@@ -1,0 +1,57 @@
+---------------
+ Upgrade Notes
+---------------
+
+Upgrading from any version pre-0.6.2
+------------------------------------
+You will need to add two columns to the 'tickets' table: 
+
+    ALTER TABLE tickets ADD COLUMN recipient varchar(100) DEFAULT '' NOT NULL;
+    ALTER TABLE tickets ADD COLUMN attachment tinyint(1) unsigned DEFAULT '0' NOT NULL;
+
+These store the followup recipient and the indication of whether there was an 
+attachment in the original ticket.  
+
+Upgrading from any version pre-0.4
+----------------------------------
+Regardless of your prior version, you will have to add two indexes to the 
+'tickets' table which were added to speed up queries.  You will also need 
+to change a column name and change the size of a field (details below). 
+You can do this with the following MySQL commands:  
+
+    ALTER TABLE tickets ADD INDEX parent (parent);
+    ALTER TABLE tickets ADD INDEX type (type);
+    ALTER TABLE tickets CHANGE client author varchar(100) DEFAULT '' NOT NULL;
+    ALTER TABLE tickets CHANGE cc cc varchar(100) DEFAULT '' NOT NULL;
+
+Lastly, you should be sure to protect gateway.pl as described in the setup 
+instructions in the README file.  
+
+Upgrading from v0.3 or v0.3.1
+----------------------------
+You will need to convert any entries in your 'comments' table to entries in the 
+'tickets' table.  I've decided to keep all types of correspondence in the same table.  
+You can do this as follows:  
+
+    INSERT INTO tickets (author, timestamp, parent, body) \
+        SELECT poster, timestamp, ticket, body FROM comments; (that's all one line)
+    
+    UPDATE tickets SET author = 'Staff Member', subject = 'Comment' WHERE type = ''
+    UPDATE tickets SET type = 'Staff Comment', assignment = '9999' WHERE type = '';
+    
+This unfortunately will leave your migrated comments with generic authors and 
+subjects, but this is the only way I know of doing it in strict SQL.  I realize 
+that all of this is kind of hardcore, and I apologize for that, but if you don't mind 
+losing your comments (we personally only have a few) then you can skip the migration 
+and go straight to the drop:  
+
+    DROP table comments;
+    
+I also cleaned up some followup-related code so you can drop a column:  
+
+    ALTER table tickets DROP followup_id;
+
+Upgrading from v0.1
+-------------------
+You'll want to add a 'priority' column to the 'tickets' table and update 
+all current tickets to have a priority of '1'.  

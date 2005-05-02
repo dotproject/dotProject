@@ -1,0 +1,26 @@
+<!-- $Id$ -->
+<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
+<tr>
+	<td width="100%" valign="top">
+		<p>
+			<strong>dotProject Online Assistance</strong>
+			<br />
+			<br />We have invented five places for your assistance. Please remember that all of these places are not one-way: You can help others as well by contributing.
+			<br />
+			<br />The <a href="http://sites.sakienvirotech.com/dp_docs/tiki/tiki-index.php?page=Introduction" target="_blank">dotProject Online Documentation</a>
+			is intended to provide you with informations about how to use dotProject (e.g. explanation of modules, features ...).
+			<br />
+			<br />Further Assistance can be found in the
+			<a href="http://www.dotproject.net/modules.php?op=modload&name=PNphpBB2&file=index" target="_blank">dotProject Support Forums</a>.
+			<br />
+			<br />Information about known problems and suggested enhancements can be read and submitted at the
+			<a href="http://www.dotproject.net/mantis/main_page.php" target="_blank">dotProject Bugs&Suggestions</a> site.
+			<br />
+			<br />If you're looking for Professional Support concerning dotProject, have a look at our
+			<a href="http://www.dotproject.net/modules.php?op=modload&name=Web_Links&file=index&req=viewlink&cid=4" target="_blank">Commercial Support</a> links collection.
+			<br />
+			<br />If the other places didn't bring the expected results visit our IRC channel at irc.freenode.net: #dotproject.
+		</p>
+	</td>
+</tr>
+</table>

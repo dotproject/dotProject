@@ -1,0 +1,124 @@
+-----------
+ Changelog
+-----------
+
+* v0.6.3 - Mon Jun 04 2001 - Justin R. Miller <justin@voxel.net>
+
+    - fixed fatal bug in gateway with attachment info
+    - fixed fatal bug in gateway with email header quotes
+    - fixed bug in ticket view with showing empty Cc: field
+    - fixed bug in search results with email address formatting issue
+
+* v0.6.2 - Mon Jun 04 2001 - Justin R. Miller <justin@voxel.net>
+
+    - cleaned up email address quoting
+    - added editable recipient field
+    - added attachment indicator
+    - properly escape special (i.e. HTML) characters in view.php
+    - slight interface tweaks (including longer input fields)
+    - fixed slight bug in assignment pull-down in showing admin account
+    - fixed "latest followup" bug for tickets with no followups
+    - get rid of \r\n-style carriage returns in incoming parent tickets
+    - moved contributors to CREDITS file
+
+* v0.6.1 - Wed May 16 2001 - Justin R. Miller <justin@voxel.net>
+
+    - fixed critical bug with improper ticket parents
+    - added view for "my" tickets
+
+* v0.6 - Wed May 2 2001 - Justin R. Miller <justin@voxel.net>
+
+    - fixed logout bug
+    - fixed disappearance of strings that look like HTML tags
+    - changed X-Mailer header to reflect new project URL
+
+* v0.6pre1 - Thu Apr 5 2001 - Justin R. Miller <justin@voxel.net>
+
+    - fix for gateway.pl warnings (thanks to Eric Peters <egpeters@u.washington.edu>)
+    - can now enable/disable wordwrapping on badly-formatted messages (i.e. support for PHP4 < 4.0.2 again)
+    - changed default search direction to descending (usually want to see newer messages first)
+    - can now edit subject in followups
+    - URL highlighting in ticket bodies
+    - added option to go to parent or latest followup from index
+    - added weeks, months, and years to ticket ages
+    - added option to change followup navigation ordering
+    - added date to search results
+    - cleaned up wordwrapping
+    - minor cosmetic tweaks
+    
+* v0.5.1 - Mon Mar 5 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - minor tweaks to README and common.inc.php
+    - fixed "followup to staff member" bug
+
+* v0.5 - Wed Jan 31 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - fixed gateway.pl timestamp insertion to be MySQL server-side
+    - brought back followups & comments to followups & comments
+    - added wrapping of long ticket bodies in viewing and followup quoting
+    - refined search depth to include type of parent ticket
+    - added search results sorting controls
+
+* v0.4.1 - Mon Jan 29 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - fixed admin login bug
+    - admin authentication cleanup
+    - fixed ticket reopening upon followup
+    - fixed slash problems in emails
+    - fixed expunge of multiple tickets
+    - slight fix to Cc: handling
+    - fixed Re: handling
+
+* v0.4 - Wed Jan 24 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - many, many code cleanups and bug fixes
+    - minor tweaks to database schema (see UPGRADE)
+    - added X-header to followup mailing
+    - many aesthetic improvements
+    - converted to PHP4 session management
+    - increased email database field sizes
+    - fixed search (with slightly less features for now)
+    - fixed bidirectional sorting by column on index
+
+* v0.3.1 - Wed Jan 17 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - fixed missing followup_id column in table.schema
+
+* v0.3 - Mon Jan 15 2001 - Justin R. Miller <justin@solidlinux.com>
+
+    - rudimentary searching through tickets enabled (Garrett)
+    - added ticket sort controls (Garrett)
+    - addition of staff comments added (Garrett)
+    - paging through followups (Jim)
+    - multiple pages of tickets (Garrett)
+    - indication of who made a followup (Jim)
+    - author of last followup shown on main page (Jim)
+    - minor aesthetic improvements (Jim)
+    - switch to VPL (Voxel Public License)
+
+* v0.2 - Sun Aug 13 2000 - Justin R. Miller <justin@solidlinux.com>
+
+    - added visual ticket age warning
+    - renamed *.inc to *.inc.php for security
+    - got rid of $HTTP_POST_VARS for portability
+    - fixed addslashes routines (checks for magic_quote_gpc)
+    - added better comments and documentation
+    - added email receipt notification option
+    - updated logout force time
+    - added priority flag for internal staff use
+    - added elapsed ticket time display
+    - changed followup layout
+    - reordered ticket sort (priority, then age)
+    - added 'From' line in followup post section
+    - cleaned up signature inclusion
+    - cleaned up authentication
+    - abstracted all MySQL-specific functions to common.inc.php
+    - announced mailing list
+    - added ticket deletion
+    - added user admin tool
+    - changed 'Logout' to 'Change user' to reflect admin user
+    - changed ticket type navigation on main screen
+
+* v0.1 - Sun Jul 30 2000 - Justin R. Miller <justin@solidlinux.com>
+
+    - initial release

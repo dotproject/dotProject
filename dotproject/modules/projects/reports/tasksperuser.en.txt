@@ -1,0 +1,2 @@
+Tasks sorted by user
+This report shows the tasks allocated to each user.

@@ -1,0 +1,4 @@
+<Files "gateway.pl">
+	order deny,allow
+	deny from all
+</Files>

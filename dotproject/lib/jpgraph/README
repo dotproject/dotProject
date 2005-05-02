@@ -1,0 +1,186 @@
+README FOR JPGRAPH
+==================
+
+This is JpGraph 1.17 an Object Oriented PHP4 Graph Plotting library.
+
+The library is Copyright (C) 2001-2004 Johan Persson and
+released under dual license QPL 1.0 for open source and educational
+use and JpGraph Professional License for commercial use. 
+
+Please see full license details at http://www.aditus.nu/jpgraph/
+
+* --------------------------------------------------------------------
+* PHP5 IS NOT SUPPORTED IN THE 1.x SERIES
+* Please note that the 1.x serious does NOT support PHP5. The 2.x
+* series does and is available in alpha state from the CVS respository.
+* --------------------------------------------------------------------
+
+
+Included files
+--------------
+README	                This file
+QPL.txt                 QPL 1.0  Licensee
+
+/src
+  Changelog               Changelog
+  jpg-config.inc	  Configuration setup for JpGraph
+  jpgraph.php             Base library
+  jpgraph_log.php         Extension: logarithmic scales
+  jpgraph_line.php        Extension: line plots 
+  jpgraph_bar.php         Extension: bar plots
+  jpgraph_error.php       Extension: error plots
+  jpgraph_scatter.php     Extension: scatter/impulse plots
+  jpgraph_radar.php       Extension: radar plots
+  jpgraph_pie.php         Extension: pie plots
+  jpgraph_canvas.php      Extension: drawing canvas
+  jpgraph_canvtools.php	  Extension: utility classes for working with canvas
+  jpgraph_pie3d.php	  Extension: 3D pie plots
+  jpgraph_gantt.php	  Extension: Gantt chart
+  jpgraph_regstat.php	  Extension: Statistics and cubic splines.
+  jpgraph_stock.php	  Extension: Stock and box plots.
+  jpgraph_gradient.php	  Extension: Color gradient class
+  jpgraph_gb2312.php	  Extension: Chinese GB2312 to Unicode translation
+  jpgraph_plotmark.php	  Extension: Handle plotmarks in plots
+  jpgraph_imgtrans.php	  Extension: Basic image transformation
+  jpgraph_flags.php	  Extension: Country flags
+  jpgraph_iconplot.php	  Extension: Use image icons in plots
+  jpgraph_plotband.php	  Extension: Plotbands in graphs
+  jpgraph_plotmark.inc    Extension: Using plotmarks in graphs
+  imgdata_*.inc		  Extension: Encoded images for plot marks
+  flags*.dat		  Image data: Pre-compiled data for country flags.
+
+/src/Examples		A directory with around 290 example graphs with source.
+			Run testsuit.php to get a list of all
+			files and you can easily click on a file to
+			see the code and the resulting image.
+		
+/docs/index.html	Documentation portal
+
+			
+Requirements:
+-------------
+Miminum:
+* PHP 4.3.1 or higher 
+  (earlier versions might work but is unsupported)
+* GD 1.8.x or GD 2.15 or higher
+
+Recommended:
+* PHP 4.3.9 
+* PHP Builtin GD library
+
+Installation
+------------
+0. Make sure your PHP is  4.3 (preferable 4.3.9) 
+   and that you have compiled PHP with support for the GD library. 
+   You must make absolutely sure that you have GD working. 
+   Please run phpinfo() to check if GD library
+   is supported in your installation. If you don't have the GD library
+   please consult the PHP manual under section "Image" for
+   instructions on where to find this library. Please refer to
+   the manual "Verifying your PHP installation"
+   
+1. Unzip and copy the files to a directory of your choice where Your
+   httpd sever can access them. 
+   For a global site installation you should copy the files to 
+   somewhere in the PHP search path. 
+
+2. Check that the default directory paths in jpg-config.inc
+   for cache directory and TTF directory suits your installation. 
+   Note1: The default directories are different depending on if
+   the library is running on Windows or UNIX.
+   Note2: Apache/PHP must have write permission to your cache 
+   directory if you enable the cache feature. By default the cache
+   is disabled.
+
+3. Check that all rest of the DEFINE in jpg-config.inc 
+   is setup to your preference. The default should be fine
+   for most users. (See also Note 3. below)
+   
+4. Read (really!) the FAQ on http://www.aditus.nu/jpgraph/jpg_faq.php.
+
+
+Documentation
+-------------
+The installation includes HTML documentation and reference guide for the
+library. The portal page for all the documentation is
+<YOUR-INSTALLATION-DIRECTORY>/docs/index.html
+
+
+Troubleshooting
+---------------
+1. If you don't get any background images (but rather a solid black
+   box) you are using GD 2.x but have forgotten to enable truecolor
+   support. Correct this by enabling the USE_TRUECOLOR define.
+
+2. If background images does not work make sure the settings of 
+   USE_GD2_LIBRARY corresponds to your installation, i.e. If you
+   don't have GD2 then this define must be false!
+
+3. If you are running IIS and Win2k and get the error "Can't find
+   font' when trying to use TTF fonts then try to change you paths
+   to UNIX style, i.e. "/usr/local/fonts/ttf/". Remember that the
+   path is absolute and not relative to the htdocs catalogue. Some 
+   versions of GD for Windows also need you to set the environment
+   variable GDFONTPATH for GD to find the fonts.
+
+4. If you are using the cache please make sure that you have
+   set the permissions correctly for the cache directory so that
+   Apache/PHP can write to that directory.
+
+5. Some windows installations seems to have a problem with a PHP
+   script ending in a newline (This newline seems to be sent to the
+   browser and will cause a Header already sent error). 
+   If you have this problem try remove all trailing newlines in the
+   jpgraph* files 
+
+
+Bug reports and suggestions
+---------------------------
+Should be reported in the issue tracker at
+
+http://www.aditus.nu/bugtraq
+
+
+Change history:
+------------------------------------------------------------------------
+Date        Ver        Comment
+------------------------------------------------------------------------
+2005-01-16  1.17       Functional enhancement, bug fixes
+2004-11-02  1.17-beta2 Functional enhancement, bug fixes
+2004-09-12  1.17-beta  Port to PHP5 in compatibility mode. 
+2004-06-20  1.16       Minor defect fixes
+2004-05-04  1.15       Final 1.15
+2004-04-19  1.15 BETA  Defect fixes and code restructuring to make 
+                       jpgraph.php smaller.
+2003-11-25  1.14       Additional error checking, country flags, icon etc
+2003-08-19  1.13 BETA  Improved Gantt graphs various other changes and bug fixes
+2003-02-02  1.11       Stock charts and some minor oter changes.
+2002-12-16  1.10       Alpha blending, cubic splines and field plots
+2002-10-30  1.9.1      Fixed two stupid mistakes in 1.9
+2002-10-25  1.9        TTF font change. Many small additional improvements
+2002-09-17  1.8	       Documentation update.
+2002-09-09  1.8 BETA   Functional improvements.
+2002-07-05  1.7        Functional improvements. Rotated bar graphs.
+2002-06-17  1.7 BETA   Functional improvements.        
+2002-05-15  1.6.3      Enhancements to Gantt graphs anbd minor bug fixes.
+2002-04-19  1.6.2      Addition of image maps for line and scatter plot
+2002-04-07  1.6.1      Bug fixes for 3D pies and image maps for pie's
+2002-04-01  1.6	       Functional improvments
+2002-04-01  1.6 BETA   Beta candidate for 1.6
+2002-03-01  1.5.3      Fix minor release problem in 1.5.2
+2002-02-29  1.5.2      Minor bug fixes.
+2002-02-11  1.5.1      Minor bug fixes.
+2002-01-27  1.5	       Functional improvements. Gantt charts.
+2002-01-17  1.5-BETA2  Functional improvements, bug fixes
+2001-12-16  1.5-BETA   Functional improvements, gantt-charts, bug fixes.
+2001-11-12  1.4        Functional improvements, bug fixes.
+2001-09-23  1.3.1      Minor bug fixes
+2001-09-13  1.3        Major functional enhancements and minor bugfixes
+2001-04-29  1.2.2      Minor bug fixes. Addded background image support 
+2001-03-29  1.2.1      Minor bug fixes. Experimental support for 3D pie plots
+2001-03-18  1.2        Second release see changes.txt
+2001-02-18  1.1        Second release see changes.txt
+2001-02-04  1.0        First public release
+-------------------------------------------------------------------------
+
+<EOF>

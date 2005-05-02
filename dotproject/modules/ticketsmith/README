@@ -1,0 +1,147 @@
+--------------------------------
+ dotProject enhanced Ticketsmith
+--------------------------------
+
+Ticketsmith was originally developed by Justin Miller at Voxel.Net to
+be a standalone trouble ticket management system.  It was originally
+incorporated into dotProject although it wasn't well integrated.
+
+Work has since been done to incorporate it more seamlessly into
+dotProject.  This includes not having separate configuration files,
+changing the gateway code to work with the PHP config files, etc.
+
+Check the document INSTALL to see how to install the email gateway
+for dotproject.
+
+The original README from ticketsmith is included here for completeness:
+
+
+--------------------
+ Ticketsmith v0.6.3
+--------------------
+
+URL:            http://www.voxel.net/projects/ticketsmith/
+Mailing list:   ticketsmith@solidlinux.com
+Author:         Justin R. Miller <justin@voxel.net>
+License:        Voxel Public License (see LICENSE)
+
+----------
+ Overview 
+----------
+
+Ticketsmith is an all-in-one email/web-based ticket support system.  Messages  
+to your support list will be inserted into a database and cataloged for easy
+viewing on the web.  Multiple staff users can answer tickets via the system and
+their answers and resulting responses (and so on) will all be recorded.   The
+system is multi-user capable, fast, and full-featured.  Say goodbye to lost
+support mail!
+
+Ticketsmith is the open-source support component of Voxel Dot Net's web hosting 
+automation system, Übersmith.  
+
+-------------- 
+ Requirements 
+--------------
+
+Ticketsmith needs a server with PHP4 enabled.  There are a few features  (such
+as auto-wordwrapping) that will require a very recent version of  PHP4 (greater
+than 4.0.2) but these features can be disabled.  You'll also need access to a
+MySQL server on which you can create a separate database.  You'll need Perl  as
+well as the MySQL DBI module for it.  Lastly, you'll need some kind of  MDA
+(Mail Delivery Agent) such as procmail that is capable of piping mail  to a
+program or be able to set up your MTA (such as sendmail or qmail) to  send mail
+for an address to a program.
+
+On the client side, 4.x browsers give the best appearance, since stylesheets 
+and JavaScript are used.  Also, with the introduction of PHP4 session 
+management, a browser which accepts cookies is required.  
+
+-------------- 
+ Installation 
+--------------
+
+1.  Uncompress and un-tar the download file.  I'm assuming that since you're 
+    reading this, you've already done this.  Put the scripts someplace 
+    accessible from the web.
+
+2.  Be sure to protect the gateway.pl file.  You basically need to do one 
+    of two things, either move it out of a web-accessible place or somehow 
+    protect it from being accessed over the web:
+    
+            <Files "gateway.pl">
+	            order deny,allow
+	            deny from all
+            </Files>
+    
+    If you don't protect it, one of two things will happen,  either users will be
+    able to see the source and thus grab your Ticketsmith MySQL password, or
+    something unpredictable will happen when Apache tries  to run it as a CGI
+    script.  I don't think this could be harmful, but hey,  you never know.
+
+3.  Create the database on your MySQL server.  A good name is 'ticketsmith' with
+    access as user 'ticketsmith' and a password of your choosing.
+
+4.  Edit the bottom of the table.schema file to reflect the administrative password 
+    you would like.  
+
+5.  Create the necessary tables.  You can use the provided database schema file:
+
+            mysql -uticketsmith -p ticketsmith < table.schema
+            
+    and entering the password you set up in Step 3 when it prompts you.  
+            
+6.  Move or delete the table.schema file.  If you don't, it will be accessible from 
+    the web and users will be able to gain your admin password.              
+
+7.  Edit config.inc.php and the top of gateway.pl to fit your setup.
+
+8.  Create user accounts for your staff.  You can do this by logging in as 'admin' 
+    with the password created in Step 4 after pointing your browser at the 
+    Ticketsmith main login page.  It should be pretty self-explanatory.  Name,
+    email,  and signature are as you'd want them on outgoing mail.  If you include 
+    a signature, when that user goes to followup, their signature will automatically  
+    be included in the composition area.  
+    
+9.  Configure your MDA or MTA to pipe mail for your support list to gateway.pl.  For
+    example,  here is a sample procmail recipe:
+
+            :0
+            * (^To:|^CC:|^Cc:) .*support@foo.bar
+            |/path/to/gateway.pl
+
+    You can also set Ticketsmith up directly with sendmail in /etc/aliases: 
+
+            support: "|/path/to/gateway.pl"
+
+    Keep in mind that with sendmail you need to either put gateway.pl in 
+    /etc/smrsh or at least symlink to it from that directory so that 
+    sendmail will execute it.  If you do this, you'll have to point 
+    the /etc/aliases entry to the copy in /etc/smrsh.
+
+10. Start using Ticketsmith!  Mail sent to your support list should start 
+    showing up on the main page.
+
+------- 
+ Usage 
+-------
+
+As mail accumulates, you will see it on the main page.  When you examine a
+ticket,  you will some basic info.  Here you can assign the ticket to one 
+of your staff, change its status, or read its followups.  Followups come in 
+two varieties, either ones made by your staff or ones emailed in by clients.  
+Followups made by your staff can either be email responses to the client 
+(known as 'followups') or internal comments which don't get sent but can 
+be viewed by your staff (known as 'comments').  
+
+Ticketsmith should handle the subject lines properly so that followups are 
+kept with their parent ticket.  You might want to let your clients know 
+to keep the standard subject that is in the email.  Most mail clients will 
+do this automatically when you hit 'reply'.  
+
+--------------
+ Mailing List
+--------------
+
+To subscribe to the Ticketsmith mailing list, send an email to 
+minimalist@solidlinux.com with the words "subscribe ticketsmith" 
+in the subject.  Follow the instructions that you receive from there.  

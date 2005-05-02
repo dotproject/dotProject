@@ -1,0 +1,15 @@
+Notes to developers and users:
+
+dotproject.sql is the full installation script for the latest CVS version.
+
+upgrade_latest.sql is the differences between the last release version and
+the current CVS version.  It will be renamed once a release is created.
+
+Developers:  Please make sure you add your changes to both these files.
+Do not add changes to version specific upgrade files.  Also make sure
+you DATE STAMP your changes correctly.
+
+Users: DO NOT USE ANY OF THESE FILES DIRECTLY.  Instead direct your
+browser to install/index.php EVEN IF YOU ARE UPGRADING.  The installer
+will patch your system correctly, or install a new system if required.
+

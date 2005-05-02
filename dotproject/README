@@ -1,0 +1,21 @@
+dotProject is an open source system for managing projects.
+
+The home page is http://www.dotproject.net/
+
+The sourceforge page is http://sourceforge.net/projects/dotproject
+
+Installing/Upgrading:  The quick way:
+	Point your browser to the install directory.
+
+Installation instructions are at http://docs.dotproject.net/tiki-index.php?page=Installation+Instructions
+
+Support forums are at http://www.dotproject.net/modules.php?op=modload&name=PNphpBB2&file=index
+
+Bug reports can be lodged at http://www.dotproject.net/mantis/
+
+IRC channel is irc://irc.freenode.net/dotproject or #dotproject on irc.freenode.net
+
+As of version 2.0, dotProject is released under GPL.
+1.0.2 and previous versions were released under BSD license.
+Parts of dotProject include libraries from other projects which are used and re-released under their original licence.
+

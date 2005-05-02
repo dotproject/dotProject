@@ -1,0 +1,52 @@
+/* $Id$ */
+
+body{
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 9pt;
+}
+
+td {
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 9pt;
+   color: #000;
+}
+.heading {
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 10pt;
+   font-weight: bold;
+   color: #fff;
+   height : 75%;
+}
+.maintable{
+	border : 1px solid Black;
+	width: 95%;
+	padding : 3px 3px 3px 3px;
+	}
+
+
+.footer {
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 9pt;
+   font-style: italic;
+   font-variant: small-caps;
+   text-align: center;
+   letter-spacing: 4px;
+   padding-top: 0px;
+   margin-top: 0px;
+   color: #333;
+}
+.paging {
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 9pt;
+   font-weight: bold;
+   color: #fff;
+}
+tt {
+   font-family: courier, courier new, lucidatypewriter;
+   font-size: 10pt;
+}
+a {
+   font-family: tahoma, helvetica, sans-serif;
+   font-size: 9pt;
+   color: #036;
+}

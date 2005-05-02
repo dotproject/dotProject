@@ -1,0 +1,30 @@
+---------
+ Credits 
+---------
+
+Contributors:  Charles Boening <bones@workspot.net>
+               Fabian Debus <fdebus@geva.de>
+               Alex Duggan <aldug@openup.com>
+               George Duggan <george@openup.com>
+               Thomas Krause <tk@webmatic.de>
+               Eddy Lai <eddy@modernterminals.com>
+               Christoph Maser <cmaser@geva.de>
+               Jim Palmer <jim@voxel.net>
+               Eric Peters <egpeters@u.washington.edu>
+               Garrett Rooney <rooneg@electricjellyfish.net>
+               Nicolai Rybnikar <nr@ndh.net>
+               Luc Schiltz <luc@web.lu>
+
+I got some ideas for the email gateway (actually most of it) from the VA 
+Mail Processor.  Not sure where I found that though.  I can't seem to find 
+it on freshmeat.net, sourceforge.net, or VA's website.  
+
+I'd also like to thank Voxel Dot Net, Inc. for inspriration and general 
+technical help when it came to the mailing list and stuff like that.  
+Granted, I work for them, but I have to mention that we are an 
+extremely cool hosting company with extremely cool people.  We are also 
+probably the heaviest testers of Ticketsmith.  Check out: 
+
+        http://www.voxel.net/
+    
+Lastly, special thanks to Apache, PHP, and MySQL for being such cool projects!

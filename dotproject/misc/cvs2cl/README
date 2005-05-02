@@ -1,0 +1,25 @@
+cvs2cl.pl by kripper
+
+A hacked version of cvs2cl used to update DP's Changelog file
+
+How To by John Pritchard (20 Feb 2003)
+
+SITUATION 
+You have a WIN2K workstation with Cygwin, WINCVS, and SSH capabilities installed. You want to execute Kripper's dotProject script "cvs2cl.pl" to create a ChangeLog from the dotProject CVSROOT.
+
+EXECUTION
+1) Make sure you have a working copy of dotProject downloaded. Basically, you just need access to the cvs2cl.pl script. Navigate to the root of the dotproject installation.
+
+C:\{path}\dotproject\>
+
+2) Set path to the SourceForge DotProject repository:
+
+C:\{path}\dotproject\> set CVSROOT=:ext:{username}@cvs.sourceforge.net:/cvsroot/dotproject
+C:\{path}\dotproject\> set CVS_RSH=ssh
+
+3) Run the "cvs2cl.pl" script
+C:\{path}\dotproject\> perl misc\cvs2cl\cvs2cl.pl --dp
+
+OK this is all that is necessary to generate a new ChangeLog file that is nicely formatted with Kripper's dotproject output. Very nice tool provided by Kripper.
+
+4) Your dotproject Root will now contain a new "ChangeLog" file. Simply check this into CVS to update the ChangeLog. 

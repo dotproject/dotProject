@@ -1,0 +1,41 @@
+------
+ Todo
+------
+
+    FEATURES
+    --------
+    - add search by date
+    - add owner search
+    - add case sensitivity to search
+    - add paging to search
+    - add Bcc field to followup
+    - HTML stripping
+    
+    COSMETIC
+    --------
+    - admin still stupid about empty create fields
+    - need to handle missing query strings
+    - abstract smaller font to create_selectbox (?)
+    - add depth to get_time_ago()
+    - more informational error messages
+    - better followup listing navigation
+    - fix listing of no users in admin
+    - check ticket starting at 0
+    - warning highlight only when unanswered
+    - secondary sort by date again (?)
+
+    STYLISTIC
+    ---------
+    - modularize comment.php like others
+    - finish move to stylesheets
+    - modularize name & email grabbing
+    - clean up ticket parent stuff
+    - store latest followup type in parent
+    - use UNIX_TIMESTAMP() in MySQL
+
+    WISHLIST
+    --------
+    - spell checker for followups
+    - make gateway acknowledge receipt to sender
+    - be able to have sig at top or bottom of followup
+    - actions to tickets from main index

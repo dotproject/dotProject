@@ -1,0 +1,135 @@
+/* dotPROJECT REQUIRED CLASSES */
+BODY {
+	background-color: #f0f0f0;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	font-family: verdana,Sans-Serif;
+	font-size: 10pt;
+}
+
+LI {
+	margin-bottom: 10px;
+}
+
+em {
+	font-weight: bold;
+	text-decoration: none;
+	font-style: normal;
+}
+
+code {
+	color: #cc0000;
+}
+
+pre {
+	color: #6633CC;
+}
+
+A:link {
+	color: #08245b;
+	text-decoration: none;
+}
+
+A:visited {
+	color: #08245b;
+	text-decoration: none;
+}
+
+A:active {
+	color: red;
+	text-decoration: none;
+}
+
+A:hover {
+	color: #666666;
+	text-decoration: underline;
+}
+
+TD {
+	font-family: verdana,Sans-Serif;
+	font-size: 8pt
+}
+
+TR {
+	font-family: verdana,Sans-Serif;
+	font-size: 8pt
+}
+
+h1, .title {
+	font-size: 16px;
+	font-weight: bold;
+	font-family: verdana,Sans-Serif;
+	color: #08245b;
+	margin-bottom: 0px;
+	margin-top: 5px;
+}
+
+h2, .subtitle {
+	font-size: 12px;
+	font-weight: bold;
+	font-family: verdana,Sans-Serif;
+	color: #666;
+	margin-bottom: 0px;
+	margin-top: 15px;
+}
+
+h3 {
+	font-size: 12px;
+	font-weight: bold;
+	font-family: verdana,Sans-Serif;
+	color: #08245b;
+	margin-bottom: 0px;
+	margin-top: 35px;
+}
+
+/* Standard table 'spreadsheet' style */
+table.tbl {
+	background: #a5cbf7;
+}
+
+table.tbl TH {
+	background-color: #08245b;
+	color: #ffffff;
+	list-style-type: disc;
+	list-style-position: inside;
+	border: outset #D1D1CD 1px;
+	font-weight: normal;
+}
+
+table.tbl td {
+	background-color: #ffffff;
+}
+
+/* a 'standard' table */
+table.std {
+	border: solid #08245b 2px;
+	background: #d6ebff;
+}
+table.std TH {
+	background-color: #08245b;
+	color: white;
+	list-style-type: disc;
+	list-style-position: inside;
+	border: outset #D1D1CD 1px;
+}
+
+table.std td.hilite {
+	background-color: #ffffff;
+}
+
+/* Message styles */
+.warning {
+	color: red
+}
+.error {
+	color: red
+}
+.message {
+	color: #08245b;
+}
+
+.no_ {
+	color: red
+}

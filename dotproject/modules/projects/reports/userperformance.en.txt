@@ -1,0 +1,2 @@
+User performance
+Report that shows the amount of hours worked by a user against those allocated in tasks

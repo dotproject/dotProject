@@ -1,0 +1,58 @@
+dplink - PostNuke authentication module for dotProject.
+
+(c) Copyright 2005, Adam Donnison <adam@saki.com.au>
+This is FREE SOFTWARE released under the GPL.
+
+This module provides full authentication control of
+dotProject from within the PostNuke environment, for
+dotProject version 2.0 and later.
+
+It also provides an alternate, HTTP authentication
+system.
+
+To install:
+
+1. Copy the dplink directory and its sub-directories
+into your PostNuke modules directory.
+
+2. In System Admin -> System Configuration,
+select 'postnuke' as the login_authentication
+method.
+
+3. From PostNuke, login as an administrator and go
+to Modules administration.  Regenerate the list and
+then Initialise and Activate the dplink module.
+
+4. From administration, administer the dplink
+module to set the full URL to your dotproject
+installation.  It is suggested that you include the
+http:// part in your URL, otherwise PostNuke may
+use a URL relative to its location.
+
+5. In Blocks Administration, edit the Menu block and
+add a menu line that uses the URL of {dplink}.  This
+can be named anything you like, but dotProject would
+seem to be useful.
+
+
+Usage:
+
+Provided you are logged into PostNuke, and you have
+access to the dotProject menu item, clicking the link
+will start dotProject with your PostNuke credentials.
+If you have not chosen Full Window in dplink admin
+then it will appear within the center block of your
+PostNuke site.
+
+If you do not have a valid login on dotProject, one
+will be created for you with your current postNuke
+login, password and full name.  This new login will
+have the Anonymous role assigned, giving read-only
+access to dotProject.
+
+If you have an existing login on dotProject, it will
+simply update the password and full name (if necessary)
+and log you in with whatever permissions you already
+have.
+
+
