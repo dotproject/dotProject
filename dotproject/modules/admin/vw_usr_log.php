@@ -89,7 +89,7 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1 ) {
 	$q->addQuery('ual.*, u.*, c.*');
 	$q->addWhere('ual.user_id = u.user_id');
 	$q->addWhere('user_contact = contact_id ');
-	if(user_id != 0) { $q->addWhere("ual.user_id='$user_id'"); }
+	if($user_id != 0) { $q->addWhere("ual.user_id='$user_id'"); }
 	$q->addWhere("ual.date_time_in >='$start_date'");
 	$q->addWhere("ual.date_time_out <='$end_date'");
 	$q->addGroup('ual.date_time_last_action DESC');
