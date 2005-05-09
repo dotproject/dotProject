@@ -157,6 +157,13 @@ function submitIt(){
 		form.event_end_date.focus();
 		return;
 	}
+	if ( (!(form.event_times_recuring.value>0)) 
+		&& (form.event_recurs[0].selected!=true) ) {
+		alert("<?php echo $AppUI->_('Please enter number of recurrences', UI_OUTPUT_JS); ?>");
+		form.event_times_recuring.value=1;
+		form.event_times_recuring.focus();
+		return;
+	} 
 	// Ensure that the assigned values are selected before submitting.
 	var assigned = form.assigned;
 	var len = assigned.length;
@@ -310,7 +317,7 @@ function removeUser() {
 	<td><?php echo arraySelect( $recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true ); ?></td>
 	<td align="right">x</td>
 	<td>
-		<input type="text"  name="event_times_recuring" value="<?php echo @$obj->event_times_recuring;?>" maxlength="2" size=3> <?php echo $AppUI->_( 'times' );?>
+		<input type="text"  name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring))?($obj->event_times_recuring):'1');?>" maxlength="2" size=3> <?php echo $AppUI->_( 'times' );?>
 	</td>
 </tr>
 <?php /* FUNCTIONALITY NOT YET ENABLED ?>
