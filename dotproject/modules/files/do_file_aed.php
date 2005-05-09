@@ -14,6 +14,13 @@ if ($file_id) {
 	$oldObj->load( $file_id );
 
 } else {
+	if (!$del)
+	{
+		$acl =& $AppUI->acl();
+		if ( ! $acl->checkModule('files', 'add')) {
+		  $AppUI->setMsg($AppUI->_( "noDeletePermission" ));
+		$AppUI->redirect('m=public&a=access_denied');
+	}
 	$obj->_message = 'added';
 }
 $obj->file_category = intval( dPgetParam( $_POST, 'file_category', 0 ) );
