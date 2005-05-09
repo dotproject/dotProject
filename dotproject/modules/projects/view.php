@@ -158,7 +158,7 @@ if ($canEdit) {
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete( 'delete project', $canDelete, $msg );
 	}
-	$titleBlock->addCrumb("?m=tasks&a=organize&project_id=$project_id", "move/copy tasks");
+	$titleBlock->addCrumb("?m=tasks&a=organize&project_id=$project_id", "organize tasks");
 }
 $titleBlock->addCrumb( "?m=projects&a=reports&project_id=$project_id", "reports" );
 $titleBlock->show();
