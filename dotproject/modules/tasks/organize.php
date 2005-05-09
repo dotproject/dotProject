@@ -182,6 +182,12 @@ function showtask_edit($task, $level=0)
 		$days = $now->dateDiff( $end ) * $sign;
 	else
 		$days = 0;
+
+	if ($task['task_percent_complete'] == 100)
+	{
+		$days = 'n/a';
+		$style = 'background-color:#aaddaa; color:#00000;';
+	}
 ?>
 <tr>
 	<td>
@@ -325,6 +331,8 @@ foreach ($tasks as $task)
 <tr>
 	<td><?php echo $AppUI->_('Key');?>:</td>
 	<td>&nbsp; &nbsp;</td>
+	<td style="background-color:#aaddaa; color:#00000">&nbsp; &nbsp;</td>
+	<td>=<?php echo $AppUI->_('Complete');?></td>
 	<td bgcolor="#ffffff">&nbsp; &nbsp;</td>
 	<td>=<?php echo $AppUI->_('Future Task');?></td>
 	<td bgcolor="#e6eedd">&nbsp; &nbsp;</td>
