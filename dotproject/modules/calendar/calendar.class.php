@@ -698,8 +698,9 @@ class CEvent extends CDpObject {
 		$q->addWhere('p.project_id ='.$this->event_project);
 		$sql = $q->prepare();
 		$q->clear();
-		$prj = db_loadHash($sql);
-	  	$body .= $AppUI->_('Project') . ":\t". $prj['project_name'];
+		if (db_loadHash($sql, $prj)){
+			$body .= $AppUI->_('Project') . ":\t". $prj['project_name'];
+		}
 	  }
 
 	  $types = dPgetSysVal('EventType');
