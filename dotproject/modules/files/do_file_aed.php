@@ -17,9 +17,11 @@ if ($file_id) {
 	if (!$del)
 	{
 		$acl =& $AppUI->acl();
-		if ( ! $acl->checkModule('files', 'add')) {
+		if ( ! $acl->checkModule('files', 'add')) 
+		{
 		  $AppUI->setMsg($AppUI->_( "noDeletePermission" ));
-		$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 	}
 	$obj->_message = 'added';
 }
