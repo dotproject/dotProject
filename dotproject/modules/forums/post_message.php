@@ -147,7 +147,7 @@ $date = intval( $message_info["message_date"] ) ? new CDate( $message_info["mess
 		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?m=forums';">
 	</td>
 	<td align="right"><?php
-		if ($AppUI->user_id == $forum_info["forum_owner"] || $message_id ==0 || (!empty($perms['all']) && !getDenyEdit('all')) ) {
+		if ($AppUI->user_id == $message_info['message_author'] || $AppUI->user_id == $forum_info["forum_owner"] || $message_id ==0 || (!empty($perms['all']) && !getDenyEdit('all')) ) {
 			echo '<input type="button" value="'.$AppUI->_('submit').'" class=button onclick="submitIt()">';
 		}
 	?></td>
