@@ -61,7 +61,7 @@
 				                       "dept_zip"      => "contact_zip",
 				                       "dept_phone"   => "contact_phone");
 			}
-			$data_update_script = "opener.setDepartment('" . $_POST[$id_field] . "', '" . $r_data[$name_field] . "');\n";
+			$data_update_script = "opener.setDepartment('" . $_POST[$id_field] . "', '" . db_escape($r_data[$name_field]) . "');\n";
 		}
 	
 		// Let's figure out which fields are going to
