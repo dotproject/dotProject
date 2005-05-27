@@ -133,7 +133,7 @@ if (($msg = $obj->store())) {
 	** Negative value :<=> no filesize limit
 	*/
 	$index_max_file_size = dPgetConfig('index_max_file_size', 0);
-	if ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size*1024) {
+	if (empty($file_id) && ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size*1024)) {
 		$obj->indexStrings();
 		$AppUI->setMsg('; ' . $indexed . ' words indexed', UI_MSG_OK, true);
 	}
