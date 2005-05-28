@@ -96,11 +96,13 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1 ) {
 	$logs = $q->loadList();
 ?>
 <table align="center" class="tbl" width="50%">
-    <th nowrap="nowrap"  STYLE="background: #08245b"><?php echo $AppUI->_('Name(s)');?></th>
-    <th nowrap="nowrap"  STYLE="background: #08245b"><?php echo $AppUI->_('Last Name');?></th>
-    <th nowrap="nowrap"  STYLE="background: #08245b"><?php echo $AppUI->_('Internet Address');?></th>
-    <th nowrap="nowrap"  STYLE="background: #08245b"><?php echo $AppUI->_('Date Time IN');?></th>
-    <th nowrap="nowrap"  STYLE="background: #08245b"><?php echo $AppUI->_('Date Time OUT');?></th>
+<tr>
+	<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)');?></th>
+	<th nowrap="nowrap" ><?php echo $AppUI->_('Last Name');?></th>
+	<th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address');?></th>
+	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN');?></th>
+	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT');?></th>
+</tr>
 <?php foreach ($logs as $detail){?>
 	<tr>
 		<td align="center"><?php echo $detail["contact_first_name"];?></td>
