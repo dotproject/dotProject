@@ -13,7 +13,7 @@ class tickets {
 		global $AppUI;
 		$sql = $this->_buildQuery();
 		$results = db_loadList($sql);
-		$outstring = "<th nowrap='nowrap' STYLE='background: #08245b' >".$AppUI->_('Tickets')."</th>\n";
+		$outstring = "<th nowrap='nowrap' >".$AppUI->_('Tickets')."</th>\n";
 		if($results){
 			foreach($results as $records){
 			    if($permissions->checkModuleItem($this->table, "view", $records["ticket"])){

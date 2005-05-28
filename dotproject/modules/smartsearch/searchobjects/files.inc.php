@@ -12,7 +12,7 @@ class files {
 		global $AppUI;
 		$sql = $this->_buildQuery();
 		$results = db_loadList($sql);
-		$outstring = "<th nowrap='nowrap' STYLE='background: #08245b' >".$AppUI->_('Files')."</th>\n";
+		$outstring = "<th nowrap='nowrap' >".$AppUI->_('Files')."</th>\n";
 		if($results){
 			foreach($results as $records){
 			    if ($permissions->checkModuleItem($this->table, "edit", $records["file_id"])) {

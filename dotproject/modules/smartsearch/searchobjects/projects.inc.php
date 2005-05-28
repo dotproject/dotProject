@@ -13,7 +13,7 @@ class projects {
 		global $AppUI;
 		$sql = $this->_buildQuery();
 		$results = db_loadList($sql);
-		$outstring = "<th nowrap='nowrap' STYLE='background: #08245b' >".$AppUI->_('Projects')."</th>\n";
+		$outstring = "<th nowrap='nowrap' >".$AppUI->_('Projects')."</th>\n";
 		require_once($AppUI->getModuleClass("projects"));
 		if($results){
 			foreach($results as $records){

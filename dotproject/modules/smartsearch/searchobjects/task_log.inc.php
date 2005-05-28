@@ -12,7 +12,7 @@ class task_log {
 			global $AppUI;
 		$sql = $this->_buildQuery();
 		$results = db_loadList($sql);
-		$outstring = "<th nowrap='nowrap' STYLE='background: #08245b' >".$AppUI->_('Task Log')."</th>\n";
+		$outstring = "<th nowrap='nowrap' >".$AppUI->_('Task Log')."</th>\n";
 		if($results){
 			foreach($results as $records){
 			    if ($permissions->checkModuleItem("tasks", "view", $records["task_log_task"])) {

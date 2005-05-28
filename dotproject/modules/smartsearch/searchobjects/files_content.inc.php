@@ -14,7 +14,7 @@ class files_content {
 			return "<tr>"."<td>".$AppUI->_('Empty')."</td>"."</tr>";
 		$sql = $this->_buildQuery();
 		$results = db_loadList($sql);
-		$outstring = "<tr><th nowrap='nowrap' STYLE='background: #08245b' >".$AppUI->_('Files Content')."</th></tr>\n";
+		$outstring = "<tr><th nowrap='nowrap' >".$AppUI->_('Files Content')."</th></tr>\n";
 		if($results){
 			foreach($results as $records){
    			$outstring .= "<tr>";
