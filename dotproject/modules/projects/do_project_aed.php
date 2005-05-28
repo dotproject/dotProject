@@ -14,6 +14,7 @@ $obj->project_start_date = $date->format( FMT_DATETIME_MYSQL );
 
 if ($obj->project_end_date) {
 	$date = new CDate( $obj->project_end_date );
+	$date->setTime( 23, 59, 59 );
 	$obj->project_end_date = $date->format( FMT_DATETIME_MYSQL );
 }
 if ($obj->project_actual_end_date) {
