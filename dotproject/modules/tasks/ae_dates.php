@@ -38,7 +38,13 @@ for ( $current = 0 + $inc; $current < 60; $current += $inc ) {
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = intval( $obj->task_start_date ) ? new CDate( $obj->task_start_date ) : new CDate();
+if (intval($obj->task_start_date))
+  $start_date = new CDate($obj->task_start_date);
+else if ($task_id != 0)
+  $start_date = null;
+else
+  $start_date = new CDate();
+//$start_date = intval( $obj->task_start_date ) ? new CDate( $obj->task_start_date ) : new CDate();
 $end_date = intval( $obj->task_end_date ) ? new CDate( $obj->task_end_date ) : null;
 
 // convert the numeric calendar_working_days config array value to a human readable output format
