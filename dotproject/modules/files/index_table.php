@@ -179,7 +179,7 @@ foreach ($files as $file_row) {
 ?>
 <tr>
 	<td nowrap="nowrap" width="20">
-	<?php if ($canEdit && ( empty($latest_file['file_checkout']) || ( $latest_file['file_checkout'] == 'final' && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id) ))) {
+	<?php if ($canEdit && ( empty($latest_file['file_checkout']) || ( $latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) {
 		echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
 		echo dPshowImage( './images/icons/stock_edit-16.png', '16', '16' );
 		echo "\n</a>";
