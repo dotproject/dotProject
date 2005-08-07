@@ -456,7 +456,7 @@ class CTask extends CDpObject {
 			}
 
 			// insert entry in user tasks
-			$sql = "INSERT INTO user_tasks (user_id, task_id, user_type) VALUES ($AppUI->user_id, $this->task_id, -1)";
+			$sql = "INSERT INTO user_tasks (user_id, task_id, user_type) VALUES ($AppUI->user_id, $this->task_id, 0)";
 			db_exec( $sql );
 		}
 		
