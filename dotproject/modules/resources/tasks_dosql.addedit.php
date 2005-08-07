@@ -37,7 +37,7 @@ function resource_postsave()
     foreach ($reslist as $res) {
       if ($res) {
 				list ($resource, $perc) = explode('=', $res);
-				$value[] = "( '$task_id', '$resource', '$perc' )";
+				$value[] = array( $task_id, $resource, $perc );
       }
     }
 		// first delete any elements already there, then replace with this
@@ -51,14 +51,11 @@ function resource_postsave()
 			$q->addTable('resource_tasks');
 			foreach($value as $v)
 			{
-				$q->addInsert('task_id, resource_id, percent_allocated', substr($v, 1, -1), true);
+				$q->addInsert('task_id,resource_id,percent_allocated', $v, true);
 			}
 			$q->exec();
 			$q->clear();
-//      $sql = "insert into resource_tasks ( task_id, resource_id, percent_allocated) values " . implode(',', $value);
-//      db_exec($sql);
     }
   }
 }
-  
 ?>
