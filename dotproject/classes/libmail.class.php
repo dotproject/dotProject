@@ -132,6 +132,8 @@ function autoCheck( $bool )
  *	@param string $charset encoding to be used for Quoted-Printable encoding of the subject 
 */
 function Subject( $subject, $charset='' ) {
+	global $dPconfig;
+
 	if( isset($charset) && $charset != "" ) {
 		$this->charset = strtolower($charset);
 	}
@@ -142,7 +144,7 @@ function Subject( $subject, $charset='' ) {
 		$subject = "=?".$this->charset."?Q?".
 			str_replace("=\r\n","",imap_8bit($subject))."?=";		
 	}
-	$this->xheaders['Subject'] = strtr( $subject, "\r\n" , "  " );
+	$this->xheaders['Subject'] = $dPconfig['email_prefix'].' '.strtr( $subject, "\r\n" , "  " );
 }
 
 
