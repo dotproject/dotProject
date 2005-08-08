@@ -79,7 +79,7 @@ $proj =& new CProject;
 $tobj =& new CTask;
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id);
-$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'a.task_id');
+$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 
 // query my sub-tasks (ignoring task parents)
 
