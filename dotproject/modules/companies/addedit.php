@@ -162,7 +162,7 @@ function testURL( x ) {
 		<td align="right"><?php echo $AppUI->_('Type');?>:</td>
 		<td>
 	<?php
-		echo arraySelect( $types, 'company_type', 'size="1" class="text" onChange="javascript:changeRecordType(this.value);"', @$obj->company_type, true );
+		echo arraySelect( $types, 'company_type', 'size="1" class="text"', @$obj->company_type, true );
 	?>
 		</td>
 	</tr>
