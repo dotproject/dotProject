@@ -70,7 +70,7 @@ function popChgPwd() {
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('User Type');?>:</td>
-			<td class="hilite" width="100%"><?php echo $utypes[$user["user_type"]];?></td>
+			<td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user["user_type"]]);?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Real Name');?>:</td>
