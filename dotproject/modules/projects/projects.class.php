@@ -155,13 +155,13 @@ class CProject extends CDpObject {
 
 		$timeOffset = $destDate->getTime() - $origDate->getTime();
 
-		$objTask = new CTask();
 		
 		// Dependencies array
 		$deps = array();
 		
 		// Copy each task into this project and get their deps
 		foreach ($tasks as $orig => $void) {
+			$objTask = new CTask();
 			$objTask->load ($orig);
 			$destTask = $objTask->copy($this->project_id);
 			$tasks[$orig] = $destTask;
