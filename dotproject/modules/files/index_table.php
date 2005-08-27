@@ -198,7 +198,17 @@ foreach ($files as $file_row) {
                 if ($latest_file['file_checkout'] == 'final')
                         echo 'final';
                 else
-                        echo $latest_file['co_user']; 
+						$q4 = new DBQuery;
+						$q4->addQuery("file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name");
+						$q4->addTable('files');
+						$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
+						$q4->leftJoin('contacts', 'co', 'co.contact_id = file_checkout');
+						$q4->addWhere('file_id = '.$latest_file['file_id']);
+						$co_user = array();
+						$co_user = $q4->loadList();
+						$co_user = $co_user[0];
+						$q4->clear();
+                        echo $co_user['contact_first_name'].' '.$co_user['contact_last_name'].'<br>('.$co_user['co_user'].')'; 
         }
         ?>
                 
