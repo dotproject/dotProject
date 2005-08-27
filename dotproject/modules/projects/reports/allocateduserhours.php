@@ -211,7 +211,7 @@ if($do_report) {
 		
 		$table_header = "<tr><th>".$AppUI->_("User")."</th>";
 		for($i=0; $i<=$days_difference; $i++){
-			$table_header .= "<th>".utf8_encode(Date_Calc::getWeekdayAbbrname($actual_date->day, $actual_date->month, $actual_date->year, 3))."</th>";
+			$table_header .= "<th>".utf8_encode(Date_Calc::getWeekdayAbbrname($actual_date->day, $actual_date->month, $actual_date->year, 3))."<br><table><td style='font-weight:normal; font-size:70%'>".$actual_date->format( $df )."</td></table></th>";
 			if($actual_date->isWorkingDay()){
 				$working_days_count++;
 			}
