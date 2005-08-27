@@ -1,6 +1,8 @@
 <?php
 global $showEditCheckbox, $tasks, $priorities;
 GLOBAL $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
+$perms =& $AppUI->acl();
+$canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0">
 <form name="form_buttons" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date";?>">
@@ -127,7 +129,10 @@ foreach($priorities as $k => $v) {
 	$options[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_RAW);
 }
 $options['c'] = $AppUI->_('mark as finished', UI_OUTPUT_RAW);
-$options['d'] = $AppUI->_('delete', UI_OUTPUT_RAW);
+if ($canDelete) 
+{
+    $options['d'] = $AppUI->_('delete', UI_OUTPUT_RAW);
+}
 echo arraySelect( $options, 'task_priority', 'size="1" class="text"', '0' );
 ?>
 	</td>
