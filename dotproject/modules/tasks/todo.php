@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-global $showEditCheckbox, $date, $other_users, $baseDir, $dPconfig, $user_id;
+global $showEditCheckbox, $this_day, $other_users, $baseDir, $dPconfig, $user_id;
 
 $showEditCheckbox = true;
 // Project status from sysval, defined as a constant
@@ -12,7 +12,7 @@ if (isset( $_GET['tab'] )) {
 $tab = $AppUI->getState( 'ToDoTab' ) !== NULL ? $AppUI->getState( 'ToDoTab' ) : 0;
 
 $project_id = intval( dPgetParam( $_GET, 'project_id', 0 ) );
-$date       = intval( dPgetParam( $_GET, 'date', '' ) );
+$date = (!dPgetParam( $_GET, 'date', '' ) == '') ?  $this_day->format( FMT_TIMESTAMP_DATE ) : intval( dPgetParam( $_GET, 'date', '' ));
 $user_id    = $AppUI->user_id;
 $no_modify	= false;
 $other_users	= false;
