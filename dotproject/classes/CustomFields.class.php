@@ -548,6 +548,7 @@
 			$q  = new DBQuery;
 			$q->addTable('custom_fields_lists');
 			$q->addWhere("field_id = {$this->field_id}");
+			$q->addOrder("list_value");
 			if (!$rs = $q->exec()) {
 				$q->clear();
 			  return $db->ErrorMsg();		
@@ -557,7 +558,7 @@
 
 			while ($opt_row = $q->fetchRow())
 			{
-				$this->options[] = $opt_row["list_value"];
+				$this->options[$opt_row["list_option_id"]] = $opt_row["list_value"];
 			}
 			$q->clear();
 		}
@@ -568,8 +569,30 @@
 
 			if (! is_array($this->options))
 				$this->options = array();
+			
+			//load the dbs options and compare them with the options
+			$q  = new DBQuery;
+			$q->addTable('custom_fields_lists');
+			$q->addWhere("field_id = {$this->field_id}");
+			$q->addOrder("list_value");
+			if (!$rs = $q->exec()) {
+				$q->clear();
+			  	return $db->ErrorMsg();		
+			}
 
-			foreach($this->options as $opt)
+			$dboptions = Array();
+
+			while ($opt_row = $q->fetchRow())
+			{
+				$dboptions[$opt_row["list_option_id"]] = $opt_row["list_value"];
+			}
+			$q->clear();
+			
+			$newoptions = Array();
+			$newoptions = array_diff($this->options, $dboptions);
+			$deleteoptions = array_diff($dboptions, $this->options);
+			//insert the new options
+			foreach($newoptions as $opt)
 			{
 				$optid = $db->GenID('custom_fields_option_id', 1 );
 
@@ -582,8 +605,18 @@
 				if (!$q->exec()) $insert_error = $db->ErrorMsg();  	
 				$q->clear();
 			}	
+			//delete the deleted options
+			foreach($deleteoptions as $opt => $value)
+			{
+				$q  = new DBQuery;
+				$q->setDelete('custom_fields_lists');
+				$q->addWhere("list_option_id = $opt");
 
-			return $insert_error;
+				if (!$q->exec()) $delete_error = $db->ErrorMsg();  	
+				$q->clear();
+			}	
+
+			return $insert_error.' '.$delete_error;
 		}
 
 		function delete()

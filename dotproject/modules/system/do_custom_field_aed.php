@@ -49,7 +49,7 @@
 				else
 				{
 					// To update each list would be a lot more complex than rewriting it
-					$opts->delete();
+					// So it is, but it is needed in order for it to work properly. (Pedro A. Bug 1163)
 					$o_msg = $opts->store();
 				}
 
