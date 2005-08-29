@@ -51,8 +51,9 @@ for( $i=0; $i <= $sizeof; $i++) {
                         if ($overAssignment) {
                                 $AppUI->setMsg( "Some Users could not be unassigned from Task", UI_MSG_ERROR );
                         } else {
-                                $AppUI->setMsg( "User(s) unassigned from Task", UI_MSG_OK);
-                                $AppUI->redirect();
+//								  Don't do nothing because we might have other tasks to change
+//                                $AppUI->setMsg( "User(s) unassigned from Task", UI_MSG_OK);
+//                                $AppUI->redirect();
                         }
                 } else if ( ($rm || $del)  ) {
                         if (($msg = $obj->removeAssigned($user_id))) {
@@ -90,5 +91,7 @@ for( $i=0; $i <= $sizeof; $i++) {
                 }
         }
 }
+if ($rm && $del)
+	$AppUI->setMsg( "User(s) unassigned from Task", UI_MSG_OK);
 $AppUI->redirect();
 ?>
