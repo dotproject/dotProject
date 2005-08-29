@@ -399,7 +399,7 @@ function SMTPSend($to, $subject, $body, &$headers) {
 	$this->socketRead();
 	// Send the protocol start
 	$this->socketSend("HELO " . $_SERVER['HTTP_HOST']);
-	if ($this->auth && $this->username) {
+	if ($this->sasl && $this->username) {
 		$this->socketSend("AUTH LOGIN");
 		$this->socketSend(base64_encode($this->username));
 		$rcv = $this->socketSend(base64_encode($this->password));
