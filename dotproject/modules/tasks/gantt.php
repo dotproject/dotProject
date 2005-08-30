@@ -397,11 +397,13 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 $bar->progress->SetFillColor('darkgray');
                 $bar->progress->SetPattern(BAND_SOLID,'gray',98);
         }
+	$q = new DBQuery;
+	$q->addTable('task_dependencies');
+	$q->addQuery('dependencies_task_id');
+	$q->addWhere('dependencies_req_task_id=' . $a["task_id"]);
+	$query = $q->loadHashList();
 
-	$sql = "SELECT dependencies_task_id FROM task_dependencies WHERE dependencies_req_task_id=" . $a["task_id"];
-	$query = db_exec($sql);
-
-	while($dep = db_fetch_assoc($query)) {
+	foreach($query as $dep) {
 		// find row num of dependencies
 		for($d = 0; $d < count($gantt_arr); $d++ ) {
 			if($gantt_arr[$d][1]["task_id"] == $dep["dependencies_task_id"]) {
@@ -409,6 +411,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 			}
 		}
 	}
+	$q->clear();
 	$graph->Add($bar);
 }
 $today = date("y-m-d");
