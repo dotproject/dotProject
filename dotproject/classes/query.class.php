@@ -680,6 +680,29 @@ class DBQuery {
 		return $result;
 	}
 
+	function loadObject( &$object, $bindAll=false , $strip = true) {
+		if (! $this->exec(ADODB_FETCH_NUM)) {
+			die ($this->_db->ErrorMsg());
+		}
+		if ($object != null) {
+			$hash = $this->fetchRow();
+			$this->clear();
+			if( !$hash ) {
+				return false;
+			}
+			$this->bindHashToObject( $hash, $object, null, $strip, $bindAll );
+			return true;
+		} else {
+			if ($object = $this->_query_id->FetchNextObject(false)) {
+				$this->clear();
+				return true;
+			} else {
+				$object = null;
+				return false;
+			}
+		}
+	}
+	
 	/**
 	 * Using an XML string, build or update a table.
 	 */
