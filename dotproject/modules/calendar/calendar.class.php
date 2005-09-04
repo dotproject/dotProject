@@ -533,10 +533,13 @@ class CEvent extends CDpObject {
 				$q->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
 				break;
 		}
-		$q->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start'
-				OR event_start_date BETWEEN '$db_start' AND '$db_end')");
-		// duplicate query object for recursive events;
+		
+		// duplicate query object for recursive events; must reside before the date limits where clause
 		$r = $q;
+		
+		$q->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start'
+				OR event_start_date BETWEEN '$db_start' AND '$db_end')");	
+		
 		
 		// assemble query for non-recursive events
 		$q->addWhere('( event_recurs <= 0 )');
