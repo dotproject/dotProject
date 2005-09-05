@@ -401,12 +401,12 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 	$q->addTable('task_dependencies');
 	$q->addQuery('dependencies_task_id');
 	$q->addWhere('dependencies_req_task_id=' . $a["task_id"]);
-	$query = $q->loadHashList();
+	$query = $q->loadHashList(1);
 
 	foreach($query as $dep) {
 		// find row num of dependencies
 		for($d = 0; $d < count($gantt_arr); $d++ ) {
-			if($gantt_arr[$d][1]["task_id"] == $dep["dependencies_task_id"]) {
+			if($gantt_arr[$d][0]["task_id"] == $dep["dependencies_task_id"]) {
 				$bar->SetConstrain($d, CONSTRAIN_ENDSTART);
 			}
 		}
