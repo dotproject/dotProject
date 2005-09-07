@@ -27,8 +27,8 @@ function checkDate(){
 
 <?php
 $date_reg = date("Y-m-d");
-$start_date = intval( $date_reg) ? new CDate( $date_reg ) : null;
-$end_date = intval( $date_reg) ? new CDate( $date_reg ) : null;
+$start_date = intval( $date_reg) ? new CDate( dPgetParam($_REQUEST, "log_start_date", date("Y-m-d") ) ) : null;
+$end_date = intval( $date_reg) ? new CDate( dPgetParam($_REQUEST, "log_end_date", date("Y-m-d") ) ) : null;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
@@ -79,8 +79,8 @@ if ($a = dPgetParam($_REQUEST, "a", "") == ""){
 
 <?php 
 if (dPgetParam($_REQUEST, "showdetails", 0) == 1 ) {  
-    $start_date = date("Y-m-d", strtotime(dPgetParam($_REQUEST, "start_date", date("Y-m-d") )));
-    $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetParam($_REQUEST, "end_date", date("Y-m-d") )));
+    $start_date = date("Y-m-d", strtotime(dPgetParam($_REQUEST, "log_start_date", date("Y-m-d") )));
+    $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetParam($_REQUEST, "log_end_date", date("Y-m-d") )));
     
     	$q  = new DBQuery;
 	$q->addTable('user_access_log', 'ual');
