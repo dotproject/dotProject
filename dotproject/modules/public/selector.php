@@ -139,6 +139,7 @@ if (!$ok) {
 		else
 			var wh = document.all ? document.body.clientHeight : window.innerHeight;
    
+		var wh = getInnerHeight(window);
 		var selector = document.getElementById("selector");
 		var count = 0;
 		obj = selector;
