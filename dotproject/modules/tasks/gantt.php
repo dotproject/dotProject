@@ -325,11 +325,11 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 	if($flags == "m") {		
 		$start = new CDate($start);
 		$start->addDays(0);
-		$s = $start->format("%Y-%m-%d");//
+		$s = $start->format($df);//
 		$bar = new MileStone($row++, array($name, "", substr($s, 0, 10), substr($s, 0, 10)), $s, $s);		
 		//caption of milestone shoud be date
 		if ($showLabels=='1') {			
-			$caption = $start->format("%Y-%m-%d");		
+			$caption = $start->format($df);		
 		}
 	} else {
 		$type = $a["task_duration_type"];
