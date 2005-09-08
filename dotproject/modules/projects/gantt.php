@@ -2,6 +2,8 @@
 include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph.php");
 include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph_gantt.php");
 
+ini_set('max_execution_time', 180);
+
 global $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt;
 
 // get the prefered date format
@@ -25,7 +27,7 @@ if ($company_id != 0) {
 }
 //$filter1 = ($proFilter == '-1') ? '' : " AND project_status = $proFilter ";
 if ($showInactive != '1')
-	$filter1[] = "project_active <> 0 ";
+	$filter1[] = "project_status != 7";
 $pjobj =& new CProject;
 $allowed_projects = $pjobj->getAllowedSQL($AppUI->user_id);
 $where = array_merge($filter1, $allowed_projects);
@@ -40,7 +42,7 @@ $q->addQuery("DISTINCT project_id, project_color_identifier, project_name, proje
 		max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
 		IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/ SUM(task_duration * 
 		IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete,
-		project_status, project_active");
+		project_status");
 $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'p.project_company = c1.company_id');
 if (count($where))
@@ -159,7 +161,6 @@ foreach($projects as $p) {
 	//using new jpGraph determines using Date object instead of string
 	$start = ($p["project_start_date"] > "0000-00-00 00:00:00") ? $p["project_start_date"] : date("Y-m-d H:i:s");
 	$end_date   = $p["project_end_date"];
-        $actual_end = $p["project_actual_end_date"] ? $p["project_actual_end_date"] : " ";
 
 
 	$end_date = new CDate($end_date);
@@ -187,10 +188,12 @@ foreach($projects as $p) {
 
         if ($showLabels){
                 $caption .= $AppUI->_($projectStatus[$p['project_status']]).", ";
-                $caption .= $p['project_active'] <> 0 ? $AppUI->_('active') : $AppUI->_('inactive');
+                $caption .= $p['project_status'] <> 7 ? $AppUI->_('active') : $AppUI->_('archived');
         }
 	$enddate = new CDate($end);
 	$startdate = new CDate($start);
+	$actual_end = $p["project_actual_end_date"] ? $p["project_actual_end_date"] : $end;
+
 	$actual_enddate = new CDate($actual_end);
 	$actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
         $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
@@ -205,7 +208,7 @@ foreach($projects as $p) {
 	$bar->caption->Align("left","center");
 
         // gray out templates, completes, on ice, on hold
-        if ($p['project_status'] != '3' || $p['project_active'] == '0') {
+        if ($p['project_status'] != '3' || $p['project_status'] == '7') {
                 $bar->caption->SetColor('darkgray');
                 $bar->title->SetColor('darkgray');
                 $bar->SetColor('darkgray');
@@ -216,8 +219,8 @@ foreach($projects as $p) {
         }
 
 	$graph->Add($bar);
-
- 	// If showAllGant checkbox is checked 
+ 	
+	// If showAllGant checkbox is checked 
  	if ($showAllGantt)
  	{
  		// insert tasks into Gantt Chart
@@ -228,7 +231,7 @@ foreach($projects as $p) {
 		$q->addTable('tasks');
 		$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone');
 		$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
-		$q->addWhere("p.project_id = {$p["project_id"]}");
+		$q->addWhere('p.project_id = '. $p['project_id']);
 		$q->addOrder('tasks.task_end_date ASC');
  		$tasks = $q->loadList();
 		$q->clear();
