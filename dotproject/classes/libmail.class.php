@@ -476,7 +476,7 @@ function socketSend($msg, $rcv = true)
 function getHostName()
 {
   // Grab the server address, return a hostname for it.
-  if ($host = gethostbyname($_SERVER['SERVER_ADDR']))
+  if ($host = gethostbyaddr($_SERVER['SERVER_ADDR']))
     return $host;
   else
     return '[' . $_SERVER['SERVER_ADDR'] . ']';
