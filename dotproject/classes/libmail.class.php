@@ -398,7 +398,7 @@ function SMTPSend($to, $subject, $body, &$headers) {
 	// Read the opening stuff;
 	$this->socketRead();
 	// Send the protocol start
-	$this->socketSend("HELO " . $_SERVER['HTTP_HOST']);
+	$this->socketSend("HELO " . $this->getHostName());
 	if ($this->sasl && $this->username) {
 		$this->socketSend("AUTH LOGIN");
 		$this->socketSend(base64_encode($this->username));
@@ -471,6 +471,15 @@ function socketSend($msg, $rcv = true)
 		return $this->socketRead();
 	else
 		return $sent;
+}
+
+function getHostName()
+{
+  // Grab the server address, return a hostname for it.
+  if ($host = gethostbyname($_SERVER['SERVER_ADDR']))
+    return $host;
+  else
+    return '[' . $_SERVER['SERVER_ADDR'] . ']';
 }
 
 /**
