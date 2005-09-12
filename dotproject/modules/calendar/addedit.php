@@ -64,6 +64,8 @@ if ($is_clash) {
 	unset($_SESSION['add_event_clash']);
 	unset($_SESSION['event_is_clash']);
 }
+if ($_GET["event_project"]) 
+	$obj->event_project = $_GET["event_project"];
 
 // setup the title block
 $titleBlock = new CTitleBlock( ($event_id ? "Edit Event" : "Add Event") , 'myevo-appointments.png', $m, "$m.$a" );
