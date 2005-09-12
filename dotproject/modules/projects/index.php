@@ -166,7 +166,7 @@ global $projects;
 
 $q->addTable('projects');
 $q->addQuery('projects.project_id, project_active, project_status, project_color_identifier, project_name, project_description,
-	project_start_date, project_end_date, project_color_identifier, project_company, company_name, project_status,
+	project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 	project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, ts.total_tasks, tsy.my_tasks,
 	ts.project_percent_complete, user_username');
 $q->addJoin('companies', 'com', 'projects.project_company = company_id');
