@@ -5,6 +5,7 @@ $project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
 $perms =& $AppUI->acl();
 $canRead = $perms->checkModuleItem( $m, 'view', $project_id );
 $canEdit = $perms->checkModuleItem( $m, 'edit', $project_id );
+$canEditT = $perms->checkModule( 'tasks', 'add');
 
 if (!$canRead) {
 	$AppUI->redirect( "m=public&a=access_denied" );
@@ -140,12 +141,20 @@ $titleBlock->addCell(
 	'<form action="?m=projects&a=view&project_id='.$project_id.'" method="post" id="searchfilter">', '</form>'
 );
 
-if ($canEdit) {
+if ($canEditT) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new task').'">', '',
 		'<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post">', '</form>'
 	);
+}
+if ($canEdit) {
+	$titleBlock->addCell();
+	$titleBlock->addCell(
+		'<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
+		'<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post">', '</form>'
+	);
+
 	$titleBlock->addCell();
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new file').'">', '',
@@ -201,7 +210,11 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Company');?>:</td>
-			<td class="hilite" width="100%"><?php echo htmlspecialchars( $obj->company_name, ENT_QUOTES) ;?></td>
+			<?php if ($perms->checkModuleItem( 'companies', 'access', $obj->project_company )) {?>
+            			<td class="hilite" width="100%"> <?php echo "<a href='?m=companies&a=view&company_id=" . $obj->project_company ."'>" . htmlspecialchars( $obj->company_name, ENT_QUOTES) . '</a>' ;?></td>
+			<?php } else {?>
+            			<td class="hilite" width="100%"><?php echo htmlspecialchars( $obj->company_name, ENT_QUOTES) ;?></td>
+			<?php }?>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Short Name');?>:</td>
@@ -330,8 +343,9 @@ function delIt() {
 			$q  = new DBQuery;
 			$q->addTable('contacts', 'a');
 			$q->addTable('project_contacts', 'b');
+			$q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');			
 			$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name,
-					a.contact_email, a.contact_phone, a.contact_department');
+					a.contact_email, a.contact_phone, c.dept_name');
 			$q->addWhere("a.contact_id = b.contact_id and b.project_id = $project_id
 					and (contact_owner = '$AppUI->user_id' or contact_private='0')");
 
@@ -358,7 +372,7 @@ function delIt() {
 							echo "</td>";
 			    				echo "<td class='hilite'><a href='mailto: ".$contact_data["contact_email"]."'>".$contact_data["contact_email"]."</a></td>";
 			    				echo "<td class='hilite'>".$contact_data["contact_phone"]."</td>";
-			    				echo "<td class='hilite'>".$contact_data["contact_department"]."</td>";
+			    				echo "<td class='hilite'>".$contact_data["dept_name"]."</td>";
 			    				echo "</tr>";
 			    			}
 			    			echo "</table>";
