@@ -34,8 +34,8 @@ if ( $task_id ) {
 	// we are editing an existing task
 	$canEdit = $perms->checkModuleItem( $m, "edit", $task_id );
 } else {
-	// do we have write access on this project?
-	$canEdit = $perms->checkModuleItem( 'projects', "edit", $task_project );
+	// do we have access on this project?
+	$canEdit = $perms->checkModuleItem( 'projects', "view", $task_project );
 	// And do we have add permission to tasks?
 	if ($canEdit)
 	  $canEdit = $perms->checkModule('tasks', 'add');
@@ -216,7 +216,7 @@ $pq = new DBQuery;
 $pq->addQuery('project_id, project_name');
 $pq->addTable('projects');
 $pq->addWhere("project_company = '$company_id'");
-$pq->addWhere('project_active = 1');
+$pq->addWhere('( project_active = 1 or project_id = \''. $task_project . '\')');
 $pq->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $pq);
 $projects = $pq->loadHashList();
