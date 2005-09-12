@@ -15,6 +15,7 @@ $canAdmin = $perms->checkModule('system', 'edit');
 
 // load the companies class to retrieved denied companies
 require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once $AppUI->getModuleClass('tasks');
 
 $file_task = intval( dPgetParam( $_GET, 'file_task', 0 ) );
 $file_parent = intval( dPgetParam( $_GET, 'file_parent', 0 ) );
@@ -34,6 +35,17 @@ if ($file_id > 0 && ! $obj->load($file_id)) {
 	$AppUI->setMsg( "invalidID", UI_MSG_ERROR, true );
 	$AppUI->redirect();
 }
+if ($file_id > 0) {
+	// Check to see if the task or the project is also allowed.
+	if ($obj->file_task) {
+		if (! $perms->checkModuleItem('tasks', 'view', $obj->file_task))
+			$AppUI->redirect("m=public&a=access_denied");
+	}
+	if ($obj->file_project) {
+		if (! $perms->checkModuleItem('projects', 'view', $obj->file_project))
+			$AppUI->redirect("m=public&a=access_denied");
+	}
+}
 
 if ($obj->file_checkout != $AppUI->user_id)
         $ci = false;
@@ -49,7 +61,7 @@ $ttl = $file_id ? "Edit File" : "Add File";
 $ttl = $ci ? 'Checking in' : $ttl;
 $titleBlock = new CTitleBlock( $ttl, 'folder5.png', $m, "$m.$a" );
 $titleBlock->addCrumb( "?m=files", "files list" );
-if ($canEdit && $file_id > 0 && !$ci) {
+if ($canDelete && $file_id > 0 && !$ci) {
 	$titleBlock->addCrumbDelete( 'delete file', $canDelete, $msg );
 }
 $titleBlock->show();
