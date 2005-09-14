@@ -9,9 +9,12 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by');?>:&nbsp;</td>
 </tr>
 <tr>
-        <th nowrap="nowrap">
-                <a href="?m=projects&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Color');?></a>
-        </th>
+    <th nowrap="nowrap">
+    	<a href="?m=projects&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Color');?></a>
+    </th>
+	<th nowrap="nowrap">
+		<a href="?m=projects&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company');?></a>
+	</th>
 	<th nowrap>
 		<a href="?m=projects&orderby=project_name" class="hdr"><?php echo $AppUI->_('Project Name');?></a>
 	</th>
@@ -43,6 +46,15 @@ foreach ($projects as $row) {
 			. sprintf( "%.1f%%", $row["project_percent_complete"] )
 			. '</font>';
 		$s .= $CR . '</td>';
+
+		$s .= $CR . '<td width="30%">';
+		if ($perms->checkModuleItem('companies', 'access', $row['project_company'])) {
+			$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row["project_company"] . '" title="' . htmlspecialchars( $row["company_description"], ENT_QUOTES ) . '">' . htmlspecialchars( $row["company_name"], ENT_QUOTES ) . '</a>';
+		} else {
+			$s .= $CT . htmlspecialchars( $row["company_name"], ENT_QUOTES );
+		}
+		$s .= $CR . '</td>';
+
 		$s .= $CR . '<td width="100%">';
 		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row["project_id"] . '" title="' . htmlspecialchars( $row["project_description"], ENT_QUOTES ) . '">' . htmlspecialchars( $row["project_name"], ENT_QUOTES ) . '</a>';
 		$s .= $CR . '</td>';
