@@ -20,7 +20,7 @@ class contacts {
 			    if ($permissions->checkModuleItem($this->table, "view", $records["contact_id"])) {
     				$outstring .= "<tr>";
     				$outstring .= "<td>";
-    				$outstring .= "<a href = \"index.php?m=contacts&a=addedit&contact_id=".$records["contact_id"]."\">".highlight($records["contact_first_name"]." ".$records["contact_last_name"], $this->keyword)."</a>\n";
+    				$outstring .= "<a href = \"index.php?m=contacts&a=view&contact_id=".$records["contact_id"]."\">".highlight($records["contact_first_name"]." ".$records["contact_last_name"], $this->keyword)."</a>\n";
     				$outstring .= "</td>\n";
 			    }
 			}
