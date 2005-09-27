@@ -74,3 +74,7 @@
 "topics for this forum",
 "update watches",
 "view PDF file",
+"Normal",
+"Collapsed",
+"Single Message at a time",
+"View",

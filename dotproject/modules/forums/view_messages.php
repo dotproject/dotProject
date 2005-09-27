@@ -77,10 +77,10 @@ $thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort
 	<td><?php echo breadCrumbs( $crumbs );?></td>
         <td>
 <form action="<?php echo $thispage; ?>" method="post">
-        View: 
-        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal')?'checked':'';?> onClick="this.form.submit();" />Normal
-        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short')?'checked':'';?> onClick="this.form.submit();" />Collapsed
-        <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single')?'checked':'';?> onClick="this.form.submit();" />Single Message at a time
+        <?php echo $AppUI->_('View') ?>: 
+        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+        <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
 </form>
         </td>
 	<td align="right">
