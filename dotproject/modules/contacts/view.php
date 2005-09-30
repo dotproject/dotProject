@@ -98,7 +98,11 @@ function delIt(){
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Company');?>:</td>
-			<td nowrap><?php echo $company_detail['company_name'];?></td>
+			<?php if ($perms->checkModuleItem( 'companies', 'access', $row->contact_company )) {?>
+            			<td nowrap> <?php echo "<a href='?m=companies&a=view&company_id=" . @$row->contact_company ."'>" . htmlspecialchars( $company_detail['company_name'], ENT_QUOTES) . '</a>' ;?></td>
+			<?php } else {?>
+						<td nowrap><?php echo htmlspecialchars( $company_detail['company_name'], ENT_QUOTES);?></td>
+			<?php }?>
 		</tr>
 <?php
         if (isset($_SESSION['all_tabs']['departments']))
