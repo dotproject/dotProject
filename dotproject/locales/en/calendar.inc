@@ -80,3 +80,4 @@
 "update task",
 "view this event",
 "week view",
+"clashEvent"=>"The following users have clashes with the proposed event time",

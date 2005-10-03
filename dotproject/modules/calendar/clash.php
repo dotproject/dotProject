@@ -37,7 +37,7 @@ if ( isset($_REQUEST['clash_action'])) {
   $_SESSION['add_event_attendees'] = $_POST['event_assigned'];
   $_SESSION['add_event_mail'] = isset($_POST['mail_invited']) ? $_POST['mail_invited'] : 'off';
 
-  echo "<table width='100%' class='std'><tr><td><b>The following users have clashes with the proposed event time</b></tr></tr>";
+  echo "<table width='100%' class='std'><tr><td><b>".$AppUI->_('clashEvent')."</b></tr></tr>";
   foreach($clash as $user) {
     echo "<tr><td>$user</td></tr>\n";
   }
