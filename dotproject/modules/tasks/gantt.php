@@ -333,12 +333,10 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
 			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
 			$q->addWhere('t.task_duration_type = 24');
-			$q->addWhere("t.task_milestone  ='0'");
-			$q->addWhere("t.task_dynamic = 0");
 			$q->addWhere('t.task_id = '.$a["task_id"]);
 			
-			$wh = $q->loadHashList('wh');
-			$work_hours = $wh['wh'] * $dPconfig['daily_working_hours'];
+			$wh = $q->loadResult();
+			$work_hours = $wh * $dPconfig['daily_working_hours'];
 			$q->clear();
 			
 			$q = new DBQuery;
@@ -346,12 +344,10 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
 			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
 			$q->addWhere('t.task_duration_type = 1');
-			$q->addWhere("t.task_milestone  ='0'");
-			$q->addWhere("t.task_dynamic = 0");
 			$q->addWhere('t.task_id = '.$a["task_id"]);
 			
-			$wh2 = $q->loadHashList('wh');
-			$work_hours += $wh2['wh'];
+			$wh2 = $q->loadResult();
+			$work_hours += $wh2;
 			$q->clear();
 			//due to the round above, we don't want to print decimals unless they really exist
 			//$work_hours = rtrim($work_hours, "0");
