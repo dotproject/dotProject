@@ -317,7 +317,7 @@ function dPgetSysVal( $title ) {
 
 	// A bit of magic to handle newlines and returns as separators
 	// Missing sep1 is treated as a newline.
-	if (!isset($sep1))
+	if (!isset($sep1) || empty($sep1))
 	  $sep1 = "\n";
 	if ($sep1 == "\\n")
 	  $sep1 = "\n";
