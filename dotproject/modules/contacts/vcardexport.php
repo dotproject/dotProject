@@ -12,7 +12,7 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 	//pull data for this contact
 	$q  = new DBQuery;
 	$q->addTable('contacts');
-	$q->addQuery('*');
+	$q->addJoin('companies', 'cp', 'cp.company_id = contact_id');
 	$q->addWhere("contact_id = $contact_id");
 	$contacts = $q->loadList();
 
@@ -46,7 +46,10 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 	$vcard->setNote($contacts[0]['contact_notes']);
 
 	// add an organization
-	$vcard->addOrganization($contacts[0]['contact_company']);
+	$vcard->addOrganization($contacts[0]['company_name']);
+
+	// add dp company id
+	$vcard->setUniqueID($contacts[0]['contact_company']);
 
 	// add a phone number
 	$vcard->addTelephone($contacts[0]['contact_phone']);
