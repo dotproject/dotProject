@@ -96,7 +96,7 @@ $q->clear();
 // temporary critical tasks
 $q->createTemp('tasks_critical');
 $q->addTable('tasks');
-$q->addQuery('task_project, task_id AS critical_task, task_end_date AS project_actual_end_date');
+$q->addQuery('task_project, task_id AS critical_task, MAX(task_end_date) AS project_actual_end_date');
 $q->addJoin('projects', 'p', 'p.project_id = task_project');
 $q->addOrder("task_end_date DESC");
 $q->addGroup('task_project');
