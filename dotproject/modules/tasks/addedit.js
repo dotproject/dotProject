@@ -376,13 +376,28 @@ function calcFinish(f) {
 	var durnType = parseFloat(f.task_duration_type.value); //1 or 24
 
 	//temporary variables
-	var inc = durn;
+	var inc = Math.floor(durn);
 	var hoursToAddToLastDay = 0;
 	var hoursToAddToFirstDay = durn;
 	var fullWorkingDays = 0;
+	var int_st_hour = e.getHours();
 
 	// calculate the number of non-working days
 	var k = 7 - working_days.length;
+
+	var durnMins = (durn - inc) * 60;
+	if ((e.getMinutes() + durnMins) >= 60)
+		inc++;
+
+	var mins = ( e.getMinutes() + durnMins ) % 60;
+	if (mins > 38)
+		e.setMinutes( 45 );
+	else if (mins > 23)
+		e.setMinutes( 30 );
+	else if (mins > 8)
+		e.setMinutes( 15 );
+	else
+		e.setMinutes( 0 );
 	
 	// jump over to the first working day
 	for (var i = 0; i < k; i++){
@@ -392,7 +407,7 @@ function calcFinish(f) {
 	}
 		
 	if ( durnType==24 ) {
-		fullWorkingDays = Math.ceil(inc);
+		fullWorkingDays = Math.ceil(inc)+1;
 		e.setMinutes( 0 );
 
 		// Include start day as a working day (if it is one)
@@ -414,7 +429,7 @@ function calcFinish(f) {
 			hoursToAddToFirstDay = workHours;
 		inc -= hoursToAddToFirstDay;
 		hoursToAddToLastDay = inc % workHours;
-		fullWorkingDays = Math.round((inc - hoursToAddToLastDay) / workHours);
+		fullWorkingDays = Math.floor((inc - hoursToAddToLastDay) / workHours);
 
 		if (hoursToAddToLastDay <= 0)
 			e.setHours(e.getHours()+hoursToAddToFirstDay);
@@ -423,8 +438,15 @@ function calcFinish(f) {
 			e.setHours(cal_day_start+hoursToAddToLastDay);
 			e.setDate(e.getDate() + 1);
 		}
-		
-		e.setMinutes( 0 );
+
+			
+		if ((e.getHours() == cal_day_end || (e.getHours() - int_st_hour) == workHours) && mins > 0)
+		{
+			e.setDate(e.getDate() + 1);
+			e.setHours(cal_day_start);
+		}
+			
+		f.end_minute.value = (e.getMinutes() < 10 ? "0"+e.getMinutes() : e.getMinutes());
 		
 		// boolean for setting later if we just found a non-working day
 		// and therefore do not have to add a day in the next loop
