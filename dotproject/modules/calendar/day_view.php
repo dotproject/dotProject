@@ -1,12 +1,12 @@
 <?php /* CALENDAR $Id$ */
-global $tab, $locale_char_set;
+global $tab, $locale_char_set, $date;
 $AppUI->savePlace();
 
 require_once( $AppUI->getModuleClass( 'tasks' ) );
 
 // retrieve any state parameters
 if (isset( $_REQUEST['company_id'] )) {
-	$AppUI->setState( 'CalIdxCompany', intval( $_REQUEST['company_id'] ) );
+        $AppUI->setState( 'CalIdxCompany', intval( $_REQUEST['company_id'] ) );
 }
 $company_id = $AppUI->getState( 'CalIdxCompany', $AppUI->user_company);
 
@@ -18,14 +18,13 @@ $tab = $AppUI->getState( 'CalDayViewTab' ,'0');
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-
+// get the passed timestamp (today if none)
+$date = dPgetParam( $_GET, 'date', NULL );
 // establish the focus 'date'
 $this_day = new CDate( $date );
 $dd = $this_day->getDay();
 $mm = $this_day->getMonth();
 $yy = $this_day->getYear();
-// get the passed timestamp (today if none)
-$date = dPgetParam( $_GET, 'date', $yy.$mm.$dd );
 
 // get current week
 $this_week = Date_calc::beginOfWeek ($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY );
@@ -46,45 +45,45 @@ $titleBlock = new CTitleBlock( 'Day View', 'myevo-appointments.png', $m, "$m.$a"
 $titleBlock->addCrumb( "?m=calendar&date=".$this_day->format( FMT_TIMESTAMP_DATE ), "month view" );
 $titleBlock->addCrumb( "?m=calendar&a=week_view&date=".$this_week, "week view" );
 $titleBlock->addCell(
-	'<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
-	'<form action="?m=calendar&a=addedit&date=' . $this_day->format( FMT_TIMESTAMP_DATE )  . '" method="post">', '</form>'
+        '<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
+        '<form action="?m=calendar&a=addedit&date=' . $this_day->format( FMT_TIMESTAMP_DATE )  . '" method="post">', '</form>'
 );
 $titleBlock->show();
 ?>
 <script language="javascript">
 function clickDay( idate, fdate ) {
-	window.location = './index.php?m=calendar&a=day_view&date='+idate;
+        window.location = './index.php?m=calendar&a=day_view&date='+idate;
 }
 </script>
 
 <table width="100%" cellspacing="0" cellpadding="4">
 <tr>
-	<td valign="top">
-		<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
-		<tr>
-			<td>
-				<a href="<?php echo '?m=calendar&a=day_view&date='.$prev_day->format( FMT_TIMESTAMP_DATE ); ?>"><img src="images/prev.gif" width="16" height="16" alt="pre" border="0"></a>
-			</td>
-			<th width="100%">
-				<?php echo htmlentities($this_day->format( "%A" ), ENT_COMPAT, $locale_char_set).', '.$this_day->format( $df ); ?>
-			</th>
-			<td>
-				<a href="<?php echo '?m=calendar&a=day_view&date='.$next_day->format( FMT_TIMESTAMP_DATE ); ?>"><img src="images/next.gif" width="16" height="16" alt="next" border="0"></a>
-			</td>
-		</tr>
-		</table>
+        <td valign="top">
+                <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
+                <tr>
+                        <td>
+                                <a href="<?php echo '?m=calendar&a=day_view&date='.$prev_day->format( FMT_TIMESTAMP_DATE ); ?>"><img src="images/prev.gif" width="16" height="16" alt="pre" border="0"></a>
+                        </td>
+                        <th width="100%">
+                                <?php echo htmlentities($this_day->format( "%A" ), ENT_COMPAT, $locale_char_set).', '.$this_day->format( $df ); ?>
+                        </th>
+                        <td>
+                                <a href="<?php echo '?m=calendar&a=day_view&date='.$next_day->format( FMT_TIMESTAMP_DATE ); ?>"><img src="images/next.gif" width="16" height="16" alt="next" border="0"></a>
+                        </td>
+                </tr>
+                </table>
 
 <?php
 // tabbed information boxes
 $tabBox = new CTabBox( "?m=calendar&a=day_view&date=" . $this_day->format( FMT_TIMESTAMP_DATE ),
-	"{$dPconfig['root_dir']}/modules/calendar/", $tab );
+        "{$dPconfig['root_dir']}/modules/calendar/", $tab );
 $tabBox->add( 'vw_day_events', 'Events' );
 $tabBox->add( 'vw_day_tasks', 'Tasks' );
 $tabBox->show();
 ?>
-	</td>
+        </td>
 <?php if ($dPconfig['cal_day_view_show_minical']) { ?>
-	<td valign="top" width="175">
+        <td valign="top" width="175">
 <?php
 $minical = new CMonthCalendar( $this_day );
 $minical->setStyles( 'minititle', 'minical' );
@@ -111,7 +110,7 @@ echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
 echo '<td align="center" >'.$minical->show().'</td>';
 echo '</tr></table>';
 ?>
-	</td>
+        </td>
  <?php } ?>
 </tr>
 </table>
