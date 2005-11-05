@@ -41,10 +41,10 @@ class CDate extends Date {
 */
     function compare($d1, $d2, $convertTZ=false)
     {
-		if ($convertTZ) {
-			$d1->convertTZ(new Date_TimeZone('UTC'));
-			$d2->convertTZ(new Date_TimeZone('UTC'));
-		}
+                if ($convertTZ) {
+                        $d1->convertTZ(new Date_TimeZone('UTC'));
+                        $d2->convertTZ(new Date_TimeZone('UTC'));
+                }
         $days1 = Date_Calc::dateToDays($d1->day, $d1->month, $d1->year);
         $days2 = Date_Calc::dateToDays($d2->day, $d2->month, $d2->year);
         if($days1 < $days2) return -1;
@@ -64,48 +64,55 @@ class CDate extends Date {
 * @param int Positive or negative number of days
 * @author J. Christopher Pereira <kripper@users.sf.net>
 */
-	function addDays( $n ) {
-		$this->setDate( $this->getTime() + 60 * 60 * 24 * $n, DATE_FORMAT_UNIXTIME);
-	}
+        function addDays( $n ) {
+                 $timeStamp = $this->getTime();
+                 $oldHour = $this->getHour();
+                 $this->setDate( $timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
+
+                 if(($oldHour - $this->getHour()) || !is_int($n)) {
+                     $timeStamp += ($oldHour - $this->getHour()) * SEC_HOUR;
+                     $this->setDate( $timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
+                  }
+        }
 
 /**
 * Adds (+/-) a number of months to the current date.
 * @param int Positive or negative number of months
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function addMonths( $n ) {
-		$an = abs( $n );
-		$years = floor( $an / 12 );
-		$months = $an % 12;
+        function addMonths( $n ) {
+                $an = abs( $n );
+                $years = floor( $an / 12 );
+                $months = $an % 12;
 
-		if ($n < 0) {
-			$this->year -= $years;
-			$this->month -= $months;
-			if ($this->month < 1) {
-				$this->year--;
-				$this->month = 12 + $this->month;
-			}
-		} else {
-			$this->year += $years;
-			$this->month += $months;
-			if ($this->month > 12) {
-				$this->year++;
-				$this->month -= 12;
-			}
-		}
-	}	
+                if ($n < 0) {
+                        $this->year -= $years;
+                        $this->month -= $months;
+                        if ($this->month < 1) {
+                                $this->year--;
+                                $this->month = 12 + $this->month;
+                        }
+                } else {
+                        $this->year += $years;
+                        $this->month += $months;
+                        if ($this->month > 12) {
+                                $this->year++;
+                                $this->month -= 12;
+                        }
+                }
+        }
 
 /**
 * New method to get the difference in days the stored date
 * @param Date The date to compare to
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function dateDiff( $when ) {
-		return Date_calc::dateDiff(
-			$this->getDay(), $this->getMonth(), $this->getYear(),
-			$when->getDay(), $when->getMonth(), $when->getYear()
-		);
-	}
+        function dateDiff( $when ) {
+                return Date_calc::dateDiff(
+                        $this->getDay(), $this->getMonth(), $this->getYear(),
+                        $when->getDay(), $when->getMonth(), $when->getYear()
+                );
+        }
 
 /**
 * New method that sets hour, minute and second in a single call
@@ -114,31 +121,31 @@ class CDate extends Date {
 * @param int second
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function setTime( $h=0, $m=0, $s=0 ) {
-		$this->setHour( $h );
-		$this->setMinute( $m );
-		$this->setSecond( $s );
-	}
-	
-	function isWorkingDay(){
-		global $AppUI;
-		
-		$working_days = dPgetConfig("cal_working_days");
-		if(is_null($working_days)){
-			$working_days = array('1','2','3','4','5');
-		} else {
-			$working_days = explode(",", $working_days);
-		}
-		
-		return in_array($this->getDayOfWeek(), $working_days);
-	}
-	
-	function getAMPM() {
-		if ( $this->getHour() > 11 ) {
-			return "pm";
-		} else {
-			return "am";
-		}
-	}
+        function setTime( $h=0, $m=0, $s=0 ) {
+                $this->setHour( $h );
+                $this->setMinute( $m );
+                $this->setSecond( $s );
+        }
+
+        function isWorkingDay(){
+                global $AppUI;
+
+                $working_days = dPgetConfig("cal_working_days");
+                if(is_null($working_days)){
+                        $working_days = array('1','2','3','4','5');
+                } else {
+                        $working_days = explode(",", $working_days);
+                }
+
+                return in_array($this->getDayOfWeek(), $working_days);
+        }
+
+        function getAMPM() {
+                if ( $this->getHour() > 11 ) {
+                        return "pm";
+                } else {
+                        return "am";
+                }
+        }
 }
 ?>
