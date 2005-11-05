@@ -313,9 +313,9 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         if($flags == "m") {
                 $start = new CDate($start);
                 $start->addDays(0);
-                $s = $start->format($df);//
-                #$bar = new MileStone($row++, array($name, "", substr($s, 0, 10), substr($s, 0, 10)), $s, $s);
-                $bar  = new MileStone ($row++,array($name, "", substr($s, 0, 10), substr($s, 0, 10)) , $t["task_start_date"], $s);
+                $s = $start->format($df);
+                //$bar = new MileStone($row++, array($name, "", substr($s, 0, 10), substr($s, 0, 10)), $s, $s);
+                $bar  = new MileStone ($row++,array($name, "", substr($s, 0, 10), substr($s, 0, 10)) , $a["task_start_date"], $s);
                 $bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
                  //caption of milestone shoud be date
                 if ($showLabels=='1') {
