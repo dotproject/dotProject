@@ -27,7 +27,7 @@ if ($company_id != 0) {
 }
 //$filter1 = ($proFilter == '-1') ? '' : " AND project_status = $proFilter ";
 if ($showInactive != '1')
-	$filter1[] = "project_status != 7";
+        $filter1[] = "project_active = 1";
 $pjobj =& new CProject;
 $allowed_projects = $pjobj->getAllowedSQL($AppUI->user_id);
 $where = array_merge($filter1, $allowed_projects);
@@ -39,14 +39,14 @@ $working_hours = $dPconfig['daily_working_hours'];
 $q  = new DBQuery;
 $q->addTable('projects', 'p');
 $q->addQuery("DISTINCT project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-		max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
-		IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/ SUM(task_duration * 
-		IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete,
-		project_status");
+                max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
+                IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/ SUM(task_duration *
+                IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete,
+                project_status");
 $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'p.project_company = c1.company_id');
 if (count($where))
-	$q->addWhere( implode( " AND ", $where) );
+        $q->addWhere( implode( " AND ", $where) );
 $q->addGroup('project_id');
 $q->addOrder('project_name, task_end_date DESC');
 $projects = $q->loadList();
@@ -68,11 +68,11 @@ $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 
 $jpLocale = dPgetConfig( 'jpLocale' );
 if ($jpLocale) {
-	$graph->scale->SetDateLocale( $jpLocale );
+        $graph->scale->SetDateLocale( $jpLocale );
 }
 
 if ($start_date && $end_date) {
-	$graph->SetDateRange( $start_date, $end_date );
+        $graph->SetDateRange( $start_date, $end_date );
 }
 
 //$graph->scale->actinfo->SetFont(FF_ARIAL);
@@ -87,7 +87,7 @@ $graph->scale->tableTitle->Set($tableTitle);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 if (is_file( TTF_DIR."arialbd.ttf" ))
-	$graph->scale->tableTitle->SetFont(FF_ARIAL,FS_BOLD,12);
+        $graph->scale->tableTitle->SetFont(FF_ARIAL,FS_BOLD,12);
 $graph->scale->SetTableTitleBackground("#eeeeee");
 $graph->scale->tableTitle->Show(true);
 
@@ -151,51 +151,51 @@ if (!is_array($projects) || sizeof($projects) == 0) {
 if (is_array($projects)) {
 foreach($projects as $p) {
 
-	if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
-		$name = strlen( utf8_decode($p["project_name"]) ) > 25 ? substr( utf8_decode($p["project_name"]), 0, 22 ).'...' : utf8_decode($p["project_name"]) ;
-	} else {
-		//while using charset different than UTF-8 we need not to use utf8_deocde
-		$name = strlen( $p["project_name"] ) > 25 ? substr( $p["project_name"], 0, 22 ).'...' : $p["project_name"] ;
-	}
+        if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
+                $name = strlen( utf8_decode($p["project_name"]) ) > 25 ? substr( utf8_decode($p["project_name"]), 0, 22 ).'...' : utf8_decode($p["project_name"]) ;
+        } else {
+                //while using charset different than UTF-8 we need not to use utf8_deocde
+                $name = strlen( $p["project_name"] ) > 25 ? substr( $p["project_name"], 0, 22 ).'...' : $p["project_name"] ;
+        }
 
-	//using new jpGraph determines using Date object instead of string
-	$start = ($p["project_start_date"] > "0000-00-00 00:00:00") ? $p["project_start_date"] : date("Y-m-d H:i:s");
-	$end_date   = $p["project_end_date"];
+        //using new jpGraph determines using Date object instead of string
+        $start = ($p["project_start_date"] > "0000-00-00 00:00:00") ? $p["project_start_date"] : date("Y-m-d H:i:s");
+        $end_date   = $p["project_end_date"];
 
 
-	$end_date = new CDate($end_date);
-//	$end->addDays(0);
-	$end = $end_date->getDate();
+        $end_date = new CDate($end_date);
+//        $end->addDays(0);
+        $end = $end_date->getDate();
 
-	$start = new CDate($start);
-//	$start->addDays(0);
-	$start = $start->getDate();
+        $start = new CDate($start);
+//        $start->addDays(0);
+        $start = $start->getDate();
 
-	$progress = $p['project_percent_complete'];
+        $progress = $p['project_percent_complete'];
 
-	$caption = "";
-	if(!$start || $start == "0000-00-00"){
-		$start = !$end ? date("Y-m-d") : $end;
-		$caption .= $AppUI->_("(no start date)");
-	}
+        $caption = "";
+        if(!$start || $start == "0000-00-00"){
+                $start = !$end ? date("Y-m-d") : $end;
+                $caption .= $AppUI->_("(no start date)");
+        }
 
-	if(!$end) {
-		$end = $start;
-		$caption .= " ".$AppUI->_("(no end date)");
-	} else {
-		$cap = "";
-	}
+        if(!$end) {
+                $end = $start;
+                $caption .= " ".$AppUI->_("(no end date)");
+        } else {
+                $cap = "";
+        }
 
         if ($showLabels){
                 $caption .= $AppUI->_($projectStatus[$p['project_status']]).", ";
                 $caption .= $p['project_status'] <> 7 ? $AppUI->_('active') : $AppUI->_('archived');
         }
-	$enddate = new CDate($end);
-	$startdate = new CDate($start);
-	$actual_end = $p["project_actual_end_date"] ? $p["project_actual_end_date"] : $end;
+        $enddate = new CDate($end);
+        $startdate = new CDate($start);
+        $actual_end = $p["project_actual_end_date"] ? $p["project_actual_end_date"] : $end;
 
-	$actual_enddate = new CDate($actual_end);
-	$actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
+        $actual_enddate = new CDate($actual_end);
+        $actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
         $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
         $bar->progress->Set($progress/100);
 
@@ -203,9 +203,9 @@ foreach($projects as $p) {
         $bar->SetFillColor("#".$p['project_color_identifier']);
         $bar->SetPattern(BAND_SOLID,"#".$p['project_color_identifier']);
 
-	//adding captions
-	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align("left","center");
+        //adding captions
+        $bar->caption = new TextProperty($caption);
+        $bar->caption->Align("left","center");
 
         // gray out templates, completes, on ice, on hold
         if ($p['project_status'] != '3' || $p['project_status'] == '7') {
@@ -218,72 +218,72 @@ foreach($projects as $p) {
                 $bar->progress->SetPattern(BAND_SOLID,'darkgray',98);
         }
 
-	$graph->Add($bar);
- 	
-	// If showAllGant checkbox is checked 
- 	if ($showAllGantt)
- 	{
- 		// insert tasks into Gantt Chart
- 		
- 		// select for tasks for each project	
-		
- 		$q  = new DBQuery;
-		$q->addTable('tasks');
-		$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone');
-		$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
-		$q->addWhere('p.project_id = '. $p['project_id']);
-		$q->addOrder('tasks.task_end_date ASC');
- 		$tasks = $q->loadList();
-		$q->clear();
- 		foreach($tasks as $t)
- 		{
- 			if ($t["task_end_date"] == null)
- 				$t["task_end_date"] = $t["task_start_date"];
- 				
- 			if ($t["task_milestone"] != 1)
- 			{
-				$tStart = ($t["task_start_date"] > "0000-00-00 00:00:00") ? $t["task_start_date"] : date("Y-m-d H:i:s");
-				$tEnd = ($t["task_end_date"] > "0000-00-00 00:00:00") ? $t["task_end_date"] : date("Y-m-d H:i:s");
-				$tStartObj = new CDate($tStart);
-				$tEndObj = new CDate($tEnd);
+        $graph->Add($bar);
 
-				$bar2 = new GanttBar($row++, array(substr(" --".$t["task_name"], 0, 20)."...", $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', 0.6);
-				
-				$bar2->title->SetColor( bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ) );
- 				$bar2->SetFillColor("#".$p['project_color_identifier']);		
- 				$graph->Add($bar2);
- 			}
- 			else
- 			{
- 				$bar2  = new MileStone ($row++, "-- " . $t["task_name"], $t["task_start_date"], (substr($t["task_start_date"], 0, 10)));
- 				$bar2->title->SetColor("#CC0000");
- 				$graph->Add($bar2);
- 			}				
- 				
- 				// Insert workers for each task into Gantt Chart 
- 				$q  = new DBQuery;
-				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT user_username, t.task_id');
-				$q->addJoin('users', 'u', 'u.user_id = t.user_id');
-				$q->addWhere("t.task_id = ".$t["task_id"]);
-				$q->addOrder('user_username ASC');
- 				$workers = $q->loadList();
-				$q->clear();
- 				$workersName = "";
- 				foreach($workers as $w)
- 				{	
- 					$workersName .= " ".$w["user_username"];
- 				
- 					$bar3 = new GanttBar($row++, array("   * ".$w["user_username"], " ", " "," "), "0", "0;", 0.6);							
- 					$bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
- 					$bar3->SetFillColor("#".$p['project_color_identifier']);		
- 					$graph->Add($bar3);
- 				}
- 				// End of insert workers for each task into Gantt Chart  				
- 		}
- 		// End of insert tasks into Gantt Chart 
- 	}			
- 	// End of if showAllGant checkbox is checked
+        // If showAllGant checkbox is checked
+         if ($showAllGantt)
+         {
+                 // insert tasks into Gantt Chart
+
+                 // select for tasks for each project
+
+                 $q  = new DBQuery;
+                $q->addTable('tasks');
+                $q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone');
+                $q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
+                $q->addWhere('p.project_id = '. $p['project_id']);
+                $q->addOrder('tasks.task_end_date ASC');
+                 $tasks = $q->loadList();
+                $q->clear();
+                 foreach($tasks as $t)
+                 {
+                         if ($t["task_end_date"] == null)
+                                 $t["task_end_date"] = $t["task_start_date"];
+
+                         if ($t["task_milestone"] != 1)
+                         {
+                                $tStart = ($t["task_start_date"] > "0000-00-00 00:00:00") ? $t["task_start_date"] : date("Y-m-d H:i:s");
+                                $tEnd = ($t["task_end_date"] > "0000-00-00 00:00:00") ? $t["task_end_date"] : date("Y-m-d H:i:s");
+                                $tStartObj = new CDate($tStart);
+                                $tEndObj = new CDate($tEnd);
+
+                                $bar2 = new GanttBar($row++, array(substr(" --".$t["task_name"], 0, 20)."...", $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', 0.6);
+
+                                $bar2->title->SetColor( bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ) );
+                                 $bar2->SetFillColor("#".$p['project_color_identifier']);
+                                 $graph->Add($bar2);
+                         }
+                         else
+                         {
+                                 $bar2  = new MileStone ($row++, "-- " . $t["task_name"], $t["task_start_date"], (substr($t["task_start_date"], 0, 10)));
+                                 $bar2->title->SetColor("#CC0000");
+                                 $graph->Add($bar2);
+                         }
+
+                                 // Insert workers for each task into Gantt Chart
+                                 $q  = new DBQuery;
+                                $q->addTable('user_tasks', 't');
+                                $q->addQuery('DISTINCT user_username, t.task_id');
+                                $q->addJoin('users', 'u', 'u.user_id = t.user_id');
+                                $q->addWhere("t.task_id = ".$t["task_id"]);
+                                $q->addOrder('user_username ASC');
+                                 $workers = $q->loadList();
+                                $q->clear();
+                                 $workersName = "";
+                                 foreach($workers as $w)
+                                 {
+                                         $workersName .= " ".$w["user_username"];
+
+                                         $bar3 = new GanttBar($row++, array("   * ".$w["user_username"], " ", " "," "), "0", "0;", 0.6);
+                                         $bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
+                                         $bar3->SetFillColor("#".$p['project_color_identifier']);
+                                         $graph->Add($bar3);
+                                 }
+                                 // End of insert workers for each task into Gantt Chart
+                 }
+                 // End of insert tasks into Gantt Chart
+         }
+         // End of if showAllGant checkbox is checked
 }
 } // End of check for valid projects array.
 
