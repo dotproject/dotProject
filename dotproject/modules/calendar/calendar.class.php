@@ -756,6 +756,7 @@ class CEvent extends CDpObject {
 	$q->addWhere("event_start_date <= '" . $end_date->format(FMT_DATETIME_MYSQL) . "'");
 	$q->addWhere("event_end_date >= '" . $start_date->format(FMT_DATETIME_MYSQL) . "'");
 	$q->addWhere("( e.event_owner in (" . implode(',', $users) . ") OR ue.user_id in (" . implode(',', $users) .") )");
+	$q->addWhere('e.event_id !='.$this->event_id);
 
 	$result = $q->exec();
 	  if (! $result)
