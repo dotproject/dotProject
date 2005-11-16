@@ -23,23 +23,24 @@ require_once $AppUI->getModuleClass('projects');
 $project =& new CProject;
 
 $max_msg_length = 30;
+
+/* Query modified by Fergus McDonald 2005/08/12 to address slow join issue */
+
 $q  = new DBQuery;
 $q->addTable('forums');
 $q->addTable('projects', 'p');
 $q->addTable('users', 'u');
 $q->addQuery("forum_id, forum_project, forum_description, forum_owner, forum_name");
 $q->addQuery("forum_moderated, forum_create_date, forum_last_date");
-$q->addQuery("COUNT(distinct t.message_id) forum_topics, COUNT(distinct r.message_id) forum_replies");
+$q->addQuery("sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies");
 $q->addQuery("user_username, project_name, project_color_identifier");
 $q->addQuery("SUBSTRING(l.message_body,1,$max_msg_length) message_body");
 $q->addQuery("LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id");
 $q->addQuery("count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count");
-$q->addJoin('forum_messages', 't', 't.message_forum = forum_id AND t.message_parent = -1');
-$q->addJoin('forum_messages', 'r', 'r.message_forum = forum_id AND r.message_parent > -1');
 $q->addJoin('forum_messages', 'l', 'l.message_id = forum_last_id');
 $q->addJoin('forum_messages', 'c', 'c.message_forum = forum_id');
 $q->addJoin('forum_watch', 'w', "watch_user = $AppUI->user_id AND watch_forum = forum_id");
-$q->addJoin('forum_visits', 'v', "visit_user = $AppUI->user_id AND visit_forum = forum_id");
+$q->addJoin('forum_visits', 'v', "visit_user = $AppUI->user_id AND visit_forum = forum_id and visit_message = c.message_id");
 
 $project->setAllowedSQL($AppUI->user_id, $q);
 $forum->setAllowedSQL($AppUI->user_id, $q);
