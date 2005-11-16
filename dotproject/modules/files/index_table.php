@@ -202,7 +202,7 @@ foreach ($files as $file_row) {
 						$q4->addQuery("file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name");
 						$q4->addTable('files');
 						$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-						$q4->leftJoin('contacts', 'co', 'co.contact_id = file_checkout');
+						$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 						$q4->addWhere('file_id = '.$latest_file['file_id']);
 						$co_user = array();
 						$co_user = $q4->loadList();
