@@ -217,6 +217,9 @@ function dPshowImage( $src, $wid='', $hgt='', $alt='', $title='' ) {
 		return "<div style=\"height:{$hgt}px; width:{$wid}px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='$src', sizingMethod='scale');\" ></div>";
 	} else {
 	*/
+		if ($src == '')
+			return '';
+
 		$result = "<img src='$src' align='center'";
 		if ($wid)
 		  $result .= " width='$wid'";
