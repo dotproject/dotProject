@@ -250,7 +250,6 @@ var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours'));
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project;?>" method="post">
 	<input name="dosql" type="hidden" value="do_task_aed" />
-	<input type="hidden" name="sub_form" value="1" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id;?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project;?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo $obj->task_contacts; ?>" />
