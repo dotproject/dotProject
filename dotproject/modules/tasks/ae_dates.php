@@ -57,7 +57,7 @@ function cal_work_day_conv($val) {
 	GLOBAL $locale_char_set;
 	$wk = Date_Calc::getCalendarWeek( null, null, null, "%a", LOCALE_FIRST_DAY );
 	
-	$day_name = $wk[$val];
+	$day_name = $wk[($val - LOCALE_FIRST_DAY)%7];
 	if ($locale_char_set == "utf-8" && function_exists("utf8_encode")) {
 	    $day_name = utf8_encode($day_name);
 	}
