@@ -253,7 +253,7 @@ function companyChange() {
 			</td>
 		</tr>
 		<tr>
-			<td align="right"><?php echo $AppUI->_('URL');?>2:</td>
+			<td align="right"><?php echo $AppUI->_('URL');?>:</td>
 			<td>
 				<input type="text" class="text" name="contact_url" value="<?php echo @$row->contact_url;?>" maxlength="255" size="25" />
 			</td>

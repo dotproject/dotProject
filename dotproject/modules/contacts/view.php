@@ -154,7 +154,7 @@ function delIt(){
 			<td nowrap><a href="mailto:<?php echo @$row->contact_email2;?>"><?php echo @$row->contact_email2;?></a></td>
 		</tr>
 		<tr>
-			<td align="right"><?php echo $AppUI->_('URL');?>2:</td>
+			<td align="right"><?php echo $AppUI->_('URL');?>:</td>
 			<td nowrap><a href="<?php echo @$row->contact_url;?>"><?php echo @$row->contact_url;?></a></td>
 		</tr>
 		<tr>
