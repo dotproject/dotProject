@@ -68,13 +68,14 @@
 			else
 			{ 
 				$ins_intvalue = $this->value_intvalue == NULL ? 'NULL' : $this->value_intvalue;
+				$ins_charvalue = $this->value_charvalue == NULL ? '' : $this->value_charvalue;
 
 				if ($this->value_id > 0)
 				{
 
 						$q  = new DBQuery;
 						$q->addTable('custom_fields_values');
-						$q->addUpdate('value_charvalue', $this->value_charvalue );
+						$q->addUpdate('value_charvalue', $ins_charvalue );
 						$q->addUpdate('value_intvalue', $ins_intvalue);
 						$q->addWhere("value_id = ".$this->value_id);
 				}
@@ -89,7 +90,7 @@
 						$q->addInsert('value_field_id', $this->field_id);
 						$q->addInsert('value_object_id', $object_id);
 
-						$q->addInsert('value_charvalue', $this->value_charvalue );
+						$q->addInsert('value_charvalue', $ins_charvalue );
 						$q->addInsert('value_intvalue', $ins_intvalue);
 				}
 //				if ($sql != NULL) $rs = $q->exec();
@@ -457,10 +458,10 @@
 			{
 				foreach ($this->fields as $k => $v)
 				{
-					if ($formvars[$k] != NULL)
-					{
-						$this->fields[$k]->setValue($formvars[$k]);
-					}
+//					if ($formvars[$k] != NULL)
+//					{
+						$this->fields[$k]->setValue(@$formvars[$k]);
+//					}
 				}
 			}
 		}
@@ -469,7 +470,8 @@
 		{
 			if (!count($this->fields) == 0)
 			{
-				foreach ($this->fields as $k => $cf)
+				$store_errors = '';
+                foreach ($this->fields as $k => $cf)
 				{
 					$result = $this->fields[$k]->store( $object_id );
 					if ($result)
