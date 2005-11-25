@@ -161,7 +161,7 @@ function setDept( key, val ) {
     <td><input type="password" class="text" name="user_password" value="<?php echo $user["user_password"];?>" maxlength="32" size="32" /> </td>
 </tr>
 <tr>
-    <td align="right">* <?php echo $AppUI->_('Password');?>2:</td>
+    <td align="right">* <?php echo $AppUI->_('Confirm Password');?>:</td>
     <td><input type="password" class="text" name="password_check" value="<?php echo $user["user_password"];?>" maxlength="32" size="32" /> </td>
 </tr>
 <tr>
