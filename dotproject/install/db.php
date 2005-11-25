@@ -92,7 +92,7 @@ else
           </tr>
           <tr>
             <td class="item">Database User Password</td>
-            <td align="left"><input class="button" type="text" name="dbpass" value="<?php echo $dPconfig['dbpass']; ?>" title="The Password according to the above User." /></td>
+            <td align="left"><input class="button" type="password" name="dbpass" value="<?php echo $dPconfig['dbpass']; ?>" title="The Password according to the above User." /></td>
           </tr>
            <tr>
             <td class="item">Use Persistent Connection?</td>
