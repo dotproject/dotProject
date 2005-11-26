@@ -16,7 +16,7 @@ $canDelete = $row->canDelete( $msg, $contact_id );
 $q  = new DBQuery;
 $q->addTable('users');
 $q->addQuery('user_id');
-$q->addWhere('user_contact = ' . $row->contact_id);
+$q->addWhere('user_contact = ' . $contact_id);
 $sql = $q->prepare();
 $q->clear();
 $tmp_user = db_loadResult($sql);
