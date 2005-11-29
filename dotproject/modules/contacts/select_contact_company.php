@@ -48,7 +48,7 @@
 				                       "company_state"    => "contact_state",
 				                       "company_zip"      => "contact_zip",
 				                       "company_phone1"   => "contact_phone",
-				                       "company_phone2"   => "contact_phone2");
+				                       "company_phone2"   => "contact_phone2",
 				                       "company_fax"   => "contact_fax");
 			}
 			$data_update_script = "opener.setCompany('".$_POST[$id_field]."', '" . db_escape($r_data[$name_field]) . "');\n";
@@ -60,7 +60,7 @@
 				                       "dept_city"     => "contact_city",
 				                       "dept_state"    => "contact_state",
 				                       "dept_zip"      => "contact_zip",
-				                       "dept_phone"   => "contact_phone");
+				                       "dept_phone"   => "contact_phone",
 				                       "dept_fax"   => "contact_fax");
 			}
 			$data_update_script = "opener.setDepartment('" . $_POST[$id_field] . "', '" . db_escape($r_data[$name_field]) . "');\n";
