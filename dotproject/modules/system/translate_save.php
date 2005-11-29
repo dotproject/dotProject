@@ -5,10 +5,10 @@
 * @author Andrew Eddie <users.sourceforge.net>
 */
 
-$module = isset( $HTTP_POST_VARS['module'] ) ? $HTTP_POST_VARS['module'] : 0;
-$lang = isset( $HTTP_POST_VARS['lang'] ) ? $HTTP_POST_VARS['lang'] : 'en';
+$module = dPgetParam($_POST, 'module', 0);
+$lang = dPgetParam($_POST, 'lang', 'en');
 
-$trans = isset( $HTTP_POST_VARS['trans'] ) ? $HTTP_POST_VARS['trans'] : 0;
+$trans = dPgetParam($_POST, 'trans', 0);
 //echo '<pre>';print_r( $trans );echo '</pre>';die;
 
 // save to core locales if a translation exists there, otherwise save
