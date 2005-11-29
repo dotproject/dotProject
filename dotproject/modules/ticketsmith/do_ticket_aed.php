@@ -3,11 +3,11 @@
 ##	Ticketsmith sql handler
 ##
 
-$name = isset($HTTP_POST_VARS['name']) ? $HTTP_POST_VARS['name'] : '';
-$email = isset($HTTP_POST_VARS['email']) ? $HTTP_POST_VARS['email'] : '';
-$subject = isset($HTTP_POST_VARS['subject']) ? $HTTP_POST_VARS['subject'] : '';
-$priority = isset($HTTP_POST_VARS['priority']) ? $HTTP_POST_VARS['priority'] : '';
-$description = isset($HTTP_POST_VARS['description']) ? $HTTP_POST_VARS['description'] : '';
+$name = dPgetParam($_POST, 'name', '');
+$email = dPgetParam($_POST, 'email', '');
+$subject = dPgetParam($_POST, 'subject', '');
+$priority = dPgetParam($_POST, 'priority', '');
+$description = dPgetParam($_POST, 'description', '');
 //$description = db_escape($description);
 
 $author = $name . " <" . $email . ">";
