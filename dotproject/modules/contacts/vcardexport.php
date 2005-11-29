@@ -12,7 +12,7 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 	//pull data for this contact
 	$q  = new DBQuery;
 	$q->addTable('contacts');
-	$q->addJoin('companies', 'cp', 'cp.company_id = contact_id');
+	$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
 	$q->addWhere("contact_id = $contact_id");
 	$contacts = $q->loadList();
 
