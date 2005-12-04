@@ -126,15 +126,31 @@ class CModule extends CDpObject {
                 $temp = $this->mod_ui_order;
                 if ($dirn == 'moveup') {
                         $temp--;
-                        $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
-                        db_exec( $sql );
+
+                        $q  = new DBQuery;
+                        $q->addTable('modules');
+                        $q->addUpdate('mod_ui_order', ''.$temp+1);
+                        $q->addWhere("mod_ui_order = $temp");
+                        $q->exec();
+                        $q->clear();
+
                 } else if ($dirn == 'movedn') {
                         $temp++;
-                        $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
-                        db_exec( $sql );
+
+                        $q  = new DBQuery;
+                        $q->addTable('modules');
+                        $q->addUpdate('mod_ui_order', ''.$temp-1);
+                        $q->addWhere("mod_ui_order = $temp");
+                        $q->exec();
+                        $q->clear();
                 }
-                $sql = "UPDATE modules SET mod_ui_order = $temp WHERE mod_id = $this->mod_id";
-                db_exec( $sql );
+
+                $q  = new DBQuery;
+                $q->addTable('modules');
+                $q->addUpdate('mod_ui_order', "$temp");
+                $q->addWhere("mod_id = $this->mod_id");
+                $q->exec();
+                $q->clear();
 
                 $this->mod_ui_order = $temp;
         }
