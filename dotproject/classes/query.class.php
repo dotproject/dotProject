@@ -819,7 +819,7 @@ class DBQuery {
 	if ($join['alias'])
 	  $result .= ' AS ' . $join['alias'];
 	if (is_array($join['condition'])) {
-	  $result .= ' USING (' . implode(',', $join_condition) . ')';
+	  $result .= ' USING (' . implode(',', $join['condition']) . ')';
 	} else {
 	  $result .= ' ON ' . $join['condition'];
 	}
