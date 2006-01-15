@@ -325,12 +325,19 @@ function _HTMLaddTextInput(id, value, size, maxlength)
 //{{{2 function _HTMLaddHidden
 function _HTMLaddHidden(id, value)
 {
-  var c = new Comparable
-  c.add('id', id);
-  c.add('name', id);
-  c.add('type', 'hidden');
-  c.add('value', value);
-  return this.addNode('INPUT', false, c);
+   if (window.navigator.userAgent.toLowerCase().match(/gecko/)) {navigator.family = "gecko"}
+   var c = new Comparable
+   c.add('id', id);
+   c.add('name', id);
+   if (navigator.family == "gecko"){
+         c.add('type', 'hidden');
+         type = 'INPUT';
+   } else {
+         type = 'TEXTAREA';
+         c.add('className', 'hidden');
+   }
+   c.add('value', value);
+   return this.addNode(type, false, c);
 }
 //2}}}
 
