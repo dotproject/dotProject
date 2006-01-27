@@ -68,7 +68,7 @@
 			else
 			{ 
 				$ins_intvalue = $this->value_intvalue == NULL ? 'NULL' : $this->value_intvalue;
-				$ins_charvalue = $this->value_charvalue == NULL ? '' : $this->value_charvalue;
+				$ins_charvalue = $this->value_charvalue == NULL ? '' : stripslashes($this->value_charvalue);
 
 				if ($this->value_id > 0)
 				{
