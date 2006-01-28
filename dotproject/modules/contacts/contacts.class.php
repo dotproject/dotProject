@@ -105,9 +105,9 @@ class CContact extends CDpObject{
 		$q->addTable('companies');
 		$q->addQuery('company_id, company_name');
 		if ($this->is_alpha($this->contact_company)) {
-			$q->addWhere('company_name = '. $q->quote($this->contact_company));
+			$q->addWhere("company_name = '".$q->quote($this->contact_company)."'");
 		} else {
-			$q->addWhere('company_id = '.$this->contact_company);
+			$q->addWhere("company_id = '".$this->contact_company."'");
 		}
 		$sql = $q->prepare();
 		$q->clear();
@@ -124,8 +124,7 @@ class CContact extends CDpObject{
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
 		if ($this->is_alpha($this->contact_department))
-			$q->addWhere('dept_name = ' . $q->quote($this->contact_department) );
-
+			$q->addWhere("dept_name = '" . $q->quote($this->contact_department) . "'");
 		else
 			$q->addWhere("dept_id = '" . $this->contact_department . "'");
 			
