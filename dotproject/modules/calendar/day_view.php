@@ -19,7 +19,9 @@ $tab = $AppUI->getState( 'CalDayViewTab' ,'0');
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 // get the passed timestamp (today if none)
-$date = dPgetParam( $_GET, 'date', NULL );
+$ctoday = new CDate();
+$today = $ctoday->format(FMT_TIMESTAMP_DATE);
+$date = dPgetParam( $_GET, 'date', $today);
 // establish the focus 'date'
 $this_day = new CDate( $date );
 $dd = $this_day->getDay();
