@@ -223,8 +223,9 @@ class CMonthCalendar {
 
 		$s .= "\n\t<th width=\"99%\" align=\"center\">";
 		if ($this->clickMonth) {
-			$href = $url.'&date='.$this->this_month->format(FMT_TIMESTAMP_DATE).($this->callback ? '&callback='.$this->callback : '').((count($this->highlightedDays)>0)?'&uts='.key($this->highlightedDays):'');
-			$s .= '<a href="'.$href.'">';
+		    $urlm = "index.php?m=$m";
+			$hrefm = $urlm.'&date='.$this->this_month->format(FMT_TIMESTAMP_DATE);
+			$s .= '<a href="'.$hrefm.'">';
 		}
 		$s .= htmlentities($this->this_month->format( "%B %Y" ), ENT_COMPAT, $locale_char_set);
 		$s .= "</th>";
