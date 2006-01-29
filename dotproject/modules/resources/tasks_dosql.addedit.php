@@ -17,7 +17,7 @@ function resource_presave()
   global $other_resources;
   // check to see if we are in the post save list or if we need to
   // interrogate the session.
-  $other_resources = setItem('hresources');
+  $other_resources = setItem('hresource_assign');
 	dprint(__FILE__, __LINE__, 5, "setting other resources to $other_resources");
 }
 
@@ -48,13 +48,13 @@ function resource_postsave()
 		$q->exec(); 
 		$q->clear();
     if (count($value)) {
-			$q->addTable('resource_tasks');
 			foreach($value as $v)
 			{
+				$q->addTable('resource_tasks');
 				$q->addInsert('task_id,resource_id,percent_allocated', $v, true);
+				$q->exec();
+				$q->clear();
 			}
-			$q->exec();
-			$q->clear();
     }
   }
 }

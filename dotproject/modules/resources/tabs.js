@@ -9,7 +9,7 @@ function checkOther(form)
 
 function saveOther(form)
 {
-  return new Array('hresources');
+  return new Array('hresource_assign');
 }
 
 
@@ -33,7 +33,6 @@ function addResource(form)
 			t = form.assigned.length
 			opt = new Option( form.resources.options[fl].text+" ["+perc+"%]", form.resources.options[fl].value);
 			form.hresource_assign.value += form.resources.options[fl].value+"="+perc+";";
-			form.hresources.value = form.hresource_assign.value;
 			form.assigned.options[t] = opt
 		}
 	}

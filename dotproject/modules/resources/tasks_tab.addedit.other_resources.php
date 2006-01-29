@@ -116,7 +116,6 @@ for ($i = 1; $i < sizeof($keys); $i++) {
 	</td>
 </tr>
 </table>
-<input type="hidden" name="hresources" />
 </form>
 <script language="javascript">
   subForm.push(new FormDefinition(<?php echo $tab; ?>, document.otherFrm, checkOther, saveOther));
