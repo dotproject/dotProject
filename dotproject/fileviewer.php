@@ -162,10 +162,13 @@ if ($file_id) {
 
 	// read and output the file in chunks to bypass limiting settings in php.ini
 	$handle = fopen("{$dPconfig['root_dir']}/files/{$file['file_project']}/{$file['file_real_filename']}", 'rb');
-	while ( !feof($handle) ) {
-		print fread($handle, 8192);
+	if ($handle)
+	{
+		while ( !feof($handle) ) {
+			print fread($handle, 8192);
+		}
+		fclose($handle);
 	}
-	fclose($handle);
 } else {
 	$AppUI->setMsg( "fileIdError", UI_MSG_ERROR );
 	$AppUI->redirect();
