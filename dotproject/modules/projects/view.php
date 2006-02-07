@@ -76,7 +76,7 @@ $q->addWhere("task_log_task = task_id AND task_project = $project_id");
 $sql = $q->prepare();
 $q->clear();
 $worked_hours = db_loadResult($sql);
-$worked_hours = rtrim($worked_hours, "0");
+$worked_hours = rtrim($worked_hours, '.');
 
 // total hours
 // same milestone comment as above, also applies to dynamic tasks
