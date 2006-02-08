@@ -56,7 +56,8 @@ if ($del) {
 	}
 }
 
-set_time_limit( 600 );
+if (!ini_get('safe_mode'))
+	set_time_limit( 600 );
 ignore_user_abort( 1 );
 
 //echo "<pre>";print_r($_POST);echo "</pre>";die;
