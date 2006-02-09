@@ -315,13 +315,17 @@ class CTask extends CDpObject {
                                         WHERE task_parent = " . $modified_task->task_id .
                                         " AND task_id != " . $modified_task->task_id .
                                         " AND ! isnull( task_start_date ) AND task_start_date !=  '0000-00-00 00:00:00'";
-                        $modified_task->task_start_date = db_loadResult( $sql );
+												$d = db_loadResult( $sql );
+												if ($d)
+                        	$modified_task->task_start_date = $d;
+												else
+													$modified_task->task_start_date = '0000-00-00 00:00:00';												$d = db_loadResult( $sql );
 
                         //Update end date
                         $sql = "SELECT max( task_end_date ) FROM tasks
                                         WHERE task_parent = " . $modified_task->task_id .
                                         " AND task_id != " . $modified_task->task_id .
-                                        " AND ! isnull( task_end_date ) AND task_end_date !=  '0000-00-00 00:00:00'";
+                                        " AND ! isnull( task_end_date ) ";
                         $modified_task->task_end_date = db_loadResult( $sql );
 
                         //If we are updating a dynamic task from its children we don't want to store() it
