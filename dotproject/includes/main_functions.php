@@ -26,7 +26,7 @@ function bestColor( $bg, $lt='#ffffff', $dk='#000000' ) {
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
-function arraySelect( &$arr, $select_name, $select_attribs, $selected, $translate=false ) {
+function arraySelect( $arr, $select_name, $select_attribs, $selected, $translate=false ) {
 	GLOBAL $AppUI;
 	if (! is_array($arr)) {
 		dprint(__FILE__, __LINE__, 0, "arraySelect called with no array");
