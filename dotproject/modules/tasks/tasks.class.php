@@ -632,7 +632,7 @@ class CTask extends CDpObject {
 
                 $mail = new Mail;
 
-                $mail->Subject( dPgetConfig('email_prefix') . " $projname::$this->task_name ".$AppUI->_($this->_action), $locale_char_set);
+                $mail->Subject( dPgetConfig('email_prefix') . " $projname::$this->task_name ".$AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
         // c = creator
         // a = assignee
@@ -660,14 +660,14 @@ class CTask extends CDpObject {
                 $users = db_loadList( $sql );
 
                 if (count( $users )) {
-                        $body = $AppUI->_('Project').": $projname";
-                        $body .= "\n".$AppUI->_('Task').":    $this->task_name";
-                        $body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
-                        $body .= "\n\n" . $AppUI->_('Description') . ":"
+                        $body = $AppUI->_('Project', UI_OUTPUT_RAW).": $projname";
+                        $body .= "\n".$AppUI->_('Task', UI_OUTPUT_RAW).":    $this->task_name";
+                        $body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
+                        $body .= "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":"
                                 . "\n$this->task_description";
-                        $body .= "\n\n" . $AppUI->_('Creator').":" . $AppUI->user_first_name . " " . $AppUI->user_last_name;
+                        $body .= "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW).":" . $AppUI->user_first_name . " " . $AppUI->user_last_name;
 
-                        $body .= "\n\n" . $AppUI->_('Progress') . ": " . $this->task_percent_complete . "%";
+                        $body .= "\n\n" . $AppUI->_('Progress', UI_OUTPUT_RAW) . ": " . $this->task_percent_complete . "%";
                         $body .= "\n\n" . dPgetParam($_POST, "task_log_description");
 
 
@@ -696,7 +696,7 @@ class CTask extends CDpObject {
 
                 $mail = new Mail;
 
-                $mail->Subject( "$projname::$this->task_name ".$AppUI->_($this->_action), $locale_char_set);
+                $mail->Subject( "$projname::$this->task_name ".$AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
         // c = creator
         // a = assignee
@@ -727,21 +727,21 @@ class CTask extends CDpObject {
                         $task_start_date       = new CDate($this->task_start_date);
                         $task_finish_date      = new CDate($this->task_end_date);
 
-                        $body = $AppUI->_('Project').": $projname";
-                        $body .= "\n".$AppUI->_('Task').":    $this->task_name";
+                        $body = $AppUI->_('Project', UI_OUTPUT_RAW).": $projname";
+                        $body .= "\n".$AppUI->_('Task', UI_OUTPUT_RAW).":    $this->task_name";
                         //Priority not working for some reason, will wait till later
                         //$body .= "\n".$AppUI->_('Priority'). ": $this->task_priority";
-                        $body .= "\n".$AppUI->_('Start Date') . ": " . $task_start_date->format( $df );
-                        $body .= "\n".$AppUI->_('Finish Date') . ": " . ($this->task_end_date != "" ? $task_finish_date->format( $df ) : "");
-                        $body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
-                        $body .= "\n\n" . $AppUI->_('Description') . ":"
+                        $body .= "\n".$AppUI->_('Start Date', UI_OUTPUT_RAW) . ": " . $task_start_date->format( $df );
+                        $body .= "\n".$AppUI->_('Finish Date', UI_OUTPUT_RAW) . ": " . ($this->task_end_date != "" ? $task_finish_date->format( $df ) : "");
+                        $body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
+                        $body .= "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":"
                                 . "\n$this->task_description";
                         if ($users[0]['creator_email']) {
-                                $body .= "\n\n" . $AppUI->_('Creator').":"
+                                $body .= "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW).":"
                                         . "\n" . $users[0]['creator_first_name'] . " " . $users[0]['creator_last_name' ]
                                         . ", " . $users[0]['creator_email'];
                         }
-                        $body .= "\n\n" . $AppUI->_('Owner').":"
+                        $body .= "\n\n" . $AppUI->_('Owner', UI_OUTPUT_RAW).":"
                                 . "\n" . $users[0]['owner_first_name'] . " " . $users[0]['owner_last_name' ]
                                 . ", " . $users[0]['owner_email'];
 
@@ -863,7 +863,7 @@ class CTask extends CDpObject {
                 $sql = "SELECT project_name FROM projects WHERE project_id=$this->task_project";
                 $projname = db_loadResult( $sql );
 
-                $body = $AppUI->_('Project') . ": $projname\n";
+                $body = $AppUI->_('Project', UI_OUTPUT_RAW) . ": $projname\n";
                 if ($this->task_parent != $this->task_id) {
                         $q->clear();
                         $q->addTable('tasks');
@@ -871,15 +871,15 @@ class CTask extends CDpObject {
                         $q->addWhere('task_id = ' . $this->task_parent);
                         $req =& $q->exec(QUERY_STYLE_NUM);
                         if ($req) {
-                                $body .= $AppUI->_('Parent Task') . ': ' . $req->fields[0] . "\n";
+                                $body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . $req->fields[0] . "\n";
                         }
                 }
                 $q->clear();
                 $body .= $AppUI->_('Task') . ": $this->task_name\n";
                 $task_types = dPgetSysVal("TaskType");
-                $body .= $AppUI->_('Task Type') . ':' . $task_types[$this->task_type] . "\n";
-                $body .= $AppUI->_('URL') . ": {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id\n\n";
-                $body .= $AppUI->_('Summary') . ": $log->task_log_name\n\n";
+                $body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
+                $body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ": {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id\n\n";
+                $body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ": $log->task_log_name\n\n";
                 $body .= $log->task_log_description;
 
                 // Append the user signature to the email - if it exists.

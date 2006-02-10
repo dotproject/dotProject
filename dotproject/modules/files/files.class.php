@@ -220,13 +220,13 @@ class CFile extends CDpObject {
 				$mail->Subject( $this->_project->project_name."::".$this->_task->task_name."::".$this->file_name, $locale_char_set);
 			}
 			
-			$body = $AppUI->_('Project').": ".$this->_project->project_name;
-			$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=projects&a=view&project_id=".$this->_project->project_id;
+			$body = $AppUI->_('Project', UI_OUTPUT_RAW).": ".$this->_project->project_name;
+			$body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/index.php?m=projects&a=view&project_id=".$this->_project->project_id;
 			
 			if (intval($this->_task->task_id) != 0) {
-				$body .= "\n\n".$AppUI->_('Task').":    ".$this->_task->task_name;
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=".$this->_task->task_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->_task->task_description;
+				$body .= "\n\n".$AppUI->_('Task', UI_OUTPUT_RAW).":    ".$this->_task->task_name;
+				$body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=".$this->_task->task_id;
+				$body .= "\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":" . "\n".$this->_task->task_description;
 				
 				//preparing users array
 				$q  = new DBQuery;
@@ -258,8 +258,8 @@ class CFile extends CDpObject {
 			}
 			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
 			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/fileviewer.php?file_id=".$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->file_description;	
+				$body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/fileviewer.php?file_id=".$this->file_id;
+				$body .= "\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":" . "\n".$this->file_description;	
 			}
 			
 			//send mail			

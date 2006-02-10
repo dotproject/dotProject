@@ -187,8 +187,8 @@ class CForumMessage {
 
 	function sendWatchMail( $debug=false ) {
 		GLOBAL $AppUI, $debug, $dPconfig;
-		$subj_prefix = $AppUI->_('forumEmailSubj');
-		$body_msg = $AppUI->_('forumEmailBody');
+		$subj_prefix = $AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
+		$body_msg = $AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
 		
 		// Get the message from details.
 		$q  = new DBQuery;
@@ -248,14 +248,14 @@ class CForumMessage {
 
 		$body = "$body_msg";
 
-		$body .= "\n\n" . $AppUI->_('Forum') . ": $forum_name";
-		$body .= "\n" . $AppUI->_('Subject') . ": {$this->message_title}";
-		$body .= "\n" . $AppUI->_('Message From') . ": $message_from";
+		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ": $forum_name";
+		$body .= "\n" . $AppUI->_('Subject', UI_OUTPUT_RAW) . ": {$this->message_title}";
+		$body .= "\n" . $AppUI->_('Message From', UI_OUTPUT_RAW) . ": $message_from";
 		$body .= "\n\n{$dPconfig['base_url']}/index.php?m=forums&a=viewer&forum_id=$this->message_forum";
 		$body .= "\n\n$this->message_body";
  
 		$mail->Body( $body, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ""  );
-		$mail->From( $AppUI->_('forumEmailFrom') );
+		$mail->From( $AppUI->_('forumEmailFrom', UI_OUTPUT_RAW) );
 
 		while ($row = db_fetch_assoc( $res )) {
 			if ($mail->ValidEmail( $row['contact_email'] )) {
