@@ -236,23 +236,23 @@ function showtask_edit($task, $level=0)
 <?php } // END of displaying tasks function.}}}
 ?>
 
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&project_id=$project_id";?>"> <!--&date=$date -->
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th width="20" colspan="2"><?php echo $AppUI->_('Progress');?></th>
 	<th width="15" align="center"><?php echo $AppUI->_('P');?></th>
 	<th>
-		<a class="hdr" href="index.php?m=tasks&a=organize&sort=task_name">
+		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php echo $project_id;?>&sort=task_name">
 		<?php echo $AppUI->_('Task');?>
 		</a>
 	</th>
 	<th nowrap>
-		<a class="hdr" href="index.php?m=tasks&a=organize&sort=task_duration">
+		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php echo $project_id;?>&sort=task_duration">
 		<?php echo $AppUI->_('Duration');?>
 		</a>
 	</th>
 	<th nowrap>
-		<a class="hdr" href="index.php?m=tasks&a=organize&sort=task_end_date">
+		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php echo $project_id;?>&sort=task_end_date">
 		<?php echo $AppUI->_('Due In');?>
 		</a>
 	</th>
