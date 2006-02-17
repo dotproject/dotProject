@@ -54,7 +54,7 @@ if (! $canAdmin)
 	$canAdmin = $obj->canAdmin();
 
 if ($obj->file_checkout == 'final' && ! $canAdmin) {
-	redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 // setup the title block
 $ttl = $file_id ? "Edit File" : "Add File";
