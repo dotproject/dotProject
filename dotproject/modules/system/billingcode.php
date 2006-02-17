@@ -54,7 +54,7 @@ function showcodes(&$a) {
         $s = "\n<tr height=20>";
         $s .= "<td width=40><a href=\"javascript:delIt2({$a['billingcode_id']});\" title=\"".$AppUI->_('delete')."\"><img src=\"./images/icons/stock_delete-16.png\" border=\"0\" alt=\"Delete\"></a></td>";
         $alt = htmlspecialchars( $a["billingcode_desc"] );
-        $s .= '<td align=left>&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["billingcode_id"] . '" title="' . $alt . '">' . $a["billingcode_name"] . '</a></td>';
+        $s .= '<td align=left>&nbsp;' . $a["billingcode_name"] . '</td>';
         $s .= '<td nowrap="nowrap" align=center>'.$a["billingcode_value"].'</td>';
         $s .= '<td nowrap="nowrap">'.$a["billingcode_desc"].'</td>';
         $s .= "</tr>\n";
