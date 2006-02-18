@@ -10,10 +10,14 @@ if (($msg = $dept->bind( $_POST ))) {
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg( 'Department' );
 if ($del) {
+	$dep = new CDepartment();
+	$msg = $dep->load( $dept->dept_id );
 	if (($msg = $dept->delete())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
+		$AppUI->redirect();
 	} else {
 		$AppUI->setMsg( "deleted", UI_MSG_ALERT, true );
+		$AppUI->redirect( 'm=companies&a=view&company_id='.$dep->dept_company );
 	}
 } else {
 	if (($msg = $dept->store())) {
@@ -22,6 +26,6 @@ if ($del) {
 		$isNotNew = @$_POST['department_id'];
 		$AppUI->setMsg( $isNotNew ? 'updated' : 'inserted', UI_MSG_OK, true );
 	}
-}
 $AppUI->redirect();
+}
 ?>
