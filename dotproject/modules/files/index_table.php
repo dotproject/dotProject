@@ -195,9 +195,9 @@ foreach ($files as $file_row) {
                 <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( './images/icons/ci.png', '20','20'); ?></a>
         <?php }
         else { 
-                if ($latest_file['file_checkout'] == 'final')
+                if ($latest_file['file_checkout'] == 'final'){
                         echo 'final';
-                else
+                } else {
 						$q4 = new DBQuery;
 						$q4->addQuery("file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name");
 						$q4->addTable('files');
@@ -209,6 +209,7 @@ foreach ($files as $file_row) {
 						$co_user = $co_user[0];
 						$q4->clear();
                         echo $co_user['contact_first_name'].' '.$co_user['contact_last_name'].'<br>('.$co_user['co_user'].')'; 
+		}
         }
         ?>
                 
