@@ -83,7 +83,7 @@ function setCalendar( idate, fdate ) {
 	e_date = document.getElementById('task_' + 'end_date');
 	e_fdate = document.getElementById('end_date');
 	if (calendarField.name == 'start_date') {
-		if( e_fdate.value < idate) {
+		if( e_date.value < idate) {
 			e_date.value = idate;
 			e_fdate.value = fdate;
 		}
