@@ -211,7 +211,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 			<?php
 				$end_date = intval( $obj->task_end_date ) ? new CDate( $obj->task_end_date ) : null;
 			?>
-			<input type="hidden" name="task_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
+			<input type="hidden" name="task_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP ) : '';?>" />
 			<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" />
 			<a href="#" onClick="popCalendar('end_date')">
 				<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0">
