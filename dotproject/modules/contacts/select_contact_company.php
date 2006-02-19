@@ -53,7 +53,7 @@
 			}
 			$data_update_script = "opener.setCompany('".$_POST[$id_field]."', '" . db_escape($r_data[$name_field]) . "');\n";
 		} else if($table_name == "departments"){
-			$update_fields = array("dept_name"     => "contact_department");
+			$update_fields = array("dept_id"     => "contact_department");
 			if($update_address){
 				$update_fields = array("dept_address1" => "contact_address1",
 				                       "dept_address2" => "contact_address2",
