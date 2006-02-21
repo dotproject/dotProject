@@ -9,44 +9,44 @@ global $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $proje
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$filter1 = array();
 $projectStatus = dPgetSysVal( 'ProjectStatus' );
 $projectStatus = arrayMerge( array( '-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = dPgetParam($_REQUEST, 'company_id', 0);
+$department = dPgetParam($_REQUEST, 'department', 0);
 $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
 
-if ($proFilter == '-2'){
-        $filter1[] = "project_status != 3 ";
-} else if ($proFilter != '-1') {
-        $filter1[] = "project_status = $proFilter ";
-}
-if ($company_id != 0) {
-        $filter1[] = "project_company = $company_id ";
-}
-//$filter1 = ($proFilter == '-1') ? '' : " AND project_status = $proFilter ";
-if ($showInactive != '1')
-        $filter1[] = "project_active = 1";
 $pjobj =& new CProject;
-$allowed_projects = $pjobj->getAllowedSQL($AppUI->user_id);
-$where = array_merge($filter1, $allowed_projects);
-
 $working_hours = $dPconfig['daily_working_hours'];
 
 // pull valid projects and their percent complete information
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 $q  = new DBQuery;
 $q->addTable('projects', 'p');
-$q->addQuery("DISTINCT project_id, project_color_identifier, project_name, project_start_date, project_end_date,
+$q->addQuery('DISTINCT p.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
                 max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
-                IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/ SUM(task_duration *
-                IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete,
-                project_status");
+                IF(task_duration_type = 24, '.$working_hours.', task_duration_type))/ SUM(task_duration *
+                IF(task_duration_type = 24, '.$working_hours.', task_duration_type)) AS project_percent_complete,
+                project_status');
 $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'p.project_company = c1.company_id');
-if (count($where))
-        $q->addWhere( implode( " AND ", $where) );
+if ($department > 0) {
+	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
+	$q->addWhere('pd.department_id = '.$department);
+}
+if ($proFilter == '-2'){
+        $q->addWhere('project_status != 3');
+} else if ($proFilter != '-1') {
+         $q->addWhere('project_status = '.$proFilter);
+}
+if (!($department > 0) && $company_id != 0) {
+        $q->addWhere('project_company = '.$company_id);
+}
+if ($showInactive != '1') {
+        $q->addWhere('project_active = 1');
+}
+$pjobj->setAllowedSQL($AppUI->user_id, $q);
 $q->addGroup('project_id');
 $q->addOrder('project_name, task_end_date DESC');
 $projects = $q->loadList();
