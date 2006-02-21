@@ -57,7 +57,7 @@ if (is_file( "../includes/config.php" )) {
 	if ($mode == 'upgrade') {
 ?>
 <tr>
-	<td class='title' colspan='2'><p class='error'>It would appear that you already have a dotProject installation. The installar will attempt to upgrade your system, however it is a good idea to take a full backup first!</p></td>
+	<td class='title' colspan='2'><p class='error'>It would appear that you already have a dotProject installation. The installer will attempt to upgrade your system, however it is a good idea to take a full backup first!</p></td>
 <?php
 	}
 ?>
