@@ -87,8 +87,8 @@ $titleBlock->show();
 <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbl">
 <tr>
 	<th width="15%" nowrap><?php echo $AppUI->_( 'Abbreviation' );?></th>
-	<th width="40%" nowrap>English <?php echo $AppUI->_( 'String' );?></th>
-	<th width="40%" nowrap><?php echo $AppUI->_( $locales[$lang] ).' '.$AppUI->_( 'String' );?></th>
+	<th width="40%" nowrap><?php echo $AppUI->_('English String' );?></th>
+	<th width="40%" nowrap><?php echo $AppUI->_( 'String' ).': '.$AppUI->_( $locales[$lang] );?></th>
 	<th width="5%" nowrap><?php echo $AppUI->_( 'delete' );?></th>
 </tr>
 <form action="?m=system&a=translate_save" method="post" name="editlang">
@@ -100,7 +100,7 @@ if ($lang == 'en') {
 	echo "<tr>\n";
 	echo "<td><input type=\"text\" name=\"trans[$index][abbrev]\" value=\"\" size=\"20\" class=\"text\" /></td>\n";
 	echo "<td><input type=\"text\" name=\"trans[$index][english]\" value=\"\" size=\"40\" class=\"text\" /></td>\n";
-	echo "<td colspan=\"2\">New Entry</td>\n";
+	echo "<td colspan=\"2\">".$AppUI->_('New Entry')."</td>\n";
 	echo "</tr>\n";
 }
 

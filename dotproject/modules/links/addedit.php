@@ -142,14 +142,14 @@ function setTask( key, val ) {
                 <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category');?>:</td>
                         <td align="left">
-                                <?php echo arraySelect(dPgetSysVal("LinkType"), 'link_category', '', $obj->link_category); ?>
+                                <?php echo arraySelect(dPgetSysVal("LinkType"), 'link_category', '', $obj->link_category, true); ?>
                         <td>
 
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Project' );?>:</td>
 			<td align="left">
 			<?php
-				echo arraySelect( $projects, 'link_project', 'size="1" class="text" style="width:270px"', $link_project );
+				echo arraySelect( $projects, 'link_project', 'size="1" class="text" style="width:270px"', $link_project);
 			?>
 			</td>
 		</tr>

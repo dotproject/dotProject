@@ -243,7 +243,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 <tr>
         <td align="right" valign="middle"><?php echo $AppUI->_('Reference');?>:</td>
         <td valign="middle">
-                <?php echo arraySelect( $taskLogReference, 'task_log_reference', 'size="1" class="text"', $log->task_log_reference );?>
+                <?php echo arraySelect( $taskLogReference, 'task_log_reference', 'size="1" class="text"', $log->task_log_reference, true );?>
 	</td>
 </tr>
 <tr>
