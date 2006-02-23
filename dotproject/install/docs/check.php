@@ -15,7 +15,7 @@
 <?php
 error_reporting( E_ALL );
 
-$baseDir = dirname(dirname(__FILE__));
+$baseDir = dirname(dirname(dirname(__FILE__)));
 // automatically define the base url
 $baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : getenv('HTTP_HOST');
