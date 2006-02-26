@@ -355,4 +355,228 @@ class CProject extends CDpObject {
 
 	}
 }
+
+/* The next lines of code have resided in projects/index.php before 
+** and have been moved into this 'encapsulated' function
+** for reusability of that central code.
+**
+** @date 20060225
+** @responsible gregorerhardt
+**
+** E.g. this code is used as well in a tab for the admin/viewuser site
+**
+** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified, 
+			current viewing user $AppUI->user_id is used.
+*/
+
+function projects_list_data($user_id = false) {
+	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy;
+
+	$orderby  = $AppUI->getState( 'UsrProjIdxOrderBy' ) ? $AppUI->getState( 'UsrProjIdxOrderBy' ) : 'project_end_date';
+	$orderdir = $AppUI->getState( 'UsrProjIdxOrderDir' ) ? $AppUI->getState( 'UsrProjIdxOrderDir' ) : 'asc';
+
+	// get any records denied from viewing
+	$obj = new CProject();
+	$deny = $obj->getDeniedRecords( $AppUI->user_id );
+
+	// Let's delete temproary tables
+	$q  = new DBQuery;
+	$q->dropTemp('tasks_sum, tasks_summy, tasks_critical, tasks_problems');
+	$q->exec();
+	$q->clear();
+
+	// Task sum table
+	// by Pablo Roca (pabloroca@mvps.org)
+	// 16 August 2003
+
+	$working_hours = $dPconfig['daily_working_hours'];
+
+	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
+	$q->createTemp('tasks_sum');
+	$q->addTable('tasks');
+	$q->addQuery("task_project, COUNT(distinct tasks.task_id) AS total_tasks, 
+			SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/
+			SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_duration");
+	$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
+	if ($user_id) {
+		$q->addWhere('ut.user_id = '.$user_id);
+	}
+	$q->addGroup('task_project');
+	$tasks_sum = $q->exec();
+	$q->clear();
+
+	// temporary My Tasks
+	// by Pablo Roca (pabloroca@mvps.org)
+	// 16 August 2003
+	$q->createTemp('tasks_summy');
+	$q->addTable('tasks');
+	$q->addQuery('task_project, COUNT(distinct task_id) AS my_tasks');
+	if ($user_id) {
+		$q->addWhere('task_owner = '.$user_id);
+	} else {
+		$q->addWhere('task_owner = '.$AppUI->user_id);
+	}
+	$q->addGroup('task_project');
+	$tasks_summy = $q->exec();
+	$q->clear();
+
+	// temporary critical tasks
+	$q->createTemp('tasks_critical');
+	$q->addTable('tasks');
+	$q->addQuery('task_project, task_id AS critical_task, MAX(task_end_date) AS project_actual_end_date');
+	$q->addJoin('projects', 'p', 'p.project_id = task_project');
+	$q->addOrder("task_end_date DESC");
+	$q->addGroup('task_project');
+	$tasks_critical = $q->exec();
+	$q->clear();
+
+	// temporary task problem logs
+	$q->createTemp('tasks_problems');
+	$q->addTable('tasks');
+	$q->addQuery('task_project, task_log_problem');
+	$q->addJoin('task_log', 'tl', 'tl.task_log_task = task_id');
+	$q->addWhere("task_log_problem > '0'");
+	$q->addGroup('task_project');
+	$tasks_problems = $q->exec();
+	$q->clear();
+
+	// temporary users tasks
+	$q->createTemp('tasks_users');
+	$q->addTable('tasks');
+	$q->addQuery('task_project, ut.user_id');
+	$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
+	if ($user_id) {
+		$q->addWhere('ut.user_id = '.$user_id);
+	}
+	$q->addOrder("task_end_date DESC");
+	$q->addGroup('task_project');
+	$tasks_users = $q->exec();
+	$q->clear();
+
+	if(isset($department)){
+		//If a department is specified, we want to display projects from the department, and all departments under that, so we need to build that list of departments
+		$dept_ids = array();
+		$q->addTable('departments');
+		$q->addQuery('dept_id, dept_parent');
+		$q->addOrder('dept_parent,dept_name');
+		$rows = $q->loadList();
+		addDeptId($rows, $department);
+		$dept_ids[] = $department;
+	}
+	$q->clear();
+
+	// retrieve list of records
+	// modified for speed
+	// by Pablo Roca (pabloroca@mvps.org)
+	// 16 August 2003
+	// get the list of permitted companies
+	$obj = new CCompany();
+	$companies = $obj->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
+	if(count($companies) == 0) $companies = array(0);
+
+
+	$q->addTable('projects');
+	$q->addQuery('projects.project_id, project_active, project_status, project_color_identifier, project_name, project_description, project_duration,
+		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
+		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, ts.total_tasks, tsy.my_tasks,
+		ts.project_percent_complete, user_username');
+	$q->addJoin('companies', 'com', 'projects.project_company = company_id');
+	$q->addJoin('users', 'u', 'projects.project_owner = u.user_id');
+	$q->addJoin('tasks_critical', 'tc', 'projects.project_id = tc.task_project');
+	$q->addJoin('tasks_problems', 'tp', 'projects.project_id = tp.task_project');
+	$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
+	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');
+	$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');
+	// DO we have to include the above DENY WHERE restriction, too?
+	//$q->addJoin('', '', '');
+	if (isset($department)) {
+		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
+	}
+	if (!isset($department) && $company_id) {
+		$q->addWhere("projects.project_company = '$company_id'");
+	}
+	if (isset($department)) {
+		$q->addWhere("pd.department_id in ( ".implode(',',$dept_ids)." )");
+	}
+	if ($user_id) {
+		$q->addWhere('(tu.user_id = '.$user_id.' OR projects.project_owner = '.$user_id.' )');
+	}
+	$q->addGroup('projects.project_id');
+	$q->addOrder("$orderby $orderdir");
+	$obj->setAllowedSQL($AppUI->user_id, $q);
+	$projects = $q->loadList();
+
+	// get the list of permitted companies
+	$companies = arrayMerge( array( '0'=>$AppUI->_('All') ), $companies );
+
+	//get list of all departments, filtered by the list of permitted companies.
+	$q->clear();
+	$q->addTable('companies');
+	$q->addQuery('company_id, company_name, dep.*');
+	$q->addJoin('departments', 'dep', 'companies.company_id = dep.dept_company');
+	$q->addOrder('company_name,dept_parent,dept_name');
+	$obj->setAllowedSQL($AppUI->user_id, $q);
+	$rows = $q->loadList();
+
+	//display the select list
+	$buffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
+	$buffer .= '<option value="company_0" style="font-weight:bold;">'.$AppUI->_('All').'</option>'."\n";
+	$company = '';
+	foreach ($rows as $row) {
+		if ($row["dept_parent"] == 0) {
+			if($company!=$row['company_id']){
+				$buffer .= '<option value="'.$company_prefix.$row['company_id'].'" style="font-weight:bold;"'.($company_id==$row['company_id']?'selected="selected"':'').'>'.$row['company_name'].'</option>'."\n";
+				$company=$row['company_id'];
+			}
+			if($row["dept_parent"]!=null){
+				showchilddept( $row );
+				findchilddept( $rows, $row["dept_id"] );
+			}
+		}
+	}
+	$buffer .= '</select>';
+
+}
+
+
+//writes out a single <option> element for display of departments
+function showchilddept( &$a, $level=1 ) {
+	Global $buffer, $department;
+	$s = '<option value="'.$a["dept_id"].'"'.(isset($department)&&$department==$a["dept_id"]?'selected="selected"':'').'>';
+
+	for ($y=0; $y < $level; $y++) {
+		if ($y+1 == $level) {
+			$s .= '';
+		} else {
+			$s .= '&nbsp;&nbsp;';
+		}
+	}
+
+	$s .= '&nbsp;&nbsp;'.$a["dept_name"]."</option>\n";
+	$buffer .= $s;
+
+//	echo $s;
+}
+
+//recursive function to display children departments.
+function findchilddept( &$tarr, $parent, $level=1 ){
+	$level = $level+1;
+	$n = count( $tarr );
+	for ($x=0; $x < $n; $x++) {
+		if($tarr[$x]["dept_parent"] == $parent && $tarr[$x]["dept_parent"] != $tarr[$x]["dept_id"]){
+			showchilddept( $tarr[$x], $level );
+			findchilddept( $tarr, $tarr[$x]["dept_id"], $level);
+		}
+	}
+}
+
+function addDeptId($dataset, $parent){
+	Global $dept_ids;
+	foreach ($dataset as $data){
+		if($data['dept_parent']==$parent){
+			$dept_ids[] = $data['dept_id'];
+			addDeptId($dataset, $data['dept_id']);
+		}
+	}
+}
 ?>

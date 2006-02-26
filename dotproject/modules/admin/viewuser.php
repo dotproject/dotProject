@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-
+GLOBAL $company_id, $dept_ids, $department, $min_view, $m, $a;
 $user_id = isset( $_GET['user_id'] ) ? $_GET['user_id'] : 0;
 
 if ($user_id != $AppUI->user_id 
@@ -8,6 +8,26 @@ if ($user_id != $AppUI->user_id
 	$AppUI->redirect('m=public&a=access_denied');
 
 $AppUI->savePlace();
+
+$company_id = $AppUI->getState( 'UsrProjIdxCompany' ) !== NULL ? $AppUI->getState( 'UsrProjIdxCompany' ) : $AppUI->user_company;
+
+$company_prefix = 'company_';
+
+if (isset( $_POST['department'] )) {
+	$AppUI->setState( 'UsrProjIdxDepartment', $_POST['department'] );
+	
+	//if department is set, ignore the company_id field
+	unset($company_id);
+}
+$department = $AppUI->getState( 'UsrProjIdxDepartment' ) !== NULL ? $AppUI->getState( 'UsrProjIdxDepartment' ) : $company_prefix.$AppUI->user_company;
+
+//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the 
+// $department variable, and populate the $company_id variable.
+if(!(strpos($department, $company_prefix)===false)){
+	$company_id = substr($department,strlen($company_prefix));
+	$AppUI->setState( 'UsrProjIdxCompany', $company_id );
+	unset($department);
+}
 
 if (isset( $_GET['tab'] )) {
 	$AppUI->setState( 'UserVwTab', $_GET['tab'] );
@@ -148,11 +168,12 @@ function popChgPwd() {
 
 <?php
 	// tabbed information boxes
-	$tabBox = new CTabBox( "?m=admin&a=viewuser&user_id=$user_id", "{$dPconfig['root_dir']}/modules/admin/", $tab );
-	$tabBox->add( 'vw_usr_proj', 'Owned Projects' );
-	$tabBox->add( 'vw_usr_log', 'User Log');
-	$tabBox->add( 'vw_usr_perms', 'Permissions' );
-	$tabBox->add( 'vw_usr_roles', 'Roles' );
+	$min_view = true;
+	$tabBox = new CTabBox( "?m=admin&a=viewuser&user_id=$user_id", '', $tab );
+	$tabBox->loadExtras('admin', 'viewuser'); 
+	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_log', 'User Log');
+	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_perms', 'Permissions' );
+	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_roles', 'Roles' );
 	$tabBox->show();
 }
 ?>

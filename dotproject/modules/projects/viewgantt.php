@@ -1,6 +1,6 @@
 <?php /* TASKS $Id$gantt.php,v 1.30 2004/08/06 22:56:54 gregorerhardt Exp $ */
-GLOBAL  $company_id, $dept_ids, $department, $min_view, $m, $a;
-
+GLOBAL  $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
+//Secho dPgetConfig( 'jpLocale' );
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 $min_view = defVal( @$min_view, false);
@@ -128,7 +128,7 @@ function showFullProject() {
         <td>
                 <table border="0" cellpadding="4" cellspacing="0" class="tbl">
 
-                <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a";?>">
+                <form name="editFrm" method="post" action="?<?php echo 'm='.$m.'&a='.$a. (isset($user_id) ? '&user_id='.$user_id : '').'&tab='.$tab;?>">
                 <input type="hidden" name="display_option" value="<?php echo $display_option;?>" />
 
                 <tr>
@@ -192,7 +192,7 @@ function showFullProject() {
                         <td>
                 <?php
                 $src =
-                "?m=$m&a=gantt&suppressHeaders=1" .
+                "?m=projects&a=gantt&suppressHeaders=1" .
                 ( $display_option == 'all' ? '' :
                         '&start_date=' . $start_date->format( "%Y-%m-%d" ) . '&end_date=' . $end_date->format( "%Y-%m-%d" ) ) .
                 "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt";
