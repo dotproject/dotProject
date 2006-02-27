@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.50 6 July 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -23,7 +23,7 @@ if (!defined('_ADODB_ODBC_LAYER')) {
 class  ADODB_odbc_mssql extends ADODB_odbc {	
 	var $databaseType = 'odbc_mssql';
 	var $fmtDate = "'Y-m-d'";
-	var $fmtTimeStamp = "'Y-m-d h:i:sA'";
+	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $_bindInputArray = true;
 	var $metaTablesSQL="select name,case when type='U' then 'T' else 'V' end from sysobjects where (type='U' or type='V') and (name not in ('sysallocations','syscolumns','syscomments','sysdepends','sysfilegroups','sysfiles','sysfiles1','sysforeignkeys','sysfulltextcatalogs','sysindexes','sysindexkeys','sysmembers','sysobjects','syspermissions','sysprotects','sysreferences','systypes','sysusers','sysalternates','sysconstraints','syssegments','REFERENTIAL_CONSTRAINTS','CHECK_CONSTRAINTS','CONSTRAINT_TABLE_USAGE','CONSTRAINT_COLUMN_USAGE','VIEWS','VIEW_TABLE_USAGE','VIEW_COLUMN_USAGE','SCHEMATA','TABLES','TABLE_CONSTRAINTS','TABLE_PRIVILEGES','COLUMNS','COLUMN_DOMAIN_USAGE','COLUMN_PRIVILEGES','DOMAINS','DOMAIN_CONSTRAINTS','KEY_COLUMN_USAGE'))";
 	var $metaColumnsSQL = "select c.name,t.name,c.length from syscolumns c join systypes t on t.xusertype=c.xusertype join sysobjects o on o.id=c.id where o.name='%s'";
@@ -32,7 +32,6 @@ class  ADODB_odbc_mssql extends ADODB_odbc {
 	var $sysTimeStamp = 'GetDate()';
 	var $leftOuter = '*=';
 	var $rightOuter = '=*';
-	var $upperCase = 'upper';
 	var $substr = 'substring';
 	var $length = 'len';
 	var $ansiOuter = true; // for mssql7 or later
@@ -44,7 +43,7 @@ class  ADODB_odbc_mssql extends ADODB_odbc {
 	function ADODB_odbc_mssql()
 	{
 		$this->ADODB_odbc();
-		$this->curmode = SQL_CUR_USE_ODBC;	
+		//$this->curmode = SQL_CUR_USE_ODBC;	
 	}
 
 	// crashes php...
@@ -133,7 +132,8 @@ order by constraint_name, referenced_table_name, keyno";
 	
 	function &MetaColumns($table)
 	{
-		return ADOConnection::MetaColumns($table);
+		$arr = ADOConnection::MetaColumns($table);
+		return $arr;
 	}
 	
 	function _query($sql,$inputarr)
@@ -146,14 +146,26 @@ order by constraint_name, referenced_table_name, keyno";
 	// tested with MSSQL 2000
 	function &MetaPrimaryKeys($table)
 	{
-		$sql = "select k.column_name from information_schema.key_column_usage k,
+	global $ADODB_FETCH_MODE;
+	
+		$schema = '';
+		$this->_findschema($table,$schema);
+		//if (!$schema) $schema = $this->database;
+		if ($schema) $schema = "and k.table_catalog like '$schema%'"; 
+	
+		$sql = "select distinct k.column_name,ordinal_position from information_schema.key_column_usage k,
 		information_schema.table_constraints tc 
 		where tc.constraint_name = k.constraint_name and tc.constraint_type =
-		'PRIMARY KEY' and k.table_name = '$table'";
+		'PRIMARY KEY' and k.table_name = '$table' $schema order by ordinal_position ";
 		
+		$savem = $ADODB_FETCH_MODE;
+		$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 		$a = $this->GetCol($sql);
+		$ADODB_FETCH_MODE = $savem;
+		
 		if ($a && sizeof($a)>0) return $a;
-		return false;	  
+		$false = false;
+		return $false;	  
 	}
 	
 	function &SelectLimit($sql,$nrows=-1,$offset=-1, $inputarr=false,$secs2cache=0)

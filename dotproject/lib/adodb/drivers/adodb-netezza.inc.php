@@ -1,6 +1,6 @@
 <?php
 /*
-  V4.50 6 July 2004  (c) 2000-2004 John Lim (jlim#natsoft.com.my). All rights reserved.
+  V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
  
   First cut at the Netezza Driver by Josh Eldridge joshuae74#hotmail.com
  Based on the previous postgres drivers.
@@ -26,7 +26,6 @@ class ADODB_netezza extends ADODB_postgres64 {
 	var $_resultid = false;
   	var $concat_operator='||';
   	var $random = 'random';
-  	var $upperCase = 'upper';
 	var $metaDatabasesSQL = "select objname from _v_object_data where objtype='database' order by 1";
     var $metaTablesSQL = "select objname from _v_object_data where objtype='table' order by 1";
 	var $isoDates = true; // accepts dates in ISO format
@@ -150,10 +149,12 @@ class ADORecordSet_netezza extends ADORecordSet_postgres64
 		{
 		case ADODB_FETCH_NUM: $this->fetchMode = PGSQL_NUM; break;
 		case ADODB_FETCH_ASSOC:$this->fetchMode = PGSQL_ASSOC; break;
-		default:
+		
 		case ADODB_FETCH_DEFAULT:
-		case ADODB_FETCH_BOTH:$this->fetchMode = PGSQL_BOTH; break;
+		case ADODB_FETCH_BOTH:
+		default: $this->fetchMode = PGSQL_BOTH; break;
 		}
+		$this->adodbFetchMode = $mode;
 		$this->ADORecordSet($queryID);
 	}
 	

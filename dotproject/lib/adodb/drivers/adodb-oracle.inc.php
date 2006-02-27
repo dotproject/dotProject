@@ -1,15 +1,15 @@
 <?php
 /*
-V4.50 6 July 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
 
   Latest version is available at http://adodb.sourceforge.net
   
-  Oracle data driver. Requires Oracle client. Works on Windows and Unix and Oracle 7 and 8.
+  Oracle data driver. Requires Oracle client. Works on Windows and Unix and Oracle 7.
   
-  If you are using Oracle 8, use the oci8 driver which is much better and more reliable.
+  If you are using Oracle 8 or later, use the oci8 driver which is much better and more reliable.
 */
 
 // security - hide paths
@@ -230,7 +230,7 @@ class ADORecordset_oracle extends ADORecordSet {
 			   fields in a certain query result. If the field offset isn't specified, the next field that wasn't yet retrieved by
 			   fetchField() is retrieved.		*/
 
-	   function FetchField($fieldOffset = -1)
+	   function &FetchField($fieldOffset = -1)
 	   {
 			$fld = new ADOFieldObject;
 			$fld->name = ora_columnname($this->_queryID, $fieldOffset);
