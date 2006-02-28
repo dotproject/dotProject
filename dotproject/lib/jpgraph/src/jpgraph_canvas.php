@@ -6,8 +6,7 @@
 // Author:	Johan Persson (johanp@aditus.nu)
 // Ver:		$Id$
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -36,10 +35,15 @@ class CanvasGraph extends Graph {
     // Method description
     function Stroke($aStrokeFileName="") {
 	if( $this->texts != null ) {
-	    for($i=0; $i<count($this->texts); ++$i) {
+	    for($i=0; $i < count($this->texts); ++$i) {
 		$this->texts[$i]->Stroke($this->img);
 	    }
-	}				
+	}		
+	if( $this->iTables !== null ) {
+	    for($i=0; $i < count($this->iTables); ++$i) {
+		$this->iTables[$i]->Stroke($this->img);
+	    }   
+	}
 	$this->StrokeTitles();
 
 	// Should we do any final image transformation

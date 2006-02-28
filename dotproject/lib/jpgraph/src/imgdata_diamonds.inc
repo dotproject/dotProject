@@ -4,10 +4,9 @@
 // Description:	Base64 encoded images for diamonds
 // Created: 	2003-03-20
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: imgdata_diamonds.inc,v 1.1 2003/03/23 13:37:36 aditus Exp $
+// Ver:		$Id: imgdata_diamonds.inc 21 2005-05-30 20:35:34Z ljp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2003 Johan Persson 
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 class ImgData_Diamonds extends ImgData {

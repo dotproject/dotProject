@@ -6,8 +6,7 @@
 // Author:	Johan Persson (johanp@aditus.nu)
 // Ver:		$Id$
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -39,7 +38,7 @@ class PiePlot3D extends PiePlot {
 	
     // Set label arrays
     function SetLegends($aLegend) {
-	$this->legends = array_reverse($aLegend);
+	$this->legends = array_reverse(array_slice($aLegend,0,count($this->data)));
     }
 
     function SetSliceColors($aColors) {
@@ -58,16 +57,23 @@ class PiePlot3D extends PiePlot {
 
     // Should the slices be separated by a line? If color is specified as "" no line
     // will be used to separate pie slices.
-    function SetEdge($aColor,$aWeight=1) {
+    function SetEdge($aColor='black',$aWeight=1) {
 	$this->edgecolor = $aColor;
 	$this->edgeweight = $aWeight;
+    }
+
+    // Dummy function to make Pie3D behave in a similair way to 2D
+    function ShowBorder($exterior=true,$interior=true) {
+	JpGraphError::RaiseL(14001);
+//('Pie3D::ShowBorder() . Deprecated function. Use Pie3D::SetEdge() to control the edges around slices.');
     }
 
     // Specify projection angle for 3D in degrees
     // Must be between 20 and 70 degrees
     function SetAngle($a) {
 	if( $a<5 || $a>90 )
-	    JpGraphError::Raise("PiePlot3D::SetAngle() 3D Pie projection angle must be between 5 and 85 degrees.");
+	    JpGraphError::RaiseL(14002);
+//("PiePlot3D::SetAngle() 3D Pie projection angle must be between 5 and 85 degrees.");
 	else
 	    $this->angle = $a;
     }
@@ -119,7 +125,7 @@ class PiePlot3D extends PiePlot {
 	    $alt="alt=\"$tmp\" title=\"$tmp\"";
 	}
 	if( !empty($this->csimtargets[$i]) )
-	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\" $alt>\n";
+	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\" $alt />\n";
     }
 
     function SetLabels($aLabels,$aLblPosAdj="auto") {
@@ -176,7 +182,7 @@ class PiePlot3D extends PiePlot {
 	// pie ellipse. Hence, no slice will cross 90 or 270
 	// point.
 	if( ($sa < 90 && $ea > 90) || ( ($sa > 90 && $sa < 270) && $ea > 270) ) {
-	    JpGraphError::Raise('Internal assertion failed. Pie3D::Pie3DSlice');
+	    JpGraphError::RaiseL(14003);//('Internal assertion failed. Pie3D::Pie3DSlice');
 	    exit(1);
 	}
 
@@ -379,7 +385,7 @@ class PiePlot3D extends PiePlot {
 
     function SetStartAngle($aStart) {
 	if( $aStart < 0 || $aStart > 360 ) {
-	    JpGraphError::Raise('Slice start angle must be between 0 and 360 degrees.');
+	    JpGraphError::RaiseL(14004);//('Slice start angle must be between 0 and 360 degrees.');
 	}
 	$this->startangle = $aStart;
     }
@@ -573,7 +579,8 @@ class PiePlot3D extends PiePlot {
 		$j=0;
 	    }
 	    if( $cnt > $n ) {
-		JpGraphError::Raise("Pie3D Internal error (#1). Trying to wrap twice when looking for start index");
+		JpGraphError::RaiseL(14005);
+//("Pie3D Internal error (#1). Trying to wrap twice when looking for start index");
 	    }
 	    ++$cnt;
 	}
@@ -599,7 +606,8 @@ class PiePlot3D extends PiePlot {
 	    $j++;
 	    if( $j >= $n ) $j=0;
 	    if( $cnt > $n ) {
-		JpGraphError::Raise("Pie3D Internal Error: Z-Sorting algorithm for 3D Pies is not working properly (2). Trying to wrap twice while stroking.");
+		JpGraphError::RaiseL(14006);
+//("Pie3D Internal Error: Z-Sorting algorithm for 3D Pies is not working properly (2). Trying to wrap twice while stroking.");
 	    }
 	    ++$cnt;
 	}
@@ -619,7 +627,8 @@ class PiePlot3D extends PiePlot {
 			      $z,$adjcolors[$j],$shadow);
 	    $j--;
 	    if( $cnt > $n ) {
-		JpGraphError::Raise("Pie3D Internal Error: Z-Sorting algorithm for 3D Pies is not working properly (2). Trying to wrap twice while stroking.");
+		JpGraphError::RaiseL(14006);
+//("Pie3D Internal Error: Z-Sorting algorithm for 3D Pies is not working properly (2). Trying to wrap twice while stroking.");
 	    }
 	    if($j<0) $j=$n-1;
 	    $cnt++;
@@ -802,8 +811,7 @@ class PiePlot3D extends PiePlot {
 
 	// Add a sanity check for width
 	if( $width < 1 ) { 
-	    JpGraphError::Raise("Width for 3D Pie is 0. Specify a size > 0");
-	    exit();
+	    JpGraphError::RaiseL(14007);//("Width for 3D Pie is 0. Specify a size > 0");
 	}
 
 	// Establish a thickness. By default the thickness is a fifth of the

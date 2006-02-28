@@ -4,10 +4,9 @@
 // Description:	Class file. Handles plotmarks
 // Created: 	2003-03-21
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_plotmark.inc,v 1.9.2.5 2003/10/25 20:29:48 aditus Exp $
+// Ver:		$Id: jpgraph_plotmark.inc 485 2006-02-04 12:20:45Z ljp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2003 Johan Persson 
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 
@@ -28,14 +27,14 @@ class ImgData {
 	$n = $this->an[$aMark];
 	if( is_string($aIdx) ) {
 	    if( !in_array($aIdx,$this->colors) ) {
-		JpGraphError::Raise('This marker "'.($this->name).'" does not exist in color: '.$aIdx);
-		die();
+		JpGraphError::RaiseL(23001,$this->name,$aIdx); //('This marker "'.($this->name).'" does not exist in color: '.$aIdx);
 	    }
 	    $idx = $this->index[$aIdx];
 	}
 	elseif( !is_integer($aIdx) || 
 		(is_integer($aIdx) && $aIdx > $this->maxidx ) ) {
-	    JpGraphError::Raise('Mark color index too large for marker "'.($this->name).'"');
+	    JpGraphError::RaiseL(23002,$this->name);
+//('Mark color index too large for marker "'.($this->name).'"');
 	}
 	else
 	    $idx = $aIdx ;
@@ -102,7 +101,7 @@ class PlotMark {
     function SetType($aType,$aFileName='',$aScale=1.0) {
 	$this->type = $aType;
 	if( $aType == MARK_IMG && $aFileName=='' ) {
-	    JpGraphError::Raise('A filename must be specified if you set the mark type to MARK_IMG.');
+	    JpGraphError::RaiseL(23003);//('A filename must be specified if you set the mark type to MARK_IMG.');
 	}
 	$this->iFileName = $aFileName;
 	$this->iScale = $aScale;
@@ -192,9 +191,9 @@ class PlotMark {
 	    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtarget."\"";
 	    if( !empty($this->csimalt) ) {										
 		$tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
-		$this->csimareas .= " alt=\"$tmp\" title=\"$tmp\"";
+		$this->csimareas .= " title=\"$tmp\"";
 	    }
-	    $this->csimareas .= ">\n";
+	    $this->csimareas .= " alt=\"$tmp\" />\n";
 	}
     }
     
@@ -205,13 +204,13 @@ class PlotMark {
 	    $this->csimareas .= "<area shape=\"circle\" coords=\"$x,$y,$r\" href=\"".$this->csimtarget."\"";
     	    if( !empty($this->csimalt) ) {										
 		$tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
-		$this->csimareas .= " alt=\"$tmp\" title=\"$tmp\"";
+		$this->csimareas .= " title=\"$tmp\"";
 	    }
-            $this->csimareas .= ">\n";        
+            $this->csimareas .= " alt=\"$tmp\" />\n";        
         }
     }
     	
-    function Stroke($img,$x,$y) {
+    function Stroke(&$img,$x,$y) {
 	if( !$this->show ) return;
 
 	if( $this->iFormatCallback != '' || $this->iFormatCallback2 != '' ) {
@@ -334,6 +333,9 @@ class PlotMark {
 	    $dw = round($imgscale * $w );
 	    $dh = round($imgscale * $h );
 
+	    // Do potential rotation
+	    list($x,$y) = $img->Rotate($x,$y);
+
 	    $dx = round($x-$dw*$anchor_x);
 	    $dy = round($y-$dh*$anchor_y);
 	    
@@ -346,9 +348,9 @@ class PlotMark {
 		    "href=\"".$this->csimtarget."\"";
 		if( !empty($this->csimalt) ) {
 		    $tmp=sprintf($this->csimalt,$this->yvalue,$this->xvalue);
-		    $this->csimareas .= " alt=\"$tmp\" title=\"$tmp\"";
+		    $this->csimareas .= " title=\"$tmp\"";
 		}
-		$this->csimareas .= ">\n";
+		$this->csimareas .= " alt=\"$tmp\" />\n";
 	    }
 	    
 	    // Stroke title

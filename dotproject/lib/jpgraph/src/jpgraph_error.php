@@ -6,8 +6,7 @@
 // Author:	Johan Persson (johanp@aditus.nu)
 // Ver:		$Id$
 //
-// License:	This code is released under QPL
-// Copyright (C) 2001,2002 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
@@ -48,7 +47,8 @@ class ErrorPlot extends Plot {
 
 	if( isset($this->coords[1]) ) {
 	    if( count($this->coords[1])!=$numpoints )
-		JpGraphError::Raise("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
+		JpGraphError::RaiseL(2003,count($this->coords[1]),$numpoints);
+//("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
 	    else
 		$exist_x = true;
 	}
@@ -91,7 +91,8 @@ class ErrorLinePlot extends ErrorPlot {
     function ErrorLinePlot(&$datay,$datax=false) {
 	$this->ErrorPlot($datay,$datax);
 	// Calculate line coordinates as the average of the error limits
-	for($i=0; $i < count($datay); $i+=2 ) {
+	$n = count($datay);
+	for($i=0; $i < $n; $i+=2 ) {
 	    $ly[]=($datay[$i]+$datay[$i+1])/2;
 	}		
 	$this->line=new LinePlot($ly,$datax);
@@ -125,10 +126,10 @@ class LineErrorPlot extends ErrorPlot {
 	$ly=array(); $ey=array();
 	$n = count($datay);
 	if( $n % 3 != 0 ) {
-	    JpGraphError::Raise('Error in input data to LineErrorPlot.'.
-		'Number of data points must be a multiple of 3');
+	    JpGraphError::RaiseL(4002);
+//('Error in input data to LineErrorPlot. Number of data points must be a multiple of 3');
 	}
-	for($i=0; $i < count($datay); $i+=3 ) {
+	for($i=0; $i < $n; $i+=3 ) {
 	    $ly[]=$datay[$i];
 	    $ey[]=$datay[$i]+$datay[$i+1];
 	    $ey[]=$datay[$i]+$datay[$i+2];

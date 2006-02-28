@@ -1,9 +1,9 @@
 README FOR JPGRAPH
 ==================
 
-This is JpGraph 1.17 an Object Oriented PHP4 Graph Plotting library.
+This package contains JpGraph, an Object Oriented PHP4 Graph Plotting library.
 
-The library is Copyright (C) 2001-2004 Johan Persson and
+The library is Copyright (C) 2001-2005 Aditus Consulting and
 released under dual license QPL 1.0 for open source and educational
 use and JpGraph Professional License for commercial use. 
 
@@ -11,8 +11,7 @@ Please see full license details at http://www.aditus.nu/jpgraph/
 
 * --------------------------------------------------------------------
 * PHP5 IS NOT SUPPORTED IN THE 1.x SERIES
-* Please note that the 1.x serious does NOT support PHP5. The 2.x
-* series does and is available in alpha state from the CVS respository.
+* Please use the 2.x serie if PHP5 support is required
 * --------------------------------------------------------------------
 
 
@@ -26,6 +25,7 @@ QPL.txt                 QPL 1.0  Licensee
   jpg-config.inc	  Configuration setup for JpGraph
   jpgraph.php             Base library
   jpgraph_log.php         Extension: logarithmic scales
+  jpgraph_date.php        Extension: date/time scales
   jpgraph_line.php        Extension: line plots 
   jpgraph_bar.php         Extension: bar plots
   jpgraph_error.php       Extension: error plots
@@ -46,38 +46,41 @@ QPL.txt                 QPL 1.0  Licensee
   jpgraph_iconplot.php	  Extension: Use image icons in plots
   jpgraph_plotband.php	  Extension: Plotbands in graphs
   jpgraph_plotmark.inc    Extension: Using plotmarks in graphs
+  jpgraph_antispam.php    Extension: Antispam module
+  jpgraph_utils.inc	  Extension: Non mandatory Utility classes
   imgdata_*.inc		  Extension: Encoded images for plot marks
-  flags*.dat		  Image data: Pre-compiled data for country flags.
+  flags*.dat		  Raw Image data: Pre-compiled data for country flags.
 
-/src/Examples		A directory with around 290 example graphs with source.
+/src/Examples		A directory with example sripts.
 			Run testsuit.php to get a list of all
 			files and you can easily click on a file to
 			see the code and the resulting image.
-		
+
+/docs			Directory with all documentation		
 /docs/index.html	Documentation portal
 
 			
 Requirements:
 -------------
 Miminum:
-* PHP 4.3.1 or higher 
+* PHP 4.3.5 or higher 
   (earlier versions might work but is unsupported)
 * GD 1.8.x or GD 2.15 or higher
 
 Recommended:
-* PHP 4.3.9 
-* PHP Builtin GD library
+* PHP 4.4.0 
+* PHP Builtin GD 2.28 library
 
 Installation
 ------------
-0. Make sure your PHP is  4.3 (preferable 4.3.9) 
-   and that you have compiled PHP with support for the GD library. 
-   You must make absolutely sure that you have GD working. 
+0. Make sure that the PHP version is compatible with the stated requirements
+   and that the PHP installation has support for the GD library. 
    Please run phpinfo() to check if GD library
-   is supported in your installation. If you don't have the GD library
+   is supported in the installation. 
+   If the GD library doesn't seem to be installed 
    please consult the PHP manual under section "Image" for
    instructions on where to find this library. Please refer to
-   the manual "Verifying your PHP installation"
+   the manual section "Verifying your PHP installation"
    
 1. Unzip and copy the files to a directory of your choice where Your
    httpd sever can access them. 
@@ -96,7 +99,8 @@ Installation
    is setup to your preference. The default should be fine
    for most users. (See also Note 3. below)
    
-4. Read (really!) the FAQ on http://www.aditus.nu/jpgraph/jpg_faq.php.
+4. If any problems are encounted please start by reading the FAQ on 
+   http://www.aditus.nu/jpgraph/jpgraphfaq.php.
 
 
 Documentation
@@ -108,13 +112,22 @@ library. The portal page for all the documentation is
 
 Troubleshooting
 ---------------
-1. If you don't get any background images (but rather a solid black
-   box) you are using GD 2.x but have forgotten to enable truecolor
-   support. Correct this by enabling the USE_TRUECOLOR define.
+1. If an empty page is returned back when running an example check
+   the following
 
-2. If background images does not work make sure the settings of 
-   USE_GD2_LIBRARY corresponds to your installation, i.e. If you
-   don't have GD2 then this define must be false!
+      i) Make sure output_buffer is disabled in php.ini
+     ii) Increase the maximum memory allowed by PHP (in php.ini) to at least
+         32MB
+    iii) Enable all error messages and notices in php.ini (error_reporting = E_ALL)
+
+   Then try running the example again. Most likely an error message will
+   now be shown that will give further information on what is wrong.
+   For further clarifiction on the casues for the error messages see
+   the FAQ section on the WEB site.
+
+2. In some cases the automatic GD detection may fail. Set the
+   USE_GD2_LIBRARY to match the installation, i.e. If 
+   GD2 is not available then this define should be set to false.
 
 3. If you are running IIS and Win2k and get the error "Can't find
    font' when trying to use TTF fonts then try to change you paths
@@ -144,7 +157,11 @@ http://www.aditus.nu/bugtraq
 Change history:
 ------------------------------------------------------------------------
 Date        Ver        Comment
-------------------------------------------------------------------------
+-----------------------------------------------------------------------
+2006-02-18  1.20.3     Minor defect and feature release
+2005-12-04  1.20       Major feature enhancements
+2005-07-10  1.19       Various minor defects fixed
+2005-06-06  1.18       Date scale and guide-lines for Pie
 2005-01-16  1.17       Functional enhancement, bug fixes
 2004-11-02  1.17-beta2 Functional enhancement, bug fixes
 2004-09-12  1.17-beta  Port to PHP5 in compatibility mode. 

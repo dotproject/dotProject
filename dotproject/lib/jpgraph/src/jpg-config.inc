@@ -6,8 +6,7 @@
 // Author:	Johan Persson (johanp@aditus.nu)
 // Ver:		$Id$
 //
-// License:	This code is released under QPL 1.0
-// Copyright (C) 2004 Johan Persson
+// Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 
@@ -66,12 +65,12 @@ DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
 DEFINE('CHINESE_TTF_FONT','bkai00mp.ttf');
 
 // Special unicode cyrillic language support
-DEFINE("LANGUAGE_CYRILLIC",true);
+DEFINE("LANGUAGE_CYRILLIC",false);
 
 // If you are setting this config to true the conversion
 // will assume that the input text is windows 1251, if
 // false it will assume koi8-r
-DEFINE("CYRILLIC_FROM_WINDOWS",true);
+DEFINE("CYRILLIC_FROM_WINDOWS",false);
 
 // Japanese TrueType font used with FF_MINCHO, FF_PMINCHO, FF_GOTHIC, FF_PGOTHIC
 DEFINE('MINCHO_TTF_FONT','ipam.ttf');
@@ -131,6 +130,13 @@ DEFINE("USE_IMAGE_ERROR_HANDLER",true);
 // during development to be able to see the error message as an image
 // instead as a "red-cross" in a page where an image is expected.
 DEFINE("INSTALL_PHP_ERR_HANDLER",false);
+
+// Should the library examin the global php_errmsg string and convert
+// any error in it to a graphical representation. This is handy for the
+// occasions when, for example, header files cannot be found and this results
+// in the graph not being created and just a "red-cross" image would be seen.
+// This should be turned off for a production site.
+DEFINE("CATCH_PHPERRMSG",true);
 
 // If the color palette is full should JpGraph try to allocate
 // the closest match? If you plan on using background images or
