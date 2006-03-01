@@ -20,6 +20,8 @@ C:\{path}\dotproject\> set CVS_RSH=ssh
 3) Run the "cvs2cl.pl" script
 C:\{path}\dotproject\> perl misc\cvs2cl\cvs2cl.pl --dp
 
+(run "perl misc\cvs2cl\cvs2cl.pl --dp --accum" to only add new CL info to the existing, perhaps wrapped ChangeLog file)
+
 OK this is all that is necessary to generate a new ChangeLog file that is nicely formatted with Kripper's dotproject output. Very nice tool provided by Kripper.
 
 4) Your dotproject Root will now contain a new "ChangeLog" file. Simply check this into CVS to update the ChangeLog. 
