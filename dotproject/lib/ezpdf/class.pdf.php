@@ -1397,7 +1397,7 @@ function openFont($font){
     }
     $data['_version_']=1;
     $this->fonts[$font]=$data;
-    $fp = fopen($dir.'php_'.$name.'.afm','w');
+    $fp = fopen($dir.'php_'.$name.'.afm','r');
     fwrite($fp,serialize($data));
     fclose($fp);
   } else if (!isset($this->fonts[$font])){
