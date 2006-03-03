@@ -1659,8 +1659,14 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
         $style = "";
         if ($start_date) {
                 if (!$end_date) {
-                        $end_date = $start_date;
-                        $end_date->addSeconds( @$a["task_duration"]*$a["task_duration_type"]*SEC_HOUR );
+                       	/*
+			** end date calc has been moved to calcEndByStartAndDuration()-function
+			** called from array_csort and tasks.php 
+			** perhaps this fallback if-clause could be deleted in the future, 
+			** didn't want to remove it shortly before the 2.0.2
+
+			*/ 
+			$end_date = new CDate('0000-00-00 00:00:00');
                 }
 
                 if ($now->after( $start_date ) && $a["task_percent_complete"] == 0) {
@@ -1846,7 +1852,7 @@ function array_csort()   //coded by Ichier2003
 {
     $args = func_get_args();
     $marray = array_shift($args);
-
+	
         if ( empty( $marray )) return array();
 
         $i = 0;
@@ -1855,8 +1861,25 @@ function array_csort()   //coded by Ichier2003
     foreach ($args as $arg) {
         $i++;
         if (is_string($arg)) {
-            foreach ($marray as $row) {
-                $sortarr[$i][] = $row[$arg];
+	for ($j=0; $j < count($marray); $j++) {
+
+		/* we have to calculate the end_date via start_date+duration for 
+		** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
+		
+		** Task definition writes the following to the DB:
+		** A without start date: start = end = NULL
+		** B with start date and empty end date: start = startdate, end = "0000-00-00 00:00:00"
+		** C start + end date: start= startdate, end = end date
+
+		** A the end_date for the middle task (B) is ('dynamically') calculated on display 
+		** via start_date+duration, it may be that the order gets wrong due to the fact 
+		** that sorting has taken place _before_.
+		*/
+		if ( $marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
+			
+			$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
+		}
+                $sortarr[$i][] = $marray[$j][$arg];
             }
         } else {
             $sortarr[$i] = $arg;
@@ -1866,7 +1889,20 @@ function array_csort()   //coded by Ichier2003
     $msortline .= "\$marray));";
 
     eval($msortline);
+//var_export($marray);
     return $marray;
+}
+
+/*
+** Calc End Date via Startdate + Duration
+** @param array task	A DB row from the earlier fetched tasklist
+** @return string	Return calculated end date in MySQL-TIMESTAMP format	
+*/
+
+function calcEndByStartAndDuration( $task ) {
+	$end_date = new CDate($task['task_start_date']);
+        $end_date->addSeconds( @$task['task_duration']*$task['task_duration_type']*SEC_HOUR );
+	return $end_date->format(FMT_DATETIME_MYSQL);
 }
 
 function sort_by_item_title( $title, $item_name, $item_type )
