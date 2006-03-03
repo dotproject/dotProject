@@ -265,7 +265,7 @@ class dPacl extends gacl_api {
     if (is_array($acls)) {
       // Grab the item values
       foreach ($acls as $acl) {
-	$acl_entry =& $this->get_acl($acl);
+	$acl_entry = $this->get_acl($acl);
 	if ($acl_entry['allow'] == false && $acl_entry['enabled'] == true && isset($acl_entry['axo'][$module]))
 	  foreach ($acl_entry['axo'][$module] as $id) {
 	  	$items[] = $id;
@@ -286,7 +286,7 @@ class dPacl extends gacl_api {
     $acls = $this->getItemACLs($module, $uid);
     if (is_array($acls)) {
       foreach ($acls as $acl) {
-	$acl_entry =& $this->get_acl($acl);
+	$acl_entry = $this->get_acl($acl);
 	if ($acl_entry['allow'] == true && $acl_entry['enabled'] == true && isset($acl_entry['axo'][$module])) {
 	  foreach ($acl_entry['axo'][$module] as $id) {
 	    $items[] = $id;
