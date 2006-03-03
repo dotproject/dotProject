@@ -13,7 +13,7 @@ $q->addJoin('forum_visits', 'v', "visit_user = {$AppUI->user_id} AND visit_forum
 $q->addJoin('users', 'u', 'message_author = u.user_id');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 $q->addWhere("forum_id = message_forum AND (message_id = $message_id OR message_parent = $message_id)");
-if (@$dPconfig['forum_descendent_order'] || dPgetParam($_REQUEST,'sort',0)) { $q->addOrder("message_date $sort"); }
+$q->addOrder("message_date $sort"); 
 
 $messages = $q->loadList();
 
@@ -85,7 +85,7 @@ $thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort
         </td>
 	<td align="right">
         <?php $sort = ($sort == 'asc')?'desc':'asc'; ?>
-		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $sort . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
+		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
 	<?php if ($canEdit) { ?>
 		<input type="button" class=button value="<?php echo $AppUI->_('Post Reply');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />
 		<input type="button" class=button value="<?php echo $AppUI->_('New Topic');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=0&post_message=1';" />
@@ -265,7 +265,7 @@ if ($viewtype == 'single')
 <tr>
 	<td><?php echo breadCrumbs( $crumbs );?></td>
 	<td align="right">
-		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $sort . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
+		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
 	<?php if ($canEdit) { ?>
 		<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply');?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />
 		<input type="button" class="button" value="<?php echo $AppUI->_('New Topic');?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=0&post_message=1';" />
