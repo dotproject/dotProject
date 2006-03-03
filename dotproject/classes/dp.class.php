@@ -294,7 +294,7 @@ class CDpObject {
 		$uid || exit ("FATAL ERROR<br />" . get_class( $this ) . "::getAllowedRecords failed" );
 		$deny =& $perms->getDeniedItems( $this->_tbl, $uid );
 		$allow =& $perms->getAllowedItems($this->_tbl, $uid);
-		if (! $perms->checkModule($this->_tbl, "view" )) {
+		if (! $perms->checkModule($this->_tbl, "view", $uid )) {
 		  if (! count($allow))
 		    return array();	// No access, and no allow overrides, so nothing to show.
 		} else {
@@ -330,7 +330,7 @@ class CDpObject {
 		$uid || exit ("FATAL ERROR<br />" . get_class( $this ) . "::getAllowedSQL failed" );
 		$deny =& $perms->getDeniedItems( $this->_tbl, $uid );
 		$allow =& $perms->getAllowedItems($this->_tbl, $uid);
-		if (! $perms->checkModule($this->_tbl, "view" )) {
+		if (! $perms->checkModule($this->_tbl, "view", $uid )) {
 		  if (! count($allow))
 		    return array("1=0");	// No access, and no allow overrides, so nothing to show.
 		} else {
@@ -361,7 +361,7 @@ class CDpObject {
 				$key = substr($this->_tbl, 0, 2);
 			$query->leftJoin($this->_tbl, $key, "$key.$this->_tbl_key = $index");
 		}
-		if (! $perms->checkModule($this->_tbl, "view" )) {
+		if (! $perms->checkModule($this->_tbl, "view", $uid )) {
 		  if (! count($allow)) {
 				// We need to ensure that we don't just break complex SQLs, but
 				// instead limit to a nonsensical value.  This assumes that the
