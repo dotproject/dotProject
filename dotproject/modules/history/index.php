@@ -40,14 +40,14 @@ function show_history($history)
 	$table_id = (substr($module, -1) == 's'?substr($module, 0, -1):$module) . '_id';
         
         if ($module == 'login')
-               return 'User \'' . $history['history_description'] . '\' ' . $history['history_action'] . '.';
+               return $AppUI->_('User') . ' \'' . $history['history_description'] . '\' ' . $AppUI->_($history['history_action']);
         
         if ($history['history_action'] == 'add')
                 $msg = $AppUI->_('Added new').' ';
         else if ($history['history_action'] == 'update')
                 $msg = $AppUI->_('Modified').' ';
         else if ($history['history_action'] == 'delete')
-                return $AppUI->_('Deleted').' \'' . $history['history_description'] . '\' '.$AppUI->_('from').' ' . $AppUI->_($module) . $AppUI->_('module');
+                return $AppUI->_('Deleted').' \'' . $history['history_description'] . '\' '.$AppUI->_('from').' ' . $AppUI->_($module) . ' ' . $AppUI->_('module');
 
 	$q  = new DBQuery;
 	$q->addTable($module);
