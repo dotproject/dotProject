@@ -59,12 +59,12 @@
 	$q->addTable('contacts', 'a');
 	$q->leftJoin('companies', 'b', 'company_id = contact_company');
 	$q->leftJoin('departments', 'c', 'dept_id = contact_department');
-	$q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department, contact_last_name');
+	$q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department');
 	$q->addQuery('company_name');
 	$q->addQuery('dept_name');
 	$q->addWhere($where);
 	$q->addWhere("(contact_owner = '$AppUI->user_id' or contact_private = '0')");
-	$q->addOrder("company_name, contact_company, dept_name, contact_department"); // May need to review this.
+	$q->addOrder("company_name, contact_company, dept_name, contact_department, contact_last_name"); // May need to review this.
 
 	$contacts = $q->loadHashList("contact_id");
 ?>
