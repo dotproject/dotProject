@@ -25,7 +25,7 @@
 		//  Contacts from all allowed companies
 		require_once( $AppUI->getModuleClass( 'companies' ) );
 		$oCpy = new CCompany ();
-                $aCpies = $oCpy->getAllowedRecords ($AppUI->user_id, "company_id, company_name");
+                $aCpies = $oCpy->getAllowedRecords ($AppUI->user_id, "company_id, company_name", 'company_name');
 		$aCpies_esc = array();
 		foreach ($aCpies as $key => $company)
 		{
@@ -59,7 +59,7 @@
 	$q->addTable('contacts', 'a');
 	$q->leftJoin('companies', 'b', 'company_id = contact_company');
 	$q->leftJoin('departments', 'c', 'dept_id = contact_department');
-	$q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department');
+	$q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department, contact_last_name');
 	$q->addQuery('company_name');
 	$q->addQuery('dept_name');
 	$q->addWhere($where);
