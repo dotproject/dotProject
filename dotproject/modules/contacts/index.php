@@ -150,7 +150,7 @@ if ($canEdit) {
 		'<form action="?m=contacts&a=addedit" method="post">', '</form>'
 	);
 	$titleBlock->addCrumbRight(
-		'<a href="./index.php?m=contacts&a=csvexport&suppressHeaders=true">' . "CSV Download</a> | " .
+		'<a href="./index.php?m=contacts&a=csvexport&suppressHeaders=true">' . $AppUI->_('CSV Download'). "</a> | " .
 		'<a href="./index.php?m=contacts&a=vcardimport&dialog=0">' . $AppUI->_('Import vCard') . '</a>'
 	);
 }
@@ -204,7 +204,7 @@ $q->addWhere("project_contacts like \"" .$carr[$z][$x]["contact_id"]
  $q->clear();
  if ($projects_contact[0]>0)
    echo "				&nbsp;<a href=\"\" onClick=\"	window.open('./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=" .$carr[$z][$x]["contact_id"] ."', 'selector', 'left=50,top=50,height=250,width=400,resizable')
-;return false;\">(Projects)</a>";
+;return false;\">".$AppUI->_('Projects')."</a>";
 ?>
 			</td>
 		</tr>
