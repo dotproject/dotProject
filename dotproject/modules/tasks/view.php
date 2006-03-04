@@ -466,14 +466,12 @@ if ( $obj->task_dynamic != 1 ) {
 		// fixed bug that dP automatically jumped to access denied if user does not
 		// have read-write permissions on task_id and this tab is opened by default (session_vars)
 		// only if user has r-w perms on this task, new or edit log is beign showed
-		if ($perms->checkModuleItem( 'task_log', 'edit', $task_id )) {
-			if ($task_log_id == 0) {
-				if ($perms->checkModuleItem('task_log', 'add', $task_id))
-					$tabBox->add( "{$dPconfig['root_dir']}/modules/tasks/vw_log_update", 'New Log' );
-			} else if ($perms->checkModuleItem('task_log', 'edit', $task_id)) {
-				$tabBox->add( "{$dPconfig['root_dir']}/modules/tasks/vw_log_update", 'Edit Log' );
-
-			}
+        if ($task_log_id == 0) {
+            if ($perms->checkModuleItem('task_log', 'add', $task_id))
+                $tabBox->add( "{$dPconfig['root_dir']}/modules/tasks/vw_log_update", 'New Log' );
+        } 
+        else if ($perms->checkModuleItem('task_log', 'edit', $task_id)) {
+            $tabBox->add( "{$dPconfig['root_dir']}/modules/tasks/vw_log_update", 'Edit Log' );
 		}
 	}
 }
