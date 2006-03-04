@@ -178,7 +178,7 @@
 "cancel",
 "chgpwNoMatch"=>"The new password don\'t match",
 "chgpwUpdated"=>"Your password has been updated",
-"chgpwValidNew"=>"Please enter a valid new password",
+"chgpwValidNew"=>"Please enter a valid new password with minimal length of ",
 "chgpwValidOld"=>"Please enter a valid old password",
 "chgpwWrongPW"=>"You have entered the wrong old password",
 "clear",

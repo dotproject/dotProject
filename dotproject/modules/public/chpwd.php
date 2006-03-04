@@ -34,20 +34,12 @@ function submitIt() {
 	var f = document.frmEdit;
 	var msg = '';
 
-        <?php if ($AppUI->user_type != 1)
-        {
-        ?>
-	if (f.old_pwd.value.length < 3) {
-		msg += "\n<?php echo $AppUI->_('chgpwValidOld');?>";
-		f.old_pwd.focus();
-	}
-        <?php } ?>
-	if (f.new_pwd1.value.length < 3) {
-		msg += "\n<?php echo $AppUI->_('chgpwValidNew');?>";
-		f.new_pwd1.focus();
+	if (f.new_pwd1.value.length < <?php echo dPgetConfig('password_min_len'); ?>) {
+        	msg += "<?php echo $AppUI->_('chgpwValidNew', UI_OUTPUT_JS);?>" + <?php echo dPgetConfig('password_min_len'); ?>;
+			f.new_pwd1.focus();
 	}
 	if (f.new_pwd1.value != f.new_pwd2.value) {
-		msg += "\n<?php echo $AppUI->_('chgpwNoMatch');?>";
+		msg += "\n<?php echo $AppUI->_('chgpwNoMatch', UI_OUTPUT_JS);?>";
 		f.new_pwd2.focus();
 	}
 	if (msg.length < 1) {
