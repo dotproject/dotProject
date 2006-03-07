@@ -374,6 +374,7 @@ function projects_list_data($user_id = false) {
 
 	$orderby  = $AppUI->getState( 'UsrProjIdxOrderBy' ) ? $AppUI->getState( 'UsrProjIdxOrderBy' ) : 'project_end_date';
 	$orderdir = $AppUI->getState( 'UsrProjIdxOrderDir' ) ? $AppUI->getState( 'UsrProjIdxOrderDir' ) : 'asc';
+	$addProjectsWithAssignedTasks = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
 	// get any records denied from viewing
 	$obj = new CProject();
@@ -440,6 +441,7 @@ function projects_list_data($user_id = false) {
 	$tasks_problems = $q->exec();
 	$q->clear();
 
+	if ($addProjectsWithAssignedTasks) {
 	// temporary users tasks
 	$q->createTemp('tasks_users');
 	$q->addTable('tasks');
@@ -452,6 +454,7 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('task_project');
 	$tasks_users = $q->exec();
 	$q->clear();
+	}
 
 	if(isset($department)){
 		//If a department is specified, we want to display projects from the department, and all departments under that, so we need to build that list of departments
@@ -486,7 +489,8 @@ function projects_list_data($user_id = false) {
 	$q->addJoin('tasks_problems', 'tp', 'projects.project_id = tp.task_project');
 	$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
 	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');
-	$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');
+	if ($addProjectsWithAssignedTasks)
+		$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');
 	// DO we have to include the above DENY WHERE restriction, too?
 	//$q->addJoin('', '', '');
 	if (isset($department)) {
@@ -498,8 +502,10 @@ function projects_list_data($user_id = false) {
 	if (isset($department)) {
 		$q->addWhere("pd.department_id in ( ".implode(',',$dept_ids)." )");
 	}
-	if ($user_id) {
+	if ($user_id && $addProjectsWithAssignedTasks) {
 		$q->addWhere('(tu.user_id = '.$user_id.' OR projects.project_owner = '.$user_id.' )');
+	} elseif ($user_id) {
+		$q->addWhere('projects.project_owner = '.$user_id);
 	}
 	$q->addGroup('projects.project_id');
 	$q->addOrder("$orderby $orderdir");

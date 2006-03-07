@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-GLOBAL $company_id, $dept_ids, $department, $min_view, $m, $a;
+GLOBAL $addPwT,$company_id, $dept_ids, $department, $min_view, $m, $a;
 $user_id = isset( $_GET['user_id'] ) ? $_GET['user_id'] : 0;
 
 if ($user_id != $AppUI->user_id 
@@ -8,6 +8,14 @@ if ($user_id != $AppUI->user_id
 	$AppUI->redirect('m=public&a=access_denied');
 
 $AppUI->savePlace();
+
+if (isset( $_POST['show_form'] )) {
+	$add_pwt = dPgetParam($_POST, 'add_pwt', 0 );
+	$AppUI->setState( 'addProjWithTasks', $add_pwt);	
+} else {
+	$AppUI->setState( 'addProjWithTasks', true);
+}
+$addPwT = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
 $company_id = $AppUI->getState( 'UsrProjIdxCompany' ) !== NULL ? $AppUI->getState( 'UsrProjIdxCompany' ) : $AppUI->user_company;
 

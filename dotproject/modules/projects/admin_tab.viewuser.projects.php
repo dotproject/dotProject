@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-global $a, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id;
+global $a, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id;
 
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -17,8 +17,6 @@ natsort($projFilter);
 
 // load the companies class to retrieved denied companies
 require_once( $AppUI->getModuleClass( 'companies' ) );
-
-
 
 // retrieve any state parameters
 if (isset( $_GET['tab'] )) {
@@ -46,10 +44,13 @@ projects_list_data($user_id);
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by');?>:&nbsp;</td>
-	<td align="center" width="100%" nowrap="nowrap" colspan="8">&nbsp;</td>
+	<td align="center" width="100%" nowrap="nowrap" colspan="7">&nbsp;</td>
+	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects with assigned Tasks');?>?<input type="hidden" name="show_form" value="1" /></form></td>
 	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickCompany"><?php echo $buffer;?></form></td>
 	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject"><?php echo arraySelect( $projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true );?></form></td>
 </tr>
+</table>
+<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
 	<th nowrap="nowrap">
 		<a href="?m=<?php echo $m;?><?php echo (isset($a) ? '&a='.$a : '') ;?><?php echo (isset($extraGet) ? $extraGet : '') ;?>&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Color');?></a>
