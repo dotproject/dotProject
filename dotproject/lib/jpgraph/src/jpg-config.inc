@@ -65,12 +65,12 @@ DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
 DEFINE('CHINESE_TTF_FONT','bkai00mp.ttf');
 
 // Special unicode cyrillic language support
-DEFINE("LANGUAGE_CYRILLIC",false);
+DEFINE("LANGUAGE_CYRILLIC",true);
 
 // If you are setting this config to true the conversion
 // will assume that the input text is windows 1251, if
 // false it will assume koi8-r
-DEFINE("CYRILLIC_FROM_WINDOWS",false);
+DEFINE("CYRILLIC_FROM_WINDOWS",true);
 
 // Japanese TrueType font used with FF_MINCHO, FF_PMINCHO, FF_GOTHIC, FF_PGOTHIC
 DEFINE('MINCHO_TTF_FONT','ipam.ttf');
