@@ -124,7 +124,7 @@ foreach ($projects as $row) {
 		$s .= $CR . '</td>';
                 $s .= $CR . '<td align="center">'. ($start_date ? $start_date->format( $df ) : '-') .'</td>';
 		$s .= $CR . '<td align="center">'. ($row["project_duration"] > 0 ? $row["project_duration"].$AppUI->_('h') : '-').'</td>';
-                $s .= $CR . '<td align="right" nowrap="nowrap" style="background-color:'.$priority[$row['project_priority']]['color'].'">';
+                $s .= $CR . '<td align="center" nowrap="nowrap" style="background-color:'.$priority[$row['project_priority']]['color'].'">';
 		$s .= $CT . ($end_date ? $end_date->format( $df ) : '-');
 		$s .= $CR . '</td>';
                 $s .= $CR . '<td align="center">';
@@ -137,7 +137,7 @@ foreach ($projects as $row) {
                 $s .= $row["task_log_problem"] ? dPshowImage( './images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem' ): '-';
                 $s .= $CR . $row["task_log_problem"] ? '</a>' : '';
                 $s .= $CR . '</td>';
-		$s .= $CR . '<td nowrap="nowrap">' . htmlspecialchars( $row["user_username"], ENT_QUOTES ) . '</td>';
+		$s .= $CR . '<td align="center" nowrap="nowrap">' . htmlspecialchars( $row["user_username"], ENT_QUOTES ) . '</td>';
 		$s .= $CR . '<td align="center" nowrap="nowrap">';
 		$s .= $CT . $row["total_tasks"] . ($row["my_tasks"] ? ' ('.$row["my_tasks"].')' : '');
 		$s .= $CR . '</td>';
