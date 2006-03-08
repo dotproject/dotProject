@@ -341,10 +341,10 @@ class CDpObject {
 		   $index = $this->_tbl_key;
 		$where = array();
 		if (count($allow)) {
-		  $where[] = "$this->_tbl.$index IN (" . implode(',', $allow) . ")";
+		  $where[] = "$index IN (" . implode(',', $allow) . ")";
 		}
 		if (count($deny)) {
-		  $where[] = "$this->_tbl.$index NOT IN (" . implode(",", $deny) . ")";
+		  $where[] = "$index NOT IN (" . implode(",", $deny) . ")";
 		}
 		return $where;
 	}
