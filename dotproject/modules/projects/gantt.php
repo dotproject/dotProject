@@ -4,13 +4,20 @@ include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph_gantt.php");
 
 ini_set('max_execution_time', 180);
 
-global $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt;
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $user_id;
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $projectStatus = dPgetSysVal( 'ProjectStatus' );
 $projectStatus = arrayMerge( array( '-2' => $AppUI->_('All w/o in progress')), $projectStatus);
+
+$user_id = dPgetParam($_REQUEST, 'user_id', $AppUI->user_id);
+if ($AppUI->user_id == $user_id) {
+	$projectStatus = arrayMerge( array( '-3' => $AppUI->_('My projects')), $projectStatus);
+} else {
+	$projectStatus = arrayMerge( array( '-3' => $AppUI->_('User\'s projects')), $projectStatus);
+}
 $proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = dPgetParam($_REQUEST, 'company_id', 0);
 $department = dPgetParam($_REQUEST, 'department', 0);
@@ -35,7 +42,9 @@ if ($department > 0) {
 	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
 	$q->addWhere('pd.department_id = '.$department);
 }
-if ($proFilter == '-2'){
+if ($proFilter == '-3'){
+        $q->addWhere('project_owner = '.$user_id);
+} else if ($proFilter == '-2'){
         $q->addWhere('project_status != 3');
 } else if ($proFilter != '-1') {
          $q->addWhere('project_status = '.$proFilter);
