@@ -92,7 +92,7 @@ $proj =& new CProject;
 $tobj =& new CTask;
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id);
-$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'a.task_id');
+$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'task_id');
 
 // query my sub-tasks (ignoring task parents)
 
@@ -289,6 +289,7 @@ foreach ($tasks as $task)
           FROM projects';
 	if ($deny)
 		$sql .= "\nWHERE project_id NOT IN (" . implode( ',', $deny ) . ')';
+		$sql .= ' ORDER BY project_name';
   $projects = db_loadHashList($sql, 'project_id');
 	$p[0] = $AppUI->_('[none]');
 	foreach($projects as $proj)
@@ -296,7 +297,8 @@ foreach ($tasks as $task)
 	if ($project_id)
 		$p[$project_id] = $AppUI->_('[same project]');
 		
-	$projects = $p;
+	natsort($p);
+	$projects =  $p;
 	
 	$ts[0] = $AppUI->_('[top task]');
 	foreach($tasks as $t)
