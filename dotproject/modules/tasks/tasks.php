@@ -558,7 +558,7 @@ foreach ($projects as $k => $p) {
 			*/
 			for ($j=0; $j < count($p['tasks']); $j++) {
 					
-				if ( $p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00') {
+				if ( $p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00' || $p['tasks'][$j]['task_end_date'] == NULL) {
 					
 					 $p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
 				}
