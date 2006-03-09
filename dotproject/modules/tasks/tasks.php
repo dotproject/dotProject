@@ -266,7 +266,7 @@ if (count($allowedProjects))
 
 //
 $obj =& new CTask;
-$allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
+$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if ( count($allowedTasks))
         $where .= " AND " . implode(" AND ", $allowedTasks);
 
@@ -287,7 +287,9 @@ $tsql = "SELECT $select FROM $from $join WHERE $where" .
 
 if ($canViewTask) {
         $ptrc = db_exec( $tsql );
-        $nums = db_num_rows( $ptrc );
+	if($ptrc != false) {
+     	   $nums = db_num_rows( $ptrc );
+	}
         echo db_error();
 } else {
         $nums = 0;
