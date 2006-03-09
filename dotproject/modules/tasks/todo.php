@@ -127,6 +127,18 @@ $q->clear();
 global $tasks;
 $tasks = db_loadList( $sql );
 
+/* we have to calculate the end_date via start_date+duration for 
+** end='0000-00-00 00:00:00' if array_csort function is not used
+** as it is normally done in array_csort function in order to economise
+** cpu time as we have to go through the array there anyway
+*/
+for ($j=0; $j < count($tasks); $j++) {
+		
+	if ( $tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == NULL) {
+		
+		 $tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+	}
+}
 
 global $priorities;
 $priorities = array(
