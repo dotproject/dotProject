@@ -1,16 +1,93 @@
 <?php
+	$show_all             = dPgetParam($_REQUEST, "show_all", 0);
 	$company_id           = dPgetParam($_REQUEST, "company_id", 0);
 	$contact_id           = dPgetParam($_POST, "contact_id", 0);
 	$call_back            = dPgetParam($_GET, "call_back", null);
 	$contacts_submited    = dPgetParam($_POST, "contacts_submited", 0);
 	$selected_contacts_id = dPgetParam($_GET, "selected_contacts_id", "");
-
+        if (dPgetParam($_POST, "selected_contacts_id"))
+           {
+           $selected_contacts_id = dPgetParam($_POST, "selected_contacts_id");
+           }
+?>
+<script language="javascript">
+// ECMA Script section Carsten Menke <menke@smp-synergie.de>
+function setContactIDs (method,querystring)
+          {
+          var URL = 'index.php?m=public&a=contact_selector';
+          
+          // !! DO NOT USE !!
+          //
+          //    document.frmContactSelect.elements['contact_id[]');
+          //
+          // as the length of the array is undefined if there is just 1 contact Field present
+          
+          var field = document.getElementsByName('contact_id[]');
+          var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
+          var tmp = new Array();
+          var tmp2 = new Array();
+          tmp = selected_contacts_id.value.split(',');
+          
+          if (method == 'GET')
+             {
+             if (querystring)
+                {
+                 URL += '&' + querystring;
+	        }
+             }
+ 
+          // We copy the values of tmp to tmp2, using
+          // the value of tmp as an indice for tmp2, therefore
+          // we can later on easily check if a checked field exists
+          // we do not use the associative Array hack here, because
+          // then methods like tmp2.length would not work.
+                                                            
+          for (i = 0; i < tmp.length; i++)
+              {
+              tmp2[tmp[i]] = tmp[i];
+              }
+          for (i = 0; i < field.length; i++)
+              {
+              if (field[i].checked == true)
+                 {
+                  if (!tmp2[field[i].value])
+                     {
+                     tmp2[field[i].value] = field[i].value;
+                     }
+                 }
+             else
+                 {
+                  if (tmp2[field[i].value])
+                     {
+                     delete tmp2[field[i].value];
+                     }
+                 } 
+              }
+              tmp = new Array();
+              var count = 0;
+              for (i = 0; i < tmp2.length; i++)
+                 {
+                  if (tmp2[i])
+                     {
+                     tmp[count] = tmp2[i];
+                     count++;
+                     }
+                  }
+           selected_contacts_id.value = tmp.join(',');
+           
+           if (method == 'GET')
+              {
+              URL +=  '&selected_contacts_id=' + selected_contacts_id.value;
+              return URL;
+              }
+             else {
+                  return selected_contacts_id;
+             }
+          }
+</script>
+<?php
 	if($contacts_submited == 1){
-		$contacts_id = "";
-		if(is_array($contact_id)){
-			$contacts_id = implode(",", $contact_id);
-		}
-		$call_back_string = !is_null($call_back) ? "window.opener.$call_back('$contacts_id');" : "";
+		$call_back_string = !is_null($call_back) ? "window.opener.$call_back('$selected_contacts_id');" : "";
 		?>
 			<script language="javascript">
 				<?php echo $call_back_string ?>
@@ -21,23 +98,34 @@
 	
 	$contacts_id = explode(",", $selected_contacts_id);
 
-	if ( ! $company_id ) {
-		//  Contacts from all allowed companies
-		require_once( $AppUI->getModuleClass( 'companies' ) );
-		$oCpy = new CCompany ();
-                $aCpies = $oCpy->getAllowedRecords ($AppUI->user_id, "company_id, company_name", 'company_name');
-		$aCpies_esc = array();
-		foreach ($aCpies as $key => $company)
+	require_once( $AppUI->getModuleClass( 'companies' ) );
+	$oCpy = new CCompany ();
+        $aCpies = $oCpy->getAllowedRecords ($AppUI->user_id, "company_id, company_name", 'company_name');
+        $aCpies_esc = array();
+	foreach ($aCpies as $key => $company)
 		{
-			$aCpies_esc[$key] = db_escape($company);
+		$aCpies_esc[$key] = db_escape($company);
 		}
+       if ($selected_contacts_id && ! $show_all && ! $company_id)
+               {
+               $q =& new DBQuery;
+               $q->addTable('contacts');
+               $q->addQuery('DISTINCT contact_company');
+               $q->addWhere('contact_id IN (' . $selected_contacts_id . ')');
+               $where = implode(',', $q->loadColumn());
+               $where = "contact_company IN($where)";
+        }
+
+ 	else if ( ! $company_id ) {
+	        //  Contacts from all allowed companies
                 $where = "contact_company = '' OR (contact_company IN ('" .
                                 implode('\',\'' , array_values($aCpies_esc)) .
                                 "')) OR ( contact_company IN ('" .
-				implode(",", array_keys($aCpies_esc)) .
+				implode('\',\'', array_keys($aCpies_esc)) .
 		"'))" ;
 		$company_name = $AppUI->_('Allowed Companies');
-	} else {
+	}
+	else {
 		// Contacts for this company only
 		$q =& new DBQuery;
 		$q->addTable('companies', 'c');
@@ -69,23 +157,18 @@
 	$contacts = $q->loadHashList("contact_id");
 ?>
 
-<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
-
 <form action='index.php?m=public&a=contact_selector&dialog=1&<?php if(!is_null($call_back)) echo "call_back=$call_back&"; ?>company_id=<?php echo $company_id ?>' method='post' name='frmContactSelect'>
 <?php
 	$actual_department = "";
 	$actual_company    = "";
-	
-	if(!$company_id){
-		
-		$companies_names = array(0 => $AppUI->_("Select a company")) + $aCpies;
-		echo arraySelect($companies_names, "company_id", "onchange=\"document.frmContactSelect.contacts_submited.value=0; document.frmContactSelect.submit();\"", 0)."<hr />";
-	} else {
-		?>
-			<a href='index.php?m=public&a=contact_selector&dialog=1&<?php if(!is_null($call_back)) echo "call_back=$call_back&"; ?>'><?php echo $AppUI->_("View all allowed companies"); ?></a>
-		<?php
-	}
-	
+	$companies_names = array(0 => $AppUI->_("Select a company")) + $aCpies;
+	echo arraySelect($companies_names, "company_id", "onchange=\"document.frmContactSelect.contacts_submited.value=0; setContactIDs(); document.frmContactSelect.submit();\"", 0);
+?>
+<br>
+ <h4><a href="#" onClick="window.location.href=setContactIDs('GET','dialog=1&<?php if(!is_null($call_back)) echo "call_back=$call_back&"; ?>show_all=1');"><?php echo $AppUI->_("View all allowed companies"); ?></a></h4>
+<hr />
+<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
+<?php	
 	foreach($contacts as $contact_id => $contact_data){
 		if (! $contact_data["company_name"])
 			$contact_company = $contact_data['contact_company'];
@@ -108,5 +191,6 @@
 ?>
 <hr />
 <input name='contacts_submited' type='hidden' value='1' />
-<input type='submit' value='<?php echo $AppUI->_("Continue"); ?>' class='button' />
+<input name='selected_contacts_id' type='hidden' value='<?php echo $selected_contacts_id; ?>'>
+<input type='submit' value='<?php echo $AppUI->_("Continue"); ?>' onClick="setContactIDs()" class='button' />
 </form>
