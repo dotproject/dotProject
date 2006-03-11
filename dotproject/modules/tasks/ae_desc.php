@@ -36,7 +36,7 @@
 							<td valign='top'>
 								<?php echo $AppUI->_("Task Type"); ?>
 								<br />
-								<?php echo arraySelect(dPgetSysVal("TaskType"), "task_type",  "class='text'", $obj->task_type, false); ?>
+								<?php $task_types = dPgetSysVal('TaskType'); echo arraySelect($task_types, "task_type",  "class='text'", $obj->task_type, false); ?>
 								<br /><br />
 					<?php
 						if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {

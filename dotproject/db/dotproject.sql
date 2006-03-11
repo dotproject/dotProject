@@ -664,7 +664,7 @@ INSERT INTO `config` VALUES ('', 'password_min_len', '4', '', 'text');
 INSERT INTO `config` VALUES ('', 'enable_gantt_charts', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES ('', 'jpLocale', '', '', 'text');
 INSERT INTO `config` VALUES ('', 'log_changes', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'check_tasks_dates', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES ('', 'check_task_dates', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES ('', 'locale_warn', 'false', '', 'checkbox');
 INSERT INTO `config` VALUES ('', 'locale_alert', '^', '', 'text');
 INSERT INTO `config` VALUES ('', 'daily_working_hours', '8.0', '', 'text');
