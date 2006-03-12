@@ -319,7 +319,7 @@ else
   echo $AppUI->_("Missing file. Possible Module \"$m\" missing!");
 }
 if(!$suppressHeaders) {
-	echo '<iframe name="thread" src="about:blank" width="0" height="0" frameborder="0"></iframe>';
+	echo '<iframe name="thread" src="' . $baseUrl . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	require "$baseDir/style/$uistyle/footer.php";
 }
 ob_end_flush();
