@@ -91,7 +91,7 @@ if ( dPgetParam( $_GET, 'inactive', '' ) == 'toggle' )
 $in = $AppUI->getState( 'inactive' ) == -1 ? '' : 'in';
 
 // use a new title block (a new row) to prevent from oversized sites
-$titleBlock = new CTitleBlock('' );
+$titleBlock = new CTitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell( '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':' );
 $titleBlock->addCell(
