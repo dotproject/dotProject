@@ -441,6 +441,7 @@ function convert2days( $durn, $units ) {
 	global $dPconfig;
 	switch ($units) {
 	case 0:
+	case 1:
 		return $durn / $dPconfig['daily_working_hours'];
 		break;
 	case 24:
