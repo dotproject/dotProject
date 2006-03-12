@@ -488,13 +488,20 @@ class CTask extends CDpObject {
                 }
 
                 if ( !$importing_tasks && $this->task_parent != $this->task_id )
-                        $this->updateDynamics();
+                        $this->updateDynamics(true);
 
                 // if is child update parent task
                 if ( $this->task_parent != $this->task_id ) {
                              $pTask = new CTask();
                         $pTask->load($this->task_parent);
-                        $pTask->updateDynamics(true);
+                        $pTask->updateDynamics();
+												
+												if ($oTsk->task_parent != $this->task_parent)
+												{
+													$old_parent = new CTask();
+													$old_parent->load($oTsk->task_parent);
+													$old_parent->updateDynamics();
+												}
                 }
 
                 // update dependencies
