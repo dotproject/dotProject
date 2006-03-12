@@ -398,8 +398,8 @@ function projects_list_data($user_id = false) {
 	$q->addQuery("task_project, COUNT(distinct tasks.task_id) AS total_tasks, 
 			SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/
 			SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_duration");
-	$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 	if ($user_id) {
+		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 		$q->addWhere('ut.user_id = '.$user_id);
 	}
 	$q->addGroup('task_project');
@@ -445,7 +445,8 @@ function projects_list_data($user_id = false) {
 	// temporary users tasks
 	$q->createTemp('tasks_users');
 	$q->addTable('tasks');
-	$q->addQuery('task_project, ut.user_id');
+	$q->addQuery('task_project');
+	$q->addQuery('ut.user_id');
 	$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 	if ($user_id) {
 		$q->addWhere('ut.user_id = '.$user_id);
