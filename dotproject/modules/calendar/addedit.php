@@ -105,6 +105,40 @@ if ($event_id || $is_clash) {
 	$end_date->setTime( 17,0,0 );
 }
 
+$inc = intval(dPgetConfig('cal_day_increment')) ? intval(dPgetConfig('cal_day_increment')) : 30;
+if (!$event_id && !$is_clash)
+{
+
+	$seldate = new CDate( $date );
+	// If date is today, set start time to now + inc
+	if ($date == date('Ymd'))
+	{
+		$h = date('H');
+		// an interval after now.
+		$min = intval(date('i') / $inc) + 1;
+		$min *= $inc;
+		if ($min > 60)
+		{
+			$min = 0;
+			$h++;
+		}
+	}
+	if ($h && $h < dPgetConfig('cal_day_end'))
+	{
+		$seldate->setTime($h, $min, 0);
+		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+		$seldate->addSeconds( $inc * 60 );
+		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
+	}	
+	else
+	{
+		$seldate->setTime(dPgetConfig('cal_day_start'),0,0);
+		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+		$seldate->setTime(dPgetConfig('cal_day_end'),0,0);
+		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
+	}
+}
+
 $recurs =  array (
 	'Never',
 	'Hourly',
@@ -135,9 +169,10 @@ $t = new CDate();
 $t->setTime( 0,0,0 );
 if (!defined('LOCALE_TIME_FORMAT'))
   define('LOCALE_TIME_FORMAT', '%I:%M %p');
-for ($m=0; $m < 60; $m++) {
+//$m clashes with global $m (module)
+for ($minutes=0; $minutes < ((24 * 60) / $inc); $minutes++) {
 	$times[$t->format( "%H%M%S" )] = $t->format( LOCALE_TIME_FORMAT );
-	$t->addSeconds( 1800 );
+	$t->addSeconds( $inc * 60 );
 }
 ?>
 
