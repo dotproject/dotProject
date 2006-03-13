@@ -752,7 +752,7 @@ INSERT INTO config VALUES (NULL, 'mail_host', 'localhost', 'mail', 'text');
 INSERT INTO config VALUES (NULL, 'mail_port', '25', 'mail', 'text');
 INSERT INTO config VALUES (NULL, 'mail_auth', 'false', 'mail', 'checkbox');
 INSERT INTO config VALUES (NULL, 'mail_user', '', 'mail', 'text');
-INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'text');
+INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'password');
 INSERT INTO config VALUES (NULL, 'mail_defer', 'false', 'mail', 'checkbox');
 INSERT INTO config VALUES (NULL, 'mail_timeout', '30', 'mail', 'text');
 
