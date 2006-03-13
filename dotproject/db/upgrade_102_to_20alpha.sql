@@ -776,7 +776,7 @@ INSERT INTO config VALUES (NULL, 'mail_host', 'localhost', 'mail', 'text');
 INSERT INTO config VALUES (NULL, 'mail_port', '25', 'mail', 'text');
 INSERT INTO config VALUES (NULL, 'mail_auth', 'false', 'mail', 'checkbox');
 INSERT INTO config VALUES (NULL, 'mail_user', '', 'mail', 'text');
-INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'text');
+INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'password');
 INSERT INTO config VALUES (NULL, 'mail_defer', 'false', 'mail', 'checkbox');
 INSERT INTO config VALUES (NULL, 'mail_timeout', '30', 'mail', 'text');
 
@@ -829,7 +829,7 @@ INSERT INTO dpversion VALUES ('2.0-alpha', 2, '2005-03-04', '2005-03-04');
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication
 INSERT INTO config VALUES ('', 'ldap_search_user', 'Manager', 'ldap', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_search_pass', 'secret', 'ldap', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_search_pass', 'secret', 'ldap', 'password'); 
 INSERT INTO config VALUES ('', 'ldap_allow_login', 'true', 'ldap', 'checkbox');
 
 # 20050311

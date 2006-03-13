@@ -1192,6 +1192,6 @@ INSERT INTO dpversion VALUES ('2.0.1', 2, '2005-04-05', '2005-04-09');
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication
 INSERT INTO config VALUES ('', 'ldap_search_user', 'Manager', 'ldap', 'text');
-INSERT INTO config VALUES ('', 'ldap_search_pass', 'secret', 'ldap', 'text');
+INSERT INTO config VALUES ('', 'ldap_search_pass', 'secret', 'ldap', 'password');
 INSERT INTO config VALUES ('', 'ldap_allow_login', 'true', 'ldap', 'checkbox');
 
