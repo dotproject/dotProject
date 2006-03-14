@@ -281,17 +281,36 @@ if ($do_report) {
 	        	$AppUI->_('Cost Code')
         	);
 
-		$options = array(
-			'showLines' => 1,
-			'fontSize' => 8,
+        	$options = array(
+			'showLines' => 0,
+			'fontSize' => 12,
 			'rowGap' => 2,
 			'colGap' => 5,
 			'xPos' => 50,
 			'xOrientation' => 'right',
-			'width'=>'500'
-		);
-
-		$pdf->ezTable( $pdfdata, $pdfheaders, $title, $options );
+			'width' => 500,
+			);
+	        $pdfheaderdata[] = array (
+	                                  '',
+	                                  '',
+	                                  '',
+	                                  '',
+	                                  '',
+	                                  '',
+	                                  );
+		$pdf->ezTable($pdfheaderdata,$pdfheaders,$title,$options);
+			 
+	        $options['col_options'] = array(
+			                        2 => array('width' => 250),
+			                        3 => array('width' => 55),
+			                        4 => array('width' => 30),
+			                        5 => array('width' => 30),
+			                        );
+	        $options['showHeadings'] = 0;
+	        $options['showLines'] = 1;
+	        $options['fontSize'] = 8;
+	        
+		$pdf->ezTable( $pdfdata,'','',$options );
 
 		if ($fp = fopen( "$temp_dir/temp$AppUI->user_id.pdf", 'wb' )) {
 			fwrite( $fp, $pdf->ezOutput() );
