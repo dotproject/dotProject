@@ -272,6 +272,12 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         $start = $start->getDate();
 
         $progress = $a["task_percent_complete"];
+
+	if ($progress > 100) 
+		$progress = 100;
+	elseif ($progress < 0)
+		$progress = 0;
+
         $flags    = ($a["task_milestone"] ? "m" : "");
 
         $cap = "";
