@@ -140,8 +140,9 @@ function setCalendar( idate, fdate ) {
 
 <?php
 if ($do_report) {
-	
-	$sql = "SELECT * FROM tasks WHERE task_project = $project_id";
+		$sql = 'SELECT * FROM tasks WHERE 1=1 ';
+	if ($project_id != 0)
+		$sql .= " AND task_project = $project_id ";
 	if (!$log_all) {
 		$sql .= "\n	AND task_start_date >= '".$start_date->format( FMT_DATETIME_MYSQL )."'"
 		."\n	AND task_start_date <= '".$end_date->format( FMT_DATETIME_MYSQL )."'";
