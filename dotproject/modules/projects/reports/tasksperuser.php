@@ -3,7 +3,6 @@
 $do_report 		    = dPgetParam( $_POST, "do_report", 0 );
 $log_start_date 	= dPgetParam( $_POST, "log_start_date", 0 );
 $log_end_date 	    = dPgetParam( $_POST, "log_end_date", 0 );
-$log_all_projects 	= dPgetParam($_POST["log_all_projects"], 0);
 $log_all		    = dPgetParam($_POST["log_all"], 0);
 $use_period			= dPgetParam($_POST,"use_period",0); 
 $display_week_hours	= dPgetParam($_POST,"display_week_hours",0); 
@@ -92,10 +91,6 @@ function setCalendar( idate, fdate ) {
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all_projects" <?php if ($log_all_projects) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Log All Projects' );?>
-		</input>
-		<br>
 		<input type="checkbox" name="use_period" <?php if ($use_period) echo "checked" ?> >
 		<?php echo $AppUI->_( 'Use the period' );?>
 		</input>
@@ -178,7 +173,7 @@ if($do_report){
 	        //AND task_duration  > 0";
 			//;
 
-	if(!$log_all_projects){
+	if($project_id != 0){
 		if (!$where) { $sql.=" WHERE ";$where=true; }
 		if ($and) {
 			$sql .= " AND ";
@@ -264,7 +259,7 @@ if($do_report){
 	
 		$table_header = "<tr>".
 						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Task")."</B></font></td>".
-						( $log_all_projects ? "<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Project")."</B></font></td>" : "" ) .
+						( $project_id != 0 ? "<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Project")."</B></font></td>" : "" ) .
 						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Start Date")."</B></font></td>".
 						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("End Date")."</B></font></td>".
 						weekDates($display_week_hours,$sss,$sse).
@@ -278,7 +273,7 @@ if($do_report){
 				      ." "
 					  .$user_data["contact_last_name"]
 					  ."</B></font></td>";
-		    for($w=0;$w<=(1 + ($log_all_projects ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w++) {
+		    for($w=0;$w<=(1 + ($project_id != 0 ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w++) {
 				 $tmpuser.="<td bgcolor='#D0D0D0'></td>";
 			}
 			$tmpuser.="</tr>";
@@ -288,11 +283,11 @@ if($do_report){
 			foreach($task_list as $task) {
 				if (!isChildTask($task)) {
 					if (isMemberOfTask($task_list,$task_assigned_users,$Ntasks,$user_id,$task)) {
-						$tmptasks.=displayTask($task_list,$task,0,$display_week_hours,$sss,$sse, $log_all_projects);
+						$tmptasks.=displayTask($task_list,$task,0,$display_week_hours,$sss,$sse, !$project_id);
 						// Get children
 						$tmptasks.=doChildren($task_list,$task_assigned_users,$Ntasks,
 											  $task->task_id,$user_id,
-											  1,$max_levels,$display_week_hours,$sss,$sse, $log_all_projects);
+											  1,$max_levels,$display_week_hours,$sss,$sse, !$project_id);
 					}
 				}
 			}
