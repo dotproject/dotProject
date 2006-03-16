@@ -3,7 +3,6 @@
 $do_report 		    = dPgetParam( $_POST, "do_report", 0 );
 $log_start_date 	= dPgetParam( $_POST, "log_start_date", 0 );
 $log_end_date 	    = dPgetParam( $_POST, "log_end_date", 0 );
-$log_all_projects 	= dPgetParam( $_POST, "log_all_projects", "off");
 $user_id            = dPgetParam( $_POST, "user_id", $AppUI->user_id);
 
 // create Date objects from the datetime fields
@@ -62,11 +61,6 @@ function setCalendar( idate, fdate ) {
 		</a>
 	</td>
 
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all_projects" <?php if ($log_all_projects == "on") echo "checked" ?> />
-		<?php echo $AppUI->_( 'Log All Projects' );?>
-	</td>
-	
 	<td nowrap='nowrap'>
 	   <?php
 	       $sql = "select user_id, concat_ws(' ', contact_first_name, contact_last_name)
@@ -88,7 +82,10 @@ function setCalendar( idate, fdate ) {
 
 <?php
 if($do_report){
-    $projects_filter = $log_all_projects == "on" ? "" : " and task_project = $project_id ";
+    $projects_filter = '';
+    if ($project_id != 0)
+			$projects_filter = " and task_project = $project_id ";
+
     $user_filter     = "";
     
     $sql = "select t.*, p.project_name, u.user_username
