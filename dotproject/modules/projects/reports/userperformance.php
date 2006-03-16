@@ -2,7 +2,6 @@
 $do_report 		    = dPgetParam( $_POST, "do_report", 0 );
 $log_start_date 	= dPgetParam( $_POST, "log_start_date", 0 );
 $log_end_date 	    = dPgetParam( $_POST, "log_end_date", 0 );
-$log_all_projects 	= dPgetParam($_POST["log_all_projects"], 0);
 $log_all		    = dPgetParam($_POST["log_all"], 0);
 $group_by_unit      = dPgetParam($_POST["group_by_unit"],"day");
 
@@ -62,11 +61,6 @@ function setCalendar( idate, fdate ) {
 		</a>
 	</td>
 
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all_projects" <?php if ($log_all_projects) echo "checked" ?> />
-		<?php echo $AppUI->_( 'Log All Projects' );?>
-	</td>
-	
 	<td nowrap='nowrap'>
 		<input type="checkbox" name="log_all" <?php if ($log_all) echo "checked" ?> />
 		<?php echo $AppUI->_( 'Log All' );?>
@@ -104,10 +98,9 @@ if($do_report){
 	        WHERE t.task_id = ut.task_id
 				  AND t.task_milestone    ='0'";
 	
-	if(!$log_all_projects){
+	if($project_id != 0)
 		$sql .= " AND t.task_project='$project_id'\n";
-	}
-	
+		
 	if(!$log_all){
 		$sql .= " AND t.task_start_date >= \"".$start_date->format( FMT_DATETIME_MYSQL )."\"
 		          AND t.task_start_date <= \"".$end_date->format( FMT_DATETIME_MYSQL )."\"";
@@ -183,7 +176,8 @@ if($do_report){
 				$percentage_e = 0;
 				if($total_hours_worked>0){
 					$percentage = ($total_hours_worked/$total_hours_allocated)*100;
-					$percentage_e = ($hours_allocated_complete/$hours_worked_complete)*100;
+					if ($hours_worked_complete > 0)
+						$percentage_e = ($hours_allocated_complete/$hours_worked_complete)*100;
 				}
 				?>
 				<tr>
@@ -200,7 +194,8 @@ if($do_report){
                 $sum_efficiency = 0;
 		if($sum_total_hours_worked > 0){
 			$sum_percentage = ($sum_total_hours_worked/$sum_total_hours_allocated)*100;
-                        $sum_efficiency = ($sum_hours_allocated_complete/$sum_hours_worked_complete)*100;
+			if ($sum_hours_worked_complete > 0)
+				$sum_efficiency = ($sum_hours_allocated_complete/$sum_hours_worked_complete)*100;
 		}
 		?>
 			<tr>
