@@ -130,10 +130,6 @@ function setTask( key, val ) {
 				<a href="<?php echo $obj->link_url;?>"><?php echo $AppUI->_( 'go' );?></a>
 			</td>
 		</tr>
-		<tr valign="top">
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Type' );?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->link_type;?></td>
-		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Uploaded By' );?>:</td>
 			<td align="left" class="hilite"><?php echo $obj->user_first_name . ' '. $obj->user_last_name;?></td>

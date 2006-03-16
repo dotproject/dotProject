@@ -181,12 +181,10 @@ shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 	<th nowrap="nowrap"><?php echo $AppUI->_( 'Category' );?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_( 'Task Name' );?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_( 'Owner' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Type' );?></a></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_( 'Date' );?></th>
 </tr>
 <?php
 $fp=-1;
-$link_date = new CDate();
 
 $id = 0;
 for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_totalrecs; $i++){
@@ -226,7 +224,6 @@ for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_total
         <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']];?></td> 
 	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row["task_id"];?>"><?php echo $row["task_name"];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row["contact_first_name"].' '.$row["contact_last_name"];?></td>
-	<td width="15%" nowrap="nowrap"><?php echo $row["link_type"];?></td>
 	<td width="15%" nowrap="nowrap" align="right"><?php echo $link_date->format( "$df $tf" );?></td>
 </tr>
 <?php }?>

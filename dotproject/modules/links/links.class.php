@@ -14,10 +14,9 @@ class CLink extends CDpObject {
 	var $link_name = NULL;
 	var $link_parent = NULL;
 	var $link_description = NULL;
-	var $link_type = NULL;
 	var $link_owner = NULL;
 	var $link_date = NULL;
-        var $link_category = NULL;
+	var $link_category = NULL;
 
 	
 	function CLink() {

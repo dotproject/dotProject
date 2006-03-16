@@ -53,7 +53,6 @@ class CSetupLinks {
 `link_name` varchar( 255 ) NOT NULL default '',
 `link_parent` int( 11 ) default '0',
 `link_description` text,
-`link_type` varchar( 100 ) default NULL ,
 `link_owner` int( 11 ) default '0',
 `link_date` datetime default NULL ,
 `link_icon` varchar( 20 ) default 'obj/',
