@@ -108,7 +108,7 @@ if($do_report) {
 	           OR task_end_date	BETWEEN \"".$start_date->format( FMT_DATETIME_MYSQL )."\" 
 	                AND \"".$end_date->format( FMT_DATETIME_MYSQL )."\")
 							OR (task_start_date <= \"".$start_date->format( FMT_DATETIME_MYSQL )."\"
-								AND task_end_date >= \"".$end_date->format( FMT_DATETIME_MYSQL )."\"))
+								AND task_end_date >= \"".$end_date->format( FMT_DATETIME_MYSQL )."\")
 	        AND !isnull(task_end_date) AND task_end_date != '0000-00-00 00:00:00'
 	        AND !isnull(task_start_date) AND task_start_date != '0000-00-00 00:00:00'
 	        AND task_dynamic   !='1'
