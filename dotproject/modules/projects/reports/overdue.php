@@ -1,8 +1,13 @@
 <?php
 // Output the PDF
 // make the PDF file
-$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
-$pname = db_loadResult( $sql );
+if ($project_id != 0)
+{
+	$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
+	$pname = db_loadResult( $sql );
+}
+else
+	$pname = $AppUI->_('All Projects');
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
 	$AppUI->redirect();
@@ -73,7 +78,8 @@ $q->addQuery('b.user_username');
 $q->addTable('tasks', 'a');
 $q->leftJoin('users', 'b', 'a.task_owner = b.user_id');
 $q->addWhere('task_percent_complete < 100');
-$q->addWhere('task_project = ' . $project_id);
+if ($project_id != 0)
+	$q->addWhere('task_project = ' . $project_id);
 $q->addWhere("task_end_date <  '" . $date->format(FMT_DATETIME_MYSQL) . "'");
 $tasks = $q->loadHashList('task_id');
 

@@ -7,7 +7,7 @@ if ($project_id != 0)
 	$pname = db_loadResult( $sql );
 }
 else
-	$pname = 'All Projects';
+	$pname = $AppUI->_('All Projects');
 
 $font_dir = $dPconfig['root_dir']."/lib/ezpdf/fonts";
 $temp_dir = $dPconfig['root_dir']."/files/temp";
