@@ -11,7 +11,6 @@ $log_all = dPgetParam( $_GET, 'log_all', 0 );
 $log_pdf = dPgetParam( $_GET, 'log_pdf', 0 );
 $log_ignore = dPgetParam( $_GET, 'log_ignore', 0 );
 $log_userfilter = dPgetParam( $_GET, 'log_userfilter', '0' );
-$log_allprojects = dPgetParam( $_GET, 'log_allprojects', '0' );
 
 $log_start_date = dPgetParam( $_GET, "log_start_date", 0 );
 $log_end_date = dPgetParam( $_GET, "log_end_date", 0 );
@@ -104,11 +103,6 @@ function setCalendar( idate, fdate ) {
 	</TD>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_allprojects" <?php if ($log_allprojects) echo "checked" ?> />
-		<?php echo $AppUI->_( 'All Projects' );?>
-	</td>
-
-	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" <?php if ($log_all) echo "checked" ?> />
 		<?php echo $AppUI->_( 'Log All' );?>
 	</td>
@@ -139,10 +133,9 @@ if ($do_report) {
                 ."\nLEFT JOIN contacts ON user_contact = contact_id"
 		."\nLEFT JOIN projects ON project_id = task_project"
 		."\nWHERE task_log_task = task_id";
-	if (!$log_allprojects)
-	{
-		 $sql .= "\nAND task_project = $project_id";
-	}
+	if ($project_id != 0)
+		$sql .= "\nAND task_project = $project_id";
+	
 	if (!$log_all) {
 		$sql .= "\n	AND task_log_date >= '".$start_date->format( FMT_DATETIME_MYSQL )."'"
 		."\n	AND task_log_date <= '".$end_date->format( FMT_DATETIME_MYSQL )."'";
@@ -237,7 +230,7 @@ if ($do_report) {
 <?php
 	if ($log_pdf) {
 	// make the PDF file
-		 if (!$log_allprojects){
+		 if ($project_id != 0){
 			$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
 			$pname = db_loadResult( $sql );
 		}
