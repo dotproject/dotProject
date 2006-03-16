@@ -69,7 +69,7 @@ KEY `idx_link_parent` ( `link_parent` )
 	$q->addTable('sysvals');
 	$q->addInsert('sysval_key_id', 1);
 	$q->addInsert('sysval_title', 'LinkType');
-	$q->addInsert('sysval_value', '0|Unknown\n1|Document\n2|Application');
+	$q->addInsert('sysval_value', "0|Unknown\n1|Document\n2|Application");
 	$q->exec();
 	
 	return NULL;
