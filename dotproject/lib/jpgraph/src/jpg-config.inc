@@ -72,6 +72,32 @@ DEFINE("LANGUAGE_CYRILLIC",true);
 // false it will assume koi8-r
 DEFINE("CYRILLIC_FROM_WINDOWS",true);
 
+// The following constant is used to auto-detect
+// whether cyrillic conversion is really necessary 
+// if enabled. Just replace 'windows-1251' with a variable 
+// containing the input character encoding string 
+// of your application calling jpgraph.
+// A typical such string would be 'UTF-8' or 'utf-8'. 
+// The comparison is case-insensitive.
+// If this charset is not a 'koi8-r' or 'windows-1251'
+// derivate then no conversion is done.
+//
+// This constant can be very important in multi-user
+// multi-language environments where a cyrillic conversion
+// could be needed for some cyrillic people 
+// and resulting in just erraneous conversions 
+// for not-cyrillic language based people.
+//
+// Example: In the free project management
+// software dotproject.net $locale_char_set is dynamically
+// set by the language environment the user has chosen.
+//
+// Usage:  DEFINE('LANGUAGE_CHARSET', $locale_char_set);
+//
+// where $locale_char_set is a GLOBAL (string) variable
+// from the application including JpGraph.
+DEFINE('LANGUAGE_CHARSET', $locale_char_set);
+
 // Japanese TrueType font used with FF_MINCHO, FF_PMINCHO, FF_GOTHIC, FF_PGOTHIC
 DEFINE('MINCHO_TTF_FONT','ipam.ttf');
 DEFINE('PMINCHO_TTF_FONT','ipamp.ttf');

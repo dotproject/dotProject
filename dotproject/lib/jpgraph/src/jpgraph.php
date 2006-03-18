@@ -581,13 +581,30 @@ class LanguageConv {
     var $g2312 = null ;
 
     function Convert($aTxt,$aFF) {
-	if( LANGUAGE_CYRILLIC ) {
-	    if( CYRILLIC_FROM_WINDOWS ) {
-		$aTxt = convert_cyr_string($aTxt, "w", "k"); 
-	    }
-	    $isostring = convert_cyr_string($aTxt, "k", "i");
-	    $unistring = LanguageConv::iso2uni($isostring);
-	    return $unistring;
+	   if( LANGUAGE_CYRILLIC ) {
+		
+		/* Auto-detect whether the cyrillic conversion
+		** based on the character_set info that has 
+		** been passed to jpgraph from the including
+		** application.
+		**
+		** Call the cyrillic converter only when a cyrillic 
+		** charset derivate is used. Otherwise do nothing 
+		** and prevent from erraneously converted strings.
+		*/			
+		
+		if( CYRILLIC_FROM_WINDOWS && ( !defined('LANGUAGE_CHARSET') || stristr(LANGUAGE_CHARSET, 'windows-1251') ) ) {
+
+			$aTxt = convert_cyr_string($aTxt, "w", "k"); 
+		}
+		
+		if (!defined('LANGUAGE_CHARSET') || stristr(LANGUAGE_CHARSET, 'koi8-r') || stristr(LANGUAGE_CHARSET, 'windows-1251')) {
+			$isostring = convert_cyr_string($aTxt, "k", "i");
+			$unistring = LanguageConv::iso2uni($isostring);
+		} else {
+			$unistring = $aTxt;
+		}
+		return $unistring;
 	}
 	elseif( $aFF === FF_SIMSUN ) {
 	    // Do Chinese conversion
