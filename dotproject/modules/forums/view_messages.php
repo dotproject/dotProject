@@ -281,6 +281,7 @@ if ($viewtype == 'single')
 	$q->addInsert('visit_user', $AppUI->user_id);
 	$q->addInsert('visit_forum', $forum_id);
 	$q->addInsert('visit_message', $msg_id);
+	$q->addInsert('visit_date', $date->getDate());
 	$q->exec();
 	$q->clear();
   }
