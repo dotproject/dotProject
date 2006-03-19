@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-error_reporting( E_ALL );
+//error_reporting( E_ALL );
 
 $project_id = intval( dPgetParam( $_REQUEST, "project_id", 0 ) );
 $report_type = dPgetParam( $_REQUEST, "report_type", '' );
@@ -65,7 +65,7 @@ if (!empty($report_type_var))
 
 if (! $suppressHeaders) {
 if (!isset($display_project_name)) 
-	$display_project_name = "None";
+	$display_project_name = $AppUI->_('All');
 echo $AppUI->_('Selected Project') . ": <b>".$display_project_name."</b>"; 
 ?>
 <form name="changeMe" action="./index.php?m=projects&a=reports<?php echo $report_type_var; ?>" method="post">
