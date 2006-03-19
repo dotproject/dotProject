@@ -204,9 +204,12 @@ for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_total
 		if ($showProject) {
 			$s = '<tr>';
 			$s .= '<td colspan="10" style="background-color:#'.$row["project_color_identifier"].'" style="border: outset 2px #eeeeee">';
-			$s .= '<font color="' . bestColor( $row["project_color_identifier"] ) . '">
-                <a href="?m=projects&a=view&project_id=' . $row['link_project'] . '">'
-			. $row["project_name"] . '</a></font>';
+			$s .= '<font color="' . bestColor( $row["project_color_identifier"] ) . '">';
+			if ($row['project_name'] > 0)
+				$s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '">'	. $row["project_name"] . '</a>';
+			else
+				$s .= $row['project_name'];
+			$s .= '</font>';
 			$s .= '</td></tr>';
 			echo $s;
 		}
