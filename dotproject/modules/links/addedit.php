@@ -127,12 +127,12 @@ function setTask( key, val ) {
 			<td align="left"><input type="text" class="text" name="link_name" value="<?echo $obj->link_name;?>"></td>
 	<?php if ($link_id) { ?>
 			<td>
-				<a href="<?php echo $obj->link_url;?>"><?php echo $AppUI->_( 'go' );?></a>
+				<a href="<?php echo $obj->link_url;?>" target="_blank"><?php echo $AppUI->_( 'go' );?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Uploaded By' );?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->user_first_name . ' '. $obj->user_last_name;?></td>
+			<td align="left" class="hilite"><?php echo $obj->contact_first_name . ' '. $obj->contact_last_name;?></td>
 	<?php } ?>
 		</tr>
                 <tr>

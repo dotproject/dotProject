@@ -134,9 +134,11 @@ else
 // SETUP FOR LINK LIST
 $q = new DBQuery();
 $q->addQuery('links.*');
-$q->addQuery('project_name, project_color_identifier, project_status');
 $q->addQuery('contact_first_name, contact_last_name');
-$q->addQuery('task_name, task_id');
+if ($project_id != 0) {
+	$q->addQuery('project_name, project_color_identifier, project_status');
+	$q->addQuery('task_name, task_id');
+}
 
 $q->addTable('links');
 
@@ -154,10 +156,13 @@ if ($task_id) 			// Task
 if ($catsql) 						// Category
 	$q->addWhere($catsql);
 // Permissions
-$project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
-$task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
-
-$q->addOrder('project_name, link_name');
+if ($project_id != 0) {
+	$project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
+	$task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
+	$q->addOrder('project_name, link_name');
+}
+else
+	$q->addOrder('link_name');
 
 //LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
 if ($canRead) 
@@ -218,7 +223,7 @@ for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_total
 	?>
 	</td>
 	<td nowrap="8%">
-		<?php echo "<a href=\"{$row['link_url']}\" title=\"{$row['link_description']}\">{$row['link_name']}</a>"; ?>
+		<?php echo "<a href=\"{$row['link_url']}\" title=\"{$row['link_description']}\" target=\"_blank\">{$row['link_name']}</a>"; ?>
 	</td>
 	<td width="20%"><?php echo $row['link_description'];?></td>
         <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']];?></td> 
