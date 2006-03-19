@@ -163,7 +163,7 @@ $join .= " LEFT JOIN files on tasks.task_id = files.file_task";
 $join .= ' LEFT JOIN user_task_pin as pin ON tasks.task_id = pin.task_id AND pin.user_id = ';
 $join .= $user_id ? $user_id : $AppUI->user_id;
 
-$where = $project_id ? "\ntask_project = $project_id" : "project_active != 0";
+$where = $project_id ? "\ntask_project = $project_id" : "project_active <> 0";
 
 if ($pinned_only)
         $where .= ' AND task_pinned = 1 ';
@@ -183,7 +183,7 @@ switch ($f) {
                 break;
         case 'children':
         // patch 2.13.04 2, fixed ambigious task_id
-                $where .= "\n        AND task_parent = $task_id AND tasks.task_id != $task_id";
+                $where .= "\n        AND task_parent = $task_id AND tasks.task_id <> $task_id";
                 break;
         case 'myproj':
                 $where .= "\n        AND project_owner = $user_id";
@@ -205,8 +205,8 @@ switch ($f) {
                                         AND user_tasks.task_id       = tasks.task_id
                                         AND (task_percent_complete    < '100' OR task_end_date = '')
                                         AND projects.project_active  = '1'
-                                        AND projects.project_status != '4'
-                                        AND projects.project_status != '5'";
+                                        AND projects.project_status <> '4'
+                                        AND projects.project_status <> '5'";
                 break;
         case 'allunfinished':
                 // patch 2.12.04 finish date required to be consider finish
@@ -215,8 +215,8 @@ switch ($f) {
                                         AND task_project             = projects.project_id
                                         AND (task_percent_complete   < '100' OR task_end_date = '')
                                         AND projects.project_active  = '1'
-                                        AND projects.project_status != '4'
-                                        AND projects.project_status != '5'";
+                                        AND projects.project_status <> '4'
+                                        AND projects.project_status <> '5'";
                 break;
         case 'unassigned':
                 $join .= "\n LEFT JOIN user_tasks ON tasks.task_id = user_tasks.task_id";

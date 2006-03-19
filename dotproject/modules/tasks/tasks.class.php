@@ -254,7 +254,7 @@ class CTask extends CDpObject {
                 if ( $modified_task->task_dynamic == '1' ) {
                         //Update allocated hours based on children with duration type of 'hours'
                         $sql1 = "SELECT SUM( task_duration * task_duration_type ) from " . $this->_tbl . " WHERE task_parent = " . $modified_task->task_id .
-                                        " and task_id != " . $modified_task->task_id .
+                                        " and task_id <> " . $modified_task->task_id .
                                         " AND task_duration_type = 1 " .
                                         " GROUP BY task_parent;";
                         $children_allocated_hours1 = (float) db_loadResult( $sql1 );
@@ -262,7 +262,7 @@ class CTask extends CDpObject {
                         //Update allocated hours based on children with duration type of 'days'
                         // use here the daily working hours instead of the full 24 hours to calculate dynamic task duration!
                         $sql2 = "SELECT SUM( task_duration * ".$dPconfig['daily_working_hours']." ) from " . $this->_tbl . " WHERE task_parent = " . $modified_task->task_id .
-                                        " and task_id != " . $modified_task->task_id .
+                                        " and task_id <> " . $modified_task->task_id .
                                         " AND task_duration_type > 1" .
                                         " GROUP BY task_parent;";
                         $children_allocated_hours2 = (float) db_loadResult( $sql2 );
@@ -280,15 +280,15 @@ class CTask extends CDpObject {
                         //Update worked hours based on children
                         $sql = "SELECT sum( task_log_hours ) FROM tasks, task_log
                                         WHERE task_id = task_log_task AND task_parent = " . $modified_task->task_id .
-                                        " AND task_id != " . $modified_task->task_id .
-                                        " AND task_dynamic != 1";
+                                        " AND task_id <> " . $modified_task->task_id .
+                                        " AND task_dynamic <> 1";
                         $children_hours_worked = (float) db_loadResult( $sql );
 
 
                         //Update worked hours based on dynamic children tasks
                         $sql = "SELECT sum( task_hours_worked ) FROM tasks
                                         WHERE task_dynamic = 1 AND task_parent = " . $modified_task->task_id .
-                                        " AND task_id != " . $modified_task->task_id;
+                                        " AND task_id <> " . $modified_task->task_id;
                         $children_hours_worked += (float) db_loadResult( $sql );
 
                         $modified_task->task_hours_worked = $children_hours_worked;
@@ -296,7 +296,7 @@ class CTask extends CDpObject {
                         //Update percent complete
                         $sql = "SELECT sum(task_percent_complete * task_duration * task_duration_type )
                                         FROM tasks WHERE task_parent = " . $modified_task->task_id .
-                                        " AND task_id != " . $modified_task->task_id;
+                                        " AND task_id <> " . $modified_task->task_id;
                         $real_children_hours_worked = (float) db_loadResult( $sql );
 
                         $total_hours_allocated = (float)($modified_task->task_duration * $modified_task->task_duration_type);
@@ -305,7 +305,7 @@ class CTask extends CDpObject {
                         } else {
                             $sql = "SELECT avg(task_percent_complete)
                                             FROM tasks WHERE task_parent = " . $modified_task->task_id .
-                                            " AND task_id != " . $modified_task->task_id;
+                                            " AND task_id <> " . $modified_task->task_id;
                             $modified_task->task_percent_complete = db_loadResult($sql);
                         }
 
@@ -313,8 +313,8 @@ class CTask extends CDpObject {
                         //Update start date
                         $sql = "SELECT min( task_start_date ) FROM tasks
                                         WHERE task_parent = " . $modified_task->task_id .
-                                        " AND task_id != " . $modified_task->task_id .
-                                        " AND ! isnull( task_start_date ) AND task_start_date !=  '0000-00-00 00:00:00'";
+                                        " AND task_id <> " . $modified_task->task_id .
+                                        " AND ! isnull( task_start_date ) AND task_start_date <>  '0000-00-00 00:00:00'";
 												$d = db_loadResult( $sql );
 												if ($d)
                         	$modified_task->task_start_date = $d;
@@ -324,7 +324,7 @@ class CTask extends CDpObject {
                         //Update end date
                         $sql = "SELECT max( task_end_date ) FROM tasks
                                         WHERE task_parent = " . $modified_task->task_id .
-                                        " AND task_id != " . $modified_task->task_id .
+                                        " AND task_id <> " . $modified_task->task_id .
                                         " AND ! isnull( task_end_date ) ";
                         $modified_task->task_end_date = db_loadResult( $sql );
 
@@ -1132,7 +1132,7 @@ class CTask extends CDpObject {
                 SET
                                 task_start_date = '$new_start_date',
                                 task_end_date = '$new_end_date'
-                        WHERE         task_dynamic != '1' AND task_id = $task_id
+                        WHERE         task_dynamic <> '1' AND task_id = $task_id
                 ";
 
                 db_exec( $sql );
@@ -1446,7 +1446,7 @@ class CTask extends CDpObject {
 
         //Returns task children IDs
         function getChildren() {
-                $sql = "select task_id from tasks where task_id != '$this->task_id'
+                $sql = "select task_id from tasks where task_id <> '$this->task_id'
                                 and task_parent = '$this->task_id'";
                 return db_loadColumn($sql);
         }
