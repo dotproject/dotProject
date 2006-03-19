@@ -79,7 +79,9 @@ $titleBlock->addCell(
 	arraySelect( $filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f , true ), '',
 	'<form name="forum_filter" action="?m=forums" method="post">', '</form>'
 );
-if ($canEdit) {
+
+$canAdd = $perms->checkModule( $m, 'add');
+if ($canAdd) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new forum').'">', '',
 		'<form action="?m=forums&a=addedit" method="post">', '</form>'
@@ -121,7 +123,7 @@ foreach ($forums as $row) {
 	}?>
 <tr>
 	<td nowrap="nowrap" align="center">
-	<?php if ( $row["forum_owner"] == $AppUI->user_id || $perms->checkModuleItem('forums', 'edit', $row['forum_id']) ) { ?>
+	<?php if ( $row["forum_owner"] == $AppUI->user_id || $perms->checkModule('forums', 'add') ) { ?>
 		<a href="?m=forums&a=addedit&forum_id=<?php echo $row["forum_id"];?>" title="<?php echo $AppUI->_('edit');?>">
 		<?php echo dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' );?>
 		</a>
