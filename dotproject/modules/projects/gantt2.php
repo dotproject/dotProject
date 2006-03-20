@@ -45,9 +45,10 @@ ORDER BY 1, 2, 5, 4
 ";
 $q  = new DBQuery;
 $q->addTable('tasks', 't');
-$q->addQuery('u.user_username user_name, t.task_name task_name, t.task_start_date task_start_date, t.task_milestone
-		task_milestone, ut.perc_assignment perc_assignment, t.task_end_date task_end_date, p.project_color_identifier
-		project_color_identifier, p.project_name project_name');
+$q->addQuery('u.user_username user_name');
+$q->addQuery('t.task_name task_name, t.task_start_date task_start_date, t.task_milestone
+		task_milestone, ut.perc_assignment perc_assignment, t.task_end_date task_end_date, t.task_dynamic');
+$q->addQuery('p.project_color_identifier project_color_identifier, p.project_name project_name');
 $q->addJoin('user_tasks', 'ut', 't.task_id = ut.task_id');
 $q->addJoin('users', 'u', 'u.user_id = ut.user_id');
 $q->addJoin('projects', 'p', 'p.project_id = t.task_project');
@@ -229,7 +230,7 @@ foreach($tasks as $t) {
 	{
 	$enddate = new CDate($end);
 	$startdate = new CDate($start);
-        $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), /*substr($actual_end, 0, 10))*/" "), $start, $actual_end, $cap, 0.6);
+        $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), /*substr($actual_end, 0, 10))*/" "), $start, $actual_end, $cap, $t['task_dynamic'] == 1 ? 0.1 : 0.6);
    //     $bar->progress->Set($progress/100);
         $bar->title->SetFont(FF_FONT1,FS_NORMAL,10);
         $bar->SetFillColor("#".$t['project_color_identifier']);

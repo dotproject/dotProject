@@ -238,7 +238,7 @@ foreach($projects as $p) {
 
                  $q  = new DBQuery;
                 $q->addTable('tasks');
-                $q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone');
+                $q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone, tasks.task_dynamic');
                 $q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
                 $q->addWhere('p.project_id = '. $p['project_id']);
                 $q->addOrder('tasks.task_end_date ASC');
@@ -256,7 +256,7 @@ foreach($projects as $p) {
                                 $tStartObj = new CDate($tStart);
                                 $tEndObj = new CDate($tEnd);
 
-                                $bar2 = new GanttBar($row++, array(substr(" --".$t["task_name"], 0, 20)."...", $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', 0.6);
+                                $bar2 = new GanttBar($row++, array(substr(" --".$t["task_name"], 0, 20)."...", $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
 
                                 $bar2->title->SetColor( bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ) );
                                  $bar2->SetFillColor("#".$p['project_color_identifier']);
