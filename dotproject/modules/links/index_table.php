@@ -135,10 +135,8 @@ else
 $q = new DBQuery();
 $q->addQuery('links.*');
 $q->addQuery('contact_first_name, contact_last_name');
-if ($project_id != 0) {
-	$q->addQuery('project_name, project_color_identifier, project_status');
-	$q->addQuery('task_name, task_id');
-}
+$q->addQuery('project_name, project_color_identifier, project_status');
+$q->addQuery('task_name, task_id');
 
 $q->addTable('links');
 
@@ -156,13 +154,9 @@ if ($task_id) 			// Task
 if ($catsql) 						// Category
 	$q->addWhere($catsql);
 // Permissions
-if ($project_id != 0) {
-	$project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
-	$task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
-	$q->addOrder('project_name, link_name');
-}
-else
-	$q->addOrder('link_name');
+$project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
+$task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
+$q->addOrder('project_name, link_name');
 
 //LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
 if ($canRead) 
@@ -205,7 +199,7 @@ for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_total
 			$s = '<tr>';
 			$s .= '<td colspan="10" style="background-color:#'.$row["project_color_identifier"].'" style="border: outset 2px #eeeeee">';
 			$s .= '<font color="' . bestColor( $row["project_color_identifier"] ) . '">';
-			if ($row['project_name'] > 0)
+			if ($row['project_id'] > 0)
 				$s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '">'	. $row["project_name"] . '</a>';
 			else
 				$s .= $row['project_name'];
