@@ -218,7 +218,14 @@ class bcode {
         }
 
         function store() {
-                if (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) {
+         				$q = new DBQuery;
+                $q->addQuery('billingcode_id');
+								$q->addTable('billingcode');
+								$q->addWhere('billingcode_name = \'' . $this->billingcode_name . "'");
+								$q->addWhere('company_id = ' . $this->company_id);
+                if ($q->loadResult())
+								        return 'Billing Code::code already exists';
+                else if (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) {
                         return "Billing Code::store failed <br />" . db_error();
                 } else {
                         return NULL;
