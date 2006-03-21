@@ -755,6 +755,10 @@ INSERT INTO config VALUES (NULL, 'mail_user', '', 'mail', 'text');
 INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'password');
 INSERT INTO config VALUES (NULL, 'mail_defer', 'false', 'mail', 'checkbox');
 INSERT INTO config VALUES (NULL, 'mail_timeout', '30', 'mail', 'text');
+INSERT INTO `config` VALUES ('', 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
+INSERT INTO `config` VALUES ('', 'task_reminder_days_before', '1', 'task_reminder', 'text');
+INSERT INTO `config` VALUES ('', 'task_reminder_repeat', '100', 'task_reminder', 'text');
+
 
 INSERT INTO config_list (`config_id`, `config_list_name`)
   SELECT config_id, 'php'

@@ -95,6 +95,10 @@ if (($msg = $task->store())) {
 	$AppUI->setMsg( $msg, UI_MSG_ERROR, true );
 }
 
+$new_task_end = new CDate($task->task_end_date);
+if ($new_task_end->dateDiff($task_end_date))
+	$task->addReminder();
+
 if ($notify_owner) {
 	if ($msg = $task->notifyOwner()) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );

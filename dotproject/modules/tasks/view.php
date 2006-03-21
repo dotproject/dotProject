@@ -1,6 +1,7 @@
 <?php /* $Id$ */
 $task_id = intval( dPgetParam( $_GET, "task_id", 0 ) );
 $task_log_id = intval( dPgetParam( $_GET, "task_log_id", 0 ) );
+$reminded = intval( dPgetParam( $_GET, 'reminded', 0) );
 
 
 // check permissions for this record
@@ -47,6 +48,10 @@ if (!db_loadObject( $sql, $obj, true, false )) {
 if (!$obj->canAccess( $AppUI->user_id )) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
+
+// Clear any reminders
+if ($reminded)
+	$obj->clearReminder();
 
 // retrieve any state parameters
 if (isset( $_GET['tab'] )) {
