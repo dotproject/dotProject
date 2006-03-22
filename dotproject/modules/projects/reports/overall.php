@@ -2,7 +2,6 @@
 /**
 * Generates a report of the task logs for given dates
 */
-error_reporting( E_ALL );
 $do_report = dPgetParam( $_POST, "do_report", 0 );
 $log_pdf = dPgetParam( $_POST, 'log_pdf', 0 );
 
