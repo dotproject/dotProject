@@ -48,8 +48,11 @@ if ($sub_form) {
 	}
 
 	// Find the task if we are set
-	if ($task_id)
+	$task_end_date = null;
+	if ($task_id) {
 		$obj->load($task_id);
+		$task_end_date = new CDate($obj->task_end_date);
+	}
 
 	if ( isset($_POST)) {
 		$obj->bind($_POST);
@@ -106,9 +109,10 @@ if ($sub_form) {
 		$date = new CDate( $obj->task_start_date );
 		$obj->task_start_date = $date->format( FMT_DATETIME_MYSQL );
 	}
+	$end_date = null;
 	if ($obj->task_end_date) {
-		$date = new CDate( $obj->task_end_date );
-		$obj->task_end_date = $date->format( FMT_DATETIME_MYSQL );
+		$end_date = new CDate( $obj->task_end_date );
+		$obj->task_end_date = $end_date->format( FMT_DATETIME_MYSQL );
 	}
 
 
