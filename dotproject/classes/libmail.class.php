@@ -347,7 +347,7 @@ function BuildMail() {
 	if( count( $this->aattach ) > 0 ) {
 		$this->_build_attachement();
 	} else {
-		$sep = "\r\n";
+		$sep = "\n";
 		$arr = preg_split("/(\r?\n)|\r/", $this->body);
 		$this->fullBody = implode($sep, $arr);
 	}
@@ -355,7 +355,7 @@ function BuildMail() {
 	reset($this->xheaders);
 	while( list( $hdr,$value ) = each( $this->xheaders )  ) {
 		if( $hdr != "Subject" )
-			$this->headers .= "$hdr: $value\r\n";
+			$this->headers .= "$hdr: $value\n";
 	}
 }
 
