@@ -40,7 +40,7 @@ $proj->load($obj->task_project);
 $sql = "SELECT billingcode_id, billingcode_name
         FROM billingcode
         WHERE billingcode_status=0
-        AND company_id='$proj->project_company' 
+        AND (company_id='$proj->project_company' OR company_id = 0)
         ORDER BY billingcode_name";
 
 $task_log_costcodes[0]="None";
