@@ -3,12 +3,17 @@
 
 	// Lets check which cost codes have been used before
 	$q  = new DBQuery;
-	$q->addTable('task_log');
-	$q->addQuery('distinct task_log_costcode, task_log_costcode');
-	$q->addOrder('task_log_costcode');
-	$q->addWhere("task_log_costcode != ''");
-	$task_log_costcodes = array("" => ""); // Let's add a blank default option
-	$task_log_costcodes = array_merge($task_log_costcodes, $q->loadHashList());
+	$q->addQuery('project_company');
+	$q->addTable('projects');
+	$q->addWhere('project_id = ' . $project_id);
+	$company_id = $q->loadResult();
+
+	$q->addTable('billingcode');
+	$q->addQuery('billingcode_id, billingcode_name');
+	$q->addOrder('billingcode_name');
+	$q->addWhere('(company_id = 0 OR company_id = ' . $company_id . ')');
+  $task_log_costcodes = $q->loadHashList();
+  array_unshift($task_log_costcodes, '');
 	
 	$q  = new DBQuery;
 	$q->addTable('users');
@@ -17,7 +22,7 @@
 	$q->addOrder('contact_first_name, contact_last_name');
 	$users = arrayMerge( array( '-1' => $AppUI->_('All Users') ), $q->loadHashList() );
 
-	$cost_code = dPgetParam( $_GET, 'cost_code' );
+	$cost_code = dPgetParam( $_GET, 'cost_code', '0' );
 	
 	if (isset( $_GET['user_id'] )) {
 		$AppUI->setState( 'ProjectsTaskLogsUserFilter', $_GET['user_id'] );
@@ -98,8 +103,10 @@ $project =& new CProject;
 $q  = new DBQuery;
 $q->addTable('task_log');
 $q->addQuery('task_log.*, user_username, task_id');
+$q->addQuery('billingcode_name as task_log_costcode');
 $q->addJoin('users', 'u', 'user_id = task_log_creator');
 $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
+$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
 //already included bY the setAllowedSQL function
 //$q->addJoin('projects', 'p', 'task_project = p.project_id');
 $q->addWhere("task_project = $project_id ");
@@ -109,7 +116,7 @@ if ($hide_inactive)
 	$q->addWhere("task_status>=0");
 if ($hide_complete) 
 	$q->addWhere("task_percent_complete < 100");
-if ($cost_code != "") 
+if ($cost_code != '0') 
 	$q->addWhere("task_log_costcode = '$cost_code'");
 $q->addOrder('task_log_date');
 $project->setAllowedSQL($AppUI->user_id, $q, 'task_project');

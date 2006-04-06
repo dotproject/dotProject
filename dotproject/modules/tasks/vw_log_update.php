@@ -231,7 +231,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
                 <table width="100%">
                         <tr>
                                 <td align="left">
-                                        <input type="text" class="text" name="task_log_name" value="<?php echo htmlspecialchars($log->task_log_name);?>" maxlength="255" size="30" />
+                                        <input type="text" class="text" name="task_log_name" value="<?php echo $log->task_log_name;?>" maxlength="255" size="30" />
                                 </td>
                                 <td align="center"><?php echo $AppUI->_('Problem');?>:
                                         <input type="checkbox" value="1" name="task_log_problem" <?php if($log->task_log_problem){?>checked="checked"<?php }?> />
@@ -257,7 +257,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 <tr>
 	<td align="right" valign="top"><?php echo $AppUI->_('Description');?>:</td>
 	<td>
-		<textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php echo htmlspecialchars($log->task_log_description);?></textarea>
+		<textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php echo $log->task_log_description;?></textarea>
 	</td>
 </tr>
 <tr>

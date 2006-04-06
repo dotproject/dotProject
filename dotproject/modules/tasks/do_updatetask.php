@@ -96,7 +96,7 @@ if (($msg = $task->store())) {
 }
 
 $new_task_end = new CDate($task->task_end_date);
-if ($new_task_end->dateDiff($task_end_date))
+if ($new_task_end->dateDiff($new_task_end))
 	$task->addReminder();
 
 if ($notify_owner) {

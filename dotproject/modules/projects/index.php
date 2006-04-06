@@ -65,7 +65,7 @@ $titleBlock = new CTitleBlock( 'Projects', 'applet3-48.png', $m, "$m.$a" );
 $titleBlock->addCell( $AppUI->_('Company') . '/' . $AppUI->_('Division') . ':');
 $titleBlock->addCell( $buffer, '', '<form action="?m=projects" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell();
-if ($canEdit) {
+if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new project').'">', '',
 		'<form action="?m=projects&a=addedit" method="post">', '</form>'

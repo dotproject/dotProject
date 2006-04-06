@@ -274,7 +274,7 @@ class CTask extends CDpObject {
                         if ( $modified_task->task_duration_type == 1 ) {
                                 $modified_task->task_duration = round($children_allocated_hours,2);
                         } else {
-                                $modified_task->task_duration = round($children_allocated_hours / $modified_task->task_duration_type, 2);
+                                $modified_task->task_duration = round($children_allocated_hours / $dPconfig['daily_working_hours'], 2);
                         }
 
                         //Update worked hours based on children
@@ -296,10 +296,17 @@ class CTask extends CDpObject {
                         //Update percent complete
                         $sql = "SELECT sum(task_percent_complete * task_duration * task_duration_type )
                                         FROM tasks WHERE task_parent = " . $modified_task->task_id .
-                                        " AND task_id <> " . $modified_task->task_id;
+                                        " AND task_id <> " . $modified_task->task_id . 
+															" AND task_duration_type = 1 ";
                         $real_children_hours_worked = (float) db_loadResult( $sql );
 
-                        $total_hours_allocated = (float)($modified_task->task_duration * $modified_task->task_duration_type);
+                        $sql = "SELECT sum(task_percent_complete * task_duration *" . dPconfig('daily_working_hours') . ")
+                                        FROM tasks WHERE task_parent = " . $modified_task->task_id .
+                                        " AND task_id <> " . $modified_task->task_id . 
+															" AND task_duration_type != 1 ";
+                        $real_children_hours_worked += (float) db_loadResult( $sql );
+
+                        $total_hours_allocated = (float)($modified_task->task_duration * ($modified_task->task_duration_type > 1?dPconfig('daily_working_hours'):1));
                         if($total_hours_allocated > 0){
                             $modified_task->task_percent_complete = $real_children_hours_worked / $total_hours_allocated;
                         } else {

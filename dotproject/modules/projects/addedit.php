@@ -6,8 +6,9 @@ $contact_id = intval( dPgetParam( $_GET, "contact_id", 0 ) );
 $perms =& $AppUI->acl();
 // check permissions for this record
 $canEdit = $perms->checkModuleItem( $m, 'edit', $project_id );
-if (!$canEdit) {
-$AppUI->redirect( "m=public&a=access_denied" );
+$canAuthor = $perms->checkModuleItem( $m, 'add' );
+if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
+	$AppUI->redirect( "m=public&a=access_denied" );
 }
 
 // get a list of permitted companies
