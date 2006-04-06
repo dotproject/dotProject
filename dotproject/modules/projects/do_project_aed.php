@@ -32,7 +32,9 @@ $del = dPgetParam( $_POST, 'del', 0 );
 
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
-	if (!$obj->canDelete( $msg )) {
+	$project_id = dPgetParam($_POST, 'project_id', 0);
+	$canDelete = $obj->canDelete($msg, $project_id);
+	if (!$canDelete) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		$AppUI->redirect();
 	}
