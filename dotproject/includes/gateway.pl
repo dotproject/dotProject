@@ -183,6 +183,7 @@ sub get_headers {
     $parent = $header{'Subject'};
     if ($parent =~ /\[\#(\d+)\]/) {
         $parent =~ s/.*\[\#(\d+)\].*/$1/;
+        $ticket = $parent;
     }
     else {
         $parent = 0;
@@ -420,7 +421,10 @@ sub insert_message {
     $insert_query .= "VALUES ($db_parent, $attachment, UNIX_TIMESTAMP(), $author, $subject, $body, $type, $cc, $assignment)";
     $sth = $dbh->prepare($insert_query);
     $sth->execute();
-    $ticket = $sth->{'mysql_insertid'};
+    if (not $parent)
+       {
+       $ticket = $sth->{'mysql_insertid'};
+       }
     $sth->finish();
     $dbh->disconnect();
 
@@ -578,7 +582,7 @@ sub mail_report {
 	print MAIL "To: $report_to_address\n";
 	print MAIL "From: $report_from_address\n";
 	if ($parent) {
-	    print MAIL "Subject: Client followup to trouble ticket #$parent\n";
+	    print MAIL "Subject: Client followup to trouble ticket #$ticket\n";
 	} else {
 	    print MAIL "Subject: New support ticket #$ticket\n";
 	}
@@ -588,7 +592,7 @@ sub mail_report {
 	print MAIL "Content-disposition: inline\n";
 	print MAIL "Content-type: text/plain\n\n";
 	if ($parent) {
-	  print MAIL "Followup Trouble ticket to ticket #$parent\n\n";
+	  print MAIL "Followup Trouble ticket to ticket #$ticket\n\n";
 	} else {
 	  print MAIL "New Trouble Ticket\n\n";
 	}
@@ -610,7 +614,7 @@ sub mail_report {
         print MAIL "}\n";
 	print MAIL "</style>\n";
 	if ($parent) {
-	    print MAIL "<title>Followup Trouble ticket to ticket #$parent</title>\n";
+	    print MAIL "<title>Followup Trouble ticket to ticket #$ticket</title>\n";
 	} else {
 	    print MAIL "<title>New Trouble ticket</title>\n";
 	}
@@ -686,15 +690,30 @@ sub mail_acknowledgement {
     }
 	print MAIL "To: $author\n";
 	print MAIL "From: $report_from_address\n";
-	print MAIL "Subject: [#$ticket] Your Support Request\n";
+	if ($parent)
+	   {
+	   print MAIL "Subject: [#$ticket] Response to Ticket $ticket received\n";
+	   }
+	else
+	    {
+	    print MAIL "Subject: [#$ticket] Your Support Request\n";
+	    }
 	print MAIL "Content-type: multipart/alternative; boundary=\"$boundary\"\n";
 	print MAIL "Mime-Version: 1.0\n\n";
 	print MAIL "--$boundary\n";
 	print MAIL "Content-disposition: inline\n";
 	print MAIL "Content-type: text/plain\n\n";
-	print MAIL "This is an acknowledgement that your support request has been logged\n";
-	print MAIL "by an automated support tracking system. It will be assigned to a\n";
-	print MAIL "support representative who will be in touch in due course.\n\n";
+	if ($parent)
+	   {
+	   print MAIL "This is an acknowledgement that your response to\n";
+	   print MAIL "Ticket ID $ticket has been received\n";
+	   }
+	 else
+	     {
+	      print MAIL "This is an acknowledgement that your support request has been logged\n";
+	      print MAIL "by an automated support tracking system. It will be assigned to a\n";
+	      print MAIL "support representative who will be in touch in due course.\n\n";
+	     }
 	print MAIL "Details of support request:\n";
 	print MAIL "Ticket ID: $ticket\n";
 	print MAIL "Author   : $author\n";
@@ -724,7 +743,14 @@ sub mail_acknowledgement {
 	print MAIL "</TABLE>\n";
 	print MAIL "<TABLE width=600 border=0 cellpadding=4 cellspacing=1 bgcolor=#878676>\n";
 	print MAIL "	<TR>\n";
-	print MAIL "		<TD colspan=2><font face=arial,san-serif size=2 color=white>New Ticket Entered</font></TD>\n";
+	if ($parent)
+	   {
+           print MAIL "                <TD colspan=2><font face=arial,san-serif size=2 color=white>Response received</font></TD>\n";
+           }
+	else
+	   {
+	    print MAIL "		<TD colspan=2><font face=arial,san-serif size=2 color=white>New Ticket Entered</font></TD>\n";
+	    }
 	print MAIL "	</tr>\n";
 	print MAIL "	<TR>\n";
 	print MAIL "		<TD bgcolor=white nowrap class=td>Ticket ID:</TD>\n";
@@ -741,9 +767,17 @@ sub mail_acknowledgement {
 	print MAIL "	<TR>\n";
 	print MAIL "		<TD bgcolor=white nowrap class=td>&nbsp;</TD>\n";
 	print MAIL "		<TD bgcolor=white nowrap class=td>\n";
-	print MAIL "This is an acknowledgement that your support request has been logged<br />\n";
-	print MAIL "by an automated support tracking system. It will be assigned to a<br />\n";
-	print MAIL "support representative who will be in touch in due course.\n";
+	if ($parent)
+	   {
+           print MAIL "This is an acknowledgement that your response to\n";
+           print MAIL "Ticket ID $ticket has been received\n";
+	   }
+	else
+	    {
+	     print MAIL "This is an acknowledgement that your support request has been logged<br />\n";
+	     print MAIL "by an automated support tracking system. It will be assigned to a<br />\n";
+	     print MAIL "support representative who will be in touch in due course.\n";
+            }
         print MAIL "            </font></TD>\n";
 	print MAIL "	</tr>\n";
 	print MAIL "</TABLE>\n";
