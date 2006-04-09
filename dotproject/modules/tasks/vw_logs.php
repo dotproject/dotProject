@@ -50,8 +50,9 @@ function delIt2(id) {
 <?php
 // Pull the task comments
 $sql = "
-SELECT task_log.*, user_username
+SELECT task_log.*, user_username, billingcode_name as task_log_costcode
 FROM task_log
+LEFT JOIN billingcode ON task_log.task_log_costcode = billingcode_id
 LEFT JOIN users ON user_id = task_log_creator
 WHERE task_log_task = $task_id". ($problem ? " AND task_log_problem > '0'" : '') .
 " ORDER BY task_log_date
