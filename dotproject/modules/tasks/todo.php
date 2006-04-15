@@ -104,7 +104,7 @@ if (!$showLowTasks)
 if (!$showHoldProjs)
 	$q->addWhere('project_status != ' . $project_on_hold_status);
 if (!$showDynTasks)
-	$q->addWhere('task_dynamic = 0');
+	$q->addWhere('task_dynamic != 1');
 if ($showPinned)
 	$q->addWhere('task_pinned = 1');
 if (!$showEmptyDate)
