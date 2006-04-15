@@ -300,13 +300,13 @@ class CTask extends CDpObject {
 															" AND task_duration_type = 1 ";
                         $real_children_hours_worked = (float) db_loadResult( $sql );
 
-                        $sql = "SELECT sum(task_percent_complete * task_duration *" . dPconfig('daily_working_hours') . ")
+                        $sql = "SELECT sum(task_percent_complete * task_duration *" . $dPconfig['daily_working_hours'] . ")
                                         FROM tasks WHERE task_parent = " . $modified_task->task_id .
                                         " AND task_id <> " . $modified_task->task_id . 
 															" AND task_duration_type != 1 ";
                         $real_children_hours_worked += (float) db_loadResult( $sql );
 
-                        $total_hours_allocated = (float)($modified_task->task_duration * ($modified_task->task_duration_type > 1?dPconfig('daily_working_hours'):1));
+                        $total_hours_allocated = (float)($modified_task->task_duration * ($modified_task->task_duration_type > 1?$dPconfig['daily_working_hours']:1));
                         if($total_hours_allocated > 0){
                             $modified_task->task_percent_complete = $real_children_hours_worked / $total_hours_allocated;
                         } else {
