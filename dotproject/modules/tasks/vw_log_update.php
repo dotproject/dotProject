@@ -43,7 +43,7 @@ $sql = "SELECT billingcode_id, billingcode_name
         AND (company_id='$proj->project_company' OR company_id = 0)
         ORDER BY billingcode_name";
 
-$task_log_costcodes[0]="None";
+$task_log_costcodes[0] = '';
 $ptrc = db_exec($sql);
 echo db_error();
 $nums = 0;
@@ -187,7 +187,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 	</td>
 	<td>
 <?php
-		echo arraySelect( $task_log_costcodes, 'task_log_costcodes', 'size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;"', '' );
+		echo arraySelect( $task_log_costcodes, 'task_log_costcodes', 'size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;"', $log->task_log_costcode );
 ?>
 		&nbsp;->&nbsp; <input type="text" class="text" name="task_log_costcode" value="<?php echo $log->task_log_costcode;?>" maxlength="8" size="8" />
 	</td>
