@@ -5,6 +5,10 @@
 GLOBAL $AppUI, $deny1, $canRead, $canEdit, $canAdmin;
 global $company_id, $project_id, $task_id;
 
+global $currentTabId;
+global $currentTabName;
+global $tabbed;
+
 //require_once( dPgetConfig( 'root_dir' )."/modules/files/index_table.lib.php");
 
 // ****************************************************************************
@@ -26,7 +30,7 @@ global $company_id, $project_id, $task_id;
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
 
-$tab = $AppUI->getState( 'FileIdxTab' ) !== NULL ? $AppUI->getState( 'FileIdxTab' ) : 0;
+$tab = $currentTabId;
 $page = dPgetParam( $_GET, "page", 1);
 if (!isset($project_id))
         $project_id = dPgetParam( $_REQUEST, 'project_id', 0);
@@ -49,10 +53,17 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
 $file_types = dPgetSysVal("FileType");
-if ($tab <= 0)
-        $catsql = false;
-else
-        $catsql = "file_category = " . --$tab ;
+if ($tabbed) {
+      if ($tab <= 0)
+              $catsql = false;
+      else
+              $catsql = "file_category = " . --$tab ;
+} else {
+      if ($tab < 0)
+              $catsql = false;
+      else
+              $catsql = "file_category = " . $tab ;
+}
 // SQL text for count the total recs from the selected option
 $q = new DBQuery;
 $q->addQuery('count(file_id)');

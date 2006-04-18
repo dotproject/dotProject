@@ -8,9 +8,7 @@ if (isset( $_REQUEST['project_id'] )) {
 
 $project_id = $AppUI->getState( 'FileIdxProject', 0 );
 
-if (dPgetParam($_GET, 'tab', -1) != -1 ) {
-        $AppUI->setState( 'FileIdxTab', dPgetParam($_GET, 'tab'));
-}
+$AppUI->setState( 'FileIdxTab', dPgetParam($_GET, 'tab'));
 $tab = $AppUI->getState( 'FileIdxTab', 0 );
 $active = intval( !$AppUI->getState( 'FileIdxTab' ) );
 
@@ -48,7 +46,7 @@ if ( $tab != -1 ) {
 }
 
 $tabBox = new CTabBox( "?m=files", "{$dPconfig['root_dir']}/modules/files/", $tab );
-
+$tabbed = $tabBox->isTabbed();
 $i = 0;
 
 foreach($file_types as $file_type)
