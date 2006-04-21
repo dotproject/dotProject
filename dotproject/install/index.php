@@ -27,10 +27,8 @@ Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproj
 The full text of the GPL is in the COPYING file.
 */
 
-$mode = 'install';
-if (is_file( "../includes/config.php" )) {
-	$mode = 'upgrade';
-}
+require_once "check_upgrade.php";
+$mode = dPcheckUpgrade();
 ?>
 <html>
 <head>
