@@ -700,11 +700,11 @@ VALUES ('', 'reset_memory_limit', '8M', '', 'text');
 # 20050302
 # ldap system config variables
 INSERT INTO config VALUES ('', 'auth_method', 'sql', 'auth', 'select'); 
-INSERT INTO config VALUES ('', 'ldap_host', 'localhost', '', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_port', '389', '', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_version', '3', '', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_base_dn', 'dc=saki,dc=com,dc=au', '', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_user_filter', '(uid=%USERNAME%)', '', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_host', 'localhost', 'ldap', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_port', '389', 'ldap', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_version', '3', 'ldap', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_base_dn', 'dc=saki,dc=com,dc=au', 'ldap', 'text'); 
+INSERT INTO config VALUES ('', 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text'); 
 
 # 20050302
 # PostNuke authentication variables
@@ -1191,7 +1191,7 @@ CREATE TABLE dpversion (
 	last_code_update date not null default '0000-00-00'
 );
 
-INSERT INTO dpversion VALUES ('2.0.1', 2, '2005-04-05', '2005-04-09');
+INSERT INTO dpversion VALUES ('2.0.2', 2, '2006-04-21', '2006-04-21');
 
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication
