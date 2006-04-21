@@ -3,6 +3,8 @@
 require_once( $AppUI->getSystemClass( 'libmail' ) );
 require_once( $AppUI->getSystemClass( 'dp' ) );
 require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once( $AppUI->getSystemClass( 'event_queue' ) );
+require_once( $AppUI->getSystemClass( 'date' ) );
 
 // user based access
 $task_access = array(
@@ -1725,7 +1727,7 @@ class CTask extends CDpObject {
           $body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . $baseUrl . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n";
           $body .= "\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
           foreach ($contacts as $contact) {
-            if ( ! $owner_is_assignee
+            if ( $owner_is_not_assignee
             || $contact['contact_id'] != $owner_contact) {
               $body .= $contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . '<' . $contact['contact_email'] . ">\n";
             }
