@@ -462,15 +462,22 @@ function formatTime( $uts ) {
  * can be trusted in Windows.
  */
 function formatCurrency( $number, $format ) {
-	global $AppUI;
+	global $AppUI, $locale_char_set;
 
 	if (!$format) {
 		$format = $AppUI->getPref('SHCURRFORMAT');
 	}
 	// If the requested locale doesn't work, don't fail,
 	// revert to the system default.
-	if (! setlocale(LC_MONETARY, $format))
+	if ( $locale_char_set != 'utf-8' || ! setlocale(LC_MONETARY, $format . '.UTF8'))
+	  if (! setlocale(LC_MONETARY, $format))
 		setlocale(LC_MONETARY, "");
+
+	// Technically this should be acheivable with the following, however
+	// it seems that some versions of PHP will set this incorrectly
+	// and you end up with everything using locale C.
+	// setlocale(LC_MONETARY, $format . '.UTF8', $format, '');
+
 	if (function_exists('money_format'))
 		return money_format('%i', $number);
 
