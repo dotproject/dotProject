@@ -62,6 +62,23 @@ class CContact extends CDpObject{
 		return NULL; // object is ok
 	}
 	
+	function canDelete( &$msg, $oid=null, $joins=null ) {
+		global $AppUI;
+		if ($oid) {
+			// Check to see if there is a user
+			$q = new DBQuery;
+			$q->addTable('users');
+			$q->addQuery('count(*) as user_count');
+			$q->addWhere('user_contact = ' . (int)$oid);
+			$user_count = $q->loadResult();
+			if ($user_count > 0) {
+				$msg =  $AppUI->_('cannot delete, contact is a user');
+				return false;
+			}
+		}
+		return parent::canDelete($msg, $oid, $joins);
+	}
+
 	function is_alpha($val)
 	{
 		// If the field consists solely of numerics, then we return it as an integer
