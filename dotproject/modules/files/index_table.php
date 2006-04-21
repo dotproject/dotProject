@@ -30,7 +30,7 @@ global $tabbed;
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
 
-$tab = $currentTabId;
+$tab = (!$company_id && !$project_id && !$task_id) ? $currentTabId : 0;
 $page = dPgetParam( $_GET, "page", 1);
 if (!isset($project_id))
         $project_id = dPgetParam( $_REQUEST, 'project_id', 0);
@@ -58,6 +58,8 @@ if ($tabbed) {
               $catsql = false;
       else
               $catsql = "file_category = " . --$tab ;
+} elseif ($company_id || $project_id || $task_id) {
+      $catsql = false;
 } else {
       if ($tab < 0)
               $catsql = false;
