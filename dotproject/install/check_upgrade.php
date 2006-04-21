@@ -47,13 +47,13 @@ function dPcheckExistingDB($conf) {
 	global $AppUI, $ADODB_FETCH_MODE;
 	$AppUI = new InstallerUI;
 	
-	$ado = NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysql');
+	$ado = @NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysql');
 	if (empty($ado))
 		return false;
-	$db = $ado->Connect($conf['dbhost'], $conf['dbuser'], $conf['dbpass']);
+	$db = @$ado->Connect($conf['dbhost'], $conf['dbuser'], $conf['dbpass']);
 	if (! $db)
 		return false;
-	$exists = $ado->SelectDB($conf['dbname']);
+	$exists = @$ado->SelectDB($conf['dbname']);
 	if (! $exists)
 		return false;
 
@@ -73,11 +73,12 @@ function dPcheckExistingDB($conf) {
 	// If one exists and is populated (the version information is seeded by the sql file)
 	// but the other either doesn't exist or is unpopulated, then it is an install as
 	// the SQL file has been loaded manually.
-	if (($qid = $ado->Execute($q1) ) && ($q1Data = $qid->fetchRow() ) && ! empty($q1Data[0]) ) {
-		$qid->Close();
-		if ( ! ($qid2 = $ado->Execute($q2) ) || ! ($q2Data = $qid2->fetchRow() ) || empty($q2Data[0]) ) {
+	if (($qid = @$ado->Execute($q1) ) && ($q1Data = @$qid->fetchRow() ) && ! empty($q1Data[0]) ) {
+		@$qid->Close();
+		if ( ! ($qid2 = @$ado->Execute($q2) ) || ! ($q2Data = @$qid2->fetchRow() ) || empty($q2Data[0]) ) {
 			return false;
 		}
+		@$qid2->Close();
 	}
 
 	return true;

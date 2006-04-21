@@ -1,6 +1,7 @@
 <?php // $Id$
 
-if ($_POST['mode'] == 'install' && is_file( "../includes/config.php" ) )
+include_once 'check_upgrade.php';
+if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade')
  die("Security Check: dotProject seems to be already configured. Communication broken for Security Reasons!");
 
 ######################################################################################################################

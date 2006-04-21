@@ -1,4 +1,5 @@
 <?php // $Id$
+include_once 'check_upgrade.php';
 ?>
 <html>
 <head>
@@ -11,7 +12,7 @@
 <?php
 if ( $_POST['mode'] == 'upgrade')
 	@include_once "../includes/config.php";
-else if (is_file( "../includes/config.php" ))
+else if (dPcheckUpgrade() == 'upgrade')
 	die("Security Check: dotProject seems to be already configured. Install aborted!");
 else
 	@include_once "../includes/config-dist.php";
