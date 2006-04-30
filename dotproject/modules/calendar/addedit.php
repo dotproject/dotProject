@@ -395,7 +395,7 @@ function removeUser() {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Show only on Working Days' );?>:</td>
 	<td>
-		<input type="checkbox" value="0" name="event_cwd" <?php echo (@$obj->event_cwd ? 'checked' : '');?>>
+		<input type="checkbox" value="1" name="event_cwd" <?php echo (@$obj->event_cwd ? 'checked' : '');?>>
 	</td>
 </tr>
 <tr>
