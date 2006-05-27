@@ -281,8 +281,7 @@ function calcDuration(f) {
 		}
 		myDate.setDate(myDay + 1);
 	}
-	//alert('h'+weekendDays);
-	//alert(durn);
+	
 	//calculating correct durn value
 	durn = durn - weekendDays*24;	// total hours minus non-working days (work day hours)
 
@@ -478,6 +477,15 @@ function calcFinish(f) {
 	
 	var tz1 = "";
 	var tz2 = "";
+
+	// if there was no fullworkingday we have to check whether the end day is a working day 
+	// and in the negative case postpone the end date by appropriate days
+	for (var i = 0; i < 7-working_days.length; i++){
+		// override  possible non-working enddays
+		if ( !isInArray(working_days, e.getDay()) ) {
+			e.setDate(e.getDate() + 1);
+		}
+	}
 
 	if ( e.getDate() < 10 ) tz1 = "0";
 	if ( (e.getMonth()+1) < 10 ) tz2 = "0";

@@ -430,7 +430,11 @@ class CTask extends CDpObject {
                 if( $this->task_id ) {
                         addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
                         $this->_action = 'updated';
-                        // Load the old task from disk
+                        
+			// Load and globalize the old, not yet updated task object 	
+			// e.g. we need some info later to calculate the shifting time for depending tasks	
+			// see function update_dep_dates
+			GLOBAL $oTsk;
                         $oTsk = new CTask();
                         $oTsk->load ($this->task_id);
 
@@ -505,12 +509,12 @@ class CTask extends CDpObject {
                         $pTask->load($this->task_parent);
                         $pTask->updateDynamics();
 												
-												if ($oTsk->task_parent != $this->task_parent)
-												{
-													$old_parent = new CTask();
-													$old_parent->load($oTsk->task_parent);
-													$old_parent->updateDynamics();
-												}
+			if ($oTsk->task_parent != $this->task_parent)
+			{
+				$old_parent = new CTask();
+				$old_parent->load($oTsk->task_parent);
+				$old_parent->updateDynamics();
+			}
                 }
 
                 // update dependencies
@@ -995,7 +999,7 @@ class CTask extends CDpObject {
         }
 
         function canAccess( $user_id ) {
-                //echo intval($this->task_access);
+
                 // Let's see if this user has admin privileges
                 if(!getDenyRead("admin")){
                         return true;
@@ -1111,12 +1115,12 @@ class CTask extends CDpObject {
         /*
          *        Update this task's dates in the DB.
          *        start date:         based on max dependency end date
-         *        end date:           based on start date + working duration
+         *        end date:           based on start date + appropriate original time shift, keep duration
          *
          *        @param                integer task_id of task to update
          */
         function update_dep_dates( $task_id ) {
-                GLOBAL $tracking_dynamics;
+		GLOBAL $tracking_dynamics, $oTsk;
 
                 $destDate = new CDate();
                 $newTask = new CTask();
@@ -1129,15 +1133,37 @@ class CTask extends CDpObject {
 
                 // start date, based on maximal dep end date
                 $destDate->setDate( $this->get_deps_max_end_date( $newTask ) );
-                $destDate = $this->next_working_day( $destDate );
+                $destDate = $destDate->next_working_day($destDate);
                 $new_start_date = $destDate->format( FMT_DATETIME_MYSQL );
 
-                // end date, based on start date and work duration
-                $newTask->task_start_date = $new_start_date;
-                $newTask->calc_task_end_date();
-                $new_end_date = $newTask->task_end_date;
+                /*
+		** Bug reported and treated on 20060525
+		** @author		gregorerhardt
+		** @responsible		gregorerhardt
+		** @problem		Task2 dep on Task1; Task2 has start/end date span of 10 days but a duration
+		**			of only 10 hrs in these 10d. Task1 is shifted => Task2 is shifted and duration 
+					of 10 hrs is kept, but end date is shortened to (start date+10 hrs).
+		** @solution		keep duration, keep start-end span
+		**
+		*/
 
-                $sql = "UPDATE tasks
+		// end date, based on start date + shift of original task, keeping work duration
+                $newTask->task_start_date = $new_start_date;
+
+		// Load original task data for comparison of the time span from
+		// task's original end date to task's new end date
+		// @var  oTsk  data of old object with unshifted dates
+		$oEnd = new CDate($oTsk->task_end_date);
+		
+		// Load shifted date data
+		$nEnd = new CDate($this->task_end_date);
+
+		$duration = $oEnd->calcDurationDiffToDate($nEnd, $newTask->task_duration_type);
+		$new_end_date = new CDate($newTask->task_end_date);
+                $new_end_date->addDuration( $duration, 1);
+		$new_end_date = $new_end_date->format( FMT_DATETIME_MYSQL );
+                
+		$sql = "UPDATE tasks
                 SET
                                 task_start_date = '$new_start_date',
                                 task_end_date = '$new_end_date'
@@ -1151,29 +1177,24 @@ class CTask extends CDpObject {
                 return;
         }
 
-        // Return date obj for the start of next working day
-        function next_working_day( $dateObj ) {
-                global $AppUI;
-                $end = intval(dPgetConfig('cal_day_end'));
-                $start = intval(dPgetConfig('cal_day_start'));
-                while ( ! $dateObj->isWorkingDay() || $dateObj->getHour() >= $end ) {
-                        $dateObj->addDays(1);
-                        $dateObj->setTime($start, '0', '0');
-                }
-                return $dateObj;
-        }
-        // Return date obj for the end of the previous working day
-        function prev_working_day( $dateObj ) {
-                global $AppUI;
-                $end = intval(dPgetConfig('cal_day_end'));
-                $start = intval(dPgetConfig('cal_day_start'));
-                while ( ! $dateObj->isWorkingDay() || ( $dateObj->getHour() < $start ) ||
-                              ( $dateObj->getHour() == $start && $dateObj->getMinute() == '0' ) ) {
-                        $dateObj->addDays(-1);
-                        $dateObj->setTime($end, '0', '0');
-                }
-                return $dateObj;
-        }
+
+
+      /* 
+	** Time related calculations have been moved to ./classes/date.class.php
+	** some have been replaced with more _robust_ functions
+	**
+	** Affects functions:
+	** prev_working_day()
+	** next_working_day()
+	** calc_task_end_date()
+	** calc_end_date()
+	**
+	** @date 	20050525
+	** @responsible gregorerhardt
+	** @purpose	reusability, consistence
+	*/ 
+
+
 
         /*
 
@@ -1210,99 +1231,6 @@ class CTask extends CDpObject {
                 return $last_end_date;
         }
 
-        /*
-        * Calculate this task obj's end date. Based on start date
-        * and the task duration and duration type.
-        */
-        function calc_task_end_date() {
-                $e = $this->calc_end_date( $this->task_start_date, $this->task_duration, $this->task_duration_type );
-                $this->task_end_date = $e->format( FMT_DATETIME_MYSQL );
-        }
-
-        /*
-
-         Calculate end date given start date and work time.
-         Accounting for (non)working days and working hours.
-
-         @param date obj or mysql time - start date
-         @param int - number
-         @param int - durnType 24=days, 1=hours
-         returns date obj
-
-        */
-
-        function calc_end_date( $start_date=null, $durn='8', $durnType='1' ) {
-                GLOBAL $AppUI;
-
-                $cal_day_start = intval(dPgetConfig( 'cal_day_start' ));
-                $cal_day_end = intval(dPgetConfig( 'cal_day_end' ));
-                $daily_working_hours = intval(dPgetConfig( 'daily_working_hours' ));
-
-                $s = new CDate( $start_date );
-                $e = $s;
-                $inc = $durn;
-                $full_working_days = 0;
-                $hours_to_add_to_last_day = 0;
-                $hours_to_add_to_first_day = $durn;
-
-                // Calc the end date
-                if ( $durnType == 24 ) { // Units are full days
-
-                        $full_working_days = ceil($durn);
-                        for ( $i = 0 ; $i < $full_working_days ; $i++ ) {
-                                $e->addDays(1);
-                                $e->setTime($cal_day_start, '0', '0');
-                                if ( !$e->isWorkingDay() )
-                                        $full_working_days++;
-                        }
-                        $e->setHour( $s->getHour() );
-
-                } else {  // Units are hours
-
-                        // First partial day
-                        if (( $s->getHour() + $inc ) > $cal_day_end ) {
-                                // Account hours for partial work day
-                                $hours_to_add_to_first_day = $cal_day_end - $s->getHour();
-                                if ( $hours_to_add_to_first_day > $daily_working_hours )
-                                        $hours_to_add_to_first_day = $daily_working_hours;
-                                $inc -= $hours_to_add_to_first_day;
-                                $hours_to_add_to_last_day = $inc % $daily_working_hours;
-                                // number of full working days remaining
-                                $full_working_days = round(($inc - $hours_to_add_to_last_day) / $daily_working_hours);
-
-                                if ( $hours_to_add_to_first_day != 0 ) {
-                                        while (1) {
-                                                // Move on to the next workday
-                                                $e->addDays(1);
-                                                $e->setTime($cal_day_start, '0', '0');
-                                                if ( $e->isWorkingDay() )
-                                                        break;
-                                        }
-                                }
-                        } else {
-                                // less than one day's work, update the hour and be done..
-                                $e->setHour( $e->getHour() + $hours_to_add_to_first_day );
-                        }
-
-                        // Full days
-                        for ( $i = 0 ; $i < $full_working_days ; $i++ ) {
-                                $e->addDays(1);
-                                $e->setTime($cal_day_start, '0', '0');
-                                if ( !$e->isWorkingDay() )
-                                        $full_working_days++;
-                        }
-                        // Last partial day
-                        if ( !($full_working_days == 0 && $hours_to_add_to_last_day == 0) )
-                                $e->setHour( $cal_day_start + $hours_to_add_to_last_day );
-
-                }
-                // Go to start of prev work day if current work day hasn't begun
-                if ( $durn != 0 )
-                        $e = $this->prev_working_day( $e );
-
-                return $e;
-
-        } // End of calc_end_date
 
         /**
         * Function that returns the amount of hours this
@@ -1337,6 +1265,35 @@ class CTask extends CDpObject {
                 if($number_assigned_users == 0) $number_assigned_users = 1;
                 return ($duration/$number_assigned_users) / $number_of_days_worked;
         }
+
+
+	/**
+        * Function that returns the amount of hours this
+        * task consumes per user each week
+        */
+        function getTaskDurationPerWeek($use_percent_assigned = false){
+                $duration              = $this->task_duration*($this->task_duration_type == 24?dPgetConfig('daily_working_hours'):$this->task_duration_type);
+                $task_start_date       = new CDate($this->task_start_date);
+                $task_finish_date      = new CDate($this->task_end_date);
+                $assigned_users        = $this->getAssignedUsers();
+                if ($use_percent_assigned) {
+                        $number_assigned_users = 0;
+                        foreach ($assigned_users as $u) {
+                                $number_assigned_users += ( $u['perc_assignment'] / 100 );
+                        }
+                } else {
+                  $number_assigned_users = count($assigned_users);
+                }
+
+                $number_of_weeks_worked = $task_finish_date->workingDaysInSpan($task_start_date) / count(explode(",",dPgetConfig("cal_working_days")));	
+		$number_of_weeks_worked = ($number_of_weeks_worked < 1) ? ceil($number_of_weeks_worked) : $number_of_weeks_worked;
+              
+                // zero adjustment
+                if($number_of_weeks_worked == 0) $number_of_weeks_worked = 1;
+                if($number_assigned_users == 0) $number_assigned_users = 1;
+                return ($duration/$number_assigned_users) / $number_of_weeks_worked;
+        }
+
 
          // unassign a user from task
         function removeAssigned( $user_id ) {
@@ -2102,7 +2059,7 @@ function array_csort()   //coded by Ichier2003
     $msortline .= "\$marray));";
 
     eval($msortline);
-//var_export($marray);
+
     return $marray;
 }
 

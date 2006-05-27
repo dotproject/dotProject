@@ -179,7 +179,7 @@ class CProject extends CDpObject {
 			// Fix task start date from project start date offset
 			$origDate->setDate ($newTask->task_start_date);
 			$destDate->setDate ($origDate->getTime() + $timeOffset , DATE_FORMAT_UNIXTIME ); 
-			$destDate = $newTask->next_working_day( $destDate );
+			$destDate = $destDate->next_working_day( );
 			$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);   
 			
 			// Fix task end date from start date + work duration

@@ -672,6 +672,12 @@ function formatHours($hours)
 	} 
 }
 
+/**
+ * PHP doesn't come with a signum function
+ */
+function dPsgn($x) {
+   return $x ? ($x>0 ? 1 : -1) : 0;
+}
 
 /**
  * This function is now deprecated and will be removed.
