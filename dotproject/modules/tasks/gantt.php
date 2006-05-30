@@ -5,8 +5,8 @@
  * TASKS $Id$
  */
 
-include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph.php");
-include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph_gantt.php");
+include ($dPconfig['root_dir'].'/lib/jpgraph/src/jpgraph.php');
+include ($dPconfig['root_dir'].'/lib/jpgraph/src/jpgraph_gantt.php');
 
 $project_id = defVal( @$_REQUEST['project_id'], 0 );
 $f = defVal( @$_REQUEST['f'], 0 );
@@ -47,7 +47,7 @@ $q->addJoin('projects', 'p', 'project_id = t.task_project');
 $q->addWhere('project_status != 7');
 $q->addOrder('project_id, task_start_date');
 if ($project_id) {
-        $q->addWhere("task_project = $project_id");
+        $q->addWhere('task_project = '.$project_id);
 }
 switch ($f) {
         case 'all':
@@ -55,43 +55,43 @@ switch ($f) {
                 break;
         case 'myproj':
                 $q->addWhere('task_status > -1');
-                $q->addWhere("project_owner = $AppUI->user_id");
+                $q->addWhere('project_owner = '.$AppUI->user_id);
                 break;
         case 'mycomp':
                 $q->addWhere('task_status > -1');
-                $q->addWhere("project_company = $AppUI->user_company");
+                $q->addWhere('project_company = '.$AppUI->user_company);
                 break;
         case 'myinact':
                 $q->addTable('user_tasks', 'ut');
                 $q->addWhere('task_project = p.project_id');
-                $q->addWhere("ut.user_id = $AppUI->user_id");
+                $q->addWhere('ut.user_id = '.$AppUI->user_id);
                 $q->addWhere('ut.task_id = t.task_id');
                 break;
         default:
                 $q->addTable('user_tasks', 'ut');
                 $q->addWhere('task_status > -1');
                 $q->addWhere('task_project = p.project_id');
-                $q->addWhere("ut.user_id = $AppUI->user_id");
+                $q->addWhere('ut.user_id = '.$AppUI->user_id);
                 $q->addWhere('ut.task_id = t.task_id');
                 break;
 }
 
 $proTasks = $q->loadHashList('task_id');
-$orrarr[] = array("task_id"=>0, "order_up"=>0, "order"=>"");
+$orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
 
 //pull the tasks into an array
 foreach ($proTasks as $row) {
 
-        if($row["task_start_date"] == "0000-00-00 00:00:00"){
-                $row["task_start_date"] = date("Y-m-d H:i:s");
+        if($row['task_start_date'] == '0000-00-00 00:00:00'){
+                $row['task_start_date'] = date('Y-m-d H:i:s');
         }
 
         // calculate or set blank task_end_date if unset
-        if($row["task_end_date"] == "0000-00-00 00:00:00") {
-                if($row["task_duration"]) {
-                        $row["task_end_date"] = db_unix2dateTime ( db_dateTime2unix( $row["task_start_date"] ) + SECONDS_PER_DAY * convert2days( $row["task_duration"], $row["task_duration_type"] ) );
+        if($row['task_end_date'] == '0000-00-00 00:00:00') {
+                if($row['task_duration']) {
+                        $row['task_end_date'] = db_unix2dateTime ( db_dateTime2unix( $row['task_start_date'] ) + SECONDS_PER_DAY * convert2days( $row['task_duration'], $row['task_duration_type'] ) );
                 } else {
-                        $row["task_end_date"] = "";
+                        $row['task_end_date'] = '';
                 }
         }
 
@@ -100,8 +100,8 @@ foreach ($proTasks as $row) {
 $q->clear();
 $width      = dPgetParam( $_GET, 'width', 600 );
 //consider critical (concerning end date) tasks as well
-$project_end = ($projects[$project_id]["project_end_date"] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]["project_end_date"] : $criticalTasks[0]['task_end_date'];
-$start_date = dPgetParam( $_GET, 'start_date', $projects[$project_id]["project_start_date"] );
+$project_end = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
+$start_date = dPgetParam( $_GET, 'start_date', $projects[$project_id]['project_start_date'] );
 $end_date   = dPgetParam( $_GET, 'end_date', $project_end );
 
 $count = 0;
@@ -116,17 +116,19 @@ $graph->SetBox(true, array(0,0,0), 2);
 $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 //$graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE2);
 
-// This configuration variable is obsolete
-$jpLocale = dPgetConfig( 'jpLocale' );
+/*$jpLocale = dPgetConfig( 'jpLocale' );
 if ($jpLocale) {
         $graph->scale->SetDateLocale( $jpLocale );
 }
-//$graph->scale->SetDateLocale( $AppUI->user_locale );
+** the jpgraph date locale is now set
+** automatically by the user's locale settings
+*/
+$graph->scale->SetDateLocale( $AppUI->user_lang[0] );
 
 if ($start_date && $end_date) {
         $graph->SetDateRange( $start_date, $end_date );
 }
-if (is_file( TTF_DIR."arialbd.ttf" )){
+if (is_file( TTF_DIR.'arialbd.ttf' )){
         $graph->scale->actinfo->SetFont(FF_ARIAL);
 }
 $graph->scale->actinfo->vgrid->SetColor('gray');
@@ -137,13 +139,13 @@ if ($showWork=='1') {
         $graph->scale->actinfo->SetColTitles(array( $AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)),array(230,16, 60,60));
 }
 
-$graph->scale->tableTitle->Set($projects[$project_id]["project_name"]);
+$graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
-if (is_file( TTF_DIR."arialbd.ttf" ))
+if (is_file( TTF_DIR.'arialbd.ttf' ))
         $graph->scale->tableTitle->SetFont(FF_ARIAL,FS_BOLD,12);
-$graph->scale->SetTableTitleBackground("#".$projects[$project_id]["project_color_identifier"]);
+$graph->scale->SetTableTitleBackground('#'.$projects[$project_id]['project_color_identifier']);
 $graph->scale->tableTitle->Show(true);
 
 //-----------------------------------------
@@ -163,8 +165,8 @@ if ($start_date && $end_date){
         $d_end = new CDate();
         for($i = 0; $i < count(@$gantt_arr); $i++ ){
                 $a = $gantt_arr[$i][0];
-                $start = substr($a["task_start_date"], 0, 10);
-                $end = substr($a["task_end_date"], 0, 10);
+                $start = substr($a['task_start_date'], 0, 10);
+                $end = substr($a['task_end_date'], 0, 10);
 
                 $d_start->Date($start);
                 $d_end->Date($end);
@@ -212,9 +214,9 @@ function findgchild( &$tarr, $parent, $level=0 ){
         $level = $level+1;
         $n = count( $tarr );
         for ($x=0; $x < $n; $x++) {
-                if($tarr[$x]["task_parent"] == $parent && $tarr[$x]["task_parent"] != $tarr[$x]["task_id"]){
+                if($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']){
                         showgtask( $tarr[$x], $level );
-                        findgchild( $tarr, $tarr[$x]["task_id"], $level);
+                        findgchild( $tarr, $tarr[$x]['task_id'], $level);
                 }
         }
 }
@@ -225,9 +227,9 @@ $tnums = count( $p['tasks'] );
 
 for ($i=0; $i < $tnums; $i++) {
         $t = $p['tasks'][$i];
-        if ($t["task_parent"] == $t["task_id"]) {
+        if ($t['task_parent'] == $t['task_id']) {
                 showgtask( $t );
-                findgchild( $p['tasks'], $t["task_id"] );
+                findgchild( $p['tasks'], $t['task_id'] );
         }
 }
 
@@ -252,16 +254,16 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 
         if($hide_task_groups) $level = 0;
 
-        $name = $a["task_name"];
-        if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
+        $name = $a['task_name'];
+        if ( $locale_char_set=='utf-8' && function_exists('utf8_decode') ) {
                 $name = utf8_decode($name);
         }
         $name = strlen( $name ) > 34 ? substr( $name, 0, 33 ).'.' : $name ;
-        $name = str_repeat(" ", $level).$name;
+        $name = str_repeat(' ', $level).$name;
 
         //using new jpGraph determines using Date object instead of string
-        $start = $a["task_start_date"];
-        $end_date = $a["task_end_date"];
+        $start = $a['task_start_date'];
+        $end_date = $a['task_end_date'];
 
         $end_date = new CDate($end_date);
 //        $end->addDays(0);
@@ -271,44 +273,44 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 //        $start->addDays(0);
         $start = $start->getDate();
 
-        $progress = $a["task_percent_complete"];
-
+        $progress = $a['task_percent_complete'] + 0;
+	
 	if ($progress > 100) 
 		$progress = 100;
 	elseif ($progress < 0)
 		$progress = 0;
 
-        $flags    = ($a["task_milestone"] ? "m" : "");
+        $flags    = ($a['task_milestone'] ? 'm' : '');
 
-        $cap = "";
-        if(!$start || $start == "0000-00-00"){
-                $start = !$end ? date("Y-m-d") : $end;
-                $cap .= "(no start date)";
+        $cap = '';
+        if(!$start || $start == '0000-00-00'){
+                $start = !$end ? date('Y-m-d') : $end;
+                $cap .= '(no start date)';
         }
 
         if(!$end) {
                 $end = $start;
-                $cap .= " (no end date)";
+                $cap .= ' (no end date)';
         } else {
-                $cap = "";
+                $cap = '';
         }
 
-        $caption = "";
+        $caption = '';
         if ($showLabels=='1') {
                 $q = new DBQuery;
                 $q->addTable('user_tasks', 'ut');
                 $q->addTable('users', 'u');
                 $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
                 $q->addWhere('u.user_id = ut.user_id');
-                $q->addWhere('ut.task_id = '.$a["task_id"]);
+                $q->addWhere('ut.task_id = '.$a['task_id']);
                 $res = $q->loadList();
                 foreach ($res as $rw) {
                         switch ($rw['perc_assignment']) {
                                 case 100:
-                                        $caption = $caption."".$rw['user_username'].";";
+                                        $caption = $caption.''.$rw['user_username'].';';
                                         break;
                                 default:
-                                        $caption = $caption."".$rw['user_username']."[".$rw['perc_assignment']."%];";
+                                        $caption = $caption.''.$rw['user_username'].'['.$rw['perc_assignment'].'%];';
                                         break;
                         }
                 }
@@ -316,22 +318,22 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 $caption = substr($caption, 0, strlen($caption)-1);
         }
 
-        if($flags == "m") {
+        if($flags == 'm') {
                 $start = new CDate($start);
                 $start->addDays(0);
-                $s = $start->format($df);
-                //$bar = new MileStone($row++, array($name, "", substr($s, 0, 10), substr($s, 0, 10)), $s, $s);
-                $bar  = new MileStone ($row++,array($name, "", substr($s, 0, 10), substr($s, 0, 10)) , $a["task_start_date"], $s);
+                $s = $start->format($df);//
+                //$bar = new MileStone($row++, array($name, '', substr($s, 0, 10), substr($s, 0, 10)), $s, $s);
+                $bar  = new MileStone ($row++,array($name, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
                 $bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
-                 //caption of milestone shoud be date
+                //caption of milestone shoud be date
                 if ($showLabels=='1') {
                         $caption = $start->format($df);
                 }
-                $bar->title->SetColor("#CC0000");
-                $graph->Add($bar);
+                $bar->title->SetColor('#CC0000');
+                 $graph->Add($bar);
         } else {
-                $type = $a["task_duration_type"];
-                $dur = $a["task_duration"];
+                $type = $a['task_duration_type'];
+                $dur = $a['task_duration'];
                 if ($type == 24) {
                         $dur *= $dPconfig['daily_working_hours'];
                 }
@@ -343,7 +345,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                         $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                         $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                         $q->addWhere('t.task_duration_type = 24');
-                        $q->addWhere('t.task_id = '.$a["task_id"]);
+                        $q->addWhere('t.task_id = '.$a['task_id']);
 
                         $wh = $q->loadResult();
                         $work_hours = $wh * $dPconfig['daily_working_hours'];
@@ -354,13 +356,13 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                         $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                         $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                         $q->addWhere('t.task_duration_type = 1');
-                        $q->addWhere('t.task_id = '.$a["task_id"]);
+                        $q->addWhere('t.task_id = '.$a['task_id']);
 
                         $wh2 = $q->loadResult();
                         $work_hours += $wh2;
                         $q->clear();
                         //due to the round above, we don't want to print decimals unless they really exist
-                        //$work_hours = rtrim($work_hours, "0");
+                        //$work_hours = rtrim($work_hours, '0');
                         $dur = $work_hours;
 
                         /*
@@ -371,16 +373,16 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 }
 
 
-                $dur .= " h";
+                $dur .= ' h';
                 $enddate = new CDate($end);
                 $startdate = new CDate($start);
-                $bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a["task_dynamic"] == 1 ? 0.1 : 0.6);
-                $bar->progress->Set($progress/100);
-                if (is_file( TTF_DIR."arialbd.ttf" )) {
+                $bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+                $bar->progress->Set(min(($progress/100),1));
+                if (is_file( TTF_DIR.'arialbd.ttf' )) {
                         $bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
                 }
-            if($a["task_dynamic"] == 1){
-                    if (is_file( TTF_DIR."arialbd.ttf" )){
+            if($a['task_dynamic'] == 1){
+                    if (is_file( TTF_DIR.'arialbd.ttf' )){
                         $bar->title->SetFont(FF_ARIAL,FS_BOLD, 8);
                 }
                     $bar->rightMark->Show();
@@ -400,10 +402,10 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         }
         //adding captions
         $bar->caption = new TextProperty($caption);
-        $bar->caption->Align("left","center");
+        $bar->caption->Align('left','center');
 
         // show tasks which are both finished and past in (dark)gray
-        if ($progress >= 100 && $end_date->isPast() && get_class($bar) == "ganttbar") {
+        if ($progress >= 100 && $end_date->isPast() && get_class($bar) == 'ganttbar') {
                 $bar->caption->SetColor('darkgray');
                 $bar->title->SetColor('darkgray');
                 $bar->setColor('darkgray');
@@ -415,13 +417,13 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         $q = new DBQuery;
         $q->addTable('task_dependencies');
         $q->addQuery('dependencies_task_id');
-        $q->addWhere('dependencies_req_task_id=' . $a["task_id"]);
+        $q->addWhere('dependencies_req_task_id=' . $a['task_id']);
         $query = $q->loadHashList(1);
 
         foreach($query as $dep) {
                 // find row num of dependencies
                 for($d = 0; $d < count($gantt_arr); $d++ ) {
-                        if($gantt_arr[$d][0]["task_id"] == $dep["dependencies_task_id"]) {
+                        if($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
                                 $bar->SetConstrain($d, CONSTRAIN_ENDSTART);
                         }
                 }
@@ -429,9 +431,9 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         $q->clear();
         $graph->Add($bar);
 }
-$today = date("y-m-d");
+$today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
-if (is_file( TTF_DIR."arialbd.ttf" )) {
+if (is_file( TTF_DIR.'arialbd.ttf' )) {
         $vline->title->SetFont(FF_ARIAL,FS_BOLD,10);
 }
 $graph->Add($vline);
