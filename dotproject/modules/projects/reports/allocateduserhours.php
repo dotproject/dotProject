@@ -200,7 +200,7 @@ if($do_report) {
 			echo '<h4>' . $AppUI->_("Total capacity for all users") . '</h4>';
 			echo $AppUI->_("Allocated hours").": ".number_format($allocated_hours_sum,2)."<br />";
 			echo $AppUI->_("Total capacity").": ".number_format($total_hours_capacity_all,2)."<br />";
-			echo $AppUI->_("Percentage used").": ".(($total_hours_capacity_all > 0) ? number_format($allocated_hours_sum/$total_hours_capacity,2)*100 : 0)."%<br />";
+			echo $AppUI->_("Percentage used").": ".(($total_hours_capacity_all > 0) ? number_format($allocated_hours_sum/$total_hours_capacity_all,2)*100 : 0)."%<br />";
 	}		
 ?>
 	   </td></tr>
@@ -240,7 +240,7 @@ GLOBAL $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_
 
 	for($i = 0; $i<=$week_difference; $i++){
 		if(!$actual_date->before($tsd) && !$actual_date->after($ted)) {
-			$awoy = Date_Calc::weekOfYear($actual_date->day,$actual_date->month,$actual_date->year);
+			$awoy = $actual_date->year.Date_Calc::weekOfYear($actual_date->day,$actual_date->month,$actual_date->year);
 			foreach($users as $user_id => $user_data){
 				if(!isset($user_usage[$user_id][$awoy])){
 					$user_usage[$user_id][$awoy] = 0;
@@ -288,13 +288,6 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 
 	$actual_date = $sd;
 
-// some helpful functions
-//Date_Calc::function weekOfYear($day,$month,$year)
-//Date_Calc::function beginOfWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
-//$s->addSeconds(168*3600);	// + one week
-//function beginOfNextWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
-
-
 	$table_header = "<tr><th>".$AppUI->_("User")."</th>";
 	for($i=0; $i<$week_difference; $i++){
 		$table_header .= "<th>".Date_Calc::weekOfYear($actual_date->day, $actual_date->month, $actual_date->year)."<br><table><td style='font-weight:normal; font-size:70%'>".$actual_date->format( $df )."</td></table></th>";	
@@ -310,7 +303,7 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 			$table_rows .= "<tr><td nowrap='nowrap'>(".$user_data["user_username"].") ".$user_data["contact_first_name"]." ".$user_data["contact_last_name"]."</td>";
 			$actual_date = $sd;
 			for($i=0; $i<$week_difference; $i++){	
-				$awoy = Date_Calc::weekOfYear($actual_date->day,$actual_date->month,$actual_date->year);
+				$awoy = $actual_date->year.Date_Calc::weekOfYear($actual_date->day,$actual_date->month,$actual_date->year);
 
 				$table_rows .= "<td align='right'>";
 				if(isset($user_usage[$user_id][$awoy])){
