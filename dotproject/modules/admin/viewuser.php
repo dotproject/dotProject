@@ -13,7 +13,7 @@ if (isset( $_POST['show_form'] )) {
 	$add_pwt = dPgetParam($_POST, 'add_pwt', 0 );
 	$AppUI->setState( 'addProjWithTasks', $add_pwt);	
 } else {
-	$AppUI->setState( 'addProjWithTasks', true);
+	$AppUI->setState( 'addProjWithTasks', false);
 }
 $addPwT = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
