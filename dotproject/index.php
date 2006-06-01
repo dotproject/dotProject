@@ -156,7 +156,7 @@ if ($AppUI->doLogin()) {
 	@include_once( "./locales/$AppUI->user_locale/locales.php" );
 	@include_once( "./locales/core.php" );
 	setlocale( LC_TIME, $AppUI->user_lang );
-	$redirect = @$_SERVER['QUERY_STRING'];
+	$redirect = $_SERVER['QUERY_STRING']?urlencode($_SERVER['QUERY_STRING']):'';
 	if (strpos( $redirect, 'logout' ) !== false) {
 		$redirect = '';
 	}
