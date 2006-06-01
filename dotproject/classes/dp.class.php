@@ -374,10 +374,10 @@ class CDpObject {
 		}
 
 		if (count($allow)) {
-		  $query->addWhere("$this->_tbl_key IN (" . implode(',', $allow) . ")");
+            $query->addWhere(((! $key)?'':"$key.")."$this->_tbl_key IN (" . implode(',', $allow) . ")");
 		}
 		if (count($deny)) {
-		  $query->addWhere("$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
+            $query->addWhere(((! $key)?'':"$key.")."$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
 		}
 	}
 }
