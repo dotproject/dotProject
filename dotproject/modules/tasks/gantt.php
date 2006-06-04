@@ -43,7 +43,7 @@ $caller = defVal( @$_REQUEST['caller'], null );
 if ($caller == 'todo') {
 	$user_id = defVal( @$_REQUEST['user_id'], 0 );
 
-	$projects[$project_id]['project_name'] = $AppUI->_('Todo for').dPgetUsername($user_id);
+	$projects[$project_id]['project_name'] = $AppUI->_('Todo for').' '.dPgetUsername($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 
 	$showLabels = dPgetParam($_REQUEST, 'showLabels', false);
