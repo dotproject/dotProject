@@ -336,7 +336,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 	        if ( $locale_char_set=='utf-8' && function_exists('utf8_decode') ) {
 	                $pname = utf8_decode($pname);
 	        }
-	        $pname = strlen( $pname ) > 34 ? substr( $pname, 0, 33 ).'.' : $pname ;
+	        $pname = strlen( $pname ) > 14 ? substr( $pname, 0, 5 ).'...'.substr( $pname, -5, 5 ): $pname ;
 		}
         //using new jpGraph determines using Date object instead of string
         $start = $a['task_start_date'];
