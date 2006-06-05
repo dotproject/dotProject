@@ -431,6 +431,7 @@ class DBQuery {
     $q .= ' FROM ';
     if (isset($this->table_list)) {
       if (is_array($this->table_list)) {
+	$q .= '( ';	// Required for MySQL 5 compatability.
 	$intable = false;
 	foreach ($this->table_list as $table_id => $table) {
 	  if ($intable)
@@ -441,6 +442,7 @@ class DBQuery {
 	  if (! is_numeric($table_id))
 	    $q .= " as $table_id";
 	}
+	$q .= ' )'; // MySQL 5 compat.
       } else {
 	$q .= $this->_table_prefix . $this->table_list;
       }
