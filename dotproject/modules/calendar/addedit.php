@@ -22,12 +22,6 @@ else if ( !$obj->load( $event_id ) && $event_id ) {
 	$AppUI->redirect();
 }
 
-// check only owner can edit
-// TODO: Should assignee's be allowed to edit?
-if ($obj->event_owner != $AppUI->user_id && $event_id != 0) {
-	$AppUI->redirect( "m=public&a=access_denied" );
-}
-
 // load the event types
 $types = dPgetSysVal( 'EventType' );
 
@@ -64,14 +58,15 @@ if ($is_clash) {
 	unset($_SESSION['add_event_clash']);
 	unset($_SESSION['event_is_clash']);
 }
-if ($_GET["event_project"]) 
-	$obj->event_project = $_GET["event_project"];
+if ($_GET['event_project']) {
+	$obj->event_project = $_GET['event_project'];
+}
 
 // setup the title block
-$titleBlock = new CTitleBlock( ($event_id ? "Edit Event" : "Add Event") , 'myevo-appointments.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=calendar", "month view" );
+$titleBlock = new CTitleBlock( ($event_id ? 'Edit Event' : 'Add Event') , 'myevo-appointments.png', $m, "$m.$a" );
+$titleBlock->addCrumb( '?m=calendar', 'month view' );
 if ($event_id) {
-	$titleBlock->addCrumb( "?m=calendar&a=view&event_id=$event_id", "view this event" );
+	$titleBlock->addCrumb( '?m=calendar&amp;a=view&event_id='.$event_id, 'view this event' );
 }
 $titleBlock->show();
 
@@ -145,10 +140,10 @@ $recurs =  array (
 	'Daily',
 	'Weekly',
 	'Bi-Weekly',
-	'Every Month',
+	'Monthly',
 	'Quarterly',
-	'Every 6 months',
-	'Every Year'
+	'Semi-Annually',
+	'Annually'
 );
 
 $remind = array (
@@ -219,7 +214,7 @@ var calendarField = '';
 function popCalendar( field ){
 	calendarField = field;
 	idate = eval( 'document.editFrm.event_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scollbars=false' );
+	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240, scollbars=false' );
 }
 
 /**

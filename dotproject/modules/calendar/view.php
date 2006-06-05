@@ -38,9 +38,10 @@ $recurs =  array (
 $assigned = $obj->getAssigned();
 
 
-if ($obj->event_owner != $AppUI->user_id) {
-	$canEdit = false;
+if (($obj->event_owner != $AppUI->user_id) && !($perms->checkModule("admin", "view"))) {
+ $canEdit = false;
 }
+
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
@@ -52,15 +53,15 @@ $event_project = db_LoadResult('SELECT project_name FROM projects where project_
 $titleBlock = new CTitleBlock( 'View Event', 'myevo-appointments.png', $m, "$m.$a" );
 if ($canEdit) {
 	$titleBlock->addCell();
-	$titleBlock->addCell(
-		'<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
-		'<form action="?m=calendar&a=addedit" method="post">', '</form>'
-	);
+	$titleBlock->addCell('
+<form action="?m=calendar&amp;a=addedit" method="post">
+	<input type="submit" class="button" value="'.$AppUI->_('new event').'" />
+</form>', '', '', '');
 }
-$titleBlock->addCrumb( "?m=calendar&date=".$start_date->format( FMT_TIMESTAMP_DATE ), "month view" );
+$titleBlock->addCrumb( '?m=calendar&amp;date='.$start_date->format( FMT_TIMESTAMP_DATE ), 'month view' );
 if ($canEdit) {
-	$titleBlock->addCrumb( "?m=calendar&a=day_view&date=".$start_date->format( FMT_TIMESTAMP_DATE ), "day view" );
-	$titleBlock->addCrumb( "?m=calendar&a=addedit&event_id=$event_id", "edit this event" );
+	$titleBlock->addCrumb( '?m=calendar&amp;a=day_view&amp;date='.$start_date->format( FMT_TIMESTAMP_DATE ), 'day view' );
+	$titleBlock->addCrumb( '?m=calendar&amp;a=addedit&amp;event_id='.$event_id, 'edit this event' );
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete( 'delete event', $canDelete, $msg );
 	}
