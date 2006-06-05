@@ -1,3 +1,20 @@
+2006-06-05 13:42  (ajdonnison)
+---------------------------------
+classes/date.class.php
+- Backported fix for PHP 5.1.x which disallows assignment to $this.
+
+2006-06-05 13:01  (ajdonnison)
+---------------------------------
+ChangeLog
+includes/version.php
+install/do_install_db.php
+- Changes for 2.0.3 security and bug fix update.
+
+2006-06-05 13:00  (ajdonnison)
+---------------------------------
+classes/query.class.php
+- Fix for MySQL 5 compatibility in Joins.
+
 2006-06-05 01:48  (gregorerhardt)
 ---------------------------------
 modules/tasks/gantt.php
@@ -117,7 +134,7 @@ install/index.php
 2006-04-21 15:08  (ajdonnison)
 ---------------------------------
 modules/contacts/contacts.class.php
-- #1232: Now reports contacts that have active users as non-deletable.
+- #1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.
 
 2006-04-21 14:39  (ajdonnison)
 ---------------------------------
@@ -2098,4 +2115,3 @@ install/do_install_db.php
 install/do_install_db.php
 install/install.inc.php
 - Fix for last_db_update field from 2.0.1 release.
-
