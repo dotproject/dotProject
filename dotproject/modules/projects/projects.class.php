@@ -183,7 +183,14 @@ class CProject extends CDpObject {
 			$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);   
 			
 			// Fix task end date from start date + work duration
-			$newTask->calc_task_end_date();
+			//$newTask->calc_task_end_date();
+			if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00')
+			{
+				$origDate->setDate ($newTask->task_end_date);
+				$destDate->setDate ($origDate->getTime() + $timeOffset , DATE_FORMAT_UNIXTIME ); 
+				$destDate = $destDate->next_working_day();
+				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
+			}
 			
 			// Dependencies
 			if (!empty($deps[$old_id])) {
