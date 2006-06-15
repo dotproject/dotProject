@@ -251,7 +251,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 		<?php echo $AppUI->_('URL');?>:
 	</td>
         <td>
-                <input type="text" class="text" name="task_log_related_url" value="<?php echo @htmlspecialchars($log->task_log_related_url);?>" size="50" maxlength="255" title="<?php echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...');?>"/>
+                <input type="text" class="text" name="task_log_related_url" value="<?php echo ($log->task_log_related_url);?>" size="50" maxlength="255" title="<?php echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...');?>"/>
         </td>
 </tr>
 <tr>
