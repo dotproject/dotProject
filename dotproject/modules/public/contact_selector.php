@@ -86,6 +86,18 @@ function setContactIDs (method,querystring)
           }
 </script>
 <?php
+
+function remove_invalid($arr)
+{
+  $result = array();
+  foreach ($arr as $val) {
+    if (! empty($val) && $val !== "") {
+      $result[] = $val;
+    }
+  }
+  return $result;
+}
+
 	if($contacts_submited == 1){
 		$call_back_string = !is_null($call_back) ? "window.opener.$call_back('$selected_contacts_id');" : "";
 		?>
@@ -96,7 +108,9 @@ function setContactIDs (method,querystring)
 		<?php
 	}
 	
-	$contacts_id = explode(",", $selected_contacts_id);
+	// Remove any empty elements
+	$contacts_id = remove_invalid(explode(",", $selected_contacts_id));
+	$selected_contacts_id = implode(',', $contacts_id);
 
 	require_once( $AppUI->getModuleClass( 'companies' ) );
 	$oCpy = new CCompany ();
