@@ -648,7 +648,7 @@ class CAppUI {
 
 		$auth_method = isset($dPconfig['auth_method']) ? $dPconfig['auth_method'] : 'sql';
 		if (@$_POST['login'] != 'login' && @$_POST['login'] != $this->_('login') && $_REQUEST['login'] != $auth_method)
-			die("You have chosen to log in using an unsupported or disabled login method '$_REQUEST[login]'");
+			die("You have chosen to log in using an unsupported or disabled login method");
 		$auth =& getauth($auth_method);
 		
 		$username = trim( db_escape( $username ) );
