@@ -28,7 +28,7 @@ function dPupgrade($from_version, $to_version, $last_updated)
 {
 
 	global $baseDir;
-	$latest_update = '20060421'; // Set to the latest upgrade date.
+	$latest_update = '20060624'; // Set to the latest upgrade date.
 
 	if (! $last_updated)
 		$last_updated = '00000000';
