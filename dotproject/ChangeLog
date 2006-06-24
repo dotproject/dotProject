@@ -1,3 +1,70 @@
+2006-06-24 12:36  (ajdonnison)
+---------------------------------
+install/do_install_db.php
+- Update for 2.0.4 upgrade.
+
+2006-06-24 12:35  (ajdonnison)
+---------------------------------
+db/upgrade_to_204.php
+- file upgrade_to_204.php was initially added on branch stable_2.
+
+2006-06-24 12:35  (ajdonnison)
+---------------------------------
+db/upgrade_latest.php
+db/upgrade_to_204.php
+includes/version.php
+- Updated install files for 2.0.4
+
+2006-06-22 20:10  (ajdonnison)
+---------------------------------
+classes/ui.class.php
+- Fixed XSS vulnerability in login parameter
+
+2006-06-20 02:42  (nybod)
+---------------------------------
+index.php
+- Changed urlencode to strip_tags
+
+2006-06-19 10:35  (ajdonnison)
+---------------------------------
+modules/public/contact_selector.php
+- Fixed problem with contact_selector occasionally creating bodgy SQL.
+
+2006-06-16 00:44  (merlinyoda)
+---------------------------------
+modules/tasks/vw_log_update.php
+modules/tasks/vw_logs.php
+- 
+- Re-fixed bug #1572 ... had somehow crept back into the follwoing files:
+- modules/tasks/vw_log_update.php
+- modules/tasks/vw_logs.php
+- 
+- ... also got rid off all the carrage returns (^M) in modules/tasks/vw_logs.php
+- to help with code readibility under *nix since most Windows text editors can
+- read (and write?) the files properly without the carrage return characters
+- (except for Notepad, Wordpad does).
+
+2006-06-07 02:33  (nybod)
+---------------------------------
+modules/projects/projects.class.php
+- Time related calculations have been moved to ./classes/date.class.php
+
+2006-06-05 22:58  (gregorerhardt)
+---------------------------------
+modules/tasks/gantt.php
+- fix for overlong project names
+
+2006-06-05 22:44  (nybod)
+---------------------------------
+modules/calendar/addedit.php
+modules/calendar/view.php
+- Event owner and admin role can edit events, some XHTML cleanup
+
+2006-06-05 13:48  (ajdonnison)
+---------------------------------
+ChangeLog
+- Changelog update
+
 2006-06-05 13:42  (ajdonnison)
 ---------------------------------
 classes/date.class.php
@@ -134,7 +201,7 @@ install/index.php
 2006-04-21 15:08  (ajdonnison)
 ---------------------------------
 modules/contacts/contacts.class.php
-- #1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.#1232: Now reports contacts that have active users as non-deletable.
+- #1232: Now reports contacts that have active users as non-deletable.
 
 2006-04-21 14:39  (ajdonnison)
 ---------------------------------
@@ -484,14 +551,10 @@ modules/tasks/tasks.php
 modules/tasks/todo.php
 - removed auto end date calc for NULL end date tasks
 
-2006-03-10 00:39  (gregorerhardt)
----------------------------------
-modules/tasks/todo.php
-- fixing auto end date calc
-
 2006-03-10 00:31  (gregorerhardt)
 ---------------------------------
 modules/tasks/tasks.php
+modules/tasks/todo.php
 - fixing auto end date calc
 
 2006-03-10 00:05  (gregorerhardt)
@@ -542,14 +605,10 @@ modules/projects/admin_tab.viewuser.projects.php
 modules/tasks/view.php
 - 1500 - fixed task log tab for only add permissions
 
-2006-03-05 00:35  (gregorerhardt)
----------------------------------
-locales/en/common.inc
-- 1524 - check pass min length on hngpwd public popup
-
 2006-03-05 00:32  (gregorerhardt)
 ---------------------------------
 modules/public/chpwd.php
+locales/en/common.inc
 - 1524 - check pass min length on hngpwd public popup
 
 2006-03-04 23:40  (gregorerhardt)
@@ -1745,11 +1804,6 @@ modules/links/setup.php
 modules/tasks/ae_dates.php
 - Mantis #1010 - overwriting start_date on edit
 
-2005-05-28 11:12  (cyberhorse)
----------------------------------
-modules/admin/vw_usr_log.php
-- Mantis #794 - removed forced style
-
 2005-05-28 11:08  (cyberhorse)
 ---------------------------------
 modules/smartsearch/searchobjects/companies.inc.php
@@ -1765,6 +1819,7 @@ modules/smartsearch/searchobjects/task_log.inc.php
 modules/smartsearch/searchobjects/tasks.inc.php
 modules/smartsearch/searchobjects/tickets.inc.php
 modules/smartsearch/searchobjects/users.inc.php
+modules/admin/vw_usr_log.php
 - Mantis #794 - removed forced style
 
 2005-05-28 10:02  (cyberhorse)
@@ -2115,3 +2170,9 @@ install/do_install_db.php
 install/do_install_db.php
 install/install.inc.php
 - Fix for last_db_update field from 2.0.1 release.
+
+2005-04-09 13:21  (ajdonnison)
+---------------------------------
+ChangeLog
+- update for 2.0.1 release
+
