@@ -257,26 +257,29 @@ if($do_report){
 			}
 		}
 	
-		$table_header = "<tr>".
-						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Task")."</B></font></td>".
-						( $project_id != 0 ? "<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Project")."</B></font></td>" : "" ) .
-						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("Start Date")."</B></font></td>".
-						"<td nowrap=\"nowrap\" bgcolor='#A0A0A0'><font color='black'><B>".$AppUI->_("End Date")."</B></font></td>".
-						weekDates($display_week_hours,$sss,$sse).
-						"</tr>";
-		$table_rows = "";
+		$table_header = '
+			<tr>
+				<td nowrap="nowrap" bgcolor="#A0A0A0">
+				<font color="black"><b>'.$AppUI->_('Task').'</b></font> </td>'.
+				( $project_id == 0 ? '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>'.$AppUI->_('Project').'</b></font></td>' : '' ) . '
+				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>'.$AppUI->_('Start Date').'</b></font></td>
+				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>'.$AppUI->_('End Date').'</b></font></td>'.
+		weekDates($display_week_hours,$sss,$sse).'
+			</tr>';
+		$table_rows = '';
 		
 		foreach($user_list as $user_id => $user_data){
 
 			$tmpuser= "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>"
 					  .$user_data["contact_first_name"]
 				      ." "
-					  .$user_data["contact_last_name"]
-					  ."</B></font></td>";
-		    for($w=0;$w<=(1 + ($project_id != 0 ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w++) {
-				 $tmpuser.="<td bgcolor='#D0D0D0'></td>";
+					  .$user_data['contact_last_name']
+					  .'</b></font>
+	</td>';
+		    for($w=0;$w<=(1 + ($project_id == 0 ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w++) {
+				 $tmpuser.='<td bgcolor="#D0D0D0">&nbsp;</td>';
 			}
-			$tmpuser.="</tr>";
+			$tmpuser.='</tr>';
 
 			$tmptasks="";
 			$actual_date = $start_date;
