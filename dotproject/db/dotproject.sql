@@ -650,65 +650,64 @@ CREATE TABLE `config` (
 # Dumping data for table `config`
 #
 
-INSERT INTO `config` VALUES ('', 'host_locale', 'en', '', 'text');
-INSERT INTO `config` VALUES ('', 'check_overallocation', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'currency_symbol', '$', '', 'text');
-INSERT INTO `config` VALUES ('', 'host_style', 'default', '', 'text');
-INSERT INTO `config` VALUES ('', 'company_name', 'My Company', '', 'text');
-INSERT INTO `config` VALUES ('', 'page_title', 'dotProject', '', 'text');
-INSERT INTO `config` VALUES ('', 'site_domain', 'dotproject.net', '', 'text');
-INSERT INTO `config` VALUES ('', 'email_prefix', '[dotProject]', '', 'text');
-INSERT INTO `config` VALUES ('', 'admin_username', 'admin', '', 'text');
-INSERT INTO `config` VALUES ('', 'username_min_len', '4', '', 'text');
-INSERT INTO `config` VALUES ('', 'password_min_len', '4', '', 'text');
-INSERT INTO `config` VALUES ('', 'enable_gantt_charts', 'true', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'jpLocale', '', '', 'text');
-INSERT INTO `config` VALUES ('', 'log_changes', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'check_task_dates', 'true', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'locale_warn', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'locale_alert', '^', '', 'text');
-INSERT INTO `config` VALUES ('', 'daily_working_hours', '8.0', '', 'text');
-INSERT INTO `config` VALUES ('', 'display_debug', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'link_tickets_kludge', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'show_all_task_assignees', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'direct_edit_assignment', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'restrict_color_selection', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'cal_day_view_show_minical', 'true', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'cal_day_start', '8', '', 'text');
-INSERT INTO `config` VALUES ('', 'cal_day_end', '17', '', 'text');
-INSERT INTO `config` VALUES ('', 'cal_day_increment', '15', '', 'text');
-INSERT INTO `config` VALUES ('', 'cal_working_days', '1,2,3,4,5', '', 'text');
-INSERT INTO `config` VALUES ('', 'restrict_task_time_editing', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'default_view_m', 'calendar', '', 'text');
-INSERT INTO `config` VALUES ('', 'default_view_a', 'day_view', '', 'text');
-INSERT INTO `config` VALUES ('', 'default_view_tab', '1', '', 'text');
-INSERT INTO `config` VALUES ('', 'index_max_file_size', '-1', '', 'text');
-INSERT INTO `config` VALUES ('', 'session_handling', 'app', 'session', 'select');
-INSERT INTO `config` VALUES ('', 'session_idle_time', '2d', 'session', 'text');
-INSERT INTO `config` VALUES ('', 'session_max_lifetime', '1m', 'session', 'text');
-INSERT INTO `config` VALUES ('', 'debug', '1', '', 'text');
-INSERT INTO `config` VALUES ('', 'parser_default', '/usr/bin/strings', '', 'text');
-INSERT INTO `config` VALUES ('', 'parser_application/msword', '/usr/bin/strings', '', 'text');
-INSERT INTO `config` VALUES ('', 'parser_text/html', '/usr/bin/strings', '', 'text');
-INSERT INTO `config` VALUES ('', 'parser_application/pdf', '/usr/bin/pdftotext', '', 'text');
+INSERT INTO `config` VALUES (0, 'host_locale', 'en', '', 'text');
+INSERT INTO `config` VALUES (0, 'check_overallocation', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'currency_symbol', '$', '', 'text');
+INSERT INTO `config` VALUES (0, 'host_style', 'default', '', 'text');
+INSERT INTO `config` VALUES (0, 'company_name', 'My Company', '', 'text');
+INSERT INTO `config` VALUES (0, 'page_title', 'dotProject', '', 'text');
+INSERT INTO `config` VALUES (0, 'site_domain', 'dotproject.net', '', 'text');
+INSERT INTO `config` VALUES (0, 'email_prefix', '[dotProject]', '', 'text');
+INSERT INTO `config` VALUES (0, 'admin_username', 'admin', '', 'text');
+INSERT INTO `config` VALUES (0, 'username_min_len', '4', '', 'text');
+INSERT INTO `config` VALUES (0, 'password_min_len', '4', '', 'text');
+INSERT INTO `config` VALUES (0, 'enable_gantt_charts', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'jpLocale', '', '', 'text');
+INSERT INTO `config` VALUES (0, 'log_changes', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'check_task_dates', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'locale_warn', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'locale_alert', '^', '', 'text');
+INSERT INTO `config` VALUES (0, 'daily_working_hours', '8.0', '', 'text');
+INSERT INTO `config` VALUES (0, 'display_debug', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'link_tickets_kludge', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'show_all_task_assignees', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'direct_edit_assignment', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'restrict_color_selection', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'cal_day_view_show_minical', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'cal_day_start', '8', '', 'text');
+INSERT INTO `config` VALUES (0, 'cal_day_end', '17', '', 'text');
+INSERT INTO `config` VALUES (0, 'cal_day_increment', '15', '', 'text');
+INSERT INTO `config` VALUES (0, 'cal_working_days', '1,2,3,4,5', '', 'text');
+INSERT INTO `config` VALUES (0, 'restrict_task_time_editing', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'default_view_m', 'calendar', '', 'text');
+INSERT INTO `config` VALUES (0, 'default_view_a', 'day_view', '', 'text');
+INSERT INTO `config` VALUES (0, 'default_view_tab', '1', '', 'text');
+INSERT INTO `config` VALUES (0, 'index_max_file_size', '-1', '', 'text');
+INSERT INTO `config` VALUES (0, 'session_handling', 'app', 'session', 'select');
+INSERT INTO `config` VALUES (0, 'session_idle_time', '2d', 'session', 'text');
+INSERT INTO `config` VALUES (0, 'session_max_lifetime', '1m', 'session', 'text');
+INSERT INTO `config` VALUES (0, 'debug', '1', '', 'text');
+INSERT INTO `config` VALUES (0, 'parser_default', '/usr/bin/strings', '', 'text');
+INSERT INTO `config` VALUES (0, 'parser_application/msword', '/usr/bin/strings', '', 'text');
+INSERT INTO `config` VALUES (0, 'parser_text/html', '/usr/bin/strings', '', 'text');
+INSERT INTO `config` VALUES (0, 'parser_application/pdf', '/usr/bin/pdftotext', '', 'text');
 
-INSERT INTO `config` VALUES ('', 'files_ci_preserve_attr', 'true', '', 'checkbox');
-INSERT INTO `config` VALUES ('', 'files_show_versions_edit', 'false', '', 'checkbox');
-INSERT INTO `config` ( `config_id` , `config_name` , `config_value` , `config_group` , `config_type` )
-VALUES ('', 'reset_memory_limit', '8M', '', 'text');
+INSERT INTO `config` VALUES (0, 'files_ci_preserve_attr', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'files_show_versions_edit', 'false', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'reset_memory_limit', '8M', '', 'text');
 
 # 20050302
 # ldap system config variables
-INSERT INTO config VALUES ('', 'auth_method', 'sql', 'auth', 'select'); 
-INSERT INTO config VALUES ('', 'ldap_host', 'localhost', 'ldap', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_port', '389', 'ldap', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_version', '3', 'ldap', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_base_dn', 'dc=saki,dc=com,dc=au', 'ldap', 'text'); 
-INSERT INTO config VALUES ('', 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text'); 
+INSERT INTO `config` VALUES (0, 'auth_method', 'sql', 'auth', 'select'); 
+INSERT INTO `config` VALUES (0, 'ldap_host', 'localhost', 'ldap', 'text'); 
+INSERT INTO `config` VALUES (0, 'ldap_port', '389', 'ldap', 'text'); 
+INSERT INTO `config` VALUES (0, 'ldap_version', '3', 'ldap', 'text'); 
+INSERT INTO `config` VALUES (0, 'ldap_base_dn', 'dc=saki,dc=com,dc=au', 'ldap', 'text'); 
+INSERT INTO `config` VALUES (0, 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text'); 
 
 # 20050302
 # PostNuke authentication variables
-INSERT INTO config VALUES ('', 'postnuke_allow_login', 'true', 'auth', 'checkbox');
+INSERT INTO `config` VALUES (0, 'postnuke_allow_login', 'true', 'auth', 'checkbox');
 
 # 20050302
 # New list support for config variables
@@ -747,17 +746,17 @@ INSERT INTO config_list (`config_id`, `config_list_name`)
 
 # 20050303
 # New mail handling options
-INSERT INTO config VALUES (NULL, 'mail_transport', 'php', 'mail', 'select');
-INSERT INTO config VALUES (NULL, 'mail_host', 'localhost', 'mail', 'text');
-INSERT INTO config VALUES (NULL, 'mail_port', '25', 'mail', 'text');
-INSERT INTO config VALUES (NULL, 'mail_auth', 'false', 'mail', 'checkbox');
-INSERT INTO config VALUES (NULL, 'mail_user', '', 'mail', 'text');
-INSERT INTO config VALUES (NULL, 'mail_pass', '', 'mail', 'password');
-INSERT INTO config VALUES (NULL, 'mail_defer', 'false', 'mail', 'checkbox');
-INSERT INTO config VALUES (NULL, 'mail_timeout', '30', 'mail', 'text');
-INSERT INTO `config` VALUES ('', 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
-INSERT INTO `config` VALUES ('', 'task_reminder_days_before', '1', 'task_reminder', 'text');
-INSERT INTO `config` VALUES ('', 'task_reminder_repeat', '100', 'task_reminder', 'text');
+INSERT INTO `config` VALUES (0, 'mail_transport', 'php', 'mail', 'select');
+INSERT INTO `config` VALUES (0, 'mail_host', 'localhost', 'mail', 'text');
+INSERT INTO `config` VALUES (0, 'mail_port', '25', 'mail', 'text');
+INSERT INTO `config` VALUES (0, 'mail_auth', 'false', 'mail', 'checkbox');
+INSERT INTO `config` VALUES (0, 'mail_user', '', 'mail', 'text');
+INSERT INTO `config` VALUES (0, 'mail_pass', '', 'mail', 'password');
+INSERT INTO `config` VALUES (0, 'mail_defer', 'false', 'mail', 'checkbox');
+INSERT INTO `config` VALUES (0, 'mail_timeout', '30', 'mail', 'text');
+INSERT INTO `config` VALUES (0, 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
+INSERT INTO `config` VALUES (0, 'task_reminder_days_before', '1', 'task_reminder', 'text');
+INSERT INTO `config` VALUES (0, 'task_reminder_repeat', '100', 'task_reminder', 'text');
 
 
 INSERT INTO config_list (`config_id`, `config_list_name`)
@@ -1195,7 +1194,6 @@ INSERT INTO dpversion VALUES ('2.0.4', 2, '2006-04-21', '2006-04-21');
 
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication
-INSERT INTO config VALUES ('', 'ldap_search_user', 'Manager', 'ldap', 'text');
-INSERT INTO config VALUES ('', 'ldap_search_pass', 'secret', 'ldap', 'password');
-INSERT INTO config VALUES ('', 'ldap_allow_login', 'true', 'ldap', 'checkbox');
-
+INSERT INTO `config` VALUES (0, 'ldap_search_user', 'Manager', 'ldap', 'text');
+INSERT INTO `config` VALUES (0, 'ldap_search_pass', 'secret', 'ldap', 'password');
+INSERT INTO `config` VALUES (0, 'ldap_allow_login', 'true', 'ldap', 'checkbox');
