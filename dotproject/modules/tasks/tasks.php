@@ -174,7 +174,7 @@ switch ($f) {
         case 'myfinished7days':
                 $where .= " AND user_tasks.user_id = $user_id";
         case 'allfinished7days':        // patch 2.12.04 tasks finished in the last 7 days
-                $from .= ", user_tasks";
+                $from = "user_tasks, ".$from;
                 $where .= "
                         AND task_project             = projects.project_id
                         AND user_tasks.task_id       = tasks.task_id
@@ -195,7 +195,7 @@ switch ($f) {
                 $where .= "\n        AND project_company = $AppUI->user_company";
                 break;
         case 'myunfinished':
-                $from .= ", user_tasks";
+                $from = "user_tasks, ".$from;
                 // This filter checks all tasks that are not already in 100%
                 // and the project is not on hold nor completed
                 // patch 2.12.04 finish date required to be consider finish
@@ -227,7 +227,7 @@ switch ($f) {
                 $where .= " AND task_owner = '$user_id'";
                 break;
         default:
-                $from .= ", user_tasks";
+                $from = "user_tasks, ".$from;
                 $where .= "
         AND task_project = projects.project_id
         AND user_tasks.user_id = $user_id
