@@ -1350,9 +1350,10 @@ class CTask extends CDpObject {
 
         function getAssignedUsers(){
                 $sql = "select u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name
-                        from users as u, user_tasks as ut
-            LEFT JOIN contacts as co ON co.contact_id = u.user_contact
-                        where ut.task_id = '$this->task_id'
+                        from users as u
+			LEFT JOIN contacts as co ON co.contact_id = u.user_contact,
+                        user_tasks as ut
+			where ut.task_id = '$this->task_id'
                               and ut.user_id = u.user_id";
                 return db_loadHashList($sql, "user_id");
         }
