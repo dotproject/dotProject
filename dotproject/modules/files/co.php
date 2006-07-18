@@ -56,14 +56,21 @@ $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_na
 $projects = arrayMerge( array( '0'=>$AppUI->_('All') ), $projects );
 ?>
 
+<script language='javascript'>
+function popFile( params ) {
+    fileloader = window.open("fileviewer.php?"+params,"mywindow","location=1,status=1,scrollbars=0,width=80,height=80");
+    fileloader.moveTo(0,0);
+}
+</script>
+
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
 <form name="coFrm" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_co" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_id" value="<?php echo $file_id;?>" />
-        <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
-        <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
+    <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
+    <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
         
 
 <tr>
@@ -106,8 +113,25 @@ $projects = arrayMerge( array( '0'=>$AppUI->_('All') ), $projects );
 	<td>
 		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=files';}" />
 	</td>
+
+<?php
+
+//MerlinYoda: moved to code from do_file_co.php to "submit" button's "onclick" event 
+//to prevent "less intelligent" pop-up blockers from blocking file checkout.
+//Some "die-hard" pop-up blockers may still block the window despite the direct user interaction.
+//Also added menu bar for saving files that don't trigger an open/save dialog.
+$params = 'file_id=' . $file_id;
+$session_id = SID;
+// are the params empty
+// Fix to handle cookieless sessions
+if ($session_id != "") {
+    $params .= "&" . $session_id;
+}
+
+?>
 	<td align="right">
-		<input type="submit" class="button" value="<?php echo $AppUI->_( 'submit' );?>" />
+    <!--- MerlinYoda: Note that submit call is in JavaScript for onclick event --->
+		<input class="button" type="button" onclick="fileloader = window.open('fileviewer.php?<?php echo $params; ?>','mywindow','location=1,menubar=1,status=1,width=200px,height=150px,resizable');fileloader.moveTo(0,0);document.coFrm.submit();" value="<?php echo $AppUI->_( 'submit' );?>" />
 	</td>
 </tr>
 </form>
