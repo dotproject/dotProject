@@ -159,7 +159,7 @@ foreach ($logs as $row) {
 			
 	$s .= '</td>';
 	$s .= "\n\t<td>";
-	if ($canEdit) {
+	if ($canDelete) {
 		$s .= "\n\t\t<a href=\"javascript:delIt2({$row['task_log_id']});\" title=\"".$AppUI->_('delete log')."\">"
 			. "\n\t\t\t". dPshowImage( './images/icons/stock_delete-16.png', 16, 16, '' )
 			. "\n\t\t</a>";
