@@ -207,13 +207,8 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority');?>:</td>
 			<td class="hilite">
 		<?php
-			if ($obj->task_priority == 0) {
-				echo $AppUI->_('normal');
-			} else if ($obj->task_priority < 0){
-				echo $AppUI->_('low');
-			} else {
-				echo $AppUI->_('high');
-			}
+			$task_priotities = dPgetSysVal("TaskPriority");
+            echo $AppUI->_($task_priotities[$obj->task_priority]); 
 		?>
 			</td>
 		</tr>

@@ -17,10 +17,6 @@ $filters = array(
 
 $status = dPgetSysVal( 'TaskStatus' );
 
-$priority = array(
- -1 => 'low',
- 0 => 'normal',
- 1 => 'high'
-);
+$priority = dPgetSysVal( 'TaskPriority' );
 
 ?>
