@@ -92,7 +92,8 @@
 		'checkbox'=>$AppUI->_('Checkbox'),
 		'select'=>$AppUI->_('Select List'),
 		'label' => $AppUI->_('Label'),
-		'separator' => $AppUI->_('Separator')
+		'separator' => $AppUI->_('Separator'),
+		'href'=>$AppUI->_('Weblink'),
 	);
 
 	$visible_state = Array();

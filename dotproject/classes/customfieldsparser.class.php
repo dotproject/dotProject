@@ -99,6 +99,9 @@
 				case "text":
 					$parsed .= "<td align='left'><input type='text' name='custom_$key' class='text' " . $field_config["options"] . " value='" . ( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "") . "' /></td>";
 					break;
+				case "href":
+					$parsed .= "<td align='left'><input type='text' name='custom_$key' class='text' " . $field_config["options"] . " value='" . ( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "") . "' /></td>";
+					break;
 				case "select":
 					$parsed .= "<td align='left'>". arraySelect(explode(",",$field_config["selects"]), "custom_$key", 'size="1" class="text" ' . $field_config["options"] ,( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "")) . "</td>";
 					break;
@@ -130,6 +133,9 @@
 			switch ( $field_config["type"]){
 				case "text":
 					$parsed .= "<td class='hilite'>" . dPformSafe(( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "")) . "</td>";
+					break;
+				case "href":
+					$parsed .= '<td class="hilite"><a href="'. dPformSafe(( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "")) . '">' . dPformSafe(( isset($this->previous_data[$key]) ? $this->previous_data[$key] : "")) . '</a></td>';
 					break;
 				case "select":
 					$optionarray = explode(",",$field_config["selects"]);

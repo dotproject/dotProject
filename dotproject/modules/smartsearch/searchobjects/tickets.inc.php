@@ -21,9 +21,9 @@ class tickets {
     				$outstring .= "<td>";
     				$outstring .= "<a href = \"index.php?m=ticketsmith&a=view&ticket=".$records["ticket"]."\">".highlight($records["subject"], $this->keyword)."</a>\n";
     				$outstring .= "</td>\n";
+						$outstring .= "</tr>";
 			    }
 			}
-		$outstring .= "</tr>";
 		}
 		else {
 			$outstring .= "<tr>"."<td>".$AppUI->_('Empty')."</td>"."</tr>";

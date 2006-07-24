@@ -20,9 +20,9 @@ class files {
     				$outstring .= "<td>";
     				$outstring .= "<a href = \"index.php?m=files&a=addedit&file_id=".$records["file_id"]."\">".$records["file_name"]."</a>".' &nbsp -- &nbsp '.highlight($records["file_description"], $this->keyword);
     				$outstring .= "</td>\n";
+						$outstring .= "</tr>";
 			    }
 			}
-		$outstring .= "</tr>";
 		}
 		else {
 			$outstring .= "<tr>"."<td>".$AppUI->_('Empty')."</td>"."</tr>";
