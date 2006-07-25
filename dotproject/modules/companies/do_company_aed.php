@@ -24,7 +24,8 @@ if ($del) {
 		$AppUI->setMsg( 'deleted', UI_MSG_ALERT, true );
 		$AppUI->redirect( 'm=companies' );
 	}
-} else {
+} 
+else {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 	} else {

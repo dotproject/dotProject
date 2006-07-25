@@ -126,7 +126,8 @@ if ($sub_form) {
 			$AppUI->setMsg( 'Task deleted');
 			$AppUI->redirect( '', -1 );
 		}
-	} else {
+	} 
+    else {
 		if (($msg = $obj->store())) {
 			$AppUI->setMsg( $msg, UI_MSG_ERROR );
 			$AppUI->redirect(); // Store failed don't continue?

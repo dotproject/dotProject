@@ -303,7 +303,9 @@ class CProject extends CDpObject {
         }
 
 	function store() {
-
+        
+        $this->dPTrimAll();
+        
 		$msg = $this->check();
 		if( $msg ) {
 			return get_class( $this )."::store-check failed - $msg";

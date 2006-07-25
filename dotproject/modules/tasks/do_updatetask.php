@@ -63,16 +63,19 @@ $AppUI->setMsg( 'Task Log' );
 if ($del) {
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
-	} else {
+	} 
+    else {
 		$AppUI->setMsg( "deleted", UI_MSG_ALERT );
 	}
 	$AppUI->redirect();
-} else {
+} 
+else {
 	$obj->task_log_costcode = cleanText($obj->task_log_costcode);
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		$AppUI->redirect();
-	} else {
+	} 
+    else {
 		$AppUI->setMsg( @$_POST['task_log_id'] ? 'updated' : 'inserted', UI_MSG_OK, true );
 	}
 }
@@ -115,7 +118,7 @@ $email_extras = dPgetParam($_POST, 'email_extras', null);
 if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, $email_others, $email_extras)) {
 	$obj->store(); // Save the updated message. It is not an error if this fails.
 }
- 
+
 
 $AppUI->redirect("m=tasks&a=view&task_id={$obj->task_log_task}&tab=0#tasklog{$obj->task_log_id}");
 ?>

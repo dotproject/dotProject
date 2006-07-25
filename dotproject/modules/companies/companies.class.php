@@ -42,7 +42,7 @@ class CCompany extends CDpObject {
 	function CCompany() {
 		$this->CDpObject( 'companies', 'company_id' );
 	}
-
+    
 // overload check
 	function check() {
 		if ($this->company_id === NULL) {
