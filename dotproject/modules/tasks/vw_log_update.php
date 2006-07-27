@@ -205,7 +205,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 				function popCalendar( field ){
 					calendarField = field;
 					idate = eval( 'document.editFrm.task_' + field + '.value' );
-					window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=251, height=220, scollbars=false' );
+					window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=251, height=220, scrollbars=no' );
 				}
 			</script>
 			<?php
