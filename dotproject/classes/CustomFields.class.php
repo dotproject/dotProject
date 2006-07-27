@@ -566,6 +566,7 @@
       $q->addTable('custom_fields_values', 'cfv');
       $q->addQuery('m.'.$moduleTableId);
       $q->addQuery('m.'.$moduleTableName);
+      $q->addQuery('cfv.value_charvalue');
 			$q->addJoin('custom_fields_struct', 'cfs', 'cfs.field_id = cfv.value_field_id');
 			$q->addJoin($moduleTable, 'm', 'm.'.$moduleTableId.' = cfv. value_object_id');
       $q->addWhere('cfs.field_module = "'.$this->m.'"');

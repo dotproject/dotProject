@@ -39,7 +39,7 @@ class projects {
 			foreach($resultsCf as $records){
 				if ($permissions->checkModuleItem($this->table, "view", $records["project_id"])) {
 					if (is_array($recordIds) && !in_array($records["project_id"], $recordIds))
-						$this->showResult($records);
+						$this->showResult($records, true);
 				}
 			}
 		}
@@ -49,13 +49,19 @@ class projects {
 		return $outstring;
 	}
 	
-	function showResult($records){
+	function showResult($records, $cf=false){
 		global $obj, $AppUI, $outstring;
     $obj = new CProject();
     if (!in_array($records["project_id"], $obj->getDeniedRecords($AppUI->user_id))) {
 			$outstring .= "<tr>";
 			$outstring .= "<td>";
-			$outstring .= "<a href = \"index.php?m=projects&a=view&project_id=".$records["project_id"]."\">".highlight($records["project_name"], $this->keyword)."</a>\n";
+			$outstring .= "<a href = \"index.php?m=projects&a=view&project_id=".$records["project_id"]."\">".highlight($records["project_name"], $this->keyword);
+
+			if ($cf)
+				$outstring .= ' -- '.highlight($records['value_charvalue'], $this->keyword);
+			
+			$outstring .= "</a>\n";
+
 			$outstring .= "</td>\n";
 			$outstring .= "</tr>";
 		}	

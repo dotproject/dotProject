@@ -37,7 +37,7 @@ class events {
 			foreach($resultsCf as $records){
 				if ($permissions->checkModuleItem($this->table, "view", $records["event_id"])) {
 					if (is_array($recordIds) && !in_array($records["event_id"], $recordIds))
-						$this->showResult($records);
+						$this->showResult($records, true);
 				}
 			}
 		}
@@ -47,11 +47,16 @@ class events {
 		return $outstring;
 	}
 
-	function showResult($records){
+	function showResult($records, $cf=false){
 		global $AppUI, $outstring;
 		$outstring .= "<tr>";
 		$outstring .= "<td>";
-		$outstring .= "<a href = \"index.php?m=calendar&a=view&event_id=".$records["event_id"]."\">".highlight($records["event_title"], $this->keyword)."</a>\n";
+		$outstring .= "<a href = \"index.php?m=calendar&a=view&event_id=".$records["event_id"]."\">".highlight($records["event_title"], $this->keyword);
+
+		if ($cf)
+			$outstring .= ' -- '.highlight($records['value_charvalue'], $this->keyword);
+			
+		$outstring .= "</a>\n";
 		$outstring .= "</td>\n";
 		$outstring .= "</tr>";
 	}

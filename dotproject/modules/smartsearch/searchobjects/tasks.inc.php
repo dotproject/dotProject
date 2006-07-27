@@ -38,7 +38,7 @@ class tasks {
 			foreach($resultsCf as $records){
 					if ($permissions->checkModuleItem($this->table, "view", $records["task_id"])) {
 						if (is_array($recordIds) && !in_array($records["task_id"], $recordIds))
-							$this->showResult($records);
+							$this->showResult($records, true);
 					}
 			}
 		}
@@ -48,11 +48,16 @@ class tasks {
 		return $outstring;
 	}
 	
-	function showResult($records){
+	function showResult($records, $cf=false){
 		global $AppUI, $outstring;
 		$outstring .= "<tr>";
 		$outstring .= "<td>";
 		$outstring .= "<a href = \"index.php?m=tasks&a=view&task_id=".$records["task_id"]."\">".highlight($records["task_name"], $this->keyword)."</a>\n";
+
+		if ($cf)
+			$outstring .= ' -- '.highlight($records['value_charvalue'], $this->keyword);
+
+		$outstring .= "</a>\n";
 		$outstring .= "</td>\n";
 		$outstring .= "</tr>";
 	}
