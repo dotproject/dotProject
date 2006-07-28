@@ -65,6 +65,8 @@ function dPsessionRead($id)
 
 function dPsessionWrite($id, $data)
 {
+    global $AppUI;
+    
 	$q = new DBQuery;
 	$q->addQuery('count(*) as row_count');
 	$q->addTable('sessions');
@@ -75,6 +77,8 @@ function dPsessionWrite($id, $data)
 		dprint(__FILE__, __LINE__, 11, "Updating session $id");
 		$q->query = null;
 		$q->addUpdate('session_data', $data);
+        if (isset($AppUI))
+            $q->addUpdate('session_user', $AppUI->last_insert_id);
 	} else {
 		dprint(__FILE__, __LINE__, 11, "Creating new session $id");
 		$q->query = null;
@@ -88,14 +92,28 @@ function dPsessionWrite($id, $data)
 	return true;
 }
 
-function dPsessionDestroy($id)
-{
+function dPsessionDestroy($id, $user_access_log_id=0) {
+ 	global $AppUI;
+    
+    if(!($user_access_log_id) && isset($AppUI->last_insert_id)){
+        $user_access_log_id = $AppUI->last_insert_id;
+    }
+    
 	dprint(__FILE__, __LINE__, 11, "Killing session $id");
 	$q = new DBQuery;
 	$q->setDelete('sessions');
 	$q->addWhere("session_id = '$id'");
 	$q->exec();
 	$q->clear();
+    
+	if ($user_access_log_id) {
+ 		$q->addTable('user_access_log');
+ 		$q->addUpdate('date_time_out', date("Y-m-d H:i:s"));
+		$q->addWhere('user_access_log_id = ' . $user_access_log_id);
+ 		$q->exec();
+ 		$q->clear();
+ 	}
+    
 	return true;
 }
 
