@@ -82,7 +82,7 @@ $tab = dPgetParam($_REQUEST, "tab", 0);
     <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
     <th width="150"><a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name'); ?></a></th>
     <th><a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name'); ?></a></th>
-    <th><a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Company');?></a></th>
+    <th><a href="?m=admin&a=index&orderby=contact_company" class="hdr"><?php echo $AppUI->_('Company');?></a></th>
     <th><a href="?m=admin&a=index&orderby=date_time_in" class="hdr"><?php echo $AppUI->_('Date Time IN');?></a></th>
     <th><a href="?m=admin&a=index&orderby=user_ip" class="hdr"><?php echo $AppUI->_('Internet Address');?></a></th>
   </tr>
