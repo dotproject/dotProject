@@ -1,5 +1,5 @@
 <?php /* ADMIN  $Id$ */ 
-GLOBAL $dPconfig, $canEdit, $canDelete, $stub, $where, $orderby, $tpl;
+GLOBAL $dPconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 
 /*
  * Flag value to determine if "logout user" button should show. 
@@ -79,13 +79,12 @@ $tab = dPgetParam($_REQUEST, "tab", 0);
 
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">
   <tr>
-    <th>&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
-    <th>&nbsp; &nbsp;</th>
+    <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
     <th width="150"><a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name'); ?></a></th>
     <th><a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name'); ?></a></th>
     <th><a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Company');?></a></th>
     <th><a href="?m=admin&a=index&orderby=date_time_in" class="hdr"><?php echo $AppUI->_('Date Time IN');?></a></th>
-    <th><a href="?m=admin&a=index&orderby=user_ip" class="hdr"><?php echo $AppUI->_('Internet Address');?></a></th>
+    <th><a href="?m=admin&a=index&orderby=user_ip" class="hdr"><?php echo $AppUI->_('IP Address');?></a></th>
   </tr>
 
 <?php 
@@ -93,7 +92,7 @@ $tab = dPgetParam($_REQUEST, "tab", 0);
         echo ("  <tr>\n");
         echo ("    <td align=\"center\" nowrap=\"nowrap\">\n") ;
         if ($canEdit && $canDelete) {
-            echo ('<input type="button" class="button" value="'.$AppUI->_('logout session')
+            echo ('<input type="button" class="button" value="'.$AppUI->_('logout_session')
                   ."\" onClick=\"javascript:window.location='./index.php?m=admin&tab=3&out_session=".$row['session_id']
                   .'&out_user_log_id='.$row['user_access_log_id'].'&out_user_id='.$row['u_user_id']
                   .'&out_name='.$row['contact_first_name'].'%20'.$row['contact_last_name']."';\"></input>\n") ;
@@ -101,7 +100,7 @@ $tab = dPgetParam($_REQUEST, "tab", 0);
         echo ("    </td>\n");
         echo ("    <td align=\"center\" nowrap=\"nowrap\">\n") ;
         if ($canEdit && $canDelete && $logoutUserFlag) {
-            echo ('<input type="button" class=button value='.$AppUI->_('logout user')
+            echo ('<input type="button" class=button value="'.$AppUI->_('logout_user')
                   ."\" onClick=\"javascript:window.location='./index.php?m=admin&tab=3&out_user_id=".$row['u_user_id']
                   .'&out_name='.$row['contact_first_name'].'%20'.$row['contact_last_name']."';\"></input>\n") ;
         }
