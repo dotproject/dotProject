@@ -8,6 +8,8 @@ $use_period			= dPgetParam($_POST,"use_period",0);
 $display_week_hours	= dPgetParam($_POST,"display_week_hours",0); 
 $max_levels        	= dPgetParam($_POST,"max_levels","max"); 
 $log_userfilter		= dPgetParam($_POST,"log_userfilter","");
+$log_open		= dPgetParam($_POST,"log_open",0);
+$pdf_output		= dPgetParam($_POST,"pdf_output",0);
 
 
 $table_header = "";
@@ -90,16 +92,19 @@ function setCalendar( idate, fdate ) {
 
 	</td>
 
-	<td nowrap="nowrap">
-		<input type="checkbox" name="use_period" <?php if ($use_period) echo "checked" ?> >
+	<td nowrap="nowrap" rowspan="2">
+		<table>
+		<tr>
+		<td><input type="checkbox" name="use_period" <?php if ($use_period) echo "checked" ?> >
 		<?php echo $AppUI->_( 'Use the period' );?>
 		</input>
-		<br>
+		</td></tr>
+		<tr><td>
 		<input type="checkbox" name="display_week_hours" <?php if ($display_week_hours) echo "checked" ?> >
 		<?php echo $AppUI->_( 'Display allocated hours/week' );?>
 		</input>
-		<br> 
-
+		</td></tr> 
+		</table>
 	</td> 
 	
 	<td align="right" width="50%" nowrap="nowrap">
