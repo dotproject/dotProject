@@ -53,16 +53,19 @@ class CProject extends CDpObject {
 
         function load($oid=null , $strip = true) {
                 $result = parent::load($oid, $strip);
-                if ($result && $oid)
-                {
-			$q = new DBQuery;
-			$q->addTable('projects');
-			$q->addQuery('SUM(t1.task_duration*t1.task_duration_type*t1.task_percent_complete) / 
-                                        SUM(t1.task_duration*t1.task_duration_type) 
-                                        AS project_percent_complete');
-			$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-			$q->addWhere(" project_id = $oid");
-                        $this->project_percent_complete = $q->loadResult();
+                if ($result && $oid) {
+                    
+                    $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
+                    
+                    $q = new DBQuery;
+                    $q->addTable('projects');
+                    $q->addQuery(" SUM(t1.task_duration * t1.task_percent_complete"
+                                 ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+                                 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}"
+                                 .", t1.task_duration_type)) AS project_percent_complete");
+                    $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+                    $q->addWhere(" project_id = $oid AND t1.task_id = t1.task_parent");
+                    $this->project_percent_complete = $q->loadResult();
                 }
                 return $result;
         }
@@ -379,7 +382,7 @@ class CProject extends CDpObject {
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy;
+	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
@@ -389,7 +392,7 @@ function projects_list_data($user_id = false) {
 
 	// Let's delete temproary tables
 	$q  = new DBQuery;
-	$q->dropTemp('tasks_sum, tasks_summy, tasks_critical, tasks_problems, tasks_users');
+	$q->dropTemp('tasks_sum, tasks_total, tasks_summy, tasks_critical, tasks_problems, tasks_users');
 	$q->exec();
 	$q->clear();
 
@@ -397,22 +400,37 @@ function projects_list_data($user_id = false) {
 	// by Pablo Roca (pabloroca@mvps.org)
 	// 16 August 2003
 
-	$working_hours = $dPconfig['daily_working_hours'];
+	$working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
 
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$q->createTemp('tasks_sum');
 	$q->addTable('tasks');
-	$q->addQuery("task_project, COUNT(distinct tasks.task_id) AS total_tasks, 
-			SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ".$working_hours.", task_duration_type))/
-			SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24, ".$working_hours.", task_duration_type)) AS project_duration");
+	$q->addQuery("task_project, SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, {$working_hours},"
+                 ." task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, {$working_hours},"
+                 ." task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24,"
+                 ." {$working_hours}, task_duration_type)) AS project_duration");
+	if ($user_id) {
+		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
+		$q->addWhere('ut.user_id = '.$user_id);
+	}
+    $q->addWhere("tasks.task_id = tasks.task_parent");
+	$q->addGroup('task_project');
+	$tasks_sum = $q->exec();
+	$q->clear();
+    
+    
+    // Task total table
+    $q->createTemp('tasks_total');
+	$q->addTable('tasks');
+	$q->addQuery("task_project, COUNT(distinct tasks.task_id) AS total_tasks");
 	if ($user_id) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 		$q->addWhere('ut.user_id = '.$user_id);
 	}
 	$q->addGroup('task_project');
-	$tasks_sum = $q->exec();
+	$tasks_total = $q->exec();
 	$q->clear();
-
+    
 	// temporary My Tasks
 	// by Pablo Roca (pabloroca@mvps.org)
 	// 16 August 2003
@@ -489,13 +507,14 @@ function projects_list_data($user_id = false) {
 	$q->addTable('projects');
 	$q->addQuery('projects.project_id, project_active, project_status, project_color_identifier, project_name, project_description, project_duration,
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
-		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, ts.total_tasks, tsy.my_tasks,
+		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username');
 	$q->addJoin('companies', 'com', 'projects.project_company = company_id');
 	$q->addJoin('users', 'u', 'projects.project_owner = u.user_id');
 	$q->addJoin('tasks_critical', 'tc', 'projects.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'projects.project_id = tp.task_project');
 	$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
+	$q->addJoin('tasks_total', 'tt', 'projects.project_id = tt.task_project');
 	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');
 	if ($addProjectsWithAssignedTasks)
 		$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');

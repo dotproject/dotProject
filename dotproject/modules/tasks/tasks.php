@@ -97,39 +97,62 @@ if (isset($_POST['show_task_options'])) {
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
-$where = '';
 require_once $AppUI->getModuleClass('projects');
 $project =& new CProject;
 // $allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
-$where = "";
-if ( count($allowedProjects))
-  $where = "WHERE " . implode(" AND ", $allowedProjects);
 
-$psql = "
-SELECT project_id, project_color_identifier, project_name,
-        COUNT(t1.task_id) as total_tasks,
-        SUM(t1.task_duration*t1.task_percent_complete)/SUM(t1.task_duration) as project_percent_complete,
-        company_name
-FROM projects
-LEFT JOIN tasks t1 ON projects.project_id = t1.task_project" .
-" LEFT JOIN companies ON company_id = project_company
-" . $where  . "
-GROUP BY project_id
-ORDER BY project_name
-";
+if ( count($allowedProjects)) {
+    $where_list = implode(" AND ", $allowedProjects);
+}
 
-//echo "<pre>$psql</pre>";
+$working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
+
+$q  = new DBQuery;
+$q->addTable('projects');
+$q->addQuery("company_name, project_id, project_color_identifier, project_name,"
+             ." SUM(t1.task_duration * t1.task_percent_complete"
+             ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+             ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+             ." AS project_percent_complete");
+$q->addJoin('companies', 'com', 'company_id = project_company');
+$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+$q->addWhere("{$where_list}".(($where_list)?" AND ":"")."t1.task_id = t1.task_parent" );
+$q->addGroup('project_id');
+$q->addOrder('project_name');
+$psql = $q->prepare();
+$q->clear();
+
+
+$q->addTable('projects');
+$q->addQuery('project_id, COUNT(t1.task_id) as total_tasks');
+$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+if($where_list) {
+    $q->addWhere("{$where_list}");
+}
+$q->addGroup('project_id');
+$psql2 = $q->prepare();
+$q->clear();
+
 
 $perms =& $AppUI->acl();
 $projects = array();
 $canViewTask = $perms->checkModule('tasks', 'view');
 if ($canViewTask) {
-        $prc = db_exec( $psql );
-        echo db_error();
-        while ($row = db_fetch_assoc( $prc )) {
-                $projects[$row["project_id"]] = $row;
-        }
+    
+    $prc = db_exec( $psql );
+    echo db_error();
+    while ($row = db_fetch_assoc( $prc )) {
+        $projects[$row["project_id"]] = $row;
+    }
+
+    $prc2 = db_exec( $psql2 );
+    echo db_error();
+    while ($row2 = db_fetch_assoc( $prc2 )) {
+        $projects[$row2["project_id"]] = ((!($projects[$row2["project_id"]]))?array():$projects[$row2["project_id"]]);
+        array_push($projects[$row2["project_id"]], $row2);
+    }
+
 }
 
 $join = "";

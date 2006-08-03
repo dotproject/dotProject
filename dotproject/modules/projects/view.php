@@ -35,22 +35,22 @@ $criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : NULL;
 $projectPriority = dPgetSysVal( 'ProjectPriority' );
 $projectPriorityColor = dPgetSysVal( 'ProjectPriorityColor' );
 
-$working_hours = $dPconfig['daily_working_hours'];
+$working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
 
 // load the record data
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 $q  = new DBQuery;
 $q->addTable('projects');
-$q->addQuery("company_name,
-	CONCAT_WS(' ',contact_first_name,contact_last_name) user_name,
-	projects.*,
-	SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ".$working_hours.", t1.task_duration_type))/
-		SUM(t1.task_duration * IF(t1.task_duration_type = 24, ".$working_hours.", t1.task_duration_type)) AS project_percent_complete");
+$q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, projects.*,"
+             ." SUM(t1.task_duration * t1.task_percent_complete"
+             ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+             ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+             ." AS project_percent_complete");
 $q->addJoin('companies', 'com', 'company_id = project_company');
 $q->addJoin('users', 'u', 'user_id = project_owner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-$q->addWhere('project_id = '.$project_id);
+$q->addWhere('project_id = '.$project_id .' AND t1.task_id = t1.task_parent');
 $q->addGroup('project_id');
 $sql = $q->prepare();
 $q->clear();
