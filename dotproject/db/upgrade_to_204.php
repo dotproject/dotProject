@@ -48,16 +48,21 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			db_exec( $sql );
 
 			foreach ($projects as $project){
+                $p_id = (($project['project_id'])?$project['project_id']:'0');
 				$departments = explode(',',$project['project_departments']);
 				foreach($departments as $department){
-					$sql = 'INSERT INTO project_departments (project_id, department_id) values ('.$project['project_id'].', '.$department.')';
-					db_exec( $sql );
+					$sql = 'INSERT INTO project_departments (project_id, department_id) values ('.$p_id.', '.$department.')';
+                    if ($p_id && $department) {
+                        db_exec( $sql );
+                    }
 				}
 
 				$contacts = explode(',',$project['project_contacts']);
 				foreach($contacts as $contact){
-					$sql = 'INSERT INTO project_contacts (project_id, contact_id) values ('.$project['project_id'].', '.$contact.')';
-					db_exec( $sql );
+					$sql = 'INSERT INTO project_contacts (project_id, contact_id) values ('.$p_id.', '.$contact.')';
+                    if ($p_id && $contact) {
+                        db_exec( $sql );
+                    }
 				}
 			}
 
@@ -92,6 +97,10 @@ function dPupgrade($from_version, $to_version, $last_updated)
 					}
 				}
 			}
+            
+            $sql = "ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1";
+            db_exec( $sql );
+            
 			include "$baseDir/db/upgrade_contacts.php";
 			include "$baseDir/db/upgrade_permissions.php";
 
