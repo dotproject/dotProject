@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+"session_name_tooltip"=>"Define your own Cookie Name. Attention: Change of Session Name will immediately log out all users! They will need to login again.",
 "Abbreviation",
 "All Events",
 "Are you sure you want to delete this?",
@@ -289,6 +290,7 @@ Values are in seconds unless followed by a letter: h = hours, d = days, m = mont
 You can only have 1 character within a string, so 2d4h is NOT valid, but 28h is.",
 "session_max_lifetime_title"=>"Session Maximum Lifetime",
 "session_max_lifetime_tooltip"=>"The maximum time a session can exist before it is trashed, regardless of how active it is.",
+"session_name_title"=>"Session/Cookie Name",
 "show_all_task_assignees_title"=>"Show All Task Assignees",
 "show_all_task_assignees_tooltip"=>"Set this option on if you wish to show all assignee names in the project task task list or off if you would prefer to see just the main assignee name and a count in brackets of the number of other assignees.
 ",
@@ -316,6 +318,8 @@ There are mouseover-tooltips and (?)-information popups with each of the fields 
 "task_reminder_group_title"=>"Task Reminders",
 "task_reminder_repeat_title"=>"Maximum number of reminders to send",
 "task_reminder_repeat_tooltip"=>"If a task is overdue for a large number of days, it may not be worth sending any more reminders. This value determines the total number of reminders that will be sent, including pre-due date warnings and overdue alerts.",
+"tasks_ajax_list_title"=>"Use AJAX for dynamic tasks",
+"tasks_ajax_list_tooltip"=>"If your browser doesn\'t support ajax, turn this off. Dynamically loading tasks the first time they are requested.",
 "updated",
 "username_min_len_title"=>"Minimum Username Length",
 "username_min_len_tooltip"=>"Establish the minimum length of any user names for dotProject.  This can NOT be longer than the length of the column in DB",
