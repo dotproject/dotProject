@@ -65,7 +65,7 @@ if ($sub_form) {
 		$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
 		$AppUI->redirect();
 	}
-
+		
 	// Check to see if the task_project has changed
 	if (isset($_POST['new_task_project']) && $_POST['new_task_project'])
 		$obj->task_project = $_POST['new_task_project'];
@@ -157,23 +157,24 @@ if ($sub_form) {
 			
 			// we will reset the task's start date based upon dependencies
 			// and shift the end date appropriately
-			if ($adjustStartDate) {
-			
-				// update start date based on dep
-				$obj->update_dep_dates( $obj->task_id );
+
+		if ($adjustStartDate && !is_null($hdependencies)) {
 
 				// load new task data
 				$tempTask = new CTask();
 				$tempTask->load( $obj->task_id );
 
 				// shifted new start date
-				$nsd = new CDate ($tempTask->task_start_date);
-				
+				$nsd = new CDate ($tempTask->get_deps_max_end_date( $tempTask ) );
+
 				// calc shifting span old start ~ new start
 				$d = $tsd->calcDurationDiffToDate($nsd);
 
+				// update start date based on dep
+				$obj->update_dep_dates( $obj->task_id, $d );
+
 				// appropriately shifted end date
-				$ned = $ted->addDuration($d);
+				$ned = $ted->addDuration($d, $obj->task_duration_type);
 
 				$obj->task_end_date = $ned->format( FMT_DATETIME_MYSQL );
 

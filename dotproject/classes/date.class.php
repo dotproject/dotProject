@@ -249,7 +249,7 @@ function workingDaysInSpan($e){
 	// proceeding the actual (first) day
 
 		// move to the next working day if the first day is a non-working day
-		$this->copy( ($sgn > 0) ? $this->next_working_day() : $this->prev_working_day());
+		 ($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
 
 	
 		$firstDay = ($sgn > 0) ? $cal_day_end - $this->hour : $this->hour - $cal_day_start;
@@ -270,7 +270,7 @@ function workingDaysInSpan($e){
 
 
 		$this->addDays(1 * $sgn);
-		$this->copy( ($sgn > 0) ? $this->next_working_day() : $this->prev_working_day() );
+		($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
 		$duration -= $firstAdj;
 
 	// end of proceeding the first day
@@ -325,7 +325,7 @@ function workingDaysInSpan($e){
 			$sgn = -1;
 
 			$dummy = $this;
-			$this->copy( $e);	
+			$this=$e;	
 			$e = $dummy;
 		}    
 

@@ -1138,7 +1138,7 @@ class CTask extends CDpObject
     function update_dep_dates( $task_id, $shift ) {
 		GLOBAL $tracking_dynamics;
         
-        $destDate = new CDate();
+
         $newTask = new CTask();
         
         $newTask->load($task_id);
@@ -1149,10 +1149,11 @@ class CTask extends CDpObject
         }
         
         // start date, based on maximal dep end date
-        $destDate->setDate( $this->get_deps_max_end_date( $newTask ) );
-        $destDate = $destDate->next_working_day();
-        $new_start_date = $destDate->format( FMT_DATETIME_MYSQL );
-        
+				$destDate = new CDate( $newTask->task_start_date);
+        $destDate->addDuration( $shift, 1);
+				$destDate = $destDate->next_working_day(true);
+				$new_start_date = $destDate->format( FMT_DATETIME_MYSQL );
+
         /*
          ** Bug reported and treated on 20060525
          ** @author		gregorerhardt
@@ -1170,6 +1171,7 @@ class CTask extends CDpObject
 		// Add shifting span to End Date
 		$new_end_date = new CDate($newTask->task_end_date);
 		$new_end_date->addDuration( $shift, 1);
+		$new_end_date = $new_end_date->next_working_day(true);
 		$new_end_date = $new_end_date->format( FMT_DATETIME_MYSQL );
         
 		$sql = "UPDATE tasks SET task_start_date = '$new_start_date', task_end_date = '$new_end_date'" 
