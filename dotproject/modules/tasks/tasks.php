@@ -633,9 +633,10 @@ foreach ($projects as $k => $p) {
                   findchild( $p['tasks'], $t["task_id"] );
               }
           }
-          
-          if (strpos($t['task_name'], $search_text) !== false || strpos($t['task_description'], $search_text) !== false) {
-              showtask($t, 1, false);
+          if ($search_text) {
+                if (strpos($t['task_name'], $search_text) !== false || strpos($t['task_description'], $search_text) !== false) {
+                    showtask($t, 1, false);
+                }
           }
       }
       // check that any 'orphaned' user tasks are also display
