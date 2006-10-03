@@ -471,19 +471,14 @@ class CTask extends CDpObject
             
             // shiftDependentTasks needs this done first
             $ret = db_updateObject( 'tasks', $this, 'task_id', false );
-            
+
             // Milestone or task end date, or dynamic status has changed,
             // shift the dates of the tasks that depend on this task
             if (($this->task_end_date != $oTsk->task_end_date) 
-                || ($this->task_dynamic != $oTsk->task_dynamic)   
+                || ($this->task_dynamic != $oTsk->task_dynamic) 
                 || ($this->task_milestone == '1')) {
-                
-							// Load shifted date data
-							$oEnd = new CDate($oTsk->task_end_date);
-							$nEnd = new CDate($this->task_end_date);
-							$shift = $oEnd->calcDurationDiffToDate($nEnd, $this->task_duration_type);
 
-							$this->shiftDependentTasks($shift);
+							$this->shiftDependentTasks();
             }
         }
         else {
@@ -1100,107 +1095,108 @@ class CTask extends CDpObject
         
     } // end of dependentTasks()
     
-    /*
-     *       shift dependents tasks dates
-     *       @param  integer         time offset in seconds
-     *       @return void
-     */
-    function shiftDependentTasks ($shift) {
+   /*
+	 *       shift dependents tasks dates
+	 *       @return void
+	 */
+	function shiftDependentTasks () {
         // Get tasks that depend on this task
-        $csDeps = explode( ",", $this->dependentTasks('','',false));
+        $csDeps = explode( ',', $this->dependentTasks('','',false));
         
         if ($csDeps[0] == '') {
             return;
         }
         
-        // Stage 1: Update dependent task dates (accounting for working hours)
+        // Stage 1: Update dependent task dates
         foreach( $csDeps as $task_id ) {
-            $this->update_dep_dates( $task_id, $shift );
+            $this->update_dep_dates( $task_id );
         }
         
         // Stage 2: Now shift the dependent tasks' dependents
         foreach( $csDeps as $task_id ) {
             $newTask = new CTask();
             $newTask->load($task_id);
-            $newTask->shiftDependentTasks( $shift );
+            $newTask->shiftDependentTasks();
         }
-        return;
         
-    } // end of shiftDependentTasks()
+        return;
+	} // end of shiftDependentTasks()
     
-    /*
-     *        Update this task's dates in the DB.
-     *        start date:         based on max dependency end date
-     *        end date:           based on start date + appropriate original time shift, keep duration
-     *
-     *        @param                integer task_id of task to update
-     */
-    function update_dep_dates( $task_id, $shift ) {
+   /*
+	 *        Update this task's dates in the DB.
+	 *        start date:         based on latest end date of dependencies
+	 *        end date:           based on start date + appropriate task time span
+	 *         
+	 *        @param                integer task_id of task to update
+	 */
+	function update_dep_dates( $task_id ) {
 		GLOBAL $tracking_dynamics;
         
-
-        $newTask = new CTask();
-        
-        $newTask->load($task_id);
-        
-        // Do not update tasks that are not tracking dependencies
-        if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
-            return;
-        }
-        
-        // start date, based on maximal dep end date
-				$destDate = new CDate( $newTask->task_start_date);
-        $destDate->addDuration( $shift, 1);
-				$destDate = $destDate->next_working_day(true);
-				$new_start_date = $destDate->format( FMT_DATETIME_MYSQL );
-
-        /*
-         ** Bug reported and treated on 20060525
-         ** @author		gregorerhardt
-         ** @responsible		gregorerhardt
-         ** @problem		Task2 dep on Task1; Task2 has start/end date span of 10 days but a duration
-         **			of only 10 hrs in these 10d. Task1 is shifted => Task2 is shifted and duration 
-         of 10 hrs is kept, but end date is shortened to (start date+10 hrs).
-         ** @solution		keep duration
-         **
-         */
-        
-		// end date, based on start date + shift of original task, keeping work duration
-		$newTask->task_start_date = $new_start_date;
-        
-		// Add shifting span to End Date
-		$new_end_date = new CDate($newTask->task_end_date);
-		$new_end_date->addDuration( $shift, 1);
-		$new_end_date = $new_end_date->next_working_day(true);
-		$new_end_date = $new_end_date->format( FMT_DATETIME_MYSQL );
-        
-		$sql = "UPDATE tasks SET task_start_date = '$new_start_date', task_end_date = '$new_end_date'" 
-            . " WHERE task_dynamic <> '1' AND task_id = $task_id";
-        db_exec( $sql );
-        
-        if ( $newTask->task_parent != $newTask->task_id ) {
-            $newTask->updateDynamics();
-        }
+    $newTask = new CTask();
+    $newTask->load($task_id);
+    
+    // Do not update tasks that are not tracking dependencies
+    if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
         return;
     }
+ 
+		// load original task dates and calculate task time span
+    $tsd = new CDate( $newTask->task_start_date);
+    $ted = new CDate( $newTask->task_end_date);
+ 		$duration = $tsd->calcDuration($ted);
+  
+    // reset start date
+    $nsd = new CDate ($newTask->get_deps_max_end_date( $newTask ) );
     
+		// prefer Wed 8:00 over Tue 16:00 as start date
+		$nsd = $nsd->next_working_day();
+		$new_start_date = $nsd->format( FMT_DATETIME_MYSQL );
+        
+		// Add task time span to End Date again
+		$ned = new CDate();
+		$ned->copy($nsd);
+		$ned->addDuration($duration, '1');
+		
+		// make sure one didn't land on a non-working day
+		$ned = $ned->next_working_day(true);
+
+		// prefer tue 16:00 over wed 8:00 as an end date
+		$ned = $ned->prev_working_day();
+		
+		$new_end_date = $ned->format( FMT_DATETIME_MYSQL ); 	
+    
+    // update the db
+    $q = new DBQuery;
+    $q->addTable('tasks');
+    $q->addUpdate('task_start_date', $new_start_date);
+    $q->addUpdate('task_end_date', $new_end_date);
+    $q->addWhere('task_dynamic <> 1');
+    $q->addWhere('task_id = '.$task_id);
+    $q->exec();
+    $q->clear();
+    
+    if ( $newTask->task_parent != $newTask->task_id ) {
+        $newTask->updateDynamics();
+    }
+    
+    return;
+  }
     
     
     /* 
      ** Time related calculations have been moved to ./classes/date.class.php
      ** some have been replaced with more _robust_ functions
-     **
-     ** Affects functions:
+     ** 
+			** Affected functions:
      ** prev_working_day()
      ** next_working_day()
-     ** calc_task_end_date()
-     ** calc_end_date()
+     ** calc_task_end_date() 	renamed to addDuration()
+     ** calc_end_date()	renamed to calcDuration()
      **
      ** @date 	20050525
      ** @responsible gregorerhardt
      ** @purpose	reusability, consistence
      */ 
-    
     
     
     /*

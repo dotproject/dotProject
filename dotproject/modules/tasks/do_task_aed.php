@@ -148,47 +148,71 @@ if ($sub_form) {
 			$obj->updateAssigned( $hassign , $hperc_assign_ar);
 		}
 		
+		if (isset($hassign)) {
+			$obj->updateAssigned( $hassign , $hperc_assign_ar);
+		}
+		
 		if (isset($hdependencies)) {
-			// backup old start and end dates
+			// there are dependencies set!
+			
+			// backup initial start and end dates
 			$tsd = new CDate ($obj->task_start_date);
 			$ted = new CDate ($obj->task_end_date);
 
+			// updating the table recording the 
+			// dependency relations with this task
 			$obj->updateDependencies( $hdependencies );
 			
 			// we will reset the task's start date based upon dependencies
 			// and shift the end date appropriately
+			if ($adjustStartDate && !is_null($hdependencies)) {
 
-		if ($adjustStartDate && !is_null($hdependencies)) {
+							// load already stored task data for this task
+							$tempTask = new CTask();
+							$tempTask->load( $obj->task_id );
 
-				// load new task data
-				$tempTask = new CTask();
-				$tempTask->load( $obj->task_id );
-
-				// shifted new start date
-				$nsd = new CDate ($tempTask->get_deps_max_end_date( $tempTask ) );
-
-				// calc shifting span old start ~ new start
-				$d = $tsd->calcDurationDiffToDate($nsd);
-
-				// update start date based on dep
-				$obj->update_dep_dates( $obj->task_id, $d );
-
-				// appropriately shifted end date
-				$ned = $ted->addDuration($d, $obj->task_duration_type);
-
-				$obj->task_end_date = $ned->format( FMT_DATETIME_MYSQL );
-
-		 		$q = new DBQuery;
-		                $q->addTable('tasks', 't');
-		                $q->addUpdate('task_end_date', $obj->task_end_date);
-		                $q->addWhere('task_id = '.$obj->task_id);
-		                $q->addWhere('task_dynamic != 1');
-		                $q->exec();
-		                $q->clear();
-			}
+							// shift new start date to the last dependency end date
+							$nsd = new CDate ($tempTask->get_deps_max_end_date( $tempTask ) );
+							
+							// prefer Wed 8:00 over Tue 16:00 as start date
+							$nsd = $nsd->next_working_day();
+							 
+							// prepare the creation of the end date
+							$ned = new CDate();
+							$ned->copy($nsd);
+							
+							if (empty($obj->task_start_date)) {
+								// appropriately calculated end date via start+duration
+								$ned->addDuration($obj->task_duration, $obj->task_duration_type);		
+								
+							} else { 			
+								// calc task time span start - end
+								$d = $tsd->calcDuration($ted);
+	
+								// Re-add (keep) task time span for end date.
+								// This is independent from $obj->task_duration.
+								// The value returned by Date::Duration() is always in hours ('1') 
+								$ned->addDuration($d, '1');
+	
+							}
+							
+							// prefer tue 16:00 over wed 8:00 as an end date
+							$ned = $ned->prev_working_day();
+							
+							$obj->task_start_date = $nsd->format( FMT_DATETIME_MYSQL );
+							$obj->task_end_date = $ned->format( FMT_DATETIME_MYSQL );						
+							
+							$q = new DBQuery;
+					    $q->addTable('tasks', 't');							
+							$q->addUpdate('task_start_date', $obj->task_start_date);	
+              $q->addUpdate('task_end_date', $obj->task_end_date);
+              $q->addWhere('task_id = '.$obj->task_id);
+              $q->addWhere('task_dynamic != 1');
+              $q->exec();
+              $q->clear();
+						}
 
 		}
-		
 		// If there is a set of post_save functions, then we process them
 
 		if (isset($post_save)) {

@@ -36,10 +36,8 @@ class tasks {
 		if($resultsCf && !empty($resultsCf)){
 			$res = true;
 			foreach($resultsCf as $records){
-					if ($permissions->checkModuleItem($this->table, "view", $records["task_id"])) {
-						if (is_array($recordIds) && !in_array($records["task_id"], $recordIds))
+					if ($permissions->checkModuleItem($this->table, "view", $records["task_id"])) 
 							$this->showResult($records, true);
-					}
 			}
 		}
 		if (!$res) {

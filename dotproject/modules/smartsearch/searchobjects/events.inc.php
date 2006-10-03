@@ -35,10 +35,8 @@ class events {
 		if($resultsCf && !empty($resultsCf)){	
 			$res = true;
 			foreach($resultsCf as $records){
-				if ($permissions->checkModuleItem($this->table, "view", $records["event_id"])) {
-					if (is_array($recordIds) && !in_array($records["event_id"], $recordIds))
+				if ($permissions->checkModuleItem($this->table, "view", $records["event_id"])) 
 						$this->showResult($records, true);
-				}
 			}
 		}
 		if (!$res) {
