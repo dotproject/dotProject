@@ -180,7 +180,7 @@ class DBQuery {
 				$values = explode(',', $value);
 
 			for($i = 0; $i < count($fields); $i++)
-			$this->addMap('value_list', $values[$i], $fields[$i]);
+				$this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
 		}
 		else if (!$func)
     	$this->addMap('value_list', $this->quote($value), $field);
@@ -188,10 +188,35 @@ class DBQuery {
     	$this->addMap('value_list', $value, $field);
     $this->type = 'insert';
   }
-
-  function addUpdate($field, $value)
+  
+  // implemented addReplace() on top of addInsert()
+  
+  function addReplace($field, $value, $set = false, $func = false)
   {
-    $this->addMap('update_list', $value, $field);
+  	 $this->addInsert($field, $value, $set, $func);
+	 $this->type = 'replace';
+  }
+
+
+  function addUpdate($field, $value, $set = false)
+  {
+		if ($set)
+		{
+			if (is_array($field))
+				$fields = $field;
+			else
+				$fields = explode(',', $field);
+
+			if (is_array($value))
+				$values = $value;
+			else
+				$values = explode(',', $value);
+
+			for($i = 0; $i < count($fields); $i++)
+				$this->addMap('update_list', $values[$i], $fields[$i]);
+		}
+		else
+    		$this->addMap('update_list', $value, $field);
     $this->type = 'update';
   }
 
@@ -310,9 +335,9 @@ class DBQuery {
   function addJoin($table, $alias, $join, $type = 'left')
   {
     $var = array ( 'table' => $table,
-	'alias' => $alias,
-    	'condition' => $join,
-	'type' => $type );
+	  'alias' => $alias,
+      'condition' => $join,
+	  'type' => $type );
 
     $this->addClause('join', $var, false);
   }
@@ -384,6 +409,9 @@ class DBQuery {
 	break;
       case 'insert':
         $q = $this->prepareInsert();
+	break;
+      case 'replace':
+        $q = $this->prepareReplace();
 	break;
       case 'delete':
       $q = $this->prepareDelete();
@@ -508,13 +536,43 @@ class DBQuery {
 	$fieldlist .= ",";
       if ($valuelist)
 	$valuelist .= ",";
-      $fieldlist .= '`' . $field . '`';
+      $fieldlist .= '`' . trim($field) . '`';
       $valuelist .= $value;
     }
     $q .= "($fieldlist) values ($valuelist)";
     return $q;
   }
 
+  function prepareReplace()
+  {
+    $q = 'REPLACE INTO ';
+    if (isset($this->table_list)) {
+      if (is_array($this->table_list)) {
+			reset($this->table_list);
+	// Grab the first record
+	list($key, $table) = each ($this->table_list);
+      } else {
+	$table = $this->table_list;
+      }
+    } else {
+      return false;
+    }
+    $q .= '`' . $this->_table_prefix . $table . '`';
+
+    $fieldlist = '';
+    $valuelist = '';
+    foreach( $this->value_list as $field => $value) {
+      if ($fieldlist)
+	$fieldlist .= ",";
+      if ($valuelist)
+	$valuelist .= ",";
+      $fieldlist .= '`' . trim($field) . '`';
+      $valuelist .= $value;
+    }
+    $q .= "($fieldlist) values ($valuelist)";
+    return $q;
+  }
+  
   function prepareDelete()
   {
     $q = 'DELETE FROM ';
@@ -652,6 +710,17 @@ class DBQuery {
 		}
 		$this->clear();
 		return $hashlist;
+	}
+
+	function loadHash()
+	{
+		global $db;
+		if (! $this->exec(ADODB_FETCH_ASSOC)) {
+			exit ($this->db->ErrorMsg());
+		}
+		$hash = $this->fetchRow();
+		$this->clear();
+		return $hash;
 	}
 
 	function loadArrayList($index = 0) {
