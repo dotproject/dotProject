@@ -1731,7 +1731,7 @@ class CTask extends CDpObject
     function clearReminder($dont_check = false ) {
         $ev = new EventQueue;
         
-        $event_list = $ev->find('tasks', 'remind', $this->id);
+        $event_list = $ev->find('tasks', 'remind', $this->task_id);
         if (count($event_list)) {
             foreach ($event_list as $id => $data) {
                 if ($dont_check || $this->task_percent_complete >= 100) {
