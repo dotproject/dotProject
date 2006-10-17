@@ -195,7 +195,7 @@ function Receipt() {
 
 function To( $to, $reset=false ) {
 
-	// TODO : test validité sur to
+	// TODO : test validit? sur to
 	if( is_array( $to ) ) {
 		$this->sendto = $to;
 	} else {
@@ -254,7 +254,7 @@ function Bcc( $bcc ) {
  *		set the body (message) of the mail
  *		define the charset if the message contains extended characters (accents)
  *		default to us-ascii
- *		$mail->Body( "mél en français avec des accents", "iso-8859-1" );
+ *		$mail->Body( "m?l en fran?ais avec des accents", "iso-8859-1" );
  */
 function Body( $body, $charset="" ) {
 	$this->body = $body;
@@ -556,7 +556,14 @@ function CheckAdresses( $aad ) {
 			exit;
 		}
 	}
+	return true;
 }
+	/**
+	 * alias for the mispelled CheckAdresses
+	 */
+	function CheckAddresses($aad) {
+		return $this->CheckAdresses($aad);
+	}
 
 /**
  *	check and encode attach file(s) . internal use only
