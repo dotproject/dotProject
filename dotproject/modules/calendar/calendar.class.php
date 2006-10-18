@@ -534,19 +534,39 @@ class CEvent extends CDpObject {
 				$q->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
 				break;
 		}
-		
-		// duplicate query object for recursive events; must reside before the date limits where clause
-		$r = $q;
-		
+				
 		$q->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start'
 				OR event_start_date BETWEEN '$db_start' AND '$db_end')");	
-		
 		
 		// assemble query for non-recursive events
 		$q->addWhere('( event_recurs <= 0 )');
 		$eventList = $q->loadList();
+        
+        
+        // seperate query object for recursive events
+        $r  = new DBQuery;
+		$r->addTable('events', 'e');
+		$r->addQuery('e.*');
+		
+		if (count ($allowedProjects)) {
+		  $r->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ") OR event_project = 0 )");
+		  $r->addJoin('projects', 'p', 'p.project_id = e.event_project');
+		}
 
-
+		switch ($filter) {
+			case 'my':
+				$r->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
+				$r->addWhere("( ( event_private = 0 AND ue.user_id = $user_id )
+						OR event_owner=$user_id )");
+				break;
+			case 'own':
+				$r->addWhere("( event_owner = $user_id )");
+				break;
+			case 'all':
+				$r->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
+				break;
+		}
+        
 		// assemble query for recursive events
 		$r->addWhere('( event_recurs > 0 )');
 		$eventListRec = $r->loadList();
