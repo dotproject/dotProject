@@ -579,8 +579,12 @@ class CEvent extends CDpObject {
 		// If it should then a comment to that effect would be nice.
 		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
 		for ($i=0; $i < sizeof($eventListRec);  $i++) {
-
-			for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
+            
+            //note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
+            // So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
+            // This way the original and all recurrances are covered.
+			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
+            for ($j=0; $j <= intval($eventListRec[$i]['event_times_recuring']); $j++) {
 
 				//Daily View
 				//show all
