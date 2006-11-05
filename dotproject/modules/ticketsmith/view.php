@@ -68,7 +68,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	{
 		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
 
-		if (@$mailinfo['user_email']) {
+		if (@$mailinfo['contact_email']) {
 			$boundary = "_lkqwkASDHASK89271893712893";
 			$message = "--$boundary\n";
 			$message .= "Content-disposition: inline\n";
@@ -125,7 +125,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "\n--$boundary--\n";
 
 
-			mail($mailinfo["user_email"], $AppUI->_('Trouble ticket')." #$ticket ".$AppUI->_('has been assigned to you'), $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
+			mail($mailinfo["contact_email"], $AppUI->_('Trouble ticket')." #$ticket ".$AppUI->_('has been assigned to you'), $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
 		} // End of check for valid email
 	} // End of check for toggle of assignee
 
