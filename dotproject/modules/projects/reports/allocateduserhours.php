@@ -234,9 +234,9 @@ GLOBAL $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_
 	$ed = new CDate(Date_Calc::endOfWeek($end_date->day,$end_date->month,$end_date->year));
 	$sd = new CDate(Date_Calc::beginOfWeek($start_date->day,$start_date->month,$start_date->year));
 
-	$week_difference = $ted->workingDaysInSpan($tsd)/count(explode(",",dPgetConfig("cal_working_days")));
+	$week_difference = $end_date->workingDaysInSpan($start_date)/count(explode(",",dPgetConfig("cal_working_days")));
 
-	$actual_date = $tsd;
+	$actual_date = $start_date;
 
 	for($i = 0; $i<=$week_difference; $i++){
 		if(!$actual_date->before($tsd) && !$actual_date->after($ted)) {
@@ -325,6 +325,7 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 			}
 				
 			$array_sum = array_sum($user_usage[$user_id]);
+			var_export($user_usage[$user_id]);
 			$average_user_usage = number_format( ($array_sum/( $week_difference * count(explode(",",dPgetConfig("cal_working_days")))*dPgetConfig("daily_working_hours")))*100, 2);
 			$allocated_hours_sum += $array_sum;
 
