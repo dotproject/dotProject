@@ -861,6 +861,10 @@ class CAppUI {
 	  while(list(,$js_file_name) = each($js_files)){
 		  echo "<script type=\"text/javascript\" src=\"{$base}js/$js_file_name\"></script>\n";
 		  }
+
+		// additionally load overlib
+			echo "<script type=\"text/javascript\" src=\"{$base}lib/overlib/overlib.js\"></script>\n";
+
 		$this->getModuleJS($m, $a, true);
 	}
 
