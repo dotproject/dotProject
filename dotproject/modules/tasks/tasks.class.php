@@ -612,8 +612,16 @@ class CTask extends CDpObject
         if (!db_exec( $sql )) {
             return db_error();
         }
-        else {
-            $this->_action ='deleted';
+        
+				$sql = "DELETE FROM task_dependencies WHERE dependencies_task_id";
+				if (!empty($childrenlist))
+					$sql .= ' IN ('.implode(', ', $childrenlist).', '.$this->task_id.')';
+				else 
+					$sql .= ' = ' . $this->task_id;
+				if (!db_exec($sql))
+					return db_error();
+				else {
+            $this->_action = 'deleted';
         }
         
         return NULL;
