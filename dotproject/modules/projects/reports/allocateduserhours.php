@@ -325,7 +325,7 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 			}
 				
 			$array_sum = array_sum($user_usage[$user_id]);
-			var_export($user_usage[$user_id]);
+
 			$average_user_usage = number_format( ($array_sum/( $week_difference * count(explode(",",dPgetConfig("cal_working_days")))*dPgetConfig("daily_working_hours")))*100, 2);
 			$allocated_hours_sum += $array_sum;
 
