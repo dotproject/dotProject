@@ -57,11 +57,41 @@ if (isset( $_GET['orderby'] )) {
 $orderby  = $AppUI->getState( 'ProjIdxOrderBy' ) ? $AppUI->getState( 'ProjIdxOrderBy' ) : 'project_end_date';
 $orderdir = $AppUI->getState( 'ProjIdxOrderDir' ) ? $AppUI->getState( 'ProjIdxOrderDir' ) : 'asc';
 
+// prepare the users filter
+if (isset( $_POST['show_owner'] ))
+	$AppUI->setState( 'ProjIdxowner', intval( $_POST['show_owner'] ) );
+$owner = $AppUI->getState( 'ProjIdxowner' ) !== NULL ? $AppUI->getState( 'ProjIdxowner' ) : 0;
+
+
+$bufferUser = '<select name="show_owner" onchange="document.pickUser.submit()" class="text">';
+$bufferUser .= "<OPTION VALUE='0'>".$AppUI->_('All Users');
+
+$usersql = "
+SELECT user_id, user_username, contact_first_name, contact_last_name
+FROM users, contacts
+WHERE user_contact = contact_id
+ORDER BY contact_last_name
+";
+
+
+if (($rows = db_loadList( $usersql, NULL )))
+{
+  foreach ($rows as $row)
+  {
+    if ( $owner == $row["user_id"])
+      $bufferUser .= "<OPTION VALUE='".$row["user_id"]."' SELECTED>".$row["contact_last_name"].', '.$row["contact_first_name"]. ' ('. $row["user_username"]. ')';
+    else
+      $bufferUser .= "<OPTION VALUE='".$row["user_id"]."'>".$row["contact_last_name"].', '.$row["contact_first_name"]. ' ('. $row["user_username"]. ')';
+  }
+}
+
 // collect the full projects list data via function in projects.class.php
 projects_list_data();
 
 // setup the title block
 $titleBlock = new CTitleBlock( 'Projects', 'applet3-48.png', $m, "$m.$a" );
+$titleBlock->addCell( $AppUI->_('Owner') . ':');
+$titleBlock->addCell( $bufferUser, '', '<form action="?m=projects" method="post" name="pickUser">', '</form>');
 $titleBlock->addCell( $AppUI->_('Company') . '/' . $AppUI->_('Division') . ':');
 $titleBlock->addCell( $buffer, '', '<form action="?m=projects" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell();

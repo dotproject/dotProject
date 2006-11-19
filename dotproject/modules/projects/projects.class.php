@@ -380,7 +380,7 @@ class CProject extends CDpObject {
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total;
+	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
@@ -532,6 +532,8 @@ function projects_list_data($user_id = false) {
 	} elseif ($user_id) {
 		$q->addWhere('projects.project_owner = '.$user_id);
 	}
+	if ($owner > 0)
+		$q->addWhere('projects.project_owner = '.$owner);
 	$q->addGroup('projects.project_id');
 	$q->addOrder("$orderby $orderdir");
 	$obj->setAllowedSQL($AppUI->user_id, $q);
