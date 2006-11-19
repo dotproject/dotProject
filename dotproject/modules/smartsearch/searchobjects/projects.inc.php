@@ -4,7 +4,7 @@ require_once( $AppUI->getSystemClass( 'CustomFields' ) );
 
 class projects {
 	var $table = 'projects';
-	var $search_fields = array ("project_name","project_short_name","project_description","project_url","project_demo_url");
+	var $search_fields = array ("p.project_name","p.project_short_name","p.project_description","p.project_url","p.project_demo_url", 'con.contact_last_name', 'con.contact_first_name', 'con.contact_email', 'con.contact_title', 'con.contact_email2', 'con.contact_phone', 'con.contact_phone2', 'con.contact_address1', 'con.contact_notes');
 	var $keyword = null;
 		
 	function cprojects (){
@@ -71,9 +71,11 @@ class projects {
 	
 	function _buildQuery(){
                 $q  = new DBQuery;
-                $q->addTable($this->table);
-                $q->addQuery('project_id');
-                $q->addQuery('project_name');
+                $q->addTable($this->table, 'p');
+                $q->addQuery('p.project_id');
+                $q->addQuery('p.project_name');
+								$q->addJoin('project_contacts', 'pc', 'p.project_id = pc.project_id');
+								$q->addJoin('contacts', 'con', 'pc.contact_id = con.contact_id');
 
                 $sql = '';
                 foreach($this->search_fields as $field){
