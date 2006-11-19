@@ -347,5 +347,30 @@ class CDate extends Date {
 
 		return $duration*$sgn;
 	}	
+
+	function workingDaysInSpan($e){
+		global $AppUI;
+		
+		// assume start is before end and set a default signum for the duration	
+		$sgn = 1;
+
+		// check whether start before end, interchange otherwise
+		if ($e->before($this)) {
+			// duration is negative, set signum appropriately
+			$sgn = -1;
+		}    
+		
+		$wd = 0;
+		$days = $e->dateDiff($this);
+		$start = $this;
+
+		for ( $i = 0 ; $i <= $days ; $i++ ){
+		        if ( $start->isWorkingDay())
+		        	$wd++;
+			$start->addDays(1 * $sgn);
+		}
+
+		return $wd;
+	}
 }
 ?>
