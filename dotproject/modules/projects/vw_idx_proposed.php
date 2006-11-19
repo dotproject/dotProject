@@ -1,9 +1,8 @@
 <?php /* PROJECTS $Id$ */
 GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
 
-$check = $AppUI->_('All Projects', UI_OUTPUT_RAW);
 $show_all_projects = false;
-if ( stristr($currentTabName, $check) !== false)
+if ( $currentTabId == 1000)
 	$show_all_projects = true;
 
 $perms =& $AppUI->acl();
@@ -70,15 +69,14 @@ $none = true;
 //Tabbed view
 $project_status_filter = $currentTabId;
 //Project not defined
-if ($currentTabId == count($project_types)-1)
-	$project_status_filter = 0;
+//if ($currentTabId == count($project_types)-1)
+//	$project_status_filter = 0;
 
 foreach ($projects as $row) {
 	if (! $perms->checkModuleItem('projects', 'view', $row['project_id'])) {
 		continue;
 	}
-	if ($show_all_projects ||
-	    ($row["project_active"] > 0 && $row["project_status"] == $project_status_filter)) {
+	if ($show_all_projects || $row["project_status"] == $project_status_filter) {
 		$none = false;
                 $start_date = intval( @$row["project_start_date"] ) ? new CDate( $row["project_start_date"] ) : null;
 		$end_date = intval( @$row["project_end_date"] ) ? new CDate( $row["project_end_date"] ) : null;

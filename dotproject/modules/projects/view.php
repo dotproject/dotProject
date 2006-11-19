@@ -322,10 +322,6 @@ function delIt() {
 			<td class="hilite" width="100%"><?php printf( "%.1f%%", $obj->project_percent_complete );?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Active');?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->project_active ? $AppUI->_('Yes') : $AppUI->_('No');?></td>
-		</tr>
-		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Worked Hours');?>:</td>
 			<td class="hilite" width="100%"><?php echo $worked_hours ?></td>
 		</tr>	

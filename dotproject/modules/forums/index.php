@@ -50,22 +50,22 @@ $q->addWhere("user_id = forum_owner AND project_id = forum_project");
 
 switch ($f) {
 	case 1:
-		$q->addWhere("project_active=1 AND forum_owner = $AppUI->user_id");
+		$q->addWhere("project_status <> 7 AND forum_owner = $AppUI->user_id");
 		break;
 	case 2:
-		$q->addWhere("project_active=1 AND watch_user IS NOT NULL");
+		$q->addWhere("project_status <> 7 AND watch_user IS NOT NULL");
 		break;
 	case 3:
-		$q->addWhere("project_active=1 AND project_owner = $AppUI->user_id");
+		$q->addWhere("project_status <> 7 AND project_owner = $AppUI->user_id");
 		break;
 	case 4:
-		$q->addWhere("project_active=1 AND project_company = $AppUI->user_company");
+		$q->addWhere("project_status <> 7 AND project_company = $AppUI->user_company");
 		break;
 	case 5:
-		$q->addWhere("project_active=0");
+		$q->addWhere("project_status = 7");
 		break;
 	default:
-		$q->addWhere("project_active=1");
+		$q->addWhere("project_status <> 7");
 		break;
 }
 

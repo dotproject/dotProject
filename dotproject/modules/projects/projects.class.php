@@ -32,7 +32,6 @@ class CProject extends CDpObject {
 	var $project_target_budget = NULL;
 	var $project_actual_budget = NULL;
 	var $project_creator = NULL;
-	var $project_active = NULL;
 	var $project_private = NULL;
 	var $project_departments= NULL;
 	var $project_contacts = NULL;
@@ -45,7 +44,6 @@ class CProject extends CDpObject {
 
 	function check() {
 	// ensure changes of state in checkboxes is captured
-		$this->project_active = intval( $this->project_active );
 		$this->project_private = intval( $this->project_private );
 
 		return NULL; // object is ok
@@ -505,7 +503,7 @@ function projects_list_data($user_id = false) {
 
 
 	$q->addTable('projects');
-	$q->addQuery('projects.project_id, project_active, project_status, project_color_identifier, project_name, project_description, project_duration,
+	$q->addQuery('projects.project_id, project_status, project_color_identifier, project_name, project_description, project_duration,
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username');

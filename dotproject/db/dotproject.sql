@@ -265,7 +265,6 @@ CREATE TABLE `projects` (
   `project_target_budget` decimal(10,2) default '0.00',
   `project_actual_budget` decimal(10,2) default '0.00',
   `project_creator` int(11) default '0',
-  `project_active` tinyint(4) default '1',
   `project_private` tinyint(3) unsigned default '0',
   `project_departments` CHAR( 100 ) ,
   `project_contacts` CHAR( 100 ) ,

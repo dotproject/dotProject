@@ -89,7 +89,7 @@ if ($obj->file_task) {
 }
 
 $extra = array(
-	'where'=>'project_active <> 0'
+	'where'=>'project_status <> 7'
 );
 $project = new CProject();
 $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );

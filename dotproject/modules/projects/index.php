@@ -85,10 +85,9 @@ foreach($project_types as $key=>$value)
         $counter[$key] = 0;
 	if (is_array($projects)) {
 		foreach ($projects as $p)
-			if ($p['project_status'] == $key && $p['project_active'] > 0)
+			if ($p['project_status'] == $key)
 				++$counter[$key];
 	}
-                
         $project_types[$key] = $AppUI->_($project_types[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
 }
 
@@ -96,12 +95,10 @@ foreach($project_types as $key=>$value)
 if (is_array($projects)) {
         foreach ($projects as $p)
         {
-                if ($p['project_active'] > 0 && $p['project_status'] == 3)
+                if ($p['project_status'] == 3)
                         ++$active;
-                else if ($p['project_active'] > 0 && $p['project_status'] == 5)
+                else if ($p['project_status'] == 5)
                         ++$complete;
-                else if ($p['project_active'] < 1)
-                        ++$archive;
                 else
                         ++$proposed;
         }
@@ -110,20 +107,7 @@ if (is_array($projects)) {
 $fixed_project_type_file = array(
         $AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' => "vw_idx_active",
         $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')'    => "vw_idx_complete",
-        $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')'    => "vw_idx_archived");
-// we need to manually add Archived project type because this status is defined by 
-// other field (Active) in the project table, not project_status
-$project_types[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')';
-
-// Only display the All option in tabbed view, in plain mode it would just repeat everything else
-// already in the page
-$tabBox = new CTabBox( "?m=projects", "{$dPconfig['root_dir']}/modules/projects/", $tab );
-if ( $tabBox->isTabbed() ) {
-	// This will overwrited the initial tab, so we need to add that separately.
-	if (isset($project_types[0]))
-		$project_types[] = $project_types[0];
-	$project_types[0] = $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')';
-}
+				$AppUI->_('Archived', UI_OUTPUT_RAW). ' (' . $counter['7'] . ')' => 'vw_idx_archived');
 
 /**
 * Now, we will figure out which vw_idx file are available
@@ -141,8 +125,11 @@ foreach($project_types as $project_type){
 }
 
 // tabbed information boxes
-foreach($project_types as $project_type) {
-	$tabBox->add($project_file_type[$project_type], $project_type, true);
+$tabBox = new CTabBox( "?m=projects", "{$dPconfig['root_dir']}/modules/projects/", $tab );
+
+$tabBox->add( 'vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW). ' (' . count($projects) . ')' , true,  1000);
+foreach($project_types as $ptk=>$project_type) {
+		$tabBox->add($project_file_type[$project_type], $project_type, true, $ptk);
 }
 $min_view = true;
 $tabBox->add("viewgantt", "Gantt");

@@ -51,7 +51,7 @@ foreach ($projects as $row) {
 	// We dont check the percent_completed == 100 because some projects
 	// were being categorized as completed because not all the tasks
 	// have been created (for new projects)
-	if ($row["project_active"] > 0 && $row["project_status"] == 3) {
+	if ($row["project_status"] == 3) {
 		$none = false;
                 $start_date = intval( @$row["project_start_date"] ) ? new CDate( $row["project_start_date"] ) : null;
 		$end_date = intval( @$row["project_end_date"] ) ? new CDate( $row["project_end_date"] ) : null;

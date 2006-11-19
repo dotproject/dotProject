@@ -36,7 +36,7 @@ $none = true;
 foreach ($projects as $row) {
 	if (! $perms->checkModuleItem('projects', 'view', $row['project_id']))
 		continue;
-	if ($row["project_active"] < 1) {
+	if ($row['project_status'] == 7) {
 		$none = false;
 		$end_date = intval( @$row["project_actual_end_date"] ) ? new CDate( $row["project_actual_end_date"] ) : null;
 		$s = '<tr>';

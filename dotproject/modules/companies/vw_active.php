@@ -19,7 +19,7 @@ $q->addQuery('project_id, project_name, project_start_date, project_status, proj
 $q->addJoin('users', 'u', 'u.user_id = projects.project_owner');
 $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
 $q->addWhere('projects.project_company = '.$company_id);
-$q->addWhere('projects.project_active <> 0');
+$q->addWhere('projects.project_status <> 7');
 $q->addOrder($sort);
 $s = '';
 

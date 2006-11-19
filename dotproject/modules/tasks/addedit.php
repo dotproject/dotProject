@@ -216,7 +216,7 @@ $pq = new DBQuery;
 $pq->addQuery('project_id, project_name');
 $pq->addTable('projects');
 $pq->addWhere("project_company = '$company_id'");
-$pq->addWhere('( project_active = 1 or project_id = \''. $task_project . '\')');
+$pq->addWhere('( project_status <> 7 or project_id = \''. $task_project . '\')');
 $pq->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $pq);
 $projects = $pq->loadHashList();

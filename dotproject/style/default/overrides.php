@@ -50,7 +50,7 @@ class CTabBox extends CTabBox_core {
 			
 			if ( count($this->tabs)-1 < $this->active ) {
 				//Last selected tab is not available in this view. eg. Child tasks
-				$this->active = 0;
+//				$this->active = 0;
 			}
 			foreach( $this->tabs as $k => $v ) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';

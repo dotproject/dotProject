@@ -179,7 +179,7 @@ $join .= " LEFT JOIN files on tasks.task_id = files.file_task";
 $join .= ' LEFT JOIN user_task_pin as pin ON tasks.task_id = pin.task_id AND pin.user_id = ';
 $join .= $user_id ? $user_id : $AppUI->user_id;
 
-$where = $project_id ? " task_project = $project_id" : "project_active <> 0";
+$where = $project_id ? " task_project = $project_id" : "project_status <> 7";
 
 if ($pinned_only) {
     $where .= ' AND task_pinned = 1 ';
@@ -216,13 +216,13 @@ switch ($f) {
      // patch 2.12.04 finish date required to be consider finish
      $where .= " AND task_project = projects.project_id AND user_tasks.user_id = $user_id "
          ."AND user_tasks.task_id = tasks.task_id AND (task_percent_complete < '100' OR task_end_date = '') "
-         ."AND projects.project_active = '1' AND projects.project_status <> '4' AND projects.project_status <> '5'";
+         ."AND projects.project_status <> 7 AND projects.project_status <> '4' AND projects.project_status <> '5'";
      break;
  case 'allunfinished':
      // patch 2.12.04 finish date required to be consider finish
      // patch 2.12.04 2, also show unassigned tasks
      $where .= " AND task_project = projects.project_id AND (task_percent_complete < '100' OR task_end_date = '') "
-         ."AND projects.project_active = '1' AND projects.project_status <> '4' AND projects.project_status <> '5'";
+         ."AND projects.project_status <> 7 AND projects.project_status <> '4' AND projects.project_status <> '5'";
      break;
  case 'unassigned':
      $join .= " LEFT JOIN user_tasks ON tasks.task_id = user_tasks.task_id";

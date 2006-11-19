@@ -26,7 +26,7 @@ if ($company_id != 0) {
 }
 //$filter1 = ($proFilter == '-1') ? '' : " AND project_status = $proFilter ";
 if ($showInactive != '1')
-	$filter1[] = "project_active <> 0 ";
+	$filter1[] = "project_status <> 7 ";
 $pjobj =& new CProject;
 $allowed_projects = $pjobj->getAllowedSQL($AppUI->user_id);
 $where = array_merge($filter1, $allowed_projects);
@@ -220,7 +220,7 @@ foreach($tasks as $t) {
 
        if ($showLabels){
                 $caption .= $t['project_name']." (".$t['perc_assignment']."%)";
-//                $caption .= $p['project_active'] <> 0 ? $AppUI->_('active') : $AppUI->_('inactive');
+//                $caption .= $p['project_status'] != 7 ? $AppUI->_('active') : $AppUI->_('inactive');
         }
 
 	

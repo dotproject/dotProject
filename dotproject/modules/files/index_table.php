@@ -86,7 +86,6 @@ $q2->addQuery(array ('f.*',
 	'round(max(f.file_version),2) as file_lastversion'//,
 //	'project_name',
 //	'project_color_identifier',
-//	'project_active',
 //	'cont.contact_first_name',
 //	'cont.contact_last_name',
 //	'task_name',
@@ -111,7 +110,7 @@ $q2->addGroup('project_id');
 $q2->addGroup('file_version_id DESC');
 
 $q3 = new DBQuery;
-$q3->addQuery("file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_active, project_owner, contact_first_name, contact_last_name");
+$q3->addQuery("file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, contact_first_name, contact_last_name");
 $q3->addTable('files');
 $q3->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 $q3->leftJoin('users', 'u', 'u.user_id = file_owner');

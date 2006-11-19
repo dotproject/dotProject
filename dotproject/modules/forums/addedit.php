@@ -34,7 +34,7 @@ $projObj = new CProject();
 $q =& new DBQuery;
 $q->addTable('projects');
 $q->addQuery('project_id, project_name');
-$q->addWhere('project_active <> 0');
+$q->addWhere('project_status <> 7');
 $q->addOrder('project_name');
 $projObj->setAllowedSQL($AppUI->user_id, $q);
 if (isset($company_id))

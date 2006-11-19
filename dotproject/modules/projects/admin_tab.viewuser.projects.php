@@ -9,10 +9,11 @@ $pstatus =  dPgetSysVal( 'ProjectStatus' );
 if (isset(  $_POST['proFilter'] )) {
 	$AppUI->setState( 'UsrProjectIdxFilter',  $_POST['proFilter'] );
 }
-$proFilter = $AppUI->getState( 'UsrProjectIdxFilter' ) !== NULL ? $AppUI->getState( 'UsrProjectIdxFilter' ) : '-1';
+$proFilter = $AppUI->getState( 'UsrProjectIdxFilter' ) !== NULL ? $AppUI->getState( 'UsrProjectIdxFilter' ) : '-3';
 
 $projFilter = arrayMerge( array('-1' => 'All Projects'), $pstatus);
 $projFilter = arrayMerge( array( '-2' => 'All w/o in progress'), $projFilter);
+$projFilter = arrayMerge( array( '-3' => 'All w/o archived'), $projFilter);
 natsort($projFilter);
 
 // load the companies class to retrieved denied companies
@@ -98,7 +99,7 @@ foreach ($projects as $row) {
 	// We dont check the percent_completed == 100 because some projects
 	// were being categorized as completed because not all the tasks
 	// have been created (for new projects)
-	if ($proFilter == -1 || $row["project_status"] == $proFilter || ($proFilter == -2 && $row["project_status"] != 3) ) {
+	if ($proFilter == -1 || $row["project_status"] == $proFilter || ($proFilter == -2 && $row["project_status"] != 3) || ($proFilter == -3 && $row["project_status"] != 7) ) {
 		$none = false;
                 $start_date = intval( @$row["project_start_date"] ) ? new CDate( $row["project_start_date"] ) : null;
 		$end_date = intval( @$row["project_end_date"] ) ? new CDate( $row["project_end_date"] ) : null;

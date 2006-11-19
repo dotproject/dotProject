@@ -68,7 +68,7 @@ if ($caller == 'todo') {
 	$q->addWhere("ta.task_status = '0'");
 	$q->addWhere("pr.project_id = ta.task_project");
 	if (!$showArcProjs)
-		$q->addWhere('project_active = 1');
+		$q->addWhere('project_status <> 7');
 	if (!$showLowTasks)
 		$q->addWhere('task_priority >= 0');
 	if (!$showHoldProjs)
