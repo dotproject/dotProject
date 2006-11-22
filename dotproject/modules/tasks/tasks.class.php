@@ -1952,31 +1952,31 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
         }
     }
     // name link
-    $alt = strlen($a['task_description']) > 80 ? substr($a["task_description"],0,80) . '...' : $a['task_description'];
+  //  $alt = strlen($a['task_description']) > 80 ? substr($a["task_description"],0,80) . '...' : $a['task_description'];
     // instead of the statement below
-    $alt = str_replace("\"", "&quot;", $alt);
+    //$alt = str_replace("\"", "&quot;", $alt);
     //$alt = htmlspecialchars($alt);
-    $alt = str_replace("\r", ' ', $alt);
-    $alt = str_replace("\n", ' ', $alt);
-    
+    //$alt = str_replace("\r", ' ', $alt);
+    //$alt = str_replace("\n", ' ', $alt);
+    $alt = !empty($a['task_description'])? 'onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', $a['task_description']), ENT_QUOTES).'</p></div>'.'\', STICKY, CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();"' : ' ';
     $open_link = $is_opened 
         ? "<a href='index.php$query_string&close_task_id=".$a["task_id"]
         ."'><img src='images/icons/collapse.gif' border='0' align='center' /></a>" 
         : "<a href='index.php$query_string&open_task_id=".$a["task_id"]
         ."'><img src='images/icons/expand.gif' border='0' /></a>";
     if ($a["task_milestone"] > 0 ) {
-        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '"><b>' 
+        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" '. $alt .'><b>' 
             . $a["task_name"] . '</b></a> <img src="./images/icons/milestone.gif" border="0"></td>';
     } 
     else if ($a["task_dynamic"] == '1'){
         if (! $today_view) {
             $s .= $open_link;
         }
-        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '"><b><i>' 
+        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" '. $alt .'><b><i>' 
             . $a["task_name"] . '</i></b></a></td>';
     } 
     else {
-        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '">' 
+        $s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" '. $alt .'>' 
             . $a["task_name"] . '</a></td>';
     }
     
