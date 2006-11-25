@@ -85,7 +85,7 @@ $task_list = array_keys($tasks);
 $assigned_users = array();
 // Build the array
 foreach ($task_list as $tid)
-	$asssigned_users[$tid] = array();
+	$assigned_users[$tid] = array();
 
 if (count($tasks)) {
 	$q->clear();
