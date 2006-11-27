@@ -17,6 +17,10 @@ $showWork = dPgetParam( $_POST, 'showWork', '0' );
 if ($showWork!='0') {
     $showWork='1';
 }
+$sortByName = dPgetParam( $_POST, 'sortByName', '0' );
+if ($sortByName!='0') {
+    $sortByName='1';
+}
 $showPinned = dPgetParam( $_POST, 'showPinned', '0' );
 if ($showPinned!='0') {
     $showPinned='1';
@@ -161,6 +165,9 @@ function showFullProject() {
 	<td valign="top">
 		<input type="checkbox" name="showWork" <?php echo (($showWork==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show work instead of duration' );?>
 	</td>	
+<td valign="top">
+		<input type="checkbox" name="sortByName" <?php echo (($sortByName==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Sort by Task Name' );?>
+	</td>	
 	<td align="left">
 		<input type="button" class="button" value="<?php echo $AppUI->_( 'submit' );?>" onclick='document.editFrm.display_option.value="custom";submit();'>
 	</td>
@@ -233,7 +240,7 @@ if ($cnt[0]['N'] > 0) {
 	  "?m=tasks&a=gantt&suppressHeaders=1&project_id=$project_id" .
 	  ( $display_option == 'all' ? '' :
 		'&start_date=' . $start_date->format( "%Y-%m-%d" ) . '&end_date=' . $end_date->format( "%Y-%m-%d" ) ) .
-	  "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=".$showLabels."&showWork=".$showWork.'&showPinned='.$showPinned.'&showArcProjs='.$showArcProjs.'&showHoldProjs='.$showHoldProjs.'&showDynTasks='.$showDynTasks.'&showLowTasks='.$showLowTasks.'&caller='.$a.'&user_id='.$user_id;
+	  "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=".$showLabels."&showWork=".$showWork."&sortByName=".$sortByName.'&showPinned='.$showPinned.'&showArcProjs='.$showArcProjs.'&showHoldProjs='.$showHoldProjs.'&showDynTasks='.$showDynTasks.'&showLowTasks='.$showLowTasks.'&caller='.$a.'&user_id='.$user_id;
 
 	echo "<script>document.write('<img src=\"$src\">')</script>";
 } else {

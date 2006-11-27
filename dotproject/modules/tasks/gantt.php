@@ -8,8 +8,10 @@
 include ($dPconfig['root_dir'].'/lib/jpgraph/src/jpgraph.php');
 include ($dPconfig['root_dir'].'/lib/jpgraph/src/jpgraph_gantt.php');
 
-global $caller, $locale_char_set, $showLabels, $showWork, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
+global $caller, $locale_char_set, $showLabels, $showWork, $sortByName, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
+
+$sortByName = dPgetParam( $_REQUEST, 'sortByName', false );
 $project_id = defVal( @$_REQUEST['project_id'], 0 );
 $f = defVal( @$_REQUEST['f'], 0 );
 
@@ -77,10 +79,16 @@ if ($caller == 'todo') {
 		$q->addWhere('task_dynamic != 1');
 	if ($showPinned)
 		$q->addWhere('task_pinned = 1');
-
+	
 	$q->addGroup('ta.task_id');
-	$q->addOrder('ta.task_end_date');
-	$q->addOrder('task_priority DESC');
+
+	if ($sortByName) {
+		$q->addOrder('ta.task_name, ta.task_end_date');
+		$q->addOrder('task_priority DESC');
+	} else {
+			$q->addOrder('ta.task_end_date');
+			$q->addOrder('task_priority DESC');
+	}
 ##############################################################
 } else {
 	// pull tasks
@@ -89,7 +97,12 @@ if ($caller == 'todo') {
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project');
 	$q->addWhere('project_status != 7');
-	$q->addOrder('project_id, task_start_date');
+
+	if ($sortByName)
+		$q->addOrder('project_id, t.task_name, task_start_date');
+	else 	
+		$q->addOrder('project_id, task_start_date');
+
 	if ($project_id) {
 	        $q->addWhere('task_project = '.$project_id);
 	}
