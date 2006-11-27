@@ -1,3 +1,60 @@
+2006-11-25 13:13  (nybod)
+---------------------------------
+modules/projects/reports/completed.php
+- Small typo
+
+2006-11-22 20:35  (gregorerhardt)
+---------------------------------
+modules/tasks/view.php
+- softcoding translation
+
+2006-11-22 20:15  (gregorerhardt)
+---------------------------------
+modules/calendar/week_view.php
+- softcoding translation
+
+2006-11-22 19:59  (gregorerhardt)
+---------------------------------
+modules/tasks/tasks.class.php
+- some additional overlib enhanced tooltips
+
+2006-11-20 00:15  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Missing function getTaskDurationPerWeek
+
+2006-11-19 23:36  (gregorerhardt)
+---------------------------------
+modules/projects/index.php
+modules/projects/projects.class.php
+- adding owner filter to projects
+
+2006-11-19 22:27  (gregorerhardt)
+---------------------------------
+modules/projects/reports/allocateduserhours.php
+- removing development testing code :)
+
+2006-11-19 22:23  (gregorerhardt)
+---------------------------------
+modules/projects/reports/allocateduserhours.php
+- correcting user usage hour and percent values
+
+2006-11-19 21:50  (gregorerhardt)
+---------------------------------
+classes/date.class.php
+- readded erraneously removed date::workingdaysinspan()
+
+2006-11-19 21:46  (gregorerhardt)
+---------------------------------
+classes/date.class.php
+- readded erraneously removed date::workingdaysinspan()
+
+2006-11-19 20:39  (gregorerhardt)
+---------------------------------
+ChangeLog
+modules/smartsearch/searchobjects/projects.inc.php
+- Smartsearch project_contacts for projects
+
 2006-11-19 17:01  (gregorerhardt)
 ---------------------------------
 classes/ui.class.php

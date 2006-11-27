@@ -51,6 +51,12 @@ $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
+$task_sort_item1 = dPgetParam( $_GET, 'task_sort_item1', '' );
+$task_sort_type1 = dPgetParam( $_GET, 'task_sort_type1', '' );
+$task_sort_item2 = dPgetParam( $_GET, 'task_sort_item2', '' );
+$task_sort_type2 = dPgetParam( $_GET, 'task_sort_type2', '' );
+$task_sort_order1 = intval( dPgetParam( $_GET, 'task_sort_order1', 0 ) );
+$task_sort_order2 = intval( dPgetParam( $_GET, 'task_sort_order2', 0 ) );
 
 // if task priority set and items selected, do some work
 $task_priority = dPgetParam( $_POST, 'task_priority', 99 );
