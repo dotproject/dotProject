@@ -23,7 +23,7 @@ $showInactive = dPgetParam( $_POST, 'showInactive', '0' );
 
 $showLabels = dPgetParam( $_POST, 'showLabels', '0' );
 
-
+$sortTasksByName = dPgetParam( $_POST, 'sortTasksByName', '0' );
 
 $showAllGantt = dPgetParam( $_POST, 'showAllGantt', '0' );
 
@@ -335,7 +335,11 @@ function showFullProject() {
                                 <input type="checkbox" value='1' name="showAllGantt" <?php echo (($showAllGantt==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show Tasks' );?>
 
                         </td>
+												<td valign="top">
 
+                                <input type="checkbox" value='1' name="sortTasksByName" <?php echo (($sortTasksByName==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Sort Tasks By Name' );?>
+
+                        </td>
                         <td align="left">
 
                                 <input type="button" class="button" value="<?php echo $AppUI->_( 'submit' );?>" onclick='document.editFrm.display_option.value="custom";submit();'>
@@ -398,7 +402,7 @@ function showFullProject() {
 
                         '&start_date=' . $start_date->format( "%Y-%m-%d" ) . '&end_date=' . $end_date->format( "%Y-%m-%d" ) ) .
 
-                "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id";
+                "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id";
 
                 echo "<script>document.write('<img src=\"$src\">')</script>";
 

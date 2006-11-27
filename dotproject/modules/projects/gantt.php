@@ -4,7 +4,7 @@ include ("{$dPconfig['root_dir']}/lib/jpgraph/src/jpgraph_gantt.php");
 
 ini_set('max_execution_time', 180);
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $user_id;
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id;
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -22,6 +22,7 @@ $company_id = dPgetParam($_REQUEST, 'company_id', 0);
 $department = dPgetParam($_REQUEST, 'department', 0);
 $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
+$sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
 
 $pjobj =& new CProject;
 $working_hours = $dPconfig['daily_working_hours'];
@@ -237,7 +238,10 @@ foreach($projects as $p) {
 		$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone, tasks.task_dynamic');
 		$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
 		$q->addWhere('p.project_id = '. $p['project_id']);
-		$q->addOrder('tasks.task_end_date ASC');
+		if ($sortTasksByName)
+			$q->addOrder('tasks.task_name');
+		else
+			$q->addOrder('tasks.task_end_date ASC');
  		$tasks = $q->loadList();
 		$q->clear();
  		foreach($tasks as $t)
