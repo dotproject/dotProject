@@ -72,6 +72,15 @@ if(($close_task_id = dPGetParam($_GET, "close_task_id", 0)) > 0) {
     closeOpenedTask($close_task_id);
 }
 
+// Close all tasks at once
+if(dPGetParam($_GET, "close_task_all", 0) > 0) {
+	foreach ($tasks_opened as $to) 
+		closeOpenedTask($to);
+}
+
+// shall all tasks be opened?
+$open_task_all = dPGetParam($_GET, "open_task_all", 0);
+
 // We need to save tasks_opened until the end because some tasks are closed within tasks iteration
 //echo "<pre>"; print_r($tasks_opened); echo "</pre>";
 /// End of tasks_opened routine
@@ -627,7 +636,7 @@ foreach ($projects as $k => $p) {
           $t = $p['tasks'][$i];
           
           if ($t["task_parent"] == $t["task_id"]) {
-              $is_opened = in_array($t["task_id"], $tasks_opened);
+              $is_opened = $open_task_all || in_array($t["task_id"], $tasks_opened);
               showtask( $t, 0, $is_opened );
               if($is_opened || $t["task_dynamic"] == 0) {
                   findchild( $p['tasks'], $t["task_id"] );
@@ -655,6 +664,8 @@ foreach ($projects as $k => $p) {
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
+	<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> :
+	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>&nbsp;&nbsp;
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>" 
    onclick="javascript:window.location='index.php?m=projects&a=reports&project_id=<?php echo $k;?>';" />
   <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart');?>" 
@@ -685,6 +696,11 @@ $AppUI->setState("tasks_opened", $tasks_opened);
   <td>=<?php echo $AppUI->_('Overdue');?></td>
   <td>&nbsp; &nbsp;</td>
   <td bgcolor="#aaddaa">&nbsp; &nbsp;</td>
-  <td>=<?php echo $AppUI->_('Done');?></td>
+  <td>=<?php echo $AppUI->_('Done');?>
+	<?php if($min_view) { ?>
+	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> : 
+	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a> 
+	<?php } ?>
+	</td>
 </tr>
 </table>
