@@ -34,8 +34,6 @@ function dPupgrade($from_version, $to_version, $last_updated)
 		$last_updated = '00000000';
 	
 	// Place the upgrade code here, depending on the last_updated date.
-    $sql = "ALTER TABLE `sessions` ADD `session_user` INT DEFAULT '0' NOT NULL AFTER `session_id`";
-    db_exec( $sql );
     
 	return $latest_update;
 }
