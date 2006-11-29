@@ -1,5 +1,6 @@
 <?php /* DEPARTMENTS $Id$ */
-$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : 0;
+global $department, $min_view;
+$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : $department;
 
 // check permissions
 $canRead = !getDenyRead( $m, $dept_id );
@@ -30,31 +31,32 @@ $sql = $q->prepare();
 $q->clear();
 
 if (!db_loadHash( $sql, $dept )) {
-	$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, "$m.$a" );
-	$titleBlock->addCrumb( "?m=companies", "companies list" );
-	$titleBlock->show();
+		$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, "$m.$a" );
+		$titleBlock->addCrumb( "?m=companies", "companies list" );
+		$titleBlock->show();
 } else {
 	$company_id = $dept['dept_company'];
-
-	// setup the title block
-	$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, "$m.$a" );
-	if ($canEdit) {
-		$titleBlock->addCell();
-		$titleBlock->addCell(
-			'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
-			'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
-		);
-	}
-	$titleBlock->addCrumb( "?m=companies", "company list" );
-	$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company_id", "view this company" );
-	if ($canEdit) {
-		$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$dept_id", "edit this department" );
-
-		if ($canDelete) {
-			$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
+	if (!$min_view) {
+		// setup the title block
+		$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, "$m.$a" );
+		if ($canEdit) {
+			$titleBlock->addCell();
+			$titleBlock->addCell(
+				'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
+				'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
+			);
 		}
+		$titleBlock->addCrumb( "?m=companies", "company list" );
+		$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company_id", "view this company" );
+		if ($canEdit) {
+			$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$dept_id", "edit this department" );
+
+			if ($canDelete) {
+				$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
+			}
+		}
+		$titleBlock->show();
 	}
-	$titleBlock->show();
 ?>
 <script language="javascript">
 <?php
@@ -127,8 +129,10 @@ function delIt() {
 </table>
 <?php
 	// tabbed information boxes
-	$tabBox = new CTabBox( "?m=departments&a=view&dept_id=$dept_id", "{$dPconfig['root_dir']}/modules/departments/", $tab );
-	$tabBox->add("vw_contacts", "Contacts");
+	$tabBox = new CTabBox( '?m=departments&a='.$a.'&dept_id='.$dept_id, '', $tab );
+	$tabBox->add($dPconfig['root_dir'].'/modules/departments/vw_contacts', "Contacts");
+	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
+	$tabBox->loadExtras($m, 'view');		
 	$tabBox->show();
 }
 ?>

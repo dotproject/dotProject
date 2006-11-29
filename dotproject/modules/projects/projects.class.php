@@ -9,6 +9,7 @@ require_once( $AppUI->getSystemClass ('dp' ) );
 require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
 require_once( $AppUI->getModuleClass( 'tasks' ) );
 require_once( $AppUI->getModuleClass( 'companies' ) );
+require_once( $AppUI->getModuleClass( 'departments' ) );
 
 /**
  * The Project Class
@@ -380,7 +381,7 @@ class CProject extends CDpObject {
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner;
+	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
@@ -480,6 +481,17 @@ function projects_list_data($user_id = false) {
 	$q->clear();
 	}
 
+// add Projects where the Project Owner is in the given department
+	if ($addPwOiD && isset($department)) {
+		$owner_ids = array();
+		$q->addTable('users');
+		$q->addQuery('user_id');
+		$q->addJoin('contacts', 'c', 'c.contact_id = user_contact');
+		$q->addWhere('c.contact_department = '.$department);
+		$owner_ids = $q->loadColumn();	
+		$q->clear();
+	}
+
 	if(isset($department)){
 		//If a department is specified, we want to display projects from the department, and all departments under that, so we need to build that list of departments
 		$dept_ids = array();
@@ -513,7 +525,7 @@ function projects_list_data($user_id = false) {
 	$q->addJoin('tasks_problems', 'tp', 'projects.project_id = tp.task_project');
 	$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
 	$q->addJoin('tasks_total', 'tt', 'projects.project_id = tt.task_project');
-	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');
+	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');	
 	if ($addProjectsWithAssignedTasks)
 		$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');
 	// DO we have to include the above DENY WHERE restriction, too?
@@ -521,10 +533,10 @@ function projects_list_data($user_id = false) {
 	if (isset($department)) {
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
 	}
-	if (!isset($department) && $company_id) {
+	if (!isset($department) && $company_id &&!$addPwOiD) {
 		$q->addWhere("projects.project_company = '$company_id'");
 	}
-	if (isset($department)) {
+	if (isset($department) &&!$addPwOiD) {
 		$q->addWhere("pd.department_id in ( ".implode(',',$dept_ids)." )");
 	}
 	if ($user_id && $addProjectsWithAssignedTasks) {
@@ -534,6 +546,11 @@ function projects_list_data($user_id = false) {
 	}
 	if ($owner > 0)
 		$q->addWhere('projects.project_owner = '.$owner);
+
+// Show Projects where the Project Owner is in the given department
+	if ($addPwOiD && !empty($owner_ids))
+		$q->addWhere('projects.project_owner IN ('.implode(',', $owner_ids).')');
+
 	$q->addGroup('projects.project_id');
 	$q->addOrder("$orderby $orderdir");
 	$obj->setAllowedSQL($AppUI->user_id, $q);
@@ -569,47 +586,5 @@ function projects_list_data($user_id = false) {
 	}
 	$buffer .= '</select>';
 
-}
-
-
-//writes out a single <option> element for display of departments
-function showchilddept( &$a, $level=1 ) {
-	Global $buffer, $department;
-	$s = '<option value="'.$a["dept_id"].'"'.(isset($department)&&$department==$a["dept_id"]?'selected="selected"':'').'>';
-
-	for ($y=0; $y < $level; $y++) {
-		if ($y+1 == $level) {
-			$s .= '';
-		} else {
-			$s .= '&nbsp;&nbsp;';
-		}
-	}
-
-	$s .= '&nbsp;&nbsp;'.$a["dept_name"]."</option>\n";
-	$buffer .= $s;
-
-//	echo $s;
-}
-
-//recursive function to display children departments.
-function findchilddept( &$tarr, $parent, $level=1 ){
-	$level = $level+1;
-	$n = count( $tarr );
-	for ($x=0; $x < $n; $x++) {
-		if($tarr[$x]["dept_parent"] == $parent && $tarr[$x]["dept_parent"] != $tarr[$x]["dept_id"]){
-			showchilddept( $tarr[$x], $level );
-			findchilddept( $tarr, $tarr[$x]["dept_id"], $level);
-		}
-	}
-}
-
-function addDeptId($dataset, $parent){
-	Global $dept_ids;
-	foreach ($dataset as $data){
-		if($data['dept_parent']==$parent){
-			$dept_ids[] = $data['dept_id'];
-			addDeptId($dataset, $data['dept_id']);
-		}
-	}
 }
 ?>
