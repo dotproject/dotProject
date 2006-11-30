@@ -361,7 +361,7 @@
 			$q  = new DBQuery;
 			$q->addTable('custom_fields_struct');
 			$q->addWhere("field_module = '".$this->m."' AND	field_page = '".$this->a."'");
-			$q->addOrder('field_order ASC');
+			//$q->addOrder('field_order DESC');
 			$rows = $q->loadList();						
 			if ($rows == NULL)
 			{

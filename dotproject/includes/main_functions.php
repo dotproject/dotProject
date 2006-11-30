@@ -691,4 +691,26 @@ function dpRealPath($file)
 	return $file;
 }
 
+/*
+** Create the Required Fields (From Sysvals) JavaScript Code
+** For instance implemented in projects and tasks addedit.php
+** @param array required field array from SysVals
+*/
+function dPrequiredFields($requiredFields) 
+{
+	global $AppUI;
+	$buffer = '';
+	if (!empty($requiredFields))
+	{
+		foreach ($requiredFields as $rf=>$comparator)
+		{
+			$buffer.= 'if (f.'. $rf . html_entity_decode($comparator, ENT_QUOTES) .') {'."\n";
+			$buffer.= "\t".'msg += "\n'.$AppUI->_('required_field_'.$rf, UI_OUTPUT_JS).'";'."\n";
+			$buffer.= "\t".'f.'.substr($rf,0,strpos($rf, '.')).'.focus();'."\n";
+			$buffer.= "}\n";
+		}
+	}
+	return $buffer;
+}
+
 ?>

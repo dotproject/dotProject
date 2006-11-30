@@ -54,7 +54,7 @@ function showRow($id=0, $key=0, $title='', $value='') {
 		$s .= '<td>&nbsp;</td>';
 		$s .= '<td valign="top">'.arraySelect( $keys, 'sysval_key_id', 'size="1" class="text"', $key).'</td>';
 		$s .= '<td valign="top"><input type="text" name="sysval_title" value="'.dPformSafe($title).'" class="text" /></td>';
-		$s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">'.dPformSafe($value).'</textarea></td>';
+		$s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">'.$value.'</textarea></td>';
 		$s .= '<td><input type="submit" value="'.$AppUI->_($id ? 'edit' : 'add').'" class="button" /></td>';
 		$s .= '<td>&nbsp;</td>';
 	} else {
@@ -67,7 +67,7 @@ function showRow($id=0, $key=0, $title='', $value='') {
 		}
 		$s .= '<td valign="top">'.$keys[$key].'</td>'.$CR;
 		$s .= '<td valign="top">'.dPformSafe($title).'</td>'.$CR;
-		$s .= '<td valign="top" colspan="2">'.dPformSafe($value).'</td>'.$CR;
+		$s .= '<td valign="top" colspan="2">'.$value.'</td>'.$CR;
 		$s .= '<td valign="top" width="16">';
 		if ($canEdit) {
 			$s .= '<a href="javascript:delIt('.$id.')" title="'.$AppUI->_('delete').'">'

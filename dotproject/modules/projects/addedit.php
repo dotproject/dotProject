@@ -171,34 +171,31 @@ function setCalendar( idate, fdate ) {
 }
 
 function submitIt() {
-var f = document.editFrm;
-var msg = '';
+	var f = document.editFrm;
+	var msg = '';
 
-if (f.project_name.value.length < 3) {
-	msg += "\n<?php echo $AppUI->_('projectsValidName', UI_OUTPUT_JS);?>";
-	f.project_name.focus();
-}
-if (f.project_color_identifier.value.length < 3) {
-	msg += "\n<?php echo $AppUI->_('projectsColor', UI_OUTPUT_JS);?>";
-	f.project_color_identifier.focus();
-}
-if (f.project_company.options[f.project_company.selectedIndex].value < 1) {
-	msg += "\n<?php echo $AppUI->_('projectsBadCompany', UI_OUTPUT_JS);?>";
-	f.project_name.focus();
-}
-/*
-if (f.project_end_date.value > 0 && f.project_end_date.value < f.project_start_date.value) {
-	msg += "\n<?php echo $AppUI->_('projectsBadEndDate1');?>";
-}
-if (f.project_actual_end_date.value > 0 && f.project_actual_end_date.value < f.project_start_date.value) {
-	msg += "\n<?php echo $AppUI->_('projectsBadEndDate2');?>";
-}
-*/
-if (msg.length < 1) {
-	f.submit();
-} else {
-	alert(msg);
-}
+	/*
+	if (f.project_end_date.value > 0 && f.project_end_date.value < f.project_start_date.value) {
+		msg += "\n<?php echo $AppUI->_('projectsBadEndDate1');?>";
+	}
+	if (f.project_actual_end_date.value > 0 && f.project_actual_end_date.value < f.project_start_date.value) {
+		msg += "\n<?php echo $AppUI->_('projectsBadEndDate2');?>";
+	}
+	*/
+
+	<?php 
+	/*
+	** Automatic required fields generated from System Values
+	*/
+	$requiredFields = dPgetSysVal( 'ProjectRequiredFields' );
+	echo dPrequiredFields($requiredFields);
+	?>
+
+	if (msg.length < 1) {
+		f.submit();
+	} else {
+		alert(msg);
+	}
 }
 
 var selected_contacts_id = "<?php echo implode(',', $selected_contacts); ?>";

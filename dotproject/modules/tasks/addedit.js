@@ -101,12 +101,6 @@ function setContacts(contact_id_string){
 
 function submitIt(form){
 
-	if (form.task_name.value.length < 3) {
-		alert( task_name_msg );
-		form.task_name.focus();
-		return false;
-	}
-
 	// Check the sub forms
 	for (var i = 0; i < subForm.length; i++) {
 		if (!subForm[i].check())
@@ -116,7 +110,12 @@ function submitIt(form){
 		subForm[i].save();
 	}
 
-	form.submit();
+	msg = checkAutoRequiredFields(form);
+	if (msg.length < 1) {
+		form.submit();
+	} else {
+		alert(msg);
+	}
 }
 
 function addUser(form) {

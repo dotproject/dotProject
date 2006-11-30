@@ -217,7 +217,7 @@
 "taskCancel"=>"Are you sure you want to cancel?",
 "taskDelete"=>"Are you sure that you would like to delete this task?",
 "taskDuration"=>"Please enter the duration of this task",
-"taskName"=>"Please enter a valid task Name",
+"required_field_task_name.value.length"=>"Please enter a valid task Name",
 "taskNameExist"=>"A Root Task (First Level Task) with the same name already exists. Root tasks names should be unique. Please choose another task name.",
 "taskNotify"=>"Notify Assignees of Task by Email",
 "taskValidStartDate"=>"Please enter a valid start date",

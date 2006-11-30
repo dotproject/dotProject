@@ -1,3 +1,77 @@
+2006-11-29 13:57  (gregorerhardt)
+---------------------------------
+modules/departments/departments.class.php
+modules/departments/index.php
+modules/departments/view.php
+modules/projects/departments_tab.view.projects.php
+modules/projects/projects.class.php
+- view departments from dep module; some auto-tabs
+
+2006-11-29 13:57  (gregorerhardt)
+---------------------------------
+modules/projects/departments_tab.view.projects.php
+- file departments_tab.view.projects.php was initially added on branch stable_2.
+
+2006-11-29 12:35  (cyberhorse)
+---------------------------------
+modules/calendar/calendar.class.php
+- #1822 - Fixed contacts notification for events
+- 
+- ----------------------------------------------------------------------
+
+2006-11-28 16:14  (cyberhorse)
+---------------------------------
+classes/dp.class.php
+modules/tasks/view.php
+- #1826 - fixed particular access issue.
+- Improved permission handling, tracking parent relationships
+- Added better handling of parent relationships tracking.
+
+2006-11-28 00:37  (pedroix)
+---------------------------------
+modules/projects/reports/upcoming.php
+- assigned_users variable typo
+
+2006-11-27 17:30  (gregorerhardt)
+---------------------------------
+modules/tasks/tasks.php
+- open or close all tasks in a list at once
+
+2006-11-27 16:27  (gregorerhardt)
+---------------------------------
+db/upgrade_latest.sql
+db/upgrade_latest.php
+db/upgrade_latest.sql
+- remove installer inconsistencies
+
+2006-11-27 15:40  (gregorerhardt)
+---------------------------------
+modules/projects/gantt.php
+modules/projects/viewgantt.php
+- gantt sortable by name
+
+2006-11-27 15:04  (gregorerhardt)
+---------------------------------
+modules/tasks/gantt.php
+modules/tasks/viewgantt.php
+- gantt sortable by name
+
+2006-11-27 14:18  (gregorerhardt)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/todo.php
+modules/tasks/todo_tasks_sub.php
+- sortable todo
+
+2006-11-27 14:05  (gregorerhardt)
+---------------------------------
+ChangeLog
+modules/projects/admin_tab.viewuser.projects.php
+modules/tasks/tasks.class.php
+modules/tasks/todo.php
+modules/tasks/todo_tasks_sub.php
+- sortable todo, some more tooltips
+
 2006-11-25 13:13  (nybod)
 ---------------------------------
 modules/projects/reports/completed.php

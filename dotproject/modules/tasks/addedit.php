@@ -245,6 +245,18 @@ var cal_day_end = <?php echo intval(dPgetConfig( 'cal_day_end' ));?>;
 var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours')); ?>;
 
 
+function checkAutoRequiredFields(f) {
+	var msg = '';
+	<?php 
+	/*
+	** Automatic required fields generated from System Values
+	*/
+	$requiredFields = dPgetSysVal( 'TaskRequiredFields' );
+	echo dPrequiredFields($requiredFields);
+	?>
+	return msg;
+}
+
 </script>
 
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
