@@ -49,7 +49,7 @@ $q->clear();
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 if ($hasTasks) { 
     $q->addTable('projects');
-    $q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, projects.*,"
+    $q->addQuery("company_name, CONCAT_WS(', ',contact_last_name,contact_first_name) user_name, projects.*,"
                  ." SUM(t1.task_duration * t1.task_percent_complete"
                  ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
                  ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
