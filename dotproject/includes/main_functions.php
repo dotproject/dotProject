@@ -698,19 +698,19 @@ function dpRealPath($file)
 */
 function dPrequiredFields($requiredFields) 
 {
-	global $AppUI;
+	global $AppUI, $m;
 	$buffer = '';
 	if (!empty($requiredFields))
 	{
 		foreach ($requiredFields as $rf=>$comparator)
 		{
-			$buffer.= 'if (f.'. $rf . html_entity_decode($comparator, ENT_QUOTES) .') {'."\n";
+			$buffer.= 'if ('. $rf . html_entity_decode($comparator, ENT_QUOTES) .') {'."\n";
 			$buffer.= "\t".'msg += "\n'.$AppUI->_('required_field_'.$rf, UI_OUTPUT_JS).'";'."\n";
-			$buffer.= "\t".'f.'.substr($rf,0,strpos($rf, '.')).'.focus();'."\n";
+			$r = strstr($rf, '.');
+			$buffer.= "\t".'f.'.substr($r,1,strpos($r,'.',1)-1).'.focus();'."\n";
 			$buffer.= "}\n";
 		}
 	}
 	return $buffer;
 }
-
 ?>
