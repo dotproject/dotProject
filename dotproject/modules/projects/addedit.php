@@ -242,7 +242,14 @@ function setDepartment(department_id_string){
 	<input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 	<input type="hidden" name="project_creator" value="<?php echo $AppUI->user_id;?>" />
 	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
-
+<tr>
+	<td>
+		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+	</td>
+	<td align="right">
+		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt();" />
+	</td>
+</tr>
 <tr>
 	<td width="50%" valign="top">
 		<table cellspacing="0" cellpadding="2" border="0">

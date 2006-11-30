@@ -340,3 +340,23 @@ function checkAutoRequiredFields(f) {
 	$tabBox->loadExtras('tasks', 'addedit');
 	$tabBox->show('', true);
 ?>
+<table border="0" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+	<td height="40" width="35%">
+		* <?php echo $AppUI->_( 'requiredField' );?>
+	</td>
+	<td height="40" width="30%">&nbsp;</td>
+	<td  height="40" width="35%" align="right">
+		<table>
+		<tr>
+			<td>
+				<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onClick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS);?>')){location.href = '?<?php echo $AppUI->getPlace();?>';}" />
+			</td>
+			<td>
+				<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('save');?>" onClick="submitIt(document.editFrm);" />
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
