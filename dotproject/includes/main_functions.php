@@ -691,6 +691,7 @@ function dpRealPath($file)
 	return $file;
 }
 
+
 /*
 ** Create the Required Fields (From Sysvals) JavaScript Code
 ** For instance implemented in projects and tasks addedit.php
@@ -699,15 +700,26 @@ function dpRealPath($file)
 function dPrequiredFields($requiredFields) 
 {
 	global $AppUI, $m;
-	$buffer = '';
+	$buffer = 'var foc=false;'."\n";
+
 	if (!empty($requiredFields))
 	{
 		foreach ($requiredFields as $rf=>$comparator)
 		{
-			$buffer.= 'if ('. $rf . html_entity_decode($comparator, ENT_QUOTES) .') {'."\n";
+			$buffer.= "\n".'if ('. $rf . html_entity_decode($comparator, ENT_QUOTES) .') {'."\n";
 			$buffer.= "\t".'msg += "\n'.$AppUI->_('required_field_'.$rf, UI_OUTPUT_JS).'";'."\n";
+
+			/* MSIE cannot handle the focus command for some disabled or hidden fields like the start/end date fields
+			** Another workaround would be to check whether the field is disabled, 
+			** but then one would for instance need to use end_date instead of project_end_date in the projects addedit site.
+			** As this cannot be guaranteed since these fields are grabbed from a user-specifiable 
+			** System Value it's IMHO more safe to disable the focus for MSIE.
+			*/
 			$r = strstr($rf, '.');
-			$buffer.= "\t".'f.'.substr($r,1,strpos($r,'.',1)-1).'.focus();'."\n";
+			$buffer .= "\t".'if((foc==false) && (navigator.userAgent.indexOf(\'MSIE\')== -1)) {'."\n";
+			$buffer.= "\t\t".'f.'.substr($r,1,strpos($r,'.',1)-1).'.focus();'."\n";
+			$buffer.= "\t\t".'foc=true;'."\n";
+			$buffer.= "\t}\n";
 			$buffer.= "}\n";
 		}
 	}
