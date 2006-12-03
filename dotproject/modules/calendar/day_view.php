@@ -4,6 +4,17 @@ $AppUI->savePlace();
 
 require_once( $AppUI->getModuleClass( 'tasks' ) );
 
+
+/* Kludge: Backward compatible function to address php5 and php4 date issue */
+function php4_clone($object) {
+	if (version_compare(phpversion(), '5.0') < 0) {
+   	return $object;
+  	} else {
+   	return @clone($object);
+  }
+ }
+
+
 // retrieve any state parameters
 if (isset( $_REQUEST['company_id'] )) {
         $AppUI->setState( 'CalIdxCompany', intval( $_REQUEST['company_id'] ) );
@@ -32,11 +43,11 @@ $yy = $this_day->getYear();
 $this_week = Date_calc::beginOfWeek ($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY );
 
 // prepare time period for 'events'
-$first_time = $this_day;
+$first_time = php4_clone($this_day);
 $first_time->setTime( 0, 0, 0 );
 $first_time->subtractSeconds( 1 );
 
-$last_time = $this_day;
+$last_time = php4_clone($this_day);
 $last_time->setTime( 23, 59, 59 );
 
 $prev_day = new CDate( Date_calc::prevDay( $dd, $mm, $yy, FMT_TIMESTAMP_DATE ) );
