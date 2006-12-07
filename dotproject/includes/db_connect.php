@@ -333,7 +333,7 @@ function db_updateObject( $table, &$object, $keyName, $updateNulls=true ) {
 		if ($v === NULL && !$updateNulls) {
 			continue;
 		}
-		if( $v == '' ) {
+		if( $v === '' ) {
 			$val = "''";
 		} else {
 			$val = "'" . db_escape(htmlspecialchars( $v )). "'";
