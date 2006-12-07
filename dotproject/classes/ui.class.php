@@ -59,6 +59,8 @@ class CAppUI {
 /** @var string */
 	var $user_locale=null;
 /** @var string */
+	var $user_lang=null;
+/** @var string */
 	var $base_locale = 'en'; // do not change - the base 'keys' will always be in english
 
 /** @var string Message string*/
