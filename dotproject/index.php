@@ -121,9 +121,9 @@ if (dPgetParam( $_POST, 'lostpass', 0 )) {
 // and HTTP auth methods now supported.
 if (isset($_REQUEST['login'])) {
 
-	$username = dPgetParam( $_POST, 'username', '' );
-	$password = dPgetParam( $_POST, 'password', '' );
-	$redirect = dPgetParam( $_REQUEST, 'redirect', '' );
+	$username = dPgetCleanParam( $_POST, 'username', '' );
+	$password = dPgetCleanParam( $_POST, 'password', '' );
+	$redirect = dPgetCleanParam( $_REQUEST, 'redirect', '' );
 	$AppUI->setUserLocale();
 	@include_once( "$baseDir/locales/$AppUI->user_locale/locales.php" );
 	@include_once "$baseDir/locales/core.php";
@@ -185,10 +185,10 @@ if (! isset($_GET['m']) && !empty($dPconfig['default_view_m'])) {
 	$tab = $dPconfig['default_view_tab'];
 } else {
 	// set the module from the url
-	$m = $AppUI->checkFileName(dPgetParam( $_GET, 'm', getReadableModule() ));
+	$m = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'm', getReadableModule() ));
 }
 // set the action from the url
-$a = $AppUI->checkFileName(dPgetParam( $_GET, 'a', $def_a));
+$a = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'a', $def_a));
 
 /* This check for $u implies that a file located in a subdirectory of higher depth than 1
  * in relation to the module base can't be executed. So it would'nt be possible to
@@ -197,7 +197,7 @@ $a = $AppUI->checkFileName(dPgetParam( $_GET, 'a', $def_a));
  * not allowed in the request parameters.
 */
 
-$u = $AppUI->checkFileName(dPgetParam( $_GET, 'u', '' ));
+$u = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'u', '' ));
 
 // load module based locale settings
 @include_once "$baseDir/locales/$AppUI->user_locale/locales.php";
