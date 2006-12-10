@@ -121,7 +121,8 @@ function setPermItem( key, val ) {
 
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
-	<th width="100%"><?php echo $AppUI->_('Item');?></th>
+	<th width="50%"><?php echo $AppUI->_('Module');?></th>
+	<th width="50%"><?php echo $AppUI->_('Item');?></th>
 	<th nowrap><?php echo $AppUI->_('Type');?></th>
 	<th nowrap><?php echo $AppUI->_('Status');?></th>
 	<th>&nbsp;</th>
@@ -143,17 +144,23 @@ foreach ($user_acls as $acl){
 			foreach ($permission['axo_groups'] as $group_id) {
 				$group_data = $perms->get_group_data($group_id, 'axo');
 				$modlist[] = $AppUI->_($group_data[3]);
+				$itemlist[] = $AppUI->_('ALL');
 			}
 		}
 		if (is_array($permission['axo'])) {
 			foreach ($permission['axo'] as $key => $section) {
+				// Find the module based on the key
+				$mod_info = $perms->get_object_full($key, 'app', 1, 'axo');
+				$modlist[] = $AppUI->_($mod_info['name']);
 				foreach ($section as $id) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
-					$modlist[] = $AppUI->_($mod_data['name']);
+					$itemlist[] = $AppUI->_($mod_data['name']);
 				}
 			}
 		}
 		$buf .= implode("<br />", $modlist);
+		$buf .= "</td><td>";
+		$buf .= implode("<br />", $itemlist);
 		$buf .= "</td>";
 		// Item information TODO:  need to figure this one out.
 	// 	$buf .= "<td></td>";
