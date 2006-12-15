@@ -1913,6 +1913,8 @@ function stream($options=''){
   } else {
     $tmp = $this->output();
   }
+  header( "Pragma: ");
+  header( "Cache-Control: public");
   header("Content-type: application/pdf");
   header("Content-Length: ".strlen(ltrim($tmp)));
   $fileName = (isset($options['Content-Disposition'])?$options['Content-Disposition']:'file.pdf');
