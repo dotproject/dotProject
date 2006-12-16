@@ -170,7 +170,7 @@ function setDept( key, val ) {
 </tr>
 <?php if ($canEdit) { ?>
 <tr>
-    <td align="right">* <?php echo $AppUI->_('Company');?>:</td>
+    <td align="right"> <?php echo $AppUI->_('Company');?>:</td>
     <td>
 <?php
     echo arraySelect( $companies, 'contact_company', 'class=text size=1', $user["contact_company"] );
