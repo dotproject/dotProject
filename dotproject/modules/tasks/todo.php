@@ -22,9 +22,9 @@ if($perms->checkModule("admin","view")){ // let's see if the user has sysadmin a
 	if(($show_uid = dPgetParam($_REQUEST, "show_user_todo", 0)) != 0){ // lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
 		$no_modify = true;
-		$AppUI->setState("user_id", $user_id);
-	} else {
-//		$user_id = $AppUI->getState("user_id");
+		$AppUI->setState('tasks_todo_user_id', $user_id);
+	} elseif ($AppUI->getState('tasks_todo_user_id')) {
+		$user_id = $AppUI->getState('tasks_todo_user_id');
 	}
 }
 
