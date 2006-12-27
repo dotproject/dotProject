@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-GLOBAL  $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
+GLOBAL  $AppUI,$company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 //Secho dPgetConfig( 'jpLocale' );
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
@@ -14,6 +14,7 @@ $showLabels = dPgetParam( $_POST, 'showLabels', '0' );
 $sortTasksByName = dPgetParam( $_POST, 'sortTasksByName', '0' );
 $showAllGantt = dPgetParam( $_POST, 'showAllGantt', '0' );
 $showTaskGantt = dPgetParam( $_POST, 'showTaskGantt', '0' );
+$addPwOiD = dPgetParam($_POST, 'add_pwoid', 0);
 
 //if set GantChart includes user labels as captions of every GantBar
 if ($showLabels!='0') {
@@ -210,7 +211,7 @@ function showFullProject() {
                 $src = "?m=projects&a=gantt&suppressHeaders=1" .
                 ( $display_option == 'all' ? '' :
                   '&start_date=' . $start_date->format( "%Y-%m-%d" ) . '&end_date=' . $end_date->format( "%Y-%m-%d" ) ) .
-                "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id";
+                "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD";
                 echo "<script>document.write('<img src=\"$src\">')</script>";
                 ?>
                         </td>

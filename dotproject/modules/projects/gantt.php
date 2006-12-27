@@ -23,9 +23,26 @@ $department = dPgetParam($_REQUEST, 'department', 0);
 $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
 $sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
+$addPwOiD = dPgetParam($_REQUEST, 'addPwOiD', 0);
 
 $pjobj =& new CProject;
 $working_hours = $dPconfig['daily_working_hours'];
+
+/* 
+** Load department info for the case where one
+** wants to see the ProjectsWithOwnerInDeparment (PwOiD)
+** instead of the projects related to the given department.
+*/
+if ($addPwOiD && $department>0) {
+	$owner_ids = array();	
+	$q = new DBQuery;
+	$q->addTable('users');
+	$q->addQuery('user_id');
+	$q->addJoin('contacts', 'c', 'c.contact_id = user_contact');
+	$q->addWhere('c.contact_department = '.$department);
+	$owner_ids = $q->loadColumn();	
+	$q->clear();
+}
 
 // pull valid projects and their percent complete information
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
@@ -40,6 +57,8 @@ $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'p.project_company = c1.company_id');
 if ($department > 0) {
 	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
+}
+if ($department > 0 && !$addPwOiD) {
 	$q->addWhere('pd.department_id = '.$department);
 }
 if ($proFilter == '-3'){
@@ -49,9 +68,13 @@ if ($proFilter == '-3'){
 } else if ($proFilter != '-1') {
          $q->addWhere('project_status = '.$proFilter);
 }
-if (!($department > 0) && $company_id != 0) {
+if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
         $q->addWhere('project_company = '.$company_id);
 }
+// Show Projects where the Project Owner is in the given department
+if ($addPwOiD && !empty($owner_ids))
+	$q->addWhere('p.project_owner IN ('.implode(',', $owner_ids).')');
+
 if ($showInactive != '1') {
         $q->addWhere('project_status != 7');
 }
