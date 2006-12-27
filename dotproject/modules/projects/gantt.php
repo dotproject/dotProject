@@ -78,10 +78,10 @@ $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 //stable_2 still has jpLocale config variable
 $jpLocale = dPgetConfig( 'jpLocale' );
 if ($jpLocale) {
-	$graph2->scale->SetDateLocale( $jpLocale );
+	$graph->scale->SetDateLocale( $jpLocale );
 }
 else {
-    $graph->scale->SetDateLocale( $AppUI->user_lang[2] );
+    $graph->scale->SetDateLocale( $AppUI->user_lang[0] );
 }
 
 if ($start_date && $end_date) {
