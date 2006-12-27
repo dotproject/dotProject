@@ -1,6 +1,6 @@
 <?php /* DEPARTMENTS $Id$ */
 global $department, $min_view;
-$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : $department;
+$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);
 
 // check permissions
 $canRead = !getDenyRead( $m, $dept_id );
@@ -16,47 +16,50 @@ if (isset( $_GET['tab'] )) {
 }
 $tab = $AppUI->getState( 'DeptVwTab' ) !== NULL ? $AppUI->getState( 'DeptVwTab' ) : 0;
 
-// pull data
-$q  = new DBQuery;
-$q->addTable('companies', 'com');
-$q->addTable('departments', 'dep');
-$q->addQuery('dep.*, company_name');
-$q->addQuery('con.contact_first_name');
-$q->addQuery('con.contact_last_name');
-$q->addJoin('users', 'u', 'u.user_id = dep.dept_owner');
-$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addWhere('dep.dept_id = '.$dept_id);
-$q->addWhere('dep.dept_company = company_id');
-$sql = $q->prepare();
-$q->clear();
-
-if (!db_loadHash( $sql, $dept )) {
-		$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, "$m.$a" );
-		$titleBlock->addCrumb( "?m=companies", "companies list" );
-		$titleBlock->show();
-} else {
-	$company_id = $dept['dept_company'];
-	if (!$min_view) {
-		// setup the title block
-		$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, "$m.$a" );
-		if ($canEdit) {
-			$titleBlock->addCell();
-			$titleBlock->addCell(
-				'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
-				'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
-			);
-		}
-		$titleBlock->addCrumb( "?m=companies", "company list" );
-		$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company_id", "view this company" );
-		if ($canEdit) {
-			$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$dept_id", "edit this department" );
-
-			if ($canDelete) {
-				$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
+if ($dept_id > 0) {
+	// pull data
+	$q  = new DBQuery;
+	$q->addTable('companies', 'com');
+	$q->addTable('departments', 'dep');
+	$q->addQuery('dep.*, company_name');
+	$q->addQuery('con.contact_first_name');
+	$q->addQuery('con.contact_last_name');
+	$q->addJoin('users', 'u', 'u.user_id = dep.dept_owner');
+	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+	$q->addWhere('dep.dept_id = '.$dept_id);
+	$q->addWhere('dep.dept_company = company_id');
+	$sql = $q->prepare();
+	$q->clear();
+}
+	if (!db_loadHash( $sql, $dept )) {
+			$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, "$m.$a" );
+			$titleBlock->addCrumb( "?m=companies", "companies list" );
+			$titleBlock->show();
+	} elseif ($dept_id <= 0) {
+				echo $AppUI->_('Please choose a Department first!');
+	} else {
+		$company_id = $dept['dept_company'];
+		if (!$min_view) {
+			// setup the title block
+			$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, "$m.$a" );
+			if ($canEdit) {
+				$titleBlock->addCell();
+				$titleBlock->addCell(
+					'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
+					'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
+				);
 			}
+			$titleBlock->addCrumb( "?m=companies", "company list" );
+			$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company_id", "view this company" );
+			if ($canEdit) {
+				$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$dept_id", "edit this department" );
+
+				if ($canDelete) {
+					$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
+				}
+			}
+			$titleBlock->show();
 		}
-		$titleBlock->show();
-	}
 ?>
 <script language="javascript">
 <?php
@@ -128,6 +131,7 @@ function delIt() {
 </tr>
 </table>
 <?php
+
 	// tabbed information boxes
 	$tabBox = new CTabBox( '?m=departments&a='.$a.'&dept_id='.$dept_id, '', $tab );
 	$tabBox->add($dPconfig['root_dir'].'/modules/departments/vw_contacts', "Contacts");

@@ -87,7 +87,7 @@ $buffer .= '</select>';
 // setup the title block
 $titleBlock = new CTitleBlock( 'Departments', 'users.gif', $m, $m.$a );
 $titleBlock->addCrumb( "?m=companies", "companies list" );
-$titleBlock->addCell( $AppUI->_('Company') . '/' . $AppUI->_('Department') . ':');
+$titleBlock->addCell( $AppUI->_('Department') . ':');
 $titleBlock->addCell( $buffer, '', '<form action="?m=departments" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell();
 if ($canEdit) {
