@@ -3,6 +3,19 @@
 $pstatus = dPgetSysVal( 'ProjectStatus' );
 $ptype = dPgetSysVal( 'ProjectType' );
 
+$ppriority_name = dPgetSysVal( 'ProjectPriority' );
+$ppriority_color = dPgetSysVal( 'ProjectPriorityColor' );
+
+$priority = array();
+foreach ($ppriority_name as $key => $val) {
+    $priority[$key]['name'] = $val;
+}
+foreach ($ppriority_color as $key => $val) {
+    $priority[$key]['color'] = $val;
+}
+
+/*
+// kept for reference
 $priority = array(
  -1 => array(
  	'name' => 'low',
@@ -21,5 +34,6 @@ $priority = array(
  	'color' => '#FF887C'
  	)
 );
+*/
 
 ?>
