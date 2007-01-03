@@ -11,6 +11,11 @@ if (!$canRead) {
 }
 $AppUI->savePlace();
 
+if (isset( $dept_id ) && $dept_id >0) {
+	$AppUI->setState( 'DeptIdxDepartment', $dept_id );
+}
+$dept_id = $AppUI->getState( 'DeptIdxDepartment' ) !== NULL ? $AppUI->getState( 'DeptIdxDepartment' ) : ($AppUI->user_department > 0 ? $AppUI->user_department : $company_prefix.$AppUI->user_company);
+
 if (isset( $_GET['tab'] )) {
 	$AppUI->setState( 'DeptVwTab', $_GET['tab'] );
 }
