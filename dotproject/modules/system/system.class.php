@@ -34,7 +34,7 @@ class CPreferences {
                 if (($msg = $this->delete())) {
                         return "CPreference::store-delete failed<br />$msg";
                 }
-                if (!($ret = db_insertObject( 'user_preferences', $this, 'pref_user' ))) {
+                if (!($ret = db_insertObject( 'user_preferences', $this ))) {
                         return "CPreference::store failed <br />" . db_error();
                 } else {
                         return NULL;
