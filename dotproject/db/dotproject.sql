@@ -792,7 +792,8 @@ value_module varchar(30),
 value_object_id integer,
 value_field_id integer,
 value_charvalue varchar(250),
-value_intvalue integer
+value_intvalue integer,
+KEY `idx_cfv_id` (`value_id`)
 );
 
 CREATE TABLE custom_fields_lists (

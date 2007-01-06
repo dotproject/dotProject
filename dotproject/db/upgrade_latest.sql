@@ -18,3 +18,6 @@ ALTER TABLE `projects` DROP `project_active`;
 # 20061129
 INSERT INTO `sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, '1', 'ProjectRequiredFields', 'f.project_name.value.length|<3\r\nf.project_color_identifier.value.length|<3\r\nf.project_company.options[f.project_company.selectedIndex].value|<1' );
 
+# 20070106
+# Adding Index to the custom fields value
+ALTER TABLE `custom_fields_values` ADD INDEX `idx_cfv_id` ( `value_id` );
