@@ -706,7 +706,7 @@ class CEvent extends CDpObject {
 
 	  $body = '';
 	  if ($clash) {
-	    $body .= "You have been invited to an event by $AppUI->user_first_name $AppUI->uset_last_name\n";
+	    $body .= "You have been invited to an event by $AppUI->user_first_name $AppUI->user_last_name\n";
 	    $body .= "However, either you or another intended invitee has a competing event\n";
 	    $body .= "$AppUI->user_first_name $AppUI->user_last_name has requested that you reply to this message\n";
 	    $body .= "and confirm if you can or can not make the requested time.\n\n";
