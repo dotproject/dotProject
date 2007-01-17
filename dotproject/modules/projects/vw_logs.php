@@ -129,7 +129,7 @@ foreach ($logs as $row) {
 
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
-	if ($perms->checkModuleItem($m, 'edit', $row['task_id']) ) {
+	if ($perms->checkModuleItem('tasks', 'edit', $row['task_id']) ) {
 		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=".$row['task_id']."&tab=1&task_log_id=".@$row['task_log_id']."\">"
 			. "\n\t\t\t". dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' )
 			. "\n\t\t</a>";
