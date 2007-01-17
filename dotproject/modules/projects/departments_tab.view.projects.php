@@ -33,14 +33,11 @@ $orderby  = $AppUI->getState( 'DeptProjIdxOrderBy' ) ? $AppUI->getState( 'DeptPr
 $orderdir = $AppUI->getState( 'DeptProjIdxOrderDir' ) ? $AppUI->getState( 'DeptProjIdxOrderDir' ) : 'asc';
 
 if (isset($_POST['show_form'])) {
-	$AppUI->setState( 'addProjWithTasks',  dPgetParam($_POST, 'add_pwt', 0) );	
-}
-$addPwT = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
-
-if (isset($_POST['show_form'])) {
+	$AppUI->setState( 'addProjWithTasks',  dPgetParam($_POST, 'add_pwt', 0) );
 	$AppUI->setState( 'addProjWithOwnerInDep',  dPgetParam($_POST, 'add_pwoid', 0) );
 }
-$addPwOiD = $AppUI->getState( 'addProjWithOwnerInDep' ) ? $AppUI->getState( 'addProjWithOwnerInDep' ) : 0;
+$addPwT = $AppUI->getState( 'addProjWithTasks', 0);
+$addPwOiD = $AppUI->getState( 'addProjWithOwnerInDep', 0);
 
 $extraGet = '&user_id='.$user_id;
 
@@ -53,9 +50,12 @@ projects_list_data($user_id);
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
+	<form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="form_cb">
+	<input type="hidden" name="show_form" value="1" />
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by');?>:&nbsp;</td>
-	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="checkPwOiD"><input type="checkbox" name="add_pwoid" onclick="document.checkPwOiD.submit()" <?php echo $addPwOiD ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.');?>?<input type="hidden" name="show_form" value="1" /></form></td>
-	<td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects with assigned Tasks');?>?<input type="hidden" name="show_form" value="1" /></form></td>
+	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><input type="checkbox" name="add_pwoid" onclick="document.form_cb.submit()" <?php echo $addPwOiD ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.');?>?</td>
+	<td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" onclick="document.form_cb.submit()" <?php echo $addPwT ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects with assigned Tasks');?>?</td>
+	</form>
 	<td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="pickProject"><?php echo arraySelect( $projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true );?></form></td>
 </tr>
 </table>
