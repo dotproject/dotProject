@@ -72,7 +72,7 @@ class CContact extends CDpObject{
 			$q->addWhere('user_contact = ' . (int)$oid);
 			$user_count = $q->loadResult();
 			if ($user_count > 0) {
-				$msg =  $AppUI->_('cannot delete, contact is a user');
+				$msg =  $AppUI->_('contactsDeleteUserError');
 				return false;
 			}
 		}

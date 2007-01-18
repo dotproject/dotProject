@@ -12,7 +12,11 @@ if (! ($canEdit = $perms->checkModuleItem( 'contacts', 'edit', $contact_id )) ) 
 // load the record data
 $msg = '';
 $row = new CContact();
+
 $canDelete = $row->canDelete( $msg, $contact_id );
+if($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
+	$userDeleteProtect=true;
+}
 
 if (!$row->load( $contact_id ) && $contact_id > 0) {
 	$AppUI->setMsg( 'Contact' );
@@ -28,9 +32,10 @@ if (!$row->load( $contact_id ) && $contact_id > 0) {
 $ttl = $contact_id > 0 ? "Edit Contact" : "Add Contact";
 $titleBlock = new CTitleBlock( $ttl, 'monkeychat-48.png', $m, "$m.$a" );
 $titleBlock->addCrumb( "?m=contacts", "contacts list" );
-if ($canEdit && $contact_id) {
+if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete( 'delete contact', $canDelete, $msg );
 }
+
 $titleBlock->show();
 $company_detail = $row->getCompanyDetails();
 $dept_detail = $row->getDepartmentDetails();
@@ -94,11 +99,21 @@ function setCompany( key, val ){
 }
 
 function delIt(){
+<?php
+if ($userDeleteProtect) {
+?>
+	alert( "<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS);?>" );
+<?
+} else {
+?>
 	var form = document.changecontact;
 	if(confirm( "<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>" )) {
 		form.del.value = "<?php echo $contact_id;?>";
 		form.submit();
 	}
+<?
+} 
+?>
 }
 
 function orderByName( x ){
