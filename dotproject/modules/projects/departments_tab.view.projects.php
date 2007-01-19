@@ -133,7 +133,7 @@ foreach ($projects as $row) {
 		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row["project_id"] . '" onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', $row["project_description"]).'</p></div>', ENT_QUOTES ).'\', STICKY, CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();">' . htmlspecialchars( $row["project_name"], ENT_QUOTES ) . '</a>';
 		$s .= $CR . '</td>';
                 $s .= $CR . '<td align="center">'. ($start_date ? $start_date->format( $df ) : '-') .'</td>';
-		$s .= $CR . '<td align="center">'. ($row["project_duration"] > 0 ? $row["project_duration"].$AppUI->_('h') : '-').'</td>';
+		$s .= $CR . '<td align="center">'. ($row["project_duration"] > 0 ? round($row["project_duration"],0).$AppUI->_('h') : '-').'</td>';
                 $s .= $CR . '<td align="center" nowrap="nowrap" style="background-color:'.$priority[$row['project_priority']]['color'].'">';
 		$s .= $CT . ($end_date ? $end_date->format( $df ) : '-');
 		$s .= $CR . '</td>';
