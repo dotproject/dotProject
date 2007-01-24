@@ -245,7 +245,7 @@ class Cache_Lite
     */
     function clean($group = false)     
     {
-        $motif = ($group) ? "cache_$group_" : 'cache_';
+        $motif = ($group) ? "cache_{$group}_" : 'cache_';
         if (!($dh = opendir($this->_cacheDir))) {
             Cache_Lite::raiseError('Cache_Lite : Unable to open cache directory !', -4);   
             return false;
