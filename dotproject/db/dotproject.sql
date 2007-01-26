@@ -1198,3 +1198,17 @@ INSERT INTO dpversion VALUES ('2.0.4', 2, '2006-04-21', '2006-04-21');
 INSERT INTO `config` VALUES (0, 'ldap_search_user', 'Manager', 'ldap', 'text');
 INSERT INTO `config` VALUES (0, 'ldap_search_pass', 'secret', 'ldap', 'password');
 INSERT INTO `config` VALUES (0, 'ldap_allow_login', 'true', 'ldap', 'checkbox');
+
+# 20070126
+#
+# Table structure for table `file_folders`
+#
+
+DROP TABLE IF EXISTS `file_folders`;
+CREATE TABLE `file_folders` (
+	`file_folder_id` int(11) NOT NULL auto_increment,
+	`file_folder_parent` int(11) NOT NULL default '0',
+	`file_folder_name` varchar(255) NOT NULL default '',
+	`file_folder_description` text,
+	PRIMARY KEY  (`file_folder_id`)
+) TYPE=MyISAM;
