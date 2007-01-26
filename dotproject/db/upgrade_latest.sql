@@ -21,3 +21,6 @@ INSERT INTO `sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval
 # 20070106
 # Adding Index to the custom fields value
 ALTER TABLE `custom_fields_values` ADD INDEX `idx_cfv_id` ( `value_id` );
+
+# 20070126
+ALTER TABLE `files` ADD `file_folder` INT(11) DEFAULT '0' NOT NULL;
