@@ -49,7 +49,7 @@ if ($obj->file_task) {
 }
 
 $extra = array(
-	'where'=>'project_status <> 7'
+	'where'=>'project_status<>7'
 );
 $project = new CProject();
 $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );
@@ -105,6 +105,11 @@ function popFile( params ) {
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left"><input type="checkbox" name="notify" checked="checked"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></td>		
 		</tr>
+
+		<tr>
+			<td align="right" nowrap="nowrap">&nbsp;</td>
+			<td align="left"><input type="checkbox" name="notify_contacts" checked="checked"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></td>		
+		</tr>
 		
 		</table>
 	</td>
@@ -113,25 +118,8 @@ function popFile( params ) {
 	<td>
 		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=files';}" />
 	</td>
-
-<?php
-
-//MerlinYoda: moved to code from do_file_co.php to "submit" button's "onclick" event 
-//to prevent "less intelligent" pop-up blockers from blocking file checkout.
-//Some "die-hard" pop-up blockers may still block the window despite the direct user interaction.
-//Also added menu bar for saving files that don't trigger an open/save dialog.
-$params = 'file_id=' . $file_id;
-$session_id = SID;
-// are the params empty
-// Fix to handle cookieless sessions
-if ($session_id != "") {
-    $params .= "&" . $session_id;
-}
-
-?>
 	<td align="right">
-    <!--- MerlinYoda: Note that submit call is in JavaScript for onclick event --->
-		<input class="button" type="button" onclick="fileloader = window.open('fileviewer.php?<?php echo $params; ?>','mywindow','location=1,menubar=1,status=1,width=200px,height=150px,resizable');fileloader.moveTo(0,0);document.coFrm.submit();" value="<?php echo $AppUI->_( 'submit' );?>" />
+		<input type="submit" class="button" value="<?php echo $AppUI->_( 'submit' );?>" />
 	</td>
 </tr>
 </form>

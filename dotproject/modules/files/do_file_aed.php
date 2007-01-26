@@ -2,10 +2,14 @@
 //addfile sql
 $file_id = intval( dPgetParam( $_POST, 'file_id', 0 ) );
 $del = intval( dPgetParam( $_POST, 'del', 0 ) );
+$duplicate = intval( dPgetParam( $_POST, 'duplicate', 0 ) );
+$redirect = dPgetParam( $_POST, 'redirect', '' );
 global $db;
 
 $not = dPgetParam( $_POST, 'notify', '0' );
+$notcont = dPgetParam( $_POST, 'notify_contacts', '0' );
 if ($not!='0') $not='1';
+if ($notcont!='0') $notcont='1';
 
 $obj = new CFile();
 if ($file_id) { 
@@ -14,13 +18,13 @@ if ($file_id) {
 	$oldObj->load( $file_id );
 
 } else {
-	if (!$del)
-	{
-		$acl =& $AppUI->acl();
-		if ( ! $acl->checkModule('files', 'add')) 
+  if (!$del)
+  {
+    $acl =& $AppUI->acl();
+    if ( ! $acl->checkModule('files', 'delete')) 
 		{
-		  $AppUI->setMsg($AppUI->_( "noDeletePermission" ));
-			$AppUI->redirect('m=public&a=access_denied');
+      $AppUI->setMsg($AppUI->_( "noDeletePermission" ));
+    	$AppUI->redirect('m=public&a=access_denied');
 		}
 	}
 	$obj->_message = 'added';
@@ -38,11 +42,33 @@ if ( strcasecmp('major', $revision_type) == 0 )
 
 if (!$obj->bind( $_POST )) {
 	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
-	$AppUI->redirect();
+	$AppUI->redirect($redirect);
 }
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg( 'File' );
+// duplicate a file
+if ($duplicate) {
+	$obj->load( $file_id );
+	$new_file = new CFile();
+	$new_file = $obj->duplicate();
+	$new_file->file_project = 0;
+	$new_file->file_folder = 0;
+	if (!($dup_realname = $obj->duplicateFile($obj->file_project, $obj->file_real_filename))) {
+		$AppUI->setMsg( 'Could not duplicate file, check file permissions', UI_MSG_ERROR );
+		$AppUI->redirect();
+	} else {
+		$new_file->file_real_filename = $dup_realname;
+		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
+		if (($msg = $new_file->store())) {
+			$AppUI->setMsg( $msg, UI_MSG_ERROR );
+			$AppUI->redirect($redirect);			
+		} else {
+			$AppUI->setMsg( "duplicated", UI_MSG_OK, true );
+			$AppUI->redirect( $redirect );
+		}
+	}
+}
 // delete the file
 if ($del) {
 	$obj->load( $file_id );
@@ -51,10 +77,13 @@ if ($del) {
 		$AppUI->redirect();
 	} else {
 		if ($not=='1') $obj->notify();
+		if ($notcont=='1') $obj->notifyContacts();
 		$AppUI->setMsg( "deleted", UI_MSG_ALERT, true );
-		$AppUI->redirect( "m=files" );
+		$AppUI->redirect( $redirect );
 	}
 }
+
+
 
 if (!ini_get('safe_mode'))
 	set_time_limit( 600 );
@@ -69,7 +98,7 @@ if (isset( $_FILES['formfile'] )) {
 	if ($upload['size'] < 1) {
 		if (!$file_id) {
 			$AppUI->setMsg( 'Upload file size is zero. Process aborted.', UI_MSG_ERROR );
-			$AppUI->redirect();
+			$AppUI->redirect($redirect);
 		}
 	} else {
 
@@ -83,7 +112,7 @@ if (isset( $_FILES['formfile'] )) {
 		$res = $obj->moveTemp( $upload );
 		if (!$res) {
 		    $AppUI->setMsg( 'File could not be written', UI_MSG_ERROR );
-		    $AppUI->redirect();
+		    $AppUI->redirect($redirect);
 		}
 
 	}
@@ -94,7 +123,7 @@ if ($file_id && ($obj->file_project != $oldObj->file_project) ) {
 	$res = $obj->moveFile( $oldObj->file_project, $oldObj->file_real_filename );
 	if (!$res) {
 		$AppUI->setMsg( 'File could not be moved', UI_MSG_ERROR );
-		$AppUI->redirect();
+		$AppUI->redirect($redirect);
 	}
 }
 
@@ -120,12 +149,13 @@ if (!$file_id) {
 		$q->clear();
 	}
 }
-
+//print_r($obj);die;
 if (($msg = $obj->store())) {
 	$AppUI->setMsg( $msg, UI_MSG_ERROR );
 } else {
 	$obj->load($obj->file_id);
 	if ($not=='1') $obj->notify();
+	if ($notcont=='1') $obj->notifyContacts();
 	$AppUI->setMsg( $file_id ? 'updated' : 'added', UI_MSG_OK, true );
 	/* Workaround for indexing large files:
 	** Based on the value defined in config data,
@@ -134,12 +164,10 @@ if (($msg = $obj->store())) {
 	** Negative value :<=> no filesize limit
 	*/
 	$index_max_file_size = dPgetConfig('index_max_file_size', 0);
-	if (empty($file_id) && ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size*1024)) {
+	if ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size*1024) {
 		$obj->indexStrings();
-		$AppUI->setMsg('; ' . $indexed . ' ', UI_MSG_OK, true);
-		$AppUI->setMsg('words indexed' , UI_MSG_OK, true);
-
+		$AppUI->setMsg('; ' . $indexed . ' words indexed', UI_MSG_OK, true);
 	}
 }
-$AppUI->redirect();
+$AppUI->redirect($redirect);
 ?>
