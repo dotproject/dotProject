@@ -414,7 +414,7 @@ function displayFiles($folder) {
 	// SETUP FOR FILE LIST
 	$q = new DBQuery();
 	$q->addTable('files');
-	$q->addQuery('files.*,count(file_version) as file_versions,round(max(file_version), 2) as file_lastversion,file_folder_id, file_folder_name,project_name, project_color_identifier, project_active,contact_first_name, contact_last_name,task_name,task_id');
+	$q->addQuery('files.*,count(file_version) as file_versions,round(max(file_version), 2) as file_lastversion,file_folder_id, file_folder_name,project_name, project_color_identifier,contact_first_name, contact_last_name,task_name,task_id');
 	$q->addJoin('projects','p','p.project_id = file_project');
 	$q->addJoin('users','u','u.user_id = file_owner');
 	$q->addJoin('contacts','c','c.contact_id = u.user_contact');
