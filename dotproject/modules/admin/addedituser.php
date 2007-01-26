@@ -14,6 +14,20 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
     $AppUI->redirect( "m=public&a=access_denied" );
 }
 
+//$roles
+// Create the roles class container
+require_once "$baseDir/modules/system/roles/roles.class.php";
+$perms =& $AppUI->acl();
+$crole =& new CRole;
+$roles = $crole->getRoles();
+// Format the roles for use in arraySelect
+$roles_arr = array();
+foreach ($roles as $role) {
+  $roles_arr[$role['id']] = $role['name'];
+}
+$roles_arr = arrayMerge( array( 0 => '' ), $roles_arr );
+
+
 $q  = new DBQuery;
 $q->addTable('users', 'u');
 $q->addQuery('u.*');
@@ -155,6 +169,13 @@ function setDept( key, val ) {
     </td>
 </tr>
 <?php } // End of security
+?>
+<?php if ($canEdit && !$user_id) { ?>
+<tr>
+    <td align="right"><?php echo $AppUI->_('User Role');?>:</td>
+    <td><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"','', true);?></td>
+</tr>
+<?php }
 ?>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Password');?>:</td>
