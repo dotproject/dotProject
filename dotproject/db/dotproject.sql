@@ -146,6 +146,7 @@ CREATE TABLE `event_queue` (
 CREATE TABLE `files` (
   `file_id` int(11) NOT NULL auto_increment,
   `file_real_filename` varchar(255) NOT NULL default '',
+  `file_folder` int(11) NOT NULL default '0',
   `file_project` int(11) NOT NULL default '0',
   `file_task` int(11) NOT NULL default '0',
   `file_name` varchar(255) NOT NULL default '',
