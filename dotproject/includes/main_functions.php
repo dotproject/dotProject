@@ -329,7 +329,7 @@ function dPgetCleanParam( &$arr, $name, $def=null ) {
 			}
 			$pattern .= '/i';
 			$replacement = substr($ra[$i], 0, 2).'<x>'.substr($ra[$i], 2); // add in <> to nerf the tag
-			$val = preg_replace($pattern, $replacement, $val); // filter out the hex tags
+			$val = (in_array($arr[$name],$ra)) ? preg_replace($pattern, $replacement, $val) : $val; // filter out the hex tags
 			if ($val_before == $val) {
 				// no replacements were made, so exit the loop
 				$found = false;
