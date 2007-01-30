@@ -26,6 +26,7 @@ if (isset( $_GET['orderby'] )) {
     $AppUI->setState( 'UserIdxOrderby', $_GET['orderby'] );
 }
 $orderby = $AppUI->getState( 'UserIdxOrderby' ) ? $AppUI->getState( 'UserIdxOrderby' ) : 'user_username';
+$orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip') ) ? $orderby : 'user_username';
 
 // Pull First Letters
 $let = ":";
