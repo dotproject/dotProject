@@ -390,15 +390,28 @@ class CFile extends CDpObject {
 				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=".$this->_task->task_id;
 				$body .= "\n" . $AppUI->_('Description') . ": " . "\n".$this->_task->task_description;
 
-				$sql = "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM project_contacts INNER JOIN contacts ON (project_contacts.contact_id = contacts.contact_id) WHERE (project_contacts.project_id = ".$this->_project->project_id.")) ";				
-				$sql .= "UNION ";				
-				$sql .= "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM task_contacts INNER JOIN contacts ON (task_contacts.contact_id = contacts.contact_id) WHERE (task_contacts.task_id = ".$this->_task->task_id."));";				
+				$q = new DBQuery;
+				$q->addTable('project_contacts', 'pc');
+  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+				$q->addWhere('pc.project_id = '.$this->_project->project_id);
+                        $sql = '('.$q->prepare().')';
+                        $q->clear();
+				//$sql = "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM project_contacts INNER JOIN contacts ON (project_contacts.contact_id = contacts.contact_id) WHERE (project_contacts.project_id = ".$this->_project->project_id.")) ";				
+				$sql .= " UNION ";				
+				$q->addTable('task_contacts', 'tc');
+  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
+				$q->addWhere('tc.task_id = '.$this->_task->task_id);
+                        $sql .= '('.$q->prepare().')';
+                        $q->clear();
+				//$sql .= "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM task_contacts INNER JOIN contacts ON (task_contacts.contact_id = contacts.contact_id) WHERE (task_contacts.task_id = ".$this->_task->task_id."));";				
   				$this->_users = db_loadList($sql);
 			} else {			
 				$q = new DBQuery;
 				$q->addTable('project_contacts', 'pc');
 				$q->addQuery('pc.project_id, pc.contact_id');
-  	    		$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addWhere('pc.project_id = '.$this->file_project);
 
