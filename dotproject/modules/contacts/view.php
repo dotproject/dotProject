@@ -130,6 +130,10 @@ function delIt(){
                         </td>
 		</tr>
 		<tr>
+			<td align="right" width="100"><?php echo $AppUI->_('Map Address');?>:</td>
+			<td><input type="image" src="./images/googlemaps.gif" width="55" height="22" alt="Find It on Google" onClick="window.open('http://maps.google.com/maps?q=<?php echo @$row->contact_address1;?>+<?php echo @$row->contact_address2;?>+<?php echo @$row->contact_city;?>+<?php echo @$row->contact_state;?>+<?php echo @$row->contact_zip;?>+<?php echo @$row->contact_country;?>')"></td>
+		</tr>
+		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Phone');?>:</td>
 			<td><?php echo @$row->contact_phone;?></td>
 		</tr>
