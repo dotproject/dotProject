@@ -4,6 +4,10 @@
  * new PHPGACL library.
  */
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 // Permission flags used in the DB
 
 define( 'PERM_DENY', '0' );

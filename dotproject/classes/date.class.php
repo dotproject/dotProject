@@ -3,6 +3,10 @@
 * @package dotproject
 * @subpackage utilites
 */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 
 require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
 

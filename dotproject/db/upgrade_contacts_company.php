@@ -7,9 +7,8 @@
 * If it doesn't find it, the it creates the company (only the name) and then it 
 * relates it to the contact using the new company's id.
 */
-global $baseDir;
 
-if (! isset($baseDir))
+if (! defined('DP_BASE_DIR'))
 	die('You must not use this file directly, please direct your browser to install/index.php instead');
 
 dPmsg("Fetching companies list");

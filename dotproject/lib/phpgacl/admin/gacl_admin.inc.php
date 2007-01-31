@@ -31,6 +31,7 @@
 // Prefix added to restrict access to these functions to only
 // the original dotproject user.
 $baseDir = dirname(__FILE__)."/../../..";
+define('DP_BASE_DIR', $baseDir);
 require_once "$baseDir/includes/config.php";
 require_once  "$baseDir/classes/ui.class.php";
 require_once "$baseDir/includes/session.php";

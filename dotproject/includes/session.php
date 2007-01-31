@@ -14,12 +14,16 @@
 * instead of trying to set their own sessions.
 */
 
-require_once $baseDir . '/includes/main_functions.php';
-require_once $baseDir . '/includes/db_adodb.php';
-require_once $baseDir . '/includes/db_connect.php';
-require_once $baseDir . '/classes/query.class.php';
-require_once $baseDir . '/classes/ui.class.php';
-require_once $baseDir . '/classes/event_queue.class.php';
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
+require_once DP_BASE_DIR . '/includes/main_functions.php';
+require_once DP_BASE_DIR . '/includes/db_adodb.php';
+require_once DP_BASE_DIR . '/includes/db_connect.php';
+require_once DP_BASE_DIR . '/classes/query.class.php';
+require_once DP_BASE_DIR . '/classes/ui.class.php';
+require_once DP_BASE_DIR . '/classes/event_queue.class.php';
 
 function dPsessionOpen($save_path, $session_name)
 {

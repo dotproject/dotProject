@@ -1,6 +1,10 @@
 <?php /* ADMIN $Id$ */
 //add or edit a system user
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
 if ($user_id == 0)
@@ -16,7 +20,7 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 
 //$roles
 // Create the roles class container
-require_once "$baseDir/modules/system/roles/roles.class.php";
+require_once DP_BASE_DIR."/modules/system/roles/roles.class.php";
 $perms =& $AppUI->acl();
 $crole =& new CRole;
 $roles = $crole->getRoles();

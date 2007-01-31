@@ -11,6 +11,10 @@
  * Copyright 2005, the dotProject team.
  */
 
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 class EventQueue {
 
 	var $table = 'event_queue';

@@ -4,6 +4,10 @@
  *	@subpackage utilites
 */
 
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 /**
  *	This class encapsulates the PHP mail() function.
  *

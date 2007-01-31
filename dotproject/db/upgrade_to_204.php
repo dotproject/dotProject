@@ -1,14 +1,13 @@
 <?php
-global $baseDir;
 
-if (! isset($baseDir)) {
+if (! defined('DP_BASE_DIR')) {
 	die("You must not call this file directly, it is run automatically on install/upgrade");
 }
-include_once "$baseDir/includes/config.php";
-include_once "$baseDir/includes/main_functions.php";
-require_once "$baseDir/includes/db_adodb.php";
-include_once "$baseDir/includes/db_connect.php";
-include_once "$baseDir/install/install.inc.php";
+include_once DP_BASE_DIR."/includes/config.php";
+include_once DP_BASE_DIR."/includes/main_functions.php";
+require_once DP_BASE_DIR."/includes/db_adodb.php";
+include_once DP_BASE_DIR."/includes/db_connect.php";
+include_once DP_BASE_DIR."/install/install.inc.php";
 
 /**
  * DEVELOPERS PLEASE NOTE:
@@ -26,7 +25,6 @@ include_once "$baseDir/install/install.inc.php";
 function dPupgrade($from_version, $to_version, $last_updated)
 {
 
-	global $baseDir;
 	$latest_update = '20060624'; // Set to the latest upgrade date.
 
 	/**
@@ -101,8 +99,8 @@ function dPupgrade($from_version, $to_version, $last_updated)
             $sql = "ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1";
             db_exec( $sql );
             
-			include "$baseDir/db/upgrade_contacts.php";
-			include "$baseDir/db/upgrade_permissions.php";
+			include DP_BASE_DIR."/db/upgrade_contacts.php";
+			include DP_BASE_DIR."/db/upgrade_permissions.php";
 
 			// Fallthrough
 		case '20050314':
@@ -115,7 +113,7 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$perms->add_group_object($all_mods, 'app', 'task_log', 'axo');
 			$perms->add_group_object($nonadmin, 'app', 'task_log', 'axo');
 		case '20050316':
-			include "$baseDir/db/upgrade_contacts_company.php";
+			include DP_BASE_DIR."/db/upgrade_contacts_company.php";
 		default:
 			break;
 	}

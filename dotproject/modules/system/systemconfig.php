@@ -1,5 +1,9 @@
 <?php  // $Id$
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 // check permissions
 if (!$canEdit) {
     $AppUI->redirect( "m=public&a=access_denied" );
@@ -22,7 +26,7 @@ $titleBlock->addCrumb( "?m=system", "system admin" );
 $titleBlock->addCrumb( "?m=system&a=addeditpref", "default user preferences" );
 $titleBlock->show();
 
-if (is_dir("$baseDir/install")) {
+if (is_dir(DP_BASE_DIR."/install")) {
 	$AppUI->setMsg("You have not removed your install directory, this is a major security risk!", UI_MSG_ALERT);
 	echo "<span class='error'>" . $AppUI->getMsg() . "</span>\n";
 }

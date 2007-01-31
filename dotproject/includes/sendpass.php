@@ -5,6 +5,9 @@
 * @license http://opensource.org/licenses/bsd-license.php BSD License
 */
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
 require_once( $AppUI->getSystemClass( 'libmail' ) );
 
 //

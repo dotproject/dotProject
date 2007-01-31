@@ -19,7 +19,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 }}}*/
 
-require_once "$baseDir/lib/adodb/adodb.inc.php";
+if (! defined('DP_BASE_DIR')) {
+	die('This file should not be called directly');
+}
+
+require_once DP_BASE_DIR."/lib/adodb/adodb.inc.php";
 
 define('QUERY_STYLE_ASSOC', ADODB_FETCH_ASSOC);
 define('QUERY_STYLE_NUM' , ADODB_FETCH_NUM);
@@ -778,9 +782,9 @@ class DBQuery {
 	 * Using an XML string, build or update a table.
 	 */
 	function execXML($xml, $mode = 'REPLACE') {
-		global $db, $baseDir, $AppUI;
+		global $db, $AppUI;
 
-		include_once $baseDir.'/lib/adodb/adodb-xmlschema.inc.php';
+		include_once DP_BASE_DIR.'/lib/adodb/adodb-xmlschema.inc.php';
 		$schema = new adoSchema($db);
 		$schema->setUpgradeMode($mode);
 		if (isset($this->_table_prefix) && $this->_table_prefix) {

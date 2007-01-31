@@ -5,10 +5,14 @@
 * @todo Encapsulate into a database object
 */
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 // load the db specific handlers
 //require_once( "{$dPconfig['root_dir']}/includes/db_{$dPconfig['dbtype']}.php" );
 //require_once( "./includes/db_adodb.php" );
-require_once "$baseDir/includes/db_adodb.php";
+require_once DP_BASE_DIR."/includes/db_adodb.php";
 
 // make the connection to the db
 db_connect( $dPconfig['dbhost'], $dPconfig['dbname'],

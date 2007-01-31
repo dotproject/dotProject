@@ -1,6 +1,9 @@
 <?php /* PUBLIC $Id$ */
-require_once( "$baseDir/classes/ui.class.php" );
-require_once( "$baseDir/modules/calendar/calendar.class.php" );
+if (! defined('DP_BASE_DIR')) {
+	die('You should not call this file directly');
+}
+require_once( DP_BASE_DIR."/classes/ui.class.php" );
+require_once( DP_BASE_DIR."/modules/calendar/calendar.class.php" );
 
 $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 $date = dpGetParam( $_GET, 'date', null );

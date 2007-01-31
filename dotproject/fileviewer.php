@@ -30,12 +30,12 @@ The full text of the GPL is in the COPYING file.
 
 //file viewer
 require_once 'base.php';
-require_once "$baseDir/includes/config.php";
-require_once "$baseDir/includes/main_functions.php";
-require_once "$baseDir/classes/ui.class.php";
-require_once "$baseDir/includes/db_adodb.php";
-require_once "$baseDir/includes/db_connect.php";
-require_once "$baseDir/includes/session.php";
+require_once DP_BASE_DIR."/includes/config.php";
+require_once DP_BASE_DIR."/includes/main_functions.php";
+require_once DP_BASE_DIR."/classes/ui.class.php";
+require_once DP_BASE_DIR."/includes/db_adodb.php";
+require_once DP_BASE_DIR."/includes/db_connect.php";
+require_once DP_BASE_DIR."/includes/session.php";
 
 $loginFromPage = 'fileviewer.php';
 
@@ -50,7 +50,7 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 	$AppUI->checkStyle();
 	 
 	require_once( $AppUI->getSystemClass( 'dp' ) );
-	require_once( "$baseDir/misc/debug.php" );
+	require_once( DP_BASE_DIR."/misc/debug.php" );
 
 	if ($AppUI->doLogin()) $AppUI->loadPrefs( 0 );
 	// check if the user is trying to log in
@@ -63,7 +63,7 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 			//display login failed message 
 			$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
 			$AppUI->setMsg( 'Login Failed' );
-			require "$baseDir/style/$uistyle/login.php";
+			require DP_BASE_DIR."/style/$uistyle/login.php";
 			session_unset();
 			exit;
 		}
@@ -75,14 +75,14 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 	// check if we are logged in
 	if ($AppUI->doLogin()) {
 	    $AppUI->setUserLocale();
-		@include_once( "$baseDir/locales/$AppUI->user_locale/locales.php" );
-		@include_once( "$baseDir/locales/core.php" );
+		@include_once( DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php" );
+		@include_once( DP_BASE_DIR."/locales/core.php" );
 		setlocale( LC_TIME, $AppUI->user_locale );
 		
 		$redirect = @$_SERVER['QUERY_STRING'];
 		if (strpos( $redirect, 'logout' ) !== false) $redirect = '';	
 		if (isset( $locale_char_set )) header("Content-type: text/html;charset=$locale_char_set");
-		require "$baseDir/style/$uistyle/login.php";
+		require DP_BASE_DIR."/style/$uistyle/login.php";
 		session_unset();
 		session_destroy();
 		exit;
@@ -90,7 +90,7 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 }
 $AppUI =& $_SESSION['AppUI'];
 
-require_once "$baseDir/includes/permissions.php";
+require_once DP_BASE_DIR."/includes/permissions.php";
 
 $perms =& $AppUI->acl();
 
@@ -148,7 +148,7 @@ if ($file_id) {
 	// END extra headers to resolve IE caching bug
 	*/
 
-	$fname = "$baseDir/files/{$file['file_project']}/{$file['file_real_filename']}";
+	$fname = DP_BASE_DIR."/files/{$file['file_project']}/{$file['file_real_filename']}";
 	if (! file_exists($fname)) {
 		$AppUI->setMsg("fileIdError", UI_MSG_ERROR);
 		$AppUI->redirect();

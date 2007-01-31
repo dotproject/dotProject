@@ -34,6 +34,11 @@ if (@$pathInfo) {
 } else {
   $baseUrl .= str_replace('\\','/', dirname( isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : getenv('SCRIPT_NAME')));
 }
+
+// Defines to deprecate the global baseUrl/baseDir
+define('DP_BASE_DIR', $baseDir);
+define('DP_BASE_URL', $baseUrl);
+
 // required includes for start-up
 global $dPconfig;
 $dPconfig = array();

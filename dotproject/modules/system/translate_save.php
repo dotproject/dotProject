@@ -5,6 +5,10 @@
 * @author Andrew Eddie <users.sourceforge.net>
 */
 
+if (! defined('DP_BASE_DIR')) {
+	die('You should not call this file directly');
+}
+
 $module = dPgetParam($_POST, 'module', 0);
 $lang = dPgetParam($_POST, 'lang', 'en');
 
@@ -14,13 +18,13 @@ $trans = dPgetParam($_POST, 'trans', 0);
 // save to core locales if a translation exists there, otherwise save
 // into the module's local locale area if it exists.  If not then
 // the core table is updated.
-$core_filename = "$baseDir/locales/$lang/$module.inc";
+$core_filename = DP_BASE_DIR."/locales/$lang/$module.inc";
 if ( file_exists( $core_filename ) ) {
 	$filename = $core_filename;
 } else {
-	$mod_locale = "$baseDir/modules/$module/locales";
+	$mod_locale = DP_BASE_DIR."/modules/$module/locales";
 	if ( is_dir($mod_locale))
-		$filename = "$baseDir/modules/$module/locales/$lang.inc";
+		$filename = DP_BASE_DIR."/modules/$module/locales/$lang.inc";
 	else
 		$filename = $core_filename;
 }

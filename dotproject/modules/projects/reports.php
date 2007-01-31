@@ -1,6 +1,10 @@
 <?php /* PROJECTS $Id$ */
 //error_reporting( E_ALL );
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 $project_id = intval( dPgetParam( $_REQUEST, "project_id", 0 ) );
 $report_type = dPgetParam( $_REQUEST, "report_type", '' );
 
@@ -78,14 +82,14 @@ echo $AppUI->_('Selected Project') . ": <b>".$display_project_name."</b>";
 if ($report_type) {
 	$report_type = $AppUI->checkFileName( $report_type );
 	$report_type = str_replace( ' ', '_', $report_type );
-	require "$baseDir/modules/projects/reports/$report_type.php";
+	require DP_BASE_DIR."/modules/projects/reports/$report_type.php";
 } else {
 	echo "<table>";
 	echo "<tr><td><h2>" . $AppUI->_( 'Reports Available' ) . "</h2></td></tr>";
 	foreach ($reports as $v) {
 		$type = str_replace( ".php", "", $v );
 		$desc_file = str_replace( ".php", ".{$AppUI->user_locale}.txt", $v );
-		$desc = @file( "$baseDir/modules/projects/reports/$desc_file");
+		$desc = @file( DP_BASE_DIR."/modules/projects/reports/$desc_file");
 
 		echo "\n<tr>";
 		echo "\n	<td><a href=\"index.php?m=projects&a=reports&project_id=$project_id&report_type=$type";

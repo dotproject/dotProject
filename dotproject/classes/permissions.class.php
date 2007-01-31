@@ -16,14 +16,18 @@
  * the main dP environment.
  */
 
+if (! defined('DP_BASE_DIR')) {
+	die('This file should not be called directly');
+}
+
 // Set the ADODB directory
 if (! defined('ADODB_DIR')) {
-  define('ADODB_DIR', "$baseDir/lib/adodb");
+  define('ADODB_DIR', DP_BASE_DIR."/lib/adodb");
 }
  
 // Include the PHPGACL library
-require_once "$baseDir/lib/phpgacl/gacl.class.php";
-require_once "$baseDir/lib/phpgacl/gacl_api.class.php";
+require_once DP_BASE_DIR."/lib/phpgacl/gacl.class.php";
+require_once DP_BASE_DIR."/lib/phpgacl/gacl_api.class.php";
 // Include the db_connections 
 
 // Now extend the class

@@ -1,4 +1,7 @@
 <?php  /* FORUMS $Id$ */
+if (! defined('DP_BASE_DIR')) {
+	die('You should not call this file directly');
+}
 $AppUI->savePlace();
 $sort = dPgetParam($_REQUEST, 'sort', 'asc');
 $forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
@@ -7,8 +10,6 @@ $perms =& $AppUI->acl();
 
 if ( ! $perms->checkModuleItem('forums', 'view', $message_id))
 	$AppUI->redirect("m=public&a=access_denied");
-
-global $baseDir;
 
 $q  = new DBQuery;
 $q->addTable('forums');
@@ -52,8 +53,8 @@ foreach ($messages as $row) {
 		' . $row['message_body']);
 }
 
-$font_dir = "$baseDir/lib/ezpdf/fonts";
-$temp_dir = "$baseDir/files/temp";
+$font_dir = DP_BASE_DIR."/lib/ezpdf/fonts";
+$temp_dir = DP_BASE_DIR."/files/temp";
 $base_url  = $dPconfig['base_url'];
 require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 

@@ -1,11 +1,12 @@
 <?php // $Id$
 
-global $cfgDir, $cfgFile, $failedImg, $filesDir, $locEnDir, $okImg, $tblwidth, $tmpDir, $baseDir;
-$cfgDir = isset($cfgDir) ? $cfgDir : "$baseDir/includes";
-$cfgFile = isset($cfgFile) ? $cfgFile : "$baseDir/includes/config.php";
-$filesDir = isset($filesDir) ? $filesDir : "$baseDir/files";
-$locEnDir = isset($locEnDir) ? $locEnDir : "$baseDir/locales/en";
-$tmpDir = isset($tmpDir) ? $tmpDir : "$baseDir/files/temp";
+global $cfgDir, $cfgFile, $failedImg, $filesDir, $locEnDir, $okImg, $tblwidth, $tmpDir;
+
+$cfgDir = isset($cfgDir) ? $cfgDir : DP_BASE_DIR."/includes";
+$cfgFile = isset($cfgFile) ? $cfgFile : DP_BASE_DIR."/includes/config.php";
+$filesDir = isset($filesDir) ? $filesDir : DP_BASE_DIR."/files";
+$locEnDir = isset($locEnDir) ? $locEnDir : DP_BASE_DIR."/locales/en";
+$tmpDir = isset($tmpDir) ? $tmpDir : DP_BASE_DIR."/files/temp";
 $tblwidth = isset($tblwidth) ? $tblwidth :'100%';
 $chmod = 0777;
 

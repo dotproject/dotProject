@@ -32,12 +32,12 @@ The full text of the GPL is in the COPYING file.
 	// Function to scan the event queue and execute any functions required.
 
 	require_once 'base.php';
-	require_once "$baseDir/includes/config.php";
-	require_once "$baseDir/includes/main_functions.php";
-	require_once "$baseDir/includes/db_connect.php";
-	require_once "$baseDir/classes/ui.class.php";
-	require_once "$baseDir/classes/event_queue.class.php";
-	require_once "$baseDir/classes/query.class.php";
+	require_once DP_BASE_DIR."/includes/config.php";
+	require_once DP_BASE_DIR."/includes/main_functions.php";
+	require_once DP_BASE_DIR."/includes/db_connect.php";
+	require_once DP_BASE_DIR."/classes/ui.class.php";
+	require_once DP_BASE_DIR."/classes/event_queue.class.php";
+	require_once DP_BASE_DIR."/classes/query.class.php";
 
 	$AppUI = new CAppUI;
 

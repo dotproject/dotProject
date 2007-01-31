@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
 if ( isset($_REQUEST['clash_action'])) {
   $do_include = false;
   switch ($_REQUEST['clash_action']) {
@@ -180,7 +184,7 @@ function set_clash_action(action) {
  */
 function clash_process()
 {
-  global $AppUI, $do_include, $baseDir;
+  global $AppUI, $do_include;
 
   $obj =& new CEvent;
   $obj->bind($_SESSION['add_event_post']);
@@ -217,7 +221,7 @@ function clash_process()
     $AppUI->setMsg('No clashes in suggested timespan', UI_MSG_OK);
     $_SESSION['event_is_clash'] = true;
     $_GET['event_id'] = $obj->event_id;
-    $do_include = "$baseDir/modules/calendar/addedit.php";
+    $do_include = DP_BASE_DIR."/modules/calendar/addedit.php";
     return;
   }
 
@@ -296,7 +300,7 @@ function clash_process()
 	$AppUI->setMsg('First available time slot', UI_MSG_OK);
 	$_SESSION['event_is_clash'] = true;
 	$_GET['event_id'] = $obj->event_id;
-	$do_include = "$baseDir/modules/calendar/addedit.php";
+	$do_include = DP_BASE_DIR."/modules/calendar/addedit.php";
 	return;
       }
     }

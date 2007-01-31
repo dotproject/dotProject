@@ -9,7 +9,11 @@
 	A generic database layer providing a set of low to middle level functions
 	originally written for WEBO project, see webo source for "real life" usages
 */
-require_once( "$baseDir/lib/adodb/adodb.inc.php" );
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+
+require_once( DP_BASE_DIR."/lib/adodb/adodb.inc.php" );
 
 $db = NewADOConnection($dPconfig['dbtype']);
 
@@ -49,7 +53,7 @@ function db_insert_id() {
 }
 
 function db_exec( $sql ) {
-        global $db, $baseDir;
+        global $db;
 
 	if (! is_object($db))
 	  dprint(__FILE__,__LINE__, 0, "Database object does not exist");

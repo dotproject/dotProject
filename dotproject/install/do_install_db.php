@@ -7,6 +7,7 @@ if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade')
 ######################################################################################################################
 
 $baseDir = dirname(dirname(__FILE__));
+define('DP_BASE_DIR', $baseDir);
 $baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : getenv('HTTP_HOST');
 $baseUrl .= isset($_SERVER['SCRIPT_NAME']) ? dirname(dirname($_SERVER['SCRIPT_NAME'])) : dirname(dirname(getenv('SCRIPT_NAME')));

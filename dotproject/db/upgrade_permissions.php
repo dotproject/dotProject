@@ -1,20 +1,18 @@
 <?php
 
-global $baseDir;
-
-if (! isset($baseDir)) {
+if (! defined('DP_BASE_DIR')) {
 	die('You must not run this script manually.  Instead run the Installer in install/index.php');
 }
 
-@include_once "$baseDir/includes/config.php";
-require_once "$baseDir/includes/main_functions.php";
-require_once "$baseDir/install/install.inc.php";
-require_once "$baseDir/includes/db_adodb.php";
-require_once "$baseDir/includes/db_connect.php";
+@include_once DP_BASE_DIR."/includes/config.php";
+require_once DP_BASE_DIR."/includes/main_functions.php";
+require_once DP_BASE_DIR."/install/install.inc.php";
+require_once DP_BASE_DIR."/includes/db_adodb.php";
+require_once DP_BASE_DIR."/includes/db_connect.php";
 
 
 // Now update the GACL class information.
-require_once "$baseDir/classes/permissions.class.php";
+require_once DP_BASE_DIR."/classes/permissions.class.php";
 
 dPmsg("Creating new Permissions objects");
 $perms =& new dPacl;
