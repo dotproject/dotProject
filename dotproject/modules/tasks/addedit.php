@@ -173,11 +173,11 @@ $selected_departments      = $obj->task_departments != "" ? explode(",", $obj->t
 $departments_count         = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
 if($department_selection_list!=""){
-	$department_selection_list = "<select name='dept_ids[]' size='$departments_count' multiple class='text'>
-								  $department_selection_list
-    	                          </select>";
+  $department_selection_list = ("<select name=\"dept_ids[]\" class=\"text\">\n"
+								."<option value=\"0\"></option>\n"
+								."{$department_selection_list}\n"
+								."</select>");
 }
-
 
 
 function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent=0, $spaces = 0){
@@ -192,13 +192,13 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	$depts_list = db_loadHashList($sql, "dept_id");
 
 	foreach($depts_list as $dept_id => $dept_info){
-		$selected = in_array($dept_id, $checked_array) ? "selected" : "";
+		$selected = in_array($dept_id, $checked_array) ? " selected=\"selected\"" : "";
 
 		if(strlen($dept_info["dept_name"]) > 30){
 			$dept_info["dept_name"] = substr($dept_info["dept_name"], 0, 28)."...";
 		}
 
-		$parsed .= "<option value='$dept_id' $selected>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";
+		$parsed .= "<option value=\"{$dept_id}\"{$selected}>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";
 		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces+5);
 	}
 

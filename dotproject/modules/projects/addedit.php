@@ -94,9 +94,13 @@ if ($project_id) {
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
 if($department_selection_list!=""){
-$department_selection_list = $AppUI->_("Departments")."<br /><select name='dept_ids[]' size='$departments_count' multiple style=''>$department_selection_list</select>";
+  $department_selection_list = ($AppUI->_("Departments")."<br />\n"
+								."<option value=\"0\"></option>\n"
+								."<select name=\"dept_ids[]\" class=\"text\">\n"
+								."{$department_selection_list}\n"
+								."</select>");
 } else {
-$department_selection_list = "<input type='button' class='button' value='".$AppUI->_("Select department...")."' onclick='javascript:popDepartment();' /><input type=\"hidden\" name=\"project_departments\"";
+  $department_selection_list = "<input type=\"button\" class=\"button\" value=\"".$AppUI->_("Select department...")."\" onclick=\"javascript:popDepartment();\" /><input type=\"hidden\" name=\"project_departments\"";
 }
 
 // Get contacts list
@@ -469,9 +473,9 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	$depts_list = $q->loadHashList("dept_id");
 
 	foreach($depts_list as $dept_id => $dept_info){
-		$selected = in_array($dept_id, $checked_array) ? "selected" : "";
+		$selected = in_array($dept_id, $checked_array) ? " selected=\"selected\"" : "";
 
-		$parsed .= "<option value='$dept_id' $selected>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";
+		$parsed .= "<option value=\"{$dept_id}\"{$selected}>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";
 		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces+5);
 	}
 	
