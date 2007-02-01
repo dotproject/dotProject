@@ -127,10 +127,22 @@ class EventQueue {
 		$args = unserialize($fields['queue_data']);
 		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);
+			if (!class_exists($class)) {
+				dprint(__FILE__, __LINE__, 2, "Cannot process event: Class $class does not exist");
+				return false;
+			}
 			$object = new $class;
+			if (!method_exists($object, $method)) {
+				dprint(__FILE__, __LINE__, 2, "Cannot process event: Method $class::$method does not exist");
+				return false;
+			}
 			return $object->$method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
 		} else {
 			$method = $fields['queue_callback'];
+			if (!function_exists($method)) {
+				dprint(__FILE__, __LINE__, 2, "Cannot process event: Function $method does not exist");
+				return false;
+			}
 			return $method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
 		}
 	}
