@@ -76,6 +76,10 @@ function submitIt(){
    if (form.user_username.value.length < <?php echo dPgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo dPgetConfig('admin_username'); ?>') {
         alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS)  ;?>"  + <?php echo dPgetConfig('username_min_len'); ?>);
         form.user_username.focus();
+      <?php if ($canEdit && !$user_id) { ?>
+    } else if (form.user_role.value <=0 ) {
+        alert("<?php echo $AppUI->_('adminValidRole', UI_OUTPUT_JS);?>");
+        form.user_role.focus();     <?php } ?>
     } else if (form.user_password.value.length < <?php echo dPgetConfig('password_min_len'); ?>) {
         alert("<?php echo $AppUI->_('adminValidPassword', UI_OUTPUT_JS);?>" + <?php echo dPgetConfig('password_min_len'); ?>);
         form.user_password.focus();
@@ -271,7 +275,9 @@ function setDept( key, val ) {
         <input type="button" value="<?php echo $AppUI->_('back');?>" onClick="javascript:history.back(-1);" class="button" />
     </td>
     <td align="right">
-        <input type="button" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt()" class="button" />
+    <?php if ($canEdit && !$user_id) { ?>
+	<?php echo $AppUI->_('Inform new user of his account details?'); ?> <input type='checkbox' value='1' name='send_user_mail' >&nbsp;&nbsp;&nbsp;<?php } ?>
+	<input type="button" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt()" class="button" />
     </td>
 </tr>
 </table>

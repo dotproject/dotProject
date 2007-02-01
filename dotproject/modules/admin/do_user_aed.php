@@ -69,20 +69,20 @@ if ($del) {
               if (($msg = $obj->store())) {
       		$AppUI->setMsg( $msg, UI_MSG_ERROR );
               } else {
-                    if ($isNewUser) {
+                    if ($isNewUser && $_REQUEST['send_user_mail']) {
                           notifyNewUser($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
                     }
                     if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
                         $perms =& $AppUI->acl();
                       	if ( $perms->insertUserRole($_REQUEST['user_role'], $obj->user_id)) {
-                       		$AppUI->setMsg( "added", UI_MSG_ALERT, true );
+                       		$AppUI->setMsg( "", UI_MSG_ALERT, true );
                        	} else {
                        		$AppUI->setMsg( "failed to add role", UI_MSG_ERROR );
                        	}
                     }
-                    $AppUI->setMsg( $isNewUser ? 'added - please setup roles and permissions now.  User must have at least one role to log in.' : 'updated', UI_MSG_OK, true );
+                    $AppUI->setMsg( $isNewUser ? 'added' : 'updated', UI_MSG_OK, true );
               }
-      	  ($isNewUser)?$AppUI->redirect("m=admin&a=viewuser&user_id=". $obj->user_id . "&tab=3"):$AppUI->redirect();
+      	  ($isNewUser)?$AppUI->redirect("m=admin&a=viewuser&user_id=". $obj->user_id . "&tab=2"):$AppUI->redirect();
        }
 
 

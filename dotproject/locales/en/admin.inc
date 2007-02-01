@@ -83,6 +83,7 @@
 "adminInvalidYear"=>"The year you have provided is invalid.",
 "adminPasswordsDiffer"=>"Your passwords do not match.",
 "adminValidFirstName"=>"Please enter a first name",
+"adminValidRole"=>"Please select a role for the new user.  Every user must have a role assigned in order to log in.",
 "adminValidLastName"=>"Please enter a last name",
 "adminValidPassword"=>"Please enter a valid password.  It needs to have a minimal length of ",
 "adminValidUserName"=>"Please enter a valid user name.  It needs to have a minimal length of ",
