@@ -86,6 +86,9 @@ $jpLocale = dPgetConfig( 'jpLocale' );
 if ($jpLocale) {
 	$graph2->scale->SetDateLocale( $jpLocale );
 }
+else {
+    $graph->scale->SetDateLocale( $AppUI->user_lang[2] );
+}
 
 if ($start_date && $end_date) {
 	$graph2->SetDateRange( $start_date, $end_date );

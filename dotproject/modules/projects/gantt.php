@@ -104,7 +104,7 @@ if ($jpLocale) {
 	$graph->scale->SetDateLocale( $jpLocale );
 }
 else {
-    $graph->scale->SetDateLocale( $AppUI->user_lang[0] );
+    $graph->scale->SetDateLocale( $AppUI->user_lang[2] );
 }
 
 if ($start_date && $end_date) {
