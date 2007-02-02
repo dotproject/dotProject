@@ -520,7 +520,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         $q->addTable('task_dependencies');
         $q->addQuery('dependencies_task_id');
         $q->addWhere('dependencies_req_task_id=' . $a['task_id']);
-        $query = $q->loadHashList(1);
+        $query = $q->loadList();
 
         foreach($query as $dep) {
                 // find row num of dependencies
