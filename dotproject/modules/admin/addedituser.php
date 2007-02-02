@@ -169,7 +169,7 @@ function setDept( key, val ) {
 <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
 ?>
 <tr>
-    <td align="right">* <?php echo $AppUI->_('User Type');?>:</td>
+    <td align="right"> <?php echo $AppUI->_('User Type');?>:</td>
     <td>
 <?php
     echo arraySelect( $utypes, 'user_type', 'class=text size=1', $user["user_type"], true );
@@ -180,7 +180,7 @@ function setDept( key, val ) {
 ?>
 <?php if ($canEdit && !$user_id) { ?>
 <tr>
-    <td align="right"><?php echo $AppUI->_('User Role');?>:</td>
+    <td align="right">* <?php echo $AppUI->_('User Role');?>:</td>
     <td><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"','', true);?></td>
 </tr>
 <?php }
