@@ -24,3 +24,17 @@ ALTER TABLE `custom_fields_values` ADD INDEX `idx_cfv_id` ( `value_id` );
 
 # 20070126
 ALTER TABLE `files` ADD `file_folder` INT(11) DEFAULT '0' NOT NULL;
+
+# 20070126
+#
+# Table structure for table `file_folders`
+#
+
+DROP TABLE IF EXISTS `file_folders`;
+CREATE TABLE `file_folders` (
+	`file_folder_id` int(11) NOT NULL auto_increment,
+	`file_folder_parent` int(11) NOT NULL default '0',
+	`file_folder_name` varchar(255) NOT NULL default '',
+	`file_folder_description` text,
+	PRIMARY KEY  (`file_folder_id`)
+) TYPE=MyISAM;
