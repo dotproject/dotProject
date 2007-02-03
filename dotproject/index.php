@@ -300,6 +300,13 @@ if (! isset($_SESSION['all_tabs'][$m]) ) {
 				'name' => ucfirst(str_replace('_', ' ', $name)),
 				'file' => DP_BASE_DIR . '/modules/' . $dir . '/' . $filename,
 				'module' => $dir);
+
+			/* 
+			** Don't forget to unset $arr again! $arr is likely to be used in the sequel declaring
+			** any temporary array. This may lead to strange bugs with disappearing tabs (cf. #1767).
+			** @author: gregorerhardt 	@date: 20070203
+			*/
+			unset($arr); 
 		}
 	}
 } else {
