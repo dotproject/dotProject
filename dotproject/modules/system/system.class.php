@@ -193,15 +193,17 @@ class CConfig extends CDpObject {
 }
 
 
-class bcode {
+class bcode extends CDpObject {
         var $_billingcode_id=NULL;
         var $company_id;
+        var $billingcode_id = NULL;
         var $billingcode_desc;
         var $billingcode_name;
         var $billingcode_value;
         var $billingcode_status;
 
         function bcode() {
+        	$this->CDpObject( 'billingcode', 'billingcode_id' );
         }
 
         function bind( $hash ) {
@@ -214,26 +216,38 @@ class bcode {
         }
 
         function delete() {
-                $sql = "update billingcode set billingcode_status=1 where billingcode_id='".$this->_billingcode_id."'";
-                if (!db_exec( $sql )) {
+                $q  = new DBQuery;
+                $q->addTable('billingcode');
+                $q->addUpdate('billingcode_status', '1');
+                $q->addWhere("billingcode_id='".$this->_billingcode_id."'");
+                if (!$q->exec()) {
+                        $q->clear();
                         return db_error();
                 } else {
+                        $q->clear();
                         return NULL;
                 }
         }
 
         function store() {
-         				$q = new DBQuery;
+				        $q = new DBQuery;
                 $q->addQuery('billingcode_id');
 								$q->addTable('billingcode');
 								$q->addWhere('billingcode_name = \'' . $this->billingcode_name . "'");
 								$q->addWhere('company_id = ' . $this->company_id);
-                if ($q->loadResult())
-								        return 'Billing Code::code already exists';
-                else if (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) {
-                        return "Billing Code::store failed <br />" . db_error();
-                } else {
-                        return NULL;
+								$found_id = $q->loadResult();
+								
+                if ($this->_billingcode_id) {
+                	$q->setDelete('billingcode');
+								  $q->addWhere('billingcode_id = ' . $this->_billingcode_id);
+								  $q->exec();
                 }
+                
+                if ($found_id && $found_id != $this->_billingcode_id)
+								        return 'Billing Code::code already exists';
+                elseif (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) 
+                        return 'Billing Code::store failed <br />' . db_error();
+                else
+                        return NULL;
         }
 }
