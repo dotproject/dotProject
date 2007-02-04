@@ -299,26 +299,26 @@ foreach($projects as $p) {
  				$graph->Add($bar2);
  			}				
  				
- 				// Insert workers for each task into Gantt Chart 
- 				$q  = new DBQuery;
-				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT user_username, t.task_id');
-				$q->addJoin('users', 'u', 'u.user_id = t.user_id');
-				$q->addWhere("t.task_id = ".$t["task_id"]);
-				$q->addOrder('user_username ASC');
- 				$workers = $q->loadList();
-				$q->clear();
- 				$workersName = "";
- 				foreach($workers as $w)
- 				{	
- 					$workersName .= " ".$w["user_username"];
- 				
- 					$bar3 = new GanttBar($row++, array("   * ".$w["user_username"], " ", " "," "), "0", "0;", 0.6);							
- 					$bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
- 					$bar3->SetFillColor("#".$p['project_color_identifier']);		
- 					$graph->Add($bar3);
- 				}
- 				// End of insert workers for each task into Gantt Chart  				
+			// Insert workers for each task into Gantt Chart 
+			$q  = new DBQuery;
+			$q->addTable('user_tasks', 't');
+			$q->addQuery('DISTINCT user_username, t.task_id');
+			$q->addJoin('users', 'u', 'u.user_id = t.user_id');
+			$q->addWhere("t.task_id = ".$t["task_id"]);
+			$q->addOrder('user_username ASC');
+			$workers = $q->loadList();
+			$q->clear();
+			$workersName = "";
+			foreach($workers as $w)
+			{	
+				$workersName .= " ".$w["user_username"];
+			
+				$bar3 = new GanttBar($row++, array("   * ".$w["user_username"], " ", " "," "), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);							
+				$bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
+				$bar3->SetFillColor("#".$p['project_color_identifier']);		
+				$graph->Add($bar3);
+			}
+			// End of insert workers for each task into Gantt Chart  				
  		}
  		// End of insert tasks into Gantt Chart 
  	}			
