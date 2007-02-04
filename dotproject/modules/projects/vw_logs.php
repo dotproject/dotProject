@@ -11,9 +11,18 @@
 	$q->addTable('billingcode');
 	$q->addQuery('billingcode_id, billingcode_name');
 	$q->addOrder('billingcode_name');
+	$q->addWhere('billingcode_status = 0');
 	$q->addWhere('(company_id = 0 OR company_id = ' . $company_id . ')');
   $task_log_costcodes = $q->loadHashList();
   array_unshift($task_log_costcodes, '');
+  
+ 	// Show deleted codes separately (at the end)
+	$q->addTable('billingcode');
+	$q->addQuery('billingcode_id, billingcode_name');
+	$q->addOrder('billingcode_name');
+	$q->addWhere('billingcode_status = 1');
+	$q->addWhere('(company_id = 0 OR company_id = ' . $company_id . ')');
+	$task_log_costcodes = array_merge($task_log_costcodes, $q->loadHashList());
 	
 	$q  = new DBQuery;
 	$q->addTable('users');
