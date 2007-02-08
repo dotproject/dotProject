@@ -85,8 +85,11 @@ $dialog = dPgetParam( $_GET, 'dialog', 0 );
 	</script>
 
 </head>
-
+<?php if (!$dialog): ?>
 <body class="mainpage" background="style/classic/images/bground.gif">
+<?php else: ?>
+<body class="mainpage">
+<?php endif; ?>
 
 <table class="nav" width="100%" cellpadding="0" cellspacing="2">
 
