@@ -162,7 +162,6 @@ function setDept( key, val ) {
 		echo '<strong>' . $user["user_username"] . '</strong>';
     } else {
         echo '<input type="text" class="text" name="user_username" value="' . $user["user_username"] . '" maxlength="255" size="40" />';
-	//	echo ' <span class="smallNorm">(' . $AppUI->_('required') . ')</span>';
     }
 ?>
 	</td></tr>
@@ -219,46 +218,6 @@ function setDept( key, val ) {
     <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
     <td><input type="text" class="text" name="contact_email" value="<?php echo $user["contact_email"];?>" maxlength="255" size="40" /> </td>
 </tr>
-<?php
-/*
-<tr>
-    <td align="right"><?php echo $AppUI->_('Phone');?>:</td>
-    <td><input type="text" class="text" name="contact_phone" value="<?php echo $user["contact_phone"];?>" maxlength="50" size="40" /> </td>
-    </tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Home Phone');?>:</td>
-    <td><input type="text" class="text" name="contact_phone2" value="<?php echo $user["contact_phone2"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Mobile');?>:</td>
-    <td><input type="text" class="text" name="contact_mobile" value="<?php echo $user["contact_mobile"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Address');?>1:</td>
-    <td><input type="text" class="text" name="contact_address1" value="<?php echo $user["contact_address1"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Address');?>2:</td>
-    <td><input type="text" class="text" name="contact_address2" value="<?php echo $user["contact_address2"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('City');?>:</td>
-    <td><input type="text" class="text" name="contact_city" value="<?php echo $user["contact_city"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('State');?>:</td>
-    <td><input type="text" class="text" name="contact_state" value="<?php echo $user["contact_state"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo  $AppUI->_('Postcode').' / '.$AppUI->_('Zip Code');?>:</td>
-    <td><input type="text" class="text" name="contact_zip" value="<?php echo $user["contact_zip"];?>" maxlength="50" size="40" /> </td></tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Country');?>:</td>
-    <td><input type="text" class="text" name="contact_country" value="<?php echo $user["contact_country"];?>" maxlength="50" size="40" /> </td>
-</tr>
-<tr>
-    <td align="right">ICQ#:</td>
-    <td><input type="text" class="text" name="contact_icq" value="<?php echo $user["contact_icq"];?>" maxlength="50"> AOL Nick: <input type="text" class="text" name="contact_aol" value="<?php echo $user["contact_aol"];?>" maxlength="50"> </td>
-</tr>
-<tr>
-    <td align="right"><?php echo $AppUI->_('Birthday');?>:</td>
-    <td><input type="text" class="text" name="contact_birthday" value="<?php if(intval($user["contact_birthday"])!=0) { echo substr($user["contact_birthday"],0,10);}?>" maxlength="50" size="40" /> format(YYYY-MM-DD)</td>
-</tr>
-*/?>
 <tr>
     <td align="right" valign=top><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
     <td><textarea class="text" cols=50 name="user_signature" style="height: 50px"><?php echo @$user["user_signature"];?></textarea></td>
