@@ -208,7 +208,7 @@ jpGraph is the third party package that is used throughout dotProject to create 
 "ldap_port_tooltip"=>"Port Number to use to connect to LDAP authentication host.",
 "ldap_search_pass_title"=>"LDAP Search User Password",
 "ldap_search_user_title"=>"LDAP Search User",
-"ldap_search_user_tooltip"=>"The full CN of a user who has access to search your users directory",
+"ldap_search_user_tooltip"=>"The full DN of a user who has access to search your users directory",
 "ldap_user_filter_title"=>"LDAP User Filter",
 "ldap_user_filter_tooltip"=>"User Filter to use for determining matching users on LDAP queries.  Check with your site administrator for details.",
 "ldap_version_title"=>"LDAP Version",
