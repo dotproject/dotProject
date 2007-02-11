@@ -651,7 +651,7 @@ class CAppUI {
 		$auth =& getauth($auth_method);
 		
 		$username = trim( db_escape( $username ) );
-		$password = trim( db_escape( $password ) );
+		$password = trim($password);
 
 		if (!$auth->authenticate($username, $password)) {
 			return false;
