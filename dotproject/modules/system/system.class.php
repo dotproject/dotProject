@@ -237,15 +237,19 @@ class bcode extends CDpObject {
 								$q->addWhere('company_id = ' . $this->company_id);
 								$found_id = $q->loadResult();
 								
-                if ($this->_billingcode_id) {
-                	$q->setDelete('billingcode');
-								  $q->addWhere('billingcode_id = ' . $this->_billingcode_id);
-								  $q->exec();
-                }
-                
                 if ($found_id && $found_id != $this->_billingcode_id)
 								        return 'Billing Code::code already exists';
-                elseif (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) 
+								elseif ($this->_billingcode_id) {
+									$q->addTable('billingcode');
+									$q->addUpdate('billingcode_desc', $this->billingcode_desc);
+									$q->addUpdate('billingcode_name', $this->billingcode_name);
+									$q->addUpdate('billingcode_value', $this->billingcode_value);
+									$q->addUpdate('billingcode_status', $this->billingcode_status);
+									$q->addUpdate('company_id', $this->company_id);
+									$q->addWhere('billingcode_id = ' . $this->_billingcode_id);	
+									$q->exec();
+									$q->clear();
+								} elseif (!($ret = db_insertObject ( 'billingcode', $this, 'billingcode_id' ))) 
                         return 'Billing Code::store failed <br />' . db_error();
                 else
                         return NULL;
