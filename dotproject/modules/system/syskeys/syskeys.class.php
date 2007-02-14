@@ -34,6 +34,13 @@ class CSysVal extends CDpObject {
 	var $sysval_title = NULL;
 	var $sysval_value = NULL;
 
+	function check() {
+		if ($this->sysval_key_id == 0)
+			return 'Key Type cannot be empty';
+		
+		return null;
+	}
+
 	function CSysVal( $key=null, $title=null, $value=null ) {
 		$this->CDpObject( 'sysvals', 'sysval_id' );
 		$this->sysval_key_id = $key;
