@@ -229,7 +229,7 @@ function setCalendar( idate, fdate ) {
 
 	// set end date automatically with start date if start date is after end date
 	if (calendarField == 'start_date') {
-		if( document.editFrm.end_date.value < idate) {
+		if( document.editFrm.event_end_date.value < idate) {
 			document.editFrm.event_end_date.value = idate;
 			document.editFrm.end_date.value = fdate;
 		}
