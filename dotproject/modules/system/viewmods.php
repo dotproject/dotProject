@@ -8,10 +8,16 @@ if (!$canRead) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
 
+$hidden_modules = array(
+	'public',
+	'install',
+);
 $q = new DBQuery;
 $q->addQuery('*');
 $q->addTable('modules');
-$q->addWhere("mod_name <> 'Public'");
+foreach ($hidden_modules as $no_show) {
+	$q->addWhere('mod_directory != \'' . $no_show . '\'');
+}
 $q->addOrder('mod_ui_order');
 $modules = db_loadList( $q->prepare() );
 // get the modules actually installed on the file system
@@ -130,7 +136,7 @@ foreach ($modules as $row) {
 
 foreach ($modFiles as $v) {
 	// clear the file system entry
-	if ($v) {
+	if ($v && ! in_array($v, $hidden_modules)) {
 		$s = '';
 		$s .= '<td></td>';
 		$s .= '<td>'.$v.'</td>';
