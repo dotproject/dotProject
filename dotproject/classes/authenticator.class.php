@@ -230,7 +230,8 @@ if (!defined('DP_BASE_DIR')){
 			@ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
 			//$ldap_bind_dn = "cn=".$this->ldap_search_user.",".$this->base_dn;
-			$ldap_bind_dn = $this->ldap_search_user;	
+			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;	
+			$ldap_bind_pw = empty($this->ldap_search_pass) ? NULL : $this->ldap_search_pass;
 
 			if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $this->ldap_search_pass))
 			{
