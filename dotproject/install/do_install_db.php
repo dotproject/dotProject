@@ -55,9 +55,11 @@ $versionPath = array(
 	'2.0.1',
 	'2.0.2',
 	'2.0.3',
-	'2.0.4'
+	'2.0.4',
+	'2.1-rc1',
 );
 
+global $lastDBUpdate;
 $lastDBUpdate = '';
 
 require_once( "$baseDir/lib/adodb/adodb.inc.php" );
@@ -149,7 +151,10 @@ if ($dbc && ($do_db || $do_db_cfg)) {
     for ($i = $from_key; $i < $to_key; $i++) {
       $from_version = str_replace(array('.','-'), '', $versionPath[$i]);
       $to_version = str_replace(array('.','-'), '', $versionPath[$i+1]);
-      InstallLoadSql("$baseDir/db/upgrade_{$from_version}_to_{$to_version}.sql");
+      // Only do updates since last update - this is only necessary if updating via CVS of a previous
+      // version, but well worth doing anyway.
+      InstallLoadSql("$baseDir/db/upgrade_{$from_version}_to_{$to_version}.sql", $db_version['last_db_update']);
+      $db_version['last_db_update'] = $lastDBUpdate; // Global set by InstallLoadSql.
     }
   } else if (file_exists("$baseDir/db/upgrade_latest.sql")) {
     // Need to get the installed version again, as it should have been
@@ -179,14 +184,8 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  if ($mode == 'upgrade') {
   dPmsg("Applying data modifications");
   // Check for an upgrade script and run it if necessary.
-  $to_version = str_replace(array('-', '.'), '', $current_version);
-  if ($last_version != $current_version) {
-	  if (file_exists("$baseDir/db/upgrade_to_{$to_version}.php")) {
-		 include_once "$baseDir/db/upgrade_to_{$to_version}.php";
-		 
-		 $code_updated = dPupgrade($db_version['code_version'], $current_version, $db_version['last_code_update']);
-		}
-  } else if (file_exists("$baseDir/db/upgrade_latest.php")) {
+  // Note we don't need to run individual version files any more
+  if (file_exists("$baseDir/db/upgrade_latest.php")) {
    include_once "$baseDir/db/upgrade_latest.php";
    $code_updated = dPupgrade($db_version['code_version'], $current_version, $db_version['last_code_update']);
   } else {
@@ -198,6 +197,9 @@ if ($dbc && ($do_db || $do_db_cfg)) {
 
  dPmsg("Updating version information");
  // No matter what occurs we should update the database version in the dpversion table.
+ if (empty($lastDBUpdate)) {
+ 	$lastDBUpdate = $code_updated;
+ }
  $sql = "UPDATE dpversion
  SET db_version = '$dp_version_major',
  last_db_update = '$lastDBUpdate',

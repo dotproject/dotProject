@@ -10,6 +10,7 @@
 # !BACKUP YOU DATABASE BEFORE APPLYING THIS SCRIPT!
 # !                  W A R N I N G                !
 #
+# 00000000
 # add task_departments and contacts to task table
 ALTER TABLE `tasks` ADD `task_departments` CHAR( 100 ) ;
 ALTER TABLE `tasks` ADD `task_contacts` CHAR( 100 ) ;
