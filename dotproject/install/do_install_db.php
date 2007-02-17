@@ -140,6 +140,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  $db->Execute('USE ' . $dbname);
  $db_version = InstallGetVersion($mode, $db);
 
+ $code_updated = '';
  if ($mode == 'upgrade') {
   dPmsg("Applying database updates");
   $last_version = $db_version['code_version'];
@@ -167,6 +168,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
   // After all the updates, find the new version information.
   $new_version = InstallGetVersion($mode, $db);
   $lastDBUpdate = $new_version['last_db_update'];
+  $code_updated = $new_version['last_code_update'];
  }
 
 				$dbError = $db->ErrorNo();
@@ -180,7 +182,6 @@ if ($dbc && ($do_db || $do_db_cfg)) {
   $dbMsg = "Database successfully setup<br>";
  }
 
- $code_updated = '';
  if ($mode == 'upgrade') {
   dPmsg("Applying data modifications");
   // Check for an upgrade script and run it if necessary.

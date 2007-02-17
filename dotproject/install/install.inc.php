@@ -49,15 +49,13 @@ function InstallGetVersion($mode, $db) {
   'code_version' => '1.0.2',
   'db_version' => '1'
  );
- if ($mode == 'upgrade') {
-  $res = $db->Execute('SELECT * FROM dpversion LIMIT 1');
-  if ($res && $res->RecordCount() > 0) {
+ $res = $db->Execute('SELECT * FROM dpversion LIMIT 1');
+ if ($res && $res->RecordCount() > 0) {
    $row = $res->FetchRow();
    $result['last_db_update'] = str_replace('-', '', $row['last_db_update']);
    $result['last_code_update'] = str_replace('-', '', $row['last_code_update']);
    $result['code_version'] = $row['code_version'] ? $row['code_version'] : '1.0.2';
    $result['db_version'] = $row['db_version'] ? $row['db_version'] : '1';
-  }
  }
  return $result;
 
