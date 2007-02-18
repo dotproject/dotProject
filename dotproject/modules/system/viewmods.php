@@ -37,6 +37,7 @@ $titleBlock->show();
 	<th><?php echo $AppUI->_('Menu Text');?></th>
 	<th><?php echo $AppUI->_('Menu Icon');?></th>
 	<th><?php echo $AppUI->_('Menu Status');?></th>
+	<th><?php echo $AppUI->_('#');?></th>
 </tr>
 <?php
 // do the modules that are installed on the system
