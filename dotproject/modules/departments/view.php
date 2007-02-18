@@ -1,4 +1,8 @@
 <?php /* DEPARTMENTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 global $department, $min_view;
 $dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);
 

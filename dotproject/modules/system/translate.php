@@ -1,4 +1,8 @@
 <?php /* SYSTEM $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 
 // only user_type of Administrator (1) can access this page
 if (!$canEdit || $AppUI->user_type != 1) {

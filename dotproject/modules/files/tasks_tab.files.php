@@ -1,4 +1,8 @@
 <?php // check access to files module
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 global $AppUI, $m, $obj, $task_id, $dPconfig;
 if (!getDenyRead( 'files' )) {
         if (!getDenyEdit( 'files' )) { 

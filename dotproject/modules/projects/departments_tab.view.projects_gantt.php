@@ -1,4 +1,8 @@
 <?php /* PROJECTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
 
 $perms =& $AppUI->acl();

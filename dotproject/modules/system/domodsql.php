@@ -1,4 +1,8 @@
 <?php /* SYSTEM $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 ##
 ## Activate or move a module entry
 ##

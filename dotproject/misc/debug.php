@@ -1,5 +1,8 @@
 <?php
-$debug_file = "{$dPconfig['root_dir']}/files/debug.log";
+if (! defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
+$debug_file = DP_BASE_DIR . '/files/debug.log';
 
 function writeDebug( $s, $t='', $f='?', $l='?' ) {
 	GLOBAL $debug, $debug_file;

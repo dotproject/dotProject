@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 // get GETPARAMETER for contact_id
 $contact_id = intval( $_GET['contact_id']);
 

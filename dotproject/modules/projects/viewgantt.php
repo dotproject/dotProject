@@ -1,4 +1,8 @@
 <?php /* TASKS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 GLOBAL  $AppUI,$company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 //Secho dPgetConfig( 'jpLocale' );
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);

@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 ob_start();
 	@readfile( "{$dPconfig['root_dir']}/locales/$AppUI->user_locale/common.inc" );
 	

@@ -1,4 +1,8 @@
 <?php /* $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 $task_id = intval( dPgetParam( $_GET, "task_id", 0 ) );
 $task_log_id = intval( dPgetParam( $_GET, "task_log_id", 0 ) );
 $reminded = intval( dPgetParam( $_GET, 'reminded', 0) );

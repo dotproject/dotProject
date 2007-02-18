@@ -1,4 +1,8 @@
 <?php /* ADMIN  $Id$ */ 
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 GLOBAL $dPconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 
 /*

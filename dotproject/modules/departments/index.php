@@ -1,4 +1,8 @@
 <?php /* DEPARTMENTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 // load the companies class
 require_once( $AppUI->getModuleClass( 'companies' ) );
 

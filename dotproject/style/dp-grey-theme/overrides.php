@@ -1,4 +1,7 @@
 <?php /* STYLE/DEFAULT $Id$ */
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly');
+}
 
 class CTitleBlock extends CTitleBlock_core {
 }

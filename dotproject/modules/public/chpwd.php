@@ -1,4 +1,8 @@
 <?php /* PUBLIC $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 if (! ($user_id = dPgetParam($_REQUEST, 'user_id', 0)) )
         $user_id = @$AppUI->user_id;
 

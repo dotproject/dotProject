@@ -1,4 +1,8 @@
 <?php  /* PROJECTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 $AppUI->savePlace();
 
 // load the companies class to retrieved denied companies

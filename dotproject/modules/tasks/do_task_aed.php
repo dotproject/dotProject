@@ -1,4 +1,8 @@
 <?php /* TASKS $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 
 function setItem($item_name, $defval = null) {
 	if (isset($_POST[$item_name]))

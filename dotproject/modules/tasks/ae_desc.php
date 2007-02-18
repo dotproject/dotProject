@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 // $Id$
 	global $AppUI, $task_id, $obj, $users, $task_access, $department_selection_list;
 	global $task_parent_options, $dPconfig, $projects, $task_project, $can_edit_time_information, $tab;

@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 // Output the PDF
 // make the PDF file
 if ($project_id != 0)

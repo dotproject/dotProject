@@ -1,4 +1,8 @@
 <?php /* ADMIN $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 require_once( $AppUI->getSystemClass( 'libmail' ) );
 include $AppUI->getModuleClass('contacts');
 $del = isset($_REQUEST['del']) ? $_REQUEST['del'] : FALSE;

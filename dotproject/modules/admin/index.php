@@ -1,4 +1,8 @@
 <?php /* $Id$ */
+if (!defined('DP_BASE_DIR')){
+	die('You should not access this file directly');
+}
+
 $perms =& $AppUI->acl();
 if (! $perms->checkModule($m, 'view'))
 	$AppUI->redirect('m=public&a=access_denied');
