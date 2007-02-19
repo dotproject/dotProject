@@ -1,7 +1,12 @@
 <?php /* COMPANIES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 ##
 ##	Companies: View Projects sub-table
 ##
+
 GLOBAL $AppUI, $company_id, $canEdit;
 
 $q  = new DBQuery;

@@ -1,4 +1,8 @@
 <?php /* PROJECTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 GLOBAL $AppUI, $projects, $company_id;
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');

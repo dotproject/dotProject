@@ -1,4 +1,7 @@
 <?php /* TASKS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 /*
  * Dynamic Tasks Organizer - by J. Christopher Pereira

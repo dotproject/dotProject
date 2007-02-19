@@ -1,4 +1,8 @@
 <?php /* FILES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $link_id = intval( dPgetParam( $_GET, 'link_id', 0 ) );
  
 // check permissions for this record

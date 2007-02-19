@@ -1,4 +1,8 @@
 <?php /* FUNCTIONS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $filters = array( '- Filters -' );
 
 if ($a == 'viewer') {

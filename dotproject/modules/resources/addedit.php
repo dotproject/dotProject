@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 // Copyright 2004 Adam Donnison <adam@saki.com.au>
 $resource_id = intval(dPgetParam($_GET, "resource_id", null));
 $perms =& $AppUI->acl();

@@ -1,6 +1,4 @@
 <?php /* PROJECTS $Id$ */
-//error_reporting( E_ALL );
-
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }

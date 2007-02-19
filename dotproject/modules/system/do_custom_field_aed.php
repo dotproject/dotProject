@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 	/*
 	 *	do_custom_field_aed.php
 	 *

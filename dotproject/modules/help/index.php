@@ -3,7 +3,6 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly');
 }
 
-
 $hid = dPgetParam( $_GET, 'hid', 'help.toc' );
 
 $inc = "{$dPconfig['root_dir']}/modules/help/{$AppUI->user_locale}/$hid.hlp";

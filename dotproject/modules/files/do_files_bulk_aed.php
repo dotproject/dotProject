@@ -1,4 +1,8 @@
 <?php /* fileS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 global $AppUI;
 $selected = dPgetParam( $_POST, 'bulk_selected_file', 0 );
 $redirect = dPgetParam( $_POST, 'redirect', '' );

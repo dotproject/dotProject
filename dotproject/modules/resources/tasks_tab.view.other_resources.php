@@ -1,4 +1,7 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 // Grab a list of the other resources, determine how they are allocated,
 // and if there is a clash between this and other tasks.

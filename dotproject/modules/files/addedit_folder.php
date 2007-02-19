@@ -1,4 +1,8 @@
 <?php /* FILES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $file_folder_parent = intval( dPgetParam( $_GET, 'file_folder_parent', 0 ) );
 $folder = intval( dPgetParam( $_GET, 'folder', 0 ) );
 

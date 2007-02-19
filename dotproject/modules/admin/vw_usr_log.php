@@ -1,3 +1,9 @@
+<?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
+?>
 <script languaje="JavaScript">
 var calendarField = '';
 var calWin = null;

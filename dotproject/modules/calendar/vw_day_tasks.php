@@ -1,4 +1,8 @@
 <?php /* CALENDAR $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 global $this_day, $first_time, $last_time, $company_id, $m, $a;
 
 $links = array();

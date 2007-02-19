@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 	$table_name = dPgetParam($_GET, "table_name", "companies");
 
 	switch($table_name){

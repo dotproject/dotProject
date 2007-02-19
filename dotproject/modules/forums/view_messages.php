@@ -1,4 +1,8 @@
 <?php  /* FORUMS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $AppUI->savePlace();
 $sort = dPgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = dPgetParam($_REQUEST, 'viewtype', 'normal');

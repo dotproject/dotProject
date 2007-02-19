@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $config = array(
 	'mod_name' => 'Resources',
 	'mod_version' => '1.0.1',

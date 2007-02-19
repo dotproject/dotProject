@@ -1,4 +1,7 @@
 <?php /* ADMIN $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 $del = isset($_REQUEST['del']) ? $_REQUEST['del'] : FALSE;
 

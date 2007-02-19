@@ -1,4 +1,8 @@
 <?php /* SMARTSEARCH$Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 //--MSy--
 $files = $AppUI->readFiles( dPgetConfig( 'root_dir' )."/modules/$m/searchobjects", "\.php$" );
 $ssearch=ARRAY();

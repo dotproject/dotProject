@@ -1,4 +1,8 @@
 <?php /* TASKS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 	global $AppUI, $project_id, $df, $canEdit, $m, $tab;
 
 	// Lets check which cost codes have been used before

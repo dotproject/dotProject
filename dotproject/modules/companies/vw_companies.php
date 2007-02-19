@@ -1,4 +1,7 @@
 <?php /* COMPANIES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 global $search_string;
 global $owner_filter_id;

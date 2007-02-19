@@ -1,4 +1,7 @@
 <?php /* SYSKEYS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 include_once( $AppUI->getSystemClass ('dp' ) );
 

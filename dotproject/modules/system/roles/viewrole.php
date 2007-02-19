@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $AppUI->savePlace();
 $perms =& $AppUI->acl();
 $role_id = $_GET['role_id'];

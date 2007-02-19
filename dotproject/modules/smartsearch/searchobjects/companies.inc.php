@@ -1,4 +1,8 @@
 <?php /* SMARTSEARCH$Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 class companies extends smartsearch {
 	var $table = "companies";
 	var $table_module	= "companies";

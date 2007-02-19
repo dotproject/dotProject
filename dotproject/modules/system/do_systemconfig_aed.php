@@ -1,4 +1,8 @@
 <?php /* SYSTEM $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $obj = new CConfig();
 
 // set all checkboxes to false

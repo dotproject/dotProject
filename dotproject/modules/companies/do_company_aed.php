@@ -1,4 +1,8 @@
 <?php /* COMPANIES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $del = dPgetParam( $_POST, 'del', 0 );
 $obj = new CCompany();
 $msg = '';

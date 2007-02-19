@@ -1,4 +1,8 @@
 <?php /* CONTACTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $contact_id = intval( dPgetParam( $_GET, 'contact_id', 0 ) );
 $AppUI->savePlace();
 

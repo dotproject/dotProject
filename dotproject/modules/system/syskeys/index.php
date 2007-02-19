@@ -1,4 +1,8 @@
 <?php /* SYSKEYS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $AppUI->savePlace();
 
 // pull all the key types

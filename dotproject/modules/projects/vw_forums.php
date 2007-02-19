@@ -1,4 +1,8 @@
 <?php /* PROJECTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 GLOBAL $AppUI, $project_id;
 // Forums mini-table in project view action
 $q  = new DBQuery;

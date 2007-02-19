@@ -1,4 +1,8 @@
 <?php /* FILES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 //addfile sql
 $file_id = intval( dPgetParam( $_POST, 'file_id', 0 ) );
 $del = intval( dPgetParam( $_POST, 'del', 0 ) );

@@ -1,4 +1,8 @@
 <?php /* COMPANIES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
 
 // check permissions for this company

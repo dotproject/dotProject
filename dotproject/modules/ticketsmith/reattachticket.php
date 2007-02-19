@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 //update task
 $newparent = dpGetParam( $_GET, 'newparent', 0);
 $ticket = dpgetparam( $_GET, 'ticket', 0 );

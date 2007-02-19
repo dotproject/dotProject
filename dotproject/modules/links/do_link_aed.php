@@ -1,4 +1,8 @@
 <?php /* FILES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 //addlink sql
 $link_id = intval( dPgetParam( $_POST, 'link_id', 0 ) );
 $del = intval( dPgetParam( $_POST, 'del', 0 ) );

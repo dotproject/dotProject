@@ -1,4 +1,7 @@
 <?php /* PROJECTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 /**
 * Generates a report of the task logs for given dates

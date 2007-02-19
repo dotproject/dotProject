@@ -1,4 +1,7 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 if (!$canEdit) {
 	$AppUI->redirect( "m=public&a=access_denied" );

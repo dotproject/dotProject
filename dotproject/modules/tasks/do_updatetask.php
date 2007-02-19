@@ -1,4 +1,7 @@
 <?php /* TASKS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 //There is an issue with international UTF characters, when stored in the database an accented letter
 //actually takes up two letters per say in the field length, this is a problem with costcodes since

@@ -1,4 +1,8 @@
 <?php /* DEPARTMENTS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 // Add / Edit Company
 $dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : 0;
 $company_id = isset($_GET['company_id']) ? $_GET['company_id'] : 0;

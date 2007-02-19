@@ -1,4 +1,7 @@
 <?php /* ROLES $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 /**
  * This class abstracts the concept of a user Role, which is, in effect, an ARO

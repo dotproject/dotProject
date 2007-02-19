@@ -1,4 +1,8 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $coarseness 		 = dPgetParam( $_POST, "coarseness", 1 );
 $do_report 		 = dPgetParam( $_POST, "do_report", 0 );
 $hideNonWd		 = dPgetParam($_POST, "hideNonWd", 0);

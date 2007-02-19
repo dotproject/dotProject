@@ -1,4 +1,7 @@
 <?php
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 $obj =& new CResource;
 $resource_id = dPgetParam($_GET, 'resource_id', 0);

@@ -1,4 +1,8 @@
 <?php /* SYSTEM $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 $AppUI->savePlace();
 
 $titleBlock = new CTitleBlock( 'System Administration', '48_my_computer.png', $m, "$m.$a" );

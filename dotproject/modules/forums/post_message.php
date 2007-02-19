@@ -1,4 +1,8 @@
 <?php /* FORUMS $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
 // Add / Edit forum
 $message_id = isset( $_GET['message_id'] ) ? $_GET['message_id'] : 0;
 $message_parent = isset( $_GET['message_parent'] ) ? $_GET['message_parent'] : -1;

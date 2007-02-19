@@ -1,4 +1,7 @@
 <?php /* PUBLIC $Id$ */
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
 
 function selPermWhere( $obj, $idfld, $namefield, $prefix = '' ) {
 	global $AppUI;

@@ -1,4 +1,9 @@
-<?php /* ADMIN  $Id$ */ ?>
+<?php /* ADMIN  $Id$ */ 
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly');
+}
+
+?>
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">
 <tr>
 	<td width="60" align="right">
