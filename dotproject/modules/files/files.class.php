@@ -8,7 +8,9 @@ require_once( $AppUI->getSystemClass( 'dp' ) );
 require_once( $AppUI->getSystemClass( 'date' ) );
 require_once( $AppUI->getModuleClass( 'tasks' ) );
 require_once( $AppUI->getModuleClass( 'projects' ) );
-if (array_key_exists( 'helpdesk', $AppUI->getInstalledModules() )) {
+global $helpdesk_available;
+
+if (($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
 	require_once( $AppUI->getModuleClass( 'helpdesk' ) );
 }
 /**
@@ -33,30 +35,25 @@ class CFile extends CDpObject {
       var $file_folder = null;
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
+	var $file_helpdesk_item = NULL;
 
 	
 	function CFile() {
 		global $AppUI;
 		$this->CDpObject( 'files', 'file_id' );
-            if (array_key_exists( 'helpdesk', $AppUI->getInstalledModules() )) {
-      	     $this->file_helpdesk_item = NULL;
-            }
-		if ($this->file_helpdesk_item != 0) {
-			$this->_hditem = new CHelpDeskItem();
-			$this->_hditem->load($this->file_helpdesk_item);
-		}
 	}
 	
 	function store() {
-		if ($this->file_helpdesk_item != 0) {
+		global $helpdesk_available;
+		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
 		}
 		parent::store();
 	}
 	
 	function addHelpDeskTaskLog() {
-		global $AppUI;
-		if ($this->file_helpdesk_item != 0) {
+		global $AppUI, $helpdesk_available;
+		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			
 			// create task log with information about the file that was uploaded
 			$task_log = new CHDTaskLog();
@@ -112,6 +109,7 @@ class CFile extends CDpObject {
 	}
 
 	function delete() {
+		global $helpdesk_available;
 		if (!$this->canDelete( $msg ))
 			return $msg;
 		$this->_message = "deleted";
@@ -138,7 +136,7 @@ class CFile extends CDpObject {
 		}
 		$q->clear();
 		
-		if ($this->file_helpdesk_item != 0) {
+		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
 		}
 		return NULL;
@@ -280,9 +278,9 @@ class CFile extends CDpObject {
 	
 	//function notifies about file changing
 	function notify() {	
-		GLOBAL $AppUI, $dPconfig, $locale_char_set;
+		GLOBAL $AppUI, $dPconfig, $locale_char_set, $helpdesk_available;
 		// if helpdesk_item is available send notification to assigned users
-		if ($this->file_helpdesk_item != 0) {
+		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->_hditem = new CHelpDeskItem();
 			$this->_hditem->load($this->file_helpdesk_item);
 			
