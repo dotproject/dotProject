@@ -13,9 +13,9 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once( DP_BASE_DIR."/lib/adodb/adodb.inc.php" );
+require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
 
-$db = NewADOConnection($dPconfig['dbtype']);
+$db = NewADOConnection(dPgetConfig('dbtype'));
 
 function db_connect( $host='localhost', $dbname, $user='root', $passwd='', $persist=false ) {
         global $db, $ADODB_FETCH_MODE;

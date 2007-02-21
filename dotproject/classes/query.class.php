@@ -60,14 +60,10 @@ class DBQuery {
 
   function DBQuery($prefix = null) 
   {
-    global $dPconfig;
-
     if (isset($prefix))
       $this->_table_prefix = $prefix;
-    else if (isset($dPconfig['dbprefix']))
-      $this->_table_prefix = $dPconfig['dbprefix'];
     else
-      $this->_table_prefix = "";
+      $this->_table_prefix = dPgetConfig('dbprefix', '');
 
     $this->clear();
   }

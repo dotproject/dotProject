@@ -95,19 +95,17 @@ class Mail
 */
 function Mail()
 {
-	global $dPconfig;
-
 	$this->autoCheck( true );
-	$this->boundary= "--" . md5( uniqid("myboundary") );
+	$this->boundary= "--" . md5( uniqid('myboundary') );
 	// Grab the current mail handling options
-	$this->transport = isset($dPconfig['mail_transport']) ? $dPconfig['mail_transport'] : 'php';
-	$this->host = isset($dPconfig['mail_host']) ? $dPconfig['mail_host'] : 'localhost';
-	$this->port = isset($dPconfig['mail_port']) ? $dPconfig['mail_port'] : '25';
-	$this->sasl = isset($dPconfig['mail_auth']) ? $dPconfig['mail_auth'] : false;
-	$this->username = @$dPconfig['mail_user'];
-	$this->password = @$dPconfig['mail_pass'];
-	$this->defer = @$dPconfig['mail_defer'];
-	$this->timeout = isset($dPconfig['mail_timeout']) ? $dPconfig['mail_timeout'] : 0;
+	$this->transport = dPgetConfig('mail_transport', 'php');
+	$this->host = dPgetConfig('mail_host', 'localhost');
+	$this->port = dPgetConfig('mail_port', '25');
+	$this->sasl = dPgetConfig('mail_auth', false);
+	$this->username = dPgetConfig('mail_user');
+	$this->password = dPgetConfig('mail_pass');
+	$this->defer = dPgetConfig('mail_defer');
+	$this->timeout = dPgetConfig('mail_timeout', 0);
 }
 
 
@@ -136,8 +134,6 @@ function autoCheck( $bool )
  *	@param string $charset encoding to be used for Quoted-Printable encoding of the subject 
 */
 function Subject( $subject, $charset='' ) {
-	global $dPconfig;
-
 	if( isset($charset) && $charset != "" ) {
 		$this->charset = strtolower($charset);
 	}
@@ -148,7 +144,7 @@ function Subject( $subject, $charset='' ) {
 		$subject = "=?".$this->charset."?Q?".
 			str_replace("=\r\n","",imap_8bit($subject))."?=";		
 	}
-	$this->xheaders['Subject'] = $dPconfig['email_prefix'].' '.strtr( $subject, "\r\n" , "  " );
+	$this->xheaders['Subject'] = dPgetConfig('email_prefix').' '.strtr( $subject, "\r\n" , "  " );
 }
 
 
@@ -388,7 +384,7 @@ function Send() {
  * @access public
  */
 function SMTPSend($to, $subject, $body, &$headers) {
-	global $AppUI, $dPconfig;
+	global $AppUI;
 
 	// Start the connection to the server
 	$error_number = 0;
@@ -408,15 +404,15 @@ function SMTPSend($to, $subject, $body, &$headers) {
 		$this->socketSend(base64_encode($this->username));
 		$rcv = $this->socketSend(base64_encode($this->password));
 		if (strpos($rcv, '235') !== 0) {
-			dprint(__FILE__, __LINE__, 1, "Authentication failed on server: $rcv");
-			$AppUI->setMsg("Failed to login to SMTP server: $rcv");
+			dprint(__FILE__, __LINE__, 1, 'Authentication failed on server: '.$rcv);
+			$AppUI->setMsg('Failed to login to SMTP server: '.$rcv);
 			fclose($this->socket);
 			return false;
 		}
 	}
 	// Determine the mail from address.
 	if ( ! isset($headers['From'])) {
-		$from = $dPconfig['admin_user'] . '@' . $dPconfig['site_domain'];
+		$from = dPgetConfig('admin_user') . '@' . dPgetConfig('site_domain');
 	} else {
 		// Search for the parts of the email address
 		if (preg_match('/.*<([^@]+@[a-z0-9\._-]+)>/i', $headers['From'], $matches))

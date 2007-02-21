@@ -254,7 +254,6 @@ class CTask extends CDpObject
     
     
     function updateDynamics( $fromChildren = false ) {
-        GLOBAL $dPconfig;
         //Has a parent or children, we will check if it is dynamic so that it's info is updated also
         
         $modified_task = new CTask();
@@ -275,7 +274,7 @@ class CTask extends CDpObject
             
             //Update allocated hours based on children with duration type of 'days'
             // use here the daily working hours instead of the full 24 hours to calculate dynamic task duration!
-            $sql2 = "SELECT SUM( task_duration * ".$dPconfig['daily_working_hours']." ) from " . $this->_tbl 
+            $sql2 = "SELECT SUM( task_duration * ".dPgetConfig('daily_working_hours')." ) from " . $this->_tbl 
                 . " WHERE task_parent = " . $modified_task->task_id ." AND task_id <> " . $modified_task->task_id 
                 . " AND task_duration_type > 1" 
                 . " GROUP BY task_parent;";
@@ -289,7 +288,7 @@ class CTask extends CDpObject
                 $modified_task->task_duration = round($children_allocated_hours,2);
             } 
             else {
-                $modified_task->task_duration = round($children_allocated_hours / $dPconfig['daily_working_hours'], 2);
+                $modified_task->task_duration = round($children_allocated_hours / dPgetConfig('daily_working_hours'), 2);
             }
             
             //Update worked hours based on children
@@ -313,13 +312,13 @@ class CTask extends CDpObject
                 . " AND task_duration_type = 1 ";
             $real_children_hours_worked = (float) db_loadResult( $sql );
             
-            $sql = "SELECT sum(task_percent_complete * task_duration *" . $dPconfig['daily_working_hours'] 
+            $sql = "SELECT sum(task_percent_complete * task_duration *" . dPgetConfig('daily_working_hours') 
                 . ") FROM tasks WHERE task_parent = " . $modified_task->task_id ." AND task_id <> " 
                 . $modified_task->task_id . " AND task_duration_type != 1 ";
             $real_children_hours_worked += (float) db_loadResult( $sql );
             
             $total_hours_allocated = (float)($modified_task->task_duration 
-                                             * ($modified_task->task_duration_type > 1?$dPconfig['daily_working_hours']:1));
+                                             * ($modified_task->task_duration_type > 1?dPgetConfig('daily_working_hours'):1));
             if($total_hours_allocated > 0){
                 $modified_task->task_percent_complete = $real_children_hours_worked / $total_hours_allocated;
             } 
@@ -680,7 +679,7 @@ class CTask extends CDpObject
     
     
     function notifyOwner() {
-        GLOBAL $AppUI, $dPconfig, $locale_char_set;
+        GLOBAL $AppUI, $locale_char_set;
         
         $sql = "SELECT project_name FROM projects WHERE project_id=$this->task_project";
         $projname = db_loadResult( $sql );
@@ -713,7 +712,7 @@ class CTask extends CDpObject
             $body = $AppUI->_('Project', UI_OUTPUT_RAW).": $projname";
             $body .= "\n".$AppUI->_('Task', UI_OUTPUT_RAW).":    $this->task_name";
             $body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW)
-                .":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
+                .':     '.dPgetConfig('base_url') . '/index.php?m=tasks&a=view&task_id='.$this->task_id;
             $body .= "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":". "\n$this->task_description";
             $body .= "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW).":" . $AppUI->user_first_name . " " 
                 .$AppUI->user_last_name;
@@ -738,7 +737,7 @@ class CTask extends CDpObject
     
     //additional comment will be included in email body
     function notify( $comment = '' ) {
-        GLOBAL $AppUI, $dPconfig, $locale_char_set;
+        GLOBAL $AppUI, $locale_char_set;
         $df = $AppUI->getPref('SHDATEFORMAT');
         $df .= " " . $AppUI->getPref('TIMEFORMAT');
         
@@ -780,7 +779,7 @@ class CTask extends CDpObject
             $body .= "\n".$AppUI->_('Finish Date', UI_OUTPUT_RAW) . ": " 
                 . ($this->task_end_date != "" ? $task_finish_date->format( $df ) : "");
             $body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW)
-                .":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id";
+                .':     '.DP_BASE_URL.'/index.php?m=tasks&a=view&task_id='.$this->task_id;
             $body .= "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":" . "\n$this->task_description";
             if ($users[0]['creator_email']) {
                 $body .= "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW).":" . "\n" . $users[0]['creator_first_name'] 
@@ -927,7 +926,7 @@ class CTask extends CDpObject
         $task_types = dPgetSysVal("TaskType");
         $body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
         $body .= $AppUI->_('URL', UI_OUTPUT_RAW) 
-            . ": {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=$this->task_id\n\n";
+            . ': '.DP_BASE_URL.'/index.php?m=tasks&a=view&task_id='.$this->task_id."\n\n";
         $body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ": $log->task_log_name\n\n";
         $body .= $log->task_log_description;
         
@@ -1513,7 +1512,7 @@ class CTask extends CDpObject
     }
     
     function canUserEditTimeInformation(){
-        global $dPconfig, $AppUI;
+        global $AppUI;
         
         $project = new CProject();
         $project->load( $this->task_project );
@@ -1522,8 +1521,7 @@ class CTask extends CDpObject
         // enabled to change time information related to task
         $can_edit_time_information = false;
         // Let's see if all users are able to edit task time information
-        if(isset($dPconfig['restrict_task_time_editing']) && $dPconfig['restrict_task_time_editing']==true 
-           && $this->task_id > 0){
+        if(dPgetConfig('restrict_task_time_editing') == true && $this->task_id > 0){
             
             // Am I the task owner?
             if($this->task_owner == $AppUI->user_id){
@@ -1540,8 +1538,7 @@ class CTask extends CDpObject
                 $can_edit_time_information = true;
             }
             
-        } else if (!isset($dPconfig['restrict_task_time_editing']) || $dPconfig['restrict_task_time_editing']==false 
-                   || $this->task_id == 0) { // If all users are able, then don't check anything
+        } else if (dPgetConfig('restrict_task_time_editing') == false || $this->task_id == 0) { // If all users are able, then don't check anything
             $can_edit_time_information = true;
         }
         return $can_edit_time_information;
@@ -1554,11 +1551,9 @@ class CTask extends CDpObject
      * set in the system config.
      */
     function addReminder( ) {
-        global $dPconfig;
         $day = 86400;
         
-        if (! isset($dPconfig['task_reminder_control'])
-            || ! $dPconfig['task_reminder_control'])
+        if (!dPgetConfig('task_reminder_control'))
             return;
         
         if (! $this->task_end_date) {// No end date, can't do anything.
@@ -1570,8 +1565,8 @@ class CTask extends CDpObject
         }
         
         $eq = new EventQueue;
-        $pre_charge = isset($dPconfig['task_reminder_days_before']) ? $dPconfig['task_reminder_days_before'] : 1;
-        $repeat = isset($dPconfig['task_reminder_repeat']) ? $dPconfig['task_reminder_repeat'] : 100;
+        $pre_charge = dPgetConfig('task_reminder_days_before', 1);
+        $repeat = dPgetConfig('task_reminder_repeat', 100);
         
         // If we don't need any arguments (and we don't)
         // then we set this to null.  We can't just put null in the
@@ -1850,13 +1845,13 @@ function closeOpenedTask($task_id){
 //This kludgy function echos children tasks as threads
 
 function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
-    global $AppUI, $dPconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
+    global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
     
     $now = new CDate();
     $df = $AppUI->getPref('SHDATEFORMAT');
     $df .= " " . $AppUI->getPref('TIMEFORMAT');
     $perms =& $AppUI->acl();
-    $show_all_assignees = @$dPconfig['show_all_task_assignees'] ? true : false;
+    $show_all_assignees = dPgetConfig('show_all_task_assignees', false);
     
     $done[] = $a['task_id'];
     

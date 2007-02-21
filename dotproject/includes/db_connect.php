@@ -10,13 +10,13 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 // load the db specific handlers
-//require_once( "{$dPconfig['root_dir']}/includes/db_{$dPconfig['dbtype']}.php" );
+//require_once( DP_BASE_DIR."/includes/db_{$dPconfig['dbtype']}.php" );
 //require_once( "./includes/db_adodb.php" );
-require_once DP_BASE_DIR."/includes/db_adodb.php";
+require_once DP_BASE_DIR.'/includes/db_adodb.php';
 
 // make the connection to the db
-db_connect( $dPconfig['dbhost'], $dPconfig['dbname'],
-	$dPconfig['dbuser'], $dPconfig['dbpass'], $dPconfig['dbpersist'] );
+db_connect(dPgetConfig('dbhost'), dPgetConfig('dbname'),
+	dPgetConfig('dbuser'), dPgetConfig('dbpass'), dPgetConfig('dbpersist'));
 
 	
 /*
@@ -24,7 +24,7 @@ db_connect( $dPconfig['dbhost'], $dPconfig['dbname'],
 * we will hurry up to load the system configuration details from the database.
 */
 
-$sql = "SELECT config_name, config_value, config_type FROM config";
+$sql = 'SELECT config_name, config_value, config_type FROM config';
 $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.
@@ -34,10 +34,9 @@ if ($rs) { // Won't work in install mode.
 		if ($c['config_type'] == 'checkbox') {
 			$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
 		}
-		$dPconfig["{$c['config_name']}"] = $c['config_value'];
+		$dPconfig[$c['config_name']] = $c['config_value'];
 	}
 }
-
 
 
 /**

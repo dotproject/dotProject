@@ -15,10 +15,10 @@ require_once( $AppUI->getSystemClass( 'libmail' ) );
 // www.mamboserver.com | mosforge.net
 //
 function sendNewPass() {
- global $AppUI, $dPconfig;
+ global $AppUI;
 
- $_live_site = $dPconfig['base_url'];
- $_sitename = $dPconfig['company_name'];
+ $_live_site = dPgetConfig('base_url');
+ $_sitename = dPgetConfig('company_name');
 
  // ensure no malicous sql gets past
  $checkusername = trim( dPgetParam( $_POST, 'checkusername', '') );

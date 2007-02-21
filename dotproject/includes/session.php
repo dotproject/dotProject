@@ -123,7 +123,6 @@ function dPsessionDestroy($id, $user_access_log_id=0) {
 
 function dPsessionGC($maxlifetime)
 {
-	global $dPconfig;
 	global $AppUI;
 
 	dprint(__FILE__, __LINE__, 11, "Session Garbage collection running");
@@ -136,8 +135,7 @@ function dPsessionGC($maxlifetime)
 	$q->addWhere("UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > $idle OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > $max");
 	$q->exec();
 	$q->clear();
-	if (isset($dPconfig['session_gc_scan_queue'])
-	  && $dPconfig['session_gc_scan_queue']) {
+	if (dPgetConfig('session_gc_scan_queue')) {
 		// We need to scan the event queue.  If $AppUI isn't created yet
 		// And it isn't likely that it will be, we create it and run the
 		// queue scanner.
@@ -152,15 +150,14 @@ function dPsessionGC($maxlifetime)
 
 function dPsessionConvertTime($key)
 {
-	global $dPconfig;
 	$key = 'session_' . $key;
 
 	// If the value isn't set, then default to 1 day.
-	if (! isset($dPconfig[$key]) || ! $dPconfig[$key] )
+	if (dPgetConfig($key) == null || dPgetConfig($key) == null)
 		return 86400;
 
-	$numpart = (int) $dPconfig[$key];
-	$modifier = substr($dPconfig[$key], -1);
+	$numpart = (int) dPgetConfig($key);
+	$modifier = substr(dPgetConfig($key), -1);
 	if (! is_numeric($modifier)) {
 		switch ($modifier) {
 			case 'h':
@@ -182,14 +179,11 @@ function dPsessionConvertTime($key)
 
 function dpSessionStart($start_vars = 'AppUI')
 {
-	global $dPconfig;
-
 	session_name('dotproject');
 	if (ini_get('session.auto_start') > 0) {
 		session_write_close();
 	}
-	if (isset($dPconfig['session_handling'])
-		&& strtolower($dPconfig['session_handling']) == 'app') 
+	if (dPgetConfig('session_handling') == 'app') 
 	{
 		ini_set('session.save_handler', 'user');
 	
@@ -205,7 +199,7 @@ function dpSessionStart($start_vars = 'AppUI')
 		$max_time = 0; // Browser session only.
 	}
 	// Try and get the correct path to the base URL.
-	preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', $dPconfig['base_url'], $url_parts);
+	preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', dPgetConfig('base_url'), $url_parts);
 	$cookie_dir = $url_parts[4];
 	if (substr($cookie_dir, 0, 1) != '/')
 		$cookie_dir = '/' . $cookie_dir;

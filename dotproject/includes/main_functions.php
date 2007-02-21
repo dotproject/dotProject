@@ -192,15 +192,15 @@ function dPshowModuleConfig( $config ) {
  */
 function dPfindImage( $name, $module=null ) {
 // uistyle must be declared globally
-	global $dPconfig, $uistyle;
+	global $uistyle;
 
-	if (file_exists( "{$dPconfig['root_dir']}/style/$uistyle/images/$name" )) {
+	if (file_exists( DP_BASE_DIR . '/style/'.$uistyle.'/images/'.$name )) {
 		return "./style/$uistyle/images/$name";
-	} else if ($module && file_exists( "{$dPconfig['root_dir']}/modules/$module/images/$name" )) {
+	} else if ($module && file_exists( DP_BASE_DIR . '/modules/'.$module.'/images/'.$name )) {
 		return "./modules/$module/images/$name";
-	} else if (file_exists( "{$dPconfig['root_dir']}/images/icons/$name" )) {
+	} else if (file_exists( DP_BASE_DIR . '/images/icons/'.$name )) {
 		return "./images/icons/$name";
-	} else if (file_exists( "{$dPconfig['root_dir']}/images/obj/$name" )) {
+	} else if (file_exists( DP_BASE_DIR . '/images/obj/'.$name )) {
 		return "./images/obj/$name";
 	} else {
 		return "./images/$name";
@@ -226,28 +226,24 @@ function dPshowImage( $src, $wid='', $hgt='', $alt='', $title='' ) {
 		if ($src == '')
 			return '';
 
-		$result = "<img src='$src' align='center'";
+		$result = '<img src="'.$src.'" align="center"';
 		if ($wid)
-		  $result .= " width='$wid'";
+		  $result .= ' width="'.$wid.'"';
 		if ($hgt)
-		  $result .= " height='$hgt'";
+		  $result .= ' height="'.$hgt.'"';
 		if ($alt)
-		  $result .= " alt='" . $AppUI->_($alt) . "'";
+		  $result .= ' alt="' . $AppUI->_($alt) . '"';
 		if ($title)
-		  $result .= " title='" . $AppUI->_($title) . "'";
-		$result .= " border='0'>";
+		  $result .= ' title="' . $AppUI->_($title) . '"';
+		$result .= ' border="0">';
 
 		return $result;
 	// }
 }
 
-
-
-
-#
-# function to return a default value if a variable is not set
-#
-
+/**
+ * function to return a default value if a variable is not set
+ */
 function defVal($var, $def) {
 	return isset($var) ? $var : $def;
 }
@@ -347,7 +343,7 @@ function dPgetCleanParam( &$arr, $name, $def=null ) {
 #
 
 function addHistory( $table, $id, $action = 'modify', $description = '', $project_id = 0) {
-	global $AppUI, $dPconfig;
+	global $AppUI;
 	/*
 	 * TODO:
 	 * 1) description should be something like:
@@ -363,7 +359,7 @@ function addHistory( $table, $id, $action = 'modify', $description = '', $projec
 	 * 2) project_id and module_id should be provided in order to filter history entries
 	 *
 	 */
-	if(!$dPconfig['log_changes']) return;
+	if (!dPgetConfig('log_changes')) return;
 	$description = str_replace("'", "\'", $description);
 //	$hsql = "select * from modules where mod_name = 'History' and mod_active = 1";
 	$q  = new DBQuery;
@@ -447,11 +443,10 @@ function dPuserHasRole( $name ) {
 }
 
 function dPformatDuration($x) {
-    global $dPconfig;
     global $AppUI;
-    $dur_day = floor($x / $dPconfig['daily_working_hours']);
-    //$dur_hour = fmod($x, $dPconfig['daily_working_hours']);
-    $dur_hour = $x - $dur_day*$dPconfig['daily_working_hours'];
+    $dur_day = floor($x / dPgetConfig('daily_working_hours'));
+    //$dur_hour = fmod($x, dPgetConfig('daily_working_hours'));
+    $dur_hour = $x - $dur_day*dPgetConfig('daily_working_hours');
     $str = '';
     if ($dur_day > 1) {
         $str .= $dur_day .' '. $AppUI->_('days'). ' ';
@@ -527,11 +522,10 @@ function dPformSafe( $txt, $deslash=false ) {
 }
 
 function convert2days( $durn, $units ) {
-	global $dPconfig;
 	switch ($units) {
 	case 0:
 	case 1:
-		return $durn / $dPconfig['daily_working_hours'];
+		return $durn / dPgetConfig('daily_working_hours');
 		break;
 	case 24:
 		return $durn;
@@ -648,10 +642,9 @@ function format_backtrace($bt, $file, $line, $msg)
 
 function dprint($file, $line, $level, $msg)
 {
-  global $dPconfig;
   $max_level = 0;
-  $max_level = (int)$dPconfig['debug'];
-	$display_debug = isset($dPconfig['display_debug']) ? $dPconfig['display_debug'] : false;
+  $max_level = (int) dPgetConfig('debug');
+	$display_debug = dPgetConfig('display_debug', false);
   if ($level <= $max_level) {
     error_log("$file($line): $msg");
 		if ($display_debug)
@@ -731,10 +724,10 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
  */
 function formatHours($hours)
 {
-	global $AppUI, $dPconfig;
+	global $AppUI;
 
 	$hours = (int)$hours;
-	$working_hours = $dPconfig['daily_working_hours'];
+	$working_hours = dPgetConfig('daily_working_hours');
 
 	if ($hours < $working_hours) {
 		if ($hours == 1) {

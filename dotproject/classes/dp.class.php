@@ -46,15 +46,9 @@ class CDpObject {
      *	@param string $key name of the primary key field in the table
      */
 	function CDpObject( $table, $key ) {
-		global $dPconfig;
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
-		if (isset($dPconfig['dbprefix'])) {
-			$this->_prefix = $dPconfig['dbprefix'];
-        }
-		else {
-			$this->_prefix = '';
-        }
+		dPgetConfig('dbprefix', '');
 		$this->_query =& new DBQuery;
 	}
     /**

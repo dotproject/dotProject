@@ -45,9 +45,10 @@ if (! isset($GLOBALS['OS_WIN']))
 	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, "WIN") !== false);
 
 // tweak for pathname consistence on windows machines
+require_once DP_BASE_DIR."/includes/main_functions.php";
 require_once DP_BASE_DIR."/includes/db_adodb.php";
 require_once DP_BASE_DIR."/includes/db_connect.php";
-require_once DP_BASE_DIR."/includes/main_functions.php";
+
 require_once DP_BASE_DIR."/classes/ui.class.php";
 require_once DP_BASE_DIR."/classes/permissions.class.php";
 require_once DP_BASE_DIR."/includes/session.php";
@@ -101,7 +102,7 @@ if (isset($user_id) && isset($_GET['logout'])){
 
 // check is the user needs a new password
 if (dPgetParam( $_POST, 'lostpass', 0 )) {
-	$uistyle = $dPconfig['host_style'];
+	$uistyle = dPgetConfig('host_style');
 	$AppUI->setUserLocale();
 	@include_once DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php";
 	@include_once DP_BASE_DIR."/locales/core.php";
@@ -142,7 +143,7 @@ if (isset($_REQUEST['login'])) {
 // writeDebug( var_export( $AppUI, true ), 'AppUI', __FILE__, __LINE__ );
 
 // set the default ui style
-$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
+$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : dPgetConfig('host_style');
 
 // clear out main url parameters
 $m = '';
@@ -179,10 +180,10 @@ require_once DP_BASE_DIR."/includes/permissions.php";
 
 
 $def_a = 'index';
-if (! isset($_GET['m']) && !empty($dPconfig['default_view_m'])) {
-  	$m = $dPconfig['default_view_m'];
-	$def_a = !empty($dPconfig['default_view_a']) ? $dPconfig['default_view_a'] : $def_a;
-	$tab = $dPconfig['default_view_tab'];
+if (! isset($_GET['m'])) {
+	$m = dPgetConfig('default_view_m', $m);
+	$def_a = dPgetConfig('default_view_a', $def_a);
+	$tab = dPgetConfig('default_view_tab');
 } else {
 	// set the module from the url
 	$m = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'm', getReadableModule() ));

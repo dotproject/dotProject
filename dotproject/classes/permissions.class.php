@@ -42,18 +42,17 @@ require_once DP_BASE_DIR."/lib/phpgacl/gacl_api.class.php";
 class dPacl extends gacl_api {
 
   function dPacl($opts = null) {
-    global $dPconfig;
     if (! is_array($opts))
       $opts = array();
-    $opts['db_type'] = $dPconfig['dbtype'];
-    $opts['db_host'] = $dPconfig['dbhost'];
-    $opts['db_user'] = $dPconfig['dbuser'];
-    $opts['db_password'] = $dPconfig['dbpass'];
-    $opts['db_name'] = $dPconfig['dbname'];
+    $opts['db_type'] = dPgetConfig('dbtype');
+    $opts['db_host'] = dPgetConfig('dbhost');
+    $opts['db_user'] = dPgetConfig('dbuser');
+    $opts['db_password'] = dPgetConfig('dbpass');
+    $opts['db_name'] = dPgetConfig('dbname');
     // We can add an ADODB instance instead of the database
     // connection details.  This might be worth looking at in
     // the future.
-    if ($dPconfig['debug'] > 10)
+    if (dPgetConfig('debug', 0) > 10)
       $this->_debug = true;
     parent::gacl_api($opts);
   }

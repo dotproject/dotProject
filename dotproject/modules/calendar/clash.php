@@ -46,7 +46,7 @@ if ( isset($_REQUEST['clash_action'])) {
     echo "<tr><td>$user</td></tr>\n";
   }
   echo "</table>\n";
-  $calurl = $dPconfig['base_url'] . "/index.php?m=calendar&a=clash&event_id=" . $obj->event_id;
+  $calurl = dPgetConfig('base_url') . "/index.php?m=calendar&a=clash&event_id=" . $obj->event_id;
   echo "<a href='#' onclick=\"set_clash_action('suggest');\">" . $AppUI->_('Suggest Alternative') . "</a> : ";
   echo "<a href='#' onclick=\"set_clash_action('cancel');\">" . $AppUI->_('Cancel') . "</a> : ";
   echo "<a href='#' onclick=\"set_clash_action('mail');\">" . $AppUI->_('Mail Request') . "</a> : ";
@@ -76,7 +76,7 @@ function clash_cancel()
  */
 function clash_suggest()
 {
-  global $AppUI, $dPconfig;
+  global $AppUI, $m, $a;
   $obj =& new CEvent;
   $obj->bind($_SESSION['add_event_post']);
 
@@ -87,9 +87,9 @@ function clash_suggest()
   $end_secs = $end_date->getTime();
   $duration = (int) (( $end_secs - $start_secs ) / 60);
 
-  $titleBlock =& new CTitleBlock( "Suggest Alternative Event Time", "myevo-appointments.png", $m, "$m.$a");
+  $titleBlock =& new CTitleBlock( 'Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m.'.'.$a);
   $titleBlock->show();
-  $calurl = $dPconfig['base_url'] . "/index.php?m=calendar&a=clash&event_id=" . $obj->event_id;
+  $calurl = dPgetConfig('base_url') . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
   $times = array();
   $t = new CDate();
   $t->setTime( 0,0,0 );

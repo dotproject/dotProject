@@ -14,7 +14,7 @@ $date = $date !== '' ? $date : null;
 
 $this_month = new CDate( $date );
 
-$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
+$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : dPgetConfig('host_style');
 ?>
 <a href="javascript: void(0);" onClick="clickDay('', '');">clear date</a>
 <?php
