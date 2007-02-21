@@ -67,12 +67,12 @@ function dPcheckExistingDB($conf) {
 	}
 
 	// Check the table list for the standard tables.  Firstly
-	// we check for projects and tasks, and see if there is a common
+	// we check for sysvals and tasks, and see if there is a common
 	// prefix.
 	$found = false;
 	foreach ($table_list as $tbl) {
-		if (substr($tbl, -8) == 'projects') {
-			$prefix = str_replace('projects', '', $tbl);
+		if (substr($tbl, -7) == 'sysvals') {
+			$prefix = str_replace('sysvals', '', $tbl);
 			$found = true;
 			break;
 		}
