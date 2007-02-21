@@ -10,7 +10,7 @@ require_once( $AppUI->getModuleClass( 'tasks' ) );
 require_once( $AppUI->getModuleClass( 'projects' ) );
 global $helpdesk_available;
 
-if (($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
+if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
 	require_once( $AppUI->getModuleClass( 'helpdesk' ) );
 }
 /**
