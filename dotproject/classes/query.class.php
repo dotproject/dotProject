@@ -20,7 +20,7 @@
 }}}*/
 
 if (! defined('DP_BASE_DIR')) {
-	die('This file should not be called directly');
+	die('This file should not be called directly.');
 }
 
 require_once DP_BASE_DIR."/lib/adodb/adodb.inc.php";

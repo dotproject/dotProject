@@ -6,7 +6,7 @@
 */
 
 if (! defined('DP_BASE_DIR')) {
-	die('This file should not be called directly');
+	die('This file should not be called directly.');
 }
 
 // Message No Constants

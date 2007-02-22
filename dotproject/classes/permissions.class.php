@@ -17,7 +17,7 @@
  */
 
 if (! defined('DP_BASE_DIR')) {
-	die('This file should not be called directly');
+	die('This file should not be called directly.');
 }
 
 // Set the ADODB directory
@@ -329,7 +329,6 @@ class dPacl extends gacl_api {
 	$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 	$q->addOrder('g1.value');
 	
-	//FIXME-mikeb: Why is group_id in quotes?
 	switch (strtoupper($recurse)) {
 		case 'RECURSE':
 			$q->addJoin($table, 'g2', 'g2.lft<g1.lft AND g2.rgt>g1.rgt');
