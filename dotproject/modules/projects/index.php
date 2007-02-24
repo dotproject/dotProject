@@ -53,13 +53,17 @@ if(!(strpos($department, $company_prefix)===false)){
 	unset($department);
 }
 
+$orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset( $_GET['orderby'] )) {
-    $orderdir = $AppUI->getState( 'ProjIdxOrderDir' ) ? ($AppUI->getState( 'ProjIdxOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';    
-    $AppUI->setState( 'ProjIdxOrderBy', $_GET['orderby'] );
-    $AppUI->setState( 'ProjIdxOrderDir', $orderdir);
+    if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
+		$orderdir = 'desc';
+    } else {
+    	$orderdir = 'asc';
+    }
+    $AppUI->setState('ProjIdxOrderBy', $_GET['orderby']);
 }
-$orderby  = $AppUI->getState( 'ProjIdxOrderBy' ) ? $AppUI->getState( 'ProjIdxOrderBy' ) : 'project_end_date';
-$orderdir = $AppUI->getState( 'ProjIdxOrderDir' ) ? $AppUI->getState( 'ProjIdxOrderDir' ) : 'asc';
+$orderby  = $AppUI->getState('ProjIdxOrderBy') ? $AppUI->getState('ProjIdxOrderBy') : 'project_end_date';
+$AppUI->setState( 'ProjIdxOrderDir', $orderdir);
 
 // prepare the users filter
 if (isset( $_POST['show_owner'] ))
