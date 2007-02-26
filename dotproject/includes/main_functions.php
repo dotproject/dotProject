@@ -3,7 +3,7 @@
 ## Global General Purpose Functions
 ##
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $CR = "\n";
@@ -32,7 +32,7 @@ function bestColor( $bg, $lt='#ffffff', $dk='#000000' ) {
 function arraySelect( &$arr, $select_name, $select_attribs, $selected, $translate=false ) {
 	GLOBAL $AppUI;
 	if (! is_array($arr)) {
-		dprint(__FILE__, __LINE__, 0, "arraySelect called with no array");
+		dprint(__FILE__, __LINE__, 0, 'arraySelect called with no array');
 		return '';
 	}
 	reset( $arr );
@@ -48,9 +48,10 @@ function arraySelect( &$arr, $select_name, $select_attribs, $selected, $translat
 			$v=str_replace('&#369;','û',$v);
 			$v=str_replace('&#337;','õ',$v);
 		}
-		$s .= "\n\t<option value=\"".$k."\"".(($k == $selected && !$did_selected) ? " selected=\"selected\"" : '').">" .  $v  . "</option>";
-		if ($k == $selected)
-			$did_selected = 1;
+		$s .= "\n\t<option value=\"" . $k . '"' . (($k == $selected && !$did_selected)?'" selected="selected"':'') . ">" . $v . '</option>';
+		if ($k == $selected) {
+		  $did_selected = 1;
+		}
 	}
 	$s .= "\n</select>\n";
 	return $s;
@@ -107,7 +108,7 @@ function breadCrumbs( &$arr ) {
 	GLOBAL $AppUI;
 	$crumbs = array();
 	foreach ($arr as $k => $v) {
-		$crumbs[] = "<a href=\"$k\">".$AppUI->_( $v )."</a>";
+		$crumbs[] = "<a href=\"$k\">".$AppUI->_( $v ).'</a>';
 	}
 	return implode( ' <strong>:</strong> ', $crumbs );
 }
@@ -120,7 +121,7 @@ function contextHelp( $title, $link='' ) {
 
 function dPcontextHelp( $title, $link='' ) {
 	global $AppUI;
-	return "<a href=\"#$link\" onClick=\"javascript:window.open('?m=help&amp;dialog=1&amp;hid=$link', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\">".$AppUI->_($title)."</a>";
+	return '<a href="#' . $link . "\" onClick=\"javascript:window.open('?m=help&amp;dialog=1&amp;hid=$link', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\">".$AppUI->_($title).'</a>';
 }
 
 
@@ -368,7 +369,7 @@ function addHistory( $table, $id, $action = 'modify', $description = '', $projec
 	$qid = $q->exec();
 
 	if (! $qid || db_num_rows($qid) == 0) {
-	  $AppUI->setMsg("History module is not loaded, but your config file has requested that changes be logged.  You must either change the config file or install and activate the history module to log changes.", UI_MSG_ALERT);
+	  $AppUI->setMsg('History module is not loaded, but your config file has requested that changes be logged.  You must either change the config file or install and activate the history module to log changes.', UI_MSG_ALERT);
 		$q->clear();
 	  return;
 	}
@@ -482,7 +483,7 @@ function dPgetMicroDiff() {
 	global $microTimeSet;
 	$mt = $microTimeSet;
 	dPsetMicroTime();
-	return sprintf( "%.3f", $microTimeSet - $mt );
+	return sprintf( '%.3f', $microTimeSet - $mt );
 }
 
 /**
@@ -492,7 +493,7 @@ function dPformSafe( $txt, $deslash=false ) {
 	global $locale_char_set;
 	
 	if(!$locale_char_set){
-	    $locale_char_set = "utf-8";
+	    $locale_char_set = 'utf-8';
 	}
 	
 	if (is_object( $txt )) {
@@ -592,8 +593,8 @@ function formatCurrency( $number, $format ) {
 		$letter = 'n';
 		switch ($mondat['n_sign_posn']) {
 			case 0:
-				$prefix="(";
-				$suffix=")";
+				$prefix='(';
+				$suffix=')';
 				break;
 			case 1:
 				$prefix = $sign;
@@ -611,9 +612,9 @@ function formatCurrency( $number, $format ) {
 	}
 	$currency .= $currency_prefix . $mondat['int_curr_symbol'] . $currency_suffix;
 	$space = "";
-	if ($mondat[$letter . "_sep_by_space"])
+	if ($mondat[$letter . '_sep_by_space'])
 		$space = " ";
-	if ($mondat[$letter . "_cs_precedes"]) {
+	if ($mondat[$letter . '_cs_precedes']) {
 		$result = "$currency$space$numeric_portion";
 	} else {
 		$result = "$numeric_portion$space$currency";
@@ -631,7 +632,7 @@ function format_backtrace($bt, $file, $line, $msg)
     $in = false;
     foreach ($frame['args'] as $arg) {
       if ($in)
-	echo ",";
+	echo ',';
       else
 	$in = true;
       echo var_export($arg, true);
@@ -688,9 +689,9 @@ function findTabModules($module, $file = null)
 */
 function showFVar(&$var, $title = ""){
     echo "<h1>$title</h1";
-    echo "<pre>";
+    echo '<pre>';
     print_r($var);
-    echo "</pre>";
+    echo '</pre>';
 }
 
 function getUsersArray(){
@@ -706,15 +707,15 @@ function getUsersArray(){
 function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
     global $AppUI;
     
-    $parsed = "<select name='user_id' class='text'>";
+    $parsed = '<select name="user_id" class="text">';
     if($first_option != ""){
-        $parsed .= "<option value='0' ".(!$default_user_id ? "selected" : "").">".$AppUI->_($first_option)."</option>";
+        $parsed .= '<option value="0" '.(!$default_user_id ? 'selected="selected"' : '').'>'.$AppUI->_($first_option).'</option>';
     }
     foreach(getUsersArray() as $user_id => $user){
-        $selected = $user_id == $default_user_id ? "selected" : "";
-        $parsed .= "<option value='$user_id' $selected>".$user["contact_first_name"]." ".$user["contact_last_name"]."</option>";
+        $selected = $user_id == $default_user_id ? ' selected="selected"' : '';
+        $parsed .= '<option value="'.$user_id.'"'.$selected.'>'.$user['contact_first_name'].' '.$user['contact_last_name'].'</option>';
     }
-    $parsed .= "</select>";
+    $parsed .= '</select>';
     return $parsed;
 }
 

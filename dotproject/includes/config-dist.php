@@ -1,5 +1,8 @@
 <?php /* $Id$ */
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
 /*
 Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
 

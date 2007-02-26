@@ -6,7 +6,7 @@
 */
 
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 // load the db specific handlers
@@ -406,8 +406,8 @@ function db_dateTime2locale( $dateTime, $format ) {
 * @param boolean
 */
 function bindHashToObject( $hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindAll=false ) {
-	is_array( $hash ) or die( "bindHashToObject : hash expected" );
-	is_object( $obj ) or die( "bindHashToObject : object expected" );
+	is_array( $hash ) or die( 'bindHashToObject : hash expected' );
+	is_object( $obj ) or die( 'bindHashToObject : object expected' );
 
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {

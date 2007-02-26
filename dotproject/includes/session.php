@@ -15,7 +15,7 @@
 */
 
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 require_once DP_BASE_DIR . '/includes/main_functions.php';
@@ -112,7 +112,7 @@ function dPsessionDestroy($id, $user_access_log_id=0) {
     
 	if ($user_access_log_id) {
  		$q->addTable('user_access_log');
- 		$q->addUpdate('date_time_out', date("Y-m-d H:i:s"));
+ 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
 		$q->addWhere('user_access_log_id = ' . $user_access_log_id);
  		$q->exec();
  		$q->clear();
@@ -125,7 +125,7 @@ function dPsessionGC($maxlifetime)
 {
 	global $AppUI;
 
-	dprint(__FILE__, __LINE__, 11, "Session Garbage collection running");
+	dprint(__FILE__, __LINE__, 11, 'Session Garbage collection running');
 	$now = time();
 	$max = dPsessionConvertTime('max_lifetime');
 	$idle = dPsessionConvertTime('idle_time');

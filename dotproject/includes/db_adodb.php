@@ -10,7 +10,7 @@
 	originally written for WEBO project, see webo source for "real life" usages
 */
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
@@ -34,21 +34,21 @@ function db_connect( $host='localhost', $dbname, $user='root', $passwd='', $pers
 function db_error() {
         global $db;
 	if (! is_object($db))
-	  dprint(__FILE__,__LINE__, 0, "Database object does not exist");
+	  dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	return $db->ErrorMsg();
 }
 
 function db_errno() {
         global $db;
 	if (! is_object($db))
-	  dprint(__FILE__,__LINE__, 0, "Database object does not exist");
+	  dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	return $db->ErrorNo();
 }
 
 function db_insert_id() {
         global $db;
 	if (! is_object($db))
-	  dprint(__FILE__,__LINE__, 0, "Database object does not exist");
+	  dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	return $db->Insert_ID();
 }
 
@@ -56,7 +56,7 @@ function db_exec( $sql ) {
         global $db;
 
 	if (! is_object($db))
-	  dprint(__FILE__,__LINE__, 0, "Database object does not exist");
+	  dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	$qid = $db->Execute( $sql );
 	dprint(__FILE__, __LINE__, 10, $sql);
 	if ($msg = db_error())
@@ -79,32 +79,32 @@ function db_free_result($cur ) {
         //	mysql_free_result( $cur );
         // Maybe it's done my Adodb
 	if (! is_object($cur))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_free_result");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_free_result.');
         $cur->Close();
 }
 
 function db_num_rows( $qid ) {
 	if (! is_object($qid))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_num_rows");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_num_rows.');
 	return $qid->RecordCount();
         //return $db->Affected_Rows();
 }
 
 function db_fetch_row( &$qid ) {
 	if (! is_object($qid))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_fetch_row");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_row.');
 	return $qid->FetchRow();
 }
 
 function db_fetch_assoc( &$qid ) {
 	if (! is_object($qid))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_fetch_assoc");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_assoc.');
         return $qid->FetchRow();
 }
 
 function db_fetch_array( &$qid  ) {
 	if (! is_object($qid))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_fetch_array");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_array.');
         $result = $qid->FetchRow();
 	// Ensure there are numerics in the result.
 	if ($result && ! isset($result[0])) {
@@ -118,7 +118,7 @@ function db_fetch_array( &$qid  ) {
 
 function db_fetch_object( $qid  ) {
 	if (! is_object($qid))
-	  dprint(__FILE__, __LINE__, 0, "Invalid object passed to db_fetch_object");
+	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_object.');
 	return $qid->FetchNextObject(false);
 }
 
@@ -128,7 +128,7 @@ function db_escape( $str ) {
 }
 
 function db_version() {
-        return "ADODB";
+        return 'ADODB';
 }
 
 function db_unix2dateTime( $time ) {
