@@ -1,14 +1,14 @@
 <?php
 
-if (! defined('DP_BASE_DIR')) {
-	die("You must not call this file directly, it is run automatically on install/upgrade");
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
 }
-include_once DP_BASE_DIR."/includes/config.php";
-include_once DP_BASE_DIR."/includes/main_functions.php";
-require_once DP_BASE_DIR."/includes/db_adodb.php";
-include_once DP_BASE_DIR."/includes/db_connect.php";
-include_once DP_BASE_DIR."/install/install.inc.php";
-require_once DP_BASE_DIR."/classes/permissions.class.php";
+include_once DP_BASE_DIR.'/includes/config.php';
+include_once DP_BASE_DIR.'/includes/main_functions.php';
+require_once DP_BASE_DIR.'/includes/db_adodb.php';
+include_once DP_BASE_DIR.'/includes/db_connect.php';
+include_once DP_BASE_DIR.'/install/install.inc.php';
+require_once DP_BASE_DIR.'/classes/permissions.class.php';
 
 /**
  * DEVELOPERS PLEASE NOTE:
@@ -40,7 +40,7 @@ function dPupgrade($from_version, $to_version, $last_updated)
 	// DO NOT REMOVE PREVIOUS VERSION CODE!!!
 	switch ($last_updated) {
 		case '00000000':
-			$sql = "SELECT project_id, project_departments, project_contacts FROM projects";
+			$sql = 'SELECT project_id, project_departments, project_contacts FROM projects';
 			$projects = db_loadList( $sql );
 
 			//split out related departments and store them seperatly.
@@ -73,7 +73,7 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			 *  This segment will extract all the task/department and task/contact relational info and populate the task_departments and task_contacts tables.
 			 **/
 
-			$sql = "SELECT task_id, task_departments, task_contacts FROM tasks";
+			$sql = 'SELECT task_id, task_departments, task_contacts FROM tasks';
 			$tasks = db_loadList( $sql );
 
 			//split out related departments and store them seperatly.
@@ -101,16 +101,16 @@ function dPupgrade($from_version, $to_version, $last_updated)
 				}
 			}
             
-            $sql = "ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1";
+            $sql = 'ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1';
             db_exec( $sql );
             
-			include DP_BASE_DIR."/db/upgrade_contacts.php";
-			include DP_BASE_DIR."/db/upgrade_permissions.php";
+			include DP_BASE_DIR.'/db/upgrade_contacts.php';
+			include DP_BASE_DIR.'/db/upgrade_permissions.php';
 
 			// Fallthrough
 		case '20050314':
 			// Add the permissions for task_log
-			dPmsg("Adding Task Log permissions");
+			dPmsg('Adding Task Log permissions');
 			$perms =& new dPacl;
 			$perms->add_object('app', 'Task Logs', 'task_log', 11, 0, 'axo');
 			$all_mods = $perms->get_group_id('all', null, 'axo');
@@ -118,7 +118,7 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$perms->add_group_object($all_mods, 'app', 'task_log', 'axo');
 			$perms->add_group_object($nonadmin, 'app', 'task_log', 'axo');
 		case '20050316':
-			include DP_BASE_DIR."/db/upgrade_contacts_company.php";
+			include DP_BASE_DIR.'/db/upgrade_contacts_company.php';
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;

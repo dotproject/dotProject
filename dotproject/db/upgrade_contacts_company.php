@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
+}
 /**
 * This script iterates all contacts and verify if the contact_company 
 * field has a text value; if it does, it searches of the company in the 
@@ -8,15 +11,12 @@
 * relates it to the contact using the new company's id.
 */
 
-if (! defined('DP_BASE_DIR'))
-	die('You must not use this file directly, please direct your browser to install/index.php instead');
-
-dPmsg("Fetching companies list");
-foreach(db_loadList("SELECT * FROM contacts") as $contact) {
-    $contact_company = $contact["contact_company"];
+dPmsg('Fetching companies list');
+foreach(db_loadList('SELECT * FROM contacts') as $contact) {
+    $contact_company = $contact['contact_company'];
     if (is_numeric($contact_company)){
         if(!checkCompanyId($contact_company)){
-            dPmsg("Error found in contact_company in the contact ".getContactGeneralInformation($contact));
+            dPmsg('Error found in contact_company in the contact '.getContactGeneralInformation($contact));
         }
     } else if ($contact_company != "") {
         $company_id = fetchCompanyId($contact_company);
@@ -38,14 +38,14 @@ foreach(db_loadList("SELECT * FROM contacts") as $contact) {
 
 
 function updateContactCompany($contact_array, $company_id) {
-    $sql = "UPDATE contacts SET contact_company = $company_id
-            WHERE contact_id = ".$contact_array["contact_id"];
+    $sql = 'UPDATE contacts SET contact_company = ' . $company_id 
+	  . ' WHERE contact_id = '.$contact_array['contact_id'];
     db_exec($sql);
 }
 
 function getContactGeneralInformation($contact_array) {
-    $contact_info  = "(".$contact_array["contact_id"].") ";
-    $contact_info .= $contact_array["contact_first_name"]." ".$contact_array["contact_last_name"];
+    $contact_info  = '('.$contact_array['contact_id'].') ';
+    $contact_info .= $contact_array['contact_first_name'].' '.$contact_array['contact_last_name';
     return $contact_info;
 }
 
