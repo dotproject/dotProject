@@ -204,7 +204,7 @@ foreach ($files as $file_row) {
 	<td nowrap="nowrap" width="20">
 	<?php if ($canEdit && ( empty($latest_file['file_checkout']) || ( $latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) {
 		echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
-		echo dPshowImage( './modules/files/images/kedit.png', '16', '16' );
+		echo dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
 		echo "\n</a>";
 	}
 	?>
@@ -287,7 +287,7 @@ echo "
                       <td nowrap="nowrap" width="20">&nbsp;';
                                       if ($canEdit && $dPconfig['files_show_versions_edit'])
                                       {
-                                              $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">' . dPshowImage( './modules/files/images/kedit.png', '16', '16' ) . "</a>";
+                                              $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">' . dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>";
                                       }
                                       $hidden_table .= '
                       </td>
