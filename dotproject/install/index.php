@@ -27,7 +27,7 @@ Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproj
 The full text of the GPL is in the COPYING file.
 */
 
-require_once "check_upgrade.php";
+require_once 'check_upgrade.php';
 $mode = dPcheckUpgrade();
 ?>
 <html>
@@ -71,12 +71,12 @@ $mode = dPcheckUpgrade();
 $failedImg = '<img src="../images/icons/stock_cancel-16.png" width="16" height="16" align="middle" alt="Failed"/>';
 $okImg = '<img src="../images/icons/stock_ok-16.png" width="16" height="16" align="middle" alt="OK"/>';
 $tblwidth = '90%';
-$cfgDir = "../includes";
-$cfgFile = "../includes/config.php";
-$filesDir = "../files";
-$locEnDir = "../locales/en";
-$tmpDir = "../files/temp";
-include_once("vw_idx_check.php");
+$cfgDir = '../includes';
+$cfgFile = '../includes/config.php';
+$filesDir = '../files';
+$locEnDir = '../locales/en';
+$tmpDir = '../files/temp';
+include_once('vw_idx_check.php');
 ?>
 </body>
 </html>

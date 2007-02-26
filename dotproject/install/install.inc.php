@@ -1,6 +1,10 @@
 <?php
 // $Id$
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
+
 // Provide fake interface classes and installation functions
 // so that most db shortcuts will work without, for example, an AppUI instance.
 

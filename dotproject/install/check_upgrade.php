@@ -37,10 +37,11 @@ The full text of the GPL is in the COPYING file.
 // 4. Combination of 2 and 3
 // 5. It is an upgrade - there must be a config.php and a database.
 
-require_once 'install.inc.php';
 $baseDir = dirname(dirname(__FILE__));
 define('DP_BASE_DIR', $baseDir);
-require_once "$baseDir/lib/adodb/adodb.inc.php";
+
+require_once 'install.inc.php';
+require_once DP_BASE_DIR.'/lib/adodb/adodb.inc.php';
 
 function dPcheckExistingDB($conf) {
 	global $AppUI, $ADODB_FETCH_MODE;

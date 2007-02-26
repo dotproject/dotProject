@@ -11,11 +11,11 @@ include_once 'check_upgrade.php';
 <h1><img src="dp.png" align="middle" alt="dotProject Logo"/>&nbsp;dotProject Installer</h1>
 <?php
 if ( $_POST['mode'] == 'upgrade')
-	@include_once "../includes/config.php";
+	@include_once '../includes/config.php';
 else if (dPcheckUpgrade() == 'upgrade')
-	die("Security Check: dotProject seems to be already configured. Install aborted!");
+	die('Security Check: dotProject seems to be already configured. Install aborted!');
 else
-	@include_once "../includes/config-dist.php";
+	@include_once '../includes/config-dist.php';
 
 ?>
 <form name="instFrm" action="do_install_db.php" method="post">

@@ -1,12 +1,16 @@
 <?php // $Id$
 
+if (!defined('DP_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
+
 global $cfgDir, $cfgFile, $failedImg, $filesDir, $locEnDir, $okImg, $tblwidth, $tmpDir;
 
-$cfgDir = isset($cfgDir) ? $cfgDir : DP_BASE_DIR."/includes";
-$cfgFile = isset($cfgFile) ? $cfgFile : DP_BASE_DIR."/includes/config.php";
-$filesDir = isset($filesDir) ? $filesDir : DP_BASE_DIR."/files";
-$locEnDir = isset($locEnDir) ? $locEnDir : DP_BASE_DIR."/locales/en";
-$tmpDir = isset($tmpDir) ? $tmpDir : DP_BASE_DIR."/files/temp";
+$cfgDir = isset($cfgDir) ? $cfgDir : DP_BASE_DIR.'/includes';
+$cfgFile = isset($cfgFile) ? $cfgFile : DP_BASE_DIR.'/includes/config.php';
+$filesDir = isset($filesDir) ? $filesDir : DP_BASE_DIR.'/files';
+$locEnDir = isset($locEnDir) ? $locEnDir : DP_BASE_DIR.'/locales/en';
+$tmpDir = isset($tmpDir) ? $tmpDir : DP_BASE_DIR.'/files/temp';
 $tblwidth = isset($tblwidth) ? $tblwidth :'100%';
 $chmod = 0777;
 
@@ -40,7 +44,7 @@ function dPgetIniSize($val) {
 </tr>
 <tr>
  <td class="item"><li>Server API</li></td>
-  <td align="left"><?php echo (php_sapi_name() != "cgi") ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.php_sapi_name().')</span>' : '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';?></td>
+  <td align="left"><?php echo (php_sapi_name() != 'cgi') ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.php_sapi_name().')</span>' : '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';?></td>
 </tr>
 
 <tr>
@@ -56,10 +60,11 @@ $maxfileuploadsize = min(dPgetIniSize(ini_get('upload_max_filesize')), dPgetIniS
 $memory_limit = dPgetIniSize(ini_get('memory_limit'));
 if ($memory_limit > 0 && $memory_limit < $maxfileuploadsize) $maxfileuploadsize = $memory_limit;
 // Convert back to human readable numbers
-if ($maxfileuploadsize > 1048576)
+if ($maxfileuploadsize > 1048576) {
 	$maxfileuploadsize = (int)($maxfileuploadsize / 1048576) . 'M';
-else if ($maxfileuploadsize > 1024)
+} else if ($maxfileuploadsize > 1024) {
 	$maxfileuploadsize = (int)($maxfileuploadsize / 1024) . 'K';
+}
 ?>
 
 <tr>
@@ -140,14 +145,15 @@ else if ($maxfileuploadsize > 1024)
             Consider changing this to a more restrictive setting to improve security. You will need to do this manually.</td>
 </tr>
 <?php
-$okMessage="";
+$okMessage='';
 if ( (file_exists( $cfgFile ) && !is_writable( $cfgFile )) || (!file_exists( $cfgFile ) && !(is_writable( $cfgDir ))) ) {
 
         @chmod( $cfgFile, $chmod );
         @chmod( $cfgDir, $chmod );
  $filemode = @fileperms($cfgFile);
- if ($filemode & 2)
-         $okMessage="<span class='error'> World Writable</span>";
+if ($filemode & 2) {
+	$okMessage='<span class="error"> World Writable</span>';
+}
 
  }
 ?>
@@ -157,12 +163,13 @@ if ( (file_exists( $cfgFile ) && !is_writable( $cfgFile )) || (!file_exists( $cf
 </tr>
 <?php
 $okMessage="";
-if (!is_writable( $filesDir ))
+if (!is_writable( $filesDir )) {
         @chmod( $filesDir, $chmod );
-
+}
 $filemode = @fileperms($filesDir);
-if ($filemode & 2)
-         $okMessage="<span class='error'> World Writable</span>";
+if ($filemode & 2) {
+	$okMessage='<span class="error"> World Writable</span>';
+}
 ?>
 <tr>
             <td class="item">./files writable?</td>
@@ -174,8 +181,9 @@ if (!is_writable( $tmpDir ))
         @chmod( $tmpDir, $chmod );
 
 $filemode = @fileperms($tmpDir);
-if ($filemode & 2)
-	$okMessage="<span class='error'> World Writable</span>";
+if ($filemode & 2) {
+	$okMessage='<span class="error"> World Writable</span>';
+}
 ?>
 <tr>
             <td class="item">./files/temp writable?</td>
@@ -183,12 +191,13 @@ if ($filemode & 2)
 </tr>
 <?php
 $okMessage="";
-if (!is_writable( $locEnDir ))
+if (!is_writable( $locEnDir )) {
         @chmod( $locEnDir, $chmod );
-
+}
 $filemode = @fileperms($locEnDir);
-if ($filemode & 2)
-	$okMessage="<span class='error'> World Writable</span>";
+if ($filemode & 2) {
+	$okMessage='<span class="error"> World Writable</span>';
+}
 ?>
 <tr>
             <td class="item">./locales/en writable?</td>
