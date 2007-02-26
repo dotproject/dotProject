@@ -30,12 +30,12 @@ The full text of the GPL is in the COPYING file.
 
 //file viewer
 require_once 'base.php';
-require_once DP_BASE_DIR."/includes/config.php";
-require_once DP_BASE_DIR."/includes/main_functions.php";
-require_once DP_BASE_DIR."/classes/ui.class.php";
-require_once DP_BASE_DIR."/includes/db_adodb.php";
-require_once DP_BASE_DIR."/includes/db_connect.php";
-require_once DP_BASE_DIR."/includes/session.php";
+require_once DP_BASE_DIR.'/includes/config.php';
+require_once DP_BASE_DIR.'/includes/main_functions.php';
+require_once DP_BASE_DIR.'/classes/ui.class.php';
+require_once DP_BASE_DIR.'/includes/db_adodb.php';
+require_once DP_BASE_DIR.'/includes/db_connect.php';
+require_once DP_BASE_DIR.'/includes/session.php';
 
 $loginFromPage = 'fileviewer.php';
 
@@ -50,7 +50,7 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 	$AppUI->checkStyle();
 	 
 	require_once( $AppUI->getSystemClass( 'dp' ) );
-	require_once( DP_BASE_DIR."/misc/debug.php" );
+	require_once( DP_BASE_DIR.'/misc/debug.php' );
 
 	if ($AppUI->doLogin()) $AppUI->loadPrefs( 0 );
 	// check if the user is trying to log in
@@ -63,11 +63,11 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 			//display login failed message 
 			$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
 			$AppUI->setMsg( 'Login Failed' );
-			require DP_BASE_DIR."/style/$uistyle/login.php";
+			require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 			session_unset();
 			exit;
 		}
-		header ( "Location: fileviewer.php?$redirect" );
+		header ( 'Location: fileviewer.php?'.$redirect );
 		exit;
 	}	
 
@@ -75,14 +75,14 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 	// check if we are logged in
 	if ($AppUI->doLogin()) {
 	    $AppUI->setUserLocale();
-		@include_once( DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php" );
-		@include_once( DP_BASE_DIR."/locales/core.php" );
+		@include_once( DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php' );
+		@include_once( DP_BASE_DIR.'/locales/core.php' );
 		setlocale( LC_TIME, $AppUI->user_locale );
 		
 		$redirect = @$_SERVER['QUERY_STRING'];
 		if (strpos( $redirect, 'logout' ) !== false) $redirect = '';	
-		if (isset( $locale_char_set )) header("Content-type: text/html;charset=$locale_char_set");
-		require DP_BASE_DIR."/style/$uistyle/login.php";
+		if (isset( $locale_char_set )) header('Content-type: text/html;charset='.$locale_char_set);
+		require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 		session_unset();
 		session_destroy();
 		exit;
@@ -90,21 +90,21 @@ if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
 }
 $AppUI =& $_SESSION['AppUI'];
 
-require_once DP_BASE_DIR."/includes/permissions.php";
+require_once DP_BASE_DIR.'/includes/permissions.php';
 
 $perms =& $AppUI->acl();
 
 $canRead = $perms->checkModule( 'files' , 'view' );
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect( 'm=public&a=access_denied' );
 }
 
 $file_id = isset($_GET['file_id']) ? $_GET['file_id'] : 0;
 
 if ($file_id) {
 	// projects tat are denied access
-	require_once($AppUI->getModuleClass("projects"));
-	require_once($AppUI->getModuleClass("files"));
+	require_once($AppUI->getModuleClass('projects'));
+	require_once($AppUI->getModuleClass('files'));
 	$project =& new CProject;
 	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
 	$fileclass =& new CFile;
@@ -121,17 +121,12 @@ if ($file_id) {
 	$q = new DBQuery;
 	$q->addTable('files');
 	$project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
-	$q->addWhere("file_id = '$file_id'");
-	/*
-	$sql = "SELECT *
-	FROM files
-	WHERE file_id=$file_id"
-	  . (count( $allowedProjects ) > 0 ? "\nAND file_project IN (" . implode(',', array_keys($allowedProjects) ) . ')' : '');
-	*/
+	$q->addWhere('file_id = '.$file_id);
+	
 	$sql = $q->prepare();
 
 	if (!db_loadHash( $sql, $file )) {
-		$AppUI->redirect( "m=public&a=access_denied" );
+		$AppUI->redirect( 'm=public&a=access_denied' );
 	};
 
 	/*
@@ -139,18 +134,18 @@ if ($file_id) {
 
 	// BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
 	// [http://bugs.php.net/bug.php?id=16173]
-	header("Pragma: ");
-	header("Cache-Control: ");
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
-	header("Cache-Control: post-check=0, pre-check=0", false);
+	header('Pragma: ');
+	header('Cache-Control: ');
+	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+	header('Cache-Control: no-store, no-cache, must-revalidate');  //HTTP/1.1
+	header('Cache-Control: post-check=0, pre-check=0', false);
 	// END extra headers to resolve IE caching bug
 	*/
 
-	$fname = DP_BASE_DIR."/files/{$file['file_project']}/{$file['file_real_filename']}";
+	$fname = DP_BASE_DIR.'/files/'.$file['file_project'].'/'.$file['file_real_filename'];
 	if (! file_exists($fname)) {
-		$AppUI->setMsg("fileIdError", UI_MSG_ERROR);
+		$AppUI->setMsg('fileIdError', UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
     
@@ -163,16 +158,16 @@ if ($file_id) {
      * to fix the IE download issue for all for http and https
      * 
      */ 
-	header("MIME-Version: 1.0");
-    header( "Pragma: ");
-    header( "Cache-Control: public");
-	header( "Content-length: {$file['file_size']}" );
-	header( "Content-type: {$file['file_type']}" );
-	header( "Content-transfer-encoding: 8bit");
-	header( "Content-disposition: attachment; filename=\"{$file['file_name']}\"" );
+	header('MIME-Version: 1.0');
+    header( 'Pragma: ');
+    header( 'Cache-Control: public');
+	header( 'Content-length: '.$file['file_size'] );
+	header( 'Content-type: '.$file['file_type'] );
+	header( 'Content-transfer-encoding: 8bit');
+	header( 'Content-disposition: attachment; filename="'.$file['file_name'].'"' );
 
 	// read and output the file in chunks to bypass limiting settings in php.ini
-	$handle = fopen(DP_BASE_DIR . "/files/{$file['file_project']}/{$file['file_real_filename']}", 'rb');
+	$handle = fopen(DP_BASE_DIR . '/files/'.$file['file_project'].'/'.$file['file_real_filename'], 'rb');
 	if ($handle)
 	{
 		while ( !feof($handle) ) {
@@ -181,7 +176,7 @@ if ($file_id) {
 		fclose($handle);
 	}
 } else {
-	$AppUI->setMsg( "fileIdError", UI_MSG_ERROR );
+	$AppUI->setMsg( 'fileIdError', UI_MSG_ERROR );
 	$AppUI->redirect();
 }
 ?>

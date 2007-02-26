@@ -30,28 +30,28 @@ $loginFromPage = 'index.php';
 require_once 'base.php';
 
 clearstatcache();
-if( is_file( DP_BASE_DIR . "/includes/config.php" ) ) {
+if( is_file( DP_BASE_DIR . '/includes/config.php' ) ) {
 
-	require_once DP_BASE_DIR . "/includes/config.php";
+	require_once DP_BASE_DIR . '/includes/config.php';
 
 } else {
-	echo "<html><head><meta http-equiv='refresh' content='5; URL=".DP_BASE_URL."/install/index.php'></head><body>";
-	echo "Fatal Error. You haven't created a config file yet.<br/><a href='./install/index.php'>
-		Click Here To Start Installation and Create One!</a> (forwarded in 5 sec.)</body></html>";
+	echo '<html><head><meta http-equiv="refresh" content="5; URL='.DP_BASE_URL.'/install/index.php"></head><body>';
+	echo 'Fatal Error. You haven\'t created a config file yet.<br/><a href="./install/index.php">'
+	  .'Click Here To Start Installation and Create One!</a> (forwarded in 5 sec.)</body></html>';
 	exit();
 }
 
 if (! isset($GLOBALS['OS_WIN']))
-	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, "WIN") !== false);
+	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
 
 // tweak for pathname consistence on windows machines
-require_once DP_BASE_DIR."/includes/main_functions.php";
-require_once DP_BASE_DIR."/includes/db_adodb.php";
-require_once DP_BASE_DIR."/includes/db_connect.php";
+require_once DP_BASE_DIR.'/includes/main_functions.php';
+require_once DP_BASE_DIR.'/includes/db_adodb.php';
+require_once DP_BASE_DIR.'/includes/db_connect.php';
 
-require_once DP_BASE_DIR."/classes/ui.class.php";
-require_once DP_BASE_DIR."/classes/permissions.class.php";
-require_once DP_BASE_DIR."/includes/session.php";
+require_once DP_BASE_DIR.'/classes/ui.class.php';
+require_once DP_BASE_DIR.'/classes/permissions.class.php';
+require_once DP_BASE_DIR.'/includes/session.php';
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = dPgetParam( $_GET, 'suppressHeaders', false );
@@ -60,10 +60,10 @@ $suppressHeaders = dPgetParam( $_GET, 'suppressHeaders', false );
 dPsessionStart(array('AppUI'));
 
 // write the HTML headers
-header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");	// Date in the past
-header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");	// always modified
-header ("Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0");	// HTTP/1.1
-header ("Pragma: no-cache");	// HTTP/1.0
+header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT');	// Date in the past
+header ('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');	// always modified
+header ('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0');	// HTTP/1.1
+header ('Pragma: no-cache');	// HTTP/1.0
 
 // check if session has previously been initialised
 if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
@@ -86,7 +86,7 @@ require_once( $AppUI->getSystemClass( 'date' ) );
 require_once( $AppUI->getSystemClass( 'dp' ) );
 require_once( $AppUI->getSystemClass( 'query' ) );
 
-require_once DP_BASE_DIR."/misc/debug.php";
+require_once DP_BASE_DIR.'/misc/debug.php';
 
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
@@ -104,14 +104,14 @@ if (isset($user_id) && isset($_GET['logout'])){
 if (dPgetParam( $_POST, 'lostpass', 0 )) {
 	$uistyle = dPgetConfig('host_style');
 	$AppUI->setUserLocale();
-	@include_once DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php";
-	@include_once DP_BASE_DIR."/locales/core.php";
+	@include_once DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php';
+	@include_once DP_BASE_DIR.'/locales/core.php';
 	setlocale( LC_TIME, $AppUI->user_lang );
 	if (dPgetParam( $_REQUEST, 'sendpass', 0 )) {
-		require  DP_BASE_DIR."/includes/sendpass.php";
+		require  DP_BASE_DIR.'/includes/sendpass.php';
 		sendNewPass();
 	} else {
-		require  DP_BASE_DIR."/style/$uistyle/lostpass.php";
+		require  DP_BASE_DIR.'/style/'.$uistyle.'/lostpass.php';
 	}
 	exit();
 }
@@ -126,8 +126,8 @@ if (isset($_REQUEST['login'])) {
 	$password = dPgetCleanParam( $_POST, 'password', '' );
 	$redirect = dPgetCleanParam( $_REQUEST, 'redirect', '' );
 	$AppUI->setUserLocale();
-	@include_once( DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php" );
-	@include_once DP_BASE_DIR."/locales/core.php";
+	@include_once( DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php' );
+	@include_once DP_BASE_DIR.'/locales/core.php';
 	$ok = $AppUI->login( $username, $password );
 	if (!$ok) {
 		$AppUI->setMsg( 'Login Failed');
@@ -136,7 +136,7 @@ if (isset($_REQUEST['login'])) {
 	           $AppUI->registerLogin();
 	}
         addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
-	$AppUI->redirect( "$redirect" );
+	$AppUI->redirect( ''.$redirect );
 }
 
 // supported since PHP 4.2
@@ -154,8 +154,8 @@ $u = '';
 if ($AppUI->doLogin()) {
 	// load basic locale settings
 	$AppUI->setUserLocale();
-	@include_once( "./locales/$AppUI->user_locale/locales.php" );
-	@include_once( "./locales/core.php" );
+	@include_once( './locales/'.$AppUI->user_locale.'/locales.php' );
+	@include_once( './locales/core.php' );
 	setlocale( LC_TIME, $AppUI->user_lang );
 	$redirect = $_SERVER['QUERY_STRING']?strip_tags($_SERVER['QUERY_STRING']):'';
 	if (strpos( $redirect, 'logout' ) !== false) {
@@ -163,10 +163,10 @@ if ($AppUI->doLogin()) {
 	}
 
 	if (isset( $locale_char_set )) {
-		header("Content-type: text/html;charset=$locale_char_set");
+		header('Content-type: text/html;charset='.$locale_char_set);
 	}
 
-	require DP_BASE_DIR."/style/$uistyle/login.php";
+	require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 	// destroy the current session and output login page
 	session_unset();
 	session_destroy();
@@ -176,7 +176,7 @@ $AppUI->setUserLocale();
 
 
 // bring in the rest of the support and localisation files
-require_once DP_BASE_DIR."/includes/permissions.php";
+require_once DP_BASE_DIR.'/includes/permissions.php';
 
 
 $def_a = 'index';
@@ -201,12 +201,12 @@ $a = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'a', $def_a));
 $u = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'u', '' ));
 
 // load module based locale settings
-@include_once DP_BASE_DIR."/locales/$AppUI->user_locale/locales.php";
-@include_once DP_BASE_DIR."/locales/core.php";
+@include_once DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php';
+@include_once DP_BASE_DIR.'/locales/core.php';
 
 setlocale( LC_TIME, $AppUI->user_lang );
 $m_config = dPgetConfig($m);
-@include_once DP_BASE_DIR."/functions/" . $m . "_func.php";
+@include_once DP_BASE_DIR.'/functions/' . $m . '_func.php';
 
 // TODO: canRead/Edit assignements should be moved into each file
 
@@ -222,7 +222,7 @@ $canDelete = $perms->checkModule($m, 'delete');
 if ( !$suppressHeaders ) {
 	// output the character set header
 	if (isset( $locale_char_set )) {
-		header("Content-type: text/html;charset=$locale_char_set");
+		header('Content-type: text/html;charset='.$locale_char_set);
 	}
 }
 
@@ -239,7 +239,7 @@ if (!(
 	  ($m == 'admin' && $a == 'viewuser')
 	  )) {
 	if (!$canRead) {
-		$AppUI->redirect( "m=public&a=access_denied" );
+		$AppUI->redirect( 'm=public&a=access_denied' );
 	}
 }
 */
@@ -250,36 +250,38 @@ if (!(
 $modclass = $AppUI->getModuleClass($m);
 if (file_exists($modclass))
 	include_once( $modclass );
-if ($u && file_exists(DP_BASE_DIR."/modules/$m/$u/$u.class.php"))
-	include_once DP_BASE_DIR."/modules/$m/$u/$u.class.php";
+if ($u && file_exists(DP_BASE_DIR.'/modules/'.$m.'/'.$u.'/'.$u.'.class.php'))
+	include_once DP_BASE_DIR.'/modules/'.$m.'/'.$u.'/'.$u.'.class.php';
 
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
-if (isset( $_REQUEST["dosql"]) ) {
-    //require("./dosql/" . $_REQUEST["dosql"] . ".php");
-    require  DP_BASE_DIR."/modules/$m/" . ($u ? "$u/" : "") . $AppUI->checkFileName($_REQUEST["dosql"]) . ".php";
+if (isset( $_REQUEST['dosql']) ) {
+    //require('./dosql/' . $_REQUEST['dosql'] . '.php');
+  require  DP_BASE_DIR.'/modules/'.$m.'/' . ($u ? ($u.'/') : '') . $AppUI->checkFileName($_REQUEST['dosql']) . '.php';
 }
 
 // start output proper
-include  DP_BASE_DIR."/style/$uistyle/overrides.php";
+include  DP_BASE_DIR.'/style/'.$uistyle.'/overrides.php';
 ob_start();
 if(!$suppressHeaders) {
-	require DP_BASE_DIR."/style/$uistyle/header.php";
+	require DP_BASE_DIR.'/style/'.$uistyle.'/header.php';
 }
 
 if (! isset($_SESSION['all_tabs'][$m]) ) {
 	// For some reason on some systems if you don't set this up
 	// first you get recursive pointers to the all_tabs array, creating
 	// phantom tabs.
-	if (! isset($_SESSION['all_tabs']))
+	if (! isset($_SESSION['all_tabs'])) {
 		$_SESSION['all_tabs'] = array();
+	}
 	$_SESSION['all_tabs'][$m] = array();
 	$all_tabs =& $_SESSION['all_tabs'][$m];
 	foreach ($AppUI->getActiveModules() as $dir => $module)
 	{
-		if (! $perms->checkModule($dir, 'access'))
+		if (! $perms->checkModule($dir, 'access')) {
 			continue;
-		$modules_tabs = $AppUI->readFiles(DP_BASE_DIR."/modules/$dir/", '^' . $m . '_tab.*\.php');
+		}
+		$modules_tabs = $AppUI->readFiles(DP_BASE_DIR.'/modules/'.$dir.'/', '^' . $m . '_tab.*\.php');
 		foreach($modules_tabs as $tab)
 		{
 			// Get the name as the subextension
@@ -289,8 +291,9 @@ if (! isset($_SESSION['all_tabs'][$m]) ) {
 			$filename = substr($tab, 0, -4);
 			if (count($nameparts) > 3) {
 				$file = $nameparts[1];
-				if (! isset($all_tabs[$file]))
+				if (! isset($all_tabs[$file])) {
 					$all_tabs[$file] = array();
+				}
 				$arr =& $all_tabs[$file];
 				$name = $nameparts[2];
 			} else {
@@ -314,9 +317,10 @@ if (! isset($_SESSION['all_tabs'][$m]) ) {
 	$all_tabs =& $_SESSION['all_tabs'][$m];
 }
 
-$module_file = DP_BASE_DIR."/modules/$m/" . ($u ? "$u/" : "") . "$a.php";
-if (file_exists($module_file))
+$module_file = DP_BASE_DIR.'/modules/'.$m.'/'.($u?($u.'/'):'').$a.'.php';
+if (file_exists($module_file)) {
   require $module_file;
+ }
 else
 {
 // TODO: make this part of the public module? 
@@ -324,11 +328,11 @@ else
   $titleBlock = new CTitleBlock('Warning', 'log-error.gif');
   $titleBlock->show();
 
-  echo $AppUI->_("Missing file. Possible Module \"$m\" missing!");
+  echo $AppUI->_('Missing file. Possible Module "'.$m.'" missing!');
 }
 if(!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . DP_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
-	require DP_BASE_DIR."/style/$uistyle/footer.php";
+	require DP_BASE_DIR.'/style/'.$uistyle.'/footer.php';
 }
 ob_end_flush();
 ?>
