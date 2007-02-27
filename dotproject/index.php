@@ -180,10 +180,10 @@ require_once DP_BASE_DIR.'/includes/permissions.php';
 
 
 $def_a = 'index';
-if (! isset($_GET['m'])) {
-	$m = dPgetConfig('default_view_m', $m);
-	$def_a = dPgetConfig('default_view_a', $def_a);
-	$tab = dPgetConfig('default_view_tab');
+if (! isset($_GET['m']) && !empty($dPconfig['default_view_m'])) {
+  	$m = $dPconfig['default_view_m'];
+	$def_a = !empty($dPconfig['default_view_a']) ? $dPconfig['default_view_a'] : $def_a;
+	$tab = $dPconfig['default_view_tab'];
 } else {
 	// set the module from the url
 	$m = $AppUI->checkFileName(dPgetCleanParam( $_GET, 'm', getReadableModule() ));
