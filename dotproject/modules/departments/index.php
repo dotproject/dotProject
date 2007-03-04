@@ -34,19 +34,6 @@ if(!(strpos($department, $company_prefix)===false)){
 	$AppUI->setState( 'DeptIdxCompany', $company_id );
 	unset($department);
 }
-/*
-if(isset($department)){
-	//If a department is specified, we want to display projects from the department, and all departments under that, so we need to build that list of departments
-	$dept_ids = array();	
-	$q = new DBQuery;
-	$q->addTable('departments');
-	$q->addQuery('dept_id, dept_parent');
-	$q->addOrder('dept_parent,dept_name');
-	$rows = $q->loadList();
-	addDeptId($rows, $department);
-	$dept_ids[] = $department;
-}
-*/
 
 $obj = new CCompany();
 $q = new DBQuery;
@@ -56,9 +43,6 @@ $q->addOrder('company_name');
 $obj->setAllowedSQL($AppUI->user_id, $q);
 $companies = $q->loadList();
 $q->clear();
-
-//if(count($companies) == 0) $companies = array();
-//$companies = arrayMerge( array( '0'=>$AppUI->_('All') ), $companies );
 
 //get list of all departments, filtered by the list of permitted companies.
 $q->clear();
