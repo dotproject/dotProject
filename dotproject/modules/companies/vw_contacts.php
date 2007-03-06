@@ -12,7 +12,7 @@ GLOBAL $AppUI, $company_id, $obj;
 require_once $AppUI->getModuleClass('contacts');
 $q  = new DBQuery;
 $q->addTable('contacts');
-$q->addWhere("contact_company = '$obj->company_name' OR contact_company = '$obj->company_id'");
+$q->addWhere("contact_company = '" . addslashes($obj->company_name) . "' OR contact_company = '$obj->company_id'");
 $q->addOrder('contact_last_name'); 
 $s = '';
 if (!($rows = $q->loadList())) {
