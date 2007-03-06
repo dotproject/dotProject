@@ -1,6 +1,6 @@
 <?php /* TICKETSMITH $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 if (!$canRead) {
@@ -16,8 +16,8 @@ $titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
 $titleBlock->addCrumb( "?m=ticketsmith&a=view&ticket=$ticket", "view this ticket" );
 $titleBlock->show();
 
-require("modules/ticketsmith/config.inc.php");
-require("modules/ticketsmith/common.inc.php");
+require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
+require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 
 require_once( $AppUI->getSystemClass( 'libmail' ) );
 

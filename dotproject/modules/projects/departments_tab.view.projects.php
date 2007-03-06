@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $a, $addPwOiD, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
@@ -45,7 +45,7 @@ $addPwOiD = $AppUI->getState( 'addProjWithOwnerInDep', 0);
 
 $extraGet = '&user_id='.$user_id;
 
-require("{$dPconfig['root_dir']}/functions/projects_func.php");
+require(DP_BASE_DIR.'/functions/projects_func.php');
 require_once( $AppUI->getModuleClass( 'projects' ) );
 
 // collect the full projects list data via function in projects.class.php

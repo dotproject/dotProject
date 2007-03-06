@@ -1,6 +1,6 @@
 <?php /* SYSTEM $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $obj = new CConfig();
@@ -23,7 +23,7 @@ foreach ($_POST['dPcfg'] as $name => $value) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 	} else {
-		$AppUI->setMsg( "updated", UI_MSG_OK, true );
+		$AppUI->setMsg( 'updated', UI_MSG_OK, true );
 	}
 }
 $AppUI->redirect();

@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 /* FILES $Id$ */
@@ -85,7 +85,7 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 
 GLOBAL $AppUI, $deny1, $canRead, $canEdit;
 
-//require_once( dPgetConfig( 'root_dir' )."/modules/files/index_table.lib.php");
+//require_once( DP_BASE_DIR.'/modules/files/index_table.lib.php');
 
 // ****************************************************************************
 // Page numbering variables

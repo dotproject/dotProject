@@ -1,6 +1,6 @@
 <?php /* $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 if (!$canRead) {
@@ -8,8 +8,8 @@ if (!$canRead) {
 }
 
 
-require("modules/ticketsmith/config.inc.php");
-require("modules/ticketsmith/common.inc.php");
+require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
+require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 if(empty($search_pattern)) $search_pattern = "";
 if(empty($search_field)) $search_field = "";
 if(empty($search_depth)) $search_depth = "";

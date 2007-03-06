@@ -1,6 +1,6 @@
 <?php /* COMPANIES $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
@@ -159,7 +159,7 @@ function delIt() {
 		
 		</table>
 		<?php
-			require_once("./classes/CustomFields.class.php");
+			require_once($AppUI->getSystemClass( 'CustomFields' ));
 			$custom_fields = New CustomFields( $m, $a, $obj->company_id, "view" );
 			$custom_fields->printHTML();
 		?>
@@ -169,7 +169,7 @@ function delIt() {
 
 <?php
 // tabbed information boxes
-$moddir = $dPconfig['root_dir'] . '/modules/companies/';
+$moddir = DP_BASE_DIR . '/modules/companies/';
 $tabBox = new CTabBox( "?m=companies&a=view&company_id=$company_id", "", $tab );
 $tabBox->add( $moddir . 'vw_active', 'Active Projects' );
 $tabBox->add( $moddir . 'vw_archived', 'Archived Projects' );

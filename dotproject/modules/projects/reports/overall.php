@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 /**
@@ -235,9 +235,9 @@ echo '</h2>';
 if ($log_pdf) {
 	// make the PDF file
 
-		$font_dir = dPgetConfig( 'root_dir' )."/lib/ezpdf/fonts";
-		$temp_dir = dPgetConfig( 'root_dir' )."/files/temp";
-		$base_url  = dPgetConfig( 'base_url' );
+		$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
+		$temp_dir = DP_BASE_DIR.'/files/temp';
+		
 		require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 
 		$pdf =& new Cezpdf();
@@ -278,10 +278,10 @@ if ($log_pdf) {
 
 		$pdf->ezTable( $data, NULL, $title, $options );
 	}
-		if ($fp = fopen( "$temp_dir/temp$AppUI->user_id.pdf", 'wb' )) {
+		if ($fp = fopen( $temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb' )) {
 			fwrite( $fp, $pdf->ezOutput() );
 			fclose( $fp );
-			echo "<a href=\"$base_url/files/temp/temp$AppUI->user_id.pdf\" target=\"pdf\">";
+			echo '<a href="'.DP_BASE_URL.'/files/temp/temp'.$AppUI->user_id.'.pdf" target="pdf">';
 			echo $AppUI->_( "View PDF File" );
 			echo "</a>";
 		} else {

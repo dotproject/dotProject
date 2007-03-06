@@ -1,6 +1,6 @@
 <?php /* COMPANIES $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
@@ -183,7 +183,7 @@ function testURL( x ) {
 </td>
 	<td align='left'>
 		<?php
- 			require_once("./classes/CustomFields.class.php");
+ 			require_once($AppUI->getSystemClass( 'CustomFields' ));
  			$custom_fields = New CustomFields( $m, $a, $obj->company_id, "edit" );
  			$custom_fields->printHTML();
 		?>		

@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 /* FILES $Id$ */
@@ -95,7 +95,7 @@ function showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fo
 
 global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
 
-//require_once( dPgetConfig( 'root_dir' )."/modules/files/index_table.lib.php");
+//require_once( DP_BASE_DIR."/modules/files/index_table.lib.php");
 
 // ****************************************************************************
 // Page numbering variables
@@ -548,7 +548,7 @@ function displayFiles($folder) {
 		<td nowrap="8%">
 			<?php 
 			      $file_icon = getIcon($row['file_type']);
-                        echo "<a href=\"./fileviewer.php?file_id={$file['file_id']}\" title=\"{$row['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"{$dPconfig['base_url']}/modules/files/images/$file_icon\" />&nbsp;{$row['file_name']}</a>"; ?>
+                        echo "<a href=\"./fileviewer.php?file_id={$file['file_id']}\" title=\"{$row['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;{$row['file_name']}</a>"; ?>
 		</td>
 		<td width="20%"><?php echo $row['file_description'];?></td>
 		<td width="5%" nowrap="nowrap" align="center">
@@ -599,7 +599,7 @@ function displayFiles($folder) {
 	        <tr>
 	                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
 	                        title="' . $file['file_description'] . '">' . 
-                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"{$dPconfig['base_url']}/modules/files/images/$file_icon\" />&nbsp;" . 
+                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL.'/modules/files/images/$file_icon\" />&nbsp;" . 
 	                        $file['file_name'] . '
 	                </a></td>
 	                <td width="20%">' . $file['file_description'] . '</td>

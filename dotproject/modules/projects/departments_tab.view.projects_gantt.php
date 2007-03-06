@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
@@ -42,5 +42,5 @@ $extraGet = '&user_id='.$user_id;
 </table>
 <?php
 $min_view = true;
-require("{$dPconfig['root_dir']}/modules/projects/viewgantt.php");
+require(DP_BASE_DIR.'/modules/projects/viewgantt.php');
 ?>

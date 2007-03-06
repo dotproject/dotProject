@@ -1,6 +1,6 @@
 <?php /* SYSTEM $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 
@@ -22,13 +22,13 @@ $locales = $AppUI->readDirs( 'locales' );
 
 ob_start();
 // read language files from module's locale directory preferrably
-	if ( file_exists( "{$dPconfig['root_dir']}/modules/$modules[$module]/locales/en.inc" ) )
+	if ( file_exists( DP_BASE_DIR.'/modules/'.$modules[$module].'/locales/en.inc' ) )
 	{
-		@readfile( "{$dPconfig['root_dir']}/modules/$modules[$module]/locales/en.inc" );
+		@readfile( DP_BASE_DIR.'/modules/'.$modules[$module].'/locales/en.inc' );
 	}
 	else
 	{
-		@readfile( "{$dPconfig['root_dir']}/locales/en/$modules[$module].inc" );
+		@readfile( DP_BASE_DIR.'/locales/en/'.$modules[$module].'.inc' );
 	}
 	eval( "\$english=array(".ob_get_contents()."\n'0');" );
 ob_end_clean();
@@ -47,13 +47,13 @@ foreach( $english as $k => $v ) {
 if ($lang != 'en') {
 	ob_start();
 // read language files from module's locale directory preferrably
-		if ( file_exists( "{$dPconfig['root_dir']}/modules/$modules[$module]/locales/$lang.inc" ) )
+		if ( file_exists( DP_BASE_DIR.'/modules/'.$modules[$module].'/locales/'.$lang.'.inc' ) )
 		{
-			@readfile( "{$dPconfig['root_dir']}/modules/$modules[$module]/locales/$lang.inc" );
+			@readfile( DP_BASE_DIR.'/modules/'.$modules[$module].'/locales/'.$lang.'.inc' );
 		}
 		else
 		{
-			@readfile( "{$dPconfig['root_dir']}/locales/$lang/$modules[$module].inc" );
+			@readfile( DP_BASE_DIR.'/locales/'.$lang.'/'.$modules[$module].'.inc' );
 		}
 		eval( "\$locale=array(".ob_get_contents()."\n'0');" );
 	ob_end_clean();

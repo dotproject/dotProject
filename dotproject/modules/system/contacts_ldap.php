@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -16,7 +16,7 @@ $sql_table = "contacts";
 //Modify this mapping to match your LDAP->contact structure
 //For instance, of you want the contact_phone2 field to be populated out of, say telephonenumber2 then you would just modify
 //	"physicaldeliveryofficename" => "contact_phone2",
-// ro 
+// or 
 //	"telephonenumber2" => "contact_phone2",
 
 $sql_ldap_mapping = array(

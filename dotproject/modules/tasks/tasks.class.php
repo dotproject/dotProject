@@ -1,7 +1,7 @@
 <?php /* TASKS $Id$ */
 
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 require_once( $AppUI->getSystemClass( 'libmail' ) );
@@ -712,7 +712,7 @@ class CTask extends CDpObject
             $body = $AppUI->_('Project', UI_OUTPUT_RAW).": $projname";
             $body .= "\n".$AppUI->_('Task', UI_OUTPUT_RAW).":    $this->task_name";
             $body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW)
-                .':     '.dPgetConfig('base_url') . '/index.php?m=tasks&a=view&task_id='.$this->task_id;
+                .':     '.DP_BASE_URL . '/index.php?m=tasks&a=view&task_id='.$this->task_id;
             $body .= "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":". "\n$this->task_description";
             $body .= "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW).":" . $AppUI->user_first_name . " " 
                 .$AppUI->user_last_name;
@@ -1195,7 +1195,7 @@ class CTask extends CDpObject
     
     
     /* 
-     ** Time related calculations have been moved to ./classes/date.class.php
+     ** Time related calculations have been moved to /classes/date.class.php
      ** some have been replaced with more _robust_ functions
      ** 
 			** Affected functions:

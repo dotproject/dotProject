@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 require_once( $AppUI->getSystemClass( 'libmail' ) );
@@ -31,15 +31,20 @@ class CFile extends CDpObject {
 	var $file_date = NULL;
 	var $file_size = NULL;
 	var $file_version = NULL;
-      var $file_category = NULL;
-      var $file_folder = null;
+    var $file_category = NULL;
+    var $file_folder = null;
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
-	var $file_helpdesk_item = NULL;
+
+	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
+	//var $file_helpdesk_item = NULL;
 
 	
 	function CFile() {
-		global $AppUI;
+		global $AppUI, $helpdesk_available;
+		if ($helpdesk_available) {
+			$this->file_helpdesk_item = NULL;
+		}
 		$this->CDpObject( 'files', 'file_id' );
 	}
 	
@@ -145,20 +150,20 @@ class CFile extends CDpObject {
 	// delete File from File System
 	function deleteFile() {
 		global $dPconfig;
-		return @unlink( $dPconfig['root_dir'].'/files/'.$this->file_project.'/'.$this->file_real_filename );
+		return @unlink( DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename );
 	}
 
 	// move the file if the affiliated project was changed
 	function moveFile( $oldProj, $realname ) {
 		global $AppUI, $dPconfig;
-		if (!is_dir("{$dPconfig['root_dir']}/files/$this->file_project")) {
-		    $res = mkdir( "{$dPconfig['root_dir']}/files/$this->file_project", 0777 );
+		if (!is_dir(DP_BASE_DIR.'/files/'.$this->file_project)) {
+		    $res = mkdir( DP_BASE_DIR.'/files/'.$this->file_project, 0777 );
 			 if (!$res) {
                                 $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
 			     return false;
 			 }
 		}
-		$res = rename("{$dPconfig['root_dir']}/files/$oldProj/$realname", "{$dPconfig['root_dir']}/files/$this->file_project/$realname");
+		$res = rename(DP_BASE_DIR.'/files/'.$oldProj.'/'.$realname, DP_BASE_DIR.'/files/'.$this->file_project.'/'.$realname);
 
 		if (!$res) {
 		    return false;
@@ -169,15 +174,15 @@ class CFile extends CDpObject {
 	// duplicate a file into root
 	function duplicateFile( $oldProj, $realname ) {
 		global $AppUI, $dPconfig;
-		if (!is_dir("{$dPconfig['root_dir']}/files/0")) {
-		    $res = mkdir( "{$dPconfig['root_dir']}/files/0", 0777 );
+		if (!is_dir(DP_BASE_DIR.'/files/0')) {
+		    $res = mkdir( DP_BASE_DIR.'/files/0', 0777 );
 			 if (!$res) {
                                 $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
 			     return false;
 			 }
 		}
 		$dest_realname = uniqid( rand() );
-		$res = copy("{$dPconfig['root_dir']}/files/$oldProj/$realname", "{$dPconfig['root_dir']}/files/0/$dest_realname");
+		$res = copy(DP_BASE_DIR.'/files/'.$oldProj.'/'.$realname, DP_BASE_DIR.'/files/0/'.$dest_realname);
 
 		if (!$res) {
 		    return false;
@@ -189,14 +194,14 @@ class CFile extends CDpObject {
 	function moveTemp( $upload ) {
 		global $AppUI, $dPconfig;
 	// check that directories are created
-		if (!is_dir("{$dPconfig['root_dir']}/files")) {
-		    $res = mkdir( "{$dPconfig['root_dir']}/files", 0777 );
+		if (!is_dir(DP_BASE_DIR.'/files')) {
+		    $res = mkdir( DP_BASE_DIR.'/files', 0777 );
 		    if (!$res) {
 			     return false;
 			 }
 		}
-		if (!is_dir("{$dPconfig['root_dir']}/files/$this->file_project")) {
-		    $res = mkdir( "{$dPconfig['root_dir']}/files/$this->file_project", 0777 );
+		if (!is_dir(DP_BASE_DIR.'/files/'.$this->file_project)) {
+		    $res = mkdir( DP_BASE_DIR.'/files/'.$this->file_project, 0777 );
 			 if (!$res) {
                                 $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
 			     return false;
@@ -204,7 +209,7 @@ class CFile extends CDpObject {
 		}
 
 
-		$this->_filepath = "{$dPconfig['root_dir']}/files/$this->file_project/$this->file_real_filename";
+		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
 	// move it
 		$res = move_uploaded_file( $upload['tmp_name'], $this->_filepath );
 		if (!$res) {
@@ -223,7 +228,7 @@ class CFile extends CDpObject {
 		if (!$parser) 
 			return false;
 	// buffer the file
-		$this->_filepath = "{$dPconfig['root_dir']}/files/$this->file_project/$this->file_real_filename";
+		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
 		$fp = fopen( $this->_filepath, "rb" );
 		$x = fread( $fp, $this->file_size );
 		fclose( $fp );
@@ -256,7 +261,7 @@ class CFile extends CDpObject {
 		db_exec( "LOCK TABLES files_index WRITE" );
 	// filter out common strings
 		$ignore = array();
-		include "{$dPconfig['root_dir']}/modules/files/file_index_ignore.php";
+		include DP_BASE_DIR.'/modules/files/file_index_ignore.php';
 		foreach ($ignore as $w) {
 			unset( $wordarr[$w] );
 		}
@@ -306,11 +311,11 @@ class CFile extends CDpObject {
 			}
 			
 			$body = $AppUI->_('Project').": ".$this->_project->project_name;
-			$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=projects&a=view&project_id=".$this->_project->project_id;
+			$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=projects&a=view&project_id='.$this->_project->project_id;
 			
 			if (intval($this->_task->task_id) != 0) {
 				$body .= "\n\n".$AppUI->_('Task').":    ".$this->_task->task_name;
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=".$this->_task->task_id;
+				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=tasks&a=view&task_id='.$this->_task->task_id;
 				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->_task->task_description;
 				
 				//preparing users array
@@ -343,8 +348,8 @@ class CFile extends CDpObject {
 			}
 			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
 			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/fileviewer.php?file_id=".$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->file_description;	
+				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/fileviewer.php?file_id='.$this->file_id;
+				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->file_description;
 			}
 			
 			//send mail			
@@ -390,12 +395,12 @@ class CFile extends CDpObject {
 			}
 
 			$body = $AppUI->_('Project').": ".$this->_project->project_name;
-			$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=projects&a=view&project_id=".$this->_project->project_id;
+			$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=projects&a=view&project_id='.$this->_project->project_id;
 			
 			if (intval($this->_task->task_id) != 0) {
 				$body .= "\n\n".$AppUI->_('Task').":    ".$this->_task->task_name;
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/index.php?m=tasks&a=view&task_id=".$this->_task->task_id;
-				$body .= "\n" . $AppUI->_('Description') . ": " . "\n".$this->_task->task_description;
+				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=tasks&a=view&task_id='.$this->_task->task_id;
+				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->_task->task_description;
 
 				$q = new DBQuery;
 				$q->addTable('project_contacts', 'pc');
@@ -428,8 +433,8 @@ class CFile extends CDpObject {
 			
 			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
 			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').":     {$dPconfig['base_url']}/fileviewer.php?file_id=".$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->file_description;	
+				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/fileviewer.php?file_id='.$this->file_id;
+				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->file_description;	
 			}
 			
 			//send mail			
@@ -701,7 +706,7 @@ function getIcon($file_type) {
       $result = '';
       $mime = str_replace('/','-',$file_type);
       $icon = 'gnome-mime-'.$mime;
-      if (is_file($dPconfig['root_dir'].'/modules/files/images/icons/'.$icon.'.png')) {
+      if (is_file(DP_BASE_DIR.'/modules/files/images/icons/'.$icon.'.png')) {
     		$result = "icons/$icon.png";
       } else {
             $mime = split("/", $file_type);

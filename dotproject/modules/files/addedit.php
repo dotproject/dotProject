@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $folder = intval( dPgetParam( $_GET, 'folder', 0 ) );
@@ -222,7 +222,7 @@ function setTask( key, val ) {
 			<?php
 				// TODO - Add custom fields to files, doesnt make sense without a detail view.
 				/*
-				require_once("./classes/CustomFields.class.php");
+				require_once($AppUI->getSystemClass( 'CustomFields' ));
 				$custom_fields = New CustomFields( $m, $a, $obj->file_id, "edit" );
 				$custom_fields->printHTML();
 				*/

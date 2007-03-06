@@ -1,6 +1,6 @@
 <?php /* TASKS $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 //There is an issue with international UTF characters, when stored in the database an accented letter

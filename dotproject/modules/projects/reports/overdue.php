@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 // Output the PDF
@@ -17,9 +17,8 @@ if ($err = db_error()) {
 	$AppUI->redirect();
 }
 
-$font_dir = $dPconfig['root_dir']."/lib/ezpdf/fonts";
-$temp_dir = $dPconfig['root_dir']."/files/temp";
-$base_url  = $dPconfig['base_url'];
+$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
+
 require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 
 $pdf =& new Cezpdf($paper='A4',$orientation='landscape');

@@ -1,6 +1,6 @@
 <?php /* TASKS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 function setItem($item_name, $defval = null) {
@@ -22,19 +22,18 @@ if ($sub_form) {
 	// in add-edit, so set it to what it should be
 	$AppUI->setState('TaskAeTabIdx', $_POST['newTab']);
 	if (isset($_POST['subform_processor'])) {
-		$root = $dPconfig['root_dir'];
 		if (isset($_POST['subform_module']))
 			$mod = $AppUI->checkFileName($_POST['subform_module']);
 		else
 			$mod = 'tasks';
 		$proc = $AppUI->checkFileName($_POST['subform_processor']);
-		include "$root/modules/$mod/$proc.php";
+		include DP_BASE_DIR."/modules/$mod/$proc.php";
 	} 
 } else {
 
 	// Include any files for handling module-specific requirements
 	foreach (findTabModules('tasks', 'addedit') as $mod) {
-		$fname = dPgetConfig('root_dir') . "/modules/$mod/tasks_dosql.addedit.php";
+		$fname = DP_BASE_DIR . "/modules/$mod/tasks_dosql.addedit.php";
 		dprint(__FILE__, __LINE__, 3, "checking for $fname");
 		if (file_exists($fname))
 			require_once $fname;
@@ -120,7 +119,7 @@ if ($sub_form) {
 	}
 
 
-	require_once("./classes/CustomFields.class.php");
+	require_once($AppUI->getSystemClass( 'CustomFields' ));
 
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {

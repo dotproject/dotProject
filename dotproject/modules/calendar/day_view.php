@@ -1,6 +1,6 @@
 <?php /* CALENDAR $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $tab, $locale_char_set, $date;
@@ -93,7 +93,7 @@ function clickDay( idate, fdate ) {
 <?php
 // tabbed information boxes
 $tabBox = new CTabBox( "?m=calendar&a=day_view&date=" . $this_day->format( FMT_TIMESTAMP_DATE ),
-        "{$dPconfig['root_dir']}/modules/calendar/", $tab );
+        DP_BASE_DIR.'/modules/calendar/', $tab );
 $tabBox->add( 'vw_day_events', 'Events' );
 $tabBox->add( 'vw_day_tasks', 'Tasks' );
 $tabBox->show();

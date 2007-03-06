@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 // $Id$
@@ -92,7 +92,7 @@ if (!defined('DP_BASE_DIR')){
 		<textarea name="task_description" class="textarea" cols="60" rows="10" wrap="virtual"><?php echo @$obj->task_description;?></textarea>
 		</td></tr></table><br />
 		<?php
-			require_once("./classes/CustomFields.class.php");
+			require_once($AppUI->getSystemClass( 'CustomFields' ));
 			GLOBAL $m;
 			$custom_fields = New CustomFields( $m, 'addedit', $obj->task_id, "edit" );
 			$custom_fields->printHTML();

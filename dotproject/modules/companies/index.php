@@ -1,6 +1,6 @@
 <?php /* COMPANIES $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -82,7 +82,7 @@ $companiesTypeTab = defVal( $AppUI->getState( 'CompaniesIdxTab' ),  0 );
 // $tabTypes = array(getCompanyTypeID('Client'), getCompanyTypeID('Supplier'), 0);
 $companiesType = $companiesTypeTab;
 
-$tabBox = new CTabBox( "?m=companies", dPgetConfig('root_dir')."/modules/companies/", $companiesTypeTab );
+$tabBox = new CTabBox( '?m=companies', DP_BASE_DIR.'/modules/companies/', $companiesTypeTab );
 if ($tabbed = $tabBox->isTabbed()) {
 	$add_na = true;
 	if (isset($types[0])) { // They have a Not Applicable entry.

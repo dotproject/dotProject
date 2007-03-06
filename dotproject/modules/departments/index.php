@@ -1,6 +1,6 @@
 <?php /* DEPARTMENTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 // load the companies class
@@ -97,5 +97,5 @@ if ($canEdit) {
 $titleBlock->show();
 
 $min_view = true;
-include $dPconfig['root_dir'] . '/modules/departments/view.php';
+include DP_BASE_DIR . '/modules/departments/view.php';
 ?>

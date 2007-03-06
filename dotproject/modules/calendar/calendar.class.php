@@ -1,6 +1,6 @@
 <?php /* CALENDAR $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 ##
@@ -518,67 +518,51 @@ class CEvent extends CDpObject {
 		$project =& new CProject;
 		$allowedProjects = $project->getAllowedSQL($user_id, 'event_project');
 		
-		$q  = new DBQuery;
-		$q->addTable('events', 'e');
-		$q->addQuery('e.*');
+		//do similiar actions for recurring and non-recurring events
+		$queries = array('q'=>'q', 'r'=>'r');
 		
-		if (count ($allowedProjects)) {
-		  $q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ") OR event_project = 0 )");
-			$q->addJoin('projects', 'p', 'p.project_id = e.event_project');  
-		}	else if ($AppUI->getState('CalIdxCompany')) {
-			$q->addJoin('projects', 'p', 'p.project_id = e.event_project');
-			$q->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
-		}
-
-		switch ($filter) {
-			case 'my':
-				$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
-				$q->addWhere("( ( event_private = 0 AND ue.user_id = $user_id )
-						OR event_owner=$user_id )");
-				break;
-			case 'own':
-				$q->addWhere("( event_owner = $user_id )");
-				break;
-			case 'all':
-				$q->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
-				break;
-		}
-				
-		$q->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start'
-				OR event_start_date BETWEEN '$db_start' AND '$db_end')");	
-		
-		// assemble query for non-recursive events
-		$q->addWhere('( event_recurs <= 0 )');
-		$eventList = $q->loadList();
-        
-        
-        // seperate query object for recursive events
-        $r  = new DBQuery;
-		$r->addTable('events', 'e');
-		$r->addQuery('e.*');
-		
-		if (count ($allowedProjects)) {
-		  $r->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ") OR event_project = 0 )");
-		  $r->addJoin('projects', 'p', 'p.project_id = e.event_project');
-		}
-
-		switch ($filter) {
-			case 'my':
-				$r->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
-				$r->addWhere("( ( event_private = 0 AND ue.user_id = $user_id )
-						OR event_owner=$user_id )");
-				break;
-			case 'own':
-				$r->addWhere("( event_owner = $user_id )");
-				break;
-			case 'all':
-				$r->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
-				break;
+		foreach ($queries as $query_set) {
+		  
+			$$query_set  = new DBQuery;
+			$$query_set->addTable('events', 'e');
+			$$query_set->addQuery('e.*');
+			
+			if (count ($allowedProjects)) {
+				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ") OR event_project = 0 )");
+				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');  
+			}	else if ($AppUI->getState('CalIdxCompany')) {
+				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');
+				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+			}
+			
+			switch ($filter) {
+				case 'my':
+					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
+					$$query_set->addWhere("( ( event_private = 0 AND ue.user_id = $user_id ) OR event_owner=$user_id )");
+					break;
+				case 'own':
+					$$query_set->addWhere("( event_owner = $user_id )");
+					break;
+				case 'all':
+					$$query_set->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
+					break;
+			}
+			
+			$$query_set->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start' "
+					."OR event_start_date BETWEEN '$db_start' AND '$db_end')");
+			
+			
+			if ($query_set == 'q') {
+				// assemble query for non-recursive events
+				$$query_set->addWhere('( event_recurs <= 0 )');
+				$eventList = $$query_set->loadList();
+			} else if ($query_set == 'r') {
+				// assemble query for recursive events
+				$$query_set->addWhere('( event_recurs > 0 )');
+				$eventListRec = $$query_set->loadList();
+			}
 		}
         
-		// assemble query for recursive events
-		$r->addWhere('( event_recurs > 0 )');
-		$eventListRec = $r->loadList();
 
 	//Calculate the Length of Period (Daily, Weekly, Monthly View)
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(),$start_date->getMonth(),$start_date->getYear(),$end_date->getDay(),$end_date->getMonth(),$end_date->getYear());

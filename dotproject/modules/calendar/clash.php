@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 if ( isset($_REQUEST['clash_action'])) {
@@ -46,7 +46,7 @@ if ( isset($_REQUEST['clash_action'])) {
     echo "<tr><td>$user</td></tr>\n";
   }
   echo "</table>\n";
-  $calurl = dPgetConfig('base_url') . "/index.php?m=calendar&a=clash&event_id=" . $obj->event_id;
+  $calurl = DP_BASE_URL.'/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
   echo "<a href='#' onclick=\"set_clash_action('suggest');\">" . $AppUI->_('Suggest Alternative') . "</a> : ";
   echo "<a href='#' onclick=\"set_clash_action('cancel');\">" . $AppUI->_('Cancel') . "</a> : ";
   echo "<a href='#' onclick=\"set_clash_action('mail');\">" . $AppUI->_('Mail Request') . "</a> : ";
@@ -89,7 +89,7 @@ function clash_suggest()
 
   $titleBlock =& new CTitleBlock( 'Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m.'.'.$a);
   $titleBlock->show();
-  $calurl = dPgetConfig('base_url') . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+  $calurl = DP_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
   $times = array();
   $t = new CDate();
   $t->setTime( 0,0,0 );

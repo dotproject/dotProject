@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $obj = new CProject();
@@ -11,7 +11,7 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-require_once("./classes/CustomFields.class.php");
+require_once($AppUI->getSystemClass( 'CustomFields' ));
 // convert dates to SQL format first
 if ($obj->project_start_date) {
 	$date = new CDate( $obj->project_start_date );

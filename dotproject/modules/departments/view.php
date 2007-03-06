@@ -1,6 +1,6 @@
 <?php /* DEPARTMENTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $department, $min_view;
@@ -143,7 +143,7 @@ function delIt() {
 
 	// tabbed information boxes
 	$tabBox = new CTabBox( '?m=departments&a='.$a.'&dept_id='.$dept_id, '', $tab );
-	$tabBox->add($dPconfig['root_dir'].'/modules/departments/vw_contacts', "Contacts");
+	$tabBox->add(DP_BASE_DIR.'/modules/departments/vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
 	$tabBox->loadExtras($m, 'view');		
 	$tabBox->show();

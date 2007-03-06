@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $showEditCheckbox, $tasks, $priorities;
@@ -44,5 +44,5 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 </table>
 <?php 
 $min_view = true;
-	include $dPconfig['root_dir'] . '/modules/tasks/viewgantt.php';
+	include DP_BASE_DIR . '/modules/tasks/viewgantt.php';
 ?>

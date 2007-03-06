@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -87,7 +87,7 @@ if ( $tab != -1 ) {
 //if ($view == "folders") {
 	//include('folders_table.php');	
 //} else {
-	$tabBox = new CTabBox( "?m=files", "{$dPconfig['root_dir']}/modules/files/", $tab );
+	$tabBox = new CTabBox( "?m=files", DP_BASE_DIR.'/modules/files/', $tab );
 	$tabbed = $tabBox->isTabbed();
 	$i = 0;
 	foreach($file_types as $file_type) {

@@ -1,6 +1,6 @@
 <?php /* CALENDAR $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 global $this_day, $first_time, $last_time, $company_id, $m, $a;
@@ -32,5 +32,5 @@ echo $s;
 echo '</table>';
 
 $min_view = 1;
-include dPgetConfig( 'root_dir' ).'/modules/tasks/todo.php';
+include DP_BASE_DIR.'/modules/tasks/todo.php';
 ?>

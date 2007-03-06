@@ -1,6 +1,6 @@
 <?php /* SYSTEM $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
@@ -18,7 +18,7 @@ foreach ($_POST['pref_name'] as $name => $value) {
 		if (($msg = $obj->delete())) {
 			$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		} else {
-			$AppUI->setMsg( "deleted", UI_MSG_ALERT, true );
+			$AppUI->setMsg( 'deleted', UI_MSG_ALERT, true );
 		}
 	} else {
 		if (($msg = $obj->store())) {
@@ -28,11 +28,11 @@ foreach ($_POST['pref_name'] as $name => $value) {
 			// if user preferences, reload them now
 				$AppUI->loadPrefs( $AppUI->user_id );
 				$AppUI->setUserLocale();
-				include_once dPRealPath( "./locales/$AppUI->user_locale/locales.php" );
-				include dPRealPath( "./locales/core.php" );
+				include_once dPRealPath( './locales/'.$AppUI->user_locale.'/locales.php' );
+				include dPRealPath( './locales/core.php' );
 				$AppUI->setMsg( 'Preferences' );
 			}
-			$AppUI->setMsg( "updated", UI_MSG_OK, true );
+			$AppUI->setMsg( 'updated', UI_MSG_OK, true );
 		}
 	}
 }

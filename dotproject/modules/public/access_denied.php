@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 ?>
 <img src="images/shim.gif" width="1" height="5" alt="" border="0"><br />

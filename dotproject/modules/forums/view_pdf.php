@@ -1,6 +1,6 @@
 <?php  /* FORUMS $Id$ */
 if (! defined('DP_BASE_DIR')) {
-	die('You should not call this file directly');
+	die('You should not call this file directly.');
 }
 $AppUI->savePlace();
 $sort = dPgetParam($_REQUEST, 'sort', 'asc');
@@ -53,8 +53,8 @@ foreach ($messages as $row) {
 		' . $row['message_body']);
 }
 
-$font_dir = DP_BASE_DIR."/lib/ezpdf/fonts";
-$temp_dir = DP_BASE_DIR."/files/temp";
+$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
+$temp_dir = DP_BASE_DIR.'/files/temp';
 require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 
 $pdf = &new Cezpdf($paper='A4',$orientation='portrait');

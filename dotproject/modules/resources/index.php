@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -23,7 +23,7 @@ if (isset($_GET['tab'])) {
   $AppUI->setState('ResourcesIdxTab', $_GET['tab']);
 }
 $resourceTab = $AppUI->getState('ResourcesIdxTab', 0);
-$tabBox =& new CTabBox("?m=resources", "{$dPconfig['root_dir']}/modules/resources/", $resourceTab);
+$tabBox =& new CTabBox("?m=resources", DP_BASE_DIR.'/modules/resources/', $resourceTab);
 $tabbed = $tabBox->isTabbed();
 foreach ($obj->loadTypes() as $type) {
 	if ($type['resource_type_id'] == 0 && ! $tabbed)

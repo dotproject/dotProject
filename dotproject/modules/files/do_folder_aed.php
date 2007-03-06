@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $file_folder_id = intval( dPgetParam( $_POST, 'file_folder_id', 0 ) );

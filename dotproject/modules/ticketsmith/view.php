@@ -1,6 +1,6 @@
 <?php /* $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 if (!$canRead) {
@@ -20,11 +20,9 @@ $titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
 $titleBlock->addCrumb( "?m=ticketsmith&type=My", "my tickets" );
 $titleBlock->show();
 
-require("./modules/ticketsmith/config.inc.php");
-require("./modules/ticketsmith/common.inc.php");
+require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
+require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 
-/* Centralize references */
-$app_root = dPgetConfig( 'base_url' );
 
 /* initialize fields */
 if ($ticket_type == "Staff Followup" || $ticket_type == "Client Followup") {
@@ -80,7 +78,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "Ticket ID: $ticket\n";
 			$message .= "Author   : $author\n";
 			$message .= "Subject  : $subject\n";
-			$message .= "View     : $app_root/index.php?m=ticketsmith&a=view&ticket=$ticket\n";
+			$message .= "View     : ".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\n";
 			$message .= "\n--$boundary\n";
 			$message .= "Content-disposition: inline\n";
 			$message .= "Content-type: text/html\n\n";
@@ -97,7 +95,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "\n";
 			$message .= "<TABLE border=0 cellpadding=4 cellspacing=1>\n";
 			$message .= "	<TR>\n";
-			$message .= "	<TD valign=top><img src=$app_root/images/icons/ticketsmith.gif alt= border=0 width=42 height=42></td>\n";
+			$message .= "	<TD valign=top><img src=".DP_BASE_URL."/images/icons/ticketsmith.gif alt= border=0 width=42 height=42></td>\n";
 			$message .= "		<TD nowrap><span class=title>".$AppUI->_('Trouble Ticket Management')."</span></td>\n";
 			$message .= "		<TD valign=top align=right width=100%>&nbsp;</td>\n";
 			$message .= "	</tr>\n";
@@ -120,7 +118,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "	</tr>\n";
 			$message .= "	<TR>\n";
 			$message .= "		<TD bgcolor=white nowrap><font face=arial,san-serif size=2>".$AppUI->_('View').":</font></TD>\n";
-			$message .= "		<TD bgcolor=white nowrap><a href=\"$app_root/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size=2>$app_root/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></TD>\n";
+			$message .= "		<TD bgcolor=white nowrap><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size=2>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></TD>\n";
 			$message .= "	</tr>\n";
 			$message .= "</TABLE>\n";
 			$message .= "</body>\n";

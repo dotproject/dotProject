@@ -1,6 +1,6 @@
 <?php  /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -163,7 +163,7 @@ foreach($project_types as $project_type){
 }
 
 // tabbed information boxes
-$tabBox = new CTabBox( "?m=projects", "{$dPconfig['root_dir']}/modules/projects/", $tab );
+$tabBox = new CTabBox( "?m=projects", DP_BASE_DIR.'/modules/projects/', $tab );
 
 $tabBox->add( 'vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW). ' (' . count($projects) . ')' , true,  1000);
 foreach($project_types as $ptk=>$project_type) {

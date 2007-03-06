@@ -1,14 +1,13 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 
-require_once $dPconfig['root_dir'] . '/modules/ticketsmith/config.inc.php';
+require_once DP_BASE_DIR . '/modules/ticketsmith/config.inc.php';
 require_once $AppUI->getSystemClass( 'query');
-$font_dir = $dPconfig['root_dir']."/lib/ezpdf/fonts";
-$temp_dir = $dPconfig['root_dir']."/files/temp";
-$base_url  = $dPconfig['base_url'];
+$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
+$temp_dir = DP_BASE_DIR.'/files/temp';
 require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 
 $type = dPgetParam($_GET, 'type', '');

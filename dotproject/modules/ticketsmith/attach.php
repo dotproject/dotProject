@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 if (!$canEdit) {
@@ -13,10 +13,8 @@ $titleBlock = new CTitleBlock( 'Link Ticket', 'gconf-app-icon.php', $m, "$m.$a")
 $titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
 $titleBlock->show();
 
-require("./modules/ticketsmith/config.inc.php");
-require("./modules/ticketsmith/common.inc.php");
-
-$app_root = dPgetConfig( 'base_url' );
+require(DP_BASE_DIR."/modules/ticketsmith/config.inc.php");
+require(DP_BASE_DIR."/modules/ticketsmith/common.inc.php");
 
 /* setup table & database field stuff */
 $fields = array("headings" => array("Link", "Author", "Subject", "Date", 

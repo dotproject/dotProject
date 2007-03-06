@@ -1,6 +1,6 @@
 <?php /* PUBLIC $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 if (! ($user_id = dPgetParam($_REQUEST, 'user_id', 0)) )
@@ -18,7 +18,7 @@ if ($user_id) {
 								$old_md5 = md5($old_pwd);
                 $sql = "SELECT user_id FROM users WHERE user_password = '$old_md5' AND user_id=$user_id";
                 if ($AppUI->user_type == 1 || db_loadResult( $sql ) == $user_id) {
-			require_once( "{$dPconfig['root_dir']}/modules/admin/admin.class.php" );
+			require_once( $AppUI->getModuleClass( 'admin' ) );
 			$user = new CUser();
 			$user->user_id = $user_id;
 			$user->user_password = $new_pwd1;

@@ -1,13 +1,13 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 	/*
 	 *	do_custom_field_aed.php
 	 *
 	 */
-	require_once("./classes/CustomFields.class.php");
+	require_once($AppUI->getSystemClass( 'CustomFields' ));
 
 	$edit_field_id = dpGetParam( $_POST, "field_id", NULL );
 

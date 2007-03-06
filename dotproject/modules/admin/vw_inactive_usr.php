@@ -1,6 +1,6 @@
 <?php /* ADMIN $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 GLOBAL $dPconfig, $canEdit, $stub, $where, $orderby;
@@ -25,5 +25,5 @@ $q->addOrder($orderby);
 $users = $q->loadList();
 $canLogin = false;
 
-require "{$dPconfig['root_dir']}/modules/admin/vw_usr.php";
+require DP_BASE_DIR.'/modules/admin/vw_usr.php';
 ?>

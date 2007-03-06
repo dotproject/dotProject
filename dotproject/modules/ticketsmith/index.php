@@ -1,6 +1,6 @@
 <?php  /* TICKETSMITH $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 
@@ -18,8 +18,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-require("modules/ticketsmith/config.inc.php");
-require("modules/ticketsmith/common.inc.php");
+require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
+require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 
 $column = $CONFIG["order_by"];
 $direction = $CONFIG["message_order"];

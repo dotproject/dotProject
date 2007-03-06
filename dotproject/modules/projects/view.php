@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
@@ -286,7 +286,7 @@ function delIt() {
 		<tr>
 			<td colspan="2">
 			<?php
-				require_once("./classes/CustomFields.class.php");
+				require_once($AppUI->getSystemClass( 'CustomFields' ));
 				$custom_fields = New CustomFields( $m, $a, $obj->project_id, "view" );
 				$custom_fields->printHTML();
 			?>
@@ -419,16 +419,16 @@ $query_string = "?m=projects&a=view&project_id=$project_id";
 // Note that we now control these based upon module requirements.
 $canViewTask = $perms->checkModule('tasks', 'view');
 if ($canViewTask) {
-	$tabBox->add( dPgetConfig('root_dir')."/modules/tasks/tasks", 'Tasks' );
-	$tabBox->add( dPgetConfig('root_dir')."/modules/tasks/tasks", 'Tasks (Inactive)' );
+	$tabBox->add( DP_BASE_DIR.'/modules/tasks/tasks', 'Tasks' );
+	$tabBox->add( DP_BASE_DIR.'/modules/tasks/tasks', 'Tasks (Inactive)' );
 }
 if ($perms->checkModule('forums', 'view'))
-	$tabBox->add( dPgetConfig('root_dir')."/modules/projects/vw_forums", 'Forums' );
+	$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_forums', 'Forums' );
 //if ($perms->checkModule('files', 'view'))
-//	$tabBox->add( dPgetConfig('root_dir')."/modules/projects/vw_files", 'Files' );
+//	$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_files', 'Files' );
 if ($canViewTask) {
-	$tabBox->add( dPgetConfig('root_dir')."/modules/tasks/viewgantt", 'Gantt Chart' );
-	$tabBox->add( dPgetConfig('root_dir')."/modules/projects/vw_logs", 'Task Logs' );
+	$tabBox->add( DP_BASE_DIR.'/modules/tasks/viewgantt', 'Gantt Chart' );
+	$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_logs', 'Task Logs' );
 }
 $tabBox->loadExtras($m);
 $f = 'all';

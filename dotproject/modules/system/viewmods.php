@@ -1,6 +1,6 @@
 <?php /* SYSTEM $Id$*/
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -8,7 +8,7 @@ $AppUI->savePlace();
 $canEdit = !getDenyEdit( $m );
 $canRead = !getDenyRead( $m );
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect( 'm=public&a=access_denied' );
 }
 
 $hidden_modules = array(
@@ -24,10 +24,10 @@ foreach ($hidden_modules as $no_show) {
 $q->addOrder('mod_ui_order');
 $modules = db_loadList( $q->prepare() );
 // get the modules actually installed on the file system
-$modFiles = $AppUI->readDirs( "modules" );
+$modFiles = $AppUI->readDirs( 'modules' );
 
 $titleBlock = new CTitleBlock( 'Modules', 'power-management.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=system", "System Admin" );
+$titleBlock->addCrumb( '?m=system', 'System Admin' );
 $titleBlock->show();
 ?>
 
@@ -55,9 +55,9 @@ foreach ($modules as $row) {
 	// TODO: sweep this block of code and add line returns to improve View Source readability [kobudo 14 Feb 2003]
 	// Line returns after </td> tags would be a good start [as well as <tr> and </tr> tags]
 	$s .= '<td>';
-	$s .= '<img src="./images/icons/updown.gif" width="10" height="15" border=0 usemap="#arrow'.$row["mod_id"].'" />';
+	$s .= '<img src="./images/icons/updown.gif" width="10" height="15" border=0 usemap="#arrow'.$row['mod_id'].'" />';
 	if ($canEdit) {
-		$s .= '<map name="arrow'.$row["mod_id"].'">';
+		$s .= '<map name="arrow'.$row['mod_id'].'">';
 	        if ($row['mod_ui_order'] > 0)
                	        $s .= '<area coords="0,0,10,7" href="' . $query_string . '&cmd=moveup">';
 		$s .= '<area coords="0,8,10,14" href="'.$query_string . '&cmd=movedn">';
@@ -87,10 +87,10 @@ foreach ($modules as $row) {
 	}
 
 // check for upgrades
-        $ok = file_exists( "{$dPconfig['root_dir']}/modules/".$row['mod_directory']."/setup.php" );
+        $ok = file_exists( DP_BASE_DIR.'/modules/'.$row['mod_directory'].'/setup.php' );
         if ($ok)
-                include_once( "{$dPconfig['root_dir']}/modules/".$row['mod_directory']."/setup.php" );
-//	$ok = @include_once( "{$dPconfig['root_dir']}/modules/".$row['mod_directory']."/setup.php" );
+                include_once( DP_BASE_DIR.'/modules/'.$row['mod_directory'].'/setup.php' );
+//	$ok = @include_once( DP_BASE_DIR.'/modules/'.$row['mod_directory'].'/setup.php' );
 	if ( $ok )
 	{
 		if ( $config[ 'mod_version' ] != $row['mod_version'] && $canEdit )

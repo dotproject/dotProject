@@ -1,6 +1,6 @@
 <?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
@@ -123,11 +123,11 @@ if ($project_id == 0 && $contact_id > 0){
 	$selected_contacts[] = "$contact_id";
 }
 ?>
-<link rel="stylesheet" type="text/css" media="all" href="<?php echo $dPconfig['base_url'];?>/lib/calendar/calendar-dp.css" title="blue" />
+<link rel="stylesheet" type="text/css" media="all" href="<?php echo DP_BASE_URL;?>/lib/calendar/calendar-dp.css" title="blue" />
 <!-- import the calendar script -->
-<script type="text/javascript" src="<?php echo $dPconfig['base_url'];?>/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<?php echo DP_BASE_URL;?>/lib/calendar/calendar.js"></script>
 <!-- import the language module -->
-<script type="text/javascript" src="<?php echo $dPconfig['base_url'];?>/lib/calendar/lang/calendar-<?php echo $AppUI->user_locale; ?>.js"></script>
+<script type="text/javascript" src="<?php echo DP_BASE_URL;?>/lib/calendar/lang/calendar-<?php echo $AppUI->user_locale; ?>.js"></script>
 
 <script language="javascript">
 function setColor(color) {
@@ -357,7 +357,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" colspan="3">
 			<?php
-				require_once("./classes/CustomFields.class.php");
+				require_once($AppUI->getSystemClass( 'CustomFields' ));
 				$custom_fields = New CustomFields( $m, $a, $row->project_id, "edit" );
 				$custom_fields->printHTML();
 			?>

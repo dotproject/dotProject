@@ -1,6 +1,6 @@
 <?php /* ADMIN $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 GLOBAL $addPwT,$company_id, $dept_ids, $department, $min_view, $m, $a;
@@ -15,7 +15,7 @@ $AppUI->savePlace();
 
 if (isset( $_POST['show_form'] )) {
 	$add_pwt = dPgetParam($_POST, 'add_pwt', 0 );
-	$AppUI->setState( 'addProjWithTasks', $add_pwt);	
+	$AppUI->setState( 'addProjWithTasks', $add_pwt);
 } else {
 	$AppUI->setState( 'addProjWithTasks', false);
 }
@@ -184,9 +184,9 @@ function popChgPwd() {
 	$min_view = true;
 	$tabBox = new CTabBox( "?m=admin&a=viewuser&user_id=$user_id", '', $tab );
 	$tabBox->loadExtras('admin', 'viewuser'); 
-	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_log', 'User Log');
-	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_perms', 'Permissions' );
-	$tabBox->add( $dPconfig['root_dir'].'/modules/admin/vw_usr_roles', 'Roles' );
+	$tabBox->add( DP_BASE_DIR.'/modules/admin/vw_usr_log', 'User Log');
+	$tabBox->add( DP_BASE_DIR.'/modules/admin/vw_usr_perms', 'Permissions' );
+	$tabBox->add( DP_BASE_DIR.'/modules/admin/vw_usr_roles', 'Roles' );
 	$tabBox->show();
 }
 ?>

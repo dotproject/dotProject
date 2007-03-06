@@ -1,6 +1,6 @@
 <?php // check access to files module
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 global $AppUI, $m, $obj, $task_id, $dPconfig;
@@ -12,6 +12,6 @@ if (!getDenyRead( 'files' )) {
         echo dPshowImage( dPfindImage( 'stock_attach-16.png', $m ), 16, 16, '' ); 
         $showProject=false;
         $project_id = $obj->task_project;
-        include($dPconfig['root_dir'] . '/modules/files/index_table.php');
+        include(DP_BASE_DIR . '/modules/files/index_table.php');
 }
 ?>

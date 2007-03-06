@@ -1,6 +1,6 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 /* FILES $Id$ */
@@ -13,7 +13,7 @@ global $currentTabId;
 global $currentTabName;
 global $tabbed, $m;
 
-//require_once( dPgetConfig( 'root_dir' )."/modules/files/index_table.lib.php");
+//require_once( DP_BASE_DIR.'/modules/files/index_table.lib.php');
 
 // ****************************************************************************
 // Page numbering variables
@@ -250,7 +250,7 @@ if (strlen($latest_file['file_name']) > $fnamelen+9)
 }
 $file_icon = getIcon($file_row['file_type']);
 echo "
-<a href=\"./fileviewer.php?file_id={$latest_file['file_id']}\" title=\"{$latest_file['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"{$dPconfig['base_url']}/modules/files/images/$file_icon\" />&nbsp;$filename</a>";
+<a href=\"./fileviewer.php?file_id={$latest_file['file_id']}\" title=\"{$latest_file['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;$filename</a>";
 //	{$latest_file['file_name']}
 		?>
 	</td>
@@ -293,14 +293,14 @@ echo "
                       </td>
                       <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
                               title="' . $file['file_description'] . '">' . 
-                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"{$dPconfig['base_url']}/modules/files/images/$file_icon\" />&nbsp;" . 
+                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;" . 
                               $file['file_name'] . '
                       </a></td>
                       <td width="20%">' . $file['file_description'] . '</td>
                       <td width="5%" nowrap="nowrap" align="center">' . $file['file_version'] . '</td>
                       <td width="10%" nowrap="nowrap" align="center">' . $file_types[$file['file_category']] . '</td>
                       <td width="10%" nowrap="nowrap" align="center">' .
-                      	 (($file['file_folder_name'] != '') ? '<a href="'.dPgetConfig('base_url').'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $file['file_folder_name'] . '</a>' : 'Root').
+                      	 (($file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $file['file_folder_name'] . '</a>' : 'Root').
       				'</td>
                       <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
                       <td width="15%" nowrap="nowrap">' . $file["contact_first_name"].' '.$file["contact_last_name"] . '</td>
@@ -317,9 +317,9 @@ echo "
         </td>
         <td width="10%" nowrap="nowrap" align="center"><?php echo $file_types[$latest_file["file_category"]]; ?></td> 
 	<td width="10%" nowrap="nowrap" align="center"><?php
-		echo ($latest_file['file_folder_name'] != '') ? '<a href="'.dPgetConfig('base_url').'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
+		echo ($latest_file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
 	?></td>
-	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file["file_task"];?>"><?php echo $latest_file["task_name"];?></a></td>
+	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task'];?>"><?php echo $latest_file["task_name"];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $latest_file["contact_first_name"].' '.$latest_file["contact_last_name"];?></td>
 	<td width="5%" nowrap="nowrap" align="right"><?php echo file_size(intval($latest_file["file_size"]));?></td>
 	<td nowrap="nowrap"><?php echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/')+1));?></td>

@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $file_id = intval( dPgetParam( $_GET, 'file_id', 0 ) );

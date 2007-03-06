@@ -1,6 +1,6 @@
 <?php /* TASKS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -32,5 +32,5 @@ $titleBlock->show();
 
 // include the re-usable sub view
 	$min_view = false;
-	include("{$dPconfig['root_dir']}/modules/tasks/tasksperuser_sub.php");
+	include(DP_BASE_DIR.'/modules/tasks/tasksperuser_sub.php');
 ?>

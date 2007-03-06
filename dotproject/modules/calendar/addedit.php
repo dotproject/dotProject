@@ -1,6 +1,6 @@
 <?php /* CALENDAR $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $event_id = intval( dPgetParam( $_GET, "event_id", 0 ) );

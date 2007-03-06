@@ -1,6 +1,6 @@
 <?php /* TASKS $Id$ */
 if (!defined('DP_BASE_DIR')){
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 GLOBAL $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;

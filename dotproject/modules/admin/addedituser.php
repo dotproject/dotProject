@@ -2,7 +2,7 @@
 //add or edit a system user
 
 if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly');
+	die('You should not access this file directly.');
 }
 
 $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;

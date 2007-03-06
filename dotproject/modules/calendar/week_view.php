@@ -1,6 +1,6 @@
 <?php /* CALENDAR $Id$ */
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly');
+  die('You should not access this file directly.');
 }
 
 $AppUI->savePlace();
@@ -41,11 +41,11 @@ $events = CEvent::getEventsForPeriod( $first_time, $last_time );
 $links = array();
 
 // assemble the links for the tasks
-require_once( dPgetConfig( 'root_dir' )."/modules/calendar/links_tasks.php" );
+require_once( DP_BASE_DIR.'/modules/calendar/links_tasks.php' );
 getTaskLinks( $first_time, $last_time, $links, 50, $company_id );
 
 // assemble the links for the events
-require_once( dPgetConfig( 'root_dir' )."/modules/calendar/links_events.php" );
+require_once( DP_BASE_DIR.'/modules/calendar/links_events.php' );
 getEventLinks( $first_time, $last_time, $links, 50 );
 
 // setup the title block
