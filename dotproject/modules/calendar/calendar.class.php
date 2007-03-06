@@ -524,14 +524,15 @@ class CEvent extends CDpObject {
 		  
 			$$query_set  = new DBQuery;
 			$$query_set->addTable('events', 'e');
+			$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project'); 
 			$$query_set->addQuery('e.*');
+			$$query_set->addWhere( 
+				((count ($allowedProjects)) ? '( ( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') 
+				. 'event_project = 0 )');
 			
-			if (count ($allowedProjects)) {
-				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ") OR event_project = 0 )");
-				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');  
-			}	else if ($AppUI->getState('CalIdxCompany')) {
-				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');
-				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') . ' OR event_project = 0');
+			if ($AppUI->getState('CalIdxCompany')) {
+				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') 
+					. ' OR event_project = 0');
 			}
 			
 			switch ($filter) {
