@@ -32,14 +32,17 @@ $orderby = 'contact_order_by';
 
 // Pull First Letters
 $let = ":";
-$q  = new DBQuery;
-$q->addTable('contacts');
-$q->addQuery("DISTINCT UPPER(SUBSTRING($orderby,1,1)) as L");
-$q->addWhere("contact_private=0 OR (contact_private=1 AND contact_owner=$AppUI->user_id)
-		OR contact_owner IS NULL OR contact_owner = 0");
-$arr = $q->loadList();
-foreach( $arr as $L ) {
-    $let .= $L['L'];
+$search_map = array($orderby, 'contact_first_name', 'contact_last_name');
+foreach ($search_map as $search_name)
+{
+	$q  = new DBQuery;
+	$q->addTable('contacts');
+	$q->addQuery("DISTINCT UPPER(SUBSTRING($search_name,1,1)) as L");
+	$q->addWhere("contact_private=0 OR (contact_private=1 AND contact_owner=$AppUI->user_id)
+								OR contact_owner IS NULL OR contact_owner = 0");
+	$arr = $q->loadList();
+	foreach( $arr as $L )
+		$let .= $L['L'];
 }
 
 // optional fields shown in the list (could be modified to allow breif and verbose, etc)
@@ -62,7 +65,10 @@ $q->addQuery($showfields);
 $q->addQuery('contact_first_name, contact_last_name, contact_phone');
 $q->addTable('contacts', 'a');
 $q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
-$q->addWhere("(contact_order_by LIKE '$where%' $additional_filter)");
+foreach($search_map as $search_name)
+        $where_filter .=" OR $search_name LIKE '$where%'";
+$where_filter = substr($where_filter, 4);
+$q->addWhere("($where_filter $additional_filter)");
 $q->addWhere("
 	(contact_private=0
 		OR (contact_private=1 AND contact_owner=$AppUI->user_id)
