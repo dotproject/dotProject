@@ -599,7 +599,7 @@ function displayFiles($folder) {
 	        <tr>
 	                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
 	                        title="' . $file['file_description'] . '">' . 
-                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL.'/modules/files/images/$file_icon\" />&nbsp;" . 
+                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;" . 
 	                        $file['file_name'] . '
 	                </a></td>
 	                <td width="20%">' . $file['file_description'] . '</td>

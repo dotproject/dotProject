@@ -34,14 +34,11 @@ $extra = array(
 	'where' => 'project_id = file_project'
 );
 
-//get "Allowed" projects
+//get "Allowed" projects ("All" is always allowed when basing permission on projects)
 $project = new CProject();
 $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );
-$allowedProjects = array_keys($projects);
-if (count($allowedProjects)) {
-  array_push($allowedProjects, 0); //add "All" to allowed projects
-}
 $projects = arrayMerge( array( '0'=>$AppUI->_('All', UI_OUTPUT_RAW) ), $projects );
+$allowedProjects = array_keys($projects);
 
 // setup the title block
 $titleBlock = new CTitleBlock( 'Files', 'folder5.png', $m, "$m.$a" );
