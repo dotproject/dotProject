@@ -125,12 +125,12 @@ $tdw = floor( 100 / $carrWidth );
  // Let's remove the first '%' that we previously added to ContIdxWhere
 $default_search_string = dPformSafe(substr($AppUI->getState( 'ContIdxWhere' ), 1, strlen($AppUI->getState( 'ContIdxWhere' ))), true);
 
-$form = "<form action='./index.php' method='get'>".$AppUI->_('Search for')."
-           <input type='text' name='search_string' value='$default_search_string' />
-		   <input type='hidden' name='m' value='contacts' />
-		   <input type='submit' value='>' />
-		   <a href='./index.php?m=contacts&amp;search_string='>".$AppUI->_('Reset search')."</a>
-		 </form>";
+$form = "<form action='./index.php' method='get'>".$AppUI->_('Search for').'
+           <input type="text" name="search_string" value="'.$default_search_string.'" />
+		   <input type="hidden" name="m" value="contacts" />
+		   <input type="submit" value=">" />
+		   <a href="./index.php?m=contacts&amp;search_string=">'.$AppUI->_('Reset search').'</a>
+		 </form>';
 // En of contact search form
 
 $a2z = "\n<table cellpadding=\"2\" cellspacing=\"1\" border=\"0\">";

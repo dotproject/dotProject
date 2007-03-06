@@ -47,13 +47,14 @@ if (isset( $_POST['searchtext'] )) {
 	$AppUI->setState( 'searchtext', $_POST['searchtext']);
 }
 
+
 $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext'):'';
 $search_text = dPformSafe($search_text, true);
 
 $titleBlock->addCell( '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':' );
 $titleBlock->addCell(
-	'<input type="text" class="text" SIZE="20" name="searchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" .
-	'title="'. $AppUI->_('Search in name and description fields') . '"/>
+	'<input type="text" class="text" SIZE="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '"
+	title="'. $AppUI->_('Search in name and description fields') . '"/>
        	<!--<input type="submit" class="button" value=">" title="'. $AppUI->_('Search in name and description fields') . '"/>-->', '',
 	'<form action="?m=tasks" method="post" id="searchfilter">', '</form>'
 );

@@ -54,9 +54,9 @@ $titleBlock->addCell("<form name='searchform' action='?m=companies&amp;search_st
 						<table>
 							<tr>
                       			<td>
-                                    <strong>".$AppUI->_('Search')."</strong>
-                                    <input class='text' type='text' name='search_string' value='$search_string' /><br />
-						<a href='index.php?m=companies&search_string=-1'>".$AppUI->_("Reset search")."</a></td>
+                                    <strong>".$AppUI->_('Search').'</strong>
+                                    <input class="text" type="text" name="search_string" value="'.$search_string.'" /><br />
+						<a href="index.php?m=companies&search_string=-1">'.$AppUI->_("Reset search")."</a></td>
 								<td valign='top'>
 									<strong>".$AppUI->_("Owner filter")."</strong> $owner_combo
 								</td>
