@@ -514,7 +514,6 @@ class CEvent extends CDpObject {
 		  $user_id = $AppUI->user_id;
 
 		
-
 		$project =& new CProject;
 		$allowedProjects = $project->getAllowedSQL($user_id, 'event_project');
 		
@@ -532,7 +531,7 @@ class CEvent extends CDpObject {
 				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');  
 			}	else if ($AppUI->getState('CalIdxCompany')) {
 				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');
-				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') . ' OR event_project = 0');
 			}
 			
 			switch ($filter) {

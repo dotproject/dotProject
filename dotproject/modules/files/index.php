@@ -34,9 +34,13 @@ $extra = array(
 	'where' => 'project_id = file_project'
 );
 
+//get "Allowed" projects
 $project = new CProject();
 $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );
 $allowedProjects = array_keys($projects);
+if (count($allowedProjects)) {
+  array_push($allowedProjects, 0); //add "All" to allowed projects
+}
 $projects = arrayMerge( array( '0'=>$AppUI->_('All', UI_OUTPUT_RAW) ), $projects );
 
 // setup the title block
