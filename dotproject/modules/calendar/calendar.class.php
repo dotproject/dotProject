@@ -521,14 +521,14 @@ class CEvent extends CDpObject {
 		$queries = array('q'=>'q', 'r'=>'r');
 		
 		foreach ($queries as $query_set) {
-		  
+			
 			$$query_set  = new DBQuery;
 			$$query_set->addTable('events', 'e');
 			$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project'); 
 			$$query_set->addQuery('e.*');
-			$$query_set->addWhere( 
-				((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') 
-				. 'event_project = 0');
+			if (count ($allowedProjects)) {
+				$$query_set->addWhere('( ' . implode(' AND ', $allowedProjects) . ')');
+			}
 			
 			if ($AppUI->getState('CalIdxCompany')) {
 				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') 
@@ -538,27 +538,26 @@ class CEvent extends CDpObject {
 			switch ($filter) {
 				case 'my':
 					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
-					$$query_set->addWhere("( ( event_private = 0 AND ue.user_id = $user_id ) OR event_owner=$user_id )");
+					$$query_set->addWhere('((event_private = 0 AND ue.user_id = '.$user_id.') OR event_owner='.$user_id.')');
 					break;
 				case 'own':
-					$$query_set->addWhere("( event_owner = $user_id )");
+					$$query_set->addWhere('event_owner ='. $user_id);
 					break;
 				case 'all':
-					$$query_set->addWhere("( event_private=0 OR (event_private=1 AND event_owner=$user_id) )");
+					$$query_set->addWhere('(event_private=0 OR (event_private=1 AND event_owner='.$user_id.'))');
 					break;
 			}
 			
-			$$query_set->addWhere("( event_start_date <= '$db_end' AND event_end_date >= '$db_start' "
-					."OR event_start_date BETWEEN '$db_start' AND '$db_end')");
-			
+			$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' "
+				."OR event_start_date BETWEEN '$db_start' AND '$db_end')");
 			
 			if ($query_set == 'q') {
 				// assemble query for non-recursive events
-				$$query_set->addWhere('( event_recurs <= 0 )');
+				$$query_set->addWhere('(event_recurs <= 0)');
 				$eventList = $$query_set->loadList();
 			} else if ($query_set == 'r') {
 				// assemble query for recursive events
-				$$query_set->addWhere('( event_recurs > 0 )');
+				$$query_set->addWhere('(event_recurs > 0)');
 				$eventListRec = $$query_set->loadList();
 			}
 		}

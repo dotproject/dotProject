@@ -74,8 +74,8 @@ if (($company_id || $project_id || $task_id) && !($m=='files')) {
 $q = new DBQuery;
 $q->addQuery('count(file_id)');
 $q->addTable('files', 'f');
-$q->addJoin('projects', 'p', "p.project_id = file_project");
-$q->addJoin('tasks', 't', "t.task_id = file_task");
+$q->addJoin('projects', 'p', 'p.project_id = file_project');
+$q->addJoin('tasks', 't', 't.task_id = file_task');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
@@ -84,7 +84,7 @@ if ($catsql) $q->addWhere($catsql);
 if ($company_id) $q->addWhere("project_company = $company_id");
 if ($project_id) $q->addWhere("file_project = $project_id");
 if ($task_id) $q->addWhere("file_task = $task_id");
-$q->addGroup("file_version_id");
+$q->addGroup('file_version_id');
 
 // SETUP FOR FILE LIST
 $q2 = new DBQuery;
@@ -94,8 +94,8 @@ $q2->addQuery('f.*'.
 $q2->addQuery('ff.*');
 $q2->addTable('files', 'f');
 $q2->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
-$q2->addJoin('projects', 'p', "p.project_id = file_project");
-$q2->addJoin('tasks', 't', "t.task_id = file_task");
+$q2->addJoin('projects', 'p', 'p.project_id = file_project');
+$q2->addJoin('tasks', 't', 't.task_id = file_task');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
@@ -113,15 +113,15 @@ $q2->addGroup('file_version_id DESC');
 
 
 $q3 = new DBQuery;
-$q3->addQuery("file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, contact_first_name, contact_last_name");
-$q3->addQuery("ff.*");
+$q3->addQuery('file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, contact_first_name, contact_last_name');
+$q3->addQuery('ff.*');
 $q3->addTable('files');
 $q3->addJoin('users', 'cu', 'cu.user_id = file_checkout');
 $q3->addJoin('users', 'u', 'u.user_id = file_owner');
 $q3->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
 $q3->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
-$q3->addJoin('projects', 'p', "p.project_id = file_project");
-$q3->addJoin('tasks', 't', "t.task_id = file_task");
+$q3->addJoin('projects', 'p', 'p.project_id = file_project');
+$q3->addJoin('tasks', 't', 't.task_id = file_task');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
