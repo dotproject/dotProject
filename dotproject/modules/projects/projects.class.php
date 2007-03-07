@@ -51,7 +51,9 @@ class CProject extends CDpObject {
 		// ensure changes of state in checkboxes is captured
 		$this->project_private = intval( $this->project_private );
 		// Make sure project_short_name is the right size (issue for languages with encoded characters)
-		$this->project_short_name = substr($this->project_short_name, 0, 10);
+		if (strlen($this->project_short_name) > 10) {
+			$this->project_short_name = substr($this->project_short_name, 0, 10);
+		}
 
 		return null; // object is ok
 	}
