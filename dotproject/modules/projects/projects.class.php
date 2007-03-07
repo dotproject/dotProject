@@ -48,30 +48,32 @@ class CProject extends CDpObject {
 	}
 
 	function check() {
-	// ensure changes of state in checkboxes is captured
+		// ensure changes of state in checkboxes is captured
 		$this->project_private = intval( $this->project_private );
+		// Make sure project_short_name is the right size (issue for languages with encoded characters)
+		$this->project_short_name = substr($this->project_short_name, 0, 10);
 
-		return NULL; // object is ok
+		return null; // object is ok
 	}
 
-        function load($oid=null , $strip = true) {
-                $result = parent::load($oid, $strip);
-                if ($result && $oid) {
-                    
-                    $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
-                    
-                    $q = new DBQuery;
-                    $q->addTable('projects');
-                    $q->addQuery(" SUM(t1.task_duration * t1.task_percent_complete"
-                                 ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
-                                 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}"
-                                 .", t1.task_duration_type)) AS project_percent_complete");
-                    $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-                    $q->addWhere(" project_id = $oid AND t1.task_id = t1.task_parent");
-                    $this->project_percent_complete = $q->loadResult();
-                }
-                return $result;
-        }
+	function load($oid=null , $strip = true) {
+	        $result = parent::load($oid, $strip);
+	        if ($result && $oid) {
+	            
+	            $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
+	            
+	            $q = new DBQuery;
+	            $q->addTable('projects');
+	            $q->addQuery(" SUM(t1.task_duration * t1.task_percent_complete"
+	                         ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+	                         ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}"
+	                         .", t1.task_duration_type)) AS project_percent_complete");
+	            $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+	            $q->addWhere(" project_id = $oid AND t1.task_id = t1.task_parent");
+	            $this->project_percent_complete = $q->loadResult();
+	        }
+	        return $result;
+	}
 // overload canDelete
 	function canDelete( &$msg, $oid=null ) {
 		// TODO: check if user permissions are considered when deleting a project
