@@ -14,7 +14,7 @@ require_once( $AppUI->getModuleClass( 'tasks' ) );
 if (isset( $_REQUEST['company_id'] )) {
 	$AppUI->setState( 'CalIdxCompany', intval( $_REQUEST['company_id'] ) );
 }
-$company_id = $AppUI->getState( 'CalIdxCompany', $AppUI->user_company);
+$company_id = $AppUI->getState( 'CalIdxCompany', 0);
 
 // Using simplified set/get semantics. Doesn't need as much code in the module.
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 'EVENTFILTER', 'my');

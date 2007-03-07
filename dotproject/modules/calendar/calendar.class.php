@@ -525,14 +525,15 @@ class CEvent extends CDpObject {
 			$$query_set  = new DBQuery;
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('e.*');
-			if (count ($allowedProjects)) {
-				$$query_set->addWhere('( ' . implode(' AND ', $allowedProjects) . ')');
+			
+			if (($AppUI->getState('CalIdxCompany'))) {
+				$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
+				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') );
 			}
 			
-			if ($AppUI->getState('CalIdxCompany')) {
-				$$query_set->addJoin('projects', 'p', 'p.project_id = e.event_project');
-				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') 
-					. ' OR event_project = 0');
+			if (count($allowedProjects)) {
+				$$query_set->addWhere('( ( ' . implode(' AND ',  $allowedProjects) . ' ) ' 
+					. (($AppUI->getState('CalIdxCompany'))?'':' OR event_project = 0 ').')');
 			}
 			
 			switch ($filter) {
@@ -548,15 +549,13 @@ class CEvent extends CDpObject {
 					break;
 			}
 			
-			$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' "
-				."OR event_start_date BETWEEN '$db_start' AND '$db_end')");
-			
-			if ($query_set == 'q') {
-				// assemble query for non-recursive events
+			if ($query_set == 'q') { // assemble query for non-recursive events
 				$$query_set->addWhere('(event_recurs <= 0)');
+				// following line is only good for *non-recursive* events
+				$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' "
+					."OR event_start_date BETWEEN '$db_start' AND '$db_end')");
 				$eventList = $$query_set->loadList();
-			} else if ($query_set == 'r') {
-				// assemble query for recursive events
+			} else if ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
 				$eventListRec = $$query_set->loadList();
 			}
