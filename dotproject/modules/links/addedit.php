@@ -128,7 +128,7 @@ function setTask( key, val ) {
 		<table cellspacing="1" cellpadding="2" width="60%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Link Name' );?>:</td>
-			<td align="left"><input type="text" class="text" name="link_name" value="<?echo $obj->link_name;?>"></td>
+			<td align="left"><input type="text" class="text" name="link_name" value="<?php echo $obj->link_name;?>"></td>
 	<?php if ($link_id) { ?>
 			<td>
 				<a href="<?php echo $obj->link_url;?>" target="_blank"><?php echo $AppUI->_( 'go' );?></a>
@@ -172,7 +172,7 @@ function setTask( key, val ) {
 
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Link URL' );?>:</td>
-			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?= $obj->link_url ?>"></td>
+			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php = $obj->link_url ?>"></td>
 		</tr>
 		</table>
 	</td>

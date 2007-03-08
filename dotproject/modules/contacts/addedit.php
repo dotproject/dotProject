@@ -107,7 +107,7 @@ function delIt(){
 if ($userDeleteProtect) {
 ?>
 	alert( "<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS);?>" );
-<?
+<?php
 } else {
 ?>
 	var form = document.changecontact;
@@ -115,7 +115,7 @@ if ($userDeleteProtect) {
 		form.del.value = "<?php echo $contact_id;?>";
 		form.submit();
 	}
-<?
+<?php
 } 
 ?>
 }
