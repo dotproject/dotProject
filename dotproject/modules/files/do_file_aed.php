@@ -22,7 +22,16 @@ if ($file_id) {
 	$oldObj->load( $file_id );
 
 } else {
-  if (!$del)
+	/*
+	** @date 		20070309
+	** @author 	gregorerhardt
+	**
+	** 1. it must be (cf. #1932):
+			if ($del) instead of if (!$del)
+	** 2. commented all out, because delete permissions shouldn't be module-centric,
+			but file object-centric. In the CFile::delete() method there is an object-centric check for permission.
+			
+  if ($del)
   {
     $acl =& $AppUI->acl();
     if ( ! $acl->checkModule('files', 'delete')) 
@@ -31,6 +40,7 @@ if ($file_id) {
     	$AppUI->redirect('m=public&a=access_denied');
 		}
 	}
+	*/
 	$obj->_message = 'added';
 }
 $obj->file_category = intval( dPgetParam( $_POST, 'file_category', 0 ) );
