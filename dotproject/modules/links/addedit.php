@@ -172,7 +172,7 @@ function setTask( key, val ) {
 
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Link URL' );?>:</td>
-			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php = $obj->link_url ?>"></td>
+			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $obj->link_url ?>"></td>
 		</tr>
 		</table>
 	</td>
