@@ -45,7 +45,7 @@ function updateContactCompany($contact_array, $company_id) {
 
 function getContactGeneralInformation($contact_array) {
     $contact_info  = '('.$contact_array['contact_id'].') ';
-    $contact_info .= $contact_array['contact_first_name'].' '.$contact_array['contact_last_name';
+    $contact_info .= $contact_array['contact_first_name'].' '.$contact_array['contact_last_name'];
     return $contact_info;
 }
 
