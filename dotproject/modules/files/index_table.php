@@ -36,11 +36,12 @@ global $tabbed, $m;
 
 $tab = ((!$company_id && !$project_id && !$task_id) || $m=='files') ? $currentTabId : 0;
 $page = dPgetParam( $_GET, "page", 1);
-if (!isset($project_id))
-		$project_id = dPgetParam( $_REQUEST, 'project_id', 0);
-if (!isset($showProject))
-		$showProject = true;
-
+if (!isset($project_id)) {
+	$project_id = dPgetParam( $_REQUEST, 'project_id', 0);
+}
+if (!isset($showProject)) {
+	$showProject = true;
+}
 $xpg_pagesize = 30;
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
@@ -60,31 +61,49 @@ $file_types = dPgetSysVal("FileType");
 if (($company_id || $project_id || $task_id) && !($m=='files')) {
 	  $catsql = false;
 } elseif ($tabbed) {
-	  if ($tab <= 0)
-			  $catsql = false;
-	  else
-			  $catsql = "file_category = " . --$tab ;
+	if ($tab <= 0) {
+		$catsql = false;
+	} else {
+		$catsql = "file_category = " . --$tab ;
+	}
 } else {
-	  if ($tab < 0)
-			  $catsql = false;
-	  else
-			  $catsql = "file_category = " . $tab ;
+	if ($tab < 0) {
+		$catsql = false;
+	} else {
+		$catsql = "file_category = " . $tab ;
+	}
 }
+
+// Fetch permissions once for all queries
+$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
+$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
+
 // SQL text for count the total recs from the selected option
 $q = new DBQuery;
 $q->addQuery('count(file_id)');
 $q->addTable('files', 'f');
 $q->addJoin('projects', 'p', 'p.project_id = file_project');
 $q->addJoin('tasks', 't', 't.task_id = file_task');
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
-$q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
-$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
-$q->addWhere(((count ($allowedTasks)) ? '( ' . implode(' AND ', $allowedTasks) . ') OR ' : '') .'file_task = 0');
-if ($catsql) $q->addWhere($catsql);
-if ($company_id) $q->addWhere("project_company = $company_id");
-if ($project_id) $q->addWhere("file_project = $project_id");
-if ($task_id) $q->addWhere("file_task = $task_id");
+if (count ($allowedProjects)) {
+  $q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+}
+if (count ($allowedTasks)) {
+  $q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+}
+if ($catsql) {
+	$q->addWhere($catsql);
+}
+if ($company_id) {
+	$q->addWhere("project_company = $company_id");
+}
+if ($project_id) {
+	$q->addWhere("file_project = $project_id");
+}
+if ($task_id) {
+	$q->addWhere("file_task = $task_id");
+}
 $q->addGroup('file_version_id');
+
 
 // SETUP FOR FILE LIST
 $q2 = new DBQuery;
@@ -96,14 +115,24 @@ $q2->addTable('files', 'f');
 $q2->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
 $q2->addJoin('projects', 'p', 'p.project_id = file_project');
 $q2->addJoin('tasks', 't', 't.task_id = file_task');
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
-$q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
-$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
-$q->addWhere(((count ($allowedTasks)) ? '( ' . implode(' AND ', $allowedTasks) . ') OR ' : '') .'file_task = 0');
-if ($catsql) $q2->addWhere($catsql);
-if ($company_id) $q2->addWhere("project_company = $company_id");
-if ($project_id) $q2->addWhere("file_project = $project_id");
-if ($task_id) $q2->addWhere("file_task = $task_id");
+if (count ($allowedProjects)) {
+  $q2->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+}
+if (count ($allowedTasks)) {
+  $q2->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+}
+if ($catsql) {
+	$q2->addWhere($catsql);
+}
+if ($company_id) {
+	$q2->addWhere("project_company = $company_id");
+}
+if ($project_id) {
+	$q2->addWhere("file_project = $project_id");
+}
+if ($task_id) {
+	$q2->addWhere("file_task = $task_id");
+}
 $q2->setLimit($xpg_pagesize, $xpg_min);
 // Adding an Order by that is different to a group by can cause
 // performance issues. It is far better to rearrange the group
@@ -113,23 +142,34 @@ $q2->addGroup('file_version_id DESC');
 
 
 $q3 = new DBQuery;
-$q3->addQuery('file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, contact_first_name, contact_last_name');
+$q3->addQuery('file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, con.contact_first_name, con.contact_last_name, co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name ');
 $q3->addQuery('ff.*');
 $q3->addTable('files');
-$q3->addJoin('users', 'cu', 'cu.user_id = file_checkout');
 $q3->addJoin('users', 'u', 'u.user_id = file_owner');
 $q3->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
 $q3->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
 $q3->addJoin('projects', 'p', 'p.project_id = file_project');
 $q3->addJoin('tasks', 't', 't.task_id = file_task');
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
-$q->addWhere(((count ($allowedProjects)) ? '( ' . implode(' AND ', $allowedProjects) . ') OR ' : '') .'file_project = 0');
-$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
-$q->addWhere(((count ($allowedTasks)) ? '( ' . implode(' AND ', $allowedTasks) . ') OR ' : '') .'file_task = 0');
-if ($catsql) $q3->addWhere($catsql);
-if ($company_id) $q3->addWhere("project_company = $company_id");
-if ($project_id) $q3->addWhere("file_project = $project_id");
-if ($task_id) $q3->addWhere("file_task = $task_id");
+$q3->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
+$q3->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
+if (count ($allowedProjects)) {
+  $q3->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+}
+if (count ($allowedTasks)) {
+  $q3->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+}
+if ($catsql) {
+	$q3->addWhere($catsql);
+}
+if ($company_id) {
+	$q3->addWhere("project_company = $company_id");
+}
+if ($project_id) {
+	$q3->addWhere("file_project = $project_id");
+}
+if ($task_id) {
+	$q3->addWhere("file_task = $task_id");
+}
 
 $files = array();
 $file_versions = array();
@@ -176,7 +216,7 @@ $file_date = new CDate();
 
 $id = 0;
 foreach ($files as $file_row) {
-		$latest_file = $file_versions[$file_row['latest_id']];
+	$latest_file = $file_versions[$file_row['latest_id']];
 	$file_date = new CDate( $latest_file['file_date'] );
 
 	if ($fp != $latest_file["file_project"]) {
@@ -195,10 +235,6 @@ foreach ($files as $file_row) {
 		}
 	}
 	$fp = $latest_file["file_project"];
-//		  if ($row['file_versions'] > 1)
-//				  $file = last_file($file_versions, $row['file_name'], $row['file_project']);
-//		  else 
-//				  $file = $latest_file;
 ?>
 <tr>
 	<td nowrap="nowrap" width="20">
@@ -221,17 +257,8 @@ foreach ($files as $file_row) {
 				if ($latest_file['file_checkout'] == 'final'){
 						echo 'final';
 				} else {
-						$q4 = new DBQuery;
-						$q4->addQuery("file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name");
-						$q4->addTable('files');
-						$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-						$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-						$q4->addWhere('file_id = '.$latest_file['file_id']);
-						$co_user = array();
-						$co_user = $q4->loadList();
-						$co_user = $co_user[0];
-						$q4->clear();
-						echo $co_user['contact_first_name'].' '.$co_user['contact_last_name'].'<br>('.$co_user['co_user'].')'; 
+						echo $latest_file['co_contact_first_name'].' '.$latest_file['co_contact_last_name'] 
+							.'<br>('.$latest_file['co_user'].')'; 
 				}
 		}
 		?>
@@ -326,8 +353,8 @@ echo "
 	<td width="15%" nowrap="nowrap" align="right"><?php echo $file_date->format( "$df $tf" );?></td>
 </tr>
 <?php 
-	echo $hidden_table; 
-		$hidden_table = ''; 
+	echo $hidden_table;
+		$hidden_table = '';
 }?>
 </table>
 <?php
