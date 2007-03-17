@@ -1,9 +1,9 @@
 <?php // $Id$
 
 include_once 'check_upgrade.php';
-if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade')
+if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade') {
  die('Security Check: dotProject seems to be already configured. Communication broken for Security Reasons!');
-
+}
 ######################################################################################################################
 
 $baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
@@ -219,9 +219,9 @@ if ($dbc && ($do_db || $do_db_cfg)) {
 
  dPmsg('Creating config');
  $config = '<?php '."\n";
- $config = 'if (!defined(\'DP_BASE_DIR\')) {'."\n";
- $config = '	die(\'You should not access this file directly.\');'."\n";
- $config = '}'."\n";
+ $config .= 'if (!defined(\'DP_BASE_DIR\')) {'."\n";
+ $config .= '	die(\'You should not access this file directly.\');'."\n";
+ $config .= '}'."\n";
  $config .= '### Copyright (c) 2004, The dotProject Development Team dotproject.net and sf.net/projects/dotproject ###'."\n";
  $config .= '### All rights reserved. Released under GPL License. For further Information see LICENSE ###'."\n";
  $config .= "\n";
