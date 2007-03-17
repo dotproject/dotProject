@@ -17,6 +17,7 @@ ALTER TABLE `tasks` ADD `task_contacts` CHAR( 100 ) ;
 
 # add contact_department to contacts table
 ALTER TABLE `contacts` ADD `contact_department` TINYTEXT AFTER `contact_company` ;
+ALTER TABLE `contacts` CHANGE `icon` `contact_icon` VARCHAR( 20 ) NULL DEFAULT 'obj/contact';
 
 # add custom info to tasks
 ALTER TABLE `tasks` ADD `task_custom` LONGTEXT;

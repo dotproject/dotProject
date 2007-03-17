@@ -447,7 +447,7 @@ CREATE TABLE `user_preferences` (
 
 INSERT INTO `users` VALUES (1,1,'admin',MD5('passwd'),0,1,0,0,0,'');
 INSERT INTO `contacts` (contact_id, contact_first_name, contact_last_name, contact_email) 
-VALUES (1,'Admin','Person','admin@localhost');
+  VALUES (1,'Admin','Person','admin@localhost');
 
 INSERT INTO `permissions` VALUES (1,1,"all",-1, -1);
 
@@ -457,6 +457,7 @@ INSERT INTO `user_preferences` VALUES("0", "SHDATEFORMAT", "%d/%m/%Y");
 INSERT INTO `user_preferences` VALUES("0", "TIMEFORMAT", "%I:%M %p");
 INSERT INTO `user_preferences` VALUES("0", "UISTYLE", "default");
 INSERT INTO `user_preferences` VALUES("0", "TASKASSIGNMAX", "100");
+INSERT INTO `user_preferences` VALUES("0", "USERFORMAT", "user");
 
 #
 # AJE (24/Jan/2003)
