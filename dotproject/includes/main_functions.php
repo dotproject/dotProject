@@ -227,7 +227,7 @@ function dPshowImage( $src, $wid='', $hgt='', $alt='', $title='' ) {
 		if ($src == '')
 			return '';
 
-		$result = '<img src="'.$src.'" align="center"';
+		$result = '<img src="'.$src.'" ';
 		if ($wid)
 		  $result .= ' width="'.$wid.'"';
 		if ($hgt)
