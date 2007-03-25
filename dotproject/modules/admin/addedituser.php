@@ -235,7 +235,7 @@ function setDept( key, val ) {
     </td>
     <td align="right">
     <?php if ($canEdit && !$user_id) { ?>
-	<?php echo $AppUI->_('Inform new user of his account details?'); ?> <input type='checkbox' value='1' name='send_user_mail' >&nbsp;&nbsp;&nbsp;<?php } ?>
+	<?php echo $AppUI->_('Inform new user of their account details?'); ?> <input type='checkbox' value='1' name='send_user_mail' >&nbsp;&nbsp;&nbsp;<?php } ?>
 	<input type="button" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt()" class="button" />
     </td>
 </tr>
