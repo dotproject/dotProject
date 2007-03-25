@@ -6,8 +6,9 @@ if (!defined('DP_BASE_DIR')){
 GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
 
 $show_all_projects = false;
-if ( $currentTabId == 1000)
+if ( $currentTabId == -1) {
 	$show_all_projects = true;
+}
 
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
