@@ -428,7 +428,9 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 	$bar  = new MileStone ($row++,array($name, $pname, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
 				else 
 					$bar  = new MileStone ($row++,array($name, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
-                $bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
+                if (is_file( TTF_DIR.'arialbd.ttf' )) {
+									$bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
+								}
                 //caption of milestone should be date
                 if ($showLabels=='1') {
                         $caption = $start->format($df);
