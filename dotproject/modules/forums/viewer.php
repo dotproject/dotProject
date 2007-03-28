@@ -80,10 +80,10 @@ $titleBlock->show();
 
 <?php
 if($post_message){
-	include("./modules/forums/post_message.php");
+	include(DP_BASE_DIR . '/modules/forums/post_message.php');
 } else if($message_id == 0) {
-	include("./modules/forums/view_topics.php");
+	include(DP_BASE_DIR . '/modules/forums/view_topics.php');
 } else {
-	include("./modules/forums/view_messages.php");
+	include(DP_BASE_DIR . '/modules/forums/view_messages.php');
 }
 ?>

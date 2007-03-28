@@ -62,7 +62,7 @@ class CProject extends CDpObject {
 	        $result = parent::load($oid, $strip);
 	        if ($result && $oid) {
 	            
-	            $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
+	            $working_hours = (dPgetConfig('daily_working_hours')?dPgetConfig('daily_working_hours'):8);
 	            
 	            $q = new DBQuery;
 	            $q->addTable('projects');
