@@ -320,7 +320,7 @@ class CTask extends CDpObject
             $total_hours_allocated = (float)($modified_task->task_duration 
                                              * ($modified_task->task_duration_type > 1?dPgetConfig('daily_working_hours'):1));
             if($total_hours_allocated > 0){
-                $modified_task->task_percent_complete = $real_children_hours_worked / $total_hours_allocated;
+                $modified_task->task_percent_complete = ceil($real_children_hours_worked / $total_hours_allocated);
             } 
             else {
                 $sql = "SELECT avg(task_percent_complete) FROM tasks WHERE task_parent = " . $modified_task->task_id 
