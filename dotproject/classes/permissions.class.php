@@ -42,6 +42,8 @@ require_once DP_BASE_DIR."/lib/phpgacl/gacl_api.class.php";
 class dPacl extends gacl_api {
 
   function dPacl($opts = null) {
+    global $db;
+    
     if (! is_array($opts))
       $opts = array();
     $opts['db_type'] = dPgetConfig('dbtype');
@@ -49,6 +51,7 @@ class dPacl extends gacl_api {
     $opts['db_user'] = dPgetConfig('dbuser');
     $opts['db_password'] = dPgetConfig('dbpass');
     $opts['db_name'] = dPgetConfig('dbname');
+    $opts['db'] = $db;
     // We can add an ADODB instance instead of the database
     // connection details.  This might be worth looking at in
     // the future.
@@ -806,10 +809,6 @@ class dPacl extends gacl_api {
       null,
       null,
       "user");
-    if (! is_array($_POST['permission_type'])) {
-      $this->debug_text("you must select at least one permission");
-      return false;
-    }
   }
 
   // Some function overrides.
