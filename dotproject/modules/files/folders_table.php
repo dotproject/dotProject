@@ -781,7 +781,6 @@ if ($folder){ ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%">
 <?php
 //Lets add our bulk form
-	require ("functions.php");
 	$folders_avail = getFolderSelectList();
 	//used O (uppercase 0)instead of 0 (zero) to keep things in place
 	$folders = array('-1' => Array ( 0 => 'O', 1 => '(Move to Folder)', 2 => -1 )) + array('0' => Array ( 0 => 0, 1 => 'Root', 2 => -1 )) + $folders_avail;

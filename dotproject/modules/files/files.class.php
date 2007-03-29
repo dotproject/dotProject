@@ -31,8 +31,8 @@ class CFile extends CDpObject {
 	var $file_date = NULL;
 	var $file_size = NULL;
 	var $file_version = NULL;
-    var $file_category = NULL;
-    var $file_folder = null;
+     var $file_category = NULL;
+     var $file_folder = NULL;
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
 
@@ -748,5 +748,17 @@ function getIcon($file_type) {
       	}
       }
       return $result;      
+}
+
+function getFolderSelectList() {
+	global $AppUI;
+	$folders = array( 0 => '' );
+      $q = new DBQuery();
+	$q->addTable('file_folders');
+	$q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
+	$q->addOrder('file_folder_name');
+	$sql = $q->prepare();
+	$folders = arrayMerge( array( '0'=>array( 0, $AppUI->_('Root'), -1 ) ), db_loadHashList( $sql, 'file_folder_id' ));
+	return $folders;
 }
 ?>

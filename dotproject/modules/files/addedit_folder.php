@@ -6,8 +6,6 @@ if (!defined('DP_BASE_DIR')){
 $file_folder_parent = intval( dPgetParam( $_GET, 'file_folder_parent', 0 ) );
 $folder = intval( dPgetParam( $_GET, 'folder', 0 ) );
 
-require ("functions.php");
-
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];

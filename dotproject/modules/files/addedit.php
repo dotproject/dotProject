@@ -18,8 +18,6 @@ if (!$canEdit) {
 if (file_exists("./modules/helpdesk/config.php")) {
 	include ("./modules/helpdesk/config.php");
 }
-require ("functions.php");
-
 $canAdmin = $perms->checkModule('system', 'edit');
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
