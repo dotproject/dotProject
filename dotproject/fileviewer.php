@@ -108,19 +108,18 @@ if ($file_id) {
 	$project =& new CProject;
 	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
 	$fileclass =& new CFile;
+	$fileclass->load($file_id);
 	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');
 	
 	if (count($allowedFiles) && ! array_key_exists($file_id, $allowedFiles)) {
 		$AppUI->redirect( 'm=public&a=access_denied' );
 	}
 
-	if (count($allowedProjects)) {
-		$allowedProjects[0] = 'All Projects';
-	}
-
 	$q = new DBQuery;
 	$q->addTable('files');
-	$project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
+	if ($fileclass->file_project) {
+		$project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
+	}
 	$q->addWhere('file_id = '.$file_id);
 	
 	$sql = $q->prepare();
