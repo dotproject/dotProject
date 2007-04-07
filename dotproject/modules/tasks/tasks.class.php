@@ -1957,7 +1957,7 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
     //$alt = htmlspecialchars($alt);
     //$alt = str_replace("\r", ' ', $alt);
     //$alt = str_replace("\n", ' ', $alt);
-    $alt = !empty($a['task_description'])? 'onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', $a['task_description']), ENT_QUOTES).'</p></div>'.'\', STICKY, CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();"' : ' ';
+    $alt = !empty($a['task_description'])? 'onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', addslashes($a['task_description'])), ENT_QUOTES).'</p></div>'.'\', STICKY, CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();"' : ' ';
     $open_link = $is_opened 
         ? "<a href='index.php$query_string&close_task_id=".$a["task_id"]
         ."'><img src='images/icons/collapse.gif' border='0' align='center' /></a>" 
