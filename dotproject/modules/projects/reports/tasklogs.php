@@ -131,9 +131,9 @@ function setCalendar( idate, fdate ) {
 if ($do_report) {
 
 	$sql = "SELECT t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator"
-		."\nFROM task_log AS t, tasks"
+		."\nFROM task_log AS t"
 		."\nLEFT JOIN users AS u ON user_id = task_log_creator"
-                ."\nLEFT JOIN contacts ON user_contact = contact_id"
+                ."\nLEFT JOIN contacts ON user_contact = contact_id, tasks"
 		."\nLEFT JOIN projects ON project_id = task_project"
 		."\nWHERE task_log_task = task_id";
 	if ($project_id != 0)
