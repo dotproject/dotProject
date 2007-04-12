@@ -343,7 +343,6 @@ function format_field ($value, $type, $ticket = NULL) {
         case "priority_view":
             $priority = $CONFIG["priority_names"][$value];
             $color = $CONFIG["priority_colors"][$value];
-	    //$priority = $AppUI->_($priority);
             if ($value == 3) {
                 $priority = "<strong>$priority</strong>";
             }
@@ -363,7 +362,7 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "assignment":
             $options[0] = "-";
-	    $query = "SELECT user_id as id, CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM users u LEFT JOIN contacts ON u.user_contact = contact_id";
+	    $query = "SELECT user_id as id, CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM users u LEFT JOIN contacts ON u.user_contact = contact_id ORDER BY name";
             $result = do_query($query);
             while ($row = result2hash($result)) {
                 $options[$row["id"]] = $row["name"];
@@ -382,7 +381,7 @@ function format_field ($value, $type, $ticket = NULL) {
                     $value = $latest_value;
                 }
             }
-            $output = "<a href=index.php?m=ticketsmith&a=view&ticket=$value>";
+            $output = "<a href=index.php?m=ticketsmith&a=view&ticket=$value>$value&nbsp;";
             $output .= "<img src=images/icons/pencil.gif border=0></a>";
             break;
 	case "attach":
@@ -491,10 +490,6 @@ function format_field ($value, $type, $ticket = NULL) {
     return($output);
 
 }
-
-/* register login stuff */
-//session_register("login_id");
-//session_register("login_name");
 
 /* figure out parent & type */
 if (isset($ticket)) {

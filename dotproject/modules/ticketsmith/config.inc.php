@@ -1,25 +1,19 @@
 <?php
+/* $Id$ */
 if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-
-/* $Id$ */
-
 // reply-to address for staff followups
 // i.e. the address the gateway receives
-if ( ! isset($dPconfig['site_domain']))
+if ( ! isset($dPconfig['site_domain'])) {
   $dPconfig['site_domain'] = "dotproject.net";
+}
 
 $CONFIG["reply_to"] = "support@" . $dPconfig['site_domain'];
 // If you want to hide real addresses behind a bogus 
 // generic email, uncomment the following:
 // $CONFIG["reply_name"] = "Help Desk";
-
-// relative path of the program installation
-// i.e. the part of the URL after the server name
-// use "" if at the top-level of a server
-$CONFIG["relative_path"] = "/ticketsmith";
 
 // page color preferences
 $CONFIG["background_color"] = "#ffffff";
@@ -35,12 +29,12 @@ $CONFIG["warning_color"] = "#ff0000";
 $CONFIG["warning_age"] = "0.5"; // in hours
 
 // priority names (low to high)
-$CONFIG["priority_names"] = array($AppUI->_("Low"),$AppUI->_("Normal"),$AppUI->_("High"),$AppUI->_("Highest"),$AppUI->_("911"));
+$CONFIG["priority_names"] = dPgetSysVal( 'TicketPriority' );
 
 // priority colors (low to high)
 $CONFIG["priority_colors"] = array("#006600","#000000","#ff0000","#ff0000","#ff0000");
 
-$CONFIG["type_names"] = array("Open" => $AppUI->_("Open"), "Closed" => $AppUI->_("Closed"), "Deleted" => $AppUI->_("Deleted"));
+$CONFIG["type_names"] = dPgetSysVal( 'TicketStatus' );
 // number of tickets to see at once
 $CONFIG["view_rows"] = 40;
 

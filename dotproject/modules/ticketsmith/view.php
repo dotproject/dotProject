@@ -65,6 +65,73 @@ $subject = dPgetParam( $_POST, 'subject', '' );
 
 if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
     do_query("UPDATE tickets SET type = '$type_toggle', priority = '$priority_toggle', assignment = '$assignment_toggle' WHERE ticket = '$ticket'");
+
+	//Emailing notifications.
+	$change = ' ';
+	if ($type_toggle)
+		$change .= $AppUI->_('Status changed') . ' ';
+	if ($priority_toggle)
+		$change .= $AppUI->_('Priority changed') . ' ';
+	if ($assignment_toggle)
+		$change .= $AppUI->_('Assignment changed') . ' ';
+		
+	$boundary = "_lkqwkASDHASK89271893712893";
+	$message = "--$boundary\n";
+	$message .= "Content-disposition: inline\n";
+	$message .= "Content-type: text/plain\n\n";
+	$message .= $AppUI->_('Ticket Updated - ')  . $change . ".\n\n";
+	$message .= "Ticket ID: $ticket\n";
+	$message .= "Author   : $author\n";
+	$message .= "Subject  : $subject\n";
+	$message .= "View     : ".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\n";
+	$message .= "\n--$boundary\n";
+	$message .= "Content-disposition: inline\n";
+	$message .= "Content-type: text/html\n\n";
+	$message .= "<html>\n";
+	$message .= "<head>\n";
+	$message .= "<style>\n";
+	$message .= ".title {\n";
+	$message .= "	FONT-SIZE: 18pt; SIZE: 18pt;\n";
+	$message .= "}\n";
+	$message .= "</style>\n";
+	$message .= "<title>".$AppUI->_('Ticket Updated - ') . $change ."</title>\n";
+	$message .= "</head>\n";
+	$message .= "<body>\n";
+	$message .= "\n";
+	$message .= "<TABLE border=0 cellpadding=4 cellspacing=1>\n";
+	$message .= "	<TR>\n";
+	$message .= "	<TD valign=top><img src=".DP_BASE_URL."/images/icons/ticketsmith.gif alt= border=0 width=42 height=42></td>\n";
+	$message .= "		<TD nowrap><span class=title>".$AppUI->_('Trouble Ticket Management -')  . $change ."</span></td>\n";
+	$message .= "		<TD valign=top align=right width=100%>&nbsp;</td>\n";
+	$message .= "	</tr>\n";
+	$message .= "</TABLE>\n";
+	$message .= "<TABLE width=600 border=0 cellpadding=4 cellspacing=1 bgcolor=#878676>\n";
+	$message .= "	<TR>\n";
+	$message .= "		<TD bgcolor=white nowrap><font face=arial,san-serif size=2>".$AppUI->_('Ticket ID').":</font></TD>\n";
+	$message .= "		<TD bgcolor=white nowrap><font face=arial,san-serif size=2>$ticket</font></TD>\n";
+	$message .= "	</tr>\n";
+	$message .= "	<TR>\n";
+	$message .= "		<TD bgcolor=white><font face=arial,san-serif size=2>".$AppUI->_('Author').":</font></TD>\n";
+	$message .= "		<TD bgcolor=white><font face=arial,san-serif size=2>" . str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace('"', '', $author))) . "</font></TD>\n";
+	$message .= "	</tr>\n";
+	$message .= "	<TR>\n";
+	$message .= "		<TD bgcolor=white><font face=arial,san-serif size=2>".$AppUI->_('Subject').":</font></TD>\n";
+	$message .= "		<TD bgcolor=white><font face=arial,san-serif size=2>$subject</font></TD>\n";
+	$message .= "	</tr>\n";
+	$message .= "	<TR>\n";
+	$message .= "		<TD bgcolor=white nowrap><font face=arial,san-serif size=2>".$AppUI->_('View').":</font></TD>\n";
+	$message .= "		<TD bgcolor=white nowrap><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size=2>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></TD>\n";
+	$message .= "	</tr>\n";
+	$message .= "</TABLE>\n";
+	$message .= "</body>\n";
+	$message .= "</html>\n";
+	$message .= "\n--$boundary--\n";
+
+	$ticketNotification = dPgetSysVal( 'TicketNotify' );
+	if (count($ticketNotification) > 0) {
+		mail($ticketNotification[$priority], $AppUI->_('Trouble ticket')." #$ticket ", $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
+	}
+
 	if(@$assignment_toggle != @$orig_assignment)
 	{
 		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
@@ -124,7 +191,6 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "</body>\n";
 			$message .= "</html>\n";
 			$message .= "\n--$boundary--\n";
-
 
 			mail($mailinfo["contact_email"], $AppUI->_('Trouble ticket')." #$ticket ".$AppUI->_('has been assigned to you'), $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
 		} // End of check for valid email
