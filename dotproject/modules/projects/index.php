@@ -78,9 +78,7 @@ $usersql = "
 SELECT user_id, user_username, contact_first_name, contact_last_name
 FROM users, contacts
 WHERE user_contact = contact_id
-ORDER BY contact_last_name
-";
-
+ORDER BY contact_last_name";
 
 if (($rows = db_loadList( $usersql, NULL )))
 {
