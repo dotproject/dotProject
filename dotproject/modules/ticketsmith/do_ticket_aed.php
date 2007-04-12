@@ -14,18 +14,19 @@ $email = dPgetParam($_POST, 'email', '');
 $subject = dPgetParam($_POST, 'subject', '');
 $priority = dPgetParam($_POST, 'priority', '');
 $description = dPgetParam($_POST, 'description', '');
+$ticket_company = dPgetParam($_POST, 'ticket_company', 0);
+$ticket_project = dPgetParam($_POST, 'ticket_project', 0);
 
 $author = $name . " <" . $email . ">";
 $tsql =
-"INSERT INTO tickets (author,subject,priority,body,timestamp,type) ".
-"VALUES('$author','$subject','$priority','$description',UNIX_TIMESTAMP(),'Open')";
+"INSERT INTO tickets (author,subject,priority,body,timestamp,type, ticket_company, ticket_project) ".
+"VALUES('$author','$subject','$priority','$description',UNIX_TIMESTAMP(),'Open', $ticket_company, $ticket_project)";
 
 $rc = mysql_query($tsql);
 
 
 if (mysql_errno()) {
 	$AppUI->setMsg( mysql_error() );
-	// add code to mail to ticket master
 } else {
 	$AppUI->setMsg( "Ticket added" );
 	

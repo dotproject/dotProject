@@ -484,6 +484,28 @@ function format_field ($value, $type, $ticket = NULL) {
                 $output = "<em>".$AppUI->_('none')."</em>";
             }
             break;
+		case 'ticket_company':
+		    $q  = new DBQuery;
+			$q->addTable('companies');
+			$q->addQuery('companies.*');
+			$q->addWhere('companies.company_id = '.$value);
+			$sql = $q->prepare();
+			if (!db_loadObject( $sql, $obj )) {
+				// it all dies!
+			}
+			$output = '<a href="index.php?m=companies&a=view&company_id='.$value.'">'.$obj->company_name.'</a>';
+			break;
+		case 'ticket_project':
+		    $q  = new DBQuery;
+			$q->addTable('projects');
+			$q->addQuery('projects.*');
+			$q->addWhere('projects.project_id = '.$value);
+			$sql = $q->prepare();
+			if (!db_loadObject( $sql, $obj )) {
+				// it all dies!
+			}
+			$output = '<a href="index.php?m=projects&a=view&project_id='.$value.'">'.$obj->project_name.'</a>';
+			break;
         default:
             $output = $value ? htmlspecialchars($value) : "<em>".$AppUI->_('none')."</em>";
     }

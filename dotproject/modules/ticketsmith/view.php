@@ -47,14 +47,14 @@ else {
 
     $title = $AppUI->_('Ticket')." #$ticket";
 
-    $fields = array("headings" => array("From", "Subject", "Date", "Cc", "Status",
-                                        "Priority", "Owner", "<br />"),
+    $fields = array('headings' => array('From', 'Subject', 'Date', 'Cc', 'Status',
+                                        'Priority', 'Owner', 'Company', 'Project', '<br />'),
 
-                    "columns"  => array("author", "subject", "timestamp", "cc",
-                                        "type", "priority", "assignment", "body"),
+                    'columns'  => array('author', 'subject', 'timestamp', 'cc',
+                                        'type', 'priority', 'assignment', 'ticket_company', 'ticket_project', 'body'),
 
-                    "types"    => array("email", "normal", "elapsed_date", "email",
-                                        "status", "priority_select", "assignment", "body"));
+                    'types'    => array('email', 'normal', 'elapsed_date', 'email',
+                                        'status', 'priority_select', 'assignment', 'ticket_company', 'ticket_project', 'body'));
 }
 
 /* perform updates */

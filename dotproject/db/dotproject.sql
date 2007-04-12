@@ -355,6 +355,8 @@ CREATE TABLE `task_departments` (
 
 CREATE TABLE `tickets` (
   `ticket` int(10) unsigned NOT NULL auto_increment,
+  `ticket_company` int(10) NOT NULL default '0',
+  `ticket_project` int(10) NOT NULL default '0',
   `author` varchar(100) NOT NULL default '',
   `recipient` varchar(100) NOT NULL default '',
   `subject` varchar(100) NOT NULL default '',

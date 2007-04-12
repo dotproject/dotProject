@@ -10,7 +10,8 @@ if (!defined('DP_BASE_DIR')){
 if (!$canEdit) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
-
+require_once( $AppUI->getModuleClass ('companies' ) );
+require_once( $AppUI->getModuleClass ('projects' ) );
 
 // setup the title block
 $titleBlock = new CTitleBlock( 'Submit Trouble Ticket', 'gconf-app-icon.png', $m, "$m.$a" );
@@ -34,6 +35,12 @@ function submitIt() {
 	}
 	if (f.description.value.length < 3) {
 		msg += "\n- <?php echo $AppUI->_('a valid description'); ?>";
+	}
+	if (f.ticket_company.value == 0) {
+		msg += "\n- <?php echo $AppUI->_('a valid company'); ?>";
+	}
+	if (f.ticket_project.value == 0) {
+		msg += "\n- <?php echo $AppUI->_('a valid project'); ?>";
 	}
 	
 	if (msg.length < 1) {
@@ -76,6 +83,41 @@ function submitIt() {
 			<option value="4"><strong><?php echo $AppUI->_('911'); ?> (<?php echo $AppUI->_('Showstopper'); ?>)</strong>
 		</select>
 	</td>
+</tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Company'); ?>:</td>
+	<td>
+	  <?php 
+		$objCompany = new CCompany();
+		$companies = $objCompany->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
+		$companies = arrayMerge( array( '0'=>'' ), $companies );
+		echo arraySelect( $companies, 'ticket_company', 'class="text" size="1"', null );
+	  ?></td>
+</tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Project'); ?>:</td>
+	<td>
+	  <?php 
+		// Retrieve projects that the user can access
+		$objProject = new CProject();
+		$allowedProjects = $objProject->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name' );
+		
+		$q  = new DBQuery;
+		$q->addTable('projects', 'p');
+		$q->addTable('tasks', 't');
+		$q->addQuery('p.project_id, p.project_name');
+		$q->addWhere('t.task_project = p.project_id');
+		if ( count($allowedProjects) > 0 ) {
+			$q->addWhere('(p.project_id IN (' .
+			implode (',', array_keys($allowedProjects)) . '))');
+		}
+		$q->addOrder('p.project_name');
+		
+		$importList = $q->loadHashList ();
+		$importList = arrayMerge( array( '0'=> $AppUI->_('') ), $importList);
+	
+		echo arraySelect( $importList, 'ticket_project', 'size="1" class="text"', null);
+	?></td>
 </tr>
 <TR>
 	<TD align="right"><?php echo $AppUI->_('Description of Problem'); ?>: </td>
