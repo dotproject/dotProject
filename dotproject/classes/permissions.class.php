@@ -66,21 +66,24 @@ class dPacl extends gacl_api {
   }
 
   function checkModule($module, $op, $userid = null) {
-    if (! $userid)
+    if (! $userid) {
       $userid = $GLOBALS['AppUI']->user_id;
-      
+    }
+    $module = ($module == 'sysvals') ? 'system' : $module;
     $result = $this->acl_check("application", $op, "user", $userid, "app", $module);
     dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result");
     return $result;
   }
 
   function checkModuleItem($module, $op, $item = null, $userid = null) {
-    if (! $userid)
+    if (!$userid) {
       $userid = $GLOBALS['AppUI']->user_id;
-    if (! $item)
+    }
+    if (!$item) {
       return $this->checkModule($module, $op, $userid);
+    }
 
-    $result = $this->acl_query("application", $op, "user", $userid, $module, $item, NULL);
+    $result = $this->acl_query('application', $op, 'user', $userid, $module, $item, NULL);
     // If there is no acl_id then we default back to the parent lookup
     if (! $result || ! $result['acl_id']) {
       dprint(__FILE__, __LINE__, 2, "checkModuleItem($module, $op, $userid) did not return a record");

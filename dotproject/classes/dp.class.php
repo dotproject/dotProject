@@ -213,8 +213,8 @@ class CDpObject {
         
 		// First things first.  Are we allowed to delete?
 		$acl =& $AppUI->acl();
-		if ( ! $acl->checkModuleItem($this->_tbl, "delete", $oid)) {
-            $msg = $AppUI->_( "noDeletePermission" );
+		if (!$acl->checkModuleItem($this->_tbl, 'delete', $oid)) {
+            $msg = $AppUI->_( 'noDeletePermission' );
             return false;
 		}
         

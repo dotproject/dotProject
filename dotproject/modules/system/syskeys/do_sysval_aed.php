@@ -4,7 +4,6 @@ if (!defined('DP_BASE_DIR')){
 }
 
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
-
 $obj = new CSysVal();
 
 if (!$obj->bind( $_POST )) {
