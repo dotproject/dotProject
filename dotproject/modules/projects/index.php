@@ -27,7 +27,7 @@ if(isset($_GET["update_project_status"]) && isset($_GET["project_status"]) && is
 if (isset( $_GET['tab'] )) {
 	$AppUI->setState( 'ProjIdxTab', $_GET['tab'] );
 }
-$tab = $AppUI->getState( 'ProjIdxTab' ) !== NULL ? $AppUI->getState( 'ProjIdxTab' ) : -1;
+$tab = $AppUI->getState( 'ProjIdxTab' ) !== NULL ? $AppUI->getState( 'ProjIdxTab' ) : 500;
 $active = intval( !$AppUI->getState( 'ProjIdxTab' ) );
 
 if (isset( $_POST['company_id'] )) {
@@ -156,14 +156,14 @@ foreach($project_types as $project_type){
 	if(isset($fixed_project_type_file[$project_type])){
 		$project_file_type[$project_type] = $fixed_project_type_file[$project_type];
 	} else { // if there is no fixed vw_idx file, we will use vw_idx_proposed
-		$project_file_type[$project_type] = "vw_idx_proposed";
+		$project_file_type[$project_type] = 'vw_idx_proposed';
 	}
 }
 
 // tabbed information boxes
 $tabBox = new CTabBox( "?m=projects", DP_BASE_DIR.'/modules/projects/', $tab );
 
-$tabBox->add( 'vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW). ' (' . count($projects) . ')' , true,  -1);
+$tabBox->add( 'vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW). ' (' . count($projects) . ')' , true,  500);
 foreach($project_types as $ptk=>$project_type) {
 		$tabBox->add($project_file_type[$project_type], $project_type, true, $ptk);
 }

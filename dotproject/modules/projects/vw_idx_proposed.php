@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')){
 GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
 
 $show_all_projects = false;
-if ( $currentTabId == -1) {
+if ( $currentTabId == 500) {
 	$show_all_projects = true;
 }
 
