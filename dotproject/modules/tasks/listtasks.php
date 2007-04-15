@@ -30,7 +30,7 @@ function loadTasks()
     {
       ++$i;
     ?>
-  sel.options[<?php echo $i; ?>] = new Option('<?php echo $task['task_name']; ?>', <?php echo $task['task_id']; ?>);
+  sel.options[<?php echo $i; ?>] = new Option('<?php echo addslashes($task['task_name']); ?>', <?php echo $task['task_id']; ?>);
     <?php
     }
     ?>
