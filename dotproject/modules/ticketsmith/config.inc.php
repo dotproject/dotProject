@@ -10,6 +10,11 @@ if ( ! isset($dPconfig['site_domain'])) {
   $dPconfig['site_domain'] = "dotproject.net";
 }
 
+// Email to be notified for all new/changed tickets
+$CONFIG['notify'] = '';
+// Email to be notified for all new/changed tickets with high priority
+$CONFIG['notify_911'] = '';
+
 $CONFIG["reply_to"] = "support@" . $dPconfig['site_domain'];
 // If you want to hide real addresses behind a bogus 
 // generic email, uncomment the following:
