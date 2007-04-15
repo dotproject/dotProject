@@ -428,7 +428,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 	$bar  = new MileStone ($row++,array($name, $pname, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
 				else 
 					$bar  = new MileStone ($row++,array($name, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
-                if (is_file( TTF_DIR.'arialbd.ttf' )) {
+                if (is_file( TTF_DIR.'arial.ttf' )) {
 									$bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
 								}
                 //caption of milestone should be date
@@ -487,7 +487,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 				else
 					$bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
                 $bar->progress->Set(min(($progress/100),1));
-                if (is_file( TTF_DIR.'arialbd.ttf' )) {
+                if (is_file( TTF_DIR.'arial.ttf' )) {
                         $bar->title->SetFont(FF_ARIAL,FS_NORMAL,8);
                 }
             if($a['task_dynamic'] == 1){
