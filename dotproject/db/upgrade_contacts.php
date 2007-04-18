@@ -28,8 +28,8 @@ foreach ($users as $user)
                 contact_icon,
                 contact_owner)
                 VALUES  (\'' . 
-                mysql_real_escape_string($user['user_first_name']) . "', '" . 
-                mysql_real_escape_string($user['user_last_name']) . "', '" .
+                $user['user_first_name'] . "', '" . 
+                $user['user_last_name'] . "', '" .
                 $user['user_birthday'] . "', " .
                 dPgetParam($user, 'user_company', 0) . ", '" .
                 dPgetParam($user, 'user_department', 0) . "', '" .
@@ -37,15 +37,15 @@ foreach ($users as $user)
                 $user['user_phone'] . "', '" .
                 $user['user_home_phone'] . "', '" .
                 $user['user_mobile'] . "', '" .
-                mysql_real_escape_string($user['user_address1']) . "', '" .
-                mysql_real_escape_string($user['user_address2']) . "', '" .
-                mysql_real_escape_string($user['user_city']) . "', '" .
+                $user['user_address1'] . "', '" .
+                $user['user_address2'] . "', '" .
+                $user['user_city'] . "', '" .
                 $user['user_state'] . "', '" .
                 $user['user_zip'] . "', '" .
                 $user['user_country'] . "', '" .
                 $user['user_icq'] . "', '" .
                 $user['user_pic'] . "', '" .
-                mysql_real_escape_string($user['user_owner']) . "')";
+                $user['user_owner'] . "')";
 
                 db_exec($sql);
                 $msg =  db_error();
