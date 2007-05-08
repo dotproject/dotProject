@@ -399,6 +399,7 @@ function db_dateTime2locale( $dateTime, $format ) {
 /*
 * copy the hash array content into the object as properties
 * only existing properties of object are filled. when undefined in hash, properties wont be deleted
+* only non-object hash values accepted or function dies
 * @param array the input array
 * @param obj byref the object to fill of any class
 * @param string
@@ -408,6 +409,21 @@ function db_dateTime2locale( $dateTime, $format ) {
 function bindHashToObject( $hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindAll=false ) {
 	is_array( $hash ) or die( 'bindHashToObject : hash expected' );
 	is_object( $obj ) or die( 'bindHashToObject : object expected' );
+	
+	/* 
+	 * checking that all hash values are non-objects so that stripslashes() and other such 
+	 * functions are correctly used as well as making sure that we actually create new values and 
+	 * not just copy a reference to an object. bind() already filters non-objects but we still need 
+	 * to check on this should the funtion be called independently of bind()
+	 */
+	$go_on = true;
+    foreach ($hash as $k => $v) {
+		if (is_object( $hash[$k] )) {
+			$error_str .= 'bindHashToObject : non-object expected for hash value with key '.$k . "\n";
+			$go_on = false;
+		}
+	}
+	$go_on or die ( $error_str );
 
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {
