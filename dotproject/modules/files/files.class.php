@@ -320,38 +320,30 @@ class CFile extends CDpObject {
 				
 				//preparing users array
 				$q  = new DBQuery;
-				$q->addTable('tasks', 't');
-				$q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
-						 creator_first_name, cc.contact_last_name as creator_last_name,
-						 oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
-						 oc.contact_last_name as owner_last_name, a.user_id as assignee_id, 
-						 ac.contact_email as assignee_email, ac.contact_first_name as
-						 assignee_first_name, ac.contact_last_name as assignee_last_name');
-				$q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-				$q->addJoin('users', 'o', 'o.user_id = t.task_owner');
-				$q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
-				$q->addJoin('users', 'c', 'c.user_id = t.task_creator');
-				$q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
+				$q->addTable('user_tasks', 'u');
+				$q->addQuery('a.user_id as dest_id,
+						 ac.contact_email as dest_email, ac.contact_first_name as
+						 dest_first_name, ac.contact_last_name as dest_last_name');
 				$q->addJoin('users', 'a', 'a.user_id = u.user_id');
 				$q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-				$q->addWhere('t.task_id = '.$this->_task->task_id);
-				$this->_users = $q->loadList();
+				$q->addWhere('u.task_id = '.$this->_task->task_id);
+				$this->_users = $q->loadHashList('dest_id');
 			} else {
 				//find project owner and notify him about new or modified file
 				$q  = new DBQuery;
 				$q->addTable('users', 'u');
-				$q->addTable('projects', 'p');
-				$q->addQuery('u.*');
-				$q->addWhere('p.project_owner = u.user_id');
-				$q->addWhere('p.project_id = '.$this->file_project);
-				$this->_users = $q->loadList();
+				$q->addWhere('u.user_id = ' . $this->_project->project_owner);
+				$q->addQuery('u.user_id as dest_id, c.contact_first_name as dest_first_name, c.contact_last_name as dest_last_name,
+						c.contact_email as dest_email');
+				$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+				$this->_users = $q->loadHashList('dest_id');
 			}
-			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
+			$body .= "\n\n" . $AppUI->_("File", UI_OUTPUT_RAW). " " . $this->file_name. " " . $AppUI->_($this->_message, UI_OUTPUT_RAW)
+				 . " " . $AppUI->_("by", UI_OUTPUT_RAW) . " " . $AppUI->user_first_name . " " . $AppUI->user_last_name;
 			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/fileviewer.php?file_id='.$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->file_description;
+				$body .= "\n".$AppUI->_('URL', UI_OUTPUT_RAW).":     {$dPconfig['base_url']}/fileviewer.php?file_id=".$this->file_id;
+				$body .= "\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":" . "\n".$this->file_description;
 			}
-			
 			//send mail			
 			$mail->Body( $body, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "" );
 			$mail->From ( '"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
