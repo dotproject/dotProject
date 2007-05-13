@@ -85,13 +85,12 @@ $graph2->SetFrame(false);
 $graph2->SetBox(true, array(0,0,0), 2);
 $graph2->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 
-$jpLocale = dPgetConfig( 'jpLocale' );
-if ($jpLocale) {
-	$graph2->scale->SetDateLocale( $jpLocale );
+$pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
+$res = @setlocale(LC_TIME, $AppUI->user_lang[0]);
+if ($res) { // Setting locale doesn't fail
+	$graph->scale->SetDateLocale( $AppUI->user_lang[0] );
 }
-else {
-    $graph->scale->SetDateLocale( $AppUI->user_lang[2] );
-}
+setlocale(LC_TIME, $pLocale);
 
 if ($start_date && $end_date) {
 	$graph2->SetDateRange( $start_date, $end_date );

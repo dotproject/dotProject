@@ -3,8 +3,7 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-GLOBAL  $AppUI,$company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
-//Secho dPgetConfig( 'jpLocale' );
+global $AppUI,$company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 $min_view = defVal( @$min_view, false);
@@ -22,14 +21,14 @@ $addPwOiD = dPgetParam($_POST, 'add_pwoid', 0);
 
 //if set GantChart includes user labels as captions of every GantBar
 if ($showLabels!='0') {
-    $showLabels='1';
+	$showLabels='1';
 }
 if ($showInactive!='0') {
-    $showInactive='1';
+	$showInactive='1';
 }
 
 if ($showAllGantt!='0') {
-     $showAllGantt='1';
+	$showAllGantt='1';
 }
 
 $projectStatus = dPgetSysVal( 'ProjectStatus' );

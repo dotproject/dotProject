@@ -668,7 +668,6 @@ INSERT INTO `config` VALUES (0, 'admin_username', 'admin', '', 'text');
 INSERT INTO `config` VALUES (0, 'username_min_len', '4', '', 'text');
 INSERT INTO `config` VALUES (0, 'password_min_len', '4', '', 'text');
 INSERT INTO `config` VALUES (0, 'enable_gantt_charts', 'true', '', 'checkbox');
-INSERT INTO `config` VALUES (0, 'jpLocale', '', '', 'text');
 INSERT INTO `config` VALUES (0, 'log_changes', 'false', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'check_task_dates', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'locale_warn', 'false', '', 'checkbox');
