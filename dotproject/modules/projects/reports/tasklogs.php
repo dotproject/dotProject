@@ -7,8 +7,9 @@ if (!defined('DP_BASE_DIR')){
 * Generates a report of the task logs for given dates
 */
 $perms =& $AppUI->acl();
-if (! $perms->checkModule('tasks', 'view'))
+if (! $perms->checkModule('tasks', 'view')) {
 	redirect('m=public&a=access_denied');
+}	
 $do_report = dPgetParam( $_GET, "do_report", 0 );
 $log_all = dPgetParam( $_GET, 'log_all', 0 );
 $log_pdf = dPgetParam( $_GET, 'log_pdf', 0 );
@@ -86,13 +87,14 @@ function setCalendar( idate, fdate ) {
                 LEFT JOIN contacts ON user_contact = contact_id
 		";
 
-		if ( $log_userfilter == 0 ) echo '<OPTION VALUE="0" SELECTED>'.$AppUI->_('All users' );
-		else echo '<OPTION VALUE="0">All users';
+		if ( $log_userfilter == 0 ) {
+			echo '<OPTION VALUE="0" SELECTED>'.$AppUI->_('All users' );
+		} else {
+			echo '<OPTION VALUE="0">All users';
+		}
 
-		if (($rows = db_loadList( $usersql, NULL )))
-		{
-			foreach ($rows as $row)
-			{
+		if (($rows = db_loadList( $usersql, NULL ))) {
+			foreach ($rows as $row) {
 				if ( $log_userfilter == $row["user_id"])
 					echo "<OPTION VALUE='".$row["user_id"]."' SELECTED>".$row["user_username"];
 				else
@@ -130,14 +132,15 @@ function setCalendar( idate, fdate ) {
 <?php
 if ($do_report) {
 
-	$sql = "SELECT t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator"
+	$sql = "SELECT p.project_id, p.project_name, t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator"
 		."\nFROM task_log AS t"
 		."\nLEFT JOIN users AS u ON user_id = task_log_creator"
                 ."\nLEFT JOIN contacts ON user_contact = contact_id, tasks"
-		."\nLEFT JOIN projects ON project_id = task_project"
+		."\nLEFT JOIN projects p ON p.project_id = task_project"
 		."\nWHERE task_log_task = task_id";
-	if ($project_id != 0)
+	if ($project_id != 0) {
 		$sql .= "\nAND task_project = $project_id";
+	}
 	
 	if (!$log_all) {
 		$sql .= "\n	AND task_log_date >= '".$start_date->format( FMT_DATETIME_MYSQL )."'"
@@ -166,6 +169,9 @@ if ($do_report) {
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
 	<tr>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Created by');?></th>
+		<?php if ($project_id == 0) { ?>
+			<th><?php echo $AppUI->_('Project');?></th>
+		<?php } ?>
 		<th><?php echo $AppUI->_('Summary');?></th>
 		<th><?php echo $AppUI->_('Description');?></th>
 		<th><?php echo $AppUI->_('Date');?></th>
@@ -191,17 +197,19 @@ if ($do_report) {
 ?>
 	<tr>
 		<td><?php echo $log['creator'];?></td>
+		<?php if ($project_id == 0) { ?>
+			<td><a href="index.php?m=projects&a=view&project_id=<?php echo $log['project_id']; ?>"><?php echo $log['project_name'] ?></a></td>
+		<?php } ?>
 		<td>
 			<a href="index.php?m=tasks&a=view&tab=1&task_id=<?php echo $log['task_log_task'];?>&task_log_id=<?php echo $log['task_log_id'];?>"><?php echo $log['task_log_name'];?></a>
 		</td>
 		<td><?php
-// dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
-            $transbrk = "\n[translation]\n";
+      $transbrk = "\n[translation]\n";
 			$descrip = str_replace( "\n", "<br />", $log['task_log_description'] );
 			$tranpos = strpos( $descrip, str_replace( "\n", "<br />", $transbrk ) );
-			if ( $tranpos === false) echo $descrip;
-			else
-			{
+			if ( $tranpos === false) {
+				echo $descrip;
+			} else {
 				$descrip = substr( $descrip, 0, $tranpos );
 				$tranpos = strpos( $log['task_log_description'], $transbrk );
 				$transla = substr( $log['task_log_description'], $tranpos + strlen( $transbrk ) );
@@ -233,12 +241,12 @@ if ($do_report) {
 <?php
 	if ($log_pdf) {
 	// make the PDF file
-		 if ($project_id != 0){
+		if ($project_id != 0) {
 			$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
 			$pname = db_loadResult( $sql );
-		}
-		else
+		} else {
 			$pname = "All Projects";
+		}
 		echo db_error();
 
 		$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
@@ -251,7 +259,6 @@ if ($do_report) {
 		$pdf->selectFont( "$font_dir/Helvetica.afm" );
 
 		$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
-		// $pdf->ezText( dPgetConfig( 'company_name' ).' :: '.dPgetConfig( 'page_title' ), 12 );
 
 		$date = new CDate();
 		$pdf->ezText( "\n" . $date->format( $df ) , 8 );
