@@ -234,6 +234,9 @@ if ($do_report) {
 	);
 ?>
 	<tr>
+		<?php if ($project_id == 0) { ?>
+			<td></td>
+		<?php } ?>
 		<td align="right" colspan="4"><?php echo $AppUI->_('Total Hours');?>:</td>
 		<td align="right"><?php printf( "%.2f", $hours );?></td>
 	</tr>
