@@ -99,7 +99,7 @@ foreach ($logs as $row) {
 	$s .= '<td width="100">'.$row["user_username"].'</td>';
 	$s .= '<td width="100" align="right">'.sprintf( "%.2f", $row["task_log_hours"] ) . '<br />(';
 	$minutes = (int) (( $row["task_log_hours"] - ((int)  $row["task_log_hours"] ))*60);
-	$minutes = (strlen($minutes) == 1) ? $minutes.'0' : $minutes;
+	$minutes = ((strlen($minutes) == 1) ? ('0'.$minutes) : $minutes);
 	$s .= (int)  $row["task_log_hours"] .':'. $minutes . ')</td>';
 	$s .= '<td width="100">'.$row["task_log_costcode"].'</td>';
 	$s .= '<td>'.'<a name="tasklog'.@$row['task_log_id'].'"></a>';
