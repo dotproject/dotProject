@@ -1,7 +1,530 @@
-2007-03-11 07:57  nybod
+2007-05-18 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-18
 
-	* includes/session.php: Fix for Mantis 1901 regarding problems
-	using dP's extended sessions with versions of php >= 5.2.0
+2007-05-18 01:03  (cyberhorse)
+---------------------------------
+db/upgrade_latest.php
+- Fixed upgrade issue, where user contacts were being lost.
+
+2007-05-18 00:54  (caseydk)
+---------------------------------
+modules/projects/reports/tasklogs.php
+- tweaking alignment
+
+2007-05-18 00:50  (cyberhorse)
+---------------------------------
+db/upgrade_latest.php
+- Fixed a bug, where on upgrade all connections between users and contacts was lost.
+
+2007-05-18 00:50  (caseydk)
+---------------------------------
+modules/projects/reports/tasklogs.php
+- applied some code cleanup;
+- added project_name with a link when all projects are being shown;
+
+2007-05-17 23:59  (cyberhorse)
+---------------------------------
+misc/changelog.php
+- Script to update ChangeLog file and email changes to the mailing list.
+
+2007-05-15 14:54  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 14:41  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 13:26  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 12:21  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 11:55  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 11:50  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-15 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-15
+
+2007-05-14 07:04  (nybod)
+---------------------------------
+modules/files/files.class.php
+- Mantis 2006 (Aramis)
+
+2007-05-13 11:59  (cyberhorse)
+---------------------------------
+db/dotproject.sql
+locales/en/system.inc
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/tasks/gantt.php
+- #1980 - added a check if php is compiled with the user's locale. If not, it falls back to the system's default locale for gantt charts.
+
+2007-05-13 11:50  (cyberhorse)
+---------------------------------
+db/dotproject.sql
+db/upgrade_latest.sql
+locales/en/system.inc
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/projects/viewgantt.php
+modules/tasks/gantt.php
+- #1980 - Updated gantt charts code to make jpgraph use users' locale or if that fails to fallback to the system's default locale.
+
+2007-05-13 02:50  (caseydk)
+---------------------------------
+modules/tasks/vw_logs.php
+- tweak to display in hh:mm format
+
+2007-05-10 22:59  (caseydk)
+---------------------------------
+modules/tasks/do_task_aed.php
+- resolved an issue where if you had 24 set as your max calendar hour and did not change the hour selection, you'd end up with a date using 2400 as midnight... causing the date converter to die and return a null date;
+
+2007-05-10 21:45  (caseydk)
+---------------------------------
+modules/tasks/do_updatetask.php
+modules/tasks/vw_logs.php
+- added support for tasklog time entries of "1:30" in addition to "1.5" - backported from Head
+
+2007-05-10 01:37  (merlinyoda)
+---------------------------------
+classes/dp.class.php
+includes/db_connect.php
+- 
+- Applying changes to HEAD that were made in stable_2 to fix for Bug 1959.
+
+2007-05-10 00:48  (cyberhorse)
+---------------------------------
+modules/system/translate.php
+modules/system/translate_save.php
+- Fixed a number of issues:
+- Keep selections after a save.
+- Keep module highlighted
+- Sort modules list alphabetically
+- Display a message at the top of the page of the file being edited is not writable, and as a result any
+- changes won't be saved
+- Set the default language to be shown initially to be the user's local language
+- Fixed encoding issue
+
+2007-05-10 00:41  (caseydk)
+---------------------------------
+modules/ticketsmith/comment.php
+- tweak for the includes
+
+2007-05-09 05:09  (merlinyoda)
+---------------------------------
+classes/dp.class.php
+includes/db_connect.php
+- 
+- Fix for Bug 1959.
+
+2007-05-08 00:15  (cyberhorse)
+---------------------------------
+db/dotproject.sql
+db/upgrade_latest.sql
+modules/history/setup.php
+- Added extra SQL indexes in attempt to improve performance
+
+2007-05-02 00:58  (cyberhorse)
+---------------------------------
+modules/tasks/do_task_aed.php
+- #1960 - fixed a bug that made impossible to remove ALL dependencies
+- from a task.
+
+2007-05-02 00:56  (cyberhorse)
+---------------------------------
+modules/tasks/do_task_aed.php
+- #1960 - fixed bug that made it impossible to remove ALL dependencies
+- from a task.
+
+2007-04-27 19:32  (caseydk)
+---------------------------------
+modules/resources/setup.php
+- cleanup and standardization
+
+2007-04-19 04:39  (caseydk)
+---------------------------------
+db/upgrade_contacts.php
+- removed the mysql wrapping, seems to cause issues for some users;
+
+2007-04-15 20:41  (cyberhorse)
+---------------------------------
+modules/tasks/gantt.php
+- fixed check for arial font (bold vs normal)
+
+2007-04-15 20:40  (cyberhorse)
+---------------------------------
+modules/tasks/gantt.php
+- fixed checks for arial font (bold vs normal)
+
+2007-04-15 20:27  (cyberhorse)
+---------------------------------
+modules/tasks/listtasks.php
+- #1954 - fixed javascript error from non-escaped quotes
+
+2007-04-15 19:54  (cyberhorse)
+---------------------------------
+modules/ticketsmith/config.inc.php
+- part of caseydk's changes for email notification.
+
+2007-04-14 23:44  (caseydk)
+---------------------------------
+classes/permissions.class.php
+- cleaned up the issue where you couldn't delete the sysvals regardless of permissions - it was due to the permissions being checked based on the table name which is normally the module name... but not this time around - mantis 1961;
+
+2007-04-14 23:11  (caseydk)
+---------------------------------
+modules/projects/index.php
+modules/projects/vw_idx_proposed.php
+- fixed the issue I previously introduced with the whole tab list on the project screen
+
+2007-04-13 13:15  (caseydk)
+---------------------------------
+classes/dp.class.php
+modules/system/syskeys/do_sysval_aed.php
+classes/permissions.class.php
+- cleaned up the issue where you couldn't delete the sysvals regardless of permissions - it was due to the permissions being checked based on the table name which is normally the module name... but not this time around;
+
+2007-04-13 09:06  (caseydk)
+---------------------------------
+db/dotproject.sql
+db/upgrade_204_to_21rc1.sql
+modules/ticketsmith/common.inc.php
+modules/ticketsmith/do_ticket_aed.php
+modules/ticketsmith/post_ticket.php
+modules/ticketsmith/view.php
+- further updates to ticketsmith to add a company and project id -
+- these respect all permissions as expected;
+
+2007-04-13 06:57  (caseydk)
+---------------------------------
+modules/ticketsmith/common.inc.php
+modules/ticketsmith/config.inc.php
+modules/ticketsmith/do_ticket_aed.php
+modules/ticketsmith/index.php
+modules/ticketsmith/table.schema
+modules/ticketsmith/view.php
+- some major cleanup of the ticketsmith module -
+- changed some of the custom config parameters to use dotProject params;
+- added notification emails based on a dotproject param;
+- removed some deprecated code;
+- beat my head on the wall due to all the inline html and string concat, arg;
+
+2007-04-13 06:55  (caseydk)
+---------------------------------
+db/dotproject.sql
+db/upgrade_204_to_21rc1.sql
+- updates for the ticketsmith module
+
+2007-04-13 03:02  (caseydk)
+---------------------------------
+modules/admin/vw_active_usr.php
+modules/admin/vw_inactive_usr.php
+- added user filtering that respects company permissions;
+
+2007-04-13 03:01  (caseydk)
+---------------------------------
+modules/projects/index.php
+- tiny format change
+
+2007-04-11 18:16  (ajdonnison)
+---------------------------------
+modules/projects/reports/tasklogs.php
+- Fix SQL to work with MySQL 5
+
+2007-04-11 02:32  (caseydk)
+---------------------------------
+modules/projects/reports/taskenddate.en.txt
+- fixed spelling error
+
+2007-04-10 19:42  (cyberhorse)
+---------------------------------
+style/classic/main.css
+style/default/main.css
+style/dp-grey-theme/main.css
+- Improved calendar display
+
+2007-04-10 07:03  (nybod)
+---------------------------------
+includes/sendpass.php
+includes/sendpass.php
+- Added site_domain to email FROM address.  Mantis 1963.
+
+2007-04-07 21:15  (cyberhorse)
+---------------------------------
+modules/projects/admin_tab.viewuser.projects.php
+modules/projects/departments_tab.view.projects.php
+modules/projects/vw_idx_active.php
+modules/projects/vw_idx_archived.php
+modules/projects/vw_idx_complete.php
+modules/projects/vw_idx_proposed.php
+modules/tasks/tasks.class.php
+- #1933 - fixed javascript error on descriptions with single quotes
+
+2007-04-05 08:28  (merlinyoda)
+---------------------------------
+fileviewer.php
+- Fixed problem with access being denied to files assigned to "All Projects"
+- (i.e. where file_project is 0). Also removed a couple lines of old and
+- unused code
+
+2007-04-05 08:23  (merlinyoda)
+---------------------------------
+fileviewer.php
+- 
+- Fixed problem with access being denied to files assigned to "All Projects"
+- (i.e. where file_project is 0). Also removed a couple lines of old and
+- unused code
+
+2007-04-02 22:37  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-04-02
+
+2007-04-02 21:51  (cyberhorse)
+---------------------------------
+ChangeLog
+ChangeLog
+- Updating ChangeLog on 2007-04-02
+
+2007-03-29 23:58  (pedroix)
+---------------------------------
+modules/files/addedit.php
+- 'All' to 'None' back again. I got confused and I shouldn't have touched that, so we are back to 1.44.4.11
+
+2007-03-29 23:45  (pedroix)
+---------------------------------
+modules/files/addedit.php
+- 'None' to 'All' back again :) sorry for the 2 minutes I have removed it
+
+2007-03-29 23:41  (pedroix)
+---------------------------------
+modules/files/addedit.php
+modules/files/addedit_folder.php
+modules/files/files.class.php
+modules/files/folders_table.php
+- Function getFolderSelectList() ported to files.class.php and removed the functions.php file
+
+2007-03-29 00:30  (cyberhorse)
+---------------------------------
+modules/forums/viewer.php
+modules/projects/projects.class.php
+- fixed a few minor warnings - globals and config replacements
+
+2007-03-29 00:24  (cyberhorse)
+---------------------------------
+modules/calendar/clash.php
+modules/links/addedit.php
+- fixed parsing errors (looks like they were result of blind
+- global string replacements)
+
+2007-03-29 00:21  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.class.php
+- #1949 - fixed bug with dynamic parent percent completed calculation
+
+2007-03-29 00:17  (cyberhorse)
+---------------------------------
+classes/permissions.class.php
+- #1948 - made gacl reuse dp's connection to the database
+
+2007-03-29 00:17  (cyberhorse)
+---------------------------------
+classes/permissions.class.php
+- #1948 - made gacl reuse dotproject's connection to the database
+- removed unreachable code
+
+2007-03-26 10:44  (cyberhorse)
+---------------------------------
+modules/tasks/gantt.php
+- added arial font check for milestones
+
+2007-03-26 10:43  (cyberhorse)
+---------------------------------
+modules/tasks/gantt.php
+- added check for arial font when drawing milestones
+
+2007-03-26 03:25  (nybod)
+---------------------------------
+modules/files/addedit.php
+modules/files/index_table.php
+modules/files/addedit.php
+modules/files/index_table.php
+- Clarified language of files not associated with projects.
+
+2007-03-26 01:16  (caseydk)
+---------------------------------
+modules/admin/addedituser.php
+- tiny language tweak
+
+2007-03-26 00:00  (caseydk)
+---------------------------------
+modules/projects/index.php
+modules/projects/vw_idx_proposed.php
+- Changed the default 'Show All' projects tab from 1000 to -1
+
+2007-03-22 07:32  (caseydk)
+---------------------------------
+includes/main_functions.php
+- removed "center" for better xhtml compliance
+
+2007-03-21 12:19  (mosen)
+---------------------------------
+classes/permissions.class.php
+classes/query.class.php
+classes/template.class.php
+classes/ui.class.php
+- Added some javadoc documentation
+
+2007-03-20 12:40  (mosen)
+---------------------------------
+classes/CustomFields.class.php
+classes/authenticator.class.php
+classes/date.class.php
+classes/dp.class.php
+classes/event_queue.class.php
+classes/libmail.class.php
+classes/permissions.class.php
+- Added a heap of javadoc comments to dp classes
+
+2007-03-20 08:45  (gregorerhardt)
+---------------------------------
+lib/PEAR/Date/Calc.php
+modules/tasks/ae_dates.php
+- 1821, 1853 - removed utf8 encoding of day names in calendar and corrected day name abbreviation to correct locale formatting via strftime
+
+2007-03-20 03:04  (nybod)
+---------------------------------
+modules/projects/reports/allocateduserhours.en.txt
+- Grammar correction
+
+2007-03-19 10:36  (mosen)
+---------------------------------
+classes/CustomFields.class.php
+classes/ui.class.php
+includes/main_functions.php
+js/prototype.js
+modules/projects/view.php
+modules/tasks/viewtimeline.php
+modules/tasks/xmllisttasks.php
+- Added javadoc documentation to custom fields class
+- Modified addModuleJS function in ui class to include subdirectories named 'js' inside modules
+- Modified project view to include viewtimeline tab
+- Added prototype to main javascript includes
+- Added timeline api to projects module
+- Added XML task list page
+
+2007-03-18 06:27  (caseydk)
+---------------------------------
+db/upgrade_contacts.php
+- tweaks to insert the USERFORMAT user preference for all users
+
+2007-03-18 06:27  (caseydk)
+---------------------------------
+db/dotproject.sql
+db/upgrade_101_to_102.sql
+- a few sql tweaks to cover new/upgraded installs
+
+2007-03-18 05:29  (caseydk)
+---------------------------------
+classes/ui.class.php
+- coding standards
+
+2007-03-18 05:28  (caseydk)
+---------------------------------
+db/upgrade_contacts.php
+db/upgrade_contacts_company.php
+db/upgrade_latest.php
+- updated to include the new sentinel code;
+
+2007-03-18 05:28  (caseydk)
+---------------------------------
+db/upgrade_102_to_20alpha.sql
+db/upgrade_20_to_201.sql
+- updated the sql to be mysql5 compliant;
+
+2007-03-18 05:22  (caseydk)
+---------------------------------
+db/upgrade_102_to_20alpha.sql
+db/upgrade_201_to_202.sql
+db/upgrade_20_to_201.sql
+- updated the sql to be mysql5 compliant;
+
+2007-03-18 02:38  (caseydk)
+---------------------------------
+install/do_install_db.php
+- major error in writing the config file, it was simply creating a new sting instead of adding it to the existing one - ouch!;
+
+2007-03-18 02:24  (caseydk)
+---------------------------------
+style/classic/login.php
+style/dp-grey-theme/login.php
+style/default/login.php
+- updated the username length to access 255 characters just like the db and the user addedit screen;
+
+2007-03-16 11:13  (cyberhorse)
+---------------------------------
+ChangeLog
+- updated changelog
+
+2007-03-14 15:26  (pedroix)
+---------------------------------
+modules/files/folders_table.php
+- folders files list and version sublists not in synch
+
+2007-03-14 01:59  (merlinyoda)
+---------------------------------
+modules/files/index.php
+modules/files/index_table.php
+modules/files/index.php
+modules/files/index_table.new.php
+modules/files/index_table.php
+- 
+- Fixed some permission display issues for files.
+- 
+- Also, removed query object from inside index table loop in favor of pulling
+- all needed information *outside* of the loop.
+
+2007-03-13 10:25  (caseydk)
+---------------------------------
+modules/forums/view_topics.php
+modules/forums/view_topics.php
+- nasty bug in the join/group by which caused every post to show up as its own thread;
+
+2007-03-12 11:46  (nybod)
+---------------------------------
+db/upgrade_contacts_company.php
+- Added closing bracket at line 48
+
+2007-03-11 19:52  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updated changelog
+
+2007-03-11 07:57  (nybod)
+---------------------------------
+includes/session.php
+- Fix for Mantis 1901 regarding problems using dP's extended sessions with versions of php >= 5.2.0
 
 2007-03-10 04:16  gregorerhardt
 
