@@ -104,7 +104,9 @@ function dPupgrade($from_version, $to_version, $last_updated)
             $sql = 'ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1';
             db_exec( $sql );
             
-			include DP_BASE_DIR.'/db/upgrade_contacts.php';
+			if (strcmp($from_version, '2') < 0) {
+				include DP_BASE_DIR.'/db/upgrade_contacts.php';
+			}
 			include DP_BASE_DIR.'/db/upgrade_permissions.php';
 
 			// Fallthrough
