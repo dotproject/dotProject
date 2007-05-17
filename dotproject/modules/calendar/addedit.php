@@ -166,11 +166,9 @@ $remind = array (
 $times = array();
 $t = new CDate();
 $t->setTime( 0,0,0 );
-if (!defined('LOCALE_TIME_FORMAT'))
-  define('LOCALE_TIME_FORMAT', '%I:%M %p');
 //$m clashes with global $m (module)
 for ($minutes=0; $minutes < ((24 * 60) / $inc); $minutes++) {
-	$times[$t->format( "%H%M%S" )] = $t->format( LOCALE_TIME_FORMAT );
+	$times[$t->format( "%H%M%S" )] = $t->format( $AppUI->getPref('TIMEFORMAT')  );
 	$t->addSeconds( $inc * 60 );
 }
 ?>
