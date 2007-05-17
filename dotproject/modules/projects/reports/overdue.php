@@ -5,13 +5,12 @@ if (!defined('DP_BASE_DIR')){
 
 // Output the PDF
 // make the PDF file
-if ($project_id != 0)
-{
+if ($project_id != 0) {
 	$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
 	$pname = db_loadResult( $sql );
-}
-else
+} else {
 	$pname = $AppUI->_('All Projects');
+}	
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
 	$AppUI->redirect();
