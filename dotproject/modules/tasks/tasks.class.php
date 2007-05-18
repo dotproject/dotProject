@@ -473,6 +473,7 @@ class CTask extends CDpObject
             }
             
             // shiftDependentTasks needs this done first
+            $this->check();
             $ret = db_updateObject( 'tasks', $this, 'task_id', false );
 
             // Milestone or task end date, or dynamic status has changed,
@@ -527,11 +528,13 @@ class CTask extends CDpObject
             }
         }
         
-        if ( !$importing_tasks && $this->task_parent != $this->task_id )
-            $this->updateDynamics(true);
-        
         // if is child update parent task
         if ( $this->task_parent != $this->task_id ) {
+            
+            if ( !$importing_tasks) {
+                $this->updateDynamics(true);
+            }
+            
             $pTask = new CTask();
             $pTask->load($this->task_parent);
             $pTask->updateDynamics();
