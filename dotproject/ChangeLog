@@ -1,5 +1,37 @@
+2007-05-19 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-19
+
+2007-05-18 10:20  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- Fix for Bug # 1998
+
+2007-05-18 10:19  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- Fix for Bug #1998
+
+2007-05-18 05:50  (caseydk)
+---------------------------------
+modules/projects/reports/overdue.php
+- applied some code cleanup;
+
+2007-05-18 05:26  (merlinyoda)
+---------------------------------
+modules/tasks/vw_logs.php
+- Fix for Bug Report #2011
+
+2007-05-18 05:20  (merlinyoda)
+---------------------------------
+modules/calendar/addedit.php
+- 
+- Implemented some code suggested in Mantis Report # 1996
+
 2007-05-18 03:11  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-05-18
 
