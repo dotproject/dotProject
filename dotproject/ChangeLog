@@ -1,5 +1,22 @@
+2007-05-20 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-20
+
+2007-05-20 00:21  (caseydk)
+---------------------------------
+db/dotproject.sql
+db/dotproject.sql
+- applied default value tweak from MOTE - http://www.dotproject.net/vbulletin/showthread.php?p=31165
+
+2007-05-20 00:20  (caseydk)
+---------------------------------
+modules/tasks/do_updatetask.php
+- misc code cleanup and standardization;
+
 2007-05-19 03:11  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-05-19
 
