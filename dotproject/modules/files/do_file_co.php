@@ -5,6 +5,7 @@ if (!defined('DP_BASE_DIR')){
 
 //addfile sql
 $file_id = intval( dPgetParam( $_POST, 'file_id', 0 ) );
+$coReason = dPgetParam( $_POST, 'file_co_reason', '' );
 
 $obj = new CFile();
 if ($file_id) { 
@@ -22,19 +23,10 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-// prepare (and translate) the module name ready for the suffix
-//$AppUI->setMsg( 'File' );
-
 set_time_limit( 600 );
 ignore_user_abort( 1 );
 
-$q  = new DBQuery;
-$q->addTable('files');
-$q->addUpdate('file_checkout', "{$AppUI->user_id}");
-$q->addUpdate('file_co_reason', "{$_POST['file_co_reason']}" );
-$q->addWhere("file_id = $file_id");
-$q->exec();
-$q->clear();
+$obj->checkout($AppUI->user_id, $file_id, $coReason);
 
 // We now have to display the required page
 // Destroy the post stuff, and allow the page to display index.php again.

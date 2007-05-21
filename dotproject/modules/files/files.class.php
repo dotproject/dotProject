@@ -31,8 +31,8 @@ class CFile extends CDpObject {
 	var $file_date = NULL;
 	var $file_size = NULL;
 	var $file_version = NULL;
-     var $file_category = NULL;
-     var $file_folder = NULL;
+	var $file_category = NULL;
+	var $file_folder = NULL;
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
 
@@ -106,11 +106,22 @@ class CFile extends CDpObject {
 		$this->file_id = intval( $this->file_id );
 		$this->file_version_id = intval($this->file_version_id);
 		$this->file_parent = intval( $this->file_parent );
-		// $this->file_category = intval( $this->file_category );
 		$this->file_task = intval( $this->file_task );
 		$this->file_project = intval( $this->file_project );
 
 		return NULL; // object is ok
+	}
+	
+	function checkout($userId, $fileId, $coReason) {
+		$q  = new DBQuery;
+		$q->addTable('files');
+		$q->addUpdate('file_checkout', $userId);
+		$q->addUpdate('file_co_reason', $coReason );
+		$q->addWhere('file_id = '.$fileId);
+		$q->exec();
+		$q->clear();
+
+		return true;
 	}
 
 	function delete() {

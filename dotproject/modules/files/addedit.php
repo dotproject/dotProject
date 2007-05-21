@@ -109,11 +109,7 @@ $extra = array(
 $project = new CProject();
 $projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );
 $projects = arrayMerge( array( '0'=>$AppUI->_('None', UI_OUTPUT_RAW) ), $projects );
-/*
-$folders = array( 0 => '' );
-$sql = "SELECT file_folder_id, file_folder_name, file_folder_parent FROM file_folders";
-$folders = arrayMerge( array( '0'=>array( 0, '- '.$AppUI->_('Select Folder').' -', -1 ) ), db_loadHashList( $sql, 'file_folder_id' ));
-*/
+
 $folders = getFolderSelectList();
 ?>
 <script language="javascript">
