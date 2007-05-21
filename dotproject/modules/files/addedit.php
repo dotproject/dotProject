@@ -345,9 +345,7 @@ function file_show_attr()
             $str_out .= "<tr>" .
                			    '<td align="right" nowrap="nowrap">' . $AppUI->_( 'Project' ) . ':</td>';
             $str_out .= '<td align="left">' .
-                        arraySelect( $projects, 'file_project', 
-                                     'size="1" class="text" style="width:270px"' . $select_disabled,
-                                      $file_project  ) . 
+            projectSelectWithOptGroup( $AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project  ) .
                      		'</td></tr>';
             
             // ---------------------------------------------------------------------------------
@@ -376,4 +374,28 @@ function getHelpdeskFolder() {
 	return intval($ffid);
 }
 
+function projectSelectWithOptGroup( $user_id, $select_name, $select_attribs, $selected ) {
+	global $AppUI ;
+	$q = new DBQuery();
+	$q->addTable('projects');
+	$q->addQuery('project_id, co.company_name, project_name');
+	$proj = new CProject();
+	$proj->setAllowedSQL( $user_id, $q );
+	$q->addOrder('co.company_name');
+	$projects = $q->loadList();
+	$s = "\n<select name=\"$select_name\" $select_attribs>";
+	$s .= "\n\t<option value=\"0\" "  . ( $selected == 0 ? "selected=\"selected\"" : "" ) ." >" . $AppUI->_('None') . "</option>" ;
+	$current_company = "";
+	foreach ($projects as $p )
+		{
+		if ( $p['company_name'] != $current_company )
+			{
+			$current_company = $p['company_name'];
+			$s .= "\n<optgroup label=\""  . $current_company . "\" >" . $current_company. "</optgroup>" ;
+			}
+		$s .= "\n\t<option value=\"".$p['project_id']."\"".($selected == $p['project_id'] ? " selected=\"selected\"" : '').">&nbsp;&nbsp;&nbsp;" .  $p['project_name'] . "</option>";
+		}
+	$s .= "\n</select>\n";
+	return $s;
+}
 ?>
