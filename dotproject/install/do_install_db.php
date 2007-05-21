@@ -55,6 +55,7 @@ $versionPath = array(
 	'2.0.3',
 	'2.0.4',
 	'2.1-rc1',
+	'2.1-rc2',
 );
 
 global $lastDBUpdate;
