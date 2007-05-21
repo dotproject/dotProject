@@ -1,7 +1,17 @@
-2007-05-21 18:47  (ajdonnison)
+2007-05-22 03:12  (cyberhorse)
 ---------------------------------
-db/upgrade_21rc1_to_21rc2.sql
-- file upgrade_21rc1_to_21rc2.sql was initially added on branch stable_2.
+ChangeLog
+- Updating ChangeLog on 2007-05-22
+
+2007-05-21 22:27  (nybod)
+---------------------------------
+modules/files/addedit.php
+- Added projectSelectWithOptGroup from Aramis to group projects by Company
+
+2007-05-21 20:01  (ajdonnison)
+---------------------------------
+base.php
+- Allow third party libraries to work without major change.
 
 2007-05-21 18:47  (ajdonnison)
 ---------------------------------
