@@ -218,6 +218,9 @@ $canRead = $perms->checkModule($m, 'view');
 $canEdit = $perms->checkModule($m, 'edit');
 $canAuthor = $perms->checkModule($m, 'add');
 $canDelete = $perms->checkModule($m, 'delete');
+if (!$canAccess) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
 
 if ( !$suppressHeaders ) {
 	// output the character set header
