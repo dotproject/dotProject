@@ -1,5 +1,23 @@
+2007-05-23 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-23
+
+2007-05-22 20:03  (cyberhorse)
+---------------------------------
+index.php
+index.php
+- #1910 - Stop processing requested page, if no access to the module is allowed right after login checks.
+
+2007-05-22 19:59  (cyberhorse)
+---------------------------------
+classes/dp.class.php
+- Fixed an SQL error, when complex joins were complemented with extra permissions queries (more than one join
+- on companies table for example) wouldn't specify which table they were limiting on...
+
 2007-05-22 03:12  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-05-22
 
