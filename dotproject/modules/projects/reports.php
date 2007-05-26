@@ -14,24 +14,19 @@ if (!$canRead) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
 
-$obj = new CProject();
-$q = new DBQuery;
-$q->addTable('projects');
-$q->addQuery('project_id, project_status, project_name, project_description, project_short_name');                     
-$q->addGroup('project_id');
-$q->addOrder('project_short_name');
-$obj->setAllowedSQL($AppUI->user_id, $q);
-
 $project_list=array("0"=> $AppUI->_("All", UI_OUTPUT_RAW) );
-$ptrc = $q->exec();
+
+$obj = new CProject();
+$ptrc = $obj->getAllowedProjectsInRows($AppUI->user_id);
+
 $nums=db_num_rows($ptrc);
+
 echo db_error();
 for ($x=0; $x < $nums; $x++) {
-        $row = db_fetch_assoc( $ptrc );
-        if ($row["project_id"] == $project_id) $display_project_name='('.$row["project_short_name"].') '.$row["project_name"];
-        $project_list[$row["project_id"]] = '('.$row["project_short_name"].') '.$row["project_name"];
+	$row = db_fetch_assoc( $ptrc );
+	if ($row["project_id"] == $project_id) $display_project_name='('.$row["project_short_name"].') '.$row["project_name"];
+	$project_list[$row["project_id"]] = '('.$row["project_short_name"].') '.$row["project_name"];
 }
-$q->clear();
 
 if (! $suppressHeaders) {
 ?>
