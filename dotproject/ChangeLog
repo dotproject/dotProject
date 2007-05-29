@@ -1,5 +1,109 @@
+2007-05-30 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-05-30
+
+2007-05-30 01:32  (merlinyoda)
+---------------------------------
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/tasks/gantt.php
+- 
+- Changing $AppUI->user_lang[0] to $AppUI->user_lang[2]. This was the value
+- needed for the gantt locale to fix a previous bug.
+
+2007-05-29 23:30  (cyberhorse)
+---------------------------------
+modules/calendar/links_tasks.php
+modules/files/index_table.php
+modules/tasks/xmllisttasks.php
+- Remove dependency in code to the PEAR/Date class - use CDate instead
+
+2007-05-29 23:13  (cyberhorse)
+---------------------------------
+classes/date.class.php
+modules/system/addeditpref.php
+- Remove dependency of PEAR/Date/TimeZone.php
+
+2007-05-29 21:50  (cyberhorse)
+---------------------------------
+modules/files/addedit_folder.php
+modules/files/folders_table.php
+- functions.php doesn't exist anymore - removed calls to missing includes
+
+2007-05-29 05:50  (caseydk)
+---------------------------------
+modules/files/do_file_aed.php
+modules/files/files.class.php
+- implemented the delete() functionality in the LocalFileManager;
+
+2007-05-29 00:22  (caseydk)
+---------------------------------
+modules/files/files.class.php
+fileviewer.php
+- cleaned up the files class;
+- started fleshing out the file manager interface - iFileManager;
+- implemented the fileviewer's file streaming for the local file system;
+
+2007-05-28 21:11  (caseydk)
+---------------------------------
+modules/files/addedit.php
+modules/files/files.class.php
+modules/files/functions.php
+- refactored the functions.php to be included on the class;
+- removed the functions.php;
+- refactored other operations to be part of the class;
+
+2007-05-28 21:08  (caseydk)
+---------------------------------
+modules/projects/projects.class.php
+- tweaked the Project class to simplify getting project lists;
+
+2007-05-28 21:07  (caseydk)
+---------------------------------
+classes/ui.class.php
+- tweaked the tab view in preparation for implementing the -1 = All option;
+
+2007-05-28 20:43  (cyberhorse)
+---------------------------------
+modules/system/systemconfig.php
+- #2012 - fixed mishandling single quotes on the system configuration page
+
+2007-05-28 13:05  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+- Remove syntax error in projects table definition
+
+2007-05-28 11:59  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+db/upgrade_latest.sql
+- Remove engine declarations (should default to the server default engine).
+- This helps in transitions between versions of MySQL and the various levels of support of ENGINE= vs TYPE= and we don't really care what engine they use (except perhaps blackhole :)
+
+2007-05-27 07:21  (caseydk)
+---------------------------------
+modules/projects/projects.class.php
+modules/projects/reports.php
+- removed the getAllowedProjects functionality into the Project object;
+
+2007-05-26 11:15  (caseydk)
+---------------------------------
+classes/dp.class.php
+- changed the default to update nulls;
+
+2007-05-26 11:05  (caseydk)
+---------------------------------
+install/check_upgrade.php
+install/db.php
+install/do_install_db.php
+install/index.php
+- resolved lots of DP_BASE_DIR issues in the upgrade path as it attempts to get /includes/config.php numerous times without DP_BASE_DIR being defined;
+- the fresh installation path worked fine;
+
 2007-05-25 03:12  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-05-25
 
