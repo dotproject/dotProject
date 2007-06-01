@@ -1,5 +1,110 @@
+2007-06-02 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-02
+
+2007-06-02 01:34  (revelation7)
+---------------------------------
+classes/template.class.php
+- Fixed 0001977 - pagination.html cannot handle more than 9 pages.
+
+2007-06-01 10:22  (cyberhorse)
+---------------------------------
+misc/changelog.php
+- Added number of changes to the subject line
+
+2007-06-01 09:30  (cyberhorse)
+---------------------------------
+index.php
+- Load new localisation class as one of the first things in
+
+2007-06-01 09:28  (cyberhorse)
+---------------------------------
+modules/files/index_table.new.php
+- not sure if this file is used at all, but if it is, a move away from Date to CDate
+
+2007-06-01 09:18  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-01
+
+2007-06-01 02:15  (cyberhorse)
+---------------------------------
+classes/ui.class.php
+- minor cleanup
+
+2007-06-01 01:45  (cyberhorse)
+---------------------------------
+lib/PEAR/Date/Human.php
+- File is never used.
+
+2007-06-01 00:48  (cyberhorse)
+---------------------------------
+classes/l10n.php
+modules/calendar/calendar.class.php
+modules/public/calendar.php
+- Removed the last dependency on Date_Calc class
+- Fixed top comment in l10n file
+- Fixed callbacks being forgotten when month is clicked in calendar class
+- Cleanups
+
+2007-06-01 00:23  (cyberhorse)
+---------------------------------
+classes/date.class.php
+classes/l10n.php
+modules/calendar/calendar.class.php
+- Removed another dependency on Date_Calc
+- Reworked how calendar gets drawn ...
+
+2007-05-31 21:02  (caseydk)
+---------------------------------
+modules/files/do_file_aed.php
+modules/files/files.class.php
+- finished fleshing out the files interface;
+- all local file operations are implemented via the iFilesManager interface
+
+2007-05-30 23:12  (cyberhorse)
+---------------------------------
+classes/date.class.php
+modules/calendar/calendar.class.php
+- removed dependency on Date_Calc
+
+2007-05-30 23:01  (cyberhorse)
+---------------------------------
+misc/changelog.php
+- small tweaks to the changelog updater script
+
+2007-05-30 22:53  (cyberhorse)
+---------------------------------
+classes/date.class.php
+classes/l10n.php
+modules/calendar/calendar.class.php
+modules/public/calendar.php
+- Improving calendar translation handling
+- Removed dependency on Date_Calc class in calendar
+- Added CLocalisation class to handle localisation issues
+
+2007-05-30 21:15  (cyberhorse)
+---------------------------------
+classes/date.class.php
+modules/tasks/ae_dates.php
+- Optimized date handling (short weekday names)
+
+2007-05-30 20:35  (cyberhorse)
+---------------------------------
+style/default/tabBox.html
+style/dp-grey-theme/tabBox.html
+- fixed smarty error
+
+2007-05-30 19:42  (cyberhorse)
+---------------------------------
+modules/system/translate.php
+style/dp-grey-theme/header.html
+- #2003 - suggested patch for translation improvements applied
+
 2007-05-30 03:11  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-05-30
 
