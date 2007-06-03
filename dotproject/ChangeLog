@@ -1,5 +1,53 @@
+2007-06-03 20:57  (cyberhorse)
+---------------------------------
+modules/calendar/day_view.php
+- Date_Calc dependencies fixed
+
+2007-06-03 18:35  (cyberhorse)
+---------------------------------
+classes/date.class.php
+lib/PEAR/Date.php
+lib/PEAR/Date/Calc.php
+lib/PEAR/Date/Span.php
+lib/PEAR/Date/TimeZone.php
+lib/jpgraph/src/jpg-config.inc
+modules/calendar/calendar.class.php
+modules/calendar/clash.php
+modules/calendar/eventpublish.php
+modules/calendar/index.php
+modules/calendar/links_events.php
+modules/calendar/links_tasks.php
+modules/calendar/vw_day_events.php
+modules/calendar/week_view.php
+modules/forums/index.php
+modules/forums/view_topics.php
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/projects/projects.class.php
+modules/tasks/ae_dates.php
+modules/tasks/do_task_aed.php
+modules/tasks/do_updatetask.php
+modules/tasks/gantt.php
+modules/tasks/organize.php
+modules/tasks/tasks.class.php
+modules/tasks/tasksperuser_sub.php
+modules/tasks/todo_tasks_sub.php
+- Updated date class to remove PEAR/Date package dependency completely
+- Removed all references directly to PEAR/Date classes and updated them to use the CDate class instead
+- Removed PEAR/Date package
+- Updated allocateduserhours.php report to be PHP5 compatible
+- Some other minor changes and updates
+- !NB: Due to the sheer size of the change, there are likely to be problems I've missed. If you spot something
+- not quite right with dates over the next few weeks, let me know and I'll try to fix it for you.
+
+2007-06-03 18:32  (cyberhorse)
+---------------------------------
+includes/main_functions.php
+- removed unused function
+
 2007-06-03 03:11  (cyberhorse)
 ---------------------------------
+ChangeLog
 ChangeLog
 - Updating ChangeLog on 2007-06-03
 
