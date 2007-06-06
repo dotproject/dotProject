@@ -5,32 +5,32 @@ if (!defined('DP_BASE_DIR')){
 
 //There is an issue with international UTF characters, when stored in the database an accented letter
 //actually takes up two letters per say in the field length, this is a problem with costcodes since
-//they are limited in size so saving a costcode as REDACIÓN would actually save REDACIÓ since the accent takes 
+//they are limited in size so saving a costcode as REDACIï¿½N would actually save REDACIï¿½ since the accent takes 
 //two characters, so lets unaccent them, other languages should add to the replacements array too...
 function cleanText($text){
 	//This text file is not utf, its iso so we have to decode/encode
 	$text = utf8_decode($text);
-	$trade = array('á'=>'a','à'=>'a','ã'=>'a',
-                 'ä'=>'a','â'=>'a',
-                 'Á'=>'A','À'=>'A','Ã'=>'A',
-                 'Ä'=>'A','Â'=>'A',
-                 'é'=>'e','è'=>'e',
-                 'ë'=>'e','ê'=>'e',
-                 'É'=>'E','È'=>'E',
-                 'Ë'=>'E','Ê'=>'E',
-                 'í'=>'i','ì'=>'i',
-                 'ï'=>'i','î'=>'i',
-                 'Í'=>'I','Ì'=>'I',
-                 'Ï'=>'I','Î'=>'I',
-                 'ó'=>'o','ò'=>'o','õ'=>'o',
-                 'ö'=>'o','ô'=>'o',
-                 'Ó'=>'O','Ò'=>'O','Õ'=>'O',
-                 'Ö'=>'O','Ô'=>'O',
-                 'ú'=>'u','ù'=>'u',
-                 'ü'=>'u','û'=>'u',
-                 'Ú'=>'U','Ù'=>'U',
-                 'Ü'=>'U','Û'=>'U',
-                 'Ñ'=>'N','ñ'=>'n');
+	$trade = array('ï¿½'=>'a','ï¿½'=>'a','ï¿½'=>'a',
+                 'ï¿½'=>'a','ï¿½'=>'a',
+                 'ï¿½'=>'A','ï¿½'=>'A','ï¿½'=>'A',
+                 'ï¿½'=>'A','ï¿½'=>'A',
+                 'ï¿½'=>'e','ï¿½'=>'e',
+                 'ï¿½'=>'e','ï¿½'=>'e',
+                 'ï¿½'=>'E','ï¿½'=>'E',
+                 'ï¿½'=>'E','ï¿½'=>'E',
+                 'ï¿½'=>'i','ï¿½'=>'i',
+                 'ï¿½'=>'i','ï¿½'=>'i',
+                 'ï¿½'=>'I','ï¿½'=>'I',
+                 'ï¿½'=>'I','ï¿½'=>'I',
+                 'ï¿½'=>'o','ï¿½'=>'o','ï¿½'=>'o',
+                 'ï¿½'=>'o','ï¿½'=>'o',
+                 'ï¿½'=>'O','ï¿½'=>'O','ï¿½'=>'O',
+                 'ï¿½'=>'O','ï¿½'=>'O',
+                 'ï¿½'=>'u','ï¿½'=>'u',
+                 'ï¿½'=>'u','ï¿½'=>'u',
+                 'ï¿½'=>'U','ï¿½'=>'U',
+                 'ï¿½'=>'U','ï¿½'=>'U',
+                 'ï¿½'=>'N','ï¿½'=>'n');
     $text = strtr($text,$trade);
 	$text = utf8_encode($text);
 
@@ -57,6 +57,7 @@ if ($dot > 0) {
 	$log_duration_minutes = sprintf('%.3f', substr($obj->task_log_hours, $dot + 1)/60.0);
 	$obj->task_log_hours = floor($obj->task_log_hours) + $log_duration_minutes;
 }
+$obj->task_log_hours = round($obj->task_log_hours, 3);
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg( 'Task Log' );
