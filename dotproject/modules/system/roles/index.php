@@ -88,9 +88,9 @@ function showRow( $role=null ) {
 		if ($canEdit) {
 			$s .= '<a href="?m=system&u=roles&role_id='.$id.'">';
 			$s .= dPshowImage('./images/icons/stock_edit-16.png');
-			$s .= "</a><a href='?m=system&u=roles&a=viewrole&role_id=$id&tab=1' title=''>";
+			$s .= '</a><a href="?m=system&u=roles&a=viewrole&role_id='.$id.'" title="">';
 			$s .= dPshowImage('images/obj/lock.gif');
-			$s .= "</a>";
+			$s .= '</a>';
 		}
 		if ($canDelete) {
 			$s .= "<a href='javascript:delIt($id)'>";
