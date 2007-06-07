@@ -52,8 +52,9 @@ $titleBlock->show();
 
 $link_types = dPgetSysVal("LinkType");
 if ( $tab != -1 ) {
-        array_unshift($link_types, "All Links");
+	array_unshift($link_types, "All Links");
 }
+array_map(array($AppUI, '_'), $link_types);
 
 $tabBox = new CTabBox( "?m=links", DP_BASE_DIR.'/modules/links/', $tab );
 
