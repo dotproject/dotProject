@@ -4,7 +4,8 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
 }
 
-include_once DP_BASE_DIR.'/includes/config.php';
+if ($mode == 'upgrade')
+	include_once DP_BASE_DIR.'/includes/config.php';
 require_once DP_BASE_DIR.'/includes/main_functions.php';
 require_once DP_BASE_DIR.'/install/install.inc.php';
 require_once DP_BASE_DIR.'/includes/db_adodb.php';
