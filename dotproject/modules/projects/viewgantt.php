@@ -17,7 +17,7 @@ $showLabels = dPgetParam( $_POST, 'showLabels', '0' );
 $sortTasksByName = dPgetParam( $_POST, 'sortTasksByName', '0' );
 $showAllGantt = dPgetParam( $_POST, 'showAllGantt', '0' );
 $showTaskGantt = dPgetParam( $_POST, 'showTaskGantt', '0' );
-$addPwOiD = dPgetParam($_POST, 'add_pwoid', 0);
+$addPwOiD = dPgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
 
 //if set GantChart includes user labels as captions of every GantBar
 if ($showLabels!='0') {
