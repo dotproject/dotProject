@@ -1,3 +1,40 @@
+2007-06-08 00:35  (cyberhorse)
+---------------------------------
+modules/projects/viewgantt.php
+- #2033 - Patch applied as suggested - fixing project gantt chart tab in department module
+
+2007-06-08 00:06  (cyberhorse)
+---------------------------------
+db/upgrade_permissions.php
+- #2024 - suggested patch applied
+
+2007-06-07 23:49  (cyberhorse)
+---------------------------------
+locales/en/links.inc
+modules/links/index.php
+- 2034 - Suggestions from patch applied
+
+2007-06-07 23:42  (cyberhorse)
+---------------------------------
+modules/system/roles/index.php
+- 2037 - Fixed as suggested in patch
+
+2007-06-07 22:48  (cyberhorse)
+---------------------------------
+modules/help/en/help.toc.hlp
+- FIX Updated the link to the documentation site.
+
+2007-06-07 22:25  (cyberhorse)
+---------------------------------
+modules/calendar/calendar.class.php
+- FEATURE Made date picker easier to use, by allowing to click anywhere in the date square to pick a date,
+- rather then exactly on the number.
+
+2007-06-07 04:54  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-07
+
 2007-06-07 01:44  (caseydk)
 ---------------------------------
 modules/tasks/do_updatetask.php
