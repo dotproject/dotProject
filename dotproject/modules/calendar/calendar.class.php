@@ -321,7 +321,7 @@ class CMonthCalendar {
 				if($this->showHighlightedDays && isset($this->highlightedDays[$day])){
 					$html .= " style=\"border: 1px solid ".$this->highlightedDays[$day]."\"";
 				}
-				$html .= ">";
+				$html .= " onclick=\"$this->dayFunc('$day','".$this_day->format( $df )."')\">";
 				if ($m == $this_month) {
 				    if ($this->dayFunc) {
 					$html .= "<a href=\"javascript:$this->dayFunc('$day','".$this_day->format( $df )."')\" class=\"$class\">";
