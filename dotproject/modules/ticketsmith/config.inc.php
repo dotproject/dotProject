@@ -34,7 +34,7 @@ $CONFIG["warning_color"] = "#ff0000";
 $CONFIG["warning_age"] = "0.5"; // in hours
 
 // priority names (low to high)
-$CONFIG["priority_names"] = dPgetSysVal( 'TicketPriority' );
+$CONFIG["priority_names"] = array_map(array($AppUI,'_'), (array)dPgetSysVal( 'TicketPriority' ));
 
 // priority colors (low to high)
 $CONFIG["priority_colors"] = array("#006600","#000000","#ff0000","#ff0000","#ff0000");
