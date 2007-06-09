@@ -3,7 +3,6 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-
 /*
  * Gantt.php - by J. Christopher Pereira
  * TASKS $Id$
@@ -13,9 +12,10 @@ if (!defined('DP_BASE_DIR')){
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
 
-global $caller, $locale_char_set, $showLabels, $showWork, $sortByName, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
+global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, 
+	$showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
-
+$showLabels = dPgetParam( $_REQUEST, 'showLabels', false );
 $sortByName = dPgetParam( $_REQUEST, 'sortByName', false );
 $project_id = defVal( @$_REQUEST['project_id'], 0 );
 $f = defVal( @$_REQUEST['f'], 0 );
