@@ -7,7 +7,7 @@ if (!defined('DP_BASE_DIR')){
 ##	Ticketsmith Post Ticket
 ##
 
-if (!$canEdit) {
+if (!$canEdit && !$canAuthor) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
 require_once( $AppUI->getModuleClass ('companies' ) );

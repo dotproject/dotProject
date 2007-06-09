@@ -9,7 +9,7 @@ if (!$canAccess) {
 
 // setup the title block
 $titleBlock = new CTitleBlock( 'Trouble Ticket Management', 'gconf-app-icon.png', $m, "$m.$a" );
-if ($canEdit) {
+if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new ticket').'">', '',
 		'<form name="ticketform" action="?m=ticketsmith&a=post_ticket" method="post">', '</form>'
