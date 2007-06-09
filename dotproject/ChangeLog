@@ -1,3 +1,27 @@
+2007-06-09 23:32  (caseydk)
+---------------------------------
+modules/ticketsmith/config.inc.php
+- applied patch from #2040;
+- added translation to the ticket priority;
+
+2007-06-09 23:10  (caseydk)
+---------------------------------
+modules/tasks/gantt.php
+- applied patch from #2051;
+- passed along the taskLabels for gantt charts;
+
+2007-06-09 22:56  (caseydk)
+---------------------------------
+modules/ticketsmith/index.php
+modules/ticketsmith/post_ticket.php
+- applied patch from #2051;
+- applies a 'can author' check to create tickets instead of 'can edit'
+
+2007-06-09 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-09
+
 2007-06-08 03:14  (cyberhorse)
 ---------------------------------
 ChangeLog
