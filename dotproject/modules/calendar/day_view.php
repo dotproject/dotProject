@@ -57,10 +57,21 @@ $last_time->setTime( 23, 59, 59 );
 $prev_day = new CDate( Date_calc::prevDay( $dd, $mm, $yy, FMT_TIMESTAMP_DATE ) );
 $next_day = new CDate( Date_calc::nextDay( $dd, $mm, $yy, FMT_TIMESTAMP_DATE ) );
 
+// get the list of visible companies
+$company = new CCompany();
+global $companies;
+$companies = $company->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
+$companies = arrayMerge( array( '0'=>$AppUI->_('All') ), $companies );
+
 // setup the title block
 $titleBlock = new CTitleBlock( 'Day View', 'myevo-appointments.png', $m, "$m.$a" );
 $titleBlock->addCrumb( "?m=calendar&date=".$this_day->format( FMT_TIMESTAMP_DATE ), "month view" );
 $titleBlock->addCrumb( "?m=calendar&a=week_view&date=".$this_week, "week view" );
+$titleBlock->addCell( $AppUI->_('Company').':' );
+$titleBlock->addCell(
+	arraySelect( $companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id ), '',
+	'<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>'
+);
 $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
         '<form action="?m=calendar&a=addedit&date=' . $this_day->format( FMT_TIMESTAMP_DATE )  . '" method="post">', '</form>'

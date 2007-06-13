@@ -48,9 +48,19 @@ getTaskLinks( $first_time, $last_time, $links, 50, $company_id );
 require_once( DP_BASE_DIR.'/modules/calendar/links_events.php' );
 getEventLinks( $first_time, $last_time, $links, 50 );
 
+// get the list of visible companies
+$company = new CCompany();
+$companies = $company->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
+$companies = arrayMerge( array( '0'=>$AppUI->_('All') ), $companies );
+
 // setup the title block
 $titleBlock = new CTitleBlock( 'Week View', 'myevo-appointments.png', $m, "$m.$a" );
 $titleBlock->addCrumb( "?m=calendar&date=".$this_week->format( FMT_TIMESTAMP_DATE ), "month view" );
+$titleBlock->addCell( $AppUI->_('Company').':' );
+$titleBlock->addCell(
+	arraySelect( $companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id ), '',
+	'<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>'
+);
 $titleBlock->addCell( $AppUI->_('Event Filter') . ':');
 $titleBlock->addCell(
 	arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"',

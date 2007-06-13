@@ -20,7 +20,9 @@ $company_id = $AppUI->getState( 'CalIdxCompany', 0);
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 'EVENTFILTER', 'my');
 
 // get the passed timestamp (today if none)
-$date = dPgetParam( $_GET, 'date', null );
+$ctoday = new CDate();
+$today = $ctoday->format(FMT_TIMESTAMP_DATE);
+$date = dPgetParam( $_GET, 'date', $today);
 
 // get the list of visible companies
 $company = new CCompany();

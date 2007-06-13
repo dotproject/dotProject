@@ -539,13 +539,13 @@ class CEvent extends CDpObject {
 			switch ($filter) {
 				case 'my':
 					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id ='.$user_id);
-					$$query_set->addWhere('((event_private = 0 AND ue.user_id = '.$user_id.') OR event_owner='.$user_id.')');
+					$$query_set->addWhere('(ue.user_id = '.$user_id.') AND (event_private=0 OR event_owner='.$user_id.')');
 					break;
 				case 'own':
 					$$query_set->addWhere('event_owner ='. $user_id);
 					break;
 				case 'all':
-					$$query_set->addWhere('(event_private=0 OR (event_private=1 AND event_owner='.$user_id.'))');
+					$$query_set->addWhere('(event_private=0 OR event_owner='.$user_id.')');
 					break;
 			}
 			

@@ -1160,7 +1160,7 @@ class CTitleBlock_core {
 		$s .= $CR . '<td align="left" width="100%" nowrap="nowrap"><h1>' . $AppUI->_($this->title) . '</h1></td>';
 		foreach ($this->cells1 as $c) {
 			$s .= $c[2] ? $CR . $c[2] : '';
-			$s .= $CR . '<td align="right" nowrap="nowrap"' . ($c[0] ? " $c[0]" : '') . '>';
+			$s .= $CR . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
 			$s .= $c[1] ? $CT . $c[1] : '&nbsp;';
 			$s .= $CR . '</td>';
 			$s .= $c[3] ? $CR . $c[3] : '';
@@ -1169,7 +1169,7 @@ class CTitleBlock_core {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
 			//$s .= $CT . contextHelp( '<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_( 'Help' ).'" />', $this->helpref );
 
-			$s .= "\n\t<a href=\"#$this->helpref\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=$this->helpref', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_( 'Help' )."\">";
+			$s .= "\n\t<a href=\"#".$this->helpref."\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_( 'Help' )."\">";
 			$s .= "\n\t\t" . dPshowImage( './images/icons/stock_help-16.png', '16', '16', $AppUI->_( 'Help' ) );
 			$s .= "\n\t</a>";
 			$s .= "\n</td>";
