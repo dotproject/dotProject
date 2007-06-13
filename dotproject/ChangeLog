@@ -1,8 +1,34 @@
-2007-06-09 23:32  (caseydk)
+2007-06-14 02:11  (merlinyoda)
 ---------------------------------
-modules/ticketsmith/config.inc.php
-- applied patch from #2040;
-- added translation to the ticket priority;
+classes/ui.class.php
+includes/main_functions.php
+modules/calendar/calendar.class.php
+modules/calendar/day_view.php
+modules/calendar/index.php
+modules/calendar/week_view.php
+- 
+- classes/ui.class.php:
+- 	replaced some use of double quotes with single quotes
+- 
+- includes/main_functions.php:
+- 	removed extra quotation mark in string.
+- 
+- modules/calendar/day_view.php, modules/calendar/week_view.php:
+- 	added company filter to be consistant with month view per
+- Mantis report 2052, Suggestion 1.
+- 
+- modules/calendar/index.php
+- 	applied similiar changes made to modules/calendar/day_view.php
+- on revision 1.34.4.3 to this file
+- 
+- modules/calendar/calendar.class.php:
+- 	fixed event filtering to more behave in manner consistant with the
+- online documentation
+
+2007-06-10 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-10
 
 2007-06-09 23:10  (caseydk)
 ---------------------------------
