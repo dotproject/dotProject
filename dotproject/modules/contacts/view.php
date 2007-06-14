@@ -128,10 +128,12 @@ function delIt(){
 		<tr>
 			<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address');?>:</td>
 			<td>
-                                <?php echo @$row->contact_address1;?><br />
+                    <?php echo @$row->contact_address1;?><br />
 			        <?php echo @$row->contact_address2;?><br />
-			        <?php echo @$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip;?>
-                        </td>
+			        <?php echo @$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip;?>><br />
+			        <?php echo @$row->contact_country;?><br />
+			        
+           </td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Map Address');?>:</td>

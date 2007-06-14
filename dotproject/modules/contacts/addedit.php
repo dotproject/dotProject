@@ -236,6 +236,10 @@ function companyChange() {
 			<td><input type="text" class="text" name="contact_zip" value="<?php echo @$row->contact_zip;?>" maxlength="11" size="25" /></td>
 		</tr>
 		<tr>
+			<td align="right"><?php echo $AppUI->_('Country');?>:</td>
+			<td><input type="text" class="text" name="contact_country" value="<?php echo @$row->contact_country;?>" maxlength="30" size="25" /></td>
+		</tr>
+		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Phone');?>:</td>
 			<td>
 				<input type="text" class="text" name="contact_phone" value="<?php echo @$row->contact_phone;?>" maxlength="30" size="25" />
