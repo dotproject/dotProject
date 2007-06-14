@@ -1,3 +1,40 @@
+2007-06-15 01:08  (merlinyoda)
+---------------------------------
+modules/public/contact_selector.php
+- 
+- Fix for Mantis Bug 0002056.
+
+2007-06-15 00:39  (merlinyoda)
+---------------------------------
+modules/contacts/addedit.php
+modules/contacts/view.php
+modules/public/contact_selector.php
+- 
+- Added missing country field on edit and view pages for contacts. Column
+- was in the database but was not being used and could not determine why
+- based on the revision logs.
+- 
+- Also cleaned up style and unnecessary double quote usage in
+- modules/public/contact_selector.php as well as tweaking function
+- remove_invalid($arr) so that a string of spaces doesn't somehow sneak in
+- and mess with the selection process.
+
+2007-06-14 21:40  (nybod)
+---------------------------------
+modules/tasks/addedit.js
+- W3C compliant syntax
+
+2007-06-14 05:38  (merlinyoda)
+---------------------------------
+modules/tasks/addedit.js
+- 
+- Fixed typo in tag... mentioned in Mantis report 2046
+
+2007-06-14 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-14
+
 2007-06-14 02:11  (merlinyoda)
 ---------------------------------
 classes/ui.class.php
