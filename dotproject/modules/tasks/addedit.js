@@ -67,7 +67,7 @@ function popCalendar( field ){
 	calendarField = field;
 	task_cal = document.getElementById('task_' + field.name);
 	idate = task_cal.value;
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=false' );
+	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no' );
 }
 
 /**
