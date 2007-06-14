@@ -114,12 +114,12 @@ if (strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id){
 	$q->addWhere('contact_id IN (' . $selected_contacts_id . ')');
 	$where = implode(',', $q->loadColumn());
 	$q->clear();
-	$where = 'contact_company IN('.$where.')';
+	$where = (($where)?('contact_company IN('.$where.')'):'');
 } else if ( ! $company_id ) {
 	//  Contacts from all allowed companies
-	$where = ("contact_company = '' OR (contact_company IN ('" 
-			  .implode('\',\'' , array_values($aCpies_esc)) ."')) OR ( contact_company IN ('" .
-			  implode('\',\'', array_keys($aCpies_esc)) ."'))") ;
+	$where = ("contact_company = ''"
+			  ." OR (contact_company IN ('".implode('\',\'' , array_values($aCpies_esc)) ."'))"
+			  ." OR ( contact_company IN ('".implode('\',\'', array_keys($aCpies_esc)) ."'))") ;
 	$company_name = $AppUI->_('Allowed Companies');
 } else {
 	// Contacts for this company only
@@ -143,8 +143,10 @@ $q->leftJoin('departments', 'c', 'dept_id = contact_department');
 $q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department');
 $q->addQuery('company_name');
 $q->addQuery('dept_name');
-$q->addWhere($where);
-$q->addWhere("(contact_owner = '".$AppUI->user_id."' or contact_private = '0')");
+if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
+	$q->addWhere($where);
+}
+$q->addWhere("(contact_owner = '".$AppUI->user_id."' OR contact_private = '0')");
 $q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
 
 $contacts = $q->loadHashList('contact_id');
