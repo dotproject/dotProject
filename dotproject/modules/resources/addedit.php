@@ -45,7 +45,7 @@ $typelist = $obj->typeSelect();
   <td align='left'><input type='text' size=30 maxlength=255 name=resource_name
     value="<?php echo dPformSafe($obj->resource_name);?>" /></td></tr>
   <tr><td align='right'><?php echo $AppUI->_('Type'); ?></td>
-  <td align='left'><?php echo arraySelect($typelist, 'resource_type', 'class=select', $obj->resource_type);?>
+  <td align='left'><?php echo arraySelect($typelist, 'resource_type', 'class=select', $obj->resource_type, true);?>
   </td></tr>
   <tr><td align='right'><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
   <td><input type='text' size=5 maxlength=5 value='<?php 
