@@ -1,3 +1,21 @@
+2007-06-16 02:59  (merlinyoda)
+---------------------------------
+modules/calendar/view.php
+- 
+- "day view" link on event view page didn't require permissions check.
+- See end notes on Mantis Report 0002057.
+
+2007-06-16 01:49  (merlinyoda)
+---------------------------------
+modules/resources/addedit.php
+- 
+- Drop-down select for Type was missing translation. See Mantis Bug 0002035.
+
+2007-06-15 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-15
+
 2007-06-15 01:08  (merlinyoda)
 ---------------------------------
 modules/public/contact_selector.php
