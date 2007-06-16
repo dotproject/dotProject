@@ -1,3 +1,13 @@
+2007-06-16 13:22  (cyberhorse)
+---------------------------------
+modules/projects/view.php
+- #2045 - suggested patch applied
+
+2007-06-16 03:13  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-16
+
 2007-06-16 02:59  (merlinyoda)
 ---------------------------------
 modules/calendar/view.php
