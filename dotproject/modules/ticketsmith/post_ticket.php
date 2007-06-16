@@ -36,13 +36,6 @@ function submitIt() {
 	if (f.description.value.length < 3) {
 		msg += "\n- <?php echo $AppUI->_('a valid description'); ?>";
 	}
-	if (f.ticket_company.value == 0) {
-		msg += "\n- <?php echo $AppUI->_('a valid company'); ?>";
-	}
-	if (f.ticket_project.value == 0) {
-		msg += "\n- <?php echo $AppUI->_('a valid project'); ?>";
-	}
-	
 	if (msg.length < 1) {
 		f.submit();
 	} else {
