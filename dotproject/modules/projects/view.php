@@ -383,7 +383,7 @@ function delIt() {
 			    <tr>
 			    	<td colspan='3' class="hilite">
 			    		<?php
-			    			echo "<table cellspacing='1' cellpadding='2' border='0' width='100%' bgcolor='black'>";
+			    			echo "<table cellspacing='1' cellpadding='2' border='0' width='100%' class='tbl'>";
 			    			echo "<tr><th>".$AppUI->_("Name")."</th><th>".$AppUI->_("Email")."</th><th>".$AppUI->_("Phone")."</th><th>".$AppUI->_("Department")."</th></tr>";
 			    			foreach($contacts as $contact_id => $contact_data){
 			    				echo "<tr>";
