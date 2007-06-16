@@ -525,6 +525,7 @@ class CEvent extends CDpObject {
 			$$query_set  = new DBQuery;
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('e.*');
+			$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 			
 			if (($AppUI->getState('CalIdxCompany'))) {
 				$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
