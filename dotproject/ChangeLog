@@ -1,3 +1,23 @@
+2007-06-17 04:56  (nybod)
+---------------------------------
+modules/calendar/calendar.class.php
+- Fixed small typo
+
+2007-06-17 04:07  (caseydk)
+---------------------------------
+modules/calendar/calendar.class.php
+- applied the tweak specified in 2061;
+
+2007-06-17 03:22  (caseydk)
+---------------------------------
+modules/ticketsmith/post_ticket.php
+- removed the company/project checks
+
+2007-06-17 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-17
+
 2007-06-16 13:22  (cyberhorse)
 ---------------------------------
 modules/projects/view.php
