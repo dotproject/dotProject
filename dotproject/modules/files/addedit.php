@@ -137,7 +137,7 @@ function popTask() {
 function finalCI()
 {
         var f = document.uploadFrm;
-        if (f.final_ci.value = '1')
+        if (f.final_ci.value == '1')
         {
                 f.file_checkout.value = 'final';
                 f.file_co_reason.value = 'Final Version';
