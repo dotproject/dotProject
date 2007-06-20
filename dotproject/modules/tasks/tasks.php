@@ -330,7 +330,7 @@ for ($x=0; $x < $nums; $x++) {
 	$ausql = "SELECT ut.user_id, u.user_username, contact_email, ut.perc_assignment, "
 		."SUM(ut.perc_assignment) AS assign_extent, contact_first_name, contact_last_name "
 		."FROM user_tasks ut LEFT JOIN users u ON u.user_id = ut.user_id LEFT JOIN contacts ON u.user_contact = contact_id "
-		."WHERE ut.task_id=".$row['task_id']." GROUP BY ut.user_id";
+		."WHERE ut.task_id=".$row['task_id']." GROUP BY ut.user_id ORDER BY ut.perc_assignment desc, u.user_username";
 	
 	$assigned_users = array ();
 	$paurc = db_exec( $ausql );
