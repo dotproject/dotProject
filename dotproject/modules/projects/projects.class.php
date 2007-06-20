@@ -297,9 +297,23 @@ class CProject extends CDpObject {
 	}
 	function getAllowedProjectsInRows($userId) {
 		$q = new DBQuery;
+		$q->addQuery('project_id, project_status, project_name, project_description, project_short_name');
+		$q->addTable('projects');                     
+		$q->addOrder('project_short_name');
+		$this->setAllowedSQL($userId, $q);
+		$allowedProjectRows = $q->exec();
+		
+		return $allowedProjectRows;
+	}
+	function getAssignedProjectsInRows($userId) {
+		$q = new DBQuery;
+		
+		$q->addQuery('project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects');
-		$q->addQuery('project_id, project_status, project_name, project_description, project_short_name');                     
-		$q->addGroup('project_id');
+		$q->addJoin('tasks', 't', 't.task_project = project_id');
+		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+		$q->addWhere('ut.user_id = '.$userId);
+		$q->addGroup('project_id');                     
 		$q->addOrder('project_short_name');
 		$this->setAllowedSQL($userId, $q);
 		$allowedProjectRows = $q->exec();
@@ -534,7 +548,7 @@ function projects_list_data($user_id = false) {
 
 
 	$q->addTable('projects');
-	$q->addQuery('projects.project_id, project_status, project_color_identifier, project_name, project_description, project_duration,
+	$q->addQuery('projects.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration,
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username');
