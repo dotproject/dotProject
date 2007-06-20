@@ -15,8 +15,8 @@ $canEdit = $perms->checkModuleItem( $m, 'edit', $file_id );
 if (!$canEdit) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
-if (file_exists("./modules/helpdesk/config.php")) {
-	include ("./modules/helpdesk/config.php");
+if (file_exists(DP_BASE_DIR.'/modules/helpdesk/config.php')) {
+	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
 }
 $canAdmin = $perms->checkModule('system', 'edit');
 // add to allow for returning to other modules besides Files
