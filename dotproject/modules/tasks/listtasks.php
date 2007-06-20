@@ -4,14 +4,25 @@ if (!defined('DP_BASE_DIR')){
 }
 
 $perms =& $AppUI->acl();
-if (! $perms->checkModule('tasks', 'view'))
+if (! $perms->checkModule('tasks', 'view')) {
 	$AppUI->redirect("m=public&a=access_denied");
+}
+$proj = dPgetParam($_GET, 'project', 0);
+$userFilter = dPgetParam($_GET, 'userFilter', false);	
 
-$proj = $_GET['project'];
-$sql = 'SELECT task_id, task_name
-        FROM tasks';
-if ($proj != 0)
-  $sql .= ' WHERE task_project = ' . $proj;
+$q = new DBQuery();
+$q->addQuery('t.task_id, t.task_name');
+$q->addTable('tasks', 't');
+
+if ($userFilter) {
+	$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+	$q->addWhere('ut.user_id = '.$AppUI->user_id);
+}
+if ($proj != 0) {
+  $q->addWhere('task_project = '.$proj);
+}
+
+$sql = $q->prepare();
 $tasks = db_loadList($sql);
 ?>
 
