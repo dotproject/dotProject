@@ -1,3 +1,33 @@
+2007-06-21 01:32  (caseydk)
+---------------------------------
+modules/tasks/listtasks.php
+- refactored to use the DBQuery object instead of raw sql
+
+2007-06-21 01:32  (caseydk)
+---------------------------------
+modules/projects/projects.class.php
+- further cleaning up the api and updated the project lists;
+
+2007-06-21 01:30  (caseydk)
+---------------------------------
+modules/files/addedit.php
+- updated to apply the security sentinel
+
+2007-06-20 20:57  (nybod)
+---------------------------------
+modules/tasks/tasks.php
+- Display assigned users ordered by percent assigned then name (same as in HEAD)
+
+2007-06-20 09:34  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+- fixed MySQL 5 compatibility (as per http://www.dotproject.net/vbulletin/showthread.php?p=23295#post23295)
+
+2007-06-20 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-20
+
 2007-06-20 00:52  (pedroix)
 ---------------------------------
 modules/files/addedit.php
