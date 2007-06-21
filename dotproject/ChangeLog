@@ -1,7 +1,22 @@
+2007-06-21 11:36  (cyberhorse)
+---------------------------------
+modules/contacts/view.php
+- #2067 - type fixed
+
+2007-06-21 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-06-21
+
 2007-06-21 01:32  (caseydk)
 ---------------------------------
 modules/tasks/listtasks.php
 - refactored to use the DBQuery object instead of raw sql
+
+2007-06-21 01:32  (caseydk)
+---------------------------------
+modules/projects/projects.class.php
+- further cleaning up the api and updated the project lists;
 
 2007-06-21 01:32  (caseydk)
 ---------------------------------
