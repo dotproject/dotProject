@@ -130,7 +130,7 @@ function delIt(){
 			<td>
                     <?php echo @$row->contact_address1;?><br />
 			        <?php echo @$row->contact_address2;?><br />
-			        <?php echo @$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip;?>><br />
+			        <?php echo @$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip;?><br />
 			        <?php echo @$row->contact_country;?><br />
 			        
            </td>
