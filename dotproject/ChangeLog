@@ -1,7 +1,12 @@
-2007-06-27 03:13  (cyberhorse)
+2007-06-28 08:22  (caseydk)
+---------------------------------
+modules/projects/reports/tasklogs.php
+- fixed the report to actually display the costcode as stated;
+
+2007-06-28 03:12  (cyberhorse)
 ---------------------------------
 ChangeLog
-- Updating ChangeLog on 2007-06-27
+- Updating ChangeLog on 2007-06-28
 
 2007-06-26 03:12  (cyberhorse)
 ---------------------------------
