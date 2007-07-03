@@ -1134,7 +1134,7 @@ class CTitleBlock_core {
 	function addCrumbDelete( $title, $canDelete='', $msg='' ) {
 		global $AppUI;
 		$this->addCrumbRight(
-			'<table cellspacing="0" cellpadding="0" border="0"?<tr><td>'
+			'<table cellspacing="0" cellpadding="0" border="0"><tr><td>'
 			. '<a href="javascript:delIt()" title="'.($canDelete?'':$msg).'">'
 			. dPshowImage( './images/icons/'.($canDelete?'stock_delete-16.png':'stock_trash_full-16.png'), '16', '16',  '' )
 			. '</a>'
