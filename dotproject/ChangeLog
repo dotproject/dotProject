@@ -1,3 +1,20 @@
+2007-07-03 20:42  (pedroix)
+---------------------------------
+classes/ui.class.php
+- Bad end tag (http://www.dotproject.net/vbulletin/showthread.php?p=31977)
+
+2007-07-03 20:32  (pedroix)
+---------------------------------
+style/dp-grey-theme/header.php
+style/default/header.php
+style/classic/header.php
+- Trying to make sure the New Item combo does not blow up
+
+2007-07-03 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-03
+
 2007-07-02 03:12  (cyberhorse)
 ---------------------------------
 ChangeLog
