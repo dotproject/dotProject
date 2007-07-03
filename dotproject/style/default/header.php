@@ -56,7 +56,7 @@ else
 		<form name="frm_new" method=GET action="./index.php">
 <?php
 	echo '        <td nowrap="nowrap" align="right">';
-	$newItem = array( ""=>'- New Item -' );
+	$newItem = array( 0=>'- New Item -' );
 	if ($perms->checkModule( 'companies', 'add' )) $newItem["companies"] = "Company";
 	if ($perms->checkModule( 'contacts', 'add' )) $newItem["contacts"] = "Contact";
 	if ($perms->checkModule( 'calendar', 'add' )) $newItem["calendar"] = "Event";

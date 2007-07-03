@@ -133,7 +133,7 @@ $dialog = dPgetParam( $_GET, 'dialog', 0 );
 
 	echo '<td>';
 
-	$newItem = array( ""=>'- New Item -' );
+	$newItem = array( 0=>'- New Item -' );
 
 	if ($perms->checkModule( 'companies', 'add' )) $newItem["companies"] = "Company";
 	if ($perms->checkModule( 'contacts', 'add' )) $newItem["contacts"] = "Contact";
