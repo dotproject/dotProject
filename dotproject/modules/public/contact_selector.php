@@ -1,7 +1,7 @@
 <?php
-if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly.');
-}
+//if (!defined('DP_BASE_DIR')){
+//  die('You should not access this file directly.');
+//}
 
 	$show_all             = dPgetParam($_REQUEST, 'show_all', 0);
 	$company_id           = dPgetParam($_REQUEST, 'company_id', 0);
@@ -114,6 +114,7 @@ if (strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id){
 	$q->addWhere('contact_id IN (' . $selected_contacts_id . ')');
 	$where = implode(',', $q->loadColumn());
 	$q->clear();
+	if (substr($where, 0, 1) == ',') { $where = '0'.$where; }
 	$where = (($where)?('contact_company IN('.$where.')'):'');
 } else if ( ! $company_id ) {
 	//  Contacts from all allowed companies
