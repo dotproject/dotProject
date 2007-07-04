@@ -1,3 +1,43 @@
+2007-07-05 00:37  (caseydk)
+---------------------------------
+lib/jpgraph/src/jpg-config.inc
+lib/jpgraph/src/jpgraph.php
+modules/projects/gantt.php
+modules/tasks/gantt.php
+- added the define functions so jpGraph can see the newly added fonts;
+
+2007-07-04 23:04  (caseydk)
+---------------------------------
+lib/jpgraph/src/jpgraph.php
+- added cyberhorse's fonts from Head;
+
+2007-07-04 23:02  (caseydk)
+---------------------------------
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/tasks/gantt.php
+- applied cyberhorse's font fix to the gantt charts from Head;
+
+2007-07-04 23:01  (caseydk)
+---------------------------------
+modules/projects/reports/tasklogs.php
+- tweaked the default ordering;
+
+2007-07-04 23:01  (caseydk)
+---------------------------------
+modules/public/contact_selector.php
+- fixed an error where company limiting permissions could create a sql error;
+
+2007-07-04 22:59  (caseydk)
+---------------------------------
+modules/tasks/addedit.js
+- tweaked the calendar popup to be resizable... this is to provide a workaround for the stable_2 branch;
+
+2007-07-04 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-04
+
 2007-07-03 20:42  (pedroix)
 ---------------------------------
 classes/ui.class.php
