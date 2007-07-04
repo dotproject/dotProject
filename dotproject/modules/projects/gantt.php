@@ -113,7 +113,7 @@ if ($start_date && $end_date) {
 	$graph->SetDateRange( $start_date, $end_date );
 }
 
-//$graph->scale->actinfo->SetFont(FF_ARIAL);
+//$graph->scale->actinfo->SetFont(FF_CUSTOM);
 $graph->scale->actinfo->vgrid->SetColor('gray');
 $graph->scale->actinfo->SetColor('darkgray');
 $graph->scale->actinfo->SetColTitles(array( $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_('Actual End', UI_OUTPUT_RAW)),array(160,10, 70,70));
@@ -125,7 +125,7 @@ $graph->scale->tableTitle->Set($tableTitle);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 if (is_file( TTF_DIR."arialbd.ttf" ))
-	$graph->scale->tableTitle->SetFont(FF_ARIAL,FS_BOLD,12);
+	$graph->scale->tableTitle->SetFont(FF_CUSTOM,FS_BOLD,12);
 $graph->scale->SetTableTitleBackground("#eeeeee");
 $graph->scale->tableTitle->Show(true);
 
@@ -237,7 +237,7 @@ foreach($projects as $p) {
         $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
         $bar->progress->Set(min(($progress/100), 1));
 
-        $bar->title->SetFont(FF_FONT1,FS_NORMAL,10);
+        $bar->title->SetFont(FF_CUSTOM,FS_NORMAL,10);
         $bar->SetFillColor("#".$p['project_color_identifier']);
         $bar->SetPattern(BAND_SOLID,"#".$p['project_color_identifier']);
 
