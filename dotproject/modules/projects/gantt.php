@@ -126,7 +126,7 @@ $graph->scale->tableTitle->Set($tableTitle);
 // try commenting out the following two lines if gantt charts do not display
 if (is_file( TTF_DIR."arialbd.ttf" ))
 	$graph->scale->tableTitle->SetFont(FF_CUSTOM,FS_BOLD,12);
-$graph->scale->SetTableTitleBackground("#eeeeee");
+$graph->scale->SetTableTitleBackground('#eeeeee');
 $graph->scale->tableTitle->Show(true);
 
 //-----------------------------------------
@@ -243,7 +243,7 @@ foreach($projects as $p) {
 
 	//adding captions
 	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align("left","center");
+	$bar->caption->Align('left','center');
 
         // gray out templates, completes, on ice, on hold
         if ($p['project_status'] != '3' || $p['project_status'] == '7') {
@@ -262,7 +262,6 @@ foreach($projects as $p) {
  	if ($showAllGantt)
  	{
  		// insert tasks into Gantt Chart
- 		
  		// select for tasks for each project	
 		
  		$q  = new DBQuery;
