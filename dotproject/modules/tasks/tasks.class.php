@@ -1573,7 +1573,7 @@ class CTask extends CDpObject
         }
         
         $eq = new EventQueue;
-        $pre_charge = dPgetConfig('ta$this->htmlDecode();sk_reminder_days_before', 1);
+        $pre_charge = dPgetConfig('task_reminder_days_before', 1);
         $repeat = dPgetConfig('task_reminder_repeat', 100);
         
         // If we don't need any arguments (and we don't)
