@@ -238,6 +238,7 @@ class CTask extends CDpObject
          */
         if ($this->task_dynamic == '1') {
             // update task from children
+            $this->htmlDecode();
             $this->updateDynamics(true);
             
             /*
@@ -246,6 +247,7 @@ class CTask extends CDpObject
              ** prevent from infinite loops.
              */
             parent::store();
+            $loaded = parent::load($oid,$strip);
         }
         
         // return whether the object load process has been successful or not
@@ -263,6 +265,7 @@ class CTask extends CDpObject
         } 
         else {
             $modified_task->load($this->task_parent);
+            $modified_task->htmlDecode();
         }
         
         if ( $modified_task->task_dynamic == '1' ) {
@@ -394,6 +397,7 @@ class CTask extends CDpObject
             $tempTask = & new CTask();
             foreach ($children as $child) {
                 $tempTask->load($child);
+                $tempTask->htmlDecode($child);
                 $newChild = $tempTask->deepCopy($destProject_id, $new_id);
                 $newChild->store();
             }
@@ -422,6 +426,7 @@ class CTask extends CDpObject
             $tempChild = & new CTask();
             foreach ($children as $child) {
                 $tempChild->load($child);
+                $tempChild->htmlDecode($child);
                 $tempChild->move($destProject_id);
                 $tempChild->store();
             }
@@ -685,7 +690,7 @@ class CTask extends CDpObject
         GLOBAL $AppUI, $locale_char_set;
         
         $sql = "SELECT project_name FROM projects WHERE project_id=$this->task_project";
-        $projname = db_loadResult( $sql );
+        $projname = htmlspecialchars_decode( db_loadResult( $sql ) );
         
         $mail = new Mail;
         
@@ -745,7 +750,7 @@ class CTask extends CDpObject
         $df .= " " . $AppUI->getPref('TIMEFORMAT');
         
         $sql = "SELECT project_name FROM projects WHERE project_id=$this->task_project";
-        $projname = db_loadResult( $sql );
+        $projname = htmlspecialchars_decode( db_loadResult( $sql ) );
         
         $mail = new Mail;
         
@@ -911,7 +916,7 @@ class CTask extends CDpObject
         $mail->Subject( $prefix .  ' ' . $log->task_log_name, $char_set);
         
         $sql = "SELECT project_name FROM projects WHERE project_id=$this->task_project";
-        $projname = db_loadResult( $sql );
+        $projname = htmlspecialchars_decode( db_loadResult( $sql ) );
         
         $body = $AppUI->_('Project', UI_OUTPUT_RAW) . ": $projname\n";
         if ($this->task_parent != $this->task_id) {
@@ -921,7 +926,7 @@ class CTask extends CDpObject
             $q->addWhere('task_id = ' . $this->task_parent);
             $req =& $q->exec(QUERY_STYLE_NUM);
             if ($req) {
-                $body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . $req->fields[0] . "\n";
+                $body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . htmlspecialchars_decode( $req->fields[0] ) . "\n";
             }
         }
         $q->clear();
@@ -1568,7 +1573,7 @@ class CTask extends CDpObject
         }
         
         $eq = new EventQueue;
-        $pre_charge = dPgetConfig('task_reminder_days_before', 1);
+        $pre_charge = dPgetConfig('ta$this->htmlDecode();sk_reminder_days_before', 1);
         $repeat = dPgetConfig('task_reminder_repeat', 100);
         
         // If we don't need any arguments (and we don't)
@@ -1629,6 +1634,7 @@ class CTask extends CDpObject
         if (! $this->load($id)) {
             return -1; // No point it trying again later.
         }
+        $this->htmlDecode();
         
         // Only remind on working days.
         $today = new CDate();
@@ -1699,7 +1705,7 @@ class CTask extends CDpObject
         $q->addTable('projects');
         $q->addQuery('project_name');
         $q->addWhere('project_id = ' . $this->task_project);
-        $project_name = $q->loadResult();
+        $project_name = htmlspecialchars_decode( $q->loadResult() );
         
         $subject = $prefix . ' ' .$msg . ' ' . $this->task_name . '::' . $project_name;
         

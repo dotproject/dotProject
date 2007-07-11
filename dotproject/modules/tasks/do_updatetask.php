@@ -77,12 +77,11 @@ if ($del) {
 		$AppUI->setMsg( @$_POST['task_log_id'] ? 'updated' : 'inserted', UI_MSG_OK, true );
 	}
 }
-
 $task = new CTask();
 $task->load( $obj->task_log_task );
+$task->htmlDecode();
 $task->check();
 $task_end_date = new CDate($task->task_end_date);
-
 $task->task_percent_complete = dPgetParam( $_POST, 'task_percent_complete', null );
 
 if(dPgetParam($_POST, 'task_end_date', '') != ''){
@@ -117,7 +116,6 @@ $email_extras = dPgetParam($_POST, 'email_extras', null);
 if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, $email_others, $email_extras)) {
 	$obj->store(); // Save the updated message. It is not an error if this fails.
 }
-
 
 $AppUI->redirect('m=tasks&a=view&task_id='.$obj->task_log_task.'&tab=0#tasklog'.$obj->task_log_id);
 ?>

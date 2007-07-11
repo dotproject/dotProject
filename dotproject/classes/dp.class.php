@@ -422,8 +422,23 @@ class CDpObject {
             $query->addWhere(((! $key)?'':"$key.")."$this->_tbl_key IN (" . implode(',', $allow) . ")");
 		}
 		if (count($deny)) {
-            $query->addWhere(((! $key)?'':"$key.")."$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
+			$query->addWhere(((! $key)?'':"$key.")."$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
+ 		}
+ 	}
+
+	/*
+	* Decode HTML entities in object vars
+	*/
+	function htmlDecode() {
+		foreach (get_object_vars( $this ) as $k => $v) {
+			if (is_array($v) or is_object($v) or $v == NULL) {
+				continue;
+			}
+			if ($k[0] == '_') { // internal field
+				continue;
+			}
+			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
-}
-?>
+ }
+ ?>

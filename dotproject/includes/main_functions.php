@@ -45,8 +45,8 @@ function arraySelect( &$arr, $select_name, $select_attribs, $selected, $translat
 			// be translated correctly. There are probably others.
 			// As such a more general approach probably based upon an
 			// array lookup for replacements would be a better approach. AJD.
-			$v=str_replace('&#369;','û',$v);
-			$v=str_replace('&#337;','õ',$v);
+			$v=str_replace('&#369;','ï¿½',$v);
+			$v=str_replace('&#337;','ï¿½',$v);
 		}
 		$s .= "\n\t<option value=\"" . $k . '"' . (($k == $selected && !$did_selected)?' selected="selected"':'') . ">" . $v . '</option>';
 		if ($k == $selected) {
@@ -804,5 +804,14 @@ function dPrequiredFields($requiredFields)
 		}
 	}
 	return $buffer;
+}
+
+/*
+ * Make function htmlspecialchar_decode for older PHP versions
+*/
+if ( !function_exists('htmlspecialchars_decode') ) {
+	function htmlspecialchars_decode($str) {
+		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
+	}
 }
 ?>
