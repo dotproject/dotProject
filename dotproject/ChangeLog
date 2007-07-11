@@ -1,3 +1,18 @@
+2007-07-11 23:29  (cyberhorse)
+---------------------------------
+modules/projects/index.php
+- Fixed the fix ... this should work now (fingers crossed)
+
+2007-07-11 23:21  (cyberhorse)
+---------------------------------
+modules/projects/index.php
+- Fixed respecting tab set by default settings (not only passed by $_GET)
+
+2007-07-11 03:13  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-11
+
 2007-07-10 03:13  (cyberhorse)
 ---------------------------------
 ChangeLog
