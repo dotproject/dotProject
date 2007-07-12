@@ -640,7 +640,7 @@ class CAppUI {
 		require_once DP_BASE_DIR."/classes/authenticator.class.php";
 
 		$auth_method = dPgetConfig('auth_method', 'sql');
-		if (@$_POST['login'] != 'login' && @$_POST['login'] != $this->_('login') && $_REQUEST['login'] != $auth_method)
+		if (@$_POST['login'] != 'login' && @$_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method)
 			die("You have chosen to log in using an unsupported or disabled login method");
 		$auth =& getauth($auth_method);
 		
