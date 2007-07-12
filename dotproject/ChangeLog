@@ -1,3 +1,26 @@
+2007-07-12 14:02  (cyberhorse)
+---------------------------------
+classes/ui.class.php
+- Fixed translation issue with login (as described in http://www.dotproject.net/vbulletin/showthread.php?t=7135)
+
+2007-07-12 06:11  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Fixed typo caused during prior commit
+
+2007-07-12 04:11  (caseydk)
+---------------------------------
+classes/dp.class.php
+includes/main_functions.php
+modules/tasks/do_updatetask.php
+modules/tasks/tasks.class.php
+- applied the fix from #2059 to properly handle html entities in task logs/names;
+
+2007-07-12 03:13  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-12
+
 2007-07-11 23:29  (cyberhorse)
 ---------------------------------
 modules/projects/index.php
