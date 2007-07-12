@@ -933,7 +933,7 @@ class CTask extends CDpObject
             }
         }
         $q->clear();
-        $body .= $AppUI->_('Task') . ": $this->task_name\n";
+        $body .= $AppUI->_('Task', UI_OUTPUT_RAW) . ": $this->task_name\n";
         $task_types = dPgetSysVal("TaskType");
         $body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
         $body .= $AppUI->_('URL', UI_OUTPUT_RAW) 
