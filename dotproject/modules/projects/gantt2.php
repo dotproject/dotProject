@@ -6,10 +6,7 @@ if (!defined('DP_BASE_DIR')){
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
 
-
-// orginal: global $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels;
 global $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt; // $showAllGantt == Gantt with tasks and users
-
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -107,7 +104,7 @@ $graph2->scale->tableTitle->Set($tableTitle);
 
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
-if (is_file( TTF_DIR."arialbd.ttf" )) {
+if (is_file( TTF_DIR."FreeSansBold.ttf" )) {
 	$graph2->scale->tableTitle->SetFont(FF_CUSTOM,FS_BOLD,12);
 }
 $graph2->scale->SetTableTitleBackground("#eeeeee");
@@ -182,7 +179,9 @@ foreach($tasks as $t) {
 		$barTmp = new GanttBar($row++, array($t["user_name"], "", ""," "), "0", "0;" , 0.6);						
 		$barTmp->title->SetColor("#".$t['project_color_identifier']);
 		$barTmp->SetFillColor("#".$t['project_color_identifier']);
-		$barTmp->title ->SetFont(FF_CUSTOM, FF_BOLD);		
+		if (is_file( TTF_DIR."FreeSansBold.ttf" )) {
+			$barTmp->title ->SetFont(FF_CUSTOM, FF_BOLD);
+		}		
 		$graph2->Add($barTmp);
 	}
 		
@@ -237,8 +236,9 @@ foreach($tasks as $t) {
 	$enddate = new CDate($end);
 	$startdate = new CDate($start);
         $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), /*substr($actual_end, 0, 10))*/" "), $start, $actual_end, $cap, $t['task_dynamic'] == 1 ? 0.1 : 0.6);
-   //     $bar->progress->Set($progress/100);
-        $bar->title->SetFont(FF_CUSTOM,FS_NORMAL,10);
+				if (is_file( TTF_DIR."FreeSans.ttf" )) {
+        	$bar->title->SetFont(FF_CUSTOM,FS_NORMAL,10);
+				}
         $bar->SetFillColor("#".$t['project_color_identifier']);
         $bar->SetPattern(BAND_SOLID,"#".$t['project_color_identifier']);
 

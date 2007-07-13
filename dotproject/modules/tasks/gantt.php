@@ -209,7 +209,7 @@ setlocale(LC_TIME, $pLocale);
 if ($start_date && $end_date) {
         $graph->SetDateRange( $start_date, $end_date );
 }
-if (is_file( TTF_DIR.'arialbd.ttf' )){
+if (is_file( TTF_DIR.'FreeSans.ttf' )){
         $graph->scale->actinfo->SetFont(FF_CUSTOM);
 }
 $graph->scale->actinfo->vgrid->SetColor('gray');
@@ -425,7 +425,10 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 	$bar  = new MileStone ($row++,array($name, $pname, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
 				else 
 					$bar  = new MileStone ($row++,array($name, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
-                $bar->title->SetFont(FF_CUSTOM,FS_NORMAL,8);
+                $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+                if (is_file( TTF_DIR.'FreeSans.ttf' )) {
+                	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+                }
                 //caption of milestone should be date
                 if ($showLabels=='1') {
                         $caption = $start->format($df);
@@ -481,27 +484,27 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 					$bar = new GanttBar($row++, array($name, $pname, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
 				else
 					$bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
-                $bar->progress->Set(min(($progress/100),1));
-                if (is_file( TTF_DIR.'arialbd.ttf' )) {
-                        $bar->title->SetFont(FF_CUSTOM,FS_NORMAL,8);
-                }
+            $bar->progress->Set(min(($progress/100),1));
+            if (is_file( TTF_DIR.'FreeSans.ttf' )) {
+							$bar->title->SetFont(FF_CUSTOM,FS_NORMAL,8);
+            }
             if($a['task_dynamic'] == 1){
-                    if (is_file( TTF_DIR.'arialbd.ttf' )){
-                        $bar->title->SetFont(FF_CUSTOM,FS_BOLD, 8);
-                }
-                    $bar->rightMark->Show();
-            $bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
-            $bar->rightMark->SetWidth(3);
-            $bar->rightMark->SetColor('black');
-            $bar->rightMark->SetFillColor('black');
+							if (is_file( TTF_DIR.'FreeSansBold.ttf' )){
+								$bar->title->SetFont(FF_CUSTOM,FS_BOLD, 8);
+							}
+							$bar->rightMark->Show();
+							$bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
+							$bar->rightMark->SetWidth(3);
+							$bar->rightMark->SetColor('black');
+							$bar->rightMark->SetFillColor('black');
 
-            $bar->leftMark->Show();
-            $bar->leftMark->SetType(MARK_LEFTTRIANGLE);
-            $bar->leftMark->SetWidth(3);
-            $bar->leftMark->SetColor('black');
-            $bar->leftMark->SetFillColor('black');
-
-            $bar->SetPattern(BAND_SOLID,'black');
+							$bar->leftMark->Show();
+							$bar->leftMark->SetType(MARK_LEFTTRIANGLE);
+							$bar->leftMark->SetWidth(3);
+							$bar->leftMark->SetColor('black');
+							$bar->leftMark->SetFillColor('black');
+ 
+							$bar->SetPattern(BAND_SOLID,'black');
             }
         }
         //adding captions
@@ -537,8 +540,8 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
 }
 $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
-if (is_file( TTF_DIR.'arialbd.ttf' )) {
-        $vline->title->SetFont(FF_CUSTOM,FS_BOLD,10);
+if (is_file( TTF_DIR.'FreeSansBold.ttf' )) {
+	$vline->title->SetFont(FF_CUSTOM,FS_BOLD,10);
 }
 $graph->Add($vline);
 $graph->Stroke();
