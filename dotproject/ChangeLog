@@ -1,3 +1,25 @@
+2007-07-14 01:21  (caseydk)
+---------------------------------
+modules/projects/gantt.php
+modules/projects/gantt2.php
+modules/tasks/gantt.php
+- applied the fixes notes in #2092;
+
+2007-07-13 07:53  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Mantis 2059, again
+
+2007-07-13 07:26  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Mantis 2096
+
+2007-07-13 03:13  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-13
+
 2007-07-12 14:02  (cyberhorse)
 ---------------------------------
 classes/ui.class.php
