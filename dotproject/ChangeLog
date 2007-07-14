@@ -1,3 +1,18 @@
+2007-07-15 00:38  (nybod)
+---------------------------------
+classes/ui.class.php
+- Removed extraneous character which caused an "Unterminated string constant" error in IE7.
+
+2007-07-15 00:05  (caseydk)
+---------------------------------
+modules/tasks/gantt.php
+- applied the fixes notes in #2097;
+
+2007-07-14 03:14  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-14
+
 2007-07-14 01:21  (caseydk)
 ---------------------------------
 modules/projects/gantt.php
