@@ -1929,11 +1929,11 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
         $s .= dPshowImage( './images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!' );
         $s .='</a></td>';
     } 
-    else if ($canViewLog) {
-        $s .= "\n\t<td><a href=\"?m=tasks&a=view&task_id=" . $a['task_id'] . '&tab=1">'.$AppUI->_('Log').'</a></td>';
+    else if ($canViewLog && $a["task_dynamic"]!=1) {
+        $s .= "\n\t<td align='center'><a href=\"?m=tasks&a=view&task_id=" . $a['task_id'] . '&tab=1">'.$AppUI->_('Log').'</a></td>';
     } 
     else {
-        $s .= "\n\t<td></td>";
+        $s .= "\n\t<td align='center'>" . $AppUI->_('-') . "</td>";
     }
     // percent complete
     $s .= "\n\t<td align=\"right\">".intval( $a["task_percent_complete"] ).'%</td>';
