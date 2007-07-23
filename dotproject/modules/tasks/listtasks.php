@@ -37,11 +37,10 @@ function loadTasks()
   sel.options[0] = new Option('[top task]', 0);
   <?php
     $i = 0;
-    foreach($tasks as $task)
-    {
+    foreach($tasks as $task) {
       ++$i;
     ?>
-  sel.options[<?php echo $i; ?>] = new Option('<?php echo addslashes($task['task_name']); ?>', <?php echo $task['task_id']; ?>);
+  sel.options[<?php echo $i; ?>] = new Option("<?php echo $task['task_name']; ?>", <?php echo $task['task_id']; ?>);
     <?php
     }
     ?>
