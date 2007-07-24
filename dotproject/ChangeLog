@@ -1,7 +1,18 @@
-2007-07-18 03:16  (cyberhorse)
+2007-07-24 04:52  (caseydk)
+---------------------------------
+modules/tasks/listtasks.php
+- tweaked to support quotes in the task name;
+- there is still an encoding issue here
+
+2007-07-21 22:43  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Mantis 2098. Remove create log link if task is dynamic (task_dynamic == 1)
+
+2007-07-19 03:41  (cyberhorse)
 ---------------------------------
 ChangeLog
-- Updating ChangeLog on 2007-07-18
+- Updating ChangeLog on 2007-07-19
 
 2007-07-15 03:13  (cyberhorse)
 ---------------------------------
