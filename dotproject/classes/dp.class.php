@@ -196,19 +196,19 @@ class CDpObject {
 		}
 		$k = $this->_tbl_key;
 		if( $this->$k ) {
-            addHistory($this->_tbl . '_update(' . $this->$k . ')', 0, $this->_tbl);
+            $store_type = 'update';
 			$ret = db_updateObject( $this->_tbl, $this, $this->_tbl_key, $updateNulls );
 		} 
         else {
+            $store_type = 'add';
 			$ret = db_insertObject( $this->_tbl, $this, $this->_tbl_key );
-            addHistory($this->_tbl . '_add(' . $this->$k . ')', 0, $this->_tbl);
 		}
-		if( !$ret ) {
-			return get_class( $this )."::store failed <br />" . db_error();
-		} 
-        else {
-			return NULL;
+		
+		if( $ret ) {
+			// only record history if an update or insert actually occurs.
+			addHistory($this->_tbl . '_' . $store_type . '(' . $this->$k . ')', 0, $this->_tbl);
 		}
+		return ((!$ret)?(get_class( $this ) . "::store failed <br />" . db_error()):NULL) ;
 	}
     
     /**
@@ -289,13 +289,13 @@ class CDpObject {
 			return $msg;
 		}
         
-        addHistory($this->_tbl, $this->$k, 'delete');
 		$q  = new DBQuery;
 		$q->setDelete($this->_tbl);
-		$q->addWhere("$this->_tbl_key = '".$this->$k."'");
-		$result = null;
-		if (!$q->exec()) {
-			$result = db_error();
+		$q->addWhere($this->_tbl_key." = '".$this->$k."'");
+		$result = ((!$q->exec())?db_error():null);
+		if (!$result) {
+			// only record history if deletion actually occurred
+			addHistory($this->_tbl, $this->$k, 'delete');
 		}
 		$q->clear();
 		return $result;
