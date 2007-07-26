@@ -1,3 +1,55 @@
+2007-07-27 02:06  (merlinyoda)
+---------------------------------
+modules/calendar/vw_day_events.php
+- Fix for Bug #2076
+
+2007-07-27 00:20  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- #2099 - patch applied. Hide last update column in tasks when history
+- module is disabled.
+
+2007-07-26 23:46  (cyberhorse)
+---------------------------------
+modules/calendar/day_view.php
+modules/calendar/index.php
+modules/calendar/view.php
+modules/calendar/week_view.php
+style/default/header.php
+style/dp-grey-theme/header.php
+- #2112 - patch applied. Today goes to a day view for today (events).
+
+2007-07-26 23:26  (cyberhorse)
+---------------------------------
+modules/system/translate.php
+modules/system/translate_save.php
+- #2078 - patch applied. translation remembers place and user language.
+
+2007-07-26 23:17  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2101 - patch applied - removed double email_prefix
+
+2007-07-26 23:07  (cyberhorse)
+---------------------------------
+base.php
+- #2044 - suggestion applied. can't test extensively.
+
+2007-07-26 07:38  (merlinyoda)
+---------------------------------
+classes/dp.class.php
+- 
+- Small improvements to store() and delete() methods. History records will
+- be more accurate by default as history will only be stored if the database
+- transatction went through without error. Also made some minor code style
+- changes (i.e. different form, same function)
+
+2007-07-26 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-26
+
 2007-07-25 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
