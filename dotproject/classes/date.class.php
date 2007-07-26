@@ -226,7 +226,7 @@ class CDate extends Date {
 			/*
 			 ** Catch some possible inconsistencies:
 			 ** If we're later than cal_end_day or sooner than cal_start_day then we don't need to
-			 ** subtract any time from duration since the difference is greater than the # of daily working hours
+			 ** subtract any time from duration. The difference is greater than the # of daily working hours
 			 */
 			if ($firstDay < 0) {
 				$firstDay = 0;
