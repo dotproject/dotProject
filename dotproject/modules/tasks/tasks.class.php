@@ -2064,8 +2064,10 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
         $s .= '<td nowrap="nowrap" align="center" style="'.$style.'">'. $a['task_due_in'].'</td>';
     } 
     else {
-        $s .= '<td nowrap="nowrap" align="center" style="'.$style.'">'
-            .($last_update ? $last_update->format( $df ) : '-').'</td>';
+	if (!empty($mods['history']) && !getDenyRead('history')) {
+            $s .= '<td nowrap="nowrap" align="center" style="'.$style.'">'
+                .($last_update ? $last_update->format( $df ) : '-').'</td>';
+	}
     }
     
     // Assignment checkbox
