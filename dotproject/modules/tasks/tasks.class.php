@@ -694,7 +694,7 @@ class CTask extends CDpObject
         
         $mail = new Mail;
         
-        $mail->Subject( dPgetConfig('email_prefix') . " $projname::$this->task_name "
+        $mail->Subject("$projname::$this->task_name "
                         .$AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
         
         // c = creator
