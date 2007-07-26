@@ -116,7 +116,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 
 			$html .= "\n<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr>";
 			$html .= "\n<td>" . dPshowImage( dPfindImage( 'event'.$row['event_type'].'.png', 'calendar' ), 16, 16, '' );
-			$html .= "</td>\n<td>&nbsp;<b>" . $types[$row['event_type']] . "</b></td></tr></table>";
+			$html .= "</td>\n<td>&nbsp;<b>" . $AppUI->_($types[$row['event_type']]) . "</b></td></tr></table>";
 
 
 			$html .= $href ? "\n\t\t<a href=\"$href\" class=\"event\" title=\"$alt\">" : '';
