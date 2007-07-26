@@ -106,7 +106,7 @@ for ($i=0; $i < 7; $i++) {
 	$dayStamp = $show_day->format( FMT_TIMESTAMP_DATE );
 
 	$day  = $show_day->getDay();
-	$href = "?m=calendar&a=day_view&date=$dayStamp";
+	$href = "?m=calendar&a=day_view&date=$dayStamp&tab=0";
 
 	$s = '';
 	if ($column == 0) {
