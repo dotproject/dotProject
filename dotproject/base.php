@@ -25,14 +25,26 @@ global $baseUrl;
 
 $baseDir = dirname(__FILE__);
 
+// only rely on env variables if not using a apache handler
+function safe_get_env($name) 
+{
+	if (isset($_SERVER[$name])) {
+		return $_SERVER[$name];
+	} elseif (strpos(php_sapi_name(), 'apache') === false) {
+		getenv($name);
+	} else {
+		return '';
+	}
+}
+
 // automatically define the base url
 $baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
-$baseUrl .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : getenv('HTTP_HOST');
-$pathInfo = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : getenv('PATH_INFO');
+$baseUrl .= safe_get_env('HTTP_HOST');
+$pathInfo = safe_get_env('PATH_INFO');
 if (@$pathInfo) {
   $baseUrl .= str_replace('\\','/',dirname($pathInfo));
 } else {
-  $baseUrl .= str_replace('\\','/', dirname( isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : getenv('SCRIPT_NAME')));
+  $baseUrl .= str_replace('\\','/', dirname(safe_get_env('SCRIPT_NAME')));
 }
 
 // Defines to deprecate the global baseUrl/baseDir
