@@ -21,7 +21,7 @@ define( 'FMT_UNIX', '3' );
 define( 'WDAY_SUNDAY',	  0 );
 define( 'WDAY_MONDAY',	  1 );
 define( 'WDAY_TUESDAY',	  2 );
-define( 'WDAY_WEDNESDAY',  3 );
+define( 'WDAY_WEDNESDAY', 3 );
 define( 'WDAY_THURSDAY',  4 );
 define( 'WDAY_FRIDAY',	  5 );
 define( 'WDAY_SATURDAY',  6 );
@@ -209,14 +209,9 @@ class CDate extends Date {
 		// make duration positive
 		$duration = abs($duration);
 		
-		// in case the duration type is 24 resp. full days
-		// we're finished very quickly
-		if ($durationType == '24') {
+		if ($durationType == '24') { // duration type is 24, full days, we're finished very quickly
 			$full_working_days = $duration;
-		}
-		
-		// durationType is 1 hour
-		else if ($durationType == '1') {
+		} else if ($durationType == '1') { // durationType is 1 hour
 		// get dP time constants
 			$cal_day_start = intval(dPgetConfig( 'cal_day_start' ));
 			$cal_day_end = intval(dPgetConfig( 'cal_day_end' ));
