@@ -9,13 +9,14 @@ if (!$canEdit || $AppUI->user_type != 1) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
 
-$module = isset( $_REQUEST['module'] ) ? $_REQUEST['module'] : 'admin';
-$lang = isset( $_REQUEST['lang'] ) ? $_REQUEST['lang'] : 'en';
+$module = dPgetParam($_REQUEST, 'module', 'admin');
+$lang = dPgetParam($_REQUEST, 'lang', $AppUI->user_locale);
 
 $AppUI->savePlace( "m=system&a=translate&module=$module&lang=$lang" );
 
 // read the installed modules
-$modules = arrayMerge( array( 'common', 'styles' ), $AppUI->readDirs( 'modules' ));
+$modules = arrayMerge( $AppUI->readDirs( 'modules' ), array( 'common', 'styles' ));
+asort($modules);
 
 // read the installed languages
 $locales = $AppUI->readDirs( 'locales' );

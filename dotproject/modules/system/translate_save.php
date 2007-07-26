@@ -10,7 +10,7 @@ if (! defined('DP_BASE_DIR')) {
 }
 
 $module = dPgetParam($_POST, 'module', 0);
-$lang = dPgetParam($_POST, 'lang', 'en');
+$lang = dPgetParam($_POST, 'lang', $AppUI->user_locale);
 
 $trans = dPgetParam($_POST, 'trans', 0);
 //echo '<pre>';print_r( $trans );echo '</pre>';die;
@@ -66,5 +66,5 @@ fwrite( $fp, $txt );
 fclose( $fp );
 
 $AppUI->setMsg( 'Locales file saved', UI_MSG_OK );
-$AppUI->redirect();
+$AppUI->redirect($AppUI->getPlace());
 ?>
