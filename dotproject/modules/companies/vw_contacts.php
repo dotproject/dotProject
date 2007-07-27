@@ -32,7 +32,7 @@ if (!($rows = $q->loadList())) {
 		$dept_detail = $contact->getDepartmentDetails();
 
 		$s .= '<tr><td>';
-		$s .= '<a href="./index.php?m=contacts&a=addedit&contact_id='.$row["contact_id"].'">'. $row["contact_last_name"].", ".$row["contact_first_name"] .'</a>';
+		$s .= '<a href="./index.php?m=contacts&a=view&contact_id='.$row["contact_id"].'">'. $row["contact_last_name"].", ".$row["contact_first_name"] .'</a>';
 		$s .= '<td><a href="mailto:'.$row["contact_email"] .'">' .$row["contact_email"] .'</a></td>';
 		$s .= '<td>'.$dept_detail['dept_name'] .'</td>';
 		$s .= '</tr>';
