@@ -51,10 +51,6 @@ class CDate extends Date {
 		}
 		$days1 = Date_Calc::dateToDays($d1->day, $d1->month, $d1->year);
 		$days2 = Date_Calc::dateToDays($d2->day, $d2->month, $d2->year);
-		switch (true) {
-			($days1 != $days2):
-			$comp_val = 
-		}
 		
 		$comp_value = 0;
 		if ($days1 - $days2) {
