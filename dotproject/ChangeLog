@@ -1,3 +1,43 @@
+2007-07-28 22:47  (caseydk)
+---------------------------------
+db/upgrade_21rc2_to_210.sql
+- altered the data type to prevent the 99.99% misrounding issue
+
+2007-07-28 22:47  (caseydk)
+---------------------------------
+db/upgrade_21rc2_to_210.sql
+- file upgrade_21rc2_to_210.sql was initially added on branch stable_2.
+
+2007-07-28 01:21  (nybod)
+---------------------------------
+modules/companies/vw_contacts.php
+- Mantis 2115: changed addedit link to view link from company/contacts
+
+2007-07-27 22:08  (merlinyoda)
+---------------------------------
+classes/date.class.php
+- Fixed error introduced while fixing Bug #2072
+
+2007-07-27 06:07  (merlinyoda)
+---------------------------------
+classes/date.class.php
+- Minor remaining format changes.
+
+2007-07-27 05:28  (merlinyoda)
+---------------------------------
+classes/date.class.php
+- Missed a couple formatting issues last check-in. Now fixed :-).
+
+2007-07-27 05:24  (merlinyoda)
+---------------------------------
+classes/date.class.php
+- Fix for Bug #2072 and updated the formatting to our coding standards.
+
+2007-07-27 03:10  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-27
+
 2007-07-27 02:06  (merlinyoda)
 ---------------------------------
 modules/calendar/vw_day_events.php
