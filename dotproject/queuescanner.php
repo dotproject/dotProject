@@ -40,6 +40,7 @@ The full text of the GPL is in the COPYING file.
 	require_once DP_BASE_DIR.'/classes/query.class.php';
 
 	$AppUI = new CAppUI;
+	$AppUI->setUserLocale();
 
 	echo "Scanning Queue ...\n";
 	$queue = new EventQueue;
