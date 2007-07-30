@@ -20,7 +20,7 @@ $ticket_project = dPgetParam($_POST, 'ticket_project', 0);
 $author = $name . " <" . $email . ">";
 $tsql =
 "INSERT INTO tickets (author,subject,priority,body,timestamp,type, ticket_company, ticket_project) ".
-"VALUES('$author','$subject','$priority','$description',UNIX_TIMESTAMP(),'Open', $ticket_company, $ticket_project)";
+"VALUES('$author', '".addslashes($subject)."','$priority','".addslashes($description)."',UNIX_TIMESTAMP(),'Open', $ticket_company, $ticket_project)";
 
 $rc = mysql_query($tsql);
 
