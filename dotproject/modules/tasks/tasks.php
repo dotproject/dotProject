@@ -67,7 +67,7 @@ else if($task_id > 0){
 $AppUI->savePlace();
 
 if(($open_task_id = dPGetParam($_GET, "open_task_id", 0)) > 0 && !in_array($_GET["open_task_id"], $tasks_opened)) {
-	$tasks_opened[] = $_GET["open_task_id"];
+	$tasks_opened[] = $open_task_id;
 }
 
 // Closing tasks needs also to be within tasks iteration in order to
@@ -640,12 +640,12 @@ foreach ($projects as $k => $p) {
 	  
 	  for ($i=0; $i < $tnums; $i++) {
 		  $t = $p['tasks'][$i];
-		  
+
 		  if ($t["task_parent"] == $t["task_id"]) {
 			  $is_opened = $open_task_all || in_array($t["task_id"], $tasks_opened);
 			  showtask( $t, 0, $is_opened );
 			  if($is_opened || $t["task_dynamic"] == 0) {
-				  findchild( $p['tasks'], $t["task_id"] );
+				  findchild( $p['tasks'], $t["task_id"], 0, $open_task_all);
 			  }
 		  }
 		  if ($search_text 
@@ -660,12 +660,12 @@ foreach ($projects as $k => $p) {
 			  if($p['tasks'][$i]["task_dynamic"] && in_array( $p['tasks'][$i]["task_parent"], $tasks_closed)) {
 				  closeOpenedTask($p['tasks'][$i]["task_id"]);
 			  }
-			  if(in_array($p['tasks'][$i]["task_parent"], $tasks_opened)){
+			  if(!$open_task_all && in_array($p['tasks'][$i]["task_parent"], $tasks_opened)){
 				  showtask( $p['tasks'][$i], 1, false);
 			  }
 		  }
 	  }
-	  
+
 	  if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
 <tr>

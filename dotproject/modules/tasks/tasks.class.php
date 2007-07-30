@@ -1858,6 +1858,7 @@ function closeOpenedTask($task_id){
 
 function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
     global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
+    global $tasks_opened;
     
     $now = new CDate();
     $df = $AppUI->getPref('SHDATEFORMAT');
@@ -1866,6 +1867,9 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
     $show_all_assignees = dPgetConfig('show_all_task_assignees', false);
     
     $done[] = $a['task_id'];
+    if ( $is_opened && !in_array($a['task_id'], $tasks_opened) ) {
+    	$tasks_opened[] = $a['task_id'];
+    }
     
     $start_date = intval( $a["task_start_date"] ) ? new CDate( $a["task_start_date"] ) : null;
     $end_date = intval( $a["task_end_date"] ) ? new CDate( $a["task_end_date"] ) : null;
@@ -2079,18 +2083,16 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
     echo $s;
 }
 
-function findchild( &$tarr, $parent, $level=0){
-    GLOBAL $projects;
+function findchild( &$tarr, $parent, $level=0, $open_task_all=0){
     global $tasks_opened;
-    
     $level = $level+1;
     $n = count( $tarr );
     
     for ($x=0; $x < $n; $x++) {
         if($tarr[$x]["task_parent"] == $parent && $tarr[$x]["task_parent"] != $tarr[$x]["task_id"]){
-            $is_opened = in_array($tarr[$x]["task_id"], $tasks_opened);
+            $is_opened = $open_task_all || in_array($tarr[$x]["task_id"], $tasks_opened);
             showtask( $tarr[$x], $level, $is_opened );
-            if($is_opened || !$tarr[$x]["task_dynamic"]){
+            if($is_opened || 0 == $tarr[$x]["task_dynamic"]){
                 findchild( $tarr, $tarr[$x]["task_id"], $level);
             }
         }
