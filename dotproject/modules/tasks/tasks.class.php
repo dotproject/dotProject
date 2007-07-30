@@ -1959,7 +1959,7 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
         $s .= '<td width="90%">';
     }
 	if ($level == -1) {
-	  $s .= '...';
+		$s .= '...';
 	}
     for ($y=0; $y < $level; $y++) {
         if ($y+1 == $level) {

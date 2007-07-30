@@ -662,7 +662,7 @@ foreach ($projects as $k => $p) {
 				}
 				if( (!$open_task_all && in_array($p['tasks'][$i]["task_parent"], $tasks_opened) )
 					|| (!(in_array($p['tasks'][$i]["task_parent"], $tasks_closed)))){
-					showtask( $p['tasks'][$i], -1);// indeterminate depth for child task
+					showtask( $p['tasks'][$i], -1); // indeterminate depth for child task
 				}
 			}
 		}
