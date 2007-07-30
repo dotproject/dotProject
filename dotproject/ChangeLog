@@ -1,7 +1,38 @@
+2007-07-30 22:31  (cyberhorse)
+---------------------------------
+modules/ticketsmith/do_ticket_aed.php
+- #2088 - patch applied. Monitor input for sql injection.
+
+2007-07-30 22:21  (cyberhorse)
+---------------------------------
+queuescanner.php
+- #2075 - patch applied. localisation issue.
+
+2007-07-30 22:14  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- #2079 - patch applied as suggested. dynamic tasks threading.
+
+2007-07-30 22:06  (cyberhorse)
+---------------------------------
+modules/tasks/view.php
+- #2117 - patch applied as suggested - permissions related.
+
+2007-07-29 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-29
+
 2007-07-28 22:47  (caseydk)
 ---------------------------------
 db/upgrade_21rc2_to_210.sql
 - altered the data type to prevent the 99.99% misrounding issue
+
+2007-07-28 22:47  (caseydk)
+---------------------------------
+db/upgrade_21rc2_to_210.sql
+- file upgrade_21rc2_to_210.sql was initially added on branch stable_2.
 
 2007-07-28 22:47  (caseydk)
 ---------------------------------
