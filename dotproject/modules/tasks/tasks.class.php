@@ -1958,6 +1958,9 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false) {
     else {
         $s .= '<td width="90%">';
     }
+	if ($level == -1) {
+	  $s .= '...';
+	}
     for ($y=0; $y < $level; $y++) {
         if ($y+1 == $level) {
             $s .= '<img src="./images/corner-dots.gif" width="16" height="12" border="0">';

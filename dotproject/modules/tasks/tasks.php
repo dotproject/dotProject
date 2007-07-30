@@ -257,21 +257,21 @@ if ($project_id && $showIncomplete) {
 
 $task_status = 0;
 if ( $min_view && isset($_GET['task_status']) ) {
-		$task_status = intval( dPgetParam( $_GET, 'task_status', null ) );
+	$task_status = intval( dPgetParam( $_GET, 'task_status', null ) );
 }
 else if ( stristr($currentTabName, 'inactive') ) {
-		$task_status = '-1';
+	$task_status = '-1';
 }
 // If we aren't tabbed we are in the tasks list.
 else if ( ! $currentTabName) {
-		$task_status = intval( $AppUI->getState( 'inactive' ) );
+	$task_status = intval( $AppUI->getState( 'inactive' ) );
 }
 
 $where .= " AND task_status = '$task_status'";
 
 // patch 2.12.04 text search
 if ( $search_text = $AppUI->getState('searchtext') ) {
-		$where .= " AND (task_name LIKE ('%$search_text%') OR task_description LIKE ('%$search_text%') )";
+	$where .= " AND (task_name LIKE ('%$search_text%') OR task_description LIKE ('%$search_text%') )";
 }
 
 // filter tasks considering task and project permissions
@@ -296,8 +296,8 @@ if ( count($allowedTasks)) {
 
 // Filter by company
 if ( ! $min_view && $f2 != 'all' ) {
-		 $join .= " LEFT JOIN companies ON company_id = projects.project_company";
-		 $where .= " AND company_id = " . intval($f2) . " ";
+	$join .= " LEFT JOIN companies ON company_id = projects.project_company";
+	$where .= " AND company_id = " . intval($f2) . " ";
 }
 
 // patch 2.12.04 ADD GROUP BY clause for assignee count
@@ -566,10 +566,10 @@ foreach ($projects as $k => $p) {
   </table>
   </td>
 <?php 
-		  if ($dPconfig['direct_edit_assignment']) {
-			  // get Users with all Allocation info (e.g. their freeCapacity)
-			  $tempoTask = new CTask();
-			  $userAlloc = $tempoTask->getAllocation("user_id");
+			if ($dPconfig['direct_edit_assignment']) {
+				// get Users with all Allocation info (e.g. their freeCapacity)
+				$tempoTask = new CTask();
+				$userAlloc = $tempoTask->getAllocation("user_id");
 ?>
   <td colspan="3" align="right" valign="middle">
   <table width="100%" border="0">
@@ -578,31 +578,32 @@ foreach ($projects as $k => $p) {
 	<select name="add_users" style="width:200px" size="2" multiple="multiple" class="text" 
 	 ondblclick="javascript:chAssignment('.$user_id.', 0, false)">
 <?php 
-			  foreach ($userAlloc as $v => $u) {
-				  echo "	  <option value=\"".$u['user_id']."\">" . dPformSafe( $u['userFC'] ) . "</option>\n";
-			  }
+				foreach ($userAlloc as $v => $u) {
+					echo "	  <option value=\"".$u['user_id']."\">" . dPformSafe( $u['userFC'] ) . "</option>\n";
+				}
 ?>
 	</select>
 	</td>
 	<td align="center">
 <?php
-			  echo ("	 <a href='javascript:chAssignment({$p['project_id']}, 0, 0);'>"
-					.dPshowImage(dPfindImage('add.png', 'tasks'), 16, 16, 'Assign Users', 
-								 'Assign selected Users to selected Tasks')
-					."</a>\n");
-			  
-			  echo ("	  <a href='javascript:chAssignment({$p['project_id']}, 1, 1);'>"
-					.dPshowImage(dPfindImage('remove.png', 'tasks'), 16, 16, 'Unassign Users', 'Unassign Users from Task')
-					."</a>\n");
-			  
+				echo ("	 <a href='javascript:chAssignment({$p['project_id']}, 0, 0);'>"
+					  .dPshowImage(dPfindImage('add.png', 'tasks'), 16, 16, 'Assign Users', 
+								   'Assign selected Users to selected Tasks')
+					  ."</a>\n");
+				
+				echo ("	  <a href='javascript:chAssignment({$p['project_id']}, 1, 1);'>"
+					  .dPshowImage(dPfindImage('remove.png', 'tasks'), 16, 16, 'Unassign Users', 
+								   'Unassign Users from Task')
+					  ."</a>\n");
+				
 ?>
 	<br />
 <?php
-			  echo ("	 <select class=\"text\" name=\"percentage_assignment\" title=\""
+				echo ("	 <select class=\"text\" name=\"percentage_assignment\" title=\""
 					.$AppUI->_('Assign with Percentage')."\">");
-			  for ($i = 0; $i <= 100; $i+=5) {
-				  echo ("	   <option ".(($i==30)? "selected=\"true\"" : "" )." value=\"".$i."\">".$i."%</option>");
-			  }
+				for ($i = 0; $i <= 100; $i+=5) {
+					echo ("	   <option ".(($i==30)? "selected=\"true\"" : "" )." value=\"".$i."\">".$i."%</option>");
+				}
 ?>
 	</select>
 	</td>
@@ -610,63 +611,63 @@ foreach ($projects as $k => $p) {
   </table>
   </td>
 <?php 
-		  }
+			}
 ?>
 </tr>
 <?php
-	  }
+		}
 		
-	  global $done;
-	  $done = array();	
-	  
-	  if ( $task_sort_item1 != "" ) {
-		  if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
-			  $p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1
+		global $done;
+		
+		if ( $task_sort_item1 != "" ) {
+			if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
+				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1
 										, $task_sort_item2, $task_sort_order2, $task_sort_type2 );
-		  else $p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1 );
-	  } 
-	  else {
-		  /* we have to calculate the end_date via start_date+duration for 
-		   ** end='0000-00-00 00:00:00' if array_csort function is not used
-		   ** as it is normally done in array_csort function in order to economise
-		   ** cpu time as we have to go through the array there anyway
-		   */
-		  for ($j=0; $j < count($p['tasks']); $j++) {
-			  if ( $p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00' ) {
-				  $p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
-			  }
-		  }
-	  }
-	  
-	  for ($i=0; $i < $tnums; $i++) {
-		  $t = $p['tasks'][$i];
+			else $p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1 );
+		} 
+		else {
+			/* we have to calculate the end_date via start_date+duration for 
+			 ** end='0000-00-00 00:00:00' if array_csort function is not used
+			 ** as it is normally done in array_csort function in order to economise
+			 ** cpu time as we have to go through the array there anyway
+			 */
+			for ($j=0; $j < count($p['tasks']); $j++) {
+				if ( $p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00' ) {
+					$p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
+				}
+			}
+		}
+		
+		for ($i=0; $i < $tnums; $i++) {
+			$t = $p['tasks'][$i];
 
-		  if ($t["task_parent"] == $t["task_id"]) {
-			  $is_opened = $open_task_all || in_array($t["task_id"], $tasks_opened);
-			  showtask( $t, 0, $is_opened );
-			  if($is_opened || $t["task_dynamic"] == 0) {
-				  findchild( $p['tasks'], $t["task_id"], 0, $open_task_all);
-			  }
-		  }
-		  if ($search_text 
-			  && (strpos($t['task_name'], $search_text) !== false 
-				  || strpos($t['task_description'], $search_text) !== false)) {
+			if ($t["task_parent"] == $t["task_id"]) {
+				$is_opened = $open_task_all || in_array($t["task_id"], $tasks_opened);
+				showtask( $t, 0, $is_opened );
+				if($is_opened || $t["task_dynamic"] == 0) {
+					findchild( $p['tasks'], $t["task_id"], 0, $open_task_all);
+				}
+			}
+			if ($search_text 
+				&& (strpos($t['task_name'], $search_text) !== false 
+					|| strpos($t['task_description'], $search_text) !== false)) {
 			showtask($t, 1, false);
-		  }
-	  }
-	  // check that any 'orphaned' user tasks are also display
-	  for ($i=0; $i < $tnums; $i++) {
-		  if ( !in_array( $p['tasks'][$i]["task_id"], $done ) ) {
-			  if($p['tasks'][$i]["task_dynamic"] && in_array( $p['tasks'][$i]["task_parent"], $tasks_closed)) {
-				  closeOpenedTask($p['tasks'][$i]["task_id"]);
-			  }
-			  if(!$open_task_all && in_array($p['tasks'][$i]["task_parent"], $tasks_opened)){
-				  showtask( $p['tasks'][$i], 1, false);
-			  }
-		  }
-	  }
+			}
+		}
+		// check that any 'orphaned' user tasks are also display
+		for ($i=0; $i < $tnums; $i++) {
+			if ( !in_array( $p['tasks'][$i]["task_id"], $done ) ) {
+				if($p['tasks'][$i]["task_dynamic"] && in_array( $p['tasks'][$i]["task_parent"], $tasks_closed)) {
+					closeOpenedTask($p['tasks'][$i]["task_id"]);
+				}
+				if( (!$open_task_all && in_array($p['tasks'][$i]["task_parent"], $tasks_opened) )
+					|| (!(in_array($p['tasks'][$i]["task_parent"], $tasks_closed)))){
+					showtask( $p['tasks'][$i], -1);// indeterminate depth for child task
+				}
+			}
+		}
 
-	  if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
+		if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
@@ -680,7 +681,7 @@ foreach ($projects as $k => $p) {
 </tr>
 </form>
 <?php
-	  }
+		}
    }
 }
 $AppUI->setState("tasks_opened", $tasks_opened);
