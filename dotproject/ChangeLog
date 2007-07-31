@@ -1,3 +1,26 @@
+2007-07-31 23:58  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.php
+- Slightly reverted changes made from Bug 2095. Behaves more like previous
+- versions when displaying "Child Tasks" tab.
+
+2007-07-31 05:42  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.php
+modules/tasks/tasks.class.php
+- minor spacing change from last fix ... also Bug Report was #2095 not #2059
+
+2007-07-31 05:36  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- stable_2 fix of Bug Report #2059
+
+2007-07-31 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-07-31
+
 2007-07-30 22:31  (cyberhorse)
 ---------------------------------
 modules/ticketsmith/do_ticket_aed.php
