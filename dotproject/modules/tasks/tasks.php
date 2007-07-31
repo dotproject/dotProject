@@ -618,7 +618,7 @@ foreach ($projects as $k => $p) {
 		}
 		
 		global $done;
-		
+		$done = ((empty($done))?array():$done);
 		if ( $task_sort_item1 != "" ) {
 			if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1
@@ -656,13 +656,18 @@ foreach ($projects as $k => $p) {
 		}
 		// check that any 'orphaned' user tasks are also display
 		for ($i=0; $i < $tnums; $i++) {
-			if ( !in_array( $p['tasks'][$i]["task_id"], $done ) ) {
-				if($p['tasks'][$i]["task_dynamic"] && in_array( $p['tasks'][$i]["task_parent"], $tasks_closed)) {
-					closeOpenedTask($p['tasks'][$i]["task_id"]);
+			$t2 = $p['tasks'][$i];
+			if ( !in_array( $t2["task_id"], $done ) ) {
+				if($t2["task_dynamic"] && in_array( $t2["task_parent"], $tasks_closed)) {
+					closeOpenedTask($t2["task_id"]);
 				}
-				if( (!$open_task_all && in_array($p['tasks'][$i]["task_parent"], $tasks_opened) )
-					|| (!(in_array($p['tasks'][$i]["task_parent"], $tasks_closed)))){
-					showtask( $p['tasks'][$i], -1); // indeterminate depth for child task
+				
+				if( (!$open_task_all && in_array($t2["task_parent"], $tasks_opened))
+					|| (strcmp($f, 'children') == 0)){
+				  showtask( $t2, 1, false); // possibly displaying child tasks
+				}
+				if ((!(in_array($t2["task_parent"], $tasks_closed))) && strcmp($f, 'children')) {
+					showtask( $t2, -1); // indeterminate depth for child task
 				}
 			}
 		}
