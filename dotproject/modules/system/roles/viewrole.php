@@ -35,7 +35,7 @@ if (! is_array($role)) {
 </table>
 
 <?php
-	$tabBox = new CTabBox("?m=system&u=roles&a=viewrole&role_id=$role_id", "./modules/system/roles/", $tab );
+	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id='.$role_id, DP_BASE_DIR . '/modules/system/roles/', $tab );
 	$tabBox->add( 'vw_role_perms', 'Permissions');
 	$tabBox->show();
 } // End of check for valid role
