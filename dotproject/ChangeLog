@@ -1,3 +1,29 @@
+2007-08-04 23:07  (cyberhorse)
+---------------------------------
+base.php
+- #2122 - patch applied as suggested
+
+2007-08-04 22:44  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+- patch applied as suggested
+
+2007-08-04 22:36  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.php
+- check if $done is set and use that if it exists
+
+2007-08-04 08:31  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- Furter improvements against Bug Report #2095 (and possibly #2079)
+
+2007-08-04 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-04
+
 2007-08-03 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
