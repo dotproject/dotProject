@@ -47,6 +47,7 @@ if (@$pathInfo) {
   $baseUrl .= str_replace('\\','/', dirname(safe_get_env('SCRIPT_NAME')));
 }
 
+$baseUrl = preg_replace('#/$#D', '', $baseUrl);
 // Defines to deprecate the global baseUrl/baseDir
 define('DP_BASE_DIR', $baseDir);
 define('DP_BASE_URL', $baseUrl);
