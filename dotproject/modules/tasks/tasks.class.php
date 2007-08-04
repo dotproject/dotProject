@@ -2143,7 +2143,7 @@ function showtask( &$a, $level=0, $is_opened = true, $today_view = false, $allow
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format( $df ) : '-') . '</td>';
 	if ($today_view) {
 		$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . $a['task_due_in'] . '</td>';
-	} else if (!empty($mods['history']) && !getDenyRead('history')) {
+	} else if ($AppUI->isActiveModule('history') && !getDenyRead('history')) {
 		$s .= '<td nowrap="nowrap" align="center" style="'.$style.'">' 
 			. ($last_update ? $last_update->format( $df ) : '-') . '</td>';
 	}
