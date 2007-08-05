@@ -126,7 +126,9 @@ function delIt() {
 		</tr>
 		<tr valign=top>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address');?>:</td>
-			<td class="hilite"><?php
+			<td class="hilite">
+			<a href='http://maps.google.com/maps?q=<?php echo @$obj->company_address1;?>+<?php echo @$obj->company_address2;?>+<?php echo @$obj->company_city;?>+<?php echo @$obj->company_state;?>+<?php echo @$obj->company_zip;?>+<?php echo @$obj->company_country;?>' target='_blank'><image align="right" border="0" src="./images/googlemaps.gif" width="55" height="22" alt="Find It on Google" /></a>
+			<?php
 						echo @$obj->company_address1
 							.( ($obj->company_address2) ? '<br />'.$obj->company_address2 : '' )
 							.( ($obj->company_city) ? '<br />'.$obj->company_city : '' )
