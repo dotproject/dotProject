@@ -1,3 +1,27 @@
+2007-08-07 01:57  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.php
+- Removed personal debugging info from display.
+
+2007-08-07 01:54  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- More tweaking to tasks tree display logic. IDs for Dynamic tasks are the
+- only ones that should currently be in the opened/closed arrays. Tried to
+- have orphan task trees display closer to their ancestors. Also minor
+- format changes throughout.
+
+2007-08-06 05:52  (nybod)
+---------------------------------
+modules/companies/view.php
+- Mantis 2135 and to harmonize the feature with the same ability in contacts/view.php
+
+2007-08-06 03:22  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-06
+
 2007-08-05 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
