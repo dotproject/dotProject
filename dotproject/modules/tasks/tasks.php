@@ -688,7 +688,7 @@ foreach ($projects as $k => $p) {
 			 */
 		}
 
-/*
+		/*
 		// check for any 'orphaned' tasks trees to be displayed at end of tree
 		foreach ($p['tasks'] as $i => $t2) {
 			if (!(in_array($t2['task_parent'], $tasks_filtered))) {
@@ -706,10 +706,8 @@ foreach ($projects as $k => $p) {
 				}
 			}
 		}
-*/
-echo '<pre> OPEN :: ' ; print_r($tasks_opened) ; '</pre>';
-echo '<pre> CLOSED :: ' ; print_r($tasks_closed) ; '</pre>';
-
+		*/
+		
 		if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
 <tr>
