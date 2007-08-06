@@ -38,10 +38,10 @@ $cols = 13;
 $tasks_closed = (($AppUI->getState('tasks_closed')) ? $AppUI->getState('tasks_closed') : array());
 $tasks_opened = (($AppUI->getState('tasks_opened')) ? $AppUI->getState('tasks_opened') : array());
 
-$task_id = intval( dPgetParam( $_GET, 'task_id', 0 ) );
-$pinned_only = intval( dPgetParam( $_GET, 'pinned', 0) );
+$task_id = intval(dPgetParam($_GET, 'task_id', 0));
+$pinned_only = intval(dPgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
-	$pin = intval( dPgetParam( $_GET, 'pin', 0 ) );
+	$pin = intval(dPgetParam($_GET, 'pin', 0));
 	
 	$msg = '';
 	
@@ -50,8 +50,8 @@ if (isset($_GET['pin'])) {
 			?"INSERT INTO user_task_pin (user_id, task_id) VALUES($AppUI->user_id, $task_id)"
 			:"DELETE FROM user_task_pin WHERE user_id=$AppUI->user_id AND task_id=$task_id");
 	
-	if (!db_exec( $sql )) {
-		$AppUI->setMsg( 'ins/del err', UI_MSG_ERROR, true );
+	if (!db_exec($sql)) {
+		$AppUI->setMsg('ins/del err', UI_MSG_ERROR, true);
 	}
 	$AppUI->redirect('', -1);
 }
@@ -60,44 +60,43 @@ if($task_id > 0){
 	$_GET['open_task_id'] = $task_id;
 }
 
-$AppUI->savePlace();
+//save place is at end
+//$AppUI->savePlace();
 
 // shall all tasks be either opened or opened?
 $open_task_all = dPGetParam($_GET, 'open_task_all', 0);
 $close_task_all = dPGetParam($_GET, 'close_task_all', 0);
-// Closing and opening tasks will need to be done for child tasks as well 
+// Closing and opening tasks only applies to dynamic tasks
 $open_task_id = dPGetParam($_GET, 'open_task_id', 0);
 $close_task_id = dPGetParam($_GET, 'close_task_id', 0);
 
 if ($open_task_all) {
 	foreach ($tasks_closed as $to) {
-		openClosedTaskRecursive($to);
+		openClosedTask($to);
 	}
-
 } else if($close_task_all) {
 	foreach ($tasks_opened as $to) {
-		closeOpenedTaskRecursive($to);
+		closeOpenedTask($to);
 	}
 } else if ($open_task_id) {
-	openClosedTaskRecursive($open_task_id);
+	openClosedTask($open_task_id);
 } else if ($close_task_id) {
-	closeOpenedTaskRecursive($close_task_id);
+	closeOpenedTask($close_task_id);
 }
 
-/// End of tasks_opened routine
 
-$durnTypes = dPgetSysVal( 'TaskDurationType' );
-$taskPriority = dPgetSysVal( 'TaskPriority' );
+$durnTypes = dPgetSysVal('TaskDurationType');
+$taskPriority = dPgetSysVal('TaskPriority');
 
-$task_project = intval( dPgetParam( $_GET, 'task_project', null ) );
-//$task_id = intval( dPgetParam( $_GET, 'task_id', null ) );
+$task_project = intval(dPgetParam($_GET, 'task_project', null));
+//$task_id = intval(dPgetParam($_GET, 'task_id', null));
 
-$task_sort_item1 = dPgetParam( $_GET, 'task_sort_item1', '' );
-$task_sort_type1 = dPgetParam( $_GET, 'task_sort_type1', '' );
-$task_sort_item2 = dPgetParam( $_GET, 'task_sort_item2', '' );
-$task_sort_type2 = dPgetParam( $_GET, 'task_sort_type2', '' );
-$task_sort_order1 = intval( dPgetParam( $_GET, 'task_sort_order1', 0 ) );
-$task_sort_order2 = intval( dPgetParam( $_GET, 'task_sort_order2', 0 ) );
+$task_sort_item1 = dPgetParam($_GET, 'task_sort_item1', '');
+$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', '');
+$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
+$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', '');
+$task_sort_order1 = intval(dPgetParam($_GET, 'task_sort_order1', 0));
+$task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 if (isset($_POST['show_task_options'])) {
 	$AppUI->setState('TaskListShowIncomplete', dPgetParam($_POST, 'show_incomplete', 0));
 }
@@ -107,7 +106,7 @@ require_once $AppUI->getModuleClass('projects');
 $project =& new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 
-if ( count($allowedProjects)) {
+if (count($allowedProjects)) {
 	$where_list = implode(' AND ', $allowedProjects);
 }
 
@@ -115,14 +114,14 @@ $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hour
 
 $q = new DBQuery;
 $q->addTable('projects');
-$q->addQuery('company_name, project_id, project_color_identifier, project_name,'
-			 .' SUM(t1.task_duration * t1.task_percent_complete'
-			 .' * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type))'
-			 .' / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours 
+$q->addQuery('company_name, project_id, project_color_identifier, project_name, '
+			 . ' SUM(t1.task_duration * t1.task_percent_complete'
+			 . ' * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type))'
+			 . ' / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours 
 			 . ', t1.task_duration_type)) AS project_percent_complete ');
 $q->addJoin('companies', 'com', 'company_id = project_company');
 $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-$q->addWhere($where_list.(($where_list)?' AND ':'').'t1.task_id = t1.task_parent' );
+$q->addWhere($where_list.(($where_list)?' AND ':'').'t1.task_id = t1.task_parent');
 $q->addGroup('project_id');
 $q->addOrder('project_name');
 $psql = $q->prepare();
@@ -165,10 +164,10 @@ $join = '';
 $select = ('distinct tasks.task_id, task_parent, task_name, task_start_date, task_end_date, ' 
 		   . 'task_dynamic, task_pinned, pin.user_id as pin_user, task_priority, ' 
 		   . 'task_percent_complete, task_duration, task_duration_type, task_project, '
-		   .'task_description, task_owner, task_status, usernames.user_username, ' 
+		   . 'task_description, task_owner, task_status, usernames.user_username, ' 
 		   . 'usernames.user_id, task_milestone, assignees.user_username as assignee_username, ' 
 		   . 'count(distinct assignees.user_id) as assignee_count, '
-		   .'co.contact_first_name, co.contact_last_name, ' 
+		   . 'co.contact_first_name, co.contact_last_name, ' 
 		   . 'count(distinct files.file_task) as file_count, tlog.task_log_problem');
 $from = 'tasks';
 $mods = $AppUI->getActiveModules();
@@ -199,7 +198,7 @@ if ($pinned_only) {
 }
 
 $f = (($f) ? $f : '');
-$never_show_with_dots = array('all','children', 'myproj', 'mycomp',''); //used when displaying tasks
+$never_show_with_dots = array('all', 'children', 'myproj', 'mycomp', ''); //used when displaying tasks
 switch ($f) {
  case 'all':
 	 break;
@@ -208,8 +207,8 @@ switch ($f) {
  case 'allfinished7days':		 // patch 2.12.04 tasks finished in the last 7 days
 	 $from = 'user_tasks, '.$from;
 	 $where .= (' AND task_project = projects.project_id AND user_tasks.task_id = tasks.task_id '
-				."AND task_percent_complete = 100 AND task_end_date >= '"
-				.date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d')-7, date('Y')))."'");
+				. "AND task_percent_complete = 100 AND task_end_date >= '"
+				. date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d')-7, date('Y'))) . "'");
 	 break;
  case 'children':
 	 // patch 2.13.04 2, fixed ambigious task_id
@@ -229,7 +228,7 @@ switch ($f) {
 	 // This filter checks all tasks that are not already in 100%
 	 // and the project is not on hold nor completed
 	 // patch 2.12.04 finish date required to be consider finish
-	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id 
+	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
 				. 'AND user_tasks.task_id = tasks.task_id ' 
 				. "AND (task_percent_complete < 100 OR task_end_date = '') "
 				. 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
@@ -252,33 +251,33 @@ switch ($f) {
 	 break;
  default:
 	 $from = 'user_tasks, '.$from;
-	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id 
-				.'AND user_tasks.task_id = tasks.task_id');
+	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
+				. 'AND user_tasks.task_id = tasks.task_id');
 	 break;
 }
 
 if ($project_id && $showIncomplete) {
-	$where .= ' AND ( task_percent_complete < 100 or task_percent_complete is null )';
+	$where .= ' AND (task_percent_complete < 100 or task_percent_complete is null)';
 }
 
 $task_status = 0;
-if ( $min_view && isset($_GET['task_status']) ) {
-	$task_status = intval( dPgetParam( $_GET, 'task_status', null ) );
+if ($min_view && isset($_GET['task_status'])) {
+	$task_status = intval(dPgetParam($_GET, 'task_status', null));
 }
-else if ( stristr($currentTabName, 'inactive') ) {
+else if (stristr($currentTabName, 'inactive')) {
 	$task_status = '-1';
 }
 // If we aren't tabbed we are in the tasks list.
-else if ( ! $currentTabName) {
-	$task_status = intval( $AppUI->getState( 'inactive' ) );
+else if (! $currentTabName) {
+	$task_status = intval($AppUI->getState('inactive'));
 }
 
 $where .= ' AND task_status = ' . $task_status;
 
 // patch 2.12.04 text search
-if ( $search_text = $AppUI->getState('searchtext') ) {
+if ($search_text = $AppUI->getState('searchtext')) {
 	$where .= (" AND (task_name LIKE ('%{$search_text}%') " 
-			   . "OR task_description LIKE ('%{$search_text}%') )");
+			   . "OR task_description LIKE ('%{$search_text}%'))");
 }
 
 // filter tasks considering task and project permissions
@@ -295,28 +294,28 @@ if (count($allowedProjects)) {
 //
 $obj =& new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
-if ( count($allowedTasks)) {
+if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);
 }
 
 // echo "<pre>$where</pre>";
 
 // Filter by company
-if ( ! $min_view && $f2 != 'all' ) {
+if (! $min_view && $f2 != 'all') {
 	$join .= ' LEFT JOIN companies ON company_id = projects.project_company';
 	$where .= ' AND company_id = ' . intval($f2);
 }
 
 // patch 2.12.04 ADD GROUP BY clause for assignee count
-$tsql = ('SELECT ' . $select . ' FROM ( ' . $from . ' ) ' . $join 
+$tsql = ('SELECT ' . $select . ' FROM (' . $from . ') ' . $join 
 		 . ' WHERE ' . $where . ' GROUP BY task_id ORDER BY project_id, task_start_date');
 
 // echo "<pre>$tsql</pre>";
 
 if ($canViewTask) {
-	$ptrc = db_exec( $tsql );
+	$ptrc = db_exec($tsql);
 	if($ptrc != false) {
-		$nums = db_num_rows( $ptrc );
+		$nums = db_num_rows($ptrc);
 	}
 	echo db_error();
 } 
@@ -327,24 +326,24 @@ else {
 //pull the tasks into an array
 /*
 for ($x=0; $x < $nums; $x++) {
-	$row = db_fetch_assoc( $ptrc );
+	$row = db_fetch_assoc($ptrc);
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 */
 for ($x=0; $x < $nums; $x++) {
-	$row = db_fetch_assoc( $ptrc );
+	$row = db_fetch_assoc($ptrc);
 	
 	//add information about assigned users into the page output
-	$ausql = ('SELECT ut.user_id, u.user_username, contact_email, ut.perc_assignment, '
-			  . 'SUM(ut.perc_assignment) AS assign_extent, contact_first_name, contact_last_name '
+	$ausql = ('SELECT ut.user_id, u.user_username, contact_email, ut.perc_assignment, ' 
+			  . 'SUM(ut.perc_assignment) AS assign_extent, contact_first_name, contact_last_name ' 
 			  . 'FROM user_tasks ut LEFT JOIN users u ON u.user_id = ut.user_id ' 
-			  . 'LEFT JOIN contacts ON u.user_contact = contact_id '
-			  . 'WHERE ut.task_id='.$row['task_id'].' GROUP BY ut.user_id ' 
+			  . 'LEFT JOIN contacts ON u.user_contact = contact_id ' 
+			  . 'WHERE ut.task_id=' . $row['task_id'] . ' GROUP BY ut.user_id ' 
 			  . 'ORDER BY ut.perc_assignment desc, u.user_username');
 	
 	$assigned_users = array ();
-	$paurc = db_exec( $ausql );
-	$nnums = db_num_rows( $paurc );
+	$paurc = db_exec($ausql);
+	$nnums = db_num_rows($paurc);
 	echo db_error();
 	for ($xx=0; $xx < $nnums; $xx++) {
 		$row['task_assigned_users'][] = db_fetch_assoc($paurc);
@@ -370,7 +369,7 @@ function toggle_users(id){
 if (isset($canEdit) && $canEdit && $dPconfig['direct_edit_assignment']) {
 ?>
 function checkAll(project_id) {
-	var f = eval( 'document.assFrm' + project_id );
+	var f = eval('document.assFrm' + project_id);
 	var cFlag = f.master.checked ? false : true;
 	
 	for (var i=0;i< f.elements.length;i++) {
@@ -384,7 +383,7 @@ function checkAll(project_id) {
 }
 
 function chAssignment(project_id, rmUser, del) {
-	var f = eval( 'document.assFrm' + project_id );
+	var f = eval('document.assFrm' + project_id);
 	var fl = f.add_users.length-1;
 	var c = 0;
 	var a = 0;
@@ -398,7 +397,7 @@ function chAssignment(project_id, rmUser, del) {
 		// only if it's a checkbox.
 		if(e.type == "checkbox" && e.checked == true && e.name != 'master') {
 			c++;
-			f.htasks.value = f.htasks.value +","+ e.value;
+			f.htasks.value = f.htasks.value +", "+ e.value;
 		}
 	}
 	
@@ -406,7 +405,7 @@ function chAssignment(project_id, rmUser, del) {
 	for (fl; fl > -1; fl--) {
 		if (f.add_users.options[fl].selected) {
 			a++;
-			f.hassign.value = "," + f.hassign.value +","+ f.add_users.options[fl].value;
+			f.hassign.value = ", " + f.hassign.value +", "+ f.add_users.options[fl].value;
 		}
 	}
 	
@@ -417,7 +416,7 @@ function chAssignment(project_id, rmUser, del) {
 		else if (a == 0 && rmUser == 1){
 			alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
 		} 
-		else if (confirm( '<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>' )) {
+		else if (confirm('<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>')) {
 			f.del.value = 1;
 			f.rm.value = rmUser;
 			f.project_id.value = project_id;
@@ -471,15 +470,15 @@ function chAssignment(project_id, rmUser, del) {
   <th width="10"><?php echo $AppUI->_('Pin'); ?></th>
   <th width="10"><?php echo $AppUI->_('New Log'); ?></th>
   <th width="20"><?php echo $AppUI->_('Work');?></th>
-  <th align="center"><?php sort_by_item_title( 'P', 'task_priority', SORT_NUMERIC ); ?></th>
-  <th width="200"><?php sort_by_item_title( 'Task Name', 'task_name', SORT_STRING );?></th>
-  <th nowrap="nowrap"><?php sort_by_item_title( 'Task Creator', 'user_username', SORT_STRING );?></th>
+  <th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+  <th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING);?></th>
+  <th nowrap="nowrap"><?php sort_by_item_title('Task Creator', 'user_username', SORT_STRING);?></th>
   <th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users')?></th>
-  <th nowrap="nowrap"><?php sort_by_item_title( 'Start Date', 'task_start_date', SORT_NUMERIC );?></th>
-  <th nowrap="nowrap"><?php sort_by_item_title( 'Duration', 'task_duration', SORT_NUMERIC );?>&nbsp;&nbsp;</th>
-  <th nowrap="nowrap"><?php sort_by_item_title( 'Finish Date', 'task_end_date', SORT_NUMERIC );?></th>
+  <th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC);?></th>
+  <th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC);?>&nbsp;&nbsp;</th>
+  <th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC);?></th>
 <?php if (!empty($mods['history']) && !getDenyRead('history')) { ?>
-  <th nowrap="nowrap"><?php sort_by_item_title( 'Last Update', 'last_update', SORT_NUMERIC );?></th>
+  <th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC);?></th>
 <?php } else { $cols--; } ?>
   <?php if ($showEditCheckbox) { echo '<th width="1">&nbsp;</th>'; } else { $cols--; } ?>
 </tr>
@@ -490,7 +489,7 @@ function chAssignment(project_id, rmUser, del) {
 /*
 // adds in projects without tasks to display project info despite filter
 $q->addTable('projects');
-$q->addQuery("project_id");
+$q->addQuery('project_id');
 $q->exec();
 while ($proj_rows = $q->fetchRow()) {
 	$r = new DBQuery;
@@ -505,12 +504,12 @@ while ($proj_rows = $q->fetchRow()) {
 $q->clear();
 
 foreach ($project_task_count as $project_id => $count) {
-	if ( !($count > 0)) {
+	if (!($count > 0)) {
 		$q->addTable('projects');
-		$q->addQuery("company_name, project_id, project_color_identifier, project_name,"
-					 ." (0.00) AS project_percent_complete");
+		$q->addQuery('company_name, project_id, project_color_identifier, project_name, ' 
+					 . ' (0.00) AS project_percent_complete');
 		$q->addJoin('companies', 'com', 'company_id = project_company');
-		$q->addWhere("{$where_list}".(($where_list)?" AND ":"")."project_id = ".$project_id);
+		$q->addWhere($where_list . (($where_list)?' AND ':'') . 'project_id = ' . $project_id);
 		$psql3 = $q->prepare();
 		$q->clear();
 		
@@ -521,24 +520,24 @@ foreach ($project_task_count as $project_id => $count) {
 		
 		$q->addTable('projects');
 		$q->addQuery('project_id, (0) AS total_tasks');
-		$q->addWhere("{$where_list}".(($where_list)?" AND ":"")."project_id = ".$project_id);
+		$q->addWhere($where_list . (($where_list)?' AND ':'') . 'project_id = ' . $project_id);
 		$psql4 = $q->prepare();
 		$q->clear();
 		
 		$prc4 = db_exec($psql4);
 		echo db_error();
 		$row4 = db_fetch_assoc($prc4);
-		array_push($projects[$row4["project_id"]], $row4);
+		array_push($projects[$row4['project_id']], $row4);
 		
 	}
 }
 */
 
 //echo '<pre>'; print_r($projects); echo '</pre>';
-reset( $projects );
+reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count( @$p['tasks'] );
+	$tnums = count(@$p['tasks']);
 	// don't show project if it has no tasks
 	// patch 2.12.04, show project if it is the only project in view
 	if ($tnums > 0 || $project_id == $p['project_id']) {
@@ -572,7 +571,7 @@ foreach ($projects as $k => $p) {
 	<!-- patch 2.12.04 display company name next to project name -->
 	<td nowrap style="border: outset #eeeeee 2px;background-color:#<?php echo @$p['project_color_identifier'];?>">
 	<a href="./index.php?m=projects&a=view&project_id=<?php echo $k;?>">
-	<span style="color:<?php echo bestColor( @$p['project_color_identifier'] ); ?>;text-decoration:none;">
+	<span style="color:<?php echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 	<strong><?php echo @$p['company_name'].' :: '.@$p['project_name'];?></strong></span></a>
 	</td>
 	<td width="<?php echo (101 - intval(@$p['project_percent_complete']));?>%">
@@ -595,31 +594,30 @@ foreach ($projects as $k => $p) {
 	 ondblclick="javascript:chAssignment(<?php echo($p['project_id']); ?>, 0, false)">
 <?php 
 				foreach ($userAlloc as $v => $u) {
-					echo "	  <option value=\"".$u['user_id']."\">" . dPformSafe( $u['userFC'] ) . "</option>\n";
+					echo '	  <option value="'.$u['user_id'].'">' . dPformSafe($u['userFC']) . "</option>\n";
 				}
 ?>
 	</select>
 	</td>
 	<td align="center">
 <?php
-				echo ("	 <a href='javascript:chAssignment({$p['project_id']}, 0, 0);'>"
-					  .dPshowImage(dPfindImage('add.png', 'tasks'), 16, 16, 'Assign Users', 
-								   'Assign selected Users to selected Tasks')
-					  ."</a>\n");
+				echo ("	 <a href='javascript:chAssignment({$p['project_id']}, 0, 0);'>" 
+					  . dPshowImage(dPfindImage('add.png', 'tasks'), 16, 16, 'Assign Users', 
+								   'Assign selected Users to selected Tasks') 
+					  . "</a>\n");
 				
-				echo ("	  <a href='javascript:chAssignment({$p['project_id']}, 1, 1);'>"
-					  .dPshowImage(dPfindImage('remove.png', 'tasks'), 16, 16, 'Unassign Users', 
-								   'Unassign Users from Task')
-					  ."</a>\n");
+				echo ("	  <a href='javascript:chAssignment({$p['project_id']}, 1, 1);'>" 
+					  . dPshowImage(dPfindImage('remove.png', 'tasks'), 16, 16, 'Unassign Users', 
+								   'Unassign Users from Task') 
+					  . "</a>\n");
 				
 ?>
 	<br />
 
-<select class="text" name="percentage_assignment" 
-	   title="<?php echo ($AppUI->_('Assign with Percentage') ); ?>"\">
+	<select class="text" name="percentage_assignment" title="<?php echo ($AppUI->_('Assign with Percentage')); ?>" >
 <?php
 				for ($i = 0; $i <= 100; $i+=5) {
-					echo ("	   <option ".(($i==30)? "selected=\"true\"" : "" )." value=\"".$i."\">".$i."%</option>");
+					echo ("\t<option " . (($i==30)?'selected="true"':'') . ' value="' . $i . '">' . $i . '%</option>');
 				}
 ?>
 	</select>
@@ -634,15 +632,14 @@ foreach ($projects as $k => $p) {
 <?php
 		}
 		
-		$done = array();
-		if ( $task_sort_item1 != "" ) {
-			if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 ) {
+		if ($task_sort_item1 != '') {
+			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, 
 										  $task_sort_type1, $task_sort_item2, $task_sort_order2, 
-										  $task_sort_type2 );
+										  $task_sort_type2);
 			} else {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, 
-										  $task_sort_type1 );
+										  $task_sort_type1);
 			}
 		}
 		else {
@@ -652,41 +649,66 @@ foreach ($projects as $k => $p) {
 			 ** cpu time as we have to go through the array there anyway
 			 */
 			foreach ($p['tasks'] as $j => $task_change_end_date) {
-				if ( $task_change_end_date['task_end_date'] == '0000-00-00 00:00:00' ) {
+				if ($task_change_end_date['task_end_date'] == '0000-00-00 00:00:00') {
 					 $task_change_end_date['task_end_date'] = calcEndByStartAndDuration($task_change_end_date);
 				}
 			}
 		}
 		
+		//get list of task ids
 		foreach ($p['tasks'] as $i => $t) {
-			$tasks_filtered[] = $t["task_id"]; 
-			if ($t["task_parent"] == $t["task_id"]) {
-				$is_opened = ($open_task_all || $t["task_dynamic"] == 0 
-							  || (in_array($t["task_id"], $tasks_opened) && !($close_task_all) ));
-				showtask( $t, 0, $is_opened );
-				if($is_opened) {
-					findchild( $p['tasks'], $t["task_id"]);
-				}
-			}
+			$tasks_filtered[] = $t['task_id']; 
 		}
-		// check for any 'orphaned' tasks trees to be displayed
-		foreach ($p['tasks'] as $i => $t2) {
-			if ( (!in_array( $t2["task_parent"], $tasks_filtered))) {
-				// don't "mess with display when showing "Child tasks" 
+		//start displaying tasks
+		foreach ($p['tasks'] as $i => $t1) {
+			if ($t1['task_parent'] == $t1['task_id']) {
+				$is_opened = (!($t1['task_dynamic']) || (in_array($t1['task_id'], $tasks_opened)));
+				showtask($t1, 0, $is_opened);
+				if($is_opened) {
+					findchild($p['tasks'], $t1['task_id']);
+				}
+			} else if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
+			
+				// don't "mess with" display when showing "Child tasks" 
 				// or similiar filters that don't "breakapart" a task tree
-				if( (in_array($f, $never_show_with_dots))){
-					showtask( $t2, 1, false); 
+				if((in_array($f, $never_show_with_dots))){
+					showtask($t1, 1, false); 
 				} else {
 					//display as close to "tree-like" as possible
-					$is_opened = ($open_task_all || $t2["task_dynamic"] == 0 
-								  || (in_array($t2["task_id"], $tasks_opened) && !($close_task_all) ));
-					showtask( $t2, -1, in_array( $t2["task_id"], $tasks_opened)); // indeterminate depth for child task
+					$is_opened = (!($t1['task_dynamic']) || (in_array($t1['task_id'], $tasks_opened)));
+					showtask($t1, -1, $is_opened); // indeterminate depth for child task
 					if($is_opened) {
-						findchild( $p['tasks'], $t2["task_id"]);
+						findchild($p['tasks'], $t1['task_id']);
+					}
+				}
+			}
+			/*
+			 * MerlinYoda: Not 100% sure if moving code from below to above always puts orphan trees 
+			 * closer to their ancestors. At worst it just displays orphans a little earlier
+			 */
+		}
+
+/*
+		// check for any 'orphaned' tasks trees to be displayed at end of tree
+		foreach ($p['tasks'] as $i => $t2) {
+			if (!(in_array($t2['task_parent'], $tasks_filtered))) {
+				// don't "mess with" display when showing "Child tasks" 
+				// or similiar filters that don't "breakapart" a task tree
+				if((in_array($f, $never_show_with_dots))){
+					showtask($t2, 1, false); 
+				} else {
+					//display as close to "tree-like" as possible
+					$is_opened = (!($t2['task_dynamic']) || (in_array($t2['task_id'], $tasks_opened)));
+					showtask($t2, -1, $is_opened); // indeterminate depth for child task
+					if($is_opened) {
+						findchild($p['tasks'], $t2['task_id']);
 					}
 				}
 			}
 		}
+*/
+echo '<pre> OPEN :: ' ; print_r($tasks_opened) ; '</pre>';
+echo '<pre> CLOSED :: ' ; print_r($tasks_closed) ; '</pre>';
 
 		if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
@@ -707,8 +729,8 @@ foreach ($projects as $k => $p) {
 }
 
 
-$AppUI->setState("tasks_opened", $tasks_opened);
-$AppUI->setState("tasks_closed", $tasks_closed);
+$AppUI->setState('tasks_opened', $tasks_opened);
+$AppUI->setState('tasks_closed', $tasks_closed);
 
 $AppUI->savePlace();
 
