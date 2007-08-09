@@ -1688,7 +1688,7 @@ class CTask extends CDpObject
 		foreach ($contacts as $contact) {
 			if ($owner_is_not_assignee
 				 || $contact['contact_id'] != $owner_contact) {
-				$body .= $contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . '<' 
+				$body .= $contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' 
 					. $contact['contact_email'] . ">\n";
 			}
 		}
