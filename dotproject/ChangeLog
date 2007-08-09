@@ -1,7 +1,12 @@
-2007-08-07 01:57  (merlinyoda)
+2007-08-09 22:36  (merlinyoda)
 ---------------------------------
-modules/tasks/tasks.php
-- Removed personal debugging info from display.
+modules/tasks/tasks.class.php
+- Added space where noted to resolve Bug Report #2121
+
+2007-08-07 03:16  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-07
 
 2007-08-07 01:54  (merlinyoda)
 ---------------------------------
