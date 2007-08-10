@@ -1,3 +1,27 @@
+2007-08-10 23:58  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.php
+- Neglected to comment out debugging code in last submittal.
+- It is commented out now.
+
+2007-08-10 23:35  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- Slight modifications to fix issue presented in Report #2079 and while
+- still maintaining a fix for Report #2095. Hopefully this is the last
+- of the task tree stuff for a while :-)
+
+2007-08-10 10:00  (merlinyoda)
+---------------------------------
+modules/projects/view.php
+- Suggested fix from Report #2120 applied (mostly as-is). Minor difference.
+
+2007-08-10 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-10
+
 2007-08-09 22:36  (merlinyoda)
 ---------------------------------
 modules/tasks/tasks.class.php
