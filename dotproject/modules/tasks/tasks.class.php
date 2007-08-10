@@ -2150,11 +2150,11 @@ function findchild(&$tarr, $parent, $level=0) {
 	
 	foreach ($tarr as $x => $task) {
 		if($task['task_parent'] == $parent && $task['task_parent'] != $task['task_id']) {
-			$is_opened = (!($task['task_dynamic']) || (in_array($task['task_id'], $tasks_opened)));
-			if($is_opened || !($task['task_dynamic'])) {
-				showtask($task, $level, $is_opened);
+			$is_opened = (!($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
+			showtask($task, $level, $is_opened);
+			if($is_opened) {
+			  findchild($tarr, $task['task_id'], $level);
 			}
-			findchild($tarr, $task['task_id'], $level);
 		}
 	}
 }

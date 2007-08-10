@@ -662,7 +662,7 @@ foreach ($projects as $k => $p) {
 		//start displaying tasks
 		foreach ($p['tasks'] as $i => $t1) {
 			if ($t1['task_parent'] == $t1['task_id']) {
-				$is_opened = (!($t1['task_dynamic']) || (in_array($t1['task_id'], $tasks_opened)));
+				$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 				showtask($t1, 0, $is_opened);
 				if($is_opened) {
 					findchild($p['tasks'], $t1['task_id']);
@@ -675,10 +675,10 @@ foreach ($projects as $k => $p) {
 					showtask($t1, 1, false); 
 				} else {
 					//display as close to "tree-like" as possible
-					$is_opened = (!($t1['task_dynamic']) || (in_array($t1['task_id'], $tasks_opened)));
+					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 					showtask($t1, -1, $is_opened); // indeterminate depth for child task
 					if($is_opened) {
-						findchild($p['tasks'], $t1['task_id']);
+					  findchild($p['tasks'], $t1['task_id']);
 					}
 				}
 			}
@@ -759,3 +759,10 @@ $AppUI->savePlace();
 	</td>
 </tr>
 </table>
+<?php 
+
+echo '<pre>Opened ::'; print_r($tasks_opened); echo '</pre><br />';
+echo '<pre>Closed ::'; print_r($tasks_closed); echo '</pre><br />';
+
+
+?>
