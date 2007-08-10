@@ -418,6 +418,8 @@ $query_string = "?m=projects&a=view&project_id=$project_id";
 // tabbed information boxes
 // Note that we now control these based upon module requirements.
 $canViewTask = $perms->checkModule('tasks', 'view');
+$canViewTaskLog = $perms->checkModule('task_log', 'view');
+
 if ($canViewTask) {
 	$tabBox->add( DP_BASE_DIR.'/modules/tasks/tasks', 'Tasks' );
 	$tabBox->add( DP_BASE_DIR.'/modules/tasks/tasks', 'Tasks (Inactive)' );
@@ -428,7 +430,9 @@ if ($perms->checkModule('forums', 'view'))
 //	$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_files', 'Files' );
 if ($canViewTask) {
 	$tabBox->add( DP_BASE_DIR.'/modules/tasks/viewgantt', 'Gantt Chart' );
-	$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_logs', 'Task Logs' );
+	if ($canViewTaskLog) {
+		$tabBox->add( DP_BASE_DIR.'/modules/projects/vw_logs', 'Task Logs' );
+	}
 }
 $tabBox->loadExtras($m);
 $f = 'all';
