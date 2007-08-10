@@ -761,8 +761,8 @@ $AppUI->savePlace();
 </table>
 <?php 
 
-echo '<pre>Opened ::'; print_r($tasks_opened); echo '</pre><br />';
-echo '<pre>Closed ::'; print_r($tasks_closed); echo '</pre><br />';
+	  //echo '<pre>Opened ::'; print_r($tasks_opened); echo '</pre><br />';
+	  //echo '<pre>Closed ::'; print_r($tasks_closed); echo '</pre><br />';
 
 
 ?>
