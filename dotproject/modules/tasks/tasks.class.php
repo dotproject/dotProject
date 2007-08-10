@@ -1820,7 +1820,7 @@ function openClosedTask($task_id){
 	if ($task_id > 0) {
 		$to_open_task->load($task_id);
 		// don't "open" non-dynamic tasks
-		if ($to_open_task->task_dynamic) {
+		if ($to_open_task->task_dynamic == 1) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_closed);
 			if ($index !== false) {
@@ -1863,7 +1863,7 @@ function closeOpenedTask($task_id){
 	if ($task_id > 0) {	
 		$to_close_task->load($task_id);
 		// don't "close" non-dynamic tasks
-		if ($to_close_task->task_dynamic) {
+		if ($to_close_task->task_dynamic == 1) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_opened);
 			if ($index !== false) {
@@ -1899,7 +1899,7 @@ function closeOpenedTaskRecursive($task_id){
 
 //This kludgy function echos children tasks as threads
 
-function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $allowRepeatDisplay = false) {
+function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOpenCloseLink=false, $allowRepeat = false) {
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $tasks_opened, $tasks_closed;
 	
@@ -1915,7 +1915,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $allowR
 	
 	if (!(in_array($a['task_id'], $done)))	{ 
 		$done[] = $a['task_id'];
-	} else if (!($allowRepeatDisplay)) {
+	} else if (!($allowRepeat)) {
 		//by default, we shouldn't allow repeat displays of the same task
 		return;
 	}
@@ -2046,8 +2046,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $allowR
 	if ($a['task_milestone'] > 0) {
 		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' . $alt . '><b>' 
 			. $a['task_name'] . '</b></a> <img src="./images/icons/milestone.gif" border="0"></td>';
-	} else if ($a['task_dynamic']){
-		if (! $today_view) {
+	} else if ($a['task_dynamic'] == 1){
+		if (! ($today_view || $hideOpenCloseLink)) {
 			$s .= $open_link;
 		}
 		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' . $alt . '><b><i>' 
@@ -2142,17 +2142,24 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $allowR
 }
 
 function findchild(&$tarr, $parent, $level=0) {
-	global $tasks_opened;
-	global $tasks_closed;
+	global $tasks_opened, $tasks_closed, $tasks_filtered;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
+	
 	$level = $level+1;
+	$obj = new CTask;
 	
 	foreach ($tarr as $x => $task) {
 		if($task['task_parent'] == $parent && $task['task_parent'] != $task['task_id']) {
-			$is_opened = (!($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
-			showtask($task, $level, $is_opened);
-			if($is_opened) {
+			$is_opened = ( !($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
+			
+			//check for child
+			$obj->load($task['task_id']);
+			$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
+			$no_children = empty($child_test);
+			
+			showtask($task, $level, $is_opened, false, $no_children);
+			if($is_opened && !($no_children)) {
 			  findchild($tarr, $task['task_id'], $level);
 			}
 		}
