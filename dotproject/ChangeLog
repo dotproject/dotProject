@@ -1,3 +1,24 @@
+2007-08-11 07:52  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- 
+-  - Resolving issue with tasks displaying a "dynamic" when the were not set
+- up as dynamic tasks (misunderstanding with the "task_dynamic" column).
+- 
+-  - Tweaked display so that dynamic tasks do not display the "+/- link"
+- if they do not have any children
+- 
+-  - If the user set an "order filter" (i.e. by clicking on the one of the
+- column headers) the "task tree"/"threaded" view is replaced with a more
+- flat view which prefixes each task with the "orphan" notation to
+- distinguish that task depth is indeterminant and/or irrelivant.
+
+2007-08-11 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-11
+
 2007-08-10 23:58  (merlinyoda)
 ---------------------------------
 modules/tasks/tasks.php
