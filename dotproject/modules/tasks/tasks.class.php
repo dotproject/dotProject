@@ -213,7 +213,7 @@ class CTask extends CDpObject
 	 * @return any result from the database operation
 	 */
 	
-	function load($oid=null,$strip=false) {
+	function load($oid=null,$strip=false,$skipUpdate=false) {
 		// use parent function to load the given object
 		$loaded = parent::load($oid,$strip);
 		
@@ -224,7 +224,7 @@ class CTask extends CDpObject
 		 ** Additionally store the values in the db.
 		 ** Only treat umbrella tasks of dynamics '1'.
 		 */
-		if ($this->task_dynamic) {
+		if ($this->task_dynamic == 1 && !($skipUpdate)) {
 			// update task from children
 			$this->htmlDecode();
 			$this->updateDynamics(true);
@@ -242,6 +242,13 @@ class CTask extends CDpObject
 		return $loaded;
 	}
 	
+	/*
+	 * call the load function but don't update dynamics
+	 */
+	function peek($oid=null,$strip=false) {
+		$loadme = $this->load($oid,$strip,true);
+		return $loadme;
+	}
 	
 	function updateDynamics($fromChildren = false) {
 		//Has a parent or children, we will check if it is dynamic so that it's info is updated also
@@ -255,7 +262,7 @@ class CTask extends CDpObject
 			$modified_task->htmlDecode();
 		}
 		
-		if ($modified_task->task_dynamic) {
+		if ($modified_task->task_dynamic == 1) {
 			//Update allocated hours based on children with duration type of 'hours'
 			$sql1 = 'SELECT SUM(task_duration * task_duration_type) from ' . $this->_tbl 
 				. ' WHERE task_parent = ' . $modified_task->task_id .' AND task_id <> ' . $modified_task->task_id 
@@ -377,7 +384,7 @@ class CTask extends CDpObject
 		if (!empty($children)) {
 			$tempTask = & new CTask();
 			foreach ($children as $child) {
-				$tempTask->load($child);
+				$tempTask->peek($child);
 				$tempTask->htmlDecode($child);
 				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
 				$newChild->store();
@@ -400,14 +407,14 @@ class CTask extends CDpObject
 	}
 	
 	function deepMove($destProject_id = 0, $destTask_id = 0) {
-		$this->move($destProject_id, destTask_id);
+		$this->move($destProject_id, $destTask_id);
 		$children = $this->getDeepChildren();
 		if (!empty($children)) {
 			$tempChild = & new CTask();
 			foreach ($children as $child) {
-				$tempChild->load($child);
+				$tempChild->peek($child);
 				$tempChild->htmlDecode($child);
-				$tempChild->move($destProject_id);
+				$tempChild->deepMove($destProject_id, $this->task_id);
 				$tempChild->store();
 			}
 		}
@@ -441,7 +448,7 @@ class CTask extends CDpObject
 			// see function update_dep_dates
 			GLOBAL $oTsk;
 			$oTsk = new CTask();
-			$oTsk->load ($this->task_id);
+			$oTsk->peek ($this->task_id);
 			
 			// if task_status changed, then update subtasks
 			if ($this->task_status != $oTsk->task_status) {
@@ -449,10 +456,11 @@ class CTask extends CDpObject
 			}
 			
 			// Moving this task to another project?
-			if ($this->task_project != $oTsk->task_project)
+			if ($this->task_project != $oTsk->task_project) {
 				$this->updateSubTasksProject($this->task_project);
+			}
 			
-			if ($this->task_dynamic) {
+			if ($this->task_dynamic == 1) {
 				$this->updateDynamics(true);
 			}
 			
@@ -1086,9 +1094,9 @@ class CTask extends CDpObject
 	} // end of dependentTasks()
 	
    /*
-	 *		 shift dependents tasks dates
-	 *		 @return void
-	 */
+	*		 shift dependents tasks dates
+	*		 @return void
+	*/
 	function shiftDependentTasks () {
 		// Get tasks that depend on this task
 		$csDeps = explode(',', $this->dependentTasks('','',false));
@@ -1113,31 +1121,31 @@ class CTask extends CDpObject
 	} // end of shiftDependentTasks()
 	
    /*
-	 *		  Update this task's dates in the DB.
-	 *		  start date:		  based on latest end date of dependencies
-	 *		  end date:			  based on start date + appropriate task time span
-	 *		   
-	 *		  @param				integer task_id of task to update
-	 */
+	*		  Update this task's dates in the DB.
+	*		  start date:		  based on latest end date of dependencies
+	*		  end date:			  based on start date + appropriate task time span
+	*		   
+	*		  @param				integer task_id of task to update
+	*/
 	function update_dep_dates($task_id) {
 		GLOBAL $tracking_dynamics;
 		
-	$newTask = new CTask();
-	$newTask->load($task_id);
+		$newTask = new CTask();
+		$newTask->load($task_id);
 	
-	// Do not update tasks that are not tracking dependencies
-	if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
-		return;
-	}
+		// Do not update tasks that are not tracking dependencies
+		if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
+			return;
+		}
  
 		// load original task dates and calculate task time span
-	$tsd = new CDate($newTask->task_start_date);
-	$ted = new CDate($newTask->task_end_date);
+		$tsd = new CDate($newTask->task_start_date);
+		$ted = new CDate($newTask->task_end_date);
 		$duration = $tsd->calcDuration($ted);
-  
-	// reset start date
-	$nsd = new CDate ($newTask->get_deps_max_end_date($newTask));
-	
+		
+		// reset start date
+		$nsd = new CDate ($newTask->get_deps_max_end_date($newTask));
+		
 		// prefer Wed 8:00 over Tue 16:00 as start date
 		$nsd = $nsd->next_working_day();
 		$new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
@@ -1155,22 +1163,22 @@ class CTask extends CDpObject
 		
 		$new_end_date = $ned->format(FMT_DATETIME_MYSQL);		
 	
-	// update the db
-	$q = new DBQuery;
-	$q->addTable('tasks');
-	$q->addUpdate('task_start_date', $new_start_date);
-	$q->addUpdate('task_end_date', $new_end_date);
-	$q->addWhere('task_dynamic <> 1');
-	$q->addWhere('task_id = ' . $task_id);
-	$q->exec();
-	$q->clear();
-	
-	if ($newTask->task_parent != $newTask->task_id) {
-		$newTask->updateDynamics();
+		// update the db
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addUpdate('task_start_date', $new_start_date);
+		$q->addUpdate('task_end_date', $new_end_date);
+		$q->addWhere('task_dynamic <> 1');
+		$q->addWhere('task_id = ' . $task_id);
+		$q->exec();
+		$q->clear();
+		
+		if ($newTask->task_parent != $newTask->task_id) {
+			$newTask->updateDynamics();
+		}
+		
+		return;
 	}
-	
-	return;
-  }
 	
 	
 	/* 
@@ -1430,7 +1438,7 @@ class CTask extends CDpObject
 			$deep_children = array();
 			$tempTask = &new CTask();
 			foreach ($children as $child) {
-				$tempTask->load($child);
+				$tempTask->peek($child);
 				$deep_children = array_merge($deep_children, $this->getChildren());
 			}
 			
@@ -1493,7 +1501,7 @@ class CTask extends CDpObject
 		global $AppUI;
 		
 		$project = new CProject();
-		$project->load($this->task_project);
+		$project->peek($this->task_project);
 		
 		// Code to see if the current user is
 		// enabled to change time information related to task
@@ -1818,7 +1826,7 @@ function openClosedTask($task_id){
 	$to_open_task = new CTask();
 	
 	if ($task_id > 0) {
-		$to_open_task->load($task_id);
+		$to_open_task->peek($task_id);
 		// don't "open" non-dynamic tasks
 		if ($to_open_task->task_dynamic == 1) {
 			// only unset that which is set
@@ -1845,7 +1853,7 @@ function openClosedTaskRecursive($task_id) {
 	if ($task_id > 0) {
 		openClosedTask($task_id);
 		
-		$open_task->load($task_id) ;
+		$open_task->peek($task_id) ;
 		$children_to_open = $open_task->getChildren();
 		foreach ($children_to_open as $to_open) {
 			openClosedTaskRecursive($to);
@@ -1861,7 +1869,7 @@ function closeOpenedTask($task_id){
 	$to_close_task = new CTask();
 	
 	if ($task_id > 0) {	
-		$to_close_task->load($task_id);
+		$to_close_task->peek($task_id);
 		// don't "close" non-dynamic tasks
 		if ($to_close_task->task_dynamic == 1) {
 			// only unset that which is set
@@ -1888,7 +1896,7 @@ function closeOpenedTaskRecursive($task_id){
 	if ($task_id > 0) {
 		closeOpenedTask($task_id);
 		
-		$close_task->load($task_id) ;
+		$close_task->peek($task_id) ;
 		$children_to_close = $close_task->getChildren();
 		foreach ($children_to_close as $to_close) {
 		  closeOpenedTaskRecursive($to_close);
@@ -2154,7 +2162,7 @@ function findchild(&$tarr, $parent, $level=0) {
 			$is_opened = ( !($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
 			
 			//check for child
-			$obj->load($task['task_id']);
+			$obj->peek($task['task_id']);
 			$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
 			$no_children = empty($child_test);
 			

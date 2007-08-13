@@ -673,7 +673,7 @@ foreach ($projects as $k => $p) {
 					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 					
 					//check for child
-					$obj->load($t1['task_id']);
+					$obj->peek($t1['task_id']);
 					$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
 					$no_children = empty($child_test);
 					
@@ -694,7 +694,7 @@ foreach ($projects as $k => $p) {
 						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 						
 						//check for child
-						$obj->load($t1['task_id']);
+						$obj->peek($t1['task_id']);
 						$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
 						$no_children = empty($child_test);
 						
@@ -727,7 +727,7 @@ foreach ($projects as $k => $p) {
 					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 					
 					//check for child
-					$obj->load($t1['task_id']);
+					$obj->peek($t1['task_id']);
 					$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
 					$no_children = empty($child_test);
 					
