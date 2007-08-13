@@ -2150,21 +2150,18 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 }
 
 function findchild(&$tarr, $parent, $level=0) {
-	global $tasks_opened, $tasks_closed, $tasks_filtered;
+	global $tasks_opened, $tasks_closed, $tasks_filtered, $children_of;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	
 	$level = $level+1;
-	$obj = new CTask;
 	
 	foreach ($tarr as $x => $task) {
 		if($task['task_parent'] == $parent && $task['task_parent'] != $task['task_id']) {
 			$is_opened = ( !($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
 			
 			//check for child
-			$obj->peek($task['task_id']);
-			$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
-			$no_children = empty($child_test);
+			$no_children = empty($children_of[$task['task_id']]);
 			
 			showtask($task, $level, $is_opened, false, $no_children);
 			if($is_opened && !($no_children)) {

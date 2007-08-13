@@ -655,10 +655,16 @@ foreach ($projects as $k => $p) {
 			}
 		}
 		
-		global $tasks_filtered;
-		//get list of task ids
+		global $tasks_filtered, $children_of;
+		//get list of task ids and set-up array of children
 		foreach ($p['tasks'] as $i => $t) {
 			$tasks_filtered[] = $t['task_id']; 
+			$children_of[$t['task_parent']] = (($children_of[$t['task_parent']])
+											   ?$children_of[$t['task_parent']]:
+											   array());
+			if ($t['task_parent'] != $t['task_id']) {
+				array_push($children_of[$t['task_parent']], $t['task_id']);
+			}
 		}
 		
 		//start displaying tasks
@@ -673,9 +679,7 @@ foreach ($projects as $k => $p) {
 					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 					
 					//check for child
-					$obj->peek($t1['task_id']);
-					$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
-					$no_children = empty($child_test);
+					$no_children = empty($children_of[$t1['task_id']]);
 					
 					showtask($t1, 0, $is_opened, false, $no_children);
 					if($is_opened && !($no_children)) {
@@ -694,9 +698,7 @@ foreach ($projects as $k => $p) {
 						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 						
 						//check for child
-						$obj->peek($t1['task_id']);
-						$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
-						$no_children = empty($child_test);
+						$no_children = empty($children_of[$t1['task_id']]);
 						
 						showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
 						if($is_opened && !($no_children)) {
@@ -727,9 +729,7 @@ foreach ($projects as $k => $p) {
 					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 					
 					//check for child
-					$obj->peek($t1['task_id']);
-					$child_test = array_intersect($obj->getChildren(), $tasks_filtered);
-					$no_children = empty($child_test);
+					$no_children = empty($children_of[$t1['task_id']]);
 					
 					showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
 					if($is_opened && !($no_children)) {
