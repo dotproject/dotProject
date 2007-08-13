@@ -1501,7 +1501,7 @@ class CTask extends CDpObject
 		global $AppUI;
 		
 		$project = new CProject();
-		$project->peek($this->task_project);
+		$project->load($this->task_project);
 		
 		// Code to see if the current user is
 		// enabled to change time information related to task
@@ -2103,7 +2103,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			$s .= $assigned_users[0]['user_username'] .' (' . $assigned_users[0]['perc_assignment'] .'%)</a>';
 			if($a['assignee_count'] > 1){
 				$id = $a['task_id'];
-				$s .= ' <a href="javascript: void(0);"  onClick="toggle_users(' . "'users_{$id}'" . ');" title="' 
+				$s .= ' <a href="javascript: void(0);"	onClick="toggle_users(' . "'users_{$id}'" . ');" title="' 
 					. join (', ', $a_u_tmp_array) .'">(+'. ($a['assignee_count'] - 1) .')</a>';
 				
 				$s .= '<span style="display: none" id="users_' . $id . '">';
