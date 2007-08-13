@@ -1,3 +1,21 @@
+2007-08-13 23:27  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- Fixed issue with history table being populated simply when viewing tasks
+- by creating/using a "peek" method which calls a modified version load()
+- which does *not* go though the "updateDynamics" process. This "process"
+- updates a dynamic tasks information and then stores the results back into
+- the database ... even if a change never actually occurred.
+- 
+- New method peek() is useful for retrieving a task's information for quick
+- and/or temporary use, especially useful within loops.
+
+2007-08-13 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-13
+
 2007-08-12 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
