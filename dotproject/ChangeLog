@@ -1,3 +1,31 @@
+2007-08-15 02:52  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- More fixes concerning "dynamic" logics.
+
+2007-08-14 07:24  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- Improved method for finding child tasks for purpose of display. Instead of
+- loading individual tasks and then calling getChildren, make use of the
+- query data already present and add task_id to global array that is keyed,
+- unless it is the same as the task_parent (at the root level). Array is
+- keyed by task_parent.
+
+2007-08-14 05:49  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- Symantic change that to fix parse error when editing and small display
+- change to note that Open/Close All Task links affect whole page and not
+- just the project they fall under.
+
+2007-08-14 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-14
+
 2007-08-13 23:27  (merlinyoda)
 ---------------------------------
 modules/tasks/tasks.class.php
