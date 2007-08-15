@@ -1187,7 +1187,7 @@ class CTitleBlock_core {
 			$s .= "\n<table border=\"0\" cellpadding=\"4\" cellspacing=\"0\" width=\"100%\">";
 			$s .= "\n<tr>";
 			$s .= "\n\t<td nowrap=\"nowrap\">";
-			$s .= "\n\t\t" . implode( ' <strong>:</strong> ', $crumbs );
+			$s .= "\n\t\t" . '<strong>' . implode(' : ', $crumbs) . '</strong>';
 			$s .= "\n\t</td>";
 
 			foreach ($this->cells2 as $c) {
