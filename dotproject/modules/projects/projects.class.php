@@ -314,7 +314,7 @@ class CProject extends CDpObject {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('ut.user_id = '.$userId);
 		$q->addGroup('project_id');                     
-		$q->addOrder('project_short_name');
+		$q->addOrder('project_name');
 		$this->setAllowedSQL($userId, $q);
 		$allowedProjectRows = $q->exec();
 		
@@ -414,7 +414,9 @@ class CProject extends CDpObject {
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner;
+	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, 
+		$dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, 
+		$tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState( 'addProjWithTasks' ) ? $AppUI->getState( 'addProjWithTasks' ) : 0;
 
@@ -568,6 +570,9 @@ function projects_list_data($user_id = false) {
 	}
 	if (!isset($department) && $company_id &&!$addPwOiD) {
 		$q->addWhere("projects.project_company = '$company_id'");
+	}
+	if ($projectTypeId > -1) {
+		$q->addWhere("projects.project_type = $projectTypeId");
 	}
 	if (isset($department) &&!$addPwOiD) {
 		$q->addWhere("pd.department_id in ( ".implode(',',$dept_ids)." )");
