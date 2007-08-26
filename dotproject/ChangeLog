@@ -1,3 +1,13 @@
+2007-08-27 03:59  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Mantis 2148 - Related to PHP 5.2 changes regarding string handling / conversions specifically from an object datatype
+
+2007-08-26 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-08-26
+
 2007-08-25 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
