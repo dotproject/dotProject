@@ -78,6 +78,10 @@ class CTask extends CDpObject
 		$this->CDpObject('tasks', 'task_id');
 	}
 	
+	function __toString() {
+    return $this -> link .'/'. $this -> type .'/'. $this -> length;
+	}
+	
 	// overload check
 	function check() {
 		global $AppUI;
