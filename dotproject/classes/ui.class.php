@@ -799,7 +799,8 @@ class CAppUI {
 		$q  = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
-		$q->addWhere("mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> 'public'");
+		$q->addWhere('mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> \'public\'');
+		$q->addWhere('mod_type != \'utility\'');
 		$q->addOrder('mod_ui_order');
 		return ($q->loadList());
 	}
