@@ -641,78 +641,81 @@ foreach ($projects as $k => $p) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, 
 										  $task_sort_type1);
 			}
-		}
-		else {
+		} else {
 			/* we have to calculate the end_date via start_date+duration for 
 			 ** end='0000-00-00 00:00:00' if array_csort function is not used
 			 ** as it is normally done in array_csort function in order to economise
 			 ** cpu time as we have to go through the array there anyway
 			 */
-			foreach ($p['tasks'] as $j => $task_change_end_date) {
-				if ($task_change_end_date['task_end_date'] == '0000-00-00 00:00:00') {
-					 $task_change_end_date['task_end_date'] = calcEndByStartAndDuration($task_change_end_date);
+			if (is_array($p['tasks'])) {
+				foreach ($p['tasks'] as $j => $task_change_end_date) {
+					if ($task_change_end_date['task_end_date'] == '0000-00-00 00:00:00') {
+						 $task_change_end_date['task_end_date'] = calcEndByStartAndDuration($task_change_end_date);
+					}
 				}
 			}
 		}
 		
 		global $tasks_filtered, $children_of;
 		//get list of task ids and set-up array of children
-		foreach ($p['tasks'] as $i => $t) {
-			$tasks_filtered[] = $t['task_id']; 
-			$children_of[$t['task_parent']] = (($children_of[$t['task_parent']])
-											   ?$children_of[$t['task_parent']]:
-											   array());
-			if ($t['task_parent'] != $t['task_id']) {
-				array_push($children_of[$t['task_parent']], $t['task_id']);
+		if (is_array($p['tasks'])) {
+			foreach ($p['tasks'] as $i => $t) {
+				$tasks_filtered[] = $t['task_id']; 
+				$children_of[$t['task_parent']] = (($children_of[$t['task_parent']])
+												   ?$children_of[$t['task_parent']]:
+												   array());
+				if ($t['task_parent'] != $t['task_id']) {
+					array_push($children_of[$t['task_parent']], $t['task_id']);
+				}
 			}
 		}
 		
 		//start displaying tasks
-		foreach ($p['tasks'] as $i => $t1) {
-		  
-			if ($task_sort_item1) {
-				// already user sorted so there is no call for a "task tree" or "open/close" links
-				showtask($t1, -1, true, false, true);
-			
-			} else {
-				if ($t1['task_parent'] == $t1['task_id']) {
-					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
-					
-					//check for child
-					$no_children = empty($children_of[$t1['task_id']]);
-					
-					showtask($t1, 0, $is_opened, false, $no_children);
-					if($is_opened && !($no_children)) {
-						findchild($p['tasks'], $t1['task_id']);
-					}
-				} else if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
-					/*
-					 * don't "mess with" display when showing "Child tasks" 
-					 * (or similiar filters that don't involve "breaking apart" a task tree 
-					 * for that matter, even though they might not use this page ever)
-					 */
-					if((in_array($f, $never_show_with_dots)) ){
-					  showtask($t1, 1, true, false, true); 
-					} else {
-						//display as close to "tree-like" as possible
+		if (is_array($p['tasks'])) {
+			foreach ($p['tasks'] as $i => $t1) {
+				if ($task_sort_item1) {
+					// already user sorted so there is no call for a "task tree" or "open/close" links
+					showtask($t1, -1, true, false, true);
+				
+				} else {
+					if ($t1['task_parent'] == $t1['task_id']) {
 						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
 						
 						//check for child
 						$no_children = empty($children_of[$t1['task_id']]);
 						
-						showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
+						showtask($t1, 0, $is_opened, false, $no_children);
 						if($is_opened && !($no_children)) {
 							findchild($p['tasks'], $t1['task_id']);
 						}
+					} else if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
+						/*
+						 * don't "mess with" display when showing "Child tasks" 
+						 * (or similiar filters that don't involve "breaking apart" a task tree 
+						 * for that matter, even though they might not use this page ever)
+						 */
+						if((in_array($f, $never_show_with_dots)) ){
+						  showtask($t1, 1, true, false, true); 
+						} else {
+							//display as close to "tree-like" as possible
+							$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
+							
+							//check for child
+							$no_children = empty($children_of[$t1['task_id']]);
+							
+							showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
+							if($is_opened && !($no_children)) {
+								findchild($p['tasks'], $t1['task_id']);
+							}
+						}
 					}
+					/*
+					 * MerlinYoda: Not 100% sure if moving code from below to above always puts orphan trees 
+					 * closer to their ancestors. At worst it just displays orphans a little earlier
+					 */
 				}
-				/*
-				 * MerlinYoda: Not 100% sure if moving code from below to above always puts orphan trees 
-				 * closer to their ancestors. At worst it just displays orphans a little earlier
-				 */
 			}
 		}
-
 		/*
 		// check for any 'orphaned' tasks trees to be displayed at end of tree
 		foreach ($p['tasks'] as $i => $t2) {
