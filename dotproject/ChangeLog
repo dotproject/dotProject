@@ -1,3 +1,28 @@
+2007-09-04 14:22  (caseydk)
+---------------------------------
+modules/tasks/tasks.class.php
+modules/tasks/tasks.php
+- This resolves a bug where if you had two dynamic tasks at the same level and the child of a dynamic task, they would only both display if the first one was closed.  The moment you opened the first one, the second would disappear.
+- 
+- There is something screwy happening in this function in the pass by reference.  I suspect it's a PHP4 vs PHP5 oddity.
+- 
+- Arg.
+
+2007-09-04 06:53  (caseydk)
+---------------------------------
+modules/tasks/tasks.php
+- fixed error that'd occur if there were no inactive tasks - you can't foreach over an empty array;
+
+2007-09-04 06:52  (caseydk)
+---------------------------------
+classes/ui.class.php
+- tweak to hide support/utility modules in the header nav;
+
+2007-09-04 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-04
+
 2007-09-03 03:13  (cyberhorse)
 ---------------------------------
 ChangeLog
