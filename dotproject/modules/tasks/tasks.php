@@ -483,57 +483,6 @@ function chAssignment(project_id, rmUser, del) {
   <?php if ($showEditCheckbox) { echo '<th width="1">&nbsp;</th>'; } else { $cols--; } ?>
 </tr>
 <?php
-
-
-//MerlinYoda: uncomment this block if empty projects should be displayed on tasks page
-/*
-// adds in projects without tasks to display project info despite filter
-$q->addTable('projects');
-$q->addQuery('project_id');
-$q->exec();
-while ($proj_rows = $q->fetchRow()) {
-	$r = new DBQuery;
-	$r->addTable('tasks');
-	$r->addQuery('COUNT(distinct task_id) AS total_tasks');
-	$r->addWhere('task_project = '.$proj_rows['project_id']);
-	$r->exec();
-	$task_rows = $r->fetchRow();
-	$project_task_count[$proj_rows['project_id']] = $task_rows['total_tasks'];
-	$r->clear();
-}
-$q->clear();
-
-foreach ($project_task_count as $project_id => $count) {
-	if (!($count > 0)) {
-		$q->addTable('projects');
-		$q->addQuery('company_name, project_id, project_color_identifier, project_name, ' 
-					 . ' (0.00) AS project_percent_complete');
-		$q->addJoin('companies', 'com', 'company_id = project_company');
-		$q->addWhere($where_list . (($where_list)?' AND ':'') . 'project_id = ' . $project_id);
-		$psql3 = $q->prepare();
-		$q->clear();
-		
-		$prc3 = db_exec($psql3);
-		echo db_error();
-		$row3 = db_fetch_assoc($prc3);
-		$projects[$project_id] = $row3;
-		
-		$q->addTable('projects');
-		$q->addQuery('project_id, (0) AS total_tasks');
-		$q->addWhere($where_list . (($where_list)?' AND ':'') . 'project_id = ' . $project_id);
-		$psql4 = $q->prepare();
-		$q->clear();
-		
-		$prc4 = db_exec($psql4);
-		echo db_error();
-		$row4 = db_fetch_assoc($prc4);
-		array_push($projects[$row4['project_id']], $row4);
-		
-	}
-}
-*/
-
-//echo '<pre>'; print_r($projects); echo '</pre>';
 reset($projects);
 
 foreach ($projects as $k => $p) {
@@ -676,7 +625,6 @@ foreach ($projects as $k => $p) {
 				if ($task_sort_item1) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
 					showtask($t1, -1, true, false, true);
-				
 				} else {
 					if ($t1['task_parent'] == $t1['task_id']) {
 						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
@@ -716,32 +664,6 @@ foreach ($projects as $k => $p) {
 				}
 			}
 		}
-		/*
-		// check for any 'orphaned' tasks trees to be displayed at end of tree
-		foreach ($p['tasks'] as $i => $t2) {
-			if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
-				// *
-				// * don't "mess with" display when showing "Child tasks" 
-				// * (or similiar filters that don't involve "breaking apart" a task tree 
-				// * for that matter, even though they might not use this page ever)
-				// * //
-				if((in_array($f, $never_show_with_dots))){
-				  showtask($t1, 1, true, false, true); 
-				} else {
-					//display as close to "tree-like" as possible
-					$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
-					
-					//check for child
-					$no_children = empty($children_of[$t1['task_id']]);
-					
-					showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
-					if($is_opened && !($no_children)) {
-						findchild($p['tasks'], $t1['task_id']);
-					}
-				}
-			}
-		}
-		*/
 		
 		if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>

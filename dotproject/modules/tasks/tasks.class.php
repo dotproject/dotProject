@@ -2169,7 +2169,17 @@ function findchild(&$tarr, $parent, $level=0) {
 			
 			showtask($task, $level, $is_opened, false, $no_children);
 			if($is_opened && !($no_children)) {
-			  findchild($tarr, $task['task_id'], $level);
+				/*
+				 * Yes, this is stupid, but there was previously a bug where if you had
+				 * two dynamic tasks at the same level and the child of a dynamic task,
+				 * they would only both display if the first one was closed.  The moment
+				 * you opened the first one, the second would disappear.
+				 * 
+				 * There is something screwy happening in this function in the pass by
+				 * reference.  I suspect it's a PHP4 vs PHP5 oddity.
+				 */
+				$tmp = $tarr;
+			  findchild($tmp, $task['task_id'], $level);
 			}
 		}
 	}
