@@ -156,6 +156,7 @@ $deny1 = $project->getDeniedRecords( $AppUI->user_id );
 $task = new CTask();
 $deny2 = $task->getDeniedRecords( $AppUI->user_id );
 
+global $file_types;
 $file_types = dPgetSysVal("FileType");
 
 $folder = $folder ? $folder : 0;
@@ -295,7 +296,7 @@ function removeBulkComponent(li) {
 // $level is increased when we go deeper into the tree,
 //        used to display a nice indented tree
 function getFolders($parent, $level=0) {
-   global $AppUI, $allowed_folders_ary, $denied_folders_ary, $tab, $m, $a, $company_id, $allowed_companies, $project_id, $task_id, $current_uri;
+   global $AppUI, $allowed_folders_ary, $denied_folders_ary, $tab, $m, $a, $company_id, $allowed_companies, $project_id, $task_id, $current_uri, $file_types;
    // retrieve all children of $parent
 
    $folder_where = "file_folder_parent='$parent'";
@@ -655,7 +656,7 @@ function displayFiles($folder) {
 	                }
 	        ?>
 	        </td>
-	        <td width="10%" nowrap="nowrap" align="center"><a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&view=categories&tab=<?php echo ($row['file_category']+1); ?>"><?php echo $file_types[$row["file_category"]+1]; ?></a></td> 
+	        <td width="10%" nowrap="nowrap" align="center"><a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&view=categories&tab=<?php echo ($file['file_category']); ?>"><?php echo $file_types[$file["file_category"]]; ?></a></td> 
 		<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $file["task_id"]; ?>"><?php echo $file["task_name"];?></a></td>
 		<td width="15%" nowrap="nowrap"><?php echo $file["contact_first_name"].' '.$file["contact_last_name"]; ?></td>
 		<td width="5%" nowrap="nowrap" align="right"><?php echo intval($file["file_size"] / 1024); ?> kb</td>
