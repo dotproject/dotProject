@@ -227,7 +227,7 @@ function db_insertArray( $table, &$hash, $verbose=false ) {
 			continue;
 		}
 		$fields[] = $k;
-		$values[] = "'" . db_escape(htmlspecialchars( $v )) . "'";
+		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf( $fmtsql, implode( ",", $fields ) ,  implode( ",", $values ) );
 
@@ -260,7 +260,7 @@ function db_updateArray( $table, &$hash, $keyName, $verbose=false ) {
 		if ($v == '') {
 			$val = 'NULL';
 		} else {
-			$val = "'" . db_escape(htmlspecialchars( $v )) . "'";
+			$val = "'" . db_escape($v) . "'";
 		}
 		$tmp[] = "$k=$val";
 	}
@@ -302,7 +302,7 @@ function db_insertObject( $table, &$object, $keyName = NULL, $verbose=false ) {
 			continue;
 		}
 		$fields[] = $k;
-		$values[] = "'" . db_escape(htmlspecialchars( $v )) . "'";
+		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf( $fmtsql, implode( ",", $fields ) ,  implode( ",", $values ) );
 	($verbose) && print "$sql<br />\n";
@@ -339,7 +339,7 @@ function db_updateObject( $table, &$object, $keyName, $updateNulls=true ) {
 		if( $v === '' ) {
 			$val = "''";
 		} else {
-			$val = "'" . db_escape(htmlspecialchars( $v )). "'";
+			$val = "'" . db_escape($v). "'";
 		}
 		$tmp[] = "$k=$val";
 	}
