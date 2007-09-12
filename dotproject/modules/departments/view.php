@@ -11,7 +11,7 @@ $canRead = !getDenyRead( $m, $dept_id );
 $canEdit = !getDenyEdit( $m, $dept_id );
 
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect( 'm=public&a=access_denied' );
 }
 $AppUI->savePlace();
 
@@ -41,8 +41,8 @@ if ($dept_id > 0) {
 	$q->clear();
 }
 	if (!db_loadHash( $sql, $dept )) {
-			$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, "$m.$a" );
-			$titleBlock->addCrumb( "?m=companies", "companies list" );
+			$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, $m.'.'.$a );
+			$titleBlock->addCrumb( '?m=companies', 'companies list' );
 			$titleBlock->show();
 	} elseif ($dept_id <= 0) {
 				echo $AppUI->_('Please choose a Department first!');
@@ -50,7 +50,7 @@ if ($dept_id > 0) {
 		$company_id = $dept['dept_company'];
 		if (!$min_view) {
 			// setup the title block
-			$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, "$m.$a" );
+			$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, $m.'.'.$a );
 			if ($canEdit) {
 				$titleBlock->addCell();
 				$titleBlock->addCell(
@@ -58,10 +58,10 @@ if ($dept_id > 0) {
 					'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
 				);
 			}
-			$titleBlock->addCrumb( "?m=companies", "company list" );
-			$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company_id", "view this company" );
+			$titleBlock->addCrumb( '?m=companies', 'company list' );
+			$titleBlock->addCrumb( '?m=companies&a=view&company_id='.$company_id, 'view this company' );
 			if ($canEdit) {
-				$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$dept_id", "edit this department" );
+				$titleBlock->addCrumb( '?m=departments&a=addedit&dept_id='.$dept_id, 'edit this department' );
 
 				if ($canDelete) {
 					$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
@@ -98,32 +98,32 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Company'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept["company_name"];?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['company_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Department'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept["dept_name"];?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept["contact_first_name"].' '.@$dept["contact_last_name"];?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['contact_first_name'].' '.@$dept['contact_last_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept["dept_phone"];?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_phone'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept["dept_fax"];?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_fax'];?></td>
 		</tr>
 		<tr valign=top>
 			<td align="right" nowrap><?php echo $AppUI->_('Address'); ?>:</td>
 			<td bgcolor="#ffffff"><?php
-				echo @$dept["dept_address1"]
-					.( ($dept["dept_address2"]) ? '<br />'.$dept["dept_address2"] : '' )
-					.'<br />'.$dept["dept_city"]
-					.'&nbsp;&nbsp;'.$dept["dept_state"]
-					.'&nbsp;&nbsp;'.$dept["dept_zip"]
+				echo @$dept['dept_address1']
+					.( ($dept['dept_address2']) ? '<br />'.$dept['dept_address2'] : '' )
+					.'<br />'.$dept['dept_city']
+					.'&nbsp;&nbsp;'.$dept['dept_state']
+					.'&nbsp;&nbsp;'.$dept['dept_zip']
 					;
 			?></td>
 		</tr>
@@ -133,7 +133,7 @@ function delIt() {
 		<strong><?php echo $AppUI->_('Description'); ?></strong>
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
-			<td bgcolor="#ffffff" width="100%"><?php echo str_replace( chr(10), "<br />", $dept["dept_desc"]);?>&nbsp;</td>
+			<td bgcolor="#ffffff" width="100%"><?php echo str_replace( chr(10), "<br />", $dept['dept_desc']);?>&nbsp;</td>
 		</tr>
 		</table>
 	</td>

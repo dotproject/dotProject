@@ -23,7 +23,7 @@ $department = $AppUI->getState( 'DeptIdxDepartment' ) !== NULL ? $AppUI->getStat
 
 $canRead = !getDenyRead( $m, $department);
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect( 'm=public&a=access_denied' );
 }
 $AppUI->savePlace();
 
@@ -59,22 +59,25 @@ $buffer = '<select name="department" onChange="document.pickCompany.submit()" cl
 $buffer .= '<option value="company_0" style="font-weight:bold;">'.$AppUI->_('All').'</option>'."\n";
 $company = '';
 foreach ($rows as $row) {
-	if ($row["dept_parent"] == 0) {
+	if ($row['dept_parent'] == 0) {
 		if($company!=$row['company_id']){
 			$buffer .= '<option disabled="disabled" value="'.$company_prefix.$row['company_id'].'" style="font-weight:bold;">'.$row['company_name'].'</option>'."\n";
 			$company=$row['company_id'];
 		}
-		if($row["dept_parent"]!=null){
+		if($row['dept_parent']!=null){
 			showchilddept( $row );
-			findchilddept( $rows, $row["dept_id"] );
+			findchilddept( $rows, $row['dept_id'] );
 		}
+	}
+	if($row['dept_id'] == $department) {
+		$company_id=$row['dept_company'];
 	}
 }
 $buffer .= '</select>';
 
 // setup the title block
 $titleBlock = new CTitleBlock( 'Departments', 'users.gif', $m, $m.$a );
-$titleBlock->addCrumb( "?m=companies", "companies list" );
+$titleBlock->addCrumb( '?m=companies', 'companies list' );
 $titleBlock->addCell( $AppUI->_('Department') . ':');
 $titleBlock->addCell( $buffer, '', '<form action="?m=departments" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell();
@@ -82,13 +85,16 @@ if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
-		'<form action="?m=departments&a=addedit&company_id='.$company.'&dept_parent='.$department.'" method="post">', '</form>'
+		'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$department.'" method="post">', '</form>'
 	);
 }
-$titleBlock->addCrumb( "?m=companies", "company list" );
-$titleBlock->addCrumb( "?m=companies&a=view&company_id=$company", "view this company" );
-if ($canEdit) {
-	$titleBlock->addCrumb( "?m=departments&a=addedit&dept_id=$department", "edit this department" );
+$titleBlock->addCrumb( '?m=companies', 'company list' );
+
+if ($company_id) {
+	$titleBlock->addCrumb( '?m=companies&a=view&company_id='.$company_id, 'view this company' );
+}
+if ($canEdit && $department > 0) {
+	$titleBlock->addCrumb( '?m=departments&a=addedit&dept_id='.$department, 'edit this department' );
 
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
