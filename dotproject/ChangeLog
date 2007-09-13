@@ -1,3 +1,16 @@
+2007-09-13 08:52  (merlinyoda)
+---------------------------------
+modules/departments/index.php
+modules/departments/view.php
+- 
+- Fix for Mantis Bug Report #2083. Also cleaned up some double-quote usage
+- and improved display logic when "All" is selected for Department.
+
+2007-09-13 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-13
+
 2007-09-12 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
