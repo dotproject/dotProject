@@ -1,3 +1,19 @@
+2007-09-15 02:29  (theideaman)
+---------------------------------
+modules/help/en/help.toc.hlp
+- updating support URL's to the latest, subdomain versions
+
+2007-09-14 22:40  (pedroix)
+---------------------------------
+modules/calendar/calendar.class.php
+- Bug 0002147: Calendar crashes on ALL company selection.
+- People with item permissions on companies and projects would have their calendar crash whenever they selected All companies on the calendar filter. Due to not joining the projects table upon permission check and permission limitations returned.
+
+2007-09-14 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-14
+
 2007-09-13 08:52  (merlinyoda)
 ---------------------------------
 modules/departments/index.php
