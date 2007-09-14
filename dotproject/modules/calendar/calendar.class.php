@@ -527,8 +527,8 @@ class CEvent extends CDpObject {
 			$$query_set->addQuery('e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 			
+			$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
 			if (($AppUI->getState('CalIdxCompany'))) {
-				$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
 				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') );
 			}
 			
