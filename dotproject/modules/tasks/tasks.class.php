@@ -1216,14 +1216,14 @@ class CTask extends CDpObject
 		$deps = $taskObj->getDependencies();
 		$obj = new CTask();
 		
+		$last_end_date = false;
 		// Don't respect end dates of excluded tasks
-		if ($tracked_dynamics) {
+		if (!empty(trim($tracked_dynamics)) && !empty($deps)) {
 			$track_these = implode(',', $tracked_dynamics);
 			$sql = 'SELECT MAX(task_end_date) FROM tasks WHERE task_id IN (' . $deps 
 			  . ') AND task_dynamic IN (' . $track_these . ')';
+			$last_end_date = db_loadResult($sql);
 		}
-		
-		$last_end_date = db_loadResult($sql);
 		
 		if (!$last_end_date) {
 			// Set to project start date
