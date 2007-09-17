@@ -1218,7 +1218,7 @@ class CTask extends CDpObject
 		
 		$last_end_date = false;
 		// Don't respect end dates of excluded tasks
-		if (!empty(trim($tracked_dynamics)) && !empty($deps)) {
+		if ($tracked_dynamics && !empty($deps)) {
 			$track_these = implode(',', $tracked_dynamics);
 			$sql = 'SELECT MAX(task_end_date) FROM tasks WHERE task_id IN (' . $deps 
 			  . ') AND task_dynamic IN (' . $track_these . ')';
