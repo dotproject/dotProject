@@ -1,3 +1,27 @@
+2007-09-18 20:17  (ajdonnison)
+---------------------------------
+locales/en/companies.inc
+locales/en/contacts.inc
+locales/en/projects.inc
+locales/en/tasks.inc
+modules/tasks/organize.php
+- #1987 - accepted patch from acladera on adding missing locale strings.
+
+2007-09-18 18:31  (ajdonnison)
+---------------------------------
+classes/libmail.class.php
+- #2093 - incorporated patch from albert.
+
+2007-09-18 11:57  (cyberhorse)
+---------------------------------
+modules/projects/index.php
+- #1906 - Fixed project tab not being remembered (conflict of variable names - $tab was being reused)
+
+2007-09-18 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-18
+
 2007-09-17 20:36  (ajdonnison)
 ---------------------------------
 modules/projects/addedit.php
