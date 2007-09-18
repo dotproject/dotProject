@@ -308,7 +308,7 @@ foreach ($tasks as $task)
 		$ts[$t['task_id']] = $t['task_name'];
 ?>
 
-<input type="checkbox" name="include_children" value='1' /><?php echo $AppUI->_('Include Children (doesn\'t apply to delete or move within the same project)');?><br />
+<input type="checkbox" name="include_children" value='1' /><?php echo $AppUI->_('IncludeChildren');?><br />
 <table>
   <tr>
     <th>Action: </th>

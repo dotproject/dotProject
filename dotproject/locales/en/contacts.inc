@@ -4,6 +4,7 @@
 "Job Title",
 "Add Contact",
 "Contact Notes",
+"CSV Download",
 "Display Name",
 "Edit Contact",
 "Export vCard for",
