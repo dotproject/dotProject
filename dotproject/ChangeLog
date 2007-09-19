@@ -1,3 +1,59 @@
+2007-09-19 23:15  (theideaman)
+---------------------------------
+modules/projects/admin_tab.viewuser.projects.php
+modules/projects/departments_tab.view.projects.php
+modules/projects/departments_tab.view.projects_gantt.php
+modules/projects/viewgantt.php
+modules/projects/vw_logs.php
+modules/tasks/addedit.php
+modules/tasks/ae_depend.php
+modules/tasks/tasksperuser_sub.php
+modules/tasks/todo_tasks_sub.php
+modules/tasks/viewgantt.php
+modules/admin/addedituser.php
+modules/files/addedit.php
+modules/files/co.php
+modules/projects/reports/allocateduserhours.php
+modules/projects/reports/overall.php
+modules/projects/reports/tasklist.php
+modules/projects/reports/tasklogs.php
+modules/projects/reports/tasksperuser.php
+modules/projects/reports/userperformance.php
+modules/system/addeditpref.php
+modules/system/translate.php
+modules/tasks/ae_resource.php
+modules/tasks/organize.php
+modules/tasks/organizer.php
+modules/tasks/tasks.php
+modules/tasks/vw_log_update.php
+modules/admin/vw_usr_perms.php
+modules/calendar/addedit.php
+modules/contacts/addedit.php
+modules/contacts/select_contact_company.php
+modules/forums/configure.php
+modules/forums/index.php
+modules/forums/view_topics.php
+modules/public/contact_selector.php
+modules/smartsearch/index.php
+modules/system/roles/vw_role_perms.php
+- added label tags around checkbox field labels
+
+2007-09-19 21:07  (ajdonnison)
+---------------------------------
+modules/projects/viewgantt.php
+modules/tasks/viewgantt.php
+- #2139 - Fix problem in PHP 5 where scrollNext function would return the current date.
+
+2007-09-19 20:20  (ajdonnison)
+---------------------------------
+classes/authenticator.class.php
+- #2016 - Fix filter including &.
+
+2007-09-19 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-19
+
 2007-09-18 20:17  (ajdonnison)
 ---------------------------------
 locales/en/companies.inc
