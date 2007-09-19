@@ -184,9 +184,9 @@ echo arraySelect($companies_names, 'company_id',
 			echo '<h5>'.$contact_department.'</h5>';
 			$actual_department = $contact_department;
 		}
-		$checked = in_array($contact_id, $contacts_id) ? 'checked' : '';
-		echo "<input type='checkbox' name='contact_id[]' value='$contact_id' $checked />";
-		echo $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'];
+		$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
+		echo '<input type="checkbox" name="contact_id[]" id="contact_'.$contact_id.'" value="'.$contact_id.'" '.$checked.' />';
+		echo '<label for="contact_'.$contact_id.'">'.$contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</label>';
 		echo '<br />';
 	}
 ?>

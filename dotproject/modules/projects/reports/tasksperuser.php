@@ -96,15 +96,13 @@ function setCalendar( idate, fdate ) {
 
 	<td nowrap="nowrap" rowspan="2">
 		<table>
-		<tr>
-		<td><input type="checkbox" name="use_period" <?php if ($use_period) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Use the period' );?>
-		</input>
+		<tr><td>
+			<input type="checkbox" name="use_period" id="use_period" <?php if ($use_period) echo 'checked="checked"' ?> />
+			<label for="use_period"><?php echo $AppUI->_( 'Use the period' );?></label>
 		</td></tr>
 		<tr><td>
-		<input type="checkbox" name="display_week_hours" <?php if ($display_week_hours) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Display allocated hours/week' );?>
-		</input>
+			<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) echo 'checked="checked"' ?> />
+			<label for="display_week_hours"><?php echo $AppUI->_( 'Display allocated hours/week' );?></label>
 		</td></tr> 
 		</table>
 	</td> 

@@ -129,12 +129,12 @@ function setCalendar( idate, fdate ) {
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all" <?php if ($log_all) echo "checked" ?> />
-		<?php echo $AppUI->_( 'Log All' );?>
+		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+		<label for="log_all"><?php echo $AppUI->_( 'Log All' );?></label>
 	</td>
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_pdf" <?php if ($log_pdf) echo "checked" ?> />
-		<?php echo $AppUI->_( 'Make PDF' );?>
+		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
+		<label for="log_pdf"><?php echo $AppUI->_( 'Make PDF' );?></label>
 	</td>
 
 	<td align="right" width="50%" nowrap="nowrap">

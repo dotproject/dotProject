@@ -76,8 +76,8 @@ function delIt2(id) {
 <form name="frmFilter" action="./index.php" method="get">
 <tr>
 	<td width="98%">&nbsp;</td>
-	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" <?php echo $hide_inactive?"checked":""?> onchange="document.frmFilter.submit()"><?php echo $AppUI->_('Hide Inactive')?></td>
-	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" <?php echo $hide_complete?"checked":""?> onchange="document.frmFilter.submit()"><?php echo $AppUI->_('Hide 100% Complete')?></td>
+	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive?'checked="checked"':''?> onchange="document.frmFilter.submit()"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive')?></label></td>
+	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete?'checked="checked"':''?> onchange="document.frmFilter.submit()"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete')?></label></td>
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter')?></td>
 	<td width="1%"><?php echo arraySelect( $users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"',
                           $user_id )?></td>

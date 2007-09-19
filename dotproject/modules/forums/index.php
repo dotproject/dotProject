@@ -139,7 +139,7 @@ foreach ($forums as $row) {
 	</td>
 
 	<td nowrap="nowrap" align="center">
-		<input type="checkbox" name="forum_<?php echo $row['forum_id'];?>" <?php echo $row['watch_user'] ? 'checked' : '';?> />
+		<input type="checkbox" name="forum_<?php echo $row['forum_id'];?>" <?php echo $row['watch_user'] ? 'checked="checked"' : '';?> />
 	</td>
 
 	<td>

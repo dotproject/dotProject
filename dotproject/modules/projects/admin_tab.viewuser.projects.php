@@ -50,7 +50,7 @@ projects_list_data($user_id);
 <tr>
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by');?>:&nbsp;</td>
 	<td align="center" width="100%" nowrap="nowrap" colspan="7">&nbsp;</td>
-	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects with assigned Tasks');?>?<input type="hidden" name="show_form" value="1" /></form></td>
+	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : '';?> /><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks');?>?</label><input type="hidden" name="show_form" value="1" /></form></td>
 	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickCompany"><?php echo $buffer;?></form></td>
 	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject"><?php echo arraySelect( $projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true );?></form></td>
 </tr>

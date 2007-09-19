@@ -77,7 +77,7 @@ foreach ($topics as $row) {
 	if ($row["message_parent"] < 0) { ?>
 <tr>
 	<td nowrap="nowrap" align="center" width="1%">
-		<input type="checkbox" name="forum_<?php echo $row['message_id'];?>" <?php echo $row['watch_user'] ? 'checked' : '';?> />
+		<input type="checkbox" name="forum_<?php echo $row['message_id'];?>" <?php echo $row['watch_user'] ? 'checked="checked"' : '';?> />
 	</td>
 	<td>
 		<?php

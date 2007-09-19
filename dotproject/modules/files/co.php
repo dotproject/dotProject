@@ -107,12 +107,12 @@ function popFile( params ) {
 
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify" checked="checked"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></td>		
+			<td align="left"><input type="checkbox" name="notify" id="notify" checked="checked" /><label for="notify"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label></td>		
 		</tr>
 
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify_contacts" checked="checked"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></td>		
+			<td align="left"><input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" /><label for="notify_contacts"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></label></td>		
 		</tr>
 		
 		</table>

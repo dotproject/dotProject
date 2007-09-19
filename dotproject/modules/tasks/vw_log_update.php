@@ -165,7 +165,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 		      <td valign="middle" >
 			<?php
 				if ( $obj->task_owner != $AppUI->user_id ){
-					echo "<input type='checkbox' name='task_log_notify_owner' /></td><td valign='middle'>" . $AppUI->_('Notify creator');	
+					echo '<input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" /></td><td valign="middle"><label for="task_log_notify_owner">' . $AppUI->_('Notify creator') . '</label>';
 				}
 			?>		 	
 		     </td>
@@ -237,8 +237,8 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
                                 <td align="left">
                                         <input type="text" class="text" name="task_log_name" value="<?php echo $log->task_log_name;?>" maxlength="255" size="30" />
                                 </td>
-                                <td align="center"><?php echo $AppUI->_('Problem');?>:
-                                        <input type="checkbox" value="1" name="task_log_problem" <?php if($log->task_log_problem){?>checked="checked"<?php }?> />
+                                <td align="center"><label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
+                                        <input type="checkbox" value="1" name="task_log_problem" id="task_log_problem" <?php if ($log->task_log_problem) { echo 'checked="checked"'; } ?> />
                                 </td>
                         </tr>
                 </table>
@@ -273,12 +273,13 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 	$tt = $tl & 2;
 	$tp = $tl & 4;
 ?>
-		<input type='checkbox' name='email_assignees' <?php
-		   if ($ta)
-				echo "checked='checked'";
-				?>><?php echo $AppUI->_('Task Assignees');?>
-		<input type='hidden' name='email_task_list' id='email_task_list'
-		  value='<?php
+		<input type="checkbox" name="email_assignees" id="email_assignees" <?php
+		   if ($ta) {
+				echo 'checked="checked"';
+		   }
+		?> /><label for="email_assignees"><?php echo $AppUI->_('Task Assignees'); ?></label>
+		<input type="hidden" name="email_task_list" id="email_task_list"
+		  value="<?php
 				$task_email_title = array();
 				$q = new DBQuery;
 				$q->addTable('task_contacts', 'tc');
@@ -294,15 +295,16 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 					. ' ' . $req->fields['contact_last_name'];
 				}
 				echo implode(',', $cid);
-?>'>
-		<input type='checkbox' onmouseover="window.status = '<?php echo addslashes(implode(',',$task_email_title)); ?>';"
+?>" />
+		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',',$task_email_title)); ?>';"
 		onmouseout="window.status = '';"
-		name='email_task_contacts' id='email_task_contacts' <?php
-		   if ($tt)
-				echo "checked='checked'";
-				?>><?php echo $AppUI->_('Task Contacts');?>
-		<input type='hidden' name='email_project_list' id='email_project_list'
-		  value='<?php
+		name="email_task_contacts" id="email_task_contacts" <?php
+		   if ($tt) {
+				echo 'checked="checked"';
+		   }
+		?> /><label for="email_task_contacts"><?php echo $AppUI->_('Task Contacts'); ?></label>
+		<input type="hidden" name="email_project_list" id="email_project_list"
+		  value="<?php
 				$q->clear();
 				$q->addTable('project_contacts', 'pc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
@@ -321,13 +323,14 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 				}
 				echo implode(',', $cid);
 				$q->clear();
-?>'>
-		<input type='checkbox' onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" 
+?>" />
+		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" 
 		 onmouseout="window.status = '';"
-		 name='email_project_contacts' id='email_project_contacts' <?php
-		   if ($tp)
-				echo "checked='checked'";
-				?>><?php echo $AppUI->_('Project Contacts');?>
+		 name="email_project_contacts" id="email_project_contacts" <?php
+		   if ($tp) {
+				echo 'checked="checked"';
+		   }
+		?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
 		<input type='hidden' name='email_others' id='email_others' value=''>
 		<?php
 			if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {

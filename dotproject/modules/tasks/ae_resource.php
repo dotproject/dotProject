@@ -94,7 +94,7 @@ for ($i = 1; $i < sizeof($keys); $i++) {
 		<?php echo $AppUI->_( 'Additional Email Comments' );?>:		
 		<br />
 		<textarea name="email_comment" class="textarea" cols="60" rows="10" wrap="virtual"></textarea><br />
-		<input type="checkbox" name="task_notify" value="1" <?php if($obj->task_notify!="0") echo "checked"?> /> <?php echo $AppUI->_( 'notifyChange' );?>
+		<input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if($obj->task_notify!="0") echo 'checked="checked"'?> /> <label for="task_notify"><?php echo $AppUI->_( 'notifyChange' ); ?></label>
 		</td></tr></table><br />
 		
 	</td>

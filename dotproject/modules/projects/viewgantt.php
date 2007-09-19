@@ -173,16 +173,16 @@ function showFullProject() {
                                 <?php echo arraySelect( $projFilter, 'proFilter', 'size=1 class=text', $proFilter, true );?>
                         </td>
                         <td valign="top">
-                                <input type="checkbox" name="showLabels" value='1' <?php echo (($showLabels==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show captions' );?>
+                                <input type="checkbox" name="showLabels" id="showLabels" value='1' <?php echo (($showLabels==1) ? 'checked="checked"' : "");?> /><label for="showLabels"><?php echo $AppUI->_( 'Show captions' );?></label>
                         </td>
                         <td valign="top">
-                                <input type="checkbox" value='1' name="showInactive" <?php echo (($showInactive==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show Archived' );?>
+                                <input type="checkbox" value='1' name="showInactive" id="showInactive" <?php echo (($showInactive==1) ? 'checked="checked"' : "");?> /><label for="showInactive"><?php echo $AppUI->_( 'Show Archived' );?></label>
                         </td>
                         <td valign="top">
-                                <input type="checkbox" value='1' name="showAllGantt" <?php echo (($showAllGantt==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show Tasks' );?>
+                                <input type="checkbox" value='1' name="showAllGantt" id="showAllGantt" <?php echo (($showAllGantt==1) ? 'checked="checked"' : "");?> /><label for="showAllGantt"><?php echo $AppUI->_( 'Show Tasks' );?></label>
                         </td>
 												<td valign="top">
-                                <input type="checkbox" value='1' name="sortTasksByName" <?php echo (($sortTasksByName==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Sort Tasks By Name' );?>
+                                <input type="checkbox" value='1' name="sortTasksByName" id="sortTasksByName" <?php echo (($sortTasksByName==1) ? 'checked="checked"' : "");?> /><label for="sortTasksByName"><?php echo $AppUI->_( 'Sort Tasks By Name' );?></label>
                         </td>
                         <td align="left">
                                 <input type="button" class="button" value="<?php echo $AppUI->_( 'submit' );?>" onclick='document.editFrm.display_option.value="custom";submit();'>

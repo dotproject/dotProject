@@ -277,7 +277,7 @@ var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours'));
 			</td>
 
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Priority' );?> *</td>
-			<td nowrap>
+			<td nowrap="nowrap">
 				<?php echo arraySelect( $priority, 'task_priority', 'size="1" class="text"', $obj->task_priority, true );?>
 			</td>
 		</tr>
@@ -287,9 +287,9 @@ var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours'));
 				<?php echo arraySelect( $percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete ) . '%';?>
 			</td>
 
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Milestone' );?>?</td>
+			<td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_( 'Milestone' );?>?</label></td>
 			<td>
-				<input type="checkbox" value=1 name="task_milestone" <?php if($obj->task_milestone){?>checked<?php }?> />
+				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if($obj->task_milestone){?>checked="checked"<?php }?> />
 			</td>
 		</tr>
 		</table>

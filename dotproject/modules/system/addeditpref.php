@@ -197,24 +197,27 @@ function submitIt(){
 	<td>
 		<input type='hidden' name='pref_name[TASKLOGEMAIL]' id='task_log_email_defaults' value='<?php echo @$prefs['TASKLOGEMAIL']; ?>'>
 <?php
-	if (! isset($prefs['TASKLOGEMAIL']))
+	if (! isset($prefs['TASKLOGEMAIL'])) {
 		$prefs['TASKLOGEMAIL'] = 0;
-
+	}
 	$tl_assign = $prefs['TASKLOGEMAIL'] & 1;
 	$tl_task = $prefs['TASKLOGEMAIL'] & 2;
 	$tl_proj = $prefs['TASKLOGEMAIL'] & 4;
-	echo $AppUI->_('Email Assignees') . "&nbsp;<input type='checkbox' name='tl_assign' id='tl_assign' ";
-	if ($tl_assign)
-		echo " checked=checked";
-	echo "><br>";
-	echo $AppUI->_('Email Task Contacts') . "&nbsp;<input type='checkbox' name='tl_task' id='tl_task' ";
-	if ($tl_task)
-		echo " checked=checked";
-	echo "><br>";
-	echo $AppUI->_('Email Project Contacts') . "&nbsp;<input type='checkbox' name='tl_proj' id='tl_proj' ";
-	if ($tl_proj)
-		echo " checked=checked";
-	echo ">";
+	echo '<label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
+	if ($tl_assign) {
+		echo ' checked="checked"';
+	}
+	echo ' /><br />';
+	echo '<label for="tl_task">' . $AppUI->_('Email Task Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_task" id="tl_task"';
+	if ($tl_task) {
+		echo 'checked="checked"';
+	}
+	echo ' /><br />';
+	echo '<label for="tl_proj">' . $AppUI->_('Email Project Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_proj" id="tl_proj"';
+	if ($tl_proj) {
+		echo ' checked="checked"';
+	}
+	echo ' />';
 ?>
 	</td>
 </tr>

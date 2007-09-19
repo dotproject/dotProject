@@ -201,15 +201,14 @@ function chPriority(user_id) {
 	</td>
 	<td nowrap="nowrap">
                 <!-- // not in use anymore <input type="checkbox" name="log_all_projects" <?php if ($log_all_projects) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Log All Projects' );?>
+		<?php /* echo $AppUI->_( 'Log All Projects' ); */ ?>
 		</input>
 		<br> -->
-		<input type="checkbox" name="display_week_hours" <?php if ($display_week_hours) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Display allocated hours/week' );?>
-		</input><br />
-                <input type="checkbox" name="use_period" <?php if ($use_period) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Use the period' );?>
-		</input>
+		<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) echo 'checked="checked"' ?> />
+		<label for="display_week_hours"><?php echo $AppUI->_( 'Display allocated hours/week' ); ?></label>
+		<br />
+		<input type="checkbox" name="use_period" id="use_period" <?php if ($use_period) echo 'checked="checked"' ?> />
+		<label for="use_period"><?php echo $AppUI->_( 'Use the period' );?></label>
 	</td>
 	<td align="left" width="50%" nowrap="nowrap">
 		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit');?>" />
@@ -227,12 +226,11 @@ function chPriority(user_id) {
          <td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_( 'Projects' );?>:
                 <?php echo arraySelect( $projFilter, 'project_id', 'size=1 class=text', $project_id, false ); ?>
 	</td>
-        <td><input type="checkbox" name="show_orphaned" <?php if ($show_orphaned) echo "checked" ?> >
-		<?php echo $AppUI->_( 'Hide orphaned tasks' );?>
-		</input>
+        <td><input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned) echo 'checked="checked"' ?> />
+		<label for="show_orphaned"><?php echo $AppUI->_( 'Hide orphaned tasks' ); ?></label>
         </td>
         <td>
-                <?php echo $AppUI->_( 'Levels to display' ); ?>
+        <?php echo $AppUI->_( 'Levels to display' ); ?>
 		<input type="text" name="max_levels" size="10" maxlength="3" value="<?php echo $max_levels; ?>" />
 	</td>
 </tr>
@@ -507,22 +505,22 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
         $users = $task->task_assigned_users;
 	$task->userPriority = $task->getUserSpecificTaskPriority( $user_id );
         $projects = $task->getProject();
-	$tmp="<tr>";
-        $tmp.="<td align=\"center\" nowrap=\"nowrap\">";
-        $tmp .= "<input type=\"checkbox\" name=\"selected_task[$task->task_id]\" value=\"$task->task_id\"/>";
-        $tmp.="</td>";
-        $tmp.="<td align=\"center\" nowrap=\"nowrap\">";
+	$tmp = '<tr>';
+        $tmp .= '<td align="center" nowrap="nowrap">';
+        $tmp .= '<input type="checkbox" name="selected_task['.$task->task_id.']" value="'.$task->task_id.'" />';
+        $tmp .= '</td>';
+        $tmp .= '<td align="center" nowrap="nowrap">';
         if ($task->userPriority < 0) {
                 $tmp .= "<img src=\"./images/icons/priority-". -$task->userPriority . ".gif\" width=13 height=16>";
         }
         elseif ($task->userPriority > 0) {
                 $tmp .= "<img src=\"./images/icons/priority+". $task->userPriority . ".gif\" width=13 height=16>";
         }
-        $tmp.="</td>";
-	$tmp.="<td>";
+        $tmp .= '</td>';
+	$tmp .= '<td>';
 
-	for($i=0;$i<$level;$i++) {
-		$tmp.="&#160";
+	for($i=0; $i<$level; $i++) {
+		$tmp .= '&#160';
 	}
 
 	if ($task->task_milestone == true) { $tmp.="<B>"; }

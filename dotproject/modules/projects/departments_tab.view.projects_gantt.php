@@ -37,7 +37,7 @@ $extraGet = '&user_id='.$user_id;
 ?>
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
-	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="checkPwOiD"><input type="checkbox" name="add_pwoid" onclick="document.checkPwOiD.submit()" <?php echo $addPwOiD ? 'checked="checked"' : '';?>><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.');?>?<input type="hidden" name="show_form" value="1" /></form></td>
+	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><form action="?m=departments&tab=<?php echo $tab; ?>" method="post" name="checkPwOiD"><input type="checkbox" name="add_pwoid" id="add_pwoid" onclick="document.checkPwOiD.submit()" <?php echo $addPwOiD ? 'checked="checked"' : '';?> /><label for="add_pwoid"><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.');?>?</label><input type="hidden" name="show_form" value="1" /></form></td>
 </tr>
 </table>
 <?php

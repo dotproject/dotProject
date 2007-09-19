@@ -99,7 +99,7 @@ if (!defined('DP_BASE_DIR')){
 					<input type="button" class="button" value="<?php echo $AppUI->_( 'cancel' );?>" onclick="window.close()" />
 				</td>
 				<td align="right">
-					<input type='checkbox' name='overwrite_address' /> <?php echo $AppUI->_("Overwrite contact address information"); ?>
+					<input type="checkbox" name="overwrite_address" id="overwrite_address" /> <label for="overwrite_address"><?php echo $AppUI->_("Overwrite contact address information"); ?></label>
 					<input type="submit" class="button" value="<?php echo $AppUI->_( 'Select', UI_CASE_LOWER );?>" />
 				</td>
 			</tr>

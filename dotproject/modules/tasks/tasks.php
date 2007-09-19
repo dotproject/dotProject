@@ -453,10 +453,10 @@ function chAssignment(project_id, rmUser, del) {
 	<tr>
 	  <td><?php echo $AppUI->_('Show');?>:</td>
 	  <td>
-	  <input type='checkbox' name='show_incomplete' onclick='document.task_list_options.submit();' 
-	   <?php echo $showIncomplete ? 'checked="checked"' : '';?> />
+	  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();" 
+	   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
 	  </td>
-	  <td><?php echo $AppUI->_('Incomplete Tasks Only'); ?></td>
+	  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
 	</tr>
 	</table>
   </td>

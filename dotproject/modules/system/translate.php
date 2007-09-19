@@ -153,7 +153,7 @@ foreach ($trans as $k => $langs){
 			}
 		}
 	?></td>
-	<td align="center"><?php echo "<input type=\"checkbox\" name=\"trans[$index][del]\" />";?></td>
+	<td align="center"><input type="checkbox" name="trans[<?php echo $index; ?>][del]" /></td>
 </tr>
 <?php
 	$index++;

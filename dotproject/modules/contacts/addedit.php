@@ -171,9 +171,9 @@ function companyChange() {
 			</td>
 		</tr>
 		<tr>
-			<td align="right" width="100"><?php echo $AppUI->_('Private Entry');?>: </td>
+			<td align="right" width="100"><label for="contact_private"><?php echo $AppUI->_('Private Entry');?>:</label> </td>
 			<td>
-				<input type="checkbox" value="1" name="contact_private" <?php echo (@$row->contact_private ? 'checked' : '');?> />
+				<input type="checkbox" value="1" name="contact_private" id="contact_private" <?php echo (@$row->contact_private ? 'checked="checked"' : '');?> />
 			</td>
 		</tr>
 		</table>

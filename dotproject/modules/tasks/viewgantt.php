@@ -164,13 +164,13 @@ function showFullProject() {
 		<input type="text" class="text" name="show_edate" value="<?php echo $end_date->format( $df );?>" size="12" disabled="disabled" />
 		<a href="javascript:popCalendar('edate')"><img src="./images/calendar.gif" width="24" height="12" alt="" border="0"></a>
 	<td valign="top">
-		<input type="checkbox" name="showLabels" <?php echo (($showLabels==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show captions' );?>
+		<input type="checkbox" name="showLabels" id="showLabels" <?php echo (($showLabels==1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php echo $AppUI->_( 'Show captions' ); ?></label>
 	</td>
 	<td valign="top">
-		<input type="checkbox" name="showWork" <?php echo (($showWork==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Show work instead of duration' );?>
+		<input type="checkbox" name="showWork" id="showWork" <?php echo (($showWork==1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php echo $AppUI->_( 'Show work instead of duration' ); ?></label>
 	</td>	
 <td valign="top">
-		<input type="checkbox" name="sortByName" <?php echo (($sortByName==1) ? "checked=true" : "");?>><?php echo $AppUI->_( 'Sort by Task Name' );?>
+		<input type="checkbox" name="sortByName" id="sortByName" <?php echo (($sortByName==1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php echo $AppUI->_( 'Sort by Task Name' ); ?></label>
 	</td>	
 	<td align="left">
 		<input type="button" class="button" value="<?php echo $AppUI->_( 'submit' );?>" onclick='document.editFrm.display_option.value="custom";submit();'>
@@ -190,22 +190,24 @@ function showFullProject() {
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
 			<tr>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type=checkbox name="showPinned" <?php echo $showPinned ? 'checked="checked"' : ""; ?> /><?php echo $AppUI->_('Pinned Only'); ?>
+				<input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
+				<label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type=checkbox name="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ""; ?> /><?php echo $AppUI->_('Archived Projects'); ?>
+				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
+				<label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type=checkbox name="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ""; ?> />
-			<?php echo $AppUI->_('Projects on Hold'); ?>
+				<input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
+				<label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type=checkbox name="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ""; ?> />
-			<?php echo $AppUI->_('Dynamic Tasks'); ?>
+				<input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
+				<label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type=checkbox name="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ""; ?> />
-				<?php echo $AppUI->_('Low Priority Tasks'); ?>
+				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
+				<label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
 			</td>
 			</tr>
 		</table>

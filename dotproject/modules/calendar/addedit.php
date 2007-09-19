@@ -316,9 +316,9 @@ function removeUser() {
 
 
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Private Entry' );?>:</td>
+	<td align="right" nowrap="nowrap"><label for="event_private"><?php echo $AppUI->_( 'Private Entry' ); ?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_private" <?php echo (@$obj->event_private ? 'checked' : '');?>>
+		<input type="checkbox" value="1" name="event_private" id="event_private" <?php echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 	</td>
 </tr>
 <tr>
@@ -387,12 +387,12 @@ function removeUser() {
 			</tr>
 		</table>
 	</td>
-	<td align="left"><?php echo $AppUI->_('Mail Attendees?'); ?> <input type='checkbox' name='mail_invited' checked=true></td>
+	<td align="left"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Show only on Working Days' );?>:</td>
+	<td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_( 'Show only on Working Days' );?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_cwd" <?php echo (@$obj->event_cwd ? 'checked' : '');?>>
+		<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo (@$obj->event_cwd ? 'checked="checked"' : '');?> />
 	</td>
 </tr>
 <tr>

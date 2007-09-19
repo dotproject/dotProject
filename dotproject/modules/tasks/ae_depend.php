@@ -71,22 +71,22 @@ $taskDep = db_loadHashList( $sql );
 				</td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Dynamic Task' );?></td>
+	<td align="right" nowrap="nowrap"><label for="task_dynamic"><?php echo $AppUI->_( 'Dynamic Task' );?></label></td>
 	<td nowrap="nowrap">
-		<input type="checkbox" name="task_dynamic" value="1" <?php if($obj->task_dynamic=="1") echo "checked"?> />
+		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if($obj->task_dynamic=="1") echo 'checked="checked"'?> />
 	</td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Do not track this task' );?></td>
+	<td align="right" nowrap="nowrap"><label for="task_dynamic_nodelay"><?php echo $AppUI->_( 'Do not track this task' );?></label></td>
 	<td>
-		<input type="checkbox" name="task_dynamic_nodelay" value="1" <?php if(($obj->task_dynamic > '10') && ($obj->task_dynamic < 30)) echo "checked"?> />
+		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if(($obj->task_dynamic > '10') && ($obj->task_dynamic < 30)) echo 'checked="checked"' ?> />
 	</td>
 			</tr>
 			<?php
 				} else {  
 			?>
 			<tr>
-					<td colspan='2'><?php echo $AppUI->_("Only the task owner, project owner, or system administrator is able to edit time related information."); ?></td>
+					<td colspan="2"><?php echo $AppUI->_("Only the task owner, project owner, or system administrator is able to edit time related information."); ?></td>
 				</tr>
 			<?php
 				}// end of can_edit_time_information
@@ -97,7 +97,7 @@ $taskDep = db_loadHashList( $sql );
 			</tr>
 			<tr>
 				<td>
-					<select name='all_tasks' class="text" style="width:220px" size="10" class="text" multiple="multiple">
+					<select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
 						<?php echo str_replace("selected", "", $task_parent_options); // we need to remove selected added from task_parent options ?>
 					</select>
 				</td>
@@ -107,7 +107,7 @@ $taskDep = db_loadHashList( $sql );
 			</tr>
 			<tr>
 				<td colspan="2">
-				<input type="checkbox" name="set_task_start_date" /><?php echo $AppUI->_( 'Set task start date based on dependency' );?>
+				<input type="checkbox" name="set_task_start_date" id="set_task_start_date" /><label for="set_task_start_date"><?php echo $AppUI->_( 'Set task start date based on dependency' );?></label>
 				</td>
 			</tr>
 			<tr>

@@ -151,9 +151,9 @@ foreach ($role_acls as $acl){
 	foreach ($perm_list as $perm_id => $perm_name) {
 ?>
 <tr>
-	<td nowrap align='right'><?php echo $AppUI->_($perm_name);?>:</td>
+	<td nowrap="nowrap" align="right"><label for="permission_type_<?php echo $perm_id; ?>"><?php echo $AppUI->_($perm_name);?>:</label></td>
 	<td>
-	  <input type='checkbox' name='permission_type[]' value='<?php echo $perm_id;?>'>
+	  <input type="checkbox" name="permission_type[]" id="permission_type_<?php echo $perm_id; ?>" value="<?php echo $perm_id;?>" />
 	</td>
 </tr>
 <?php
