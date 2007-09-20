@@ -719,7 +719,7 @@ class CEvent extends CDpObject {
 		$sql = $q->prepare();
 		$q->clear();
 		if (db_loadHash($sql, $prj)){
-			$body .= $AppUI->_('Project') . ":\t". $prj['project_name'];
+			$body .= $AppUI->_('Project') . ":\t". $prj['project_name'] . "\n";
 		}
 	  }
 
