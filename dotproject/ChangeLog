@@ -1,3 +1,13 @@
+2007-09-21 02:36  (nybod)
+---------------------------------
+modules/calendar/calendar.class.php
+- Mantis 2164 - Added missing carriage return.
+
+2007-09-20 03:12  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-20
+
 2007-09-19 23:15  (theideaman)
 ---------------------------------
 modules/projects/admin_tab.viewuser.projects.php
