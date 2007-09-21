@@ -43,7 +43,7 @@ if ($del) {
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 	} else {
-		$AppUI->setMsg( "deleted", UI_MSG_ALERT, true );
+		$AppUI->setMsg( "deleted", UI_MSG_OK, true );
 	}
 	$AppUI->redirect( 'm=calendar' );
 } else {

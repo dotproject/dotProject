@@ -423,6 +423,31 @@ class CEvent extends CDpObject {
 		return NULL;
 	}
 
+
+ /**
+     *	Overloaded delete method
+     *
+     *	@author gregorerhardt
+     *	@return null|string null if successful otherwise returns and error message
+     */
+	function delete() {
+		global $AppUI;
+		// call default delete method first
+		$deleted = parent::delete($this->event_id);
+		
+		// if object deletion succeeded then iteratively delete relationships
+		if (empty($deleted)) {
+			// delete user_events relationship
+			$q  = new DBQuery;
+			$q->setDelete('user_events');
+			$q->addWhere('event_id = '. $this->event_id);
+			$deleted = ((!$q->exec())? $AppUI->_('Could not delete Event-User relationship').'. '.db_error():null);
+			$q->clear;
+		} 
+
+		return $deleted;
+	}
+
 /**
 * Calculating if an recurrent date is in the given period
 * @param Date Start date of the period
