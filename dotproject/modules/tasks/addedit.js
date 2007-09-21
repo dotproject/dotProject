@@ -649,7 +649,7 @@ function saveDepend(form) {
         hd = form.hdependencies;
 	hd.value = "";
 	for (dl; dl > -1; dl--){
-		hd.value = "," + hd.value +","+ form.task_dependencies.options[dl].value;
+		hd.value += form.task_dependencies.options[dl].value + ((dl == 0) ? "" : ",");
 	}
         return new Array('hdependencies');;
 }
@@ -671,7 +671,7 @@ function saveResource(form) {
 	ha = form.hassign;
 	ha.value = "";
 	for (fl; fl > -1; fl--){
-		ha.value = "," + ha.value +","+ form.assigned.options[fl].value;
+		ha.value += form.assigned.options[fl].value + ((fl == 0) ? "" : ",");
 	}
 	return new Array('hassign', 'hperc_assign');
 }
