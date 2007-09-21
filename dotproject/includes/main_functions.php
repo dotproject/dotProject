@@ -90,6 +90,47 @@ function tree_recurse($id, $indent, $list, $children) {
 	return $list;
 }
 
+/**
+**	Provide Projects Selectbox sorted by Companies
+**	@author gregorerhardt with special thanks to original author aramis
+**	@param 	int 		userID
+**	@param 	string 	HTML select box name identifier
+**	@param	string	HTML attributes
+**	@param	int			Proejct ID for preselection
+**	@param 	int			Project ID which will be excluded from the list 
+**									(e.g. in the tasks import list exclude the project to import into)
+**	@return	string 	HTML selectbox
+
+*/
+
+function projectSelectWithOptGroup( $user_id, $select_name, $select_attribs, $selected, $excludeProjWithId = null ) {
+    global $AppUI ;
+    $q = new DBQuery();
+    $q->addTable('projects');
+    $q->addQuery('project_id, co.company_name, project_name');
+		if (!empty($excludeProjWithId)){
+			$q->addWhere('project_id != '.$excludeProjWithId);
+		}
+    $proj = new CProject();
+    $proj->setAllowedSQL( $user_id, $q );
+    $q->addOrder('co.company_name, project_name');
+    $projects = $q->loadList();
+    $s = "\n<select name=\"$select_name\" $select_attribs>";
+    $s .= "\n\t<option value=\"0\" " . ( $selected == 0 ? "selected=\"selected\"" : "" ) ." >" . $AppUI->_('None') . "</option>" ;
+    $current_company = "";
+    foreach ($projects as $p )
+        {
+        if ( $p['company_name'] != $current_company )
+            {
+            $current_company = $p['company_name'];
+            $s .= "\n<optgroup label=\"" . $current_company . "\" >" . $current_company. "</optgroup>" ;
+            }
+        $s .= "\n\t<option value=\"".$p['project_id']."\"".($selected == $p['project_id'] ? " selected=\"selected\"" : '').">&nbsp;&nbsp;&nbsp;" . $p['project_name'] . "</option>";
+        }
+    $s .= "\n</select>\n";
+    return $s;
+}
+
 ##
 ## Merges arrays maintaining/overwriting shared numeric indicees
 ##

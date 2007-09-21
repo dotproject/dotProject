@@ -412,31 +412,12 @@ function setDepartment(department_id_string){
 				</table>
 			</td>
 		</tr>
-		<?php  
-			// Retrieve projects that the user can access
-			$objProject = new CProject();
-			$allowedProjects = $objProject->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name' );
-			
-			$q  = new DBQuery;
-			$q->addTable('projects', 'p');
-			$q->addTable('tasks', 't');
-			$q->addQuery('p.project_id, p.project_name');
-			$q->addWhere('t.task_project = p.project_id');
-			if ( count($allowedProjects) > 0 ) {
-				$q->addWhere('(p.project_id IN (' .
-				implode (',', array_keys($allowedProjects)) . '))');
-			}
-			$q->addOrder('p.project_name');
-			
-			$importList = $q->loadHashList ();
-			$importList = arrayMerge( array( '0'=> $AppUI->_('none') ), $importList);
-		?>
 		<tr>
 			<td align="left" nowrap="nowrap">
 				<?php   echo $AppUI->_('Import tasks from');?>:<br/>
 			</td>
 			<td colspan="3">
-				<?php echo arraySelect( $importList, 'import_tasks_from', 'size="1" class="text"', null, false ); ?>
+<?php echo projectSelectWithOptGroup( $AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id ); ?>
 			</td>
 		</tr>
 		<tr>
