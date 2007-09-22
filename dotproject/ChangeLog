@@ -1,3 +1,25 @@
+2007-09-22 08:42  (gregorerhardt)
+---------------------------------
+modules/projects/addedit.php
+includes/main_functions.php
+- 0002156 - Projects AddEdit View: Sort Import Tasks from Project List by Company
+
+2007-09-22 07:34  (gregorerhardt)
+---------------------------------
+modules/tasks/addedit.js
+- 0002063 - cleaning dependency and assigned arrays received from JS for task addEdit
+
+2007-09-22 07:10  (gregorerhardt)
+---------------------------------
+modules/calendar/calendar.class.php
+modules/calendar/do_event_aed.php
+- 0002165 - delete User-Event relationship on event deletion
+
+2007-09-22 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-22
+
 2007-09-21 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
