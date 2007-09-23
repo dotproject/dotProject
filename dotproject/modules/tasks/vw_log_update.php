@@ -3,11 +3,15 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-GLOBAL $AppUI, $task_id, $obj, $percent, $can_edit_time_information;
+global $AppUI, $task_id, $obj, $percent, $can_edit_time_information;
 
 $perms =& $AppUI->acl();
 
 // check permissions
+if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
+	$AppUI->redirect('m=publice&a=access_denied');
+}
+
 $canEdit = $perms->checkModuleItem( 'task_log', 'edit', $task_id );
 $canAdd = $perms->checkModuleItem( 'task_log', 'add', $task_id );
 

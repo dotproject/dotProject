@@ -134,7 +134,9 @@ $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= '<td align="right">' . sprintf( "%.2f", $hrs ) . '</td>';
 $s .= '<td align="right" colspan="3"><form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post">';
-$s .= '<input type="submit" class="button" value="'.$AppUI->_('new log').'"></form></td>';
+if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
+	$s .= '<input type="submit" class="button" value="'.$AppUI->_('new log').'"></form></td>';
+}
 $s .= '</tr>';
 echo $s;
 ?>
