@@ -1,3 +1,20 @@
+2007-09-23 11:43  (cyberhorse)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2155 - fixed issue with copying children when running PHP5
+
+2007-09-23 11:15  (cyberhorse)
+---------------------------------
+modules/tasks/view.php
+modules/tasks/vw_log_update.php
+modules/tasks/vw_logs.php
+- #0002084 - don't allow new/edit task_logs if no permissions to edit a task.
+
+2007-09-23 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-23
+
 2007-09-22 08:42  (gregorerhardt)
 ---------------------------------
 modules/projects/addedit.php
