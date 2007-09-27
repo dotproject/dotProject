@@ -1,3 +1,14 @@
+2007-09-28 01:19  (gregorerhardt)
+---------------------------------
+classes/permissions.class.php
+modules/system/system.class.php
+- #2140 - Delete Permission Items with Module (deletion)
+
+2007-09-27 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-09-27
+
 2007-09-26 03:12  (cyberhorse)
 ---------------------------------
 ChangeLog
