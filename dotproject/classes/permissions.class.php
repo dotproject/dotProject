@@ -195,6 +195,65 @@ class dPacl extends gacl_api {
       dprint(__FILE__, __LINE__, 0, "Failed to remove module permission section");
     return $id;
   }
+
+	/*
+	** Deleting all module-associyted entries from the phpgacl tables
+	** such as gacl_aco_maps, gacl_acl and gacl_aro_map
+	**
+	** @author 	gregorerhardt	
+	** @date		20070927
+	** @cause		#2140
+	**
+	** @access 	public
+	** @param		string	module (directory) name
+	** @return
+	*/
+
+	function deleteModuleItems($mod) {
+		// Declaring the return string
+		$ret = NULL;
+
+		// Fetching module-associated ACL ID's
+		$q = new DBQuery;
+		$q->addTable('gacl_axo_map');
+		$q->addQuery('acl_id');
+		$q->addWhere('value = "'.$mod.'"');
+		$acls = $q->loadHashList('acl_id');
+		$q->clear();
+	
+		foreach ($acls as $acl => $k) {
+			// Deleting gacl_aco_map entries
+			$q = new DBQuery;
+			$q->setDelete('gacl_aco_map');
+			$q->addWhere('acl_id = '.$acl);
+			if (!$q->exec()) {
+				$ret .= is_null($ret) ? "\n\t".db_error() : db_error();
+			} 
+			$q->clear();
+
+
+			// Deleting gacl_aro_map entries
+			$q = new DBQuery;
+			$q->setDelete('gacl_aro_map');
+			$q->addWhere('acl_id = '.$acl);
+			if (!$q->exec()) {
+				$ret .= "\n\t".db_error();
+			} 
+			$q->clear();
+
+			// Deleting gacl_aco_map entries
+			$q = new DBQuery;
+			$q->setDelete('gacl_acl');
+			$q->addWhere('id = '.$acl);
+			if (!$q->exec()) {
+				$ret .= "\n\t".db_error();
+			} 
+			$q->clear();
+		}
+
+		// Returning null (no error) or database error message (error)
+		return $ret;
+	}
   
   function deleteGroupItem($item, $group = "all", $section = "app", $type = "axo") {
     if ($gid = $this->get_group_id($group, null, $type)) {

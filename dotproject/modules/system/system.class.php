@@ -125,6 +125,7 @@ class CModule extends CDpObject {
                         } else {
                                 $perms->deleteGroupItem($this->mod_directory, "non_admin");
                         }
+												$perms->deleteModuleItems($this->mod_directory);
                         $perms->deleteModule($this->mod_directory);
                         if (isset($this->permissions_item_table) && $this->permissions_item_table)
                           $perms->deleteModuleSection($this->permissions_item_table);
