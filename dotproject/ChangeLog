@@ -1,3 +1,14 @@
+2007-10-04 00:51  (caseydk)
+---------------------------------
+modules/projects/gantt.php
+- resolved the Gantt issue where the chart drawing would die if end date was null
+- set the end date to now if it was null, start date already had this check;
+
+2007-10-03 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-03
+
 2007-10-02 03:11  (cyberhorse)
 ---------------------------------
 ChangeLog
