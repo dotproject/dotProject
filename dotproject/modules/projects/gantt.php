@@ -85,6 +85,8 @@ if ($showInactive != '1') {
 $pjobj->setAllowedSQL($AppUI->user_id, $q);
 $q->addGroup('project_id');
 $q->addOrder('project_name, task_end_date DESC');
+echo $q->prepare();
+die();
 $projects = $q->loadList();
 $q->clear();
 
@@ -198,9 +200,8 @@ foreach($projects as $p) {
 	}
 
 	//using new jpGraph determines using Date object instead of string
-	$start = ($p["project_start_date"] > "0000-00-00 00:00:00") ? $p["project_start_date"] : date("Y-m-d H:i:s");
-	$end_date   = $p["project_end_date"];
-
+  $start = ($p["project_start_date"] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
+  $end_date = ($p["project_end_date"] > '0000-00-00 00:00:00') ? $p['project_end_date'] : date('Y-m-d H:i:s', time());
 
 	$end_date = new CDate($end_date);
 //	$end->addDays(0);
