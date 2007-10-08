@@ -1,3 +1,13 @@
+2007-10-08 13:47  (ajdonnison)
+---------------------------------
+style/dp-grey-theme/lostpass.php
+- #2170: Fix problem with lostpass page not showing when default style is dp-grey-theme
+
+2007-10-06 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-06
+
 2007-10-05 03:09  (cyberhorse)
 ---------------------------------
 ChangeLog
