@@ -2047,7 +2047,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			   . "'" . htmlspecialchars('<div><p>' 
 										 . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
 													   addslashes($a['task_description'])), 
-										 ENT_QUOTES) . '</p></div>' . "', STICKY, CAPTION, '" 
+										 ENT_QUOTES) . '</p></div>' . "', CAPTION, '" 
 			   . $AppUI->_('Description') . "'" . ', CENTER);" onmouseout="nd();"')
 			: ' ');
 	$open_link = (($is_opened) 

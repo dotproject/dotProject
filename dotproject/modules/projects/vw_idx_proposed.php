@@ -105,7 +105,7 @@ foreach ($projects as $row) {
 		$s .= $CR . '</td>';
 
 		$s .= $CR . '<td width="100%">';
-		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row["project_id"] . '" onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', addslashes($row["project_description"])).'</p></div>', ENT_QUOTES ).'\', STICKY, CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();">' . htmlspecialchars( $row["project_name"], ENT_QUOTES ) . '</a>';
+		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row["project_id"] . '" onmouseover="return overlib( \''.htmlspecialchars( '<div><p>'.str_replace(array("\r\n", "\n", "\r"), '</p><p>', addslashes($row["project_description"])).'</p></div>', ENT_QUOTES ).'\', CAPTION, \''.$AppUI->_('Description').'\', CENTER);" onmouseout="nd();">' . htmlspecialchars( $row["project_name"], ENT_QUOTES ) . '</a>';
 		$s .= $CR . '</td>';
                 $s .= $CR . '<td align="center">'. ($start_date ? $start_date->format( $df ) : '-') .'</td>';
                 $s .= $CR . '<td align="center">'. ($end_date ? $end_date->format( $df ) : '-') .'</td>';
