@@ -1,3 +1,32 @@
+2007-10-09 13:32  (cyberhorse)
+---------------------------------
+modules/projects/admin_tab.viewuser.projects.php
+- Removed stickiness from overlib popups. They get really annoying (can't click on some projects/tasks in certain situations) and users have complained about this before.
+- 
+- Why were they made sticky to begin with?
+
+2007-10-09 13:18  (cyberhorse)
+---------------------------------
+modules/projects/departments_tab.view.projects.php
+modules/projects/vw_idx_active.php
+modules/projects/vw_idx_archived.php
+modules/projects/vw_idx_complete.php
+modules/projects/vw_idx_proposed.php
+modules/tasks/tasks.class.php
+- Removed stickiness from overlib popups. They get really annoying (can't click on some projects/tasks in certain situations) and users have complained about this before.
+- 
+- Why were they made sticky to begin with?
+
+2007-10-09 13:01  (cyberhorse)
+---------------------------------
+modules/projects/projects.class.php
+- #2167 - fixed original tasks being changed when creating a new project and copying tasks from it.
+
+2007-10-09 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-09
+
 2007-10-08 13:47  (ajdonnison)
 ---------------------------------
 style/dp-grey-theme/lostpass.php
