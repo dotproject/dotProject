@@ -155,6 +155,7 @@ class CProject extends CDpObject {
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project ='.$from_project_id);
+		$q->addWhere('task_id = task_parent');
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks = array_flip(db_loadColumn ($sql));
@@ -173,19 +174,20 @@ class CProject extends CDpObject {
 		foreach ($tasks as $orig => $void) {
 			$objTask = new CTask();
 			$objTask->load ($orig);
-			$destTask = $objTask->copy($this->project_id);
+			$destTask = $objTask->deepCopy($this->project_id);
 			$tasks[$orig] = $destTask;
 			$deps[$orig] = $objTask->getDependencies ();
 		}
+		
+		$q->addTable('tasks');
+		$q->addQuery('task_id');
+		$q->addWhere('task_project ='.$this->project_id);
+		$tasks = $q->loadColumn();
 
-		// Fix record integrity 
-		foreach ($tasks as $old_id => $newTask) {
-
-			// Fix parent Task
-			// This task had a parent task, adjust it to new parent task_id
-			if ($newTask->task_id != $newTask->task_parent)
-				$newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
-
+		// Update dates based on new project's start date. 
+		$newTask = new CTask();
+		foreach ($tasks as $task_id) {
+			$newTask->load($task_id);
 			// Fix task start date from project start date offset
 			$origDate->setDate ($newTask->task_start_date);
 			$destDate->setDate ($origDate->getTime() + $timeOffset , DATE_FORMAT_UNIXTIME ); 
@@ -202,23 +204,8 @@ class CProject extends CDpObject {
 				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
 			}
 			
-			// Dependencies
-			if (!empty($deps[$old_id])) {
-				$oldDeps = explode (',', $deps[$old_id]);
-				// New dependencies array
-				$newDeps = array();
-				foreach ($oldDeps as $dep) 
-					$newDeps[] = $tasks[$dep]->task_id;
-					
-				// Update the new task dependencies
-				$csList = implode (',', $newDeps);
-				$newTask->updateDependencies ($csList);
-			} // end of update dependencies 
-
 			$newTask->store();
-
 		} // end Fix record integrity	
-
 			
 	} // end of importTasks
 
