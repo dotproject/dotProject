@@ -1,3 +1,16 @@
+2007-10-11 03:08  (merlinyoda)
+---------------------------------
+modules/files/addedit.php
+- 
+- The function projectSelectWithOptGroup() is defined in
+- includes/main_functions.php and was throwing since it had been defined in
+- here as well.
+
+2007-10-10 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-10
+
 2007-10-09 13:32  (cyberhorse)
 ---------------------------------
 modules/projects/admin_tab.viewuser.projects.php
