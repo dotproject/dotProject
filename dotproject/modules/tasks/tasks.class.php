@@ -537,7 +537,7 @@ class CTask extends CDpObject
 			}
 			
 			// insert entry in user tasks
-			$q->addTable('tasks');
+			$q->addTable('user_tasks');
 			$q->addInsert('user_id', $AppUI->user_id);
 			$q->addInsert('task_id', $this->task_id);
 			$q->addInsert('user_type', '0');
@@ -2167,8 +2167,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	
 	$start_date = intval($a['task_start_date']) ? new CDate($a['task_start_date']) : null;
 	$end_date = intval($a['task_end_date']) ? new CDate($a['task_end_date']) : null;
-	$last_update = isset($a['last_update']) && (intval($a['last_update']) 
-												? new CDate($a['last_update']) : null);
+	$last_update = ((isset($a['last_update']) && intval($a['last_update'])) 
+					? new CDate($a['last_update']) : null);
 	
 	// prepare coloured highlight of task time information
 	$sign = 1;
