@@ -1,3 +1,21 @@
+2007-10-12 08:31  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Fixed some small bugs introduced in translation to utilize query.class.php
+
+2007-10-12 05:03  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Switched to using query.class.php methods to set up sql queries instead of
+- the "hard coded" ones. Also did some minor clean-up.
+
+2007-10-11 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-11
+
 2007-10-11 03:08  (merlinyoda)
 ---------------------------------
 modules/files/addedit.php
