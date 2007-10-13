@@ -177,7 +177,13 @@ class CForumMessage {
 		$q->addWhere('visit_message = '.$this->message_id);
 		$q->exec(); // No error if this fails, it is not important.
 		$q->clear();
-		
+
+		$q->addTable('forum_messages');
+		$q->addQuery('message_forum');
+		$q->addWhere('message_id = ' . $this->message_id);
+		$forumId = db_loadResult($q->prepare());
+		$q->clear();
+
 		$q->setDelete('forum_messages');
 		$q->addWhere('message_id = '.$this->message_id);
 		if (!$q->exec()) {
@@ -186,6 +192,19 @@ class CForumMessage {
 			$result = NULL;
 		}
 		$q->clear();
+
+		$q->addTable('forum_messages');
+		$q->addQuery('COUNT(*)');
+		$q->addWhere('message_forum = ' . $forumId);
+		$messageCount = db_loadResult($q->prepare());
+		$q->clear();		
+
+		$q->addTable('forums');
+		$q->addUpdate('forum_message_count', $messageCount);
+		$q->addWhere('forum_id = ' . $forumId);
+		$q->exec();
+		$q->clear();
+		
 		return $result;
 	}
 
