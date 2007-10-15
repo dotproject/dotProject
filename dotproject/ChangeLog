@@ -1,3 +1,54 @@
+2007-10-14 12:24  (ajdonnison)
+---------------------------------
+db/upgrade_21rc2_to_21.sql
+- file upgrade_21rc2_to_21.sql was initially added on branch stable_2.
+
+2007-10-14 12:24  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+db/upgrade_21rc2_to_21.sql
+db/upgrade_21rc2_to_210.sql
+- Rename upgrade files to match required version change.
+- Fix version string in initial dotproject.sql
+
+2007-10-14 12:24  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+db/upgrade_21rc2_to_21.sql
+db/upgrade_21rc2_to_210.sql
+- Rename upgrade files to match required version change.
+- Fix version string in initial dotproject.sql
+
+2007-10-14 12:17  (ajdonnison)
+---------------------------------
+ChangeLog
+- Prune ChangeLog for 2.1 release
+
+2007-10-14 12:05  (ajdonnison)
+---------------------------------
+db/upgrade_latest.php
+includes/version.php
+install/do_install_db.php
+- Version and upgrade information for 2.1 release
+
+2007-10-14 11:48  (ajdonnison)
+---------------------------------
+modules/tasks/do_task_aed.php
+- #2173 - Change lack of pre-save functions to informational.
+
+2007-10-14 07:28  (caseydk)
+---------------------------------
+modules/forums/forums.class.php
+- the forum post count was not being updated when a post was deleted, now it is;
+- it was definitely getting updated - via a count() - on creation so this was a minor issue;
+
+2007-10-13 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-13
+
+2007-10-12 08:31  (merlinyoda)
+=======
 2007-10-14 12:35  (ajdonnison)
 ---------------------------------
 db/upgrade_latest.php
@@ -25,6 +76,7 @@ modules/files/files.class.php
 - refactoring functions;
 
 2007-10-12 09:01  (merlinyoda)
+>>>>>>> 1.236.2.134
 ---------------------------------
 modules/tasks/tasks.class.php
 - 
