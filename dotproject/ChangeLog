@@ -1,7 +1,20 @@
+2007-10-16 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-16
+
 2007-10-14 12:24  (ajdonnison)
 ---------------------------------
 db/upgrade_21rc2_to_21.sql
 - file upgrade_21rc2_to_21.sql was initially added on branch stable_2.
+
+2007-10-14 12:24  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+db/upgrade_21rc2_to_21.sql
+db/upgrade_21rc2_to_210.sql
+- Rename upgrade files to match required version change.
+- Fix version string in initial dotproject.sql
 
 2007-10-14 12:24  (ajdonnison)
 ---------------------------------
