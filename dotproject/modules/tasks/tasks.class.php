@@ -927,16 +927,15 @@ class CTask extends CDpObject
 				$q->addWhere('ua.user_id <>' . $AppUI->user_id);
 			}
 			$req =& $q->exec(QUERY_STYLE_NUM);
-			$q->clear();
 			for ($req; ! $req->EOF; $req->MoveNext()) {
 				list($email, $first, $last) = $req->fields;
 				if (! isset($mail_recipients[$email])) {
 					$mail_recipients[$email] = trim($first) . ' ' . trim($last);
 				}
 			}
+			$q->clear();
 		}
 		if (isset($task_contacts) && $task_contacts == 'on') {
-			$q->clear();
 			$q->addTable('task_contacts', 'tc');
 			$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
 			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
@@ -948,9 +947,9 @@ class CTask extends CDpObject
 					$mail_recipients[$email] = $first . ' ' . $last;
 				}
 			}
+			$q->clear();
 		}
 		if (isset($project_contacts) && $project_contacts == 'on') {
-			$q->clear();
 			$q->addTable('project_contacts', 'pc');
 			$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
@@ -962,11 +961,11 @@ class CTask extends CDpObject
 					$mail_recipients[$email] = $first . ' ' . $last;
 				}
 			}
+			$q->clear();
 		}
 		if (isset($others)) {
 			$others = trim($others, " \r\n\t,"); // get rid of empty elements.
 			if (strlen($others) > 0) {
-				$q->clear();
 				$q->addTable('contacts', 'c');
 				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
 				$q->addWhere('c.contact_id in (' . $others . ')');
@@ -977,6 +976,7 @@ class CTask extends CDpObject
 						$mail_recipients[$email] = $first . ' ' . $last;
 					}
 				}
+				$q->clear();
 			}
 		}
 		if (isset($extras) && $extras) {
