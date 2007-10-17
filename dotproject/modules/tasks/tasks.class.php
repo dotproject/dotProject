@@ -1505,7 +1505,7 @@ class CTask extends CDpObject
 	
 	function getAssignedUsers(){
 		$q =& new DBQuery;
-		$q->addTable('user', 'u');
+		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
 		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name');
