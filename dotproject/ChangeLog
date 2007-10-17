@@ -1,3 +1,26 @@
+2007-10-18 02:36  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Fixed copy/paste error made when converting "static" queries
+- to "query class" queries.
+
+2007-10-18 01:32  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Fix on Mantis Bug Report #2178
+
+2007-10-17 09:40  (nybod)
+---------------------------------
+modules/tasks/tasks.class.php
+- Mantis 2177 - Fixed typo in getAssignedUsers function.
+
+2007-10-17 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-17
+
 2007-10-16 03:09  (cyberhorse)
 ---------------------------------
 ChangeLog
