@@ -1009,7 +1009,6 @@ class CTask extends CDpObject
 		
 		$body = $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
 		if ($this->task_parent != $this->task_id) {
-			$q->clear();
 			$q->addTable('tasks');
 			$q->addQuery('task_name');
 			$q->addWhere('task_id = ' . $this->task_parent);
@@ -1018,8 +1017,8 @@ class CTask extends CDpObject
 				$body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' 
 				  . htmlspecialchars_decode($req->fields[0]) . "\n";
 			}
+			$q->clear();
 		}
-		$q->clear();
 		$body .= $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n";
 		$task_types = dPgetSysVal('TaskType');
 		$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
