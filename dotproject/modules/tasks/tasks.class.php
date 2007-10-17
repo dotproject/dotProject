@@ -1461,11 +1461,8 @@ class CTask extends CDpObject
 		// delete all current entries from $cslist
 		if ($del == true && $rmUsers == true) {
 			foreach ($tarr as $user_id) {
-				if ($user_id > '') {
-					$q->setDelete('user_tasks');
-					$q->addWhere('task_id = ' . $this->task_id . ' AND user_id = ' . $user_id);
-					$q->exec();
-					$q->clear();
+				if (trim($user_id)) {
+					$this->removeAssigned($user_id);
 				}
 			}
 			
