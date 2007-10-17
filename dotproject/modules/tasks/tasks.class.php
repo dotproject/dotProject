@@ -327,6 +327,7 @@ class CTask extends CDpObject
 			$modified_task->task_hours_worked = $children_hours_worked;
 			
 			//Update percent complete
+			//hours
 			$q->addTable('tasks');
 			$q->addQuery('SUM(task_percent_complete * task_duration * task_duration_type)');
 			$q->addWhere('task_parent = ' . $modified_task->task_id . ' AND task_id <> ' 
@@ -335,8 +336,10 @@ class CTask extends CDpObject
 			$q->clear();
 			$real_children_hours_worked = (float) db_loadResult($sql);
 			
+			//"days"
 			$q->addTable('tasks');
-			$q->addQuery('SUM(task_percent_complete * task_duration * task_duration_type)');
+			$q->addQuery('SUM(task_percent_complete * task_duration * ' 
+						 . dPgetConfig('daily_working_hours') . ')');
 			$q->addWhere('task_parent = ' . $modified_task->task_id . ' AND task_id <> ' 
 						 . $modified_task->task_id . ' AND task_duration_type <> 1 ');
 			$sql = $q->prepare();
