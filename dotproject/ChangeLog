@@ -1,3 +1,32 @@
+2007-10-18 23:57  (nybod)
+---------------------------------
+modules/companies/vw_active.php
+modules/companies/vw_archived.php
+- Mantis 2181
+
+2007-10-18 23:54  (nybod)
+---------------------------------
+modules/projects/gantt.php
+- Debug code removed
+
+2007-10-18 09:06  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Small line placement change for consistancy.
+
+2007-10-18 08:57  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- 
+- Resolving issue Bruce came across in forums:
+- http://www.dotproject.net/vbulletin/showthread.php?p=33760#post33760
+
+2007-10-18 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-18
+
 2007-10-18 02:36  (merlinyoda)
 ---------------------------------
 modules/tasks/tasks.class.php
