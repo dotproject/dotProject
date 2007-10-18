@@ -85,8 +85,7 @@ if ($showInactive != '1') {
 $pjobj->setAllowedSQL($AppUI->user_id, $q);
 $q->addGroup('project_id');
 $q->addOrder('project_name, task_end_date DESC');
-echo $q->prepare();
-die();
+
 $projects = $q->loadList();
 $q->clear();
 
