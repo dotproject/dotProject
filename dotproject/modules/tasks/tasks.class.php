@@ -268,7 +268,7 @@ class CTask extends CDpObject
 			$modified_task->htmlDecode();
 		}
 		
-		if ($modified_task->task_dynamic == 1) {
+		if ($modified_task->task_dynamic == '1') {
 			//Update allocated hours based on children with duration type of 'hours'
 			$q->addTable($this->_tbl);
 			$q->addQuery('SUM(task_duration * task_duration_type)');
@@ -1598,7 +1598,7 @@ class CTask extends CDpObject
 		
 		$q->addTable('projects');
 		$q->addQuery('project_name, project_short_name, project_color_identifier');
-		$q->addWhere('project_id = ' . $this->task_project);
+		$q->addWhere("project_id = '" . $this->task_project ."'");
 		$sql = $q->prepare();
 		$q->clear();
 		$proj = db_loadHash($sql, $projects);
@@ -1611,7 +1611,7 @@ class CTask extends CDpObject
 		
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_id <> ' . $this->task_id . ' AND task_parent = ' . $this->task_id);
+		$q->addWhere("task_id <> '" . $this->task_id . "' AND task_parent = '" . $this->task_id ."'");
 		$sql = $q->prepare();
 		$q->clear();
 		
@@ -1656,7 +1656,7 @@ class CTask extends CDpObject
 		// get children
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_parent = ' . $this->task_id);
+		$q->addWhere("task_parent = '" . $this->task_id . "'");
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks_id = db_loadColumn($sql);
@@ -1667,7 +1667,7 @@ class CTask extends CDpObject
 		// update status of children
 		$q->addTable('tasks');
 		$q->addUpdate('task_status', $new_status);
-		$q->addWhere('task_parent = ' . $task_id);
+		$q->addWhere("task_parent = '" . $task_id . "'");
 		$q->exec();
 		$q->clear();
 		
@@ -1692,7 +1692,7 @@ class CTask extends CDpObject
 		
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_parent = ' . $this->task_id);
+		$q->addWhere("task_parent = '" . $this->task_id . "'");
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks_id = db_loadColumn($sql);
@@ -1704,7 +1704,7 @@ class CTask extends CDpObject
 		// update project of children
 		$q->addTable('tasks');
 		$q->addUpdate('task_project', $new_project);
-		$q->addWhere('task_parent = ' . $task_id);
+		$q->addWhere("task_parent = '" . $task_id . "'");
 		$q->exec();
 		$q->clear();
 		
