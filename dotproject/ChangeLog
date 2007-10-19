@@ -1,3 +1,19 @@
+2007-10-19 22:58  (nybod)
+---------------------------------
+index.php
+- Mantis 2183
+
+2007-10-19 05:56  (merlinyoda)
+---------------------------------
+modules/tasks/tasks.class.php
+- More tweaks on "query class" changes.
+- Possiblly fixes Mantis Bug Report #2180
+
+2007-10-19 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-19
+
 2007-10-18 23:57  (nybod)
 ---------------------------------
 modules/companies/vw_active.php
