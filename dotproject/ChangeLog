@@ -1,3 +1,19 @@
+2007-10-24 14:35  (revelation7)
+---------------------------------
+.cvsignore
+modules/tasks/vw_log_update.php
+- Fix for bug #0002185 Task Log editing - original user is overwritten
+
+2007-10-24 14:35  (revelation7)
+---------------------------------
+.cvsignore
+- file .cvsignore was initially added on branch stable_2.
+
+2007-10-20 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-20
+
 2007-10-19 22:58  (nybod)
 ---------------------------------
 index.php
