@@ -136,7 +136,7 @@ $taskLogReference = dPgetSysVal( 'TaskLogReference' );
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id;?>" />
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task;?>" />
-	<input type="hidden" name="task_log_creator" value="<?php echo $AppUI->user_id;?>" />
+	<input type="hidden" name="task_log_creator" value="<?php if($log->task_log_creator==0) echo $AppUI->user_id; else echo $log->task_log_creator;?>" />
 	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name;?>" />
 <table cellspacing="1" cellpadding="2" border="0" width="100%">
 <tr>
