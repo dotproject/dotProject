@@ -892,6 +892,10 @@ function dPcheckMem($min = 0, $revert = false) {
 	// Try upping the memory limit based on our config
 	ini_set('memory_limit', $GLOBALS['dPconfig']['reset_memory_limit']);
 	$now = dPgetBytes(ini_get('memory_limit'));
+	// Revert, if necessary, back to the original after testing.
+	if ($revert) {
+		ini_set('memory_limit', $have);
+	}
 	if ($now < $want || $now < $min) {
 		return false;
 	} else {
