@@ -232,7 +232,7 @@ function submitIt(){
 	<td>
 	<?php
 		$record_method['0'] = $AppUI->_('None');
-		$record_method['1'] = $AppUI->_('Apppend to Log');
+		$record_method['1'] = $AppUI->_('Append to Log');
 		echo arraySelect( $record_method, 'pref_name[TASKLOGNOTE]', 'class=text size=1', @$prefs['TASKLOGNOTE'], false );
 	?>
 	</td>
