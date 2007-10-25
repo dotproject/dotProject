@@ -7,12 +7,13 @@ if (!defined('DP_BASE_DIR')){
  * Gantt.php - by J. Christopher Pereira
  * TASKS $Id$
  */
+global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, 
+	$showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id, $dPconfig;
+
+ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
-
-global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, 
-	$showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
 $showLabels = dPgetParam( $_REQUEST, 'showLabels', false );
 $sortByName = dPgetParam( $_REQUEST, 'sortByName', false );
@@ -178,7 +179,9 @@ foreach ($proTasks as $row) {
         $projects[$row['task_project']]['tasks'][] = $row;
 }
 $q->clear();
-$width      = dPgetParam( $_GET, 'width', 600 );
+unset($proTasks);
+
+$width      = min(dPgetParam( $_GET, 'width', 600 ), 1400);
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 	$start_min = $projects[$project_id]['project_start_date'];
@@ -188,7 +191,6 @@ $start_date = dPgetParam( $_GET, 'start_date', $start_min );
 $end_date   = dPgetParam( $_GET, 'end_date', $end_max );
 
 $count = 0;
-
 
 $graph = new GanttGraph($width);
 $graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
@@ -525,9 +527,11 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                         }
                 }
         }
+	unset($query);
         $q->clear();
         $graph->Add($bar);
 }
+unset($gantt_arr);
 $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
 $vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);

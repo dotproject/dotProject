@@ -3,12 +3,13 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph'));
-include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id, $dPconfig;
 
 ini_set('max_execution_time', 180);
+ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id;
+include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph'));
+include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -89,7 +90,8 @@ $q->addOrder('project_name, task_end_date DESC');
 $projects = $q->loadList();
 $q->clear();
 
-$width      = dPgetParam( $_GET, 'width', 600 );
+// Don't push the width higher than about 1200 pixels, otherwise it may not display.
+$width      = min(dPgetParam( $_GET, 'width', 600 ), 1400);
 $start_date = dPgetParam( $_GET, 'start_date', 0 );
 $end_date   = dPgetParam( $_GET, 'end_date', 0 );
 
@@ -324,11 +326,13 @@ foreach($projects as $p) {
 			}
 			// End of insert workers for each task into Gantt Chart  				
  		}
+		unset($tasks);
  		// End of insert tasks into Gantt Chart 
  	}			
  	// End of if showAllGant checkbox is checked
 }
 } // End of check for valid projects array.
+unset($projects);
 
 $today = date("y-m-d");
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));

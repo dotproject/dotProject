@@ -4,7 +4,6 @@ if (!defined('DP_BASE_DIR')){
 }
 
 global $AppUI,$company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
-ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 $min_view = defVal( @$min_view, false);
 $project_id = defVal( @$_GET['project_id'], 0);
@@ -223,4 +222,3 @@ function showFullProject() {
         </td>
 </tr>
 </table>
-<?php ini_restore('memory_limit');?>
