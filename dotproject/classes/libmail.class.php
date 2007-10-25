@@ -386,13 +386,8 @@ function Send()
     else if ($this->transport == 'smtp')
         return $this->SMTPSend();
     else {
-	error_log('headers=' . $this->headers);
         $headers = preg_replace("/Subject: .*?\r\n(?! )/Ds", '', $this->headers);
         $headers = preg_replace("/To: .*?\r\n(?! )/Ds", '', $this->headers);
-	error_log('after pruning=' . $this->headers);
-	foreach ($this->xheaders as $h=>$v) {
-		error_log("$h=$v");
-	}
         return @mail( $this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers );
     }
 }
