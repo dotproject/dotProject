@@ -386,8 +386,13 @@ function Send()
     else if ($this->transport == 'smtp')
         return $this->SMTPSend();
     else {
+	error_log('headers=' . $this->headers);
         $headers = preg_replace("/Subject: .*?\r\n(?! )/Ds", '', $this->headers);
         $headers = preg_replace("/To: .*?\r\n(?! )/Ds", '', $this->headers);
+	error_log('after pruning=' . $this->headers);
+	foreach ($this->xheaders as $h=>$v) {
+		error_log("$h=$v");
+	}
         return @mail( $this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers );
     }
 }
@@ -661,7 +666,7 @@ function _addressEncode( $addr, $offset=0 )
  */
 function _wordEncode($str, $offset=0)
 {
-    if (!$this->canEncode) return $addr;
+    if (!$this->canEncode) return $str;
     
     $cs = $this->charset;
     $str = str_replace(array(' ', "=\r\n", '?') , array('_', '', '=3F'), trim(imap_8bit($str)));
