@@ -1,8 +1,59 @@
+2007-10-25 21:24  (ajdonnison)
+---------------------------------
+modules/system/addeditpref.php
+- #2198 - Fix spelling mistake.
+
+2007-10-25 20:52  (ajdonnison)
+---------------------------------
+includes/main_functions.php
+- Minor tweak to allow test to be non-intrusive.
+
+2007-10-25 20:48  (ajdonnison)
+---------------------------------
+includes/main_functions.php
+locales/en/common.inc
+modules/projects/viewgantt.php
+modules/tasks/viewgantt.php
+- #2212 - Inconsistent display of Gantt charts.
+
+2007-10-25 17:05  (ajdonnison)
+---------------------------------
+modules/projects/gantt.php
+modules/projects/viewgantt.php
+modules/tasks/gantt.php
+- Move memory_limit set to where it will actually do some good.
+- Minor cleanups to limit width of gantt, reduce overall memory footprint.
+
+2007-10-25 16:37  (ajdonnison)
+---------------------------------
+classes/libmail.class.php
+- Remove debug.
+
+2007-10-25 16:36  (ajdonnison)
+---------------------------------
+classes/libmail.class.php
+- #2190 - Subject not set if no encoding performed.
+
+2007-10-25 10:27  (revelation7)
+---------------------------------
+style/classic/main.css
+- Fix for bug #0002200: Multi-Line Selection boxes are not expanded in the dotProject Classic Theme
+
+2007-10-25 03:10  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-25
+
 2007-10-24 14:35  (revelation7)
 ---------------------------------
 .cvsignore
 modules/tasks/vw_log_update.php
 - Fix for bug #0002185 Task Log editing - original user is overwritten
+
+2007-10-24 14:35  (revelation7)
+---------------------------------
+.cvsignore
+- file .cvsignore was initially added on branch stable_2.
 
 2007-10-24 14:35  (revelation7)
 ---------------------------------
