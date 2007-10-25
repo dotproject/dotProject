@@ -63,7 +63,7 @@ bordertable {
  border: 1px black solid;
  font-family: Osaka,verdana,Sans-Serif;
  font-size: 8pt;
- height: 20px;
+ /*height: 20px;Select boxes are too small in Mozilla */
 }
 
 .textarea{
