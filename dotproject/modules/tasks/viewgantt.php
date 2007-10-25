@@ -249,6 +249,12 @@ if ($cnt[0]['N'] > 0) {
 	  "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=".$showLabels."&showWork=".$showWork."&sortByName=".$sortByName.'&showPinned='.$showPinned.'&showArcProjs='.$showArcProjs.'&showHoldProjs='.$showHoldProjs.'&showDynTasks='.$showDynTasks.'&showLowTasks='.$showLowTasks.'&caller='.$a.'&user_id='.$user_id;
 
 	echo "<script>document.write('<img src=\"$src\">')</script>";
+	// If we have a problem displaying this we need to display a warning.  Put it at the bottom just in case
+	if (! dPcheckMem(32*1024*1024)) {
+		echo "</td></tr><tr><td>";
+		echo '<span style="color: red; font-weight: bold;">'  .$AppUI->_("invalid memory config") . '</span>';
+
+	}
 } else {
 	echo $AppUI->_( "No tasks to display" );
 }

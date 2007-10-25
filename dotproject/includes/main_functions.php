@@ -855,4 +855,48 @@ if ( !function_exists('htmlspecialchars_decode') ) {
 		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
 	}
 }
+
+/**
+ * Return the number of bytes represented by a PHP.INI value
+ */
+function dPgetBytes($str) {
+	$val = $str;
+	if (preg_match('/^([0-9]+)([kmg])?$/i', $str, $match)) {
+		if (!empty($match[2])) {
+			switch(strtolower($match[2])) {
+				case 'k':
+					$val = $match[1] * 1024;
+					break;
+				case 'm':
+					$val = $match[1] * 1024 * 1024;
+					break;
+				case 'g':
+					$val = $match[1] * 1024 * 1024 * 1024;
+					break;
+			}
+		}
+	}
+	return $val;
+}
+
+/**
+ * Check for a memory limit, if we can't generate it then we fail.
+ * @param int $min minimum amount of memory needed
+ * @param bool $revert revert back to original config after test.
+ * @return bool true if we have the minimum amount of RAM and if we can modify RAM
+ */
+function dPcheckMem($min = 0, $revert = false) {
+	// First of all check if we have the minimum memory requirement.
+	$want = dPgetBytes($GLOBALS['dPconfig']['reset_memory_limit']);
+	$have = ini_get('memory_limit');
+	// Try upping the memory limit based on our config
+	ini_set('memory_limit', $GLOBALS['dPconfig']['reset_memory_limit']);
+	$now = dPgetBytes(ini_get('memory_limit'));
+	if ($now < $want || $now < $min) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 ?>

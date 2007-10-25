@@ -215,6 +215,10 @@ function showFullProject() {
                   '&start_date=' . $start_date->format( "%Y-%m-%d" ) . '&end_date=' . $end_date->format( "%Y-%m-%d" ) ) .
                 "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD";
                 echo "<script>document.write('<img src=\"$src\">')</script>";
+		if (!dPcheckMem(32*1024*1024)) {
+			echo "</td></tr><tr><td>";
+			echo '<span style="color: red; font-weight: bold;">'  .$AppUI->_("invalid memory config") . '</span>';
+		}
                 ?>
                         </td>
                 </tr>

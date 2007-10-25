@@ -194,6 +194,7 @@
 "forgotPassword"=>"Help! I've forgotten my password!",
 "hour",
 "hours",
+"invalid memory config" => "We could not configure your memory or your memory configuration is too low, this may be as a result of Safe Mode being in effect and may result in not enough memory to display this chart.",
 "invalidID"=>"ID is invalid.  Unable to display.",
 "login",
 "new File",
