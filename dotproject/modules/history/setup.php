@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')){
 /*
  * Name:      History
  * Directory: history
- * Version:   0.31
+ * Version:   0.32
  * Class:     user
  * UI Name:   History
  * UI Icon:
@@ -15,7 +15,7 @@ if (!defined('DP_BASE_DIR')){
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'History';
-$config['mod_version'] = '0.31';
+$config['mod_version'] = '0.32';
 $config['mod_directory'] = 'history';
 $config['mod_setup_class'] = 'CSetupHistory';
 $config['mod_type'] = 'user';
@@ -34,9 +34,9 @@ class CSetupHistory {
 			history_id int(10) unsigned NOT NULL auto_increment,
 			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
 			history_user int(10) NOT NULL default \'0\',
-			history_action varchar(10) NOT NULL default \'modify\',
+			history_action varchar(20) NOT NULL default \'modify\',
 			history_item int(10) NOT NULL,
-			history_table varchar(15) NOT NULL default \'\',
+			history_table varchar(20) NOT NULL default \'\',
 			history_project int(10) NOT NULL default \'0\',
 			history_name varchar(255),
 			history_changes text,
@@ -85,7 +85,13 @@ class CSetupHistory {
 				$q->addIndex('index_history_module', '(history_table, history_item)');
 				$q->exec();
 				$q->clear();
-			case '0.31';
+			case '0.31':
+				$q->alterTable('history');
+				$q->alterField('history_table', 'varchar(20) NOT NULL default \'\'');
+				$q->alterField('history_action', 'varchar(20) NOT NULL default \'modify\'');
+				$q->exec();
+				$q->clear();
+			case '0.32':
 				break;
 		}
 		return db_error();
