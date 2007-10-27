@@ -259,6 +259,15 @@ class DBQuery {
 			'spec' => $name . ' ' . $type);
 	}
 
+	function alterField($name, $type)
+	{
+		if (! is_array($this->create_definition))
+			$this->create_definition = array();
+		$this->create_definition[] = array('action' => 'CHANGE',
+			'type' => '',
+			'spec' => $name . ' ' . $name . ' ' . $type);
+	}
+
 	function dropField($name)
 	{
 		if (! is_array($this->create_definition))
