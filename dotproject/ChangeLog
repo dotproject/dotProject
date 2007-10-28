@@ -1,3 +1,19 @@
+2007-10-28 07:14  (cyberhorse)
+---------------------------------
+modules/history/setup.php
+- Increased the size of table fields (avoids an error when history module
+- is enabled and folders are used in the files module)
+
+2007-10-28 07:13  (cyberhorse)
+---------------------------------
+classes/query.class.php
+- Added mechanisms to alter db fields
+
+2007-10-26 03:11  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-26
+
 2007-10-25 21:24  (ajdonnison)
 ---------------------------------
 modules/system/addeditpref.php
