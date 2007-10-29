@@ -81,8 +81,9 @@ function dPsessionWrite($id, $data)
 		dprint(__FILE__, __LINE__, 11, "Updating session $id");
 		$q->query = null;
 		$q->addUpdate('session_data', $data);
-        if (isset($AppUI))
-            $q->addUpdate('session_user', $AppUI->last_insert_id);
+		if (isset($AppUI)) {
+			$q->addUpdate('session_user', $AppUI->last_insert_id);
+		}
 	} else {
 		dprint(__FILE__, __LINE__, 11, "Creating new session $id");
 		$q->query = null;
@@ -99,24 +100,19 @@ function dPsessionWrite($id, $data)
 function dPsessionDestroy($id, $user_access_log_id=0) {
  	global $AppUI;
     
-    if(!($user_access_log_id) && isset($AppUI->last_insert_id)){
-        $user_access_log_id = $AppUI->last_insert_id;
-    }
-    
-	dprint(__FILE__, __LINE__, 11, "Killing session $id");
 	$q = new DBQuery;
+
+	dprint(__FILE__, __LINE__, 11, "Killing session $id");
+	$q->addTable('user_access_log');
+	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
+	$q->addWhere('user_access_log_id = ( SELECT session_user from sessions WHERE session_id = \'' . $id . '\' )');
+	$q->exec();
+	$q->clear();
+
 	$q->setDelete('sessions');
 	$q->addWhere("session_id = '$id'");
 	$q->exec();
 	$q->clear();
-    
-	if ($user_access_log_id) {
- 		$q->addTable('user_access_log');
- 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-		$q->addWhere('user_access_log_id = ' . $user_access_log_id);
- 		$q->exec();
- 		$q->clear();
- 	}
     
 	return true;
 }
@@ -129,10 +125,18 @@ function dPsessionGC($maxlifetime)
 	$now = time();
 	$max = dPsessionConvertTime('max_lifetime');
 	$idle = dPsessionConvertTime('idle_time');
-	// Find all the session
+	// First pass is to kill any users that are logged in at the time of the session.
+	$where = "UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > $idle OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > $max";
 	$q = new DBQuery;
+	$q->addTable('user_access_log');
+	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
+	$q->addWhere("user_access_log_id IN ( SELECT session_user from sessions WHERE $where )");
+	$q->exec();
+	$q->clear();
+	
+	// Now we simply delete the expired sessions.
 	$q->setDelete('sessions');
-	$q->addWhere("UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > $idle OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > $max");
+	$q->addWhere($where);
 	$q->exec();
 	$q->clear();
 	if (dPgetConfig('session_gc_scan_queue')) {
