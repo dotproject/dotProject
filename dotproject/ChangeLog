@@ -1,3 +1,14 @@
+2007-11-01 19:10  (ajdonnison)
+---------------------------------
+style/default/header.php
+style/dp-grey-theme/header.php
+- #2211 - Remove forcing of tab in today view.
+
+2007-10-30 03:09  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-10-30
+
 2007-10-29 20:59  (ajdonnison)
 ---------------------------------
 includes/session.php
