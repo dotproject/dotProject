@@ -442,7 +442,7 @@ function displayFiles($folder) {
 				
 	$q->addGroup('file_folder');
 	$q->addGroup('project_name');
-	$q->addGroup('file_name');
+	$q->addGroup('file_version_id');
 
 	$q->addOrder('file_folder');
 	$q->addOrder('project_name');

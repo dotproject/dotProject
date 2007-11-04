@@ -66,14 +66,24 @@ if ($duplicate) {
 	$obj->load( $file_id );
 	$new_file = new CFile();
 	$new_file = $obj->duplicate();
-	$new_file->file_project = 0;
-	$new_file->file_folder = 0;
 	if (!($dup_realname = $obj->duplicateFile($obj->file_project, $obj->file_real_filename))) {
 		$AppUI->setMsg( 'Could not duplicate file, check file permissions', UI_MSG_ERROR );
 		$AppUI->redirect();
 	} else {
 		$new_file->file_real_filename = $dup_realname;
 		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
+
+    $q  = new DBQuery;
+    $q->addTable('files');
+    $q->addQuery('file_version_id');
+    $q->addOrder('file_version_id DESC');
+    $q->setLimit(1);
+    $sql = $q->prepare();
+    $q->clear();
+    $latest_file_version = db_loadResult($sql);
+    $new_file->file_version_id = $latest_file_version + 1;
+
+
 		if (($msg = $new_file->store())) {
 			$AppUI->setMsg( $msg, UI_MSG_ERROR );
 			$AppUI->redirect($redirect);			
