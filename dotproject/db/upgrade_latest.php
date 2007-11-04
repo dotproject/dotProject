@@ -30,11 +30,13 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
 function dPupgrade($from_version, $to_version, $last_updated)
 {
 
-	$latest_update = '20071014'; // Set to the latest upgrade date.
+	$latest_update = '20071104'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
 	}
+
+	$perms =& new dPacl;
 	
 	// Place the upgrade code here, depending on the last_updated date.
 	// DO NOT REMOVE PREVIOUS VERSION CODE!!!
@@ -113,7 +115,6 @@ function dPupgrade($from_version, $to_version, $last_updated)
 		case '20050314':
 			// Add the permissions for task_log
 			dPmsg('Adding Task Log permissions');
-			$perms =& new dPacl;
 			$perms->add_object('app', 'Task Logs', 'task_log', 11, 0, 'axo');
 			$all_mods = $perms->get_group_id('all', null, 'axo');
 			$nonadmin = $perms->get_group_id('non_admin', null, 'axo');
@@ -121,6 +122,13 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$perms->add_group_object($nonadmin, 'app', 'task_log', 'axo');
 		case '20050316':
 			include DP_BASE_DIR.'/db/upgrade_contacts_company.php';
+		case '20070521': // DP2.1RC2
+		case '20071014': // DP2.1
+			// Add view of users table to guest and project worker roles
+			$guest = $perms->get_group_id('guest', null, 'aro');
+			$worker = $perms->get_group_id('normal', null, 'aro');
+			$perms->add_acl(array('application' => array('view')), null, array($worker, $guest), array('app' => array('users')), null, 1, 1, null, null, 'user');
+
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;

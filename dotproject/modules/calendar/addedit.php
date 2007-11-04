@@ -31,7 +31,7 @@ $types = dPgetSysVal( 'EventType' );
 
 // Load the users
 $perms =& $AppUI->acl();
-$users = $perms->getPermittedUsers();
+$users = $perms->getPermittedUsers('calendar');
 
 // Load the assignees
 $assigned = array();
