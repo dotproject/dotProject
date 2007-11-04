@@ -1,3 +1,28 @@
+2007-11-04 20:30  (cyberhorse)
+---------------------------------
+modules/files/do_file_aed.php
+modules/files/folders_table.php
+- #2204 - when copying files, keep their folder and project
+- Fixed folder view (grouping on version_id instead of just name)
+
+2007-11-04 20:07  (ajdonnison)
+---------------------------------
+db/upgrade_latest.php
+modules/calendar/addedit.php
+modules/tasks/addedit.php
+- #2195 - Fix user permissions in calendar/tasks
+
+2007-11-04 16:38  (ajdonnison)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2228 - Fixed incorrect URL on sortable column headings
+- #2207 - Empty end dates cannot be overdue.
+
+2007-11-02 03:10  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-11-02
+
 2007-11-01 19:10  (ajdonnison)
 ---------------------------------
 style/default/header.php
