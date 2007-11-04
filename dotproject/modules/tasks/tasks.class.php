@@ -2173,6 +2173,18 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$sign = 1;
 	$style = '';
 	if ($start_date) {
+		
+		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
+			$style = 'background-color:#ffeebb';
+		} else if ($now->after($start_date) && $a['task_percent_complete'] < 100) {
+			$style = 'background-color:#e6eedd';
+		}
+		
+		if (!empty($end_date) && $now->after($end_date)) {
+			$sign = -1;
+			$style = 'background-color:#cc6666;color:#ffffff';
+		}
+
 		if (!$end_date) {
 			/*
 			 ** end date calc has been moved to calcEndByStartAndDuration()-function
@@ -2181,17 +2193,6 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			 ** didn't want to remove it shortly before the 2.0.2
 			 */ 
 			$end_date = new CDate('0000-00-00 00:00:00');
-		}
-		
-		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
-			$style = 'background-color:#ffeebb';
-		} else if ($now->after($start_date) && $a['task_percent_complete'] < 100) {
-			$style = 'background-color:#e6eedd';
-		}
-		
-		if ($now->after($end_date)) {
-			$sign = -1;
-			$style = 'background-color:#cc6666;color:#ffffff';
 		}
 		
 		if ($a['task_percent_complete'] == 100){
@@ -2497,7 +2498,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a='') {
 			  . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a));
 	} else {
 		echo ('<a href="./index.php?m=projects' 
-			  . (($task_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
+			  . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
 	}
 	echo '&task_sort_item1=' . $item_name;
 	echo '&task_sort_type1=' . $item_type;
