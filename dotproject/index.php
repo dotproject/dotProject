@@ -19,9 +19,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 }}} */
 
-ini_set('display_errors', 1); // Ensure errors get to the user.
-error_reporting(E_ALL & ~E_NOTICE);
-
 // If you experience a 'white screen of death' or other problems,
 // uncomment the following line of code:
 //error_reporting( E_ALL );
