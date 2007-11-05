@@ -206,7 +206,7 @@ class CDpObject {
 		
 		if( $ret ) {
 			// only record history if an update or insert actually occurs.
-			addHistory($this->_tbl . '_' . $store_type . '(' . $this->$k . ')', 0, $this->_tbl);
+			addHistory($this->_tbl, $this->$k, $store_type, $this->_tbl . '_' . $store_type . '(' . $this->$k . ')');
 		}
 		return ((!$ret)?(get_class( $this ) . "::store failed <br />" . db_error()):NULL) ;
 	}
