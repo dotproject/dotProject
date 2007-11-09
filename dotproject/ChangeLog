@@ -1,3 +1,13 @@
+2007-11-09 15:34  (ajdonnison)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2180 - fix supplied by phpgus for dependencies on copy.
+
+2007-11-07 03:10  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-11-07
+
 2007-11-06 09:05  (ajdonnison)
 ---------------------------------
 base.php
