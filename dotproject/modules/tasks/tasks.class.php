@@ -1656,7 +1656,7 @@ class CTask extends CDpObject
 		// get children
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere("task_parent = '" . $this->task_id . "'");
+		$q->addWhere("task_parent = '" . $task_id . "'");
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks_id = db_loadColumn($sql);
@@ -1692,7 +1692,7 @@ class CTask extends CDpObject
 		
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere("task_parent = '" . $this->task_id . "'");
+		$q->addWhere("task_parent = '" . $task_id . "'");
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks_id = db_loadColumn($sql);
