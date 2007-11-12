@@ -62,7 +62,7 @@ function db_exec( $sql ) {
 	if ($msg = db_error())
         {
                 global $AppUI;
-                dprint(__FILE__, __LINE__, 0, "Error executing: <pre>$sql</pre>");
+                dprint(__FILE__, __LINE__, 0, "Error executing: <pre>$sql</pre> ($msg)");
 		// Useless statement, but it is being executed only on error, 
 		// and it stops infinite loop.
 		$db->Execute( $sql );
