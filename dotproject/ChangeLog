@@ -1,3 +1,18 @@
+2007-11-13 02:52  (cyberhorse)
+---------------------------------
+modules/history/index.php
+- Added tasks as an option in the history module for filtering
+
+2007-11-13 02:45  (cyberhorse)
+---------------------------------
+includes/db_adodb.php
+- Improved debugging message for sql errors
+
+2007-11-10 04:08  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-11-10
+
 2007-11-09 15:34  (ajdonnison)
 ---------------------------------
 modules/tasks/tasks.class.php
