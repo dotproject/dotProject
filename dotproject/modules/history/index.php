@@ -23,6 +23,7 @@ $titleBlock->show();
                 <option value=""></option>
                 <option value=""><?php echo $AppUI->_('Show all'); ?></option>
                 <option value="projects"><?php echo $AppUI->_('Projects'); ?></option>
+                <option value="tasks"><?php echo $AppUI->_('Tasks'); ?></option>
                 <option value="files"><?php echo $AppUI->_('Files'); ?></option>
                 <option value="forums"><?php echo $AppUI->_('Forums'); ?></option>
                 <option value="login"><?php echo $AppUI->_('Login/Logouts'); ?></option>
