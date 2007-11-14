@@ -105,7 +105,7 @@ if (!empty($project_files))
 }
 
 $page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;
-$limit = isset($_REQUEST['limit']) ? (int)$_REQUEST['limit'] : 10;
+$limit = isset($_REQUEST['limit']) ? (int)$_REQUEST['limit'] : 100;
 $offset = ($page-1) * $limit;
 $q  = new DBQuery;
 $q->includeCount();
