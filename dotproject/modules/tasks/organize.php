@@ -259,7 +259,7 @@ function showtask_edit($task, $level=0)
 		<?php echo $AppUI->_('Due In');?>
 		</a>
 	</th>
-	<th width="0"><?php echo $AppUI->_('Select');?></th>
+	<th width="60"><input type="checkbox" name="toggleSelects" id="toggleSelects" onclick="toggleTasks();"/>&nbsp;<?php echo $AppUI->_('Select');?></th>
 </tr>
 
 <?php
@@ -363,5 +363,16 @@ foreach ($tasks as $task)
 			sel.options[0] = null;
 		sel.options[0] = new Option('loading...', -1);
 		frames['thread'].location.href = './index.php?m=tasks&a=listtasks&project=' + proj;
+	}
+	function toggleTasks()
+	{
+		var current_select = document.getElementById('toggleSelects');
+		var flag = current_select.checked;
+		var selects = document.getElementsByTagName('input');
+		for (var i = 0; i < selects.length; i++) {
+			if (selects[i].name == 'selected[]') {
+				selects[i].checked = flag;
+			}
+		}
 	}
 </script>
