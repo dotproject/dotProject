@@ -313,14 +313,25 @@ function findgchild( &$tarr, $parent, $level=0 ){
 reset($projects);
 //$p = &$projects[$project_id];
 foreach ($projects as $p) {
+	$parents = array();
 	$tnums = count( $p['tasks'] );
 
 	for ($i=0; $i < $tnums; $i++) {
 	        $t = $p['tasks'][$i];
+		if (! isset($parents[$t['task_parent']])) {
+			$parents[$t['task_parent']] = false;
+		}
 	        if ($t['task_parent'] == $t['task_id']) {
+			$parents[$t['task_parent']] = true;
 	                showgtask( $t );
 	                findgchild( $p['tasks'], $t['task_id'] );
 	        }
+	}
+	// Check for ophans.
+	foreach ($parents as $id => $ok) {
+		if (! $ok) {
+			findgchild($p['tasks'], $t['task_parent']);
+		}
 	}
 }
 

@@ -32,7 +32,6 @@ if ($a == 'todo') {
 		$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0 ) );
 		$AppUI->setState( 'TaskDayShowDyn', dPgetParam($_POST, 'showDynTasks', 0) );
 		$AppUI->setState( 'TaskDayShowPin', dPgetParam($_POST, 'showPinned', 0));
-		$AppUI->setState( 'TaskDayShowEmptyDate', dPgetParam($_POST, 'showEmptyDate', 0));
 	}
 	
 	$showArcProjs = $AppUI->getState( 'TaskDayShowArc', 0 );
@@ -40,7 +39,6 @@ if ($a == 'todo') {
 	$showHoldProjs = $AppUI->getState( 'TaskDayShowHold', 0);
 	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
-	$showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
 } else {
 	$showPinned = dPgetParam( $_POST, 'showPinned', '0' );
@@ -58,8 +56,6 @@ if ($a == 'todo') {
 	$showLowTasks = dPgetParam( $_POST, 'showLowTasks', '0' );
 	$showLowTasks = (($showLowTasks != '0')?'1':$showLowTasks);
 	
-	$showEmptyDate = dPgetParam( $_POST, 'showEmptyDate', '0' );
-	$showEmptyDate = (($showEmptyDate != '0')?'1':$showEmptyDate);
 }
 
 // months to scroll
@@ -224,10 +220,6 @@ function showFullProject() {
 			<td align="center" valign="bottom" nowrap="nowrap">
 				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
 				<label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-			</td>
-			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showEmptyDate" id="showEmptyDate" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> />
-				<label for="showEmptyDate"><?php echo $AppUI->_('Empty Dates'); ?></label>
 			</td>
 			</tr>
 		</table>
