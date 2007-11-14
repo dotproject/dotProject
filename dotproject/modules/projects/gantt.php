@@ -285,8 +285,8 @@ foreach($projects as $p) {
  			if ($t["task_end_date"] == null)
  				$t["task_end_date"] = $t["task_start_date"];
 
-			$tStart = ($t["task_start_date"] > "0000-00-00 00:00:00") ? $t["task_start_date"] : date("Y-m-d H:i:s");
-			$tEnd = ($t["task_end_date"] > "0000-00-00 00:00:00") ? $t["task_end_date"] : date("Y-m-d H:i:s");
+			$tStart = ($t["task_start_date"] > "0000-00-00 00:00:00") ? $t["task_start_date"] : $start;
+			$tEnd = ($t["task_end_date"] > "0000-00-00 00:00:00") ? $t["task_end_date"] : $end;
 			$tStartObj = new CDate($tStart);
 			$tEndObj = new CDate($tEnd);
  				
