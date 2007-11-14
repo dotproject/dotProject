@@ -798,7 +798,7 @@ if ($folder){ ?>
           $sprojects[$prj_id] = $idx_companies[$prj_id].': '.$prj_name;
     }
     asort($sprojects);
-    $sprojects = array( 'O'=>'('.$AppUI->_('Move to Project', UI_OUTPUT_RAW).')') + array( '0'=>'('.$AppUI->_('All Projects', UI_OUTPUT_RAW).')') + $sprojects ;
+    $sprojects = array( 'O'=>'('.$AppUI->_('Move to Project', UI_OUTPUT_RAW).')') + array( '0'=>'('.$AppUI->_('No Project Association', UI_OUTPUT_RAW).')') + $sprojects ;
 ?>
                 <tr>
                         <td colspan="50" align="right">
