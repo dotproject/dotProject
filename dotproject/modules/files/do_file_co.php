@@ -23,7 +23,9 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-set_time_limit( 600 );
+if (!ini_get('safe_mode')) {
+	set_time_limit( 600 );
+}
 ignore_user_abort( 1 );
 
 $obj->checkout($AppUI->user_id, $file_id, $coReason);
