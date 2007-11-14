@@ -7,6 +7,8 @@ if (!defined('DP_BASE_DIR')){
 // $Id$
 global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $tab, $loadFromTab;
 
+// Make sure that we can see users that are allocated to the task.
+
 if ( $task_id == 0 ) {
 	// Add task creator to assigned users by default
 	$assigned_perc = array($AppUI->user_id => "100");	
@@ -14,19 +16,21 @@ if ( $task_id == 0 ) {
 	// Pull users on this task
 //			 SELECT u.user_id, CONCAT_WS(' ',u.user_first_name,u.user_last_name)
 	$sql = "
-			 SELECT user_id, perc_assignment
+			 SELECT user_tasks.user_id, perc_assignment, concat_ws(', ', contact_last_name, contact_first_name) as contact_name
 			   FROM user_tasks
+			 LEFT JOIN users USING (user_id)
+			 LEFT JOIN contacts ON contacts.contact_id = users.user_contact
 			 WHERE task_id =$task_id
 			 AND task_id <> 0
 			 ";
-	$assigned_perc = db_loadHashList( $sql );	
+	$assigned_perc = db_loadHashList( $sql, 'user_id' );	
 }
 
 $initPercAsignment = "";
 $assigned = array();
-foreach ($assigned_perc as $user_id => $perc) {
-	$assigned[$user_id] = $users[$user_id] . " [" . $perc . "%]";
-	$initPercAsignment .= "$user_id=$perc;";
+foreach ($assigned_perc as $user_id => $data) {
+	$assigned[$user_id] = $data['contact_name'] . " [" . $data['perc_assignment'] . "%]";
+	$initPercAsignment .= "$user_id={$data['perc_assignment']};";
 }
 
 ?>
