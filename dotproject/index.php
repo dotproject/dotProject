@@ -216,35 +216,12 @@ $canEdit = $perms->checkModule($m, 'edit');
 $canAuthor = $perms->checkModule($m, 'add');
 $canDelete = $perms->checkModule($m, 'delete');
 
-// reversing fix to Mantis 1910 as it broke access to MyInfo
-// if (!$canAccess) {
-// 	$AppUI->redirect('m=public&a=access_denied');
-// }
-
 if ( !$suppressHeaders ) {
 	// output the character set header
 	if (isset( $locale_char_set )) {
 		header('Content-type: text/html;charset='.$locale_char_set);
 	}
 }
-
-/*
- *
- * TODO: Permissions should be handled by each file.
- * Denying access from index.php still doesn't asure
- * someone won't access directly skipping this security check.
- *
-// bounce the user if they don't have at least read access
-if (!(
-	  // however, some modules are accessible by anyone
-	  $m == 'public' ||
-	  ($m == 'admin' && $a == 'viewuser')
-	  )) {
-	if (!$canRead) {
-		$AppUI->redirect( 'm=public&a=access_denied' );
-	}
-}
-*/
 
 // include the module class file - we use file_exists instead of @ so
 // that any parse errors in the file are reported, rather than errors

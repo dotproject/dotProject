@@ -3,6 +3,10 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
+// First order check if we are allowed to view
+if (!$canAccess) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
 $AppUI->savePlace();
 
 // retrieve any state parameters
