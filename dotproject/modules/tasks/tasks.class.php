@@ -1463,7 +1463,8 @@ class CTask extends CDpObject
 		// delete all current entries from $cslist
 		if ($del == true && $rmUsers == true) {
 			foreach ($tarr as $user_id) {
-				if (trim($user_id)) {
+				$user_id = (int)$user_id;
+				if (!empty($user_id)) {
 					$this->removeAssigned($user_id);
 				}
 			}
