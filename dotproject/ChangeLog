@@ -1,3 +1,157 @@
+2007-11-14 22:25  (ajdonnison)
+---------------------------------
+classes/query.class.php
+modules/history/index.php
+- #2216 - Support pagination of history - note that there may still be issues
+- with old data and with records not visible due to permissions.
+
+2007-11-14 21:24  (ajdonnison)
+---------------------------------
+modules/calendar/calendar.class.php
+- Make module php4 compatible.
+
+2007-11-14 20:05  (ajdonnison)
+---------------------------------
+classes/ui.class.php
+- #2238 - Fix Gantt chart display in classic theme.
+
+2007-11-14 18:53  (ajdonnison)
+---------------------------------
+modules/tasks/do_updatetask.php
+- #2194 - Make sure end hour is kept when changing end date.
+
+2007-11-14 18:38  (ajdonnison)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2192 - Display of Log option not following correct logic (should only be disabled for dynamic tasks).
+
+2007-11-14 18:30  (ajdonnison)
+---------------------------------
+modules/companies/view.php
+- #2208 - Add Owner to company details page.
+
+2007-11-14 18:24  (ajdonnison)
+---------------------------------
+modules/tasks/organize.php
+- #2209 - Add option to select/deselect all tasks.
+
+2007-11-14 18:24  (ajdonnison)
+---------------------------------
+db/dotproject.sql
+db/upgrade_latest.sql
+- Fixed NOT NULL problem with some windows installs.
+
+2007-11-14 17:42  (ajdonnison)
+---------------------------------
+modules/projects/gantt.php
+- #2187 - Change missing task start/end dates to match project start/end date.
+
+2007-11-14 17:13  (ajdonnison)
+---------------------------------
+modules/tasks/gantt.php
+modules/tasks/viewgantt.php
+- #2199 - Search for orphans when showing tasks by parent
+- Remove EmptyDates option which is not supported by gantt.php
+
+2007-11-14 16:46  (ajdonnison)
+---------------------------------
+modules/tasks/ae_resource.php
+- Make the adding of a new task consistent.
+
+2007-11-14 16:05  (ajdonnison)
+---------------------------------
+modules/tasks/ae_resource.php
+- #2231 - Adjust human resource list so that even if you aren't allowed to view the user list, you can view users that are allocated to the task you can edit.
+
+2007-11-14 15:37  (ajdonnison)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2193 - Included patch from phpgus to fix tasks listings on calendar pages.
+
+2007-11-14 14:30  (ajdonnison)
+---------------------------------
+modules/calendar/calendar.class.php
+modules/calendar/projects_tab.events.php
+- #2217 Added support for project-specific events tab.  Added tab.
+
+2007-11-14 14:30  (ajdonnison)
+---------------------------------
+modules/calendar/projects_tab.events.php
+- file projects_tab.events.php was initially added on branch stable_2.
+
+2007-11-14 13:25  (ajdonnison)
+---------------------------------
+index.php
+modules/companies/index.php
+- #2183 - Make sure companies module is correctly disabled, while not disabling myInfo and other functions.
+
+2007-11-14 12:57  (ajdonnison)
+---------------------------------
+modules/files/files.class.php
+- Dump helpdesk linkages as it looks like the current version of helpdesk doesn't work this way anymore.
+- And why we have external modules hacking core code is beyond me.
+
+2007-11-14 12:26  (ajdonnison)
+---------------------------------
+classes/ui.class.php
+- #2201 - Fix help link (I know we don't need it, but we may as well fix it).
+
+2007-11-14 12:18  (merlinyoda)
+---------------------------------
+modules/files/folders_table.php
+- Fix for Mantis Bug Report #2210
+
+2007-11-14 11:57  (merlinyoda)
+---------------------------------
+modules/tasks/viewgantt.php
+- Added POST check to fix for Mantis Bug Report 2189
+
+2007-11-14 11:54  (merlinyoda)
+---------------------------------
+modules/tasks/viewgantt.php
+- More definitive fix for Mantis Bug Report #2189
+
+2007-11-14 11:48  (merlinyoda)
+---------------------------------
+modules/tasks/viewgantt.php
+- Fix for Mantis Bug Report #2189
+
+2007-11-14 11:44  (ajdonnison)
+---------------------------------
+modules/projects/gantt.php
+- #2226 - Reduced size of fonts to ensure UTF-8 characters display correctly (as per gvl).
+
+2007-11-14 11:37  (ajdonnison)
+---------------------------------
+modules/files/do_file_co.php
+- #2234 - Incorporated fix from phpgus on safe mode warnings on file checkout.
+
+2007-11-14 11:02  (ajdonnison)
+---------------------------------
+modules/forums/post_message.php
+- #2202 - Don't go all the way back to forums index after editing/adding.
+
+2007-11-14 10:48  (ajdonnison)
+---------------------------------
+modules/tasks/tasks.class.php
+- #2231 - Fix at least one part of the multiple unassigments issue.
+
+2007-11-14 10:43  (merlinyoda)
+---------------------------------
+modules/tasks/todo.php
+modules/tasks/todo_tasks_sub.php
+- Fix for Mantis Bug Report #2188
+
+2007-11-14 10:33  (ajdonnison)
+---------------------------------
+classes/libmail.class.php
+- #2236 - fix line endings when no attachments involved.
+
+2007-11-13 04:08  (cyberhorse)
+---------------------------------
+ChangeLog
+- Updating ChangeLog on 2007-11-13
+
 2007-11-13 02:52  (cyberhorse)
 ---------------------------------
 modules/history/index.php
