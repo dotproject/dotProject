@@ -10,9 +10,13 @@ require_once( $AppUI->getModuleClass( 'tasks' ) );
 require_once( $AppUI->getModuleClass( 'projects' ) );
 global $helpdesk_available;
 
+/** The helpdesk module seems to no longer have files support (at least in the dotmods CVS)
+so this breaks if helpdesk is available.  This is NOT the way to build co-operating modules.
 if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
 	require_once( $AppUI->getModuleClass( 'helpdesk' ) );
 }
+*/
+$helpdesk_available = false;
 /**
 * File Class
 */
