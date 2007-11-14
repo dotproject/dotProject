@@ -1068,18 +1068,23 @@ class CTask extends CDpObject
 	 * @param Date End date of the period
 	 * @param integer The target company
 	 */
-	function getTasksForPeriod($start_date, $end_date, $company_id=0) {
+	function getTasksForPeriod($start_date, $end_date, $company_id=0, $user_id=null) {
 		GLOBAL $AppUI;
 		$q =& new DBQuery;
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
 		
+		// Allow for possible passing of user_id 0 to stop user filtering
+		if(!isset($user_id)){
+			$user_id = $AppUI->user_id;
+		}
+ 
 		// filter tasks for not allowed projects
 		$tasks_filter = '';
 		// check permissions on projects
 		$proj = new CProject();
-		$task_filter_where = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
+		$task_filter_where = $proj->getAllowedSQL($AppUI->user_id, 't.task_project');
 		// exclude read denied projects
 		$deny = $proj->getDeniedRecords($AppUI->user_id);
 		// check permissions on tasks
@@ -1087,25 +1092,32 @@ class CTask extends CDpObject
 		$allow = $obj->getAllowedSQL($AppUI->user_id);
 		
 		$q->addTable('tasks', 't');
+		if ($user_id) {
+			$q->innerJoin('user_tasks', 'ut', 't.task_id=ut.task_id');
+		}
 		$q->innerJoin('projects', 'p', 't.task_project = p.project_id');
-		$q->addQuery('DISTINCT task_id, task_name, task_start_date, task_end_date, task_duration' 
-					 . ', task_duration_type, project_color_identifier AS color, project_name');
+		$q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' 
+					 . ', t.task_duration_type, p.project_color_identifier AS color, p.project_name');
 		$q->addWhere('task_status > -1' 
 					 . " AND (task_start_date <= '{$db_end}' AND (task_end_date >= '{$db_start}'" 
 					 . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL))");
+		if ($user_id) {
+			$q->addWhere("ut.user_id = '$user_id'");
+		}
+
 		if ($company_id) {
-			$q->addWhere('project_company = ' . $company_id);
+			$q->addWhere('p.project_company = ' . $company_id);
 		}
 		if (count($task_filter_where) > 0) {
 			$q->addWhere('(' . implode(' AND ', $task_filter_where) . ')');
 		}
 		if (count($deny) > 0) {
-			$q->addWhere('(task_project NOT IN (' . implode(', ', $deny) . '))');
+			$q->addWhere('(t.task_project NOT IN (' . implode(', ', $deny) . '))');
 		}
 		if (count($allow) > 0) {
 			$q->addWhere('(' . implode(' AND ', $allow) . ')');
 		}
-		$q->addOrder('task_start_date');
+		$q->addOrder('t.task_start_date');
 		
 		// assemble query
 		$sql = $q->prepare();
