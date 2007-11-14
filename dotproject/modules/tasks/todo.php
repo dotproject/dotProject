@@ -118,7 +118,7 @@ if (!$showDynTasks)
 if ($showPinned)
 	$q->addWhere('task_pinned = 1');
 if (!$showEmptyDate)
-	$q->addWhere("ta.task_end_date != '' AND ta.task_end_date != '0000-00-00 00:00:00'");
+	$q->addWhere("ta.task_start_date != '' AND ta.task_start_date != '0000-00-00 00:00:00'");
 
 
 if (count($allowedTasks))
@@ -142,9 +142,13 @@ $tasks = db_loadList( $sql );
 */
 for ($j=0; $j < count($tasks); $j++) {
 		
-	if ( $tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' ) {
-		
-		 $tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+	if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
+		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){
+			$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
+			$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
+		} else {
+			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+		}
 	}
 }
 
