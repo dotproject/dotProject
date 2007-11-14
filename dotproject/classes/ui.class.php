@@ -980,7 +980,8 @@ the active tab, and the selected tab **/
 			$s = "<table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\">\n<tr>";
 			if ( count($this->tabs)-1 < $this->active ) {
 				//Last selected tab is not available in this view. eg. Child tasks
-				$this->active = 0;
+				// Breaks classic view.
+				// $this->active = 0;
 			}
 			foreach( $this->tabs as $k => $v ) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
@@ -1007,6 +1008,7 @@ the active tab, and the selected tab **/
 			$s .= '<td width="100%" colspan="'.(count($this->tabs)*2 + 1).'" class="tabox">';
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
+
 			if ( $this->baseInc.$this->tabs[$this->active][0] != "" ) {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
