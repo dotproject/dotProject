@@ -367,7 +367,7 @@ function BuildMail()
     if( count( $this->aattach ) > 0 ) {
         $this->_build_attachement();
     } else {
-        $sep = "\n";
+        $sep = "\r\n";
         $arr = preg_split("/(\r?\n)|\r/", $this->body);
         $this->fullBody = implode($sep, $arr);
     }
