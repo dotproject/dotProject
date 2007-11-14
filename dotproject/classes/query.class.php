@@ -54,6 +54,7 @@ class DBQuery {
   var $value_list;
   var $create_table;
   var $create_definition;
+  var $include_count;
   var $_table_prefix;
 	var $_query_id = null;
 	var $_old_style = null;
@@ -65,6 +66,7 @@ class DBQuery {
     else
       $this->_table_prefix = dPgetConfig('dbprefix', '');
 
+    $this->include_count = false;
     $this->clear();
   }
   
@@ -404,6 +406,15 @@ class DBQuery {
   }
 
   /**
+   * Set include count feature, grabs the count of rows that
+   * would have been returned had no limit been set.
+   */
+  function includeCount()
+  {
+  	$this->include_count = true;
+  }
+
+  /**
    * Prepare a query for execution via db_exec.
    *
    */
@@ -455,6 +466,9 @@ class DBQuery {
   function prepareSelect()
   {
     $q = 'SELECT ';
+    if ($this->include_count) {
+    	$q .= 'SQL_CALC_FOUND_ROWS ';
+    }
     if (isset($this->query)) {
       if (is_array($this->query)) {
 	$inselect = false;
@@ -910,6 +924,19 @@ class DBQuery {
     return $result;
   }
   //2}}}
+
+	function foundRows()
+	{
+		global $db;
+		$result = false;
+		if ($this->include_count) {
+			if ($qid = $db->Execute('SELECT FOUND_ROWS() as rc')) {
+				$data = $qid->FetchRow();
+				$result = isset($data['rc']) ? $data['rc'] : $data[0];
+			}
+		}
+		return $result;
+	}
 
 	function quote($string)
 	{

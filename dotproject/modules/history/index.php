@@ -13,28 +13,6 @@ if (!defined('DP_BASE_DIR')){
 $AppUI->savePlace();
 $titleBlock = new CTitleBlock( 'History', 'stock_book_blue_48.png', $m, "$m.$a" );
 $titleBlock->show();
-?>
-<table width="100%" cellspacing="1" cellpadding="0" border="0">
-<tr>
-        <td nowrap align="right">
-<form name="filter" action="?m=history" method="post" >
-<?php echo $AppUI->_('Changes to'); ?>:
-        <select name="filter" onChange="document.filter.submit()">
-                <option value=""></option>
-                <option value=""><?php echo $AppUI->_('Show all'); ?></option>
-                <option value="projects"><?php echo $AppUI->_('Projects'); ?></option>
-                <option value="tasks"><?php echo $AppUI->_('Tasks'); ?></option>
-                <option value="files"><?php echo $AppUI->_('Files'); ?></option>
-                <option value="forums"><?php echo $AppUI->_('Forums'); ?></option>
-                <option value="login"><?php echo $AppUI->_('Login/Logouts'); ?></option>
-        </select>
-</form>
-        </td>
-	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('Add history');?>" onclick="window.location='?m=history&a=addedit'"></td>
-</table>
-
-
-<?php
 
 function show_history($history)
 {
@@ -93,8 +71,13 @@ function show_history($history)
 }
 
 $filter = array();
-if (!empty($_REQUEST['filter']))
+if (!empty($_REQUEST['filter'])) {
+	$in_filter = $_REQUEST['filter'];
         $filter[] = 'history_table = \'' . $_REQUEST['filter'] . '\' ';
+} else {
+	$in_filter = '';
+}
+
 if (!empty($_REQUEST['project_id']))
 {
 	$project_id = $_REQUEST['project_id'];
@@ -121,15 +104,61 @@ if (!empty($project_files))
 	)";
 }
 
+$page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;
+$limit = isset($_REQUEST['limit']) ? (int)$_REQUEST['limit'] : 10;
+$offset = ($page-1) * $limit;
 $q  = new DBQuery;
+$q->includeCount();
 $q->addTable('history');
 $q->addTable('users');
 $q->addWhere('history_user = user_id');
 $q->addWhere($filter);
 $q->addOrder('history_date DESC');
+$q->setLimit($limit, $offset);
 $history = $q->loadList();
-
+$count = $q->foundRows();
+$pages = (int)($count / $limit) + 1;
+$max_pages = 20;
+if ($pages > $max_pages) {
+	$first_page = max($page - (int)($max_pages/2), 1);
+	$last_page = min($first_page + $max_pages - 1, $pages);
+} else {
+	$first_page = 1;
+	$last_page = $pages;
+}
 ?>
+
+<table width="100%" cellspacing="1" cellpadding="0" border="0">
+<tr>
+        <td nowrap align="right">
+<form name="filter" action="?m=history" method="post" >
+<?php echo $AppUI->_('Changes to'); ?>:
+        <select name="filter" onChange="document.filter.submit()">
+                <option value=""></option>
+                <option value="" <?php if ($in_filter == '') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Show all'); ?></option>
+                <option value="projects" <?php if ($in_filter == 'projects') echo 'selected="selected"';?>><?php echo $AppUI->_('Projects'); ?></option>
+                <option value="tasks" <?php if ($in_filter == 'tasks') echo 'selected="selected"';?>><?php echo $AppUI->_('Tasks'); ?></option>
+                <option value="files" <?php if ($in_filter == 'files') echo 'selected="selected"';?>><?php echo $AppUI->_('Files'); ?></option>
+                <option value="forums" <?php if ($in_filter == 'forums') echo 'selected="selected"';?>><?php echo $AppUI->_('Forums'); ?></option>
+                <option value="login" <?php if ($in_filter == 'login') echo 'selected="selected"';?>><?php echo $AppUI->_('Login/Logouts'); ?></option>
+        </select>
+	<?php
+		if ($pages > 1) {
+			for ($i = $first_page; $i <= $last_page; $i++) {
+				echo "&nbsp;";
+				if ( $i == $page)  {
+					echo '<b>'.$i.'</b>';
+				} else {
+					echo '<a href="?m=history&filter=' . $in_filter . '&pg=' . $i . '">' . $i . '</a>';
+				}
+			}
+		}
+	?>
+</form>
+        </td>
+	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('Add history');?>" onclick="window.location='?m=history&a=addedit'"></td>
+</table>
+
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th width="10">&nbsp;</th>
