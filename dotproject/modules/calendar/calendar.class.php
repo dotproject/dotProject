@@ -541,7 +541,9 @@ class CEvent extends CDpObject {
 		
 		$project =& new CProject;
 		if ($project_id) {
-			if ($AppUI->acl()->checkModuleItem('projects', 'view', $project_id, $user_id)) {
+			$p =& $AppUI->acl();
+
+			if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
 				$allowedProjects = array('p.project_id = ' . $project_id);
 			} else {
 				$allowedProjects = array('1=0');
