@@ -30,6 +30,7 @@ if ($modclass && file_exists ($modclass))
 
 $q =& new DBQuery;
 $q->addTable($table, 'a');
+$query_result = false;
 
 switch ($table) {
 case 'companies':
@@ -96,10 +97,26 @@ case "tasks":
 	$task_project = dPgetParam( $_GET, 'task_project', 0 );
 
 	$title = 'Task';
-	$q->addQuery( 'task_id,task_name');
-	$q->addOrder('task_name');
+	$q->addQuery( 'task_id, task_name, task_parent');
+	$q->addOrder('task_parent, task_parent = task_id desc');
 	if ($task_project)
 		$q->addWhere("task_project = $task_project");
+	$task_list = $q->loadList();
+	$level = 0;
+	$query_result = array();
+	$last_parent = 0;
+	foreach ($task_list as $task) {
+		if ($task['task_parent'] != $task['task_id']) {
+			if ($last_parent != $task['task_parent']) {
+				$last_parent = $task['task_parent'];
+				$level++;
+			}
+		} else {
+			$last_parent = 0;
+			$level = 0;
+		}
+		$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+	}
 	break;
 case 'users':
 	$title = 'User';
@@ -126,7 +143,7 @@ if (!$ok) {
 		echo "<br />ok = $ok \n";
 	}
 } else {
-	$list = arrayMerge( array( 0=>$AppUI->_( '[none]' )), $q->loadHashList( ) );
+	$list = arrayMerge( array( 0=>$AppUI->_( '[none]' )), $query_result ? $query_result : $q->loadHashList( ) );
 	echo db_error();
 ?>
 <script language="javascript">
