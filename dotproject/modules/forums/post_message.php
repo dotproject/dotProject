@@ -8,6 +8,15 @@ $message_id = isset( $_GET['message_id'] ) ? $_GET['message_id'] : 0;
 $message_parent = isset( $_GET['message_parent'] ) ? $_GET['message_parent'] : -1;
 $forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
 
+// Build a back-url for when the back button is pressed
+$back_url_params = array();
+foreach ($_GET as $k => $v) {
+	if ($k != 'post_message') {
+		$back_url_params[] = "$k=$v";
+	}
+}
+$back_url = implode('&', $back_url_params);
+
 //Pull forum information
 $q  = new DBQuery;
 $q->addTable('forums');
@@ -148,7 +157,7 @@ $date = intval( $message_info["message_date"] ) ? new CDate( $message_info["mess
 </tr>
 <tr>
 	<td>
-		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?m=forums';">
+		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';">
 	</td>
 	<td align="right"><?php
 		if ($AppUI->user_id == $message_info['message_author'] || $AppUI->user_id == $forum_info["forum_owner"] || $message_id ==0 || (!empty($perms['all']) && !getDenyEdit('all')) ) {
