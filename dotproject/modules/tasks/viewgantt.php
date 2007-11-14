@@ -25,7 +25,7 @@ $showWork = (($showWork != '0')?'1':$showWork);
 $sortByName = dPgetParam( $_POST, 'sortByName', '0' );
 $sortByName = (($sortByName != '0')?'1':$sortByName);
 
-if (isset( $_POST['show_form'] )) {
+if ($a == 'todo') {
 	$AppUI->setState( 'TaskDayShowArc', dPgetParam( $_POST, 'showArcProjs', 0 ) );
 	$AppUI->setState( 'TaskDayShowLow', dPgetParam( $_POST, 'showLowTasks', 0 ) );
 	$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0 ) );
@@ -41,7 +41,6 @@ if (isset( $_POST['show_form'] )) {
 	$showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
 } else {
-	
 	$showPinned = dPgetParam( $_POST, 'showPinned', '0' );
 	$showPinned = (($showPinned != '0')?'1':$showPinned);
 	
@@ -54,7 +53,7 @@ if (isset( $_POST['show_form'] )) {
 	$showDynTasks = dPgetParam( $_POST, 'showDynTasks', '0' );
 	$showDynTasks = (($showDynTasks != '0')?'1':$showDynTasks);
 	
-	$showLowTasks = dPgetParam( $_POST, 'showLowTasks', '1' );
+	$showLowTasks = dPgetParam( $_POST, 'showLowTasks', '0' );
 	$showLowTasks = (($showLowTasks != '0')?'1':$showLowTasks);
 	
 	$showEmptyDate = dPgetParam( $_POST, 'showEmptyDate', '0' );
