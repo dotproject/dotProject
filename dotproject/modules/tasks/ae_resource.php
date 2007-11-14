@@ -11,7 +11,7 @@ global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $t
 
 if ( $task_id == 0 ) {
 	// Add task creator to assigned users by default
-	$assigned_perc = array($AppUI->user_id => "100");	
+	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));	
 } else {
 	// Pull users on this task
 //			 SELECT u.user_id, CONCAT_WS(' ',u.user_first_name,u.user_last_name)
