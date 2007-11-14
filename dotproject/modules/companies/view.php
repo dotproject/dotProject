@@ -109,6 +109,10 @@ function delIt() {
 			<td class="hilite" width="100%"><?php echo $obj->company_name;?></td>
 		</tr>
 		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner');?>:</td>
+			<td class="hilite" width="100%"><?php echo "{$obj->contact_first_name} {$obj->contact_last_name}";?></td>
+		</tr>
+		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email');?>:</td>
 			<td class="hilite" width="100%"><?php echo $obj->company_email;?></td>
 		</tr>
