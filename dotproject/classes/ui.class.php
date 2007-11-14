@@ -1170,7 +1170,7 @@ class CTitleBlock_core {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
 			//$s .= $CT . contextHelp( '<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_( 'Help' ).'" />', $this->helpref );
 
-			$s .= "\n\t<a href=\"#".$this->helpref."\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes)\" title=\"".$AppUI->_( 'Help' )."\">";
+			$s .= "\n\t<a href=\"#".$this->helpref."\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_( 'Help' )."\">";
 			$s .= "\n\t\t" . dPshowImage( './images/icons/stock_help-16.png', '16', '16', $AppUI->_( 'Help' ) );
 			$s .= "\n\t</a>";
 			$s .= "\n</td>";
