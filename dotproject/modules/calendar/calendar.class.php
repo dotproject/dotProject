@@ -527,7 +527,7 @@ class CEvent extends CDpObject {
 * @param Date End date of the period
 * @return array A list of events
 */
-	function getEventsForPeriod( $start_date, $end_date, $filter = 'all', $user_id = null ) {
+	function getEventsForPeriod( $start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0) {
 		global $AppUI;
 
 	// the event times are stored as unix time stamps, just to be different
@@ -540,7 +540,15 @@ class CEvent extends CDpObject {
 
 		
 		$project =& new CProject;
-		$allowedProjects = $project->getAllowedSQL($user_id, 'event_project');
+		if ($project_id) {
+			if ($AppUI->acl()->checkModuleItem('projects', 'view', $project_id, $user_id)) {
+				$allowedProjects = array('p.project_id = ' . $project_id);
+			} else {
+				$allowedProjects = array('1=0');
+			}
+		} else {
+			$allowedProjects = $project->getAllowedSQL($user_id, 'event_project');
+		}
 		
 		//do similiar actions for recurring and non-recurring events
 		$queries = array('q'=>'q', 'r'=>'r');
