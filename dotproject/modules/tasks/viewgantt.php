@@ -12,40 +12,54 @@ $project_id = defVal( @$_GET['project_id'], 0);
 // sdate and edate passed as unix time stamps
 $sdate = dPgetParam( $_POST, 'sdate', 0 );
 $edate = dPgetParam( $_POST, 'edate', 0 );
-$showLabels = dPgetParam( $_POST, 'showLabels', '0' );
-//if set GantChart includes user labels as captions of every GantBar
-if ($showLabels!='0') {
-    $showLabels='1';
-}
-$showWork = dPgetParam( $_POST, 'showWork', '0' );
-if ($showWork!='0') {
-    $showWork='1';
-}
-$sortByName = dPgetParam( $_POST, 'sortByName', '0' );
-if ($sortByName!='0') {
-    $sortByName='1';
-}
-$showPinned = dPgetParam( $_POST, 'showPinned', '0' );
-if ($showPinned!='0') {
-    $showPinned='1';
-}
-$showArcProjs = dPgetParam( $_POST, 'showArcProjs', '0' );
-if ($showArcProjs!='0') {
-    $showArcProjs='1';
-}
-$showHoldProjs = dPgetParam( $_POST, 'showHoldProjs', '0' );
-if ($showHoldProjs!='0') {
-    $showHoldProjs='1';
-}
-$showDynTasks = dPgetParam( $_POST, 'showDynTasks', '0' );
-if ($showDynTasks!='0') {
-    $showDynTasks='1';
-}
-$showLowTasks = dPgetParam( $_POST, 'showLowTasks', '1' );
-if ($showLowTasks!='0') {
-    $showLowTasks='1';
-}
 
+
+
+//if set GantChart includes user labels as captions of every GantBar
+$showLabels = dPgetParam( $_POST, 'showLabels', '0' );
+$showLabels = (($showLabels != '0')?'1':$showLabels);
+
+$showWork = dPgetParam( $_POST, 'showWork', '0' );
+$showWork = (($showWork != '0')?'1':$showWork);
+
+$sortByName = dPgetParam( $_POST, 'sortByName', '0' );
+$sortByName = (($sortByName != '0')?'1':$sortByName);
+
+if (isset( $_POST['show_form'] )) {
+	$AppUI->setState( 'TaskDayShowArc', dPgetParam( $_POST, 'showArcProjs', 0 ) );
+	$AppUI->setState( 'TaskDayShowLow', dPgetParam( $_POST, 'showLowTasks', 0 ) );
+	$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0 ) );
+	$AppUI->setState( 'TaskDayShowDyn', dPgetParam($_POST, 'showDynTasks', 0) );
+	$AppUI->setState( 'TaskDayShowPin', dPgetParam($_POST, 'showPinned', 0));
+	$AppUI->setState( 'TaskDayShowEmptyDate', dPgetParam($_POST, 'showEmptyDate', 0));
+	
+	$showArcProjs = $AppUI->getState( 'TaskDayShowArc', 0 );
+	$showLowTasks = $AppUI->getState( 'TaskDayShowLow', 1);
+	$showHoldProjs = $AppUI->getState( 'TaskDayShowHold', 0);
+	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
+	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+	$showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
+
+} else {
+	
+	$showPinned = dPgetParam( $_POST, 'showPinned', '0' );
+	$showPinned = (($showPinned != '0')?'1':$showPinned);
+	
+	$showArcProjs = dPgetParam( $_POST, 'showArcProjs', '0' );
+	$showArcProjs = (($showArcProjs != '0')?'1':$showArcProjs);
+	
+	$showHoldProjs = dPgetParam( $_POST, 'showHoldProjs', '0' );
+	$showHoldProjs = (($showHoldProjs != '0')?'1':$showHoldProjs);
+	
+	$showDynTasks = dPgetParam( $_POST, 'showDynTasks', '0' );
+	$showDynTasks = (($showDynTasks != '0')?'1':$showDynTasks);
+	
+	$showLowTasks = dPgetParam( $_POST, 'showLowTasks', '1' );
+	$showLowTasks = (($showLowTasks != '0')?'1':$showLowTasks);
+	
+	$showEmptyDate = dPgetParam( $_POST, 'showEmptyDate', '0' );
+	$showEmptyDate = (($showEmptyDate != '0')?'1':$showEmptyDate);
+}
 
 // months to scroll
 $scroll_date = 1;
@@ -185,6 +199,7 @@ function showFullProject() {
 	</td>
 </tr>
 <?php if($a == 'todo') { ?>
+<input type="hidden" name="show_form" value="1" />
 <tr>
 	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -208,6 +223,10 @@ function showFullProject() {
 			<td align="center" valign="bottom" nowrap="nowrap">
 				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
 				<label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
+			</td>
+			<td align="center" valign="bottom" nowrap="nowrap">
+				<input type="checkbox" name="showEmptyDate" id="showEmptyDate" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> />
+				<label for="showEmptyDate"><?php echo $AppUI->_('Empty Dates'); ?></label>
 			</td>
 			</tr>
 		</table>
