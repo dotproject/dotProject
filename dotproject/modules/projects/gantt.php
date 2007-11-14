@@ -241,7 +241,7 @@ foreach($projects as $p) {
         $bar->progress->Set(min(($progress/100), 1));
 
         if (is_file( TTF_DIR."FreeSans.ttf" )) {
-        	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+        	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         }
         $bar->SetFillColor("#".$p['project_color_identifier']);
         $bar->SetPattern(BAND_SOLID,"#".$p['project_color_identifier']);
@@ -295,12 +295,14 @@ foreach($projects as $p) {
 				$bar2 = new GanttBar($row++, array(substr(" --".$t["task_name"], 0, 20)."...", $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
 				
 				$bar2->title->SetColor( bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ) );
+				$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
  				$bar2->SetFillColor("#".$p['project_color_identifier']);		
  				$graph->Add($bar2);
  			}
  			else
  			{
  				$bar2  = new MileStone ($row++, "-- " . $t["task_name"], $t["task_start_date"], $tStartObj->format($df));
+				$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
  				$bar2->title->SetColor("#CC0000");
  				$graph->Add($bar2);
  			}				
@@ -320,6 +322,7 @@ foreach($projects as $p) {
 				$workersName .= " ".$w["user_username"];
 			
 				$bar3 = new GanttBar($row++, array("   * ".$w["user_username"], " ", " "," "), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);							
+				$bar3->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
 				$bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
 				$bar3->SetFillColor("#".$p['project_color_identifier']);		
 				$graph->Add($bar3);
