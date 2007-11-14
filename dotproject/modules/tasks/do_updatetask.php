@@ -85,7 +85,9 @@ $task_end_date = new CDate($task->task_end_date);
 $task->task_percent_complete = dPgetParam( $_POST, 'task_percent_complete', null );
 
 if(dPgetParam($_POST, 'task_end_date', '') != ''){
-	$task->task_end_date = $_POST['task_end_date'];
+	$new_date = new CDate($_POST['task_end_date']);
+	$new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
+	$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
 }
 
 if ($task->task_percent_complete >= 100 && ( ! $task->task_end_date || $task->task_end_date == '0000-00-00 00:00:00')){
