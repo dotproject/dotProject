@@ -26,12 +26,14 @@ $sortByName = dPgetParam( $_POST, 'sortByName', '0' );
 $sortByName = (($sortByName != '0')?'1':$sortByName);
 
 if ($a == 'todo') {
-	$AppUI->setState( 'TaskDayShowArc', dPgetParam( $_POST, 'showArcProjs', 0 ) );
-	$AppUI->setState( 'TaskDayShowLow', dPgetParam( $_POST, 'showLowTasks', 0 ) );
-	$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0 ) );
-	$AppUI->setState( 'TaskDayShowDyn', dPgetParam($_POST, 'showDynTasks', 0) );
-	$AppUI->setState( 'TaskDayShowPin', dPgetParam($_POST, 'showPinned', 0));
-	$AppUI->setState( 'TaskDayShowEmptyDate', dPgetParam($_POST, 'showEmptyDate', 0));
+	if (isset( $_POST['show_form'] )) {
+		$AppUI->setState( 'TaskDayShowArc', dPgetParam( $_POST, 'showArcProjs', 0 ) );
+		$AppUI->setState( 'TaskDayShowLow', dPgetParam( $_POST, 'showLowTasks', 0 ) );
+		$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0 ) );
+		$AppUI->setState( 'TaskDayShowDyn', dPgetParam($_POST, 'showDynTasks', 0) );
+		$AppUI->setState( 'TaskDayShowPin', dPgetParam($_POST, 'showPinned', 0));
+		$AppUI->setState( 'TaskDayShowEmptyDate', dPgetParam($_POST, 'showEmptyDate', 0));
+	}
 	
 	$showArcProjs = $AppUI->getState( 'TaskDayShowArc', 0 );
 	$showLowTasks = $AppUI->getState( 'TaskDayShowLow', 1);
