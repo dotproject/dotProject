@@ -27,7 +27,7 @@ CREATE TABLE `companies` (
   `company_zip` varchar(11) default '',
   `company_primary_url` varchar(255) default '',
   `company_owner` int(11) NOT NULL default '0',
-  `company_description` text NOT NULL,
+  `company_description` text,
   `company_type` int(3) NOT NULL DEFAULT '0',
   `company_email` varchar(255),
   `company_custom` LONGTEXT,
