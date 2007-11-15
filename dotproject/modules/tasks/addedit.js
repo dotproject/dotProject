@@ -386,6 +386,9 @@ function calcFinish(f) {
 	var durnType = parseFloat(f.task_duration_type.value); //1 or 24
 
 	//temporary variables
+	if (durnType==24) {
+		durn *= daily_working_hours;
+	}
 	var inc = Math.floor(durn);
 	var hoursToAddToLastDay = 0;
 	var hoursToAddToFirstDay = durn;
@@ -416,7 +419,9 @@ function calcFinish(f) {
 		}
 	}
 		
+	/*
 	if ( durnType==24 ) {
+		hoursToAddToFirstDay = inc * 
 		fullWorkingDays = Math.ceil(inc)+1;
 		e.setMinutes( 0 );
 
@@ -431,6 +436,7 @@ function calcFinish(f) {
 		
 		f.end_hour.value = f.start_hour.value;
 	} else {
+	*/
 		
 		hoursToAddToFirstDay = inc;
 		if ( e.getHours() + inc > cal_day_end )
@@ -475,7 +481,7 @@ function calcFinish(f) {
 			}
 		}
 		f.end_hour.value = (e.getHours() < 10 ? "0"+e.getHours() : e.getHours());
-	}
+	// }
 	
 	var tz1 = "";
 	var tz2 = "";
