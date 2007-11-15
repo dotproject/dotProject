@@ -699,7 +699,7 @@ INSERT INTO `config` VALUES (0, 'parser_application/pdf', '/usr/bin/pdftotext', 
 
 INSERT INTO `config` VALUES (0, 'files_ci_preserve_attr', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'files_show_versions_edit', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES (0, 'reset_memory_limit', '8M', '', 'text');
+INSERT INTO `config` VALUES (0, 'reset_memory_limit', '32M', '', 'text');
 
 # 20050302
 # ldap system config variables
