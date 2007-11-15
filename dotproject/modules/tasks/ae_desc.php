@@ -13,7 +13,7 @@ if (!defined('DP_BASE_DIR')){
   method="post"  name="detailFrm">
 <input type="hidden" name="dosql" value="do_task_aed" />
 <input type="hidden" name="sub_form" value="1" />
-<input type="hidden" name="task_id" value="<?php echo $task_id; ?>"
+<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 <table class="std" width="100%" border="1" cellpadding="4" cellspacing="0">
 <tr>
 	<td width="50%" valign='top'>
