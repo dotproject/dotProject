@@ -30,7 +30,7 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
 function dPupgrade($from_version, $to_version, $last_updated)
 {
 
-	$latest_update = '20071104'; // Set to the latest upgrade date.
+	$latest_update = '20071114'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
@@ -130,6 +130,8 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$perms->add_acl(array('application' => array('view')), null, array($worker, $guest), array('app' => array('users')), null, 1, 1, null, null, 'user');
 
 		// TODO:  Add new versions here.  Keep this message above the default label.
+		case '20071104': // Last changed date.
+		case '20071114': // Current release
 		default:
 			break;
 	}
