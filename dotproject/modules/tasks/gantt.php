@@ -287,14 +287,16 @@ if ($day_diff > 240){
 }
 
 
+$parents = array();
 //This kludgy function echos children tasks as threads
 
 function showgtask( &$a, $level=0 ) {
         /* Add tasks to gantt chart */
 
-        global $gantt_arr;
+        global $gantt_arr, $parents;
 
         $gantt_arr[] = array($a, $level);
+	$parents[$a['task_parent']] = true;
 
 }
 
@@ -313,6 +315,7 @@ function findgchild( &$tarr, $parent, $level=0 ){
 reset($projects);
 //$p = &$projects[$project_id];
 foreach ($projects as $p) {
+	global $parents;
 	$parents = array();
 	$tnums = count( $p['tasks'] );
 
@@ -322,7 +325,6 @@ foreach ($projects as $p) {
 			$parents[$t['task_parent']] = false;
 		}
 	        if ($t['task_parent'] == $t['task_id']) {
-			$parents[$t['task_parent']] = true;
 	                showgtask( $t );
 	                findgchild( $p['tasks'], $t['task_id'] );
 	        }
@@ -330,7 +332,7 @@ foreach ($projects as $p) {
 	// Check for ophans.
 	foreach ($parents as $id => $ok) {
 		if (! $ok) {
-			findgchild($p['tasks'], $t['task_parent']);
+			findgchild($p['tasks'], $id);
 		}
 	}
 }
