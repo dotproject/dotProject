@@ -569,7 +569,7 @@ class CEvent extends CDpObject {
 			
 			if (count($allowedProjects)) {
 				$$query_set->addWhere('( ( ' . implode(' AND ',  $allowedProjects) . ' ) ' 
-					. (($AppUI->getState('CalIdxCompany'))?'':' OR event_project = 0 ').')');
+					. (($AppUI->getState('CalIdxCompany'))?'':$project_id?'':' OR event_project = 0 ').')');
 			}
 			
 			switch ($filter) {
