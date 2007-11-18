@@ -157,6 +157,7 @@ if ($file_id) {
      * to fix the IE download issue for all for http and https
      * 
      */ 
+     ob_end_clean();
 	header('MIME-Version: 1.0');
     header( 'Pragma: ');
     header( 'Cache-Control: public');
@@ -174,6 +175,7 @@ if ($file_id) {
 		}
 		fclose($handle);
 	}
+	flush();
 } else {
 	$AppUI->setMsg( 'fileIdError', UI_MSG_ERROR );
 	$AppUI->redirect();
