@@ -662,34 +662,18 @@ function _addressEncode( $addr, $offset=0 )
  * 
  * @param string $str: the string to be encoded
  * @param int $offset: an optional offset to be counted for the first line
- * @return string the encoded string, made of N encoded words as the original lenght impose
+ * @return string the encoded string, made of N encoded words, ignore length limits.
  */
 function _wordEncode($str, $offset=0)
 {
     if (!$this->canEncode) return $str;
     
     $cs = $this->charset;
-    $str = str_replace(array(' ', "=\r\n", '?') , array('_', '', '=3F'), trim(imap_8bit($str)));
-
-    $enlen = strlen("=?$cs?Q??=");
-    // -4 is to ensure we do not truncate a trailing encoded char
-    $max_fst_line_len = 75 - $enlen - $offset -2;
-    if ( $this->_strlen($str) <= $max_fst_line_len ) {
-        return "=?$cs?Q?$str?=";
-    }
-    
-    if ( FALSE!==$this->_strpos($str, '=', $max_fst_line_len -3) ) { $max_fst_line_len -= 3; }
-    $fst_line = $this->_substr($str, 0, $max_fst_line_len);
-
-    $str = $this->_substr($str, $max_fst_line_len);
-    $str = chunk_split($str, 75 - $enlen, "\r\n");
-    // remove last unneeded CRLF
-    $str = $this->_substr($str, 0, -2);
-    $arows = explode("\r\n", $str);
-    //reattach the first line
-    array_unshift($arows, $fst_line);
-
-    return '=?'.$cs.'?Q?'. implode("?=\r\n =?$cs?Q?", $arows). '?=';
+    $str = str_replace(array(' ', "=\r\n", '?') , array('_', "\n", '=3F'), trim(imap_8bit($str)));
+    $qstr = explode("\n", $str);
+    $start_sentinel = "=?$cs?Q?";
+    $end_sentinel = "?=";
+    return $start_sentinel . implode($end_sentinel . "\r\n\t" . $start_sentinel, $qstr) . $end_sentinel;
 }
 
 function _addressesEncode(&$aaddr, $hdr)
