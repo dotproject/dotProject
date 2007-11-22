@@ -157,7 +157,13 @@ class CDpObject {
 	function duplicate() {
 		$_key = $this->_tbl_key;
 		
-		$newObj = $this;
+		// In php4 assignment does a shallow copy
+		// in php5 clone is required
+		if (version_compare(phpversion(), '5') >= 0) {
+			$newObj = clone $this;
+		} else {
+			$newObj = $this;
+		}
 		// blanking the primary key to ensure that's a new record
 		$newObj->$_key = '';
 		

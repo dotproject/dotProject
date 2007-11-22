@@ -155,7 +155,7 @@ class CProject extends CDpObject {
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project ='.$from_project_id);
-		$q->addWhere('task_id = task_parent');
+		//$q->addWhere('task_id = task_parent');
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks = array_flip(db_loadColumn ($sql));
@@ -167,16 +167,40 @@ class CProject extends CDpObject {
 		$timeOffset = $destDate->getTime() - $origDate->getTime();
 
 		
-		// Dependencies array
+		// Old dependencies array
 		$deps = array();
+		// New dependencies array
+		$newDeps = array();
+		// Old2New task ID array
+		$taskXref = array();
+		// New task ID to old parent array
+		$nid2op = array();
 		
 		// Copy each task into this project and get their deps
 		foreach ($tasks as $orig => $void) {
 			$objTask = new CTask();
 			$objTask->load ($orig);
-			$destTask = $objTask->deepCopy($this->project_id);
-			$tasks[$orig] = $destTask;
+
+			// Grab the old parent id
+			$oldParent = (integer)$objTask->task_parent;
+
 			$deps[$orig] = $objTask->getDependencies ();
+			$destTask = $objTask->copy($this->project_id, 0);
+			$nid2op[$destTask->task_id] = $oldParent;
+			$tasks[$orig] = $destTask;
+			$taskXref[$orig] = (integer)$destTask->task_id;
+		}
+
+		// Build new dependencies array
+		foreach( $deps as $odkey => $od ) {
+			$ndt = '';
+			$ndkey = $taskXref[$odkey];
+			$odep = explode( ',', $od );
+			foreach( $odep as $odt ) {
+				$ndt = $ndt . $taskXref[$odt] . ',';
+			}
+			$ndt = rtrim( $ndt, ',' );
+			$newDeps[$ndkey] = $ndt;
 		}
 		
 		$q->addTable('tasks');
@@ -204,7 +228,10 @@ class CProject extends CDpObject {
 				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
 			}
 			
+			$newTask->task_parent = $taskXref[$nid2op[$newTask->task_id]];
+
 			$newTask->store();
+			$newTask->updateDependencies($newDeps[$task_id]);
 		} // end Fix record integrity	
 			
 	} // end of importTasks
