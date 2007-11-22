@@ -363,7 +363,7 @@ class CFile extends CDpObject {
 			}
 			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
 			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').':     ' . DP_BASE_URL . '/index.php?m=files&a=download&file_id='.$this->file_id;
+				$body .= "\n".$AppUI->_('URL').':     ' . DP_BASE_URL . '/fileviewer.php?file_id='.$this->file_id;
 				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->file_description;	
 			}
 			
