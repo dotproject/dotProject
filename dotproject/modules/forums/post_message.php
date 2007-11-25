@@ -160,7 +160,8 @@ $date = intval( $message_info["message_date"] ) ? new CDate( $message_info["mess
 		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';">
 	</td>
 	<td align="right"><?php
-		if ($AppUI->user_id == $message_info['message_author'] || $AppUI->user_id == $forum_info["forum_owner"] || $message_id ==0 || (!empty($perms['all']) && !getDenyEdit('all')) ) {
+		$canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
+	        if ( $canEdit && ( $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) {
 			echo '<input type="button" value="'.$AppUI->_('submit').'" class=button onclick="submitIt()">';
 		}
 	?></td>
