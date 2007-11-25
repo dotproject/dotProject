@@ -84,7 +84,7 @@ switch ($cmd) {
 		}
 		else
 		{
-			$AppUI->setMsg( 'Module not upgraded', UI_MSG_ERROR );
+			$AppUI->setMsg( 'Module not upgraded (upgrade failed from '.$obj->mod_version.' to '.$config['mod_version'].')', UI_MSG_ERROR );
 		}
 		break;
 	case 'configure':
