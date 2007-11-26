@@ -79,28 +79,6 @@ class CUser extends CDpObject {
 		} else {
 			$acl =& $GLOBALS['AppUI']->acl();
 			$acl->$perm_func($this->user_id, $this->user_username);
-			//Insert Default Preferences
-			//Lets check if the user has allready default users preferences set, if not insert the default ones
-			$q->addTable('user_preferences', 'upr');
-			$q->addWhere("upr.pref_user = $this->user_id");
-			$uprefs = $q->loadList();
-			$q->clear();
-			if (!count($uprefs) && $this->user_id > 0) {
-				//Lets get the default users preferences
-				$q->addTable('user_preferences', 'dup');
-				$q->addWhere("dup.pref_user = 0");
-				$dprefs = $q->loadList();
-				$q->clear();
-				
-				foreach ($dprefs as $dprefskey => $dprefsvalue) {
-					$q->addTable('user_preferences', 'up');
-					$q->addInsert('pref_user', $this->user_id);
-					$q->addInsert('pref_name', $dprefsvalue['pref_name']);
-					$q->addInsert('pref_value', $dprefsvalue['pref_value']);
-					$q->exec();
-					$q->clear();
-				}
-			}
 			return NULL;
 		}
 	}

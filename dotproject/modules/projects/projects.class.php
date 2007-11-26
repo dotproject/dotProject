@@ -54,6 +54,10 @@ class CProject extends CDpObject {
 		if (strlen($this->project_short_name) > 10) {
 			$this->project_short_name = substr($this->project_short_name, 0, 10);
 		}
+		// Make sure empty dates are nulled.  Cannot save an empty date.
+		if (empty($this->project_end_date)) {
+			$this->project_end_date = null;
+		}
 
 		return null; // object is ok
 	}

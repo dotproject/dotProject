@@ -16,7 +16,8 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 $sql = "
 SELECT pref_name, pref_value
 FROM user_preferences
-WHERE pref_user = $user_id
+WHERE pref_user in (0, $user_id)
+ORDER by pref_user
 ";
 $prefs = db_loadHashList( $sql );
 

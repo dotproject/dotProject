@@ -754,13 +754,24 @@ class CAppUI {
 /**
 * Loads the stored user preferences from the database into the internal
 * preferences variable.
+*
+* Note, this is using a "feature" of loadHashList which means that repeated
+* data later in the query will overwrite earlier data with the same key.  This
+* means we don't need to copy default preferences across to each user, but the
+* defaults become true defaults.
+*
 * @param int User id number
 */
 	function loadPrefs( $uid=0 ) {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_name, pref_value');
-		$q->addWhere("pref_user = $uid");
+		if ($uid) {
+			$q->addWhere("pref_user in ( 0, $uid)");
+			$q->addOrder("pref_user");
+		} else {
+			$q->addWhere("pref_user = 0");
+		}
 		$prefs = $q->loadHashList();
 		$this->user_prefs = array_merge( $this->user_prefs, $prefs );
 	}

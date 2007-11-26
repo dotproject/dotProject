@@ -11,9 +11,19 @@ class CPreferences {
         var $pref_name = NULL;
         var $pref_value = NULL;
 
+	var $_default_prefs = NULL;
+
         function CPreferences() {
                 // empty constructor
         }
+
+	function get_defaults() {
+		$q = new DBQuery;
+		$q->addTable('user_preferences');
+		$q->addQuery('pref_name, pref_value');
+		$q->addWhere('pref_user = 0');
+		$this->_default_prefs = $q->loadHashList();
+	}
 
         function bind( $hash ) {
                 if (!is_array( $hash )) {
@@ -30,6 +40,9 @@ class CPreferences {
         }
 
         function store() {
+		if ($this->pref_user && ! isset($this->_default_prefs)) {
+			$this->get_defaults();
+		}
                 $msg = $this->check();
                 if( $msg ) {
                         return "CPreference::store-check failed<br />$msg";
@@ -37,11 +50,12 @@ class CPreferences {
                 if (($msg = $this->delete())) {
                         return "CPreference::store-delete failed<br />$msg";
                 }
-                if (!($ret = db_insertObject( 'user_preferences', $this ))) {
-                        return "CPreference::store failed <br />" . db_error();
-                } else {
-                        return NULL;
-                }
+		if ($this->pref_user == 0 || $this->_default_prefs[$this->pref_name] != $this->pref_value) {
+			if (!($ret = db_insertObject( 'user_preferences', $this ))) {
+				return "CPreference::store failed <br />" . db_error();
+			}
+		}
+		return NULL;
         }
 
         function delete() {
