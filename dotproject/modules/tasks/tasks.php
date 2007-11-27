@@ -71,13 +71,11 @@ $open_task_id = dPGetParam($_GET, 'open_task_id', 0);
 $close_task_id = dPGetParam($_GET, 'close_task_id', 0);
 
 if ($open_task_all) {
-	foreach ($tasks_closed as $to) {
-		openClosedTask($to);
-	}
+	$tasks_opened = array_unique($tasks_closed);
+	$tasks_closed = array();
 } else if($close_task_all) {
-	foreach ($tasks_opened as $to) {
-		closeOpenedTask($to);
-	}
+	$tasks_closed = array_unique(array_merge($tasks_closed, $tasks_opened));
+	$tasks_opened = array();
 } else if ($open_task_id) {
 	openClosedTask($open_task_id);
 } else if ($close_task_id) {
