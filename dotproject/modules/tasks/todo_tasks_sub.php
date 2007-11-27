@@ -10,35 +10,31 @@ GLOBAL $task_sort_item2, $task_sort_type2, $task_sort_order2;
 $perms =& $AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
-<table width="100%" border="0" cellpadding="1" cellspacing="0">
+
+
 <form name="form_buttons" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date";?>">
 <input type="hidden" name="show_form" value="1" />
+<table width="100%" border="0" cellpadding="1" cellspacing="0">
 
 <tr>
 	<td width="50%">
-	<?php
-	if ($other_users) {
-		echo $AppUI->_("Show Todo for:").'<select name="show_user_todo" onchange="document.form_buttons.submit()">';
-
-                $usersql = "
-                SELECT user_id, user_username, contact_first_name, contact_last_name
-                FROM users, contacts
-                WHERE user_contact = contact_id
-		ORDER BY contact_last_name
-                ";
-
-		
-                if (($rows = db_loadList( $usersql, NULL )))
-                {
-                        foreach ($rows as $row)
-                        {
-                                if ( $user_id == $row["user_id"])
-                                        echo "<OPTION VALUE='".$row["user_id"]."' SELECTED>".$row["contact_last_name"].', '.$row["contact_first_name"];
-                                else
-                                        echo "<OPTION VALUE='".$row["user_id"]."'>".$row["contact_last_name"].', '.$row["contact_first_name"];
-			                  }
-							  }
+<?php
+if ($other_users) {
+	echo $AppUI->_("Show Todo for:").'<select name="show_user_todo" onchange="document.form_buttons.submit()">';
+	
+	$usersql = ('SELECT user_id, user_username, contact_first_name, contact_last_name' 
+				. ' FROM users, contacts' 
+				. ' WHERE user_contact = contact_id' 
+				. ' ORDER BY contact_last_name');
+	
+	if (($rows = db_loadList( $usersql, NULL ))) {
+		foreach ($rows as $row) {
+		  echo ('<option value="' . $row['user_id'] . "'" 
+				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . '>' 
+				. $row['contact_last_name'].', ' . $row["contact_first_name"]) ;
+		}
 	}
+}
 	?>
 		</select>
 	</td>
@@ -60,7 +56,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td>
 		<input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="document.form_buttons.submit()" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
 	</td>
-    <td nowrap="nowrap">
+	<td nowrap="nowrap">
 		<label for="show_hold_proj"><?php echo $AppUI->_('Projects on Hold'); ?></label>
 	</td>
 	<td>
@@ -82,10 +78,11 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 		<label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
 	</td>
 </tr>
-</form>
 </table>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+</form>
+
 <form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date";?>">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th width='10'>&nbsp;</th>
 	<th width='10'><?php echo $AppUI->_('Pin'); ?></th>
@@ -127,25 +124,25 @@ foreach ($tasks as $tId=>$task) {
 
 // sorting tasks
 if ( $task_sort_item1 != "" ) {
-    if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
-        $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1
-                                  , $task_sort_item2, $task_sort_order2, $task_sort_type2 );
-    else $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1 );
+	if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
+		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1
+								  , $task_sort_item2, $task_sort_order2, $task_sort_type2 );
+	else $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1 );
 } 
 
 else { // All this appears to already be handled in todo.php ... should consider deleting this else block
-    /* we have to calculate the end_date via start_date+duration for 
+	/* we have to calculate the end_date via start_date+duration for 
 	 ** end='0000-00-00 00:00:00' if array_csort function is not used
 	 ** as it is normally done in array_csort function in order to economise
 	 ** cpu time as we have to go through the array there anyway
 	 */
-    for ($j=0; $j < count($tasks); $j++) {	
-	    if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-		    if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){
-		    	$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
+	for ($j=0; $j < count($tasks); $j++) {	
+		if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
+			if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){
+				$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
 				$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
 			} else {
-    			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+				$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
 			}
 		}
 	}
@@ -177,8 +174,8 @@ if (dPgetConfig('direct_edit_assignment')) {
 }
 ?>
 	</td>
-</form>
 </table>
+</form>
 <table>
 <tr>
 	<td><?php echo $AppUI->_('Key');?>:</td>

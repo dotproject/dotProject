@@ -988,7 +988,7 @@ the active tab, and the selected tab **/
 			echo '</table>';
 		} else {
 		// tabbed view
-			$s = "<table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\">\n<tr>";
+			$s = '<table width="100%" border="0" cellpadding="3" cellspacing="0">'."\n".'<tr>';
 			if ( count($this->tabs)-1 < $this->active ) {
 				//Last selected tab is not available in this view. eg. Child tasks
 				// Breaks classic view.

@@ -191,7 +191,7 @@ class CMonthCalendar {
 		$s .= '<table border="0" cellspacing="1" cellpadding="2" width="100%" class="' . $this->styleMain . "\">\n";
 
 		if ($this->showDays) {
-			$s .= $this->_drawDays();
+			$s .= $this->_drawDays() . "\n";
 		}
 
 		$s .= $this->_drawMain();
@@ -209,17 +209,15 @@ class CMonthCalendar {
  */
 	 function _drawTitle() {
 		global $AppUI, $m, $a, $locale_char_set;
-		$url = 'index.php?m=' . $m;
-		$url .= (($a) ? ("&a=" . $a) : '');
-		$url .= isset( $_GET['dialog']) ? '&dialog=1' : '';
+		$url = 'index.php?m=' . $m . (($a) ? ('&a=' . $a) : '') . (isset( $_GET['dialog']) ? '&dialog=1' : '');
 
 		$s = "\n" . '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
 		$s .= "\n\t<tr>";
 
 		if ($this->showArrows) {
 			$href = ($url . '&date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) 
-					 . (($this->callback) ? '&callback='.$this->callback : '') . 
-					 ((count($this->highlightedDays) > 0) ? ('&uts=' . key($this->highlightedDays)) : ''));
+					 . (($this->callback) ? ('&callback=' . $this->callback) : '') 
+					 . ((count($this->highlightedDays) > 0) ? ('&uts=' . key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="left">';
 			$s .= ('<a href="' . $href . '"><img src="./images/prev.gif" width="16" height="16" alt="' 
 				   . $AppUI->_('previous month') . '" border="0" /></a>');
@@ -230,9 +228,9 @@ class CMonthCalendar {
 
 		$s .= "\n\t" . '<th width="99%" align="center">';
 		if ($this->clickMonth) {
-			$s = '<a href="' . 'index.php?m=' . $m . '&date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
+			$s .= '<a href="index.php?m=' . $m . '&date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
-		$s .= $AppUI->_($this->this_month->format( "%B %Y" )) . (($this->clickMonth) ? '</a>' : '');
+		$s .= $this->this_month->format( "%B %Y" ) . (($this->clickMonth) ? '</a>' : '');
 		$s .= "</th>";
 
 		if ($this->showArrows) {
@@ -304,7 +302,7 @@ class CMonthCalendar {
 				$html .= ('<img src="./images/view.week.gif" width="16" height="15" border="0" alt="' 
 						  . $AppUI->_('Week View') . '" /></a>');
 				$html .= $this->dayFunc ? "</a>" : '';
-				$html .= "\n\t</td>";
+				$html .= "</td>";
 			}
 
 			foreach ($week as $day) {
@@ -335,14 +333,14 @@ class CMonthCalendar {
 								  .  $this->dayFunc . "('" . $day . "','" . $this_day->format( $df ) . "')" 
 								  . '" class="' . $class . '">');
 				    }
-					$html .=  $AppUI->_($d) . (($this->dayFunc) ? '</a>' : '');
+					$html .=  $d . (($this->dayFunc) ? '</a>' : '');
 					
 					
 				    if ($this->showEvents) {
 						$html .= $this->_drawEvents( substr( $day, 0, 8 ) );
 					}
 				}
-				$html .= "\n\t</td>";
+				$html .= "</td>";
 			}
 			$html .= "\n</tr>";
 		}

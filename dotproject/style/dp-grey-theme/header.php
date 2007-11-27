@@ -31,7 +31,7 @@ else
 					tabs[i].className = 'taboff';
 			}
 			var divs = document.getElementsByTagName('div');
-			for (i =0; i < divs.length; i++) {
+			for (i = 0; i < divs.length; i++) {
 				if (divs[i].className == 'tab')
 					divs[i].style.display = 'none';
 			}
@@ -63,13 +63,13 @@ else
 <body onload="this.focus();">
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-	<td><table width='100%' cellpadding=3 cellspacing=0 border=0><tr>
+	<td><table width='100%' cellpadding="3" cellspacing="0" border="0"><tr>
 	<th background="style/<?php echo $uistyle;?>/images/titlegrad.jpg" class="banner" align="left"><strong>
 	  <?php 
 		echo "<a style='color: white' href='{$dPconfig['base_url']}'>$page_title</a>";
 		?>
 	</strong></th>
-	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border=0></a></th>
+	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 	</tr></table></td>
 </tr>
 <?php if (!$dialog) {
@@ -79,7 +79,7 @@ else
 ?>
 <tr>
 	<td class="nav" align="left">
-	<table width="100%" cellpadding="3" cellspacing="0" width="100%">
+	<table width="100%" cellpadding="3" cellspacing="0">
 	<tr class="nav">
 		<td>
 		<?php
@@ -93,9 +93,11 @@ else
 		echo "\n";
 		?>
 		</td>
+        <td nowrap="nowrap" align="right">
 		<form name="frm_new" method=GET action="./index.php">
+		<table cellpadding="0" cellspacing="0">
+		<tr><td>
 <?php
-	echo '        <td nowrap="nowrap" align="right">';
 	$newItem = array( 0=>'- New Item -' );
 	if ($perms->checkModule( 'companies', 'add' )) $newItem["companies"] = "Company";
 	if ($perms->checkModule( 'contacts', 'add' )) $newItem["contacts"] = "Contact";
@@ -118,8 +120,10 @@ else
 		echo '<input type="hidden" name="file_id" value="'.$file_id.'" />';
 	}
 ?>
-		</td>
+		</td></tr>
+		</table>
 		</form>
+		</td>
 	</tr>
 	</table>
 	</td>
@@ -128,7 +132,7 @@ else
 	<td>
 		<table cellspacing="0" cellpadding="3" border="0" width="100%">
 		<tr>
-			<td width="100%"><?php echo $AppUI->_('Welcome')." $AppUI->user_first_name $AppUI->user_last_name"; ?></td>
+			<td width="100%"><?php echo $AppUI->_('Welcome').' '.$AppUI->user_first_name.' '.$AppUI->user_last_name; ?></td>
 			<td nowrap="nowrap">
 				<?php echo dPcontextHelp( 'Help' );?> |
 				<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
