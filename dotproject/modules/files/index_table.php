@@ -42,7 +42,7 @@ if (!isset($project_id)) {
 if (!isset($showProject)) {
 	$showProject = true;
 }
-$xpg_pagesize = 30;
+$xpg_pagesize = 30; //TODO?: Set by System Config Value ...
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
@@ -240,7 +240,7 @@ foreach ($files as $file_row) {
 	<td nowrap="nowrap" width="20">
 	<?php if ($canEdit && ( empty($latest_file['file_checkout']) || ( $latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) {
 		echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
-		echo dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
+		echo dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
 		echo "\n</a>";
 	}
 	?>
@@ -248,10 +248,10 @@ foreach ($files as $file_row) {
 		<td nowrap="nowrap">
 		<?php if ($canEdit && empty($latest_file['file_checkout']) ) {
 		?>
-				<a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( './modules/files/images/up.png', '16', '16','checkout','checkout file' ); ?></a>
+				<a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ); ?></a>
 		<?php }
 		else if ($latest_file['file_checkout'] == $AppUI->user_id) { ?>
-				<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( './modules/files/images/down.png', '16','16','checkin','checkin file'); ?></a>
+				<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16','16','checkin','checkin file'); ?></a>
 		<?php }
 		else { 
 				if ($latest_file['file_checkout'] == 'final'){
@@ -314,7 +314,7 @@ echo "
 					  <td nowrap="nowrap" width="20">&nbsp;';
 									  if ($canEdit && $dPconfig['files_show_versions_edit'])
 									  {
-											  $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">' . dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>";
+											  $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">' . dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>";
 									  }
 									  $hidden_table .= '
 					  </td>
@@ -327,7 +327,7 @@ echo "
 					  <td width="5%" nowrap="nowrap" align="center">' . $file['file_version'] . '</td>
 					  <td width="10%" nowrap="nowrap" align="center">' . $file_types[$file['file_category']] . '</td>
 					  <td width="10%" nowrap="nowrap" align="center">' .
-						 (($file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $file['file_folder_name'] . '</a>' : 'Root').
+						 (($file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $file['file_folder_name'] . '</a>' : 'Root').
 					'</td>
 					  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
 					  <td width="15%" nowrap="nowrap">' . $file["contact_first_name"].' '.$file["contact_last_name"] . '</td>
@@ -344,7 +344,7 @@ echo "
 		</td>
 		<td width="10%" nowrap="nowrap" align="center"><?php echo $file_types[$latest_file["file_category"]]; ?></td> 
 	<td width="10%" nowrap="nowrap" align="center"><?php
-		echo ($latest_file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
+		echo ($latest_file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
 	?></td>
 	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task'];?>"><?php echo $latest_file["task_name"];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $latest_file["contact_first_name"].' '.$latest_file["contact_last_name"];?></td>

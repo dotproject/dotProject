@@ -765,6 +765,94 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
     return $parsed;
 }
 
+/*
+ * Moved modified version from files.class.php as pagation could be useful in any module
+ */
+function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder = false) {
+	
+	global $AppUI, $tab, $m, $a;
+	$NUM_PAGES_TO_DISPLAY = 15; //TODO?: Set by System Config Value ...
+	$RANGE_LIMITS = floor($NUM_PAGES_TO_DISPLAY / 2);
+	
+	$xpg_prev_page = $xpg_next_page = 1;
+	
+	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>' . "\n";
+	
+	if ($xpg_totalrecs > $xpg_pagesize) { // more than a page of results
+		$xpg_prev_page = $page - 1;
+		$xpg_next_page = $page + 1;
+		
+		// left buttons, if applicable
+		echo '<td align="left" width="15%">' . "\n";		
+		if ($xpg_prev_page > 0) {
+			echo ('<a href="./index.php?m=' . $m 
+				  . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
+				  . (($folder) ? ('&folder=' . $folder) : '') . '&page=1">' 
+				  . '<img src="images/navfirst.gif" border="0" Alt="' . $AppUI->_('First Page') .'"></a>' . "\n");
+			echo ("&nbsp;&nbsp;\n");
+			echo ('<a href="./index.php?m=' . $m 
+				  . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
+				  . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_prev_page . '">' 
+				  . '<img src="images/navleft.gif" border="0" Alt="' 
+				  . $AppUI->_('Previous Page') .': ' . $xpg_prev_page .'"></a>' . "\n");
+		} else {
+			echo ("&nbsp;\n");
+		}
+		echo "</td>\n";
+		
+		// central text (files, total pages, and page selectors)
+		echo '<td align="center" width="70%">' . "\n";
+		echo ($xpg_totalrecs . ' ' . $AppUI->_('Result(s)') 
+			  . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')' . "<br />\n");
+		
+		$start_page_range = (($page > $RANGE_LIMITS) ? ($page - $RANGE_LIMITS) : 1) ;
+		$end_page_range = (($start_page_range - 1) + $NUM_PAGES_TO_DISPLAY);
+		if ($xpg_total_pages < $end_page_range) {
+			$start_page_range =  (($xpg_total_pages + 1) - $NUM_PAGES_TO_DISPLAY);
+			$start_page_range = (($start_page_range > 0) ? $start_page_range : 1);
+			$end_page_range = $xpg_total_pages;
+		}
+		
+		echo (($start_page_range <= $end_page_range) ? ' [ ' : '');
+		for($n = $start_page_range; $n <= $end_page_range; $n++) {
+			echo (($n == $page) ? '<b>' : ('<a href="./index.php?m=' . $m . (($a) ? ('&a=' . $a) : '') 
+										   . (($tab) ? ('&tab=' . $tab) : '') 
+										   . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $n . '">')); 
+			echo ($n); 
+			echo (($n == $page) ? '</b>' : '</a>');
+			echo (($n < $end_page_range) ? ' | ' : " ]\n");
+		}
+		
+		echo "</td>\n";
+		
+		// right buttons, if applicable
+		echo '<td align="left" width="15%">' . "\n";
+		if ($xpg_next_page <= $xpg_total_pages) {
+			echo ('<a href="./index.php?m=' . $m 
+				  . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
+				  . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_next_page . '">' 
+				  . '<img src="images/navright.gif" border="0" Alt="' 
+				  . $AppUI->_('Next Page') .': ' . $xpg_next_page .'"></a>' . "\n");
+			echo "&nbsp;&nbsp;\n";
+			echo ('<a href="./index.php?m=' . $m 
+				  . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
+				  . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_total_pages . '">' 
+				  . '<img src="images/navlast.gif" border="0" Alt="' . $AppUI->_('Last Page') .'"></a>' . "\n");
+		} else {
+			echo ("&nbsp;\n");
+		}
+		echo "</td>\n";
+	} else { // we dont have enough results for more than a page
+	  echo ('<td align="center">' 
+			. (($xpg_totalrecs) 
+			   ? ($xpg_totalrecs . ' ' . $AppUI->_('Result(s)')) 
+			   : ($AppUI->_('No Result(s)'))) 
+			. "</td>\n");
+	}
+	echo "</tr></table>";
+}
+
+
 /**
  * Function to format hours into useful numbers.
  * Supplied by GrahamJB.

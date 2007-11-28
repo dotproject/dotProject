@@ -3,25 +3,25 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-GLOBAL $AppUI, $project_id, $deny, $canRead, $canEdit, $dPconfig;
+GLOBAL $AppUI, $project_id, $deny, $canRead, $canEdit, $dPconfig, $cfObj;
 require_once( $AppUI->getModuleClass( 'files' ) );
-   
+
+global $allowed_folders_ary, $denied_folders_ary, $limited;
+
 $cfObj = new CFileFolder();
-global $allowed_folders_ary;
 $allowed_folders_ary = $cfObj->getAllowedRecords($AppUI->user_id);
-global $denied_folders_ary;
 $denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
 
-if ( count( $allowed_folders_ary ) < $cfObj->countFolders() ) {
-$limited = true;
-}
+$limited = ((count( $allowed_folders_ary ) < $cfObj->countFolders()) ? true : false);
+
 if (!$limited) {
-$canEdit = true;
-} elseif ($limited AND array_key_exists($folder, $allowed_folders_ary)) {
-$canEdit = true;
+	$canEdit = true;
+} elseif ($limited && array_key_exists($folder, $allowed_folders_ary)) {
+	$canEdit = true;
 } else {
-$canEdit = false;
+	$canEdit = false;
 }
+
 $showProject = false;
 require( DP_BASE_DIR . '/modules/files/folders_table.php' );
 ?>

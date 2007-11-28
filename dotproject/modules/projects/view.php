@@ -3,6 +3,8 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
+GLOBAL $project_id;
+
 $project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
 
 // check permissions for this record

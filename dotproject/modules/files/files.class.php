@@ -106,7 +106,7 @@ class CFile extends CDpObject {
 	}
 
 	function check() {
-	// ensure the integrity of some variables
+		// ensure the integrity of some variables
 		$this->file_id = intval( $this->file_id );
 		$this->file_version_id = intval($this->file_version_id);
 		$this->file_parent = intval( $this->file_parent );
@@ -134,9 +134,9 @@ class CFile extends CDpObject {
 			return $msg;
 		$this->_message = "deleted";
 		addHistory('files', $this->file_id, 'delete',  $this->file_name, $this->file_project);
-	// remove the file from the file system
+		// remove the file from the file system
 		$this->deleteFile();
-	// delete any index entries
+		// delete any index entries
 		$q  = new DBQuery;
 		$q->setDelete('files_index');
 		$q->addQuery('*');
@@ -145,7 +145,7 @@ class CFile extends CDpObject {
 			$q->clear();
 			return db_error();
 		}
-	// delete the main table reference
+		// delete the main table reference
 		$q->clear();
 		$q->setDelete('files');
 		$q->addQuery('*');
@@ -205,10 +205,10 @@ class CFile extends CDpObject {
 		return $dest_realname;
 	}
 
-// move a file from a temporary (uploaded) location to the file system
+	// move a file from a temporary (uploaded) location to the file system
 	function moveTemp( $upload ) {
 		global $AppUI, $dPconfig;
-	// check that directories are created
+		// check that directories are created
 		if (!is_dir(DP_BASE_DIR.'/files')) {
 		    $res = mkdir( DP_BASE_DIR.'/files', 0777 );
 		    if (!$res) {
@@ -225,7 +225,7 @@ class CFile extends CDpObject {
 
 
 		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
-	// move it
+		// move it
 		$res = move_uploaded_file( $upload['tmp_name'], $this->_filepath );
 		if (!$res) {
 		    return false;
@@ -233,21 +233,21 @@ class CFile extends CDpObject {
 		return true;
 	}
 
-// parse file for indexing
+	// parse file for indexing
 	function indexStrings() {
 		GLOBAL $AppUI, $dPconfig;
-	// get the parser application
+		// get the parser application
 		$parser = @$dPconfig['parser_' . $this->file_type];
 		if (!$parser)
 			$parser = $dPconfig['parser_default'];
 		if (!$parser) 
 			return false;
-	// buffer the file
+		// buffer the file
 		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
 		$fp = fopen( $this->_filepath, "rb" );
 		$x = fread( $fp, $this->file_size );
 		fclose( $fp );
-	// parse it
+		// parse it
 		$parser = $parser . " " . $this->_filepath;
 		$pos = strpos( $parser, '/pdf' );
 		if (false !== $pos) {
@@ -255,11 +255,11 @@ class CFile extends CDpObject {
 		} else {
 			$x = `$parser`;
 		}
-	// if nothing, return
+		// if nothing, return
 		if (strlen( $x ) < 1) {
 			return 0;
 		}
-	// remove punctuation and parse the strings
+		// remove punctuation and parse the strings
 		$x = str_replace( array( ".", ",", "!", "@", "(", ")" ), " ", $x );
 		$warr = split( "[[:space:]]", $x );
 
@@ -274,13 +274,13 @@ class CFile extends CDpObject {
 			}
 		}
 		db_exec( "LOCK TABLES files_index WRITE" );
-	// filter out common strings
+		// filter out common strings
 		$ignore = array();
 		include DP_BASE_DIR.'/modules/files/file_index_ignore.php';
 		foreach ($ignore as $w) {
 			unset( $wordarr[$w] );
 		}
-	// insert the strings into the table
+		// insert the strings into the table
 		while (list( $key, $val ) = each( $wordarr )) {
 			$q  = new DBQuery;
 			$q->addTable('files_index');
@@ -317,7 +317,7 @@ class CFile extends CDpObject {
 			$this->_project->load($this->file_project);
 			$mail = new Mail;		
 
-			if ($this->file_task == 0) {//notify all developers
+			if ($this->file_task == 0) { //notify all developers
 				$mail->Subject( $this->_project->project_name."::".$this->file_name, $locale_char_set);
 			} else { //notify all assigned users			
 				$this->_task = new CTask();
@@ -401,7 +401,7 @@ class CFile extends CDpObject {
 			$this->_project->load($this->file_project);
 			$mail = new Mail;		
 
-			if ($this->file_task == 0) {//notify all developers
+			if ($this->file_task == 0) { //notify all developers
 				$mail->Subject( $AppUI->_('Project').": ".$this->_project->project_name."::".$this->file_name, $locale_char_set);
 			} else { //notify all assigned users			
 				$this->_task = new CTask();
@@ -534,6 +534,16 @@ class CFileFolder extends CDpObject {
       	$q->addOrder('file_folder_name');
       	return $q->loadHashList();
 	}
+	
+	function getDeniedRecords($uid) {
+		$q = new DBQuery();
+      	$q->addTable('file_folders');
+      	$q->addQuery('*');
+      	$q->addWhere('0=1');
+      	$q->addOrder('file_folder_parent');
+      	$q->addOrder('file_folder_name');
+      	return $q->loadHashList();
+	}
       	
 	function check() {
 		$this->file_folder_id = intval( $this->file_folder_id );
@@ -615,82 +625,6 @@ class CFileFolder extends CDpObject {
 	}
 }
 
-function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page)
-{
-
-	GLOBAL $AppUI;
-	$xpg_break = false;
-        $xpg_prev_page = $xpg_next_page = 1;
-	
-	echo "\t<table width='100%' cellspacing='0' cellpadding='0' border=0><tr>";
-
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			echo "<td align='left' width='15%'>";
-			echo '<a href="./index.php?m=files&amp;page=1">';
-			echo '<img src="images/navfirst.gif" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=files&amp;page=' . $xpg_prev_page . '">';
-			echo "<img src=\"images/navleft.gif\" border=\"0\" Alt=\"Previous page ($xpg_prev_page)\"></a></td>";
-		} else {
-			echo "<td width='15%'>&nbsp;</td>\n";
-		} 
-		
-		// central text (files, total pages, ...)
-		echo "<td align='center' width='70%'>";
-		echo "$xpg_totalrecs " . $AppUI->_('File(s)') . " ($xpg_total_pages " . $AppUI->_('Page(s)') . ")";
-		echo "</td>";
-
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			echo "<td align='right' width='15%'>";
-			echo '<a href="./index.php?m=files&amp;page='.$xpg_next_page.'">';
-			echo '<img src="images/navright.gif" border="0" Alt="Next Page ('.$xpg_next_page.')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=files&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="images/navlast.gif" border="0" Alt="Last Page"></a></td>';
-		} else {
-			echo "<td width='15%'>&nbsp;</td></tr>\n";
-		}
-		// Page numbered list, up to 30 pages
-		echo "<tr><td colspan=\"3\" align=\"center\">";
-		echo " [ ";
-	
-		for($n = $page > 16 ? $page-16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				echo "<b>$n</b></a>";
-			} else {
-				echo "<a href='./index.php?m=files&amp;page=$n'>";
-				echo $n . "</a>";
-			} 
-			if ($n >= 30+$page-15) {
-				$xpg_break = true;
-				break;
-			} else if ($n < $xpg_total_pages) {
-				echo " | ";
-			} 
-		} 
-	
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				echo "<" . $n . "</a>";
-			} else {
-				echo "<a href='./index.php?m=files&amp;page=$xpg_total_pages'>";
-				echo $n . "</a>";
-			} 
-		} 
-		echo " ] ";
-		echo "</td></tr>";
-	} else { // or we dont have any files..
-		echo "<td align='center'>";
-		if ($xpg_next_page > $xpg_total_pages) {
-		echo $xpg_sqlrecs . " " . "Files" . " ";
-		}
-		echo "</td></tr>";
-	} 
-	echo "</table>";
-}
 
 function file_size($size)
 {

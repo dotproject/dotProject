@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -11,95 +11,18 @@ if (!defined('DP_BASE_DIR')){
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
 
-function showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder)
-{
 
-	global $AppUI, $tab, $m, $a;
-	$xpg_break = false;
-	$xpg_prev_page = $xpg_next_page = 1;
-	
-	echo "\t<table width='100%' cellspacing='0' cellpadding='0' border='0'><tr>";
+global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject, $project_id;
 
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			echo "<td align='left' width='15%'>";
-			echo '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;folder='.$folder.'&amp;page=1">';
-			echo '<img src="images/navfirst.gif" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;folder='.$folder.'&amp;page=' . $xpg_prev_page . '">';
-			echo "<img src=\"images/navleft.gif\" border=\"0\" Alt=\"Previous page ($xpg_prev_page)\"></a></td>";
-		} else {
-			echo "<td width='15%'>&nbsp;</td>\n";
-		} 
-		
-		// central text (files, total pages, ...)
-		echo "<td align='center' width='70%'>";
-		//echo "$xpg_totalrecs " . $AppUI->_('File(s)') . " ($xpg_total_pages " . $AppUI->_('Page(s)') . ")";
-		echo "$xpg_totalrecs " . $AppUI->_('File(s)') . " " . $AppUI->_('Pages') . ":";
-		echo " [ ";
-		
-		// begin page numbers
-		for($n = $page > 16 ? $page-16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				echo "<b>$n</b></a>";
-			} else {
-				echo "<a href='./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;folder={$folder}&amp;page=$n'>";
-				echo $n . "</a>";
-			} 
-			if ($n >= 30+$page-15) {
-				$xpg_break = true;
-				break;
-			} else if ($n < $xpg_total_pages) {
-				echo " | ";
-			} 
-		} 
-	
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				echo "<" . $n . "</a>";
-			} else {
-				echo "<a href='./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;page=$xpg_total_pages'>";
-				echo $n . "</a>";
-			} 
-		} 
-		echo " ] ";
-		// end page numbers
-		
-		echo "</td>";
+// load the following classes to retrieved denied records
+include_once( $AppUI->getModuleClass( 'projects' ) );
+include_once( $AppUI->getModuleClass( 'tasks' ) );
 
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			echo "<td align='right' width='15%'>";
-			echo '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;folder='.$folder.'&amp;page='.$xpg_next_page.'">';
-			echo '<img src="images/navright.gif" border="0" Alt="Next Page ('.$xpg_next_page.')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&amp;folder='.$folder.'&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="images/navlast.gif" border="0" Alt="Last Page"></a></td>';
-		} else {
-			echo "<td width='15%'>&nbsp;</td></tr>\n";
-		}
-		// Page numbered list, up to 30 pages
-		//echo "<tr><td colspan=\"3\" align=\"center\">";
-// was page numbers
-		//echo "</td></tr>";
-	} else { // or we dont have any files..
-		echo "<td align='center'>";
-		if ($xpg_next_page > $xpg_total_pages) {
-		echo $xpg_sqlrecs . " " . "Files" . " ";
-		}
-		echo "</td></tr>";
-	} 
-	echo "</table>";
-}
-
-global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
-
-//require_once( DP_BASE_DIR."/modules/files/index_table.lib.php");
 
 // ****************************************************************************
 // Page numbering variables
-// Pablo Roca (pabloroca@Xmvps.org) (Remove the X)
+// Pablo Roca (pabloroca@Xmvps.org) (Remove the X) 
+// Modified by "MerlinYoda" (dP Core Development)
 // 19 August 2003
 //
 // $folder          - current folder
@@ -107,11 +30,9 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders
 // $xpg_pagesize    - max rows per page
 // $xpg_min         - initial record in the SELECT LIMIT
 // $xpg_totalrecs   - total rows selected
-// $xpg_sqlrecs     - total rows from SELECT LIMIT
 // $xpg_total_pages - total pages
 // $xpg_next_page   - next pagenumber
 // $xpg_prev_page   - previous pagenumber
-// $xpg_break       - stop showing page numbered list?
 // $xpg_sqlcount    - SELECT for the COUNT total
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
@@ -125,30 +46,15 @@ if (!$project_id) {
         $showProject = true;
 }
 
-// get company to filter files by
-//if (isset( $_POST['company_id'] )) {
-//	$AppUI->setState( 'FileIdxCompany', intval( $_POST['company_id'] ) );
-//}
-//$company_id = $AppUI->getState( 'FileIdxCompany' ) !== NULL ? $AppUI->getState( 'FileIdxCompany' ) : $AppUI->user_company;
-if (!isset($company_id)) {
-        $company_id = dPgetParam( $_REQUEST, 'company_id', 0);
-}
 
 $obj = new CCompany();
 $allowed_companies_ary = $obj->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
 $allowed_companies = implode( ",", array_keys($allowed_companies_ary) );
 
-if (!isset($task_id)) {
-        $task_id = dPgetParam( $_REQUEST, 'task_id', 0);
-}
-
-global $xpg_min, $xpg_pagesize;
-$xpg_pagesize = 30;
+$xpg_pagesize = 30; //TODO?: Set by System Config Value ...
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
-// load the following classes to retrieved denied records
-include_once( $AppUI->getModuleClass( 'projects' ) );
-include_once( $AppUI->getModuleClass( 'tasks' ) );
+
 
 $project = new CProject();
 $deny1 = $project->getDeniedRecords( $AppUI->user_id );
@@ -320,12 +226,12 @@ function getFolders($parent, $level=0) {
 		$file_count = countFiles($row['file_folder_id']);
 			echo '<ul><li><table width="100%"><tr><td><span class="folder-name">';
 			if ($m=='files')
-				 echo '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
+				 echo '<a href="./index.php?m='.$m.'&a='.$a.'&tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
 				 
-			echo dPshowImage( './modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' );
+			echo dPshowImage( './images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' );
 			if ($m=='files') {
 				 '</a>' .
-				 '<a href="./index.php?m='.$m.'&amp;a='.$a.'&amp;tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
+				 '<a href="./index.php?m='.$m.'&a='.$a.'&tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
 			}
 			echo $row['file_folder_name'];
 			if ($m=='files') 
@@ -341,17 +247,17 @@ function getFolders($parent, $level=0) {
 				<input type="hidden" name="redirect" value="'.$current_uri.'" />
 				</form>';		
 		echo "<td align='right' width='64' nowrap>\n";
-		echo '<a href="./index.php?m=files&amp;a=addedit_folder&amp;folder='.$row['file_folder_id'].'">' .
-				 dPshowImage( './modules/files/images/filesaveas.png', '16', '16', 'edit icon', 'edit this folder' ) .
+		echo '<a href="./index.php?m=files&a=addedit_folder&folder='.$row['file_folder_id'].'">' .
+				 dPshowImage( './images/filesaveas.png', '16', '16', 'edit icon', 'edit this folder' ) .
 				 '</a>' .
-				 '<a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent='.$row['file_folder_id'].'&amp;file_folder_id=0">' .
-				 dPshowImage( './modules/files/images/edit_add.png', '', '', 'new folder', 'add a new subfolder' ) .
+				 '<a href="./index.php?m=files&a=addedit_folder&file_folder_parent='.$row['file_folder_id'].'&file_folder_id=0">' .
+				 dPshowImage( './images/edit_add.png', '', '', 'new folder', 'add a new subfolder' ) .
 				 '</a>' .
 				 '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_'.$row['file_folder_id'].'.submit()}">' .
-				 dPshowImage( './modules/files/images/remove.png', '', '', 'delete icon', 'delete this folder' ) .
+				 dPshowImage( './images/remove.png', '', '', 'delete icon', 'delete this folder' ) .
 				 '</a>' .
-				 '<a href="./index.php?m=files&amp;a=addedit&amp;folder='.$row['file_folder_id'].'&amp;project_id='.$project_id.'&amp;file_id=0">' .
-				 dPshowImage( './modules/files/images/folder_new.png', '', '', 'new file', 'add new file to this folder' ) .
+				 '<a href="./index.php?m=files&a=addedit&folder='.$row['file_folder_id'].'&project_id='.$project_id.'&file_id=0">' .
+				 dPshowImage( './images/folder_new.png', '', '', 'new file', 'add new file to this folder' ) .
 				 '</a>';
 		echo "</td></tr></table></span>\n";
 		if ($file_count > 0) {
@@ -614,9 +520,9 @@ function displayFiles($folder) {
         			<td width="10%">' . $row['file_co_reason'] . '</td>
         			<td nowrap="nowrap" align="center">';
 	                if ($canEdit && empty($file_row['file_checkout']) ) {
-			                $hidden_table .='<a href="?m=files&a=co&file_id='.$file_row['file_id'].'">'.dPshowImage( './modules/files/images/up.png', '16', '16','checkout','checkout file' ).'</a>';
+			                $hidden_table .='<a href="?m=files&a=co&file_id='.$file_row['file_id'].'">'.dPshowImage( './images/up.png', '16', '16','checkout','checkout file' ).'</a>';
 	                } else if ($row['file_checkout'] == $AppUI->user_id) {
-			                $hidden_table .='<a href="?m=files&a=addedit&ci=1&file_id='.$file_row['file_id'].'">'.dPshowImage( './modules/files/images/down.png', '16','16','checkin','checkin file').'</a>';
+			                $hidden_table .='<a href="?m=files&a=addedit&ci=1&file_id='.$file_row['file_id'].'">'.dPshowImage( './images/down.png', '16','16','checkin','checkin file').'</a>';
 	                } else { 
 			                if ($file_row['file_checkout'] == 'final'){
 			                        $hidden_table .= 'final';
@@ -638,9 +544,9 @@ function displayFiles($folder) {
 	                $hidden_table .= '<td nowrap="nowrap" align="right" width="48">';
 							 if ($canEdit && ( empty($file_row['file_checkout']) || ( $file_row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id) ))) 
 	                                {
-	                                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row["file_id"] . '">' . dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>".
-											'<a href="#" onclick="document.frm_duplicate_sub_file_'.$file_row['file_id'].'.submit()">' . dPshowImage( './modules/files/images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . "</a>".
-											'<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_'.$file_row['file_id'].'.submit()}">' . dPshowImage( './modules/files/images/remove.png', '16', '16', 'delete file', 'delete file' ) . "</a>";
+	                                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row["file_id"] . '">' . dPshowImage( './images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>".
+											'<a href="#" onclick="document.frm_duplicate_sub_file_'.$file_row['file_id'].'.submit()">' . dPshowImage( './images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . "</a>".
+											'<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_'.$file_row['file_id'].'.submit()}">' . dPshowImage( './images/remove.png', '16', '16', 'delete file', 'delete file' ) . "</a>";
 	                                }
 	                                $hidden_table .= '</td>';
 	                $hidden_table .= '<td nowrap="nowrap" align="right" width="1">';
@@ -666,10 +572,10 @@ function displayFiles($folder) {
         <td nowrap="nowrap" align="center">
         <?php if ($canEdit && empty($row['file_checkout']) ) {
         ?>
-                <a href="?m=files&a=co&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './modules/files/images/up.png', '16', '16','checkout','checkout file' ); ?></a>
+                <a href="?m=files&a=co&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './images/up.png', '16', '16','checkout','checkout file' ); ?></a>
         <?php }
         else if ($row['file_checkout'] == $AppUI->user_id) { ?>
-                <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './modules/files/images/down.png', '16','16','checkin','checkin file'); ?></a>
+                <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './images/down.png', '16','16','checkin','checkin file'); ?></a>
         <?php }
         else { 
                 if ($file['file_checkout'] == 'final'){
@@ -693,10 +599,10 @@ function displayFiles($folder) {
 		<td nowrap="nowrap" align="center" width="48">
 		<?php if ($canEdit && ( empty($file['file_checkout']) || ( $file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id) ))) {
 			echo '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">';
-			echo dPshowImage( './modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
+			echo dPshowImage( './images/kedit.png', '16', '16', 'edit file', 'edit file' );
 			echo "</a>";
-			echo '<a href="#" onclick="document.frm_duplicate_file_'.$file['file_id'].'.submit()">' . dPshowImage( './modules/files/images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . '</a>';
-			echo '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_'.$file['file_id'].'.submit()}">' . dPshowImage( './modules/files/images/remove.png', '16', '16', 'delete file', 'delete file' ) . '</a>';		
+			echo '<a href="#" onclick="document.frm_duplicate_file_'.$file['file_id'].'.submit()">' . dPshowImage( './images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . '</a>';
+			echo '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_'.$file['file_id'].'.submit()}">' . dPshowImage( './images/remove.png', '16', '16', 'delete file', 'delete file' ) . '</a>';		
 		}
 		?>
 		<td nowrap="nowrap" align="center" width="1">
@@ -713,9 +619,7 @@ function displayFiles($folder) {
 	}?>
 	</table>
 	<?php
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
-	}
+		shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
 	echo "<br />";
 }
 
@@ -737,12 +641,12 @@ if ($folder){ ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%">
 <tr>
   <td nowrap="nowrap">
-	<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo dPshowImage( './modules/files/images/home.png', '22', '22', 'folder icon', 'back to root folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=0"><?php echo dPshowImage( './images/home.png', '22', '22', 'folder icon', 'back to root folder' ); ?></a>
 	<?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary) ): ?>
-	<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo dPshowImage( './modules/files/images/back.png', '22', '22', 'folder icon', 'back to parent folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo dPshowImage( './images/back.png', '22', '22', 'folder icon', 'back to parent folder' ); ?></a>
 	<?php endif;
 		  //if ($allowed_folders_ary[$folder] == -1): ?>
-	<a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo dPshowImage( './modules/files/images/filesaveas.png', '22', '22', 'folder icon', 'edit folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo dPshowImage( './images/filesaveas.png', '22', '22', 'folder icon', 'edit folder' ); ?></a>
 	<?php //endif; ?>
   </td>
 </tr>
@@ -758,7 +662,7 @@ if ($folder){ ?>
 ?>
 		<span class="folder-name-current">
 			<?php
-			echo dPshowImage( './modules/files/images/folder5_small.png', '16', '16');
+			echo dPshowImage( './images/folder5_small.png', '16', '16');
 			echo ($cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root";
 			?>
 		</span>
@@ -771,7 +675,7 @@ if ($folder){ ?>
 		if( countFiles( $folder ) > 0 ) {
 			displayfiles( $folder );
 		} elseif (!$limited OR $folder != 0) {
-			echo "no files";
+			echo $AppUI->_('No Result(s)');
 		}
 		getFolders($folder);
 ?>
