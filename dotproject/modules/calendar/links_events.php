@@ -31,7 +31,7 @@ function getEventLinks( $startPeriod, $endPeriod, &$links, $strMaxLen ) {
 				$link['href'] = '';
 				$link['alt'] = $row['event_description'];
 				$link['text'] = '<table cellspacing="0" cellpadding="0" border="0"><tr>'
-					. '<td><a href=' . $url . '>' . dPshowImage( dPfindImage( 'event'.$row['event_type'].'.png', 'calendar' ), 16, 16, '' )
+					. '<td><a href=' . $url . '>' . dPshowImage( dPfindImage( 'event'.$row['event_type'].'.png', 'calendar' ), 16, 16)
 					. '</a></td>'
 					. '<td><a href="' . $url . '" title="'.$row['event_description'].'"><span class="event">'.$row['event_title'].'</span></a>'
 					. '</td></tr></table>';

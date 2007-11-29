@@ -231,22 +231,31 @@ function dPshowModuleConfig( $config ) {
  *	Function to recussively find an image in a number of places
  *	@param string The name of the image
  *	@param string Optional name of the current module
+ *  @return location for image, "default" location returned if not found elsewhere (even if not present there).
  */
 function dPfindImage( $name, $module=null ) {
 // uistyle must be declared globally
 	global $uistyle;
-
-	if (file_exists( DP_BASE_DIR . '/style/'.$uistyle.'/images/'.$name )) {
-		return "./style/$uistyle/images/$name";
-	} else if ($module && file_exists( DP_BASE_DIR . '/modules/'.$module.'/images/'.$name )) {
-		return "./modules/$module/images/$name";
-	} else if (file_exists( DP_BASE_DIR . '/images/icons/'.$name )) {
-		return "./images/icons/$name";
-	} else if (file_exists( DP_BASE_DIR . '/images/obj/'.$name )) {
-		return "./images/obj/$name";
-	} else {
-		return "./images/$name";
+	
+	//array of locations, rooted at DP_BASE
+	$locations_to_search = array(('/style/' . $uistyle . '/images/')
+								 , 'module-image' => ('/modules/' . $module . '/images/')
+								 , 'module-icon' => ('/modules/' . $module . '/images/icons/')
+								 , ('/images/icons/')
+								 , ('/images/obj/'));
+	
+	foreach ($locations_to_search as $exception => $folder) {
+		if (!($module) && ($exception == 'module-image' || $exception == 'module-icon')) {
+			continue;
+		}
+		
+		if (file_exists( DP_BASE_DIR . $folder . $name )) {
+			return (DP_BASE_URL . $folder . $name);
+		}
 	}
+	
+	// default to base image directory
+	return ('./images/' . $name);
 }
 
 /**

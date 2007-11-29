@@ -219,9 +219,9 @@ class CMonthCalendar {
 					 . (($this->callback) ? ('&callback=' . $this->callback) : '') 
 					 . ((count($this->highlightedDays) > 0) ? ('&uts=' . key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="left">';
-			$s .= ('<a href="' . $href . '"><img src="./images/prev.gif" width="16" height="16" alt="' 
-				   . $AppUI->_('previous month') . '" border="0" /></a>');
-			$s .= "</td>";
+			$s .= ('<a href="' . $href . '">' 
+				   . dPshowImage( dPfindImage( 'prev.gif'), 16, 16, $AppUI->_('previous month')) . '</a>');
+			$s .= '</td>';
 
 		}
 
@@ -238,8 +238,8 @@ class CMonthCalendar {
 					 . (($this->callback) ? ('&callback='.$this->callback) : '') 
 					 . ((count($this->highlightedDays)>0) ? ('&uts='.key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="right">';
-			$s .= ('<a href="' . $href . '"><img src="./images/next.gif" width="16" height="16" alt="' 
-				   . $AppUI->_('next month') . '" border="0" /></a>');
+			$s .= ('<a href="' . $href . '">' . dPshowImage( dPfindImage( 'next.gif'), 16, 16, $AppUI->_('next month')) 
+				   . '</a>');
 			$s .= "</td>";
 		}
 
@@ -296,12 +296,10 @@ class CMonthCalendar {
 			$html .= "\n<tr>";
 			if ($this->showWeek) {
 				$html .= ("\n\t" . '<td class="week">');
-				$html .= (($this->dayFunc) 
-						  ? ('<a href="javascript:' . $this->weekFunc . "('" .$week[0] . "')" . '">') 
+				$html .= (($this->dayFunc) ? ('<a href="javascript:' . $this->weekFunc . "('" .$week[0] . "')" . '">') 
 						  : '');
-				$html .= ('<img src="./images/view.week.gif" width="16" height="15" border="0" alt="' 
-						  . $AppUI->_('Week View') . '" /></a>');
-				$html .= $this->dayFunc ? "</a>" : '';
+				$html .= dPshowImage( dPfindImage( 'view.week.gif'), 16, 15, $AppUI->_('Week View'));
+				$html .= (($this->dayFunc) ? ('</a>') : '');
 				$html .= "</td>";
 			}
 
@@ -361,8 +359,8 @@ class CMonthCalendar {
 			$w .= ('<a href="javascript:' . $this->weekFunc . "(" . $dateObj->getTimestamp() . ",'" 
 				   . $dateObj->toString() . "')" . '">');
 		}
-		$w .= ('<img src="./images/view.week.gif" width="16" height="15" border="0" alt="' 
-			   . $AppUI->_('Week View') . '" />') . (($this->dayFunc) ? '</a>' : '');
+		$w .= dPshowImage( dPfindImage( 'view.week.gif'), 16, 15, $AppUI->_('Week View'));
+		$w .= (($this->dayFunc) ? '</a>' : '');
 		$w .= "</td>\n";
 		return $w;
 	}
@@ -386,8 +384,8 @@ class CMonthCalendar {
 			$alt = isset($e['alt']) ? str_replace("\n",' ',$e['alt']) : null;
 
 			$s .= "<br />\n";
-			$s .= (($href) ? ('<a href="' . $href . '" class="event" title="' . $AppUI->_($alt) .'">') : '');
-			$s .= $AppUI->_($e['text']);
+			$s .= (($href) ? ('<a href="' . $href . '" class="event" title="' . $alt .'">') : '');
+			$s .= $e['text'];
 			$s .= (($href) ? '</a>' : '');
 		}
 		return $s;
