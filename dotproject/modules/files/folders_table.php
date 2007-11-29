@@ -228,7 +228,7 @@ function getFolders($parent, $level=0) {
 			if ($m=='files')
 				 echo '<a href="./index.php?m='.$m.'&a='.$a.'&tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
 				 
-			echo dPshowImage( './images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' );
+			echo dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' );
 			if ($m=='files') {
 				 '</a>' .
 				 '<a href="./index.php?m='.$m.'&a='.$a.'&tab='.$tab.'&folder='.$row['file_folder_id'].'" name="ff'.$row['file_folder_id'].'">';
@@ -248,16 +248,16 @@ function getFolders($parent, $level=0) {
 				</form>';		
 		echo "<td align='right' width='64' nowrap>\n";
 		echo '<a href="./index.php?m=files&a=addedit_folder&folder='.$row['file_folder_id'].'">' .
-				 dPshowImage( './images/filesaveas.png', '16', '16', 'edit icon', 'edit this folder' ) .
+				 dPshowImage( DP_BASE_URL . '/modules/files/images/filesaveas.png', '16', '16', 'edit icon', 'edit this folder' ) .
 				 '</a>' .
 				 '<a href="./index.php?m=files&a=addedit_folder&file_folder_parent='.$row['file_folder_id'].'&file_folder_id=0">' .
-				 dPshowImage( './images/edit_add.png', '', '', 'new folder', 'add a new subfolder' ) .
+				 dPshowImage( DP_BASE_URL . '/modules/files/images/edit_add.png', '', '', 'new folder', 'add a new subfolder' ) .
 				 '</a>' .
 				 '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_'.$row['file_folder_id'].'.submit()}">' .
-				 dPshowImage( './images/remove.png', '', '', 'delete icon', 'delete this folder' ) .
+				 dPshowImage( DP_BASE_URL . '/modules/files/images/remove.png', '', '', 'delete icon', 'delete this folder' ) .
 				 '</a>' .
 				 '<a href="./index.php?m=files&a=addedit&folder='.$row['file_folder_id'].'&project_id='.$project_id.'&file_id=0">' .
-				 dPshowImage( './images/folder_new.png', '', '', 'new file', 'add new file to this folder' ) .
+				 dPshowImage( DP_BASE_URL . '/modules/files/images/folder_new.png', '', '', 'new file', 'add new file to this folder' ) .
 				 '</a>';
 		echo "</td></tr></table></span>\n";
 		if ($file_count > 0) {
@@ -455,7 +455,7 @@ function displayFiles($folder) {
 		<td nowrap="8%">
 			<?php 
 			      $file_icon = getIcon($row['file_type']);
-                        echo "<a href=\"./fileviewer.php?file_id={$file['file_id']}\" title=\"{$file['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;{$row['file_name']}</a>"; ?>
+                        echo "<a href=\"./fileviewer.php?file_id={$file['file_id']}\" title=\"{$file['file_description']}\">" . (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16')) . "&nbsp;{$row['file_name']}</a>"; ?>
 		</td>
 		<td width="20%"><?php echo $file['file_description'];?></td>
 		<td width="5%" nowrap="nowrap" align="center">
@@ -506,7 +506,7 @@ function displayFiles($folder) {
 	        <tr>
 	                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file_row['file_id'] . '" 
 	                        title="' . $file_row['file_description'] . '">' . 
-                              "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;" . 
+                              (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16')) . "&nbsp;" . 
 	                        $file_row['file_name'] . '
 	                </a></td>
 	                <td width="20%">' . $file_row['file_description'] . '</td>
@@ -520,9 +520,9 @@ function displayFiles($folder) {
         			<td width="10%">' . $row['file_co_reason'] . '</td>
         			<td nowrap="nowrap" align="center">';
 	                if ($canEdit && empty($file_row['file_checkout']) ) {
-			                $hidden_table .='<a href="?m=files&a=co&file_id='.$file_row['file_id'].'">'.dPshowImage( './images/up.png', '16', '16','checkout','checkout file' ).'</a>';
+			                $hidden_table .='<a href="?m=files&a=co&file_id='.$file_row['file_id'].'">'.dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ).'</a>';
 	                } else if ($row['file_checkout'] == $AppUI->user_id) {
-			                $hidden_table .='<a href="?m=files&a=addedit&ci=1&file_id='.$file_row['file_id'].'">'.dPshowImage( './images/down.png', '16','16','checkin','checkin file').'</a>';
+			                $hidden_table .='<a href="?m=files&a=addedit&ci=1&file_id='.$file_row['file_id'].'">'.dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16','16','checkin','checkin file').'</a>';
 	                } else { 
 			                if ($file_row['file_checkout'] == 'final'){
 			                        $hidden_table .= 'final';
@@ -544,9 +544,9 @@ function displayFiles($folder) {
 	                $hidden_table .= '<td nowrap="nowrap" align="right" width="48">';
 							 if ($canEdit && ( empty($file_row['file_checkout']) || ( $file_row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id) ))) 
 	                                {
-	                                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row["file_id"] . '">' . dPshowImage( './images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>".
-											'<a href="#" onclick="document.frm_duplicate_sub_file_'.$file_row['file_id'].'.submit()">' . dPshowImage( './images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . "</a>".
-											'<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_'.$file_row['file_id'].'.submit()}">' . dPshowImage( './images/remove.png', '16', '16', 'delete file', 'delete file' ) . "</a>";
+	                                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row["file_id"] . '">' . dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>".
+											'<a href="#" onclick="document.frm_duplicate_sub_file_'.$file_row['file_id'].'.submit()">' . dPshowImage( DP_BASE_URL . '/modules/files/images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . "</a>".
+											'<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_'.$file_row['file_id'].'.submit()}">' . dPshowImage( DP_BASE_URL . '/modules/files/images/remove.png', '16', '16', 'delete file', 'delete file' ) . "</a>";
 	                                }
 	                                $hidden_table .= '</td>';
 	                $hidden_table .= '<td nowrap="nowrap" align="right" width="1">';
@@ -572,10 +572,10 @@ function displayFiles($folder) {
         <td nowrap="nowrap" align="center">
         <?php if ($canEdit && empty($row['file_checkout']) ) {
         ?>
-                <a href="?m=files&a=co&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './images/up.png', '16', '16','checkout','checkout file' ); ?></a>
+                <a href="?m=files&a=co&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ); ?></a>
         <?php }
         else if ($row['file_checkout'] == $AppUI->user_id) { ?>
-                <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( './images/down.png', '16','16','checkin','checkin file'); ?></a>
+                <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16','16','checkin','checkin file'); ?></a>
         <?php }
         else { 
                 if ($file['file_checkout'] == 'final'){
@@ -599,10 +599,10 @@ function displayFiles($folder) {
 		<td nowrap="nowrap" align="center" width="48">
 		<?php if ($canEdit && ( empty($file['file_checkout']) || ( $file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id) ))) {
 			echo '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">';
-			echo dPshowImage( './images/kedit.png', '16', '16', 'edit file', 'edit file' );
+			echo dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
 			echo "</a>";
-			echo '<a href="#" onclick="document.frm_duplicate_file_'.$file['file_id'].'.submit()">' . dPshowImage( './images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . '</a>';
-			echo '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_'.$file['file_id'].'.submit()}">' . dPshowImage( './images/remove.png', '16', '16', 'delete file', 'delete file' ) . '</a>';		
+			echo '<a href="#" onclick="document.frm_duplicate_file_'.$file['file_id'].'.submit()">' . dPshowImage( DP_BASE_URL . '/modules/files/images/duplicate.png', '16', '16', 'duplicate file', 'duplicate file' ) . '</a>';
+			echo '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_'.$file['file_id'].'.submit()}">' . dPshowImage( DP_BASE_URL . '/modules/files/images/remove.png', '16', '16', 'delete file', 'delete file' ) . '</a>';		
 		}
 		?>
 		<td nowrap="nowrap" align="center" width="1">
@@ -641,12 +641,12 @@ if ($folder){ ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%">
 <tr>
   <td nowrap="nowrap">
-	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=0"><?php echo dPshowImage( './images/home.png', '22', '22', 'folder icon', 'back to root folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=0"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/home.png', '22', '22', 'folder icon', 'back to root folder' ); ?></a>
 	<?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary) ): ?>
-	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo dPshowImage( './images/back.png', '22', '22', 'folder icon', 'back to parent folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/back.png', '22', '22', 'folder icon', 'back to parent folder' ); ?></a>
 	<?php endif;
 		  //if ($allowed_folders_ary[$folder] == -1): ?>
-	<a href="./index.php?m=<?php echo $m; ?>&tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo dPshowImage( './images/filesaveas.png', '22', '22', 'folder icon', 'edit folder' ); ?></a>
+	<a href="./index.php?m=<?php echo $m; ?>&tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/filesaveas.png', '22', '22', 'folder icon', 'edit folder' ); ?></a>
 	<?php //endif; ?>
   </td>
 </tr>
@@ -662,7 +662,7 @@ if ($folder){ ?>
 ?>
 		<span class="folder-name-current">
 			<?php
-			echo dPshowImage( './images/folder5_small.png', '16', '16');
+			echo dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16');
 			echo ($cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root";
 			?>
 		</span>

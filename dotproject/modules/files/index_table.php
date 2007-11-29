@@ -59,19 +59,11 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 
 $file_types = dPgetSysVal("FileType");
 if (($company_id || $project_id || $task_id) && !($m=='files')) {
-	  $catsql = false;
-} elseif ($tabbed) {
-	if ($tab <= 0) {
-		$catsql = false;
-	} else {
-		$catsql = "file_category = " . --$tab ;
-	}
+	$catsql = false;
+} else if ($tabbed) {
+	$catsql = (($tab <= 0) ? false : ("file_category = " . --$tab)) ;
 } else {
-	if ($tab < 0) {
-		$catsql = false;
-	} else {
-		$catsql = "file_category = " . $tab ;
-	}
+	$catsql = (($tab < 0) ? false : ("file_category = " . $tab)) ;
 }
 
 // Fetch permissions once for all queries
@@ -218,7 +210,7 @@ $id = 0;
 foreach ($files as $file_row) {
 	$latest_file = $file_versions[$file_row['latest_id']];
 	$file_date = new CDate( $latest_file['file_date'] );
-
+	
 	if ($fp != $latest_file["file_project"]) {
 		if (!$latest_file["file_project"]) {
 			$latest_file["project_name"] = $AppUI->_('Not associated to projects');
@@ -238,48 +230,51 @@ foreach ($files as $file_row) {
 ?>
 <tr>
 	<td nowrap="nowrap" width="20">
-	<?php if ($canEdit && ( empty($latest_file['file_checkout']) || ( $latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) {
-		echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
-		echo dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
-		echo "\n</a>";
-	}
-	?>
+	<?php 
+if ($canEdit 
+	&& ( empty($latest_file['file_checkout']) 
+		 || ( $latest_file['file_checkout'] == 'final' 
+			  && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) { 
+	echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
+	echo dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
+	echo "\n</a>";
+}
+?>
 	</td>
-		<td nowrap="nowrap">
-		<?php if ($canEdit && empty($latest_file['file_checkout']) ) {
-		?>
-				<a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ); ?></a>
-		<?php }
-		else if ($latest_file['file_checkout'] == $AppUI->user_id) { ?>
-				<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16','16','checkin','checkin file'); ?></a>
-		<?php }
-		else { 
-				if ($latest_file['file_checkout'] == 'final'){
-						echo 'final';
-				} else {
-						echo $latest_file['co_contact_first_name'].' '.$latest_file['co_contact_last_name'] 
-							.'<br>('.$latest_file['co_user'].')'; 
-				}
-		}
+	<td nowrap="nowrap">
+	<?php 
+if ($canEdit && empty($latest_file['file_checkout']) ) {
+	echo ( '<a href="?m=files&a=co&file_id='. $latest_file['file_id'].'">' );
+	echo (dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ));
+	echo ( '</a>');
+} else if ($latest_file['file_checkout'] == $AppUI->user_id) { 
+	echo ( '<a href="?m=files&a=addedit&ci=1&file_id='. $latest_file['file_id'].'">' );
+	echo (dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16', '16','checkin','checkin file' ));
+	echo ( '</a>');
+} else if ($latest_file['file_checkout'] == 'final') {
+	echo ('final');
+} else {
+	echo $latest_file['co_contact_first_name'].' '.$latest_file['co_contact_last_name'] .'<br>('.$latest_file['co_user'].')'; 
+}
 		?>
 				
 		</td>
 		<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
-	<td nowrap="8%">
+		<td nowrap="8%">
 		<?php 
 $fnamelen = 32;
 $filename = $latest_file['file_name'];
-if (strlen($latest_file['file_name']) > $fnamelen+9)
-{
+if (strlen($latest_file['file_name']) > $fnamelen+9) {
 	$ext = substr($filename, strrpos($filename, '.')+1);
 	$filename = substr($filename, 0, $fnamelen);
 	$filename .= '[...].' . $ext;
 }
 $file_icon = getIcon($file_row['file_type']);
-echo "
-<a href=\"./fileviewer.php?file_id={$latest_file['file_id']}\" title=\"{$latest_file['file_description']}\"><img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;$filename</a>";
-//	{$latest_file['file_name']}
-		?>
+echo ('<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] 
+	  . '" title="' . $latest_file['file_description'] .'">');
+echo (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16'));
+echo ('&nbsp;' . $filename . "</a>"); //$latest_file['file_name']
+?>
 	</td>
 	<td width="20%"><?php echo $latest_file['file_description'];?></td>
 	<td width="5%" nowrap="nowrap" align="center">
@@ -320,7 +315,8 @@ echo "
 					  </td>
 					  <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
 							  title="' . $file['file_description'] . '">' . 
-							  "<img border=\"0\" width=\"16\" heigth=\"16\" src=\"".DP_BASE_URL."/modules/files/images/$file_icon\" />&nbsp;" . 
+							  (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16')) 
+										. '&nbsp;' . 
 							  $file['file_name'] . '
 					  </a></td>
 					  <td width="20%">' . $file['file_description'] . '</td>
@@ -344,7 +340,7 @@ echo "
 		</td>
 		<td width="10%" nowrap="nowrap" align="center"><?php echo $file_types[$latest_file["file_category"]]; ?></td> 
 	<td width="10%" nowrap="nowrap" align="center"><?php
-		echo ($latest_file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
+		echo ($latest_file['file_folder_name'] != '') ? '<a href="' . DP_BASE_URL . '/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
 	?></td>
 	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task'];?>"><?php echo $latest_file["task_name"];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $latest_file["contact_first_name"].' '.$latest_file["contact_last_name"];?></td>
