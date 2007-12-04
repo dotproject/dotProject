@@ -113,4 +113,3 @@ class CTabBox extends CTabBox_core {
 	}
 }
 ?>
-
