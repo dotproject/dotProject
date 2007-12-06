@@ -83,8 +83,8 @@ if ($addPwOiD && !empty($owner_ids))
 if ($showInactive != '1') {
         $q->addWhere('project_status != 7');
 }
-$pjobj->setAllowedSQL($AppUI->user_id, $q);
-$q->addGroup('project_id');
+$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'p');
+$q->addGroup('p.project_id');
 $q->addOrder('project_name, task_end_date DESC');
 
 $projects = $q->loadList();

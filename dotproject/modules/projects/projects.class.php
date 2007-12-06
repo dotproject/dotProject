@@ -268,9 +268,9 @@ class CProject extends CDpObject {
 		return array_merge($where, $project_where);
 	}
 	
-	function setAllowedSQL($uid, &$query, $index = null) {
+	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$oCpy = new CCompany;
-		parent::setAllowedSQL($uid, $query, $index);
+		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, 'project_company');
 	}
 	
