@@ -25,7 +25,10 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 require_once $AppUI->getModuleClass('projects');
 $project =& new CProject;
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : NULL;
+if ($project_id > 0) {
+	$criticalTasks = $project->getCriticalTasks($project_id);
+	$project->load($project_id);
+}
 
 // pull valid projects and their percent complete information
 
@@ -151,30 +154,43 @@ $end_max = '0000-00-00 00:00:00';
 $start_min = date('Y-m-d H:i:s');
 
 //pull the tasks into an array
+$criticalTasks = $project->getCriticalTasks($project_id);
+$actual_end_date = new CDate($criticalTasks[0]['task_end_date']);
+if ($actual_end_date->after($project->project_end_date))
+	$p_end_date = $criticalTasks[0]['task_end_date'];
+else
+	$p_end_date = $project->project_end_date;
+
 foreach ($proTasks as $row) {
 
-        if($row['task_start_date'] == '0000-00-00 00:00:00'){
-                $row['task_start_date'] = date('Y-m-d H:i:s');
-        }
+	// calculate or set blank task_end_date if unset
+	if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+		if($row['task_duration'] && $row['task_start_date'] != '0000-00-00 00:00:00') {
+			$row['task_end_date'] = substr(db_unix2dateTime ( db_dateTime2unix( $row['task_start_date'] ) + SECONDS_PER_DAY * convert2days( $row['task_duration'], $row['task_duration_type'] ) ), 1, -1);
+		} else {
+			$row['task_end_date'] = $p_end_date;
+		}
+	}
+
+	if ($row['task_start_date'] == '0000-00-00 00:00:00'){
+		$row['task_start_date'] = $project->project_start_date; //date('Y-m-d H:i:s');
+	}
+
+
 
 		$tsd = new CDate($row['task_start_date']);
 
 		if ($tsd->before(new CDate($start_min)))
 			$start_min = $row['task_start_date'];
 
-        // calculate or set blank task_end_date if unset
-        if($row['task_end_date'] == '0000-00-00 00:00:00') {
-                if($row['task_duration']) {
-                        $row['task_end_date'] = db_unix2dateTime ( db_dateTime2unix( $row['task_start_date'] ) + SECONDS_PER_DAY * convert2days( $row['task_duration'], $row['task_duration_type'] ) );
-                } else {
-                        $row['task_end_date'] = '';
-                }
-        }
-		
 		$ted = new CDate($row['task_end_date']);
 
 		if ($ted->after(new CDate($end_max)))
 			$end_max = $row['task_end_date'];
+		if ($ted->after(new CDate($projects[$row['task_project']]['project_end_date']))
+			 || $projects[$row['task_project']]['project_end_date'] == '') {
+			$projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
+		}
 
         $projects[$row['task_project']]['tasks'][] = $row;
 }
