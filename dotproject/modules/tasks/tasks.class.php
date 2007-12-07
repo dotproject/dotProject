@@ -525,6 +525,11 @@ class CTask extends CDpObject
 			}
 		} else {
 			$this->_action = 'added';
+			if ($this->task_start_date == '')
+				$this->task_start_date = '0000-00-00 00:00:00';
+			if ($this->task_end_date == '')
+				$this->task_end_date = '0000-00-00 00:00:00';
+
 			$ret = db_insertObject('tasks', $this, 'task_id');
 			addHistory('tasks', $this->task_id, 'add', $this->task_name, $this->task_project);
 			
