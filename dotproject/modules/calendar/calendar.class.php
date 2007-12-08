@@ -7,8 +7,8 @@ if (!defined('DP_BASE_DIR')) {
 ## Calendar classes
 ##
 
-require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
-require_once( $AppUI->getSystemClass ('dp' ) );
+require_once ($AppUI->getLibraryClass('PEAR/Date'));
+require_once ($AppUI->getSystemClass ('dp'));
 require_once $AppUI->getSystemClass('libmail');
 require_once $AppUI->getSystemClass('date');
 
@@ -67,8 +67,8 @@ class CMonthCalendar {
 /**
 * @param Date $date
 */
- function CMonthCalendar( $date=null ) {
-		$this->setDate( $date );
+ function CMonthCalendar($date=null) {
+		$this->setDate($date);
 
 		$this->classes = array();
 		$this->callback = '';
@@ -99,25 +99,29 @@ class CMonthCalendar {
  *
  * @param [type] $date
  */
-	 function setDate( $date=null ) {
-		$this->this_month = new CDate( $date );
+	 function setDate($date=null) {
+		$this->this_month = new CDate($date);
 
 		$d = $this->this_month->getDay();
 		$m = $this->this_month->getMonth();
 		$y = $this->this_month->getYear();
 
-		//$date = Date_Calc::beginOfPrevMonth( $d, $m, $y-1, FORMAT_ISO );
-		$this->prev_year = new CDate( $date );
-		$this->prev_year->setYear( $this->prev_year->getYear()-1 );
+		$this->prev_year = new CDate($date);
+		$this->prev_year->setYear($this->prev_year->getYear()-1);
 
-		$this->next_year = new CDate( $date );
-		$this->next_year->setYear( $this->next_year->getYear()+1 );
+		$this->next_year = new CDate($date);
+		$this->next_year->setYear($this->next_year->getYear()+1);
+		
+		setlocale(LC_TIME, 'en_AU');
+		$date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
+		setlocale(LC_ALL, $AppUI->user_lang);
+		
+		$this->prev_month = new CDate($date);
 
-		$date = Date_Calc::beginOfPrevMonth( $d, $m, $y, FMT_TIMESTAMP_DATE );
-		$this->prev_month = new CDate( $date );
-
-		$date = Date_Calc::beginOfNextMonth( $d, $m, $y, FMT_TIMESTAMP_DATE );
-		$this->next_month =  new CDate( $date );
+		setlocale(LC_TIME, 'en_AU');
+		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
+		setlocale(LC_ALL, $AppUI->user_lang);
+		$this->next_month =  new CDate($date);
 
 	}
 
@@ -127,7 +131,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	 function setStyles( $title, $main ) {
+	 function setStyles($title, $main) {
 		$this->styleTitle = $title;
 		$this->styleMain = $main;
 	}
@@ -140,7 +144,7 @@ class CMonthCalendar {
  * @param string $day
  * @param string $week
  */
-	function setLinkFunctions( $day='', $week='' ) {
+	function setLinkFunctions($day='', $week='') {
 		$this->dayFunc = $day;
 		$this->weekFunc = $week;
 	}
@@ -151,7 +155,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	function setCallback( $function ) {
+	function setCallback($function) {
 		$this->callback = $function;
 	}
 
@@ -161,7 +165,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
- function setEvents( $e ) {
+ function setEvents($e) {
 		$this->events = $e;
 	}
 	
@@ -172,7 +176,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
- function setHighlightedDays( $hd ) {
+ function setHighlightedDays($hd) {
 		$this->highlightedDays = $hd;
 	}
 	
@@ -209,7 +213,7 @@ class CMonthCalendar {
  */
 	 function _drawTitle() {
 		global $AppUI, $m, $a, $locale_char_set;
-		$url = 'index.php?m=' . $m . (($a) ? ('&a=' . $a) : '') . (isset( $_GET['dialog']) ? '&dialog=1' : '');
+		$url = 'index.php?m=' . $m . (($a) ? ('&a=' . $a) : '') . (isset($_GET['dialog']) ? '&dialog=1' : '');
 
 		$s = "\n" . '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
 		$s .= "\n\t<tr>";
@@ -220,7 +224,7 @@ class CMonthCalendar {
 					 . ((count($this->highlightedDays) > 0) ? ('&uts=' . key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="left">';
 			$s .= ('<a href="' . $href . '">' 
-				   . dPshowImage( dPfindImage( 'prev.gif'), 16, 16, $AppUI->_('previous month')) . '</a>');
+				   . dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous month')) . '</a>');
 			$s .= '</td>';
 
 		}
@@ -230,7 +234,7 @@ class CMonthCalendar {
 		if ($this->clickMonth) {
 			$s .= '<a href="index.php?m=' . $m . '&date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
-		$s .= $this->this_month->format( "%B %Y" ) . (($this->clickMonth) ? '</a>' : '');
+		$s .= $this->this_month->format("%B %Y") . (($this->clickMonth) ? '</a>' : '');
 		$s .= "</th>";
 
 		if ($this->showArrows) {
@@ -238,7 +242,7 @@ class CMonthCalendar {
 					 . (($this->callback) ? ('&callback='.$this->callback) : '') 
 					 . ((count($this->highlightedDays)>0) ? ('&uts='.key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="right">';
-			$s .= ('<a href="' . $href . '">' . dPshowImage( dPfindImage( 'next.gif'), 16, 16, $AppUI->_('next month')) 
+			$s .= ('<a href="' . $href . '">' . dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next month')) 
 				   . '</a>');
 			$s .= "</td>";
 		}
@@ -257,15 +261,13 @@ class CMonthCalendar {
 */
 	function _drawDays() {
 		global $AppUI;
-
-		$bow = Date_Calc::beginOfWeek(null, null, null, null, LOCALE_FIRST_DAY);
-		$y = substr( $bow, 0, 4 );
-		$m = substr( $bow, 4, 2 );
-		$d = substr( $bow, 6, 2 );
-		$wk = Date_Calc::getCalendarWeek($d, $m, $y, '%a', LOCALE_FIRST_DAY);
-
+		
+		setlocale(LC_TIME, 'en_AU');
+		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
+		setlocale(LC_ALL, $AppUI->user_lang);
+		
 		$s = (($this->showWeek) ? ("\n\t\t" . '<th>&nbsp;</th>') : '');
-		foreach( $wk as $day ) {
+		foreach($wk as $day) {
 			$s .= ("\n\t\t" . '<th width="14%">' . $AppUI->_($day) . '</th>');
 		}
 
@@ -287,9 +289,11 @@ class CMonthCalendar {
 		$this_day = intval($date->getDay());
 		$this_month = intval($date->getMonth());
 		$this_year = intval($date->getYear());
+		setlocale(LC_TIME, 'en_AU');
 		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
+		setlocale(LC_ALL, $AppUI->user_lang);
 
-		$df = $AppUI->getPref( 'SHDATEFORMAT' );
+		$df = $AppUI->getPref('SHDATEFORMAT');
 
 		$html = '';
 		foreach ($cal as $week) {
@@ -298,17 +302,17 @@ class CMonthCalendar {
 				$html .= ("\n\t" . '<td class="week">');
 				$html .= (($this->dayFunc) ? ('<a href="javascript:' . $this->weekFunc . "('" .$week[0] . "')" . '">') 
 						  : '');
-				$html .= dPshowImage( dPfindImage( 'view.week.gif'), 16, 15, $AppUI->_('Week View'));
+				$html .= dPshowImage(dPfindImage('view.week.gif'), 16, 15, $AppUI->_('Week View'));
 				$html .= (($this->dayFunc) ? ('</a>') : '');
 				$html .= "</td>";
 			}
 
 			foreach ($week as $day) {
-				$this_day = new CDate( $day );
-				$y = intval( substr( $day, 0, 4 ) );
-				$m = intval( substr( $day, 4, 2 ) );
-				$d = intval( substr( $day, 6, 2 ) );
-				$dow = intval( substr( $day, 8, 1 ) );
+				$this_day = new CDate($day);
+				$y = intval(substr($day, 0, 4));
+				$m = intval(substr($day, 4, 2));
+				$d = intval(substr($day, 6, 2));
+				$dow = intval(substr($day, 8, 1));
 
 				if ($m != $this_month) {
 					$class = 'empty';
@@ -319,23 +323,23 @@ class CMonthCalendar {
 				} else {
 					$class = 'day';
 				}
-				$day = substr( $day, 0, 8 );
+				$day = substr($day, 0, 8);
 				$html .= "\n\t" . '<td class="' . $class . '"';
 				if($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
 					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
 				}
-				$html .= ' onclick="' . $this->dayFunc . "('" . $day . "','" . $this_day->format( $df ) . "')" . '">';
+				$html .= ' onclick="' . $this->dayFunc . "('" . $day . "','" . $this_day->format($df) . "')" . '">';
 				if ($m == $this_month) {
 					if ($this->dayFunc) {
 						$html .= ('<a href="javascript:' 
-								  .  $this->dayFunc . "('" . $day . "','" . $this_day->format( $df ) . "')" 
+								  .  $this->dayFunc . "('" . $day . "','" . $this_day->format($df) . "')" 
 								  . '" class="' . $class . '">');
 				    }
 					$html .=  $d . (($this->dayFunc) ? '</a>' : '');
 					
 					
 				    if ($this->showEvents) {
-						$html .= $this->_drawEvents( substr( $day, 0, 8 ) );
+						$html .= $this->_drawEvents(substr($day, 0, 8));
 					}
 				}
 				$html .= "</td>";
@@ -351,7 +355,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	 function _drawWeek( $dateObj ) {
+	 function _drawWeek($dateObj) {
 		GLOBAL $AppUI;
 		
 		$w = "\t\t".'<td class="week">';
@@ -359,7 +363,7 @@ class CMonthCalendar {
 			$w .= ('<a href="javascript:' . $this->weekFunc . "(" . $dateObj->getTimestamp() . ",'" 
 				   . $dateObj->toString() . "')" . '">');
 		}
-		$w .= dPshowImage( dPfindImage( 'view.week.gif'), 16, 15, $AppUI->_('Week View'));
+		$w .= dPshowImage(dPfindImage('view.week.gif'), 16, 15, $AppUI->_('Week View'));
 		$w .= (($this->dayFunc) ? '</a>' : '');
 		$w .= "</td>\n";
 		return $w;
@@ -371,11 +375,11 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	 function _drawEvents( $day ) {
+	 function _drawEvents($day) {
 		GLOBAL $AppUI;
 		
 		$s = '';
-		if ( !(isset($this->events[$day])) ) {
+		if (!(isset($this->events[$day]))) {
 			return '';
 		}
 		$events = $this->events[$day];
@@ -421,15 +425,15 @@ class CEvent extends CDpObject {
 	var $event_cwd = null;
 
 	function CEvent() {
-		$this->CDpObject( 'events', 'event_id' );
+		$this->CDpObject('events', 'event_id');
 	}
 
 // overload check operation
 	function check() {
 	// ensure changes to check boxes and select lists are honoured
-		$this->event_private = intval( $this->event_private );
-		$this->event_type = intval( $this->event_type );
-		$this->event_cwd = intval( $this->event_cwd );
+		$this->event_private = intval($this->event_private);
+		$this->event_type = intval($this->event_type);
+		$this->event_cwd = intval($this->event_cwd);
 		return NULL;
 	}
 
@@ -469,15 +473,15 @@ class CEvent extends CDpObject {
 * @param integer Time of Recurrence
 * @return array Calculated Start and End Dates for the recurrent Event for the given Period
 */
-	function getRecurrentEventforPeriod( $start_date, $end_date, $event_start_date, $event_end_date
-										 , $event_recurs, $event_times_recuring, $j ) {
+	function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date
+										 , $event_recurs, $event_times_recuring, $j) {
 
 		//this array will be returned
 		$transferredEvent = array();
 
 		//create Date Objects for Event Start and Event End
-		$eventStart = new CDate( $event_start_date );
-		$eventEnd = new CDate( $event_end_date );
+		$eventStart = new CDate($event_start_date);
+		$eventEnd = new CDate($event_end_date);
 
 		//Time of Recurence = 0 (first occurence of event) has to be checked, too.
 		if ($j>0) {
@@ -487,32 +491,32 @@ class CEvent extends CDpObject {
 					$eventEnd->addSpan(new Date_Span(3600 * $j));
 					break;
 				case 2:
-					$eventStart->addDays( $j );
-					$eventEnd->addDays( $j );
+					$eventStart->addDays($j);
+					$eventEnd->addDays($j);
 					break;
 				case 3:
-					$eventStart->addDays( 7 * $j );
-					$eventEnd->addDays( 7 * $j );
+					$eventStart->addDays(7 * $j);
+					$eventEnd->addDays(7 * $j);
 					break;
 				case 4:
-					$eventStart->addDays( 14 * $j );
-					$eventEnd->addDays( 14 * $j );
+					$eventStart->addDays(14 * $j);
+					$eventEnd->addDays(14 * $j);
 					break;
 				case 5:
-					$eventStart->addMonths( $j );
-					$eventEnd->addMonths( $j );
+					$eventStart->addMonths($j);
+					$eventEnd->addMonths($j);
 					break;
 				case 6:
-					$eventStart->addMonths( 3 * $j );
-					$eventEnd->addMonths( 3 * $j );
+					$eventStart->addMonths(3 * $j);
+					$eventEnd->addMonths(3 * $j);
 					break;
 				case 7:
-					$eventStart->addMonths( 6 * $j );
-					$eventEnd->addMonths( 6 * $j );
+					$eventStart->addMonths(6 * $j);
+					$eventEnd->addMonths(6 * $j);
 					break;
 				case 8:
-					$eventStart->addMonths( 12 * $j );
-					$eventEnd->addMonths( 12 * $j );
+					$eventStart->addMonths(12 * $j);
+					$eventEnd->addMonths(12 * $j);
 					break;
 				default:
 					break;
@@ -538,14 +542,14 @@ class CEvent extends CDpObject {
 * @param Date End date of the period
 * @return array A list of events
 */
-	function getEventsForPeriod( $start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0) {
+	function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0) {
 		global $AppUI;
 		
 		// the event times are stored as unix time stamps, just to be different
 		
 		// convert to default db time stamp
-		$db_start = $start_date->format( FMT_DATETIME_MYSQL );
-		$db_end = $end_date->format( FMT_DATETIME_MYSQL );
+		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
+		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
 		if (! isset($user_id)) {
 			$user_id = $AppUI->user_id;
 		}
@@ -576,11 +580,11 @@ class CEvent extends CDpObject {
 			
 			$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
 			if (($AppUI->getState('CalIdxCompany'))) {
-				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany') );
+				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
 			}
 			
 			if (count($allowedProjects)) {
-				$$query_set->addWhere('( ( ' . implode(' AND ',  $allowedProjects) . ' ) ' 
+				$$query_set->addWhere('((' . implode(' AND ',  $allowedProjects) . ') ' 
 					. (($AppUI->getState('CalIdxCompany'))?'':$project_id?'':' OR event_project = 0 ').')');
 			}
 			
@@ -613,8 +617,10 @@ class CEvent extends CDpObject {
         
 		
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)
+		setlocale(LC_TIME, 'en_AU');
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), 
 											$end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
+		setlocale(LC_ALL, $AppUI->user_lang);
 		
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
@@ -652,10 +658,10 @@ class CEvent extends CDpObject {
 				}
 				
 				//add values to the eventsArray if check for recurrent event was positive
-				if ( sizeof($recEventDate) > 0 ) {
+				if (sizeof($recEventDate) > 0) {
 					$eList[0] = $eventListRec[$i];
-					$eList[0]['event_start_date'] = $recEventDate[0]->format( FMT_DATETIME_MYSQL );
-					$eList[0]['event_end_date'] = $recEventDate[1]->format( FMT_DATETIME_MYSQL );
+					$eList[0]['event_start_date'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
+					$eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
 					$eventList = array_merge($eventList,$eList);
 				}
 				// clear array of positive recurrent events for the case that next loop recEventDate is empty in order to avoid double display
@@ -734,7 +740,7 @@ class CEvent extends CDpObject {
 		$q->addTable('contacts','con');
 		$q->addQuery('user_id, contact_first_name,contact_last_name, contact_email');
 		$q->addWhere('u.user_contact = con.contact_id');
-		$q->addWhere("user_id in ( " . implode(',', $assignee_list) . ")");
+		$q->addWhere("user_id in (" . implode(',', $assignee_list) . ")");
 		$users = $q->loadHashList('user_id');
 		
 		$date_format = $AppUI->getPref('SHDATEFORMAT');
@@ -749,7 +755,7 @@ class CEvent extends CDpObject {
 		$subject_title = (($clash) ? ($AppUI->_('Requested Event')) : ($type . " " . $AppUI->_('Event')));
 		
 		$mail->Subject($subject_title . ": " . $this->event_title, $locale_char_set);
-		$mail->From( '"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
+		$mail->From('"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		
 		$body = '';
 		
@@ -836,8 +842,8 @@ class CEvent extends CDpObject {
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
 		$q->addWhere("event_start_date <= '" . $end_date->format(FMT_DATETIME_MYSQL) . "'");
 		$q->addWhere("event_end_date >= '" . $start_date->format(FMT_DATETIME_MYSQL) . "'");
-		$q->addWhere("( e.event_owner IN (" . implode(',', $users) 
-					 . ") OR ue.user_id IN (" . implode(',', $users) .") )");
+		$q->addWhere("(e.event_owner IN (" . implode(',', $users) 
+					 . ") OR ue.user_id IN (" . implode(',', $users) ."))");
 		$q->addWhere('e.event_id != ' . $this->event_id);
 		
 		$result = $q->exec();
@@ -888,8 +894,8 @@ class CEvent extends CDpObject {
 					 . " AND event_end_date <= '$end_date'" 
 					 . " AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= '$start_time'" 
 					 . " AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= '$end_time'" 
-					 . ' AND ( e.event_owner IN (' . implode(',', $users) . ')' 
-					 . ' OR ue.user_id IN (' . implode(',', $users) .') )');
+					 . ' AND (e.event_owner IN (' . implode(',', $users) . ')' 
+					 . ' OR ue.user_id IN (' . implode(',', $users) .'))');
 		$result = $q->exec();
 		if (! $result) {
 			return false;
