@@ -82,7 +82,7 @@ function dPsessionWrite($id, $data)
 		$q->query = null;
 		$q->addUpdate('session_data', $data);
 		if (isset($AppUI)) {
-			$q->addUpdate('session_user', $AppUI->last_insert_id);
+			$q->addUpdate('session_user', (int)$AppUI->last_insert_id);
 		}
 	} else {
 		dprint(__FILE__, __LINE__, 11, "Creating new session $id");
