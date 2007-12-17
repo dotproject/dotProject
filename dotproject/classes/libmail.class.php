@@ -115,7 +115,7 @@ function Mail()
     $this->timeout    = dPgetConfig('mail_timeout', 0);
     $this->charset    = isset( $GLOBALS['locale_char_set']) ? strtolower($GLOBALS['locale_char_set']) : 'us-ascii';
     $this->ctencoding = $this->charset != 'us-ascii' ? '8bit' : '7bit';
-    $this->canEncode  = function_exists('imap_8bit') && 'us-ascii' != $this->charset;
+    $this->canEncode  = 'us-ascii' != $this->charset;
     $this->hasMbStr   = function_exists('mb_substr');
 }
 
