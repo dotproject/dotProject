@@ -694,7 +694,7 @@ function _utfToQuotedPrintable($str, $offset=0)
 	$s = '';
 	for ($i = 0, $len = strlen($str); $i<$len; $i++) {
 		$ord = ord($str[$i]);
-		if ($ord > 32 && $ord < 127) {
+		if ($ord > 32 && $ord < 127 && $str[$i] != '?' && $str[$i] != '=') {
 			$s .= $str[$i];
 			$x++;
 		} elseif (($ord & 0xE0) == 0xC0) {
