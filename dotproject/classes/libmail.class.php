@@ -669,11 +669,64 @@ function _wordEncode($str, $offset=0)
     if (!$this->canEncode) return $str;
     
     $cs = $this->charset;
-    $str = str_replace(array(' ', "=\r\n", '?') , array('_', "\n", '=3F'), trim(imap_8bit($str)));
-    $qstr = explode("\n", $str);
+    $qstr = $this->_utfToQuotedPrintable($str, $offset);
     $start_sentinel = "=?$cs?Q?";
     $end_sentinel = "?=";
     return $start_sentinel . implode($end_sentinel . "\r\n\t" . $start_sentinel, $qstr) . $end_sentinel;
+}
+
+/**
+ * Convert a UTF8 string into a quoted printable string, making sure
+ * that the first line is a known number of characters long and subsequent
+ * lines are <= 72 characters, and that utf8 characters are always encoded
+ * completely on the one line.
+ * 
+ * @author Adam Donnison <ajdonnison@dotproject.net>
+ * @param string $str
+ * @param integer $offset
+ * @return array of lines of required length.
+ */
+function _utfToQuotedPrintable($str, $offset=0)
+{
+	$l = 72 - $offset;
+	$result = array();
+	$x = 0;
+	$s = '';
+	for ($i = 0, $len = strlen($str); $i<$len; $i++) {
+		$ord = ord($str[$i]);
+		if ($ord > 32 && $ord < 127) {
+			$s .= $str[$i];
+			$x++;
+		} elseif (($ord & 0xE0) == 0xC0) {
+			$s .= sprintf('=%02x=%02x', $ord, ord($str[++$i]));
+			$x+=6;
+		} elseif (($ord & 0xF0) == 0xE0) {
+			$s .= sprintf('=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]));
+			$x += 9;
+		} elseif (($ord & 0xF8) == 0xF0) {
+			$s .= sprintf('=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
+			$x += 12;
+		} elseif (($ord & 0xFC) == 0xF8) {
+			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
+			$x += 15;
+		} elseif (($ord & 0xFE) == 0xFC) {
+			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
+			$x += 18;
+		} else {
+			$s .= sprintf('=%02x', $ord);
+			$x += 3;
+		}
+		if ($x >= $l) {
+			$result[] = $s;
+			$s ='';
+			$x = 0;
+			$l = 72;
+		}
+	}
+	if ($x) {
+		$result[] = $s;
+	}
+	return $result;
 }
 
 function _addressesEncode(&$aaddr, $hdr)
