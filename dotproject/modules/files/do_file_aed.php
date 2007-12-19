@@ -4,194 +4,177 @@ if (!defined('DP_BASE_DIR')){
 }
 
 //addfile sql
-$file_id = intval( dPgetParam( $_POST, 'file_id', 0 ) );
-$del = intval( dPgetParam( $_POST, 'del', 0 ) );
-$duplicate = intval( dPgetParam( $_POST, 'duplicate', 0 ) );
-$redirect = dPgetParam( $_POST, 'redirect', '' );
+$file_id = intval(dPgetParam($_POST, 'file_id', 0));
+$del = intval(dPgetParam($_POST, 'del', 0));
+$duplicate = intval(dPgetParam($_POST, 'duplicate', 0));
+$redirect = dPgetParam($_POST, 'redirect', '');
 global $db;
 
-$not = dPgetParam( $_POST, 'notify', '0' );
-$notcont = dPgetParam( $_POST, 'notify_contacts', '0' );
-if ($not!='0') $not='1';
-if ($notcont!='0') $notcont='1';
+$not = dPgetParam($_POST, 'notify', '0');
+$notcont = dPgetParam($_POST, 'notify_contacts', '0');
 
 $obj = new CFile();
 if ($file_id) { 
 	$obj->_message = 'updated';
 	$oldObj = new CFile();
-	$oldObj->load( $file_id );
-
+	$oldObj->load($file_id);
 } else {
 	/*
-	** @date 		20070309
-	** @author 	gregorerhardt
-	**
-	** 1. it must be (cf. #1932):
-			if ($del) instead of if (!$del)
-	** 2. commented all out, because delete permissions shouldn't be module-centric,
-			but file object-centric. In the CFile::delete() method there is an object-centric check for permission.
+	 ** @date 		20070309
+	 ** @author 	gregorerhardt
+	 **
+	 ** 1. it must be (cf. #1932):
+	 ** 	if ($del) instead of if (!$del)
+	 ** 2. commented all out, because delete permissions shouldn't be module-centric, 
+	 ** but file object-centric. In the CFile::delete() method there is an object-centric check 
+	 ** for permission.
 			
-  if ($del)
-  {
-    $acl =& $AppUI->acl();
-    if ( ! $acl->checkModule('files', 'delete')) 
-		{
-      $AppUI->setMsg($AppUI->_( "noDeletePermission" ));
-    	$AppUI->redirect('m=public&a=access_denied');
+	if ($del) {
+		$acl =& $AppUI->acl();
+		if (! $acl->checkModule('files', 'delete')) {
+			$AppUI->setMsg($AppUI->_('noDeletePermission'));
+			$AppUI->redirect('m=public&a=access_denied');
 		}
 	}
 	*/
 	$obj->_message = 'added';
 }
-$obj->file_category = intval( dPgetParam( $_POST, 'file_category', 0 ) );
+$obj->file_category = intval(dPgetParam($_POST, 'file_category', 0));
 
-$version = dPgetParam( $_POST, 'file_version', 0 );
-$revision_type   = dPgetParam( $_POST, 'revision_type', 0 );
+$version = dPgetParam($_POST, 'file_version', 0);
+$revision_type   = dPgetParam($_POST, 'revision_type', 0);
 
-if ( strcasecmp('major', $revision_type) == 0 )
-{
-  $major_num = strtok($version, ".") + 1;
-  $_POST['file_version']= $major_num;
+if (strcasecmp('major', $revision_type) == 0) {
+	$major_num = strtok($version, '.') + 1;
+	$_POST['file_version']= $major_num;
 }
 
-if (!$obj->bind( $_POST )) {
-	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect($redirect);
 }
 
 // prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg( 'File' );
+$AppUI->setMsg('File');
 // duplicate a file
 if ($duplicate) {
-	$obj->load( $file_id );
+	$obj->load($file_id);
 	$new_file = new CFile();
 	$new_file = $obj->duplicate();
 	if (!($dup_realname = $obj->duplicateFile($obj->file_project, $obj->file_real_filename))) {
-		$AppUI->setMsg( 'Could not duplicate file, check file permissions', UI_MSG_ERROR );
+		$AppUI->setMsg('Could not duplicate file, check file permissions', UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
 		$new_file->file_real_filename = $dup_realname;
 		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
-
-    $q  = new DBQuery;
-    $q->addTable('files');
-    $q->addQuery('file_version_id');
-    $q->addOrder('file_version_id DESC');
-    $q->setLimit(1);
-    $sql = $q->prepare();
-    $q->clear();
-    $latest_file_version = db_loadResult($sql);
-    $new_file->file_version_id = $latest_file_version + 1;
-
-
-		if (($msg = $new_file->store())) {
-			$AppUI->setMsg( $msg, UI_MSG_ERROR );
-			$AppUI->redirect($redirect);			
+		$new_file->file_version_id = getNextVersionID();
+		
+		if ($msg = $new_file->store()) {
+			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$AppUI->setMsg( "duplicated", UI_MSG_OK, true );
-			$AppUI->redirect( $redirect );
+			$AppUI->setMsg('duplicated', UI_MSG_OK, true);
 		}
+		$AppUI->redirect($redirect);
 	}
 }
 // delete the file
 if ($del) {
-	$obj->load( $file_id );
+	$obj->load($file_id);
 	if (($msg = $obj->delete())) {
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
+		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
-		if ($not=='1') $obj->notify();
-		if ($notcont=='1') $obj->notifyContacts();
-		$AppUI->setMsg( "deleted", UI_MSG_OK, true );
-		$AppUI->redirect( $redirect );
+		if ($not) {
+			$obj->notify();
+		}
+		if ($notcont) {
+			$obj->notifyContacts();
+		}
+		$AppUI->setMsg('deleted', UI_MSG_OK, true);
+		$AppUI->redirect($redirect);
 	}
 }
 
 
 
-if (!ini_get('safe_mode'))
-	set_time_limit( 600 );
-ignore_user_abort( 1 );
+if (!(ini_get('safe_mode'))) {
+	set_time_limit(600);
+}
+ignore_user_abort(1);
 
-//echo "<pre>";print_r($_POST);echo "</pre>";die;
+//echo '<pre>';print_r($_POST);echo '</pre>';die;
 
 $upload = null;
-if (isset( $_FILES['formfile'] )) {
+if (isset($_FILES['formfile'])) {
 	$upload = $_FILES['formfile'];
 
 	if ($upload['size'] < 1) {
 		if (!$file_id) {
-			$AppUI->setMsg( 'Upload file size is zero. Process aborted.', UI_MSG_ERROR );
+			$AppUI->setMsg('Upload file size is zero. Process aborted.', UI_MSG_ERROR);
 			$AppUI->redirect($redirect);
 		}
 	} else {
-
-	// store file with a unique name
+		// store file with a unique name
 		$obj->file_name = $upload['name'];
 		$obj->file_type = $upload['type'];
 		$obj->file_size = $upload['size'];
 		$obj->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
-		$obj->file_real_filename = uniqid( rand() );
-
-		$res = $obj->moveTemp( $upload );
+		$obj->file_real_filename = uniqid(rand());
+		
+		$res = $obj->moveTemp($upload);
 		if (!$res) {
-		    $AppUI->setMsg( 'File could not be written', UI_MSG_ERROR );
+			$AppUI->setMsg('File could not be written', UI_MSG_ERROR);
 		    $AppUI->redirect($redirect);
 		}
-
 	}
 }
 
 // move the file on filesystem if the affiliated project was changed
-if ($file_id && ($obj->file_project != $oldObj->file_project) ) {
-	$res = $obj->moveFile( $oldObj->file_project, $oldObj->file_real_filename );
+if ($file_id && ($obj->file_project != $oldObj->file_project)) {
+	$res = $obj->moveFile($oldObj->file_project, $oldObj->file_real_filename);
 	if (!$res) {
-		$AppUI->setMsg( 'File could not be moved', UI_MSG_ERROR );
+		$AppUI->setMsg('File could not be moved', UI_MSG_ERROR);
 		$AppUI->redirect($redirect);
 	}
 }
 
 if (!$file_id) {
 	$obj->file_owner = $AppUI->user_id;
-	if (! $obj->file_version_id)
-	{
-		$q  = new DBQuery;
-		$q->addTable('files');
-		$q->addQuery('file_version_id');
-		$q->addOrder('file_version_id DESC');
-		$q->setLimit(1);
-		$sql = $q->prepare();
-		$q->clear();
-		$latest_file_version = db_loadResult($sql);
-		$obj->file_version_id = $latest_file_version + 1;
+	if (! $obj->file_version_id) {
+		$obj->file_version_id = getNextVersionID();
 	} else {
 		$q  = new DBQuery;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
-		$q->addWhere("file_version_id = $obj->file_version_id");
+		$q->addWhere('file_version_id = ' . $obj->file_version_id);
 		$q->exec();
 		$q->clear();
 	}
 }
 //print_r($obj);die;
 if (($msg = $obj->store())) {
-	$AppUI->setMsg( $msg, UI_MSG_ERROR );
+	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
-
 	// Notification
 	$obj->load($obj->file_id);
-	if ($not=='1') $obj->notify();
-	if ($notcont=='1') $obj->notifyContacts();
-
-	// Delete the existing (old) file in case of file replacement (through addedit not through c/o-versions)
+	if ($not) {
+		$obj->notify();
+	}
+	if ($notcont) {
+		$obj->notifyContacts();
+	}
+	
+	// Delete the existing (old) file in case of file replacement 
+	// (through addedit not through c/o-versions)
 	if (($file_id) && ($upload['size'] > 0)) {
 		if (($oldObj->deleteFile())) {
 			$AppUI->setMsg('replaced', UI_MSG_OK, true);
 		} else {
-			$AppUI->setMsg($file_id ? 'updated' : 'added' . '; unable to delete existing file', UI_MSG_OK, true);
+			$AppUI->setMsg($file_id ? 'updated' : 'added' . '; unable to delete existing file', 
+			               UI_MSG_OK, true);
 		}
 	} else {
-		$AppUI->setMsg( $file_id ? 'updated' : 'added', UI_MSG_OK, true );
+		$AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 	}
 
 	/* Workaround for indexing large files:

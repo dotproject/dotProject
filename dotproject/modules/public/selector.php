@@ -67,8 +67,13 @@ case 'departments':
 	break;
 case 'files':
 	$title = 'File';
-	$q->addQuery( 'file_id,file_name');
+	$q->addQuery('file_id,file_name');
 	$q->addOrder('file_name');
+	break;
+case 'file_folders':
+	$title = 'File Folder';
+	$q->addQuery('file_folder_id,file_folder_name');
+	$q->addOrder('file_folder_name');
 	break;
 case 'forums':
 	$title = 'Forum';

@@ -44,7 +44,7 @@ if($search_string != ""){
 	$search_string = $AppUI->getState("search_string");
 }
 
-// $canEdit = !getDenyEdit( $m );
+// $canEdit = getPermission($m, 'edit');
 // retrieve list of records
 $search_string = dPformSafe($search_string, true);
 

@@ -8,7 +8,7 @@ $dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : 0;
 $company_id = isset($_GET['company_id']) ? $_GET['company_id'] : 0;
 
 // check permissions for this department
-$canEdit = !getDenyEdit( $m, $dept_id );
+$canEdit = getPermission($m, 'edit', $dept_id);
 if (!$canEdit) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }

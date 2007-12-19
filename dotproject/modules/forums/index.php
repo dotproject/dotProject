@@ -84,8 +84,7 @@ $titleBlock->addCell(
 	'<form name="forum_filter" action="?m=forums" method="post">', '</form>'
 );
 
-$canAdd = $perms->checkModule( $m, 'add');
-if ($canAdd) {
+if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new forum').'">', '',
 		'<form action="?m=forums&a=addedit" method="post">', '</form>'

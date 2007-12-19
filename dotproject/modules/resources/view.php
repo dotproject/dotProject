@@ -7,10 +7,9 @@ $obj =& new CResource;
 $resource_id = dPgetParam($_GET, 'resource_id', 0);
 $perms =& $AppUI->acl();
 
-$canView = $perms->checkModuleItem('resources', 'view', $resource_id);
-$canEdit = $perms->checkModuleItem('resources', 'edit', $resource_id);
-$canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
-$canAdd = $perms->checkModule('resources', 'add');
+$canView = $perms->checkModuleItem($m, 'view', $resource_id);
+$canEdit = $perms->checkModuleItem($m, 'edit', $resource_id);
+$canDelete = $perms->checkModuleItem($m, 'delete', $resource_id);
 
 if (! $canView) {
   $AppUI->redirect("m=public&a=access_denied");
@@ -33,7 +32,7 @@ if (! $obj->load($resource_id)) {
 }
 
 $titleBlock =& new CTitleBlock('View Resource', 'handshake.png', $m, "$m.$a");
-if ($canAdd) {
+if ($canAuthor) {
   $titleBlock->addCell(
     '<input type="submit" class="button" value="'. $AppUI->_('new resource').'" />', '',
     '<form action="?m=resources&a=addedit" method="post">', '</form>'

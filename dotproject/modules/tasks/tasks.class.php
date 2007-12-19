@@ -1136,7 +1136,7 @@ class CTask extends CDpObject
 		$q =& new DBQuery;
 		
 		// Let's see if this user has admin privileges
-		if (!getDenyRead('admin')) {
+		if (getPermission('admin', 'view')) {
 			return true;
 		}
 		
@@ -1756,7 +1756,7 @@ class CTask extends CDpObject
 			}
 			
 			// Am I sys admin?
-			if (!getDenyEdit('admin')) {
+			if (getPermission('admin', 'edit')) {
 				$can_edit_time_information = true;
 			}
 			
@@ -2223,7 +2223,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$s = "\n<tr>";
 	// edit icon
 	$s .= "\n\t<td>";
-	$canEdit = !getDenyEdit('tasks', $a['task_id']);
+	$canEdit = getPermission('tasks', 'edit', $a['task_id']);
 	$canViewLog = $perms->checkModuleItem('task_log', 'view', $a['task_id']);
 	if ($canEdit) {
 		$s .= ("\n\t\t".'<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '">'
@@ -2383,7 +2383,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	if ($today_view) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' 
 			   . $a['task_due_in'] . '</td>');
-	} else if ($AppUI->isActiveModule('history') && !getDenyRead('history')) {
+	} else if ($AppUI->isActiveModule('history') && getPermission('history', 'view')) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style.'">' 
 			   . ($last_update ? $last_update->format($df) : '-') . '</td>');
 	}

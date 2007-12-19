@@ -588,7 +588,7 @@ class CAppUI {
 * @return mixed
 */
 	function getState( $label, $default_value = null ) {
-		if (array_key_exists( $label, $this->state)) {
+		if (array_key_exists($label, $this->state)) {
 			return $this->state[$label];
 		} else if (isset($default_value)) {
 			$this->setState($label, $default_value);
@@ -1116,7 +1116,7 @@ class CTitleBlock_core {
 		$this->cells1 = array();
 		$this->cells2 = array();
 		$this->crumbs = array();
-		$this->showhelp = !getDenyRead( 'help' );
+		$this->showhelp = getPermission('help', 'view');
 	}
 /**
 * Adds a table 'cell' beside the Title string

@@ -61,7 +61,7 @@ $titleBlock->addCell(
 
 
 // Let's see if this user has admin privileges
-if(!getDenyRead("admin")){
+if(getPermission('admin', 'view')){
 	$titleBlock->addCell();
 	$titleBlock->addCell( $AppUI->_("User") . ":" );
 	

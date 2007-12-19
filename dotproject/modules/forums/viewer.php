@@ -11,8 +11,8 @@ $post_message = isset($_GET["post_message"]) ? $_GET["post_message"] : 0;
 $f = dpGetParam( $_POST, 'f', 0 );
 
 // check permissions
-$canRead = !getDenyRead( $m, $forum_id );
-$canEdit = !getDenyEdit( $m, $forum_id );
+$canRead = getPermission($m, 'view', $forum_id);
+$canEdit = getPermission($m, 'edit', $forum_id);
 
 if (!$canRead || ($post_message & !$canEdit)) {
 	$AppUI->redirect( "m=public&a=access_denied" );

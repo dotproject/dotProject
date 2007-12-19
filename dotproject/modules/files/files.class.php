@@ -3,17 +3,17 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-require_once( $AppUI->getSystemClass( 'libmail' ) );
-require_once( $AppUI->getSystemClass( 'dp' ) );
-require_once( $AppUI->getSystemClass( 'date' ) );
-require_once( $AppUI->getModuleClass( 'tasks' ) );
-require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once ($AppUI->getSystemClass('libmail'));
+require_once ($AppUI->getSystemClass('dp'));
+require_once ($AppUI->getSystemClass('date'));
+require_once ($AppUI->getModuleClass('tasks'));
+require_once ($AppUI->getModuleClass('projects'));
 global $helpdesk_available;
 
 /** The helpdesk module seems to no longer have files support (at least in the dotmods CVS)
 so this breaks if helpdesk is available.  This is NOT the way to build co-operating modules.
 if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
-	require_once( $AppUI->getModuleClass( 'helpdesk' ) );
+	require_once($AppUI->getModuleClass('helpdesk'));
 }
 */
 $helpdesk_available = false;
@@ -21,7 +21,7 @@ $helpdesk_available = false;
 * File Class
 */
 class CFile extends CDpObject {
-
+	
 	var $file_id = NULL;
 	var $file_version_id = NULL;
 	var $file_project = NULL;
@@ -39,17 +39,18 @@ class CFile extends CDpObject {
 	var $file_folder = NULL;
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
-
-	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
+	
+	// This "breaks" check-in/upload if helpdesk is not present.
+	// class variable needs to be added "dymanically"
 	//var $file_helpdesk_item = NULL;
-
+	
 	
 	function CFile() {
 		global $AppUI, $helpdesk_available;
 		if ($helpdesk_available) {
 			$this->file_helpdesk_item = NULL;
 		}
-		$this->CDpObject( 'files', 'file_id' );
+		$this->CDpObject('files', 'file_id');
 	}
 	
 	function store() {
@@ -67,30 +68,32 @@ class CFile extends CDpObject {
 			// create task log with information about the file that was uploaded
 			$task_log = new CHDTaskLog();
 			$task_log->task_log_help_desk_id = $this->_hditem->item_id;
-			if ($this->_message != "deleted") {
-				$task_log->task_log_name = "File ". $this->file_name ." uploaded";
+			if ($this->_message != 'deleted') {
+				$task_log->task_log_name = 'File ' . $this->file_name .' uploaded';
 			} else {
-				$task_log->task_log_name = "File ". $this->file_name ." deleted";
+				$task_log->task_log_name = 'File ' . $this->file_name .' deleted';
 			}
 			$task_log->task_log_description = $this->file_description;
 			$task_log->task_log_creator = $AppUI->user_id;
 			$date = new CDate();
-			$task_log->task_log_date = $date->format( FMT_DATETIME_MYSQL );
+			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 			if ($msg = $task_log->store()) {
-				$AppUI->setMsg( $msg, UI_MSG_ERROR );
+				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 		return NULL;
 	}
-
+	
 	function canAdmin() {
 		global $AppUI;
-
-		if (! $this->file_project)
+		
+		if (! $this->file_project) {
 			return false;
-		if (! $this->file_id)
+		}
+		if (! $this->file_id) {
 			return false;
-
+		}
+		
 		$result = false;
 		$this->_query->clear();
 		$this->_query->addTable('projects');
@@ -99,20 +102,20 @@ class CFile extends CDpObject {
 		$res = $this->_query->exec();
 		if ($res && $row = db_fetch_assoc($res)) {
 			if ($row['project_owner'] == $AppUI->user_id)
-				$result =  true;
-		} 
+				$result = true;
+		}
 		$this->_query->clear();
 		return $result;
 	}
-
+	
 	function check() {
 		// ensure the integrity of some variables
-		$this->file_id = intval( $this->file_id );
+		$this->file_id = intval($this->file_id);
 		$this->file_version_id = intval($this->file_version_id);
-		$this->file_parent = intval( $this->file_parent );
-		$this->file_task = intval( $this->file_task );
-		$this->file_project = intval( $this->file_project );
-
+		$this->file_parent = intval($this->file_parent);
+		$this->file_task = intval($this->file_task);
+		$this->file_project = intval($this->file_project);
+		
 		return NULL; // object is ok
 	}
 	
@@ -120,117 +123,112 @@ class CFile extends CDpObject {
 		$q  = new DBQuery;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
-		$q->addUpdate('file_co_reason', $coReason );
-		$q->addWhere('file_id = '.$fileId);
+		$q->addUpdate('file_co_reason', $coReason);
+		$q->addWhere('file_id = ' . $fileId);
 		$q->exec();
 		$q->clear();
-
+		
 		return true;
 	}
 
 	function delete() {
 		global $helpdesk_available;
-		if (!$this->canDelete( $msg ))
-			return $msg;
-		$this->_message = "deleted";
-		addHistory('files', $this->file_id, 'delete',  $this->file_name, $this->file_project);
+		
+		// delete the main table reference
+		$message = parent :: delete($this->file_id, $this->file_name, $this->file_project);
+		if ($message) {
+			return $message;
+		}
+		
 		// remove the file from the file system
 		$this->deleteFile();
+		
 		// delete any index entries
 		$q  = new DBQuery;
 		$q->setDelete('files_index');
 		$q->addQuery('*');
-		$q->addWhere("file_id = $this->file_id");
-		if (!$q->exec()) {
-			$q->clear();
-			return db_error();
-		}
-		// delete the main table reference
-		$q->clear();
-		$q->setDelete('files');
-		$q->addQuery('*');
-		$q->addWhere("file_id = $this->file_id");
+		$q->addWhere('file_id = ' .$this->file_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
 		}
 		$q->clear();
 		
+		$this->_message = 'deleted';
+		
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
 		}
-		return NULL;
+		
+		return null;
 	}
 
 	// delete File from File System
 	function deleteFile() {
 		global $dPconfig;
-		return @unlink( DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename );
+		return @unlink(DP_BASE_DIR . '/files/' . $this->file_project . '/' 
+		               . $this->file_real_filename);
 	}
 
 	// move the file if the affiliated project was changed
-	function moveFile( $oldProj, $realname ) {
+	function moveFile($oldProj, $realname) {
 		global $AppUI, $dPconfig;
-		if (!is_dir(DP_BASE_DIR.'/files/'.$this->file_project)) {
-		    $res = mkdir( DP_BASE_DIR.'/files/'.$this->file_project, 0777 );
-			 if (!$res) {
-                                $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
-			     return false;
-			 }
+		if (!is_dir(DP_BASE_DIR . '/files/' . $this->file_project)) {
+			$res = mkdir(DP_BASE_DIR . '/files/' . $this->file_project, 0777);
+			if (!$res) {
+				$AppUI->setMsg('Upload folder not setup to accept uploads' 
+				               . ' - change permission on files/ directory.', UI_MSG_ALLERT);
+				return false;
+			}
 		}
-		$res = rename(DP_BASE_DIR.'/files/'.$oldProj.'/'.$realname, DP_BASE_DIR.'/files/'.$this->file_project.'/'.$realname);
-
-		if (!$res) {
-		    return false;
-		}
-		return true;
+		$res = rename(DP_BASE_DIR . '/files/' . $oldProj . '/' . $realname, 
+		              DP_BASE_DIR . '/files/' . $this->file_project . '/' . $realname);
+		
+		return $res;
 	}
 
 	// duplicate a file into root
-	function duplicateFile( $oldProj, $realname ) {
+	function duplicateFile($oldProj, $realname) {
 		global $AppUI, $dPconfig;
 		if (!is_dir(DP_BASE_DIR.'/files/0')) {
-		    $res = mkdir( DP_BASE_DIR.'/files/0', 0777 );
-			 if (!$res) {
-                                $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
-			     return false;
-			 }
+			$res = mkdir(DP_BASE_DIR.'/files/0', 0777);
+			if (!$res) {
+				$AppUI->setMsg('Upload folder not setup to accept uploads.' 
+				               . ' Change permission on files/ directory.', UI_MSG_ALLERT);
+				return false;
+			}
 		}
-		$dest_realname = uniqid( rand() );
-		$res = copy(DP_BASE_DIR.'/files/'.$oldProj.'/'.$realname, DP_BASE_DIR.'/files/0/'.$dest_realname);
-
-		if (!$res) {
-		    return false;
-		}
-		return $dest_realname;
+		$dest_realname = uniqid(rand());
+		$res = copy(DP_BASE_DIR . '/files/' . $oldProj . '/' . $realname, 
+		            DP_BASE_DIR . '/files/0/' . $dest_realname);
+		
+		return ((!$res) ? false : $dest_realname);
 	}
-
+	
 	// move a file from a temporary (uploaded) location to the file system
-	function moveTemp( $upload ) {
+	function moveTemp($upload) {
 		global $AppUI, $dPconfig;
 		// check that directories are created
 		if (!is_dir(DP_BASE_DIR.'/files')) {
-		    $res = mkdir( DP_BASE_DIR.'/files', 0777 );
+			$res = mkdir(DP_BASE_DIR.'/files', 0777);
 		    if (!$res) {
-			     return false;
-			 }
+				return false;
+			}
 		}
 		if (!is_dir(DP_BASE_DIR.'/files/'.$this->file_project)) {
-		    $res = mkdir( DP_BASE_DIR.'/files/'.$this->file_project, 0777 );
-			 if (!$res) {
-                                $AppUI->setMsg( "Upload folder not setup to accept uploads - change permission on files/ directory.", UI_MSG_ALLERT );
-			     return false;
-			 }
+			$res = mkdir(DP_BASE_DIR.'/files/'.$this->file_project, 0777);
+			if (!$res) {
+				$AppUI->setMsg('Upload folder not setup to accept uploads' 
+				               . ' - change permission on files/ directory.', UI_MSG_ALLERT);
+				return false;
+			}
 		}
-
-
+		
+		
 		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
 		// move it
-		$res = move_uploaded_file( $upload['tmp_name'], $this->_filepath );
-		if (!$res) {
-		    return false;
-		}
-		return true;
+		$res = move_uploaded_file($upload['tmp_name'], $this->_filepath);
+		return $res;
 	}
 
 	// parse file for indexing
@@ -238,67 +236,68 @@ class CFile extends CDpObject {
 		GLOBAL $AppUI, $dPconfig;
 		// get the parser application
 		$parser = @$dPconfig['parser_' . $this->file_type];
-		if (!$parser)
+		if (!$parser) {
 			$parser = $dPconfig['parser_default'];
-		if (!$parser) 
-			return false;
-		// buffer the file
-		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
-		$fp = fopen( $this->_filepath, "rb" );
-		$x = fread( $fp, $this->file_size );
-		fclose( $fp );
-		// parse it
-		$parser = $parser . " " . $this->_filepath;
-		$pos = strpos( $parser, '/pdf' );
-		if (false !== $pos) {
-			$x = `$parser -`;
-		} else {
-			$x = `$parser`;
 		}
+		if (!$parser) {
+			return false;
+		}
+		// buffer the file
+		$this->_filepath = (DP_BASE_DIR . '/files/' . $this->file_project . '/' 
+		                    . $this->file_real_filename);
+		$fp = fopen($this->_filepath, 'rb');
+		$x = fread($fp, $this->file_size);
+		fclose($fp);
+		
+		// parse it
+		$parser = $parser . ' ' . $this->_filepath;
+		$pos = strpos($parser, '/pdf');
+		$x = (($pos !== false) ? `$parser -` : `$parser`);
+		
 		// if nothing, return
-		if (strlen( $x ) < 1) {
+		if (strlen($x) < 1) {
 			return 0;
 		}
 		// remove punctuation and parse the strings
-		$x = str_replace( array( ".", ",", "!", "@", "(", ")" ), " ", $x );
-		$warr = split( "[[:space:]]", $x );
-
+		$x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
+		$warr = split('[[:space:]]', $x);
+		
 		$wordarr = array();
-		$nwords = count( $warr );
+		$nwords = count($warr);
 		for ($x=0; $x < $nwords; $x++) {
 			$newword = $warr[$x];
-			if (!ereg( "[[:punct:]]", $newword )
-				&& strlen( trim( $newword ) ) > 2
-				&& !ereg( "[[:digit:]]", $newword )) {
-				$wordarr[] = array( "word" => $newword, "wordplace" => $x );
+			if (!ereg('[[:punct:]]', $newword) && !ereg('[[:digit:]]', $newword) 
+			    && strlen(trim($newword)) > 2) {
+				$wordarr[] = array('word' => $newword, 'wordplace' => $x);
 			}
 		}
-		db_exec( "LOCK TABLES files_index WRITE" );
+		db_exec('LOCK TABLES files_index WRITE');
 		// filter out common strings
 		$ignore = array();
-		include DP_BASE_DIR.'/modules/files/file_index_ignore.php';
+		include_once (DP_BASE_DIR . '/modules/files/file_index_ignore.php');
 		foreach ($ignore as $w) {
-			unset( $wordarr[$w] );
+			unset($wordarr[$w]);
 		}
 		// insert the strings into the table
-		while (list( $key, $val ) = each( $wordarr )) {
+		while (list($key, $val) = each($wordarr)) {
 			$q  = new DBQuery;
 			$q->addTable('files_index');
-
-			$q->addReplace("file_id", $this->file_id);
-			$q->addReplace("word", $wordarr[$key]['word']);
-			$q->addReplace("word_placement", $wordarr[$key]['wordplace']);
+			
+			$q->addReplace('file_id', $this->file_id);
+			$q->addReplace('word', $wordarr[$key]['word']);
+			$q->addReplace('word_placement', $wordarr[$key]['wordplace']);
 			$q->exec();
 			$q->clear();
 		}
-
-		db_exec( "UNLOCK TABLES;" );
+		
+		db_exec('UNLOCK TABLES;');
 		return nwords;
 	}
 	
 	//function notifies about file changing
 	function notify() {	
 		GLOBAL $AppUI, $dPconfig, $locale_char_set, $helpdesk_available;
+		
 		// if helpdesk_item is available send notification to assigned users
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->_hditem = new CHelpDeskItem();
@@ -308,40 +307,49 @@ class CFile extends CDpObject {
 			$task_log_help_desk_id = $this->_hditem->item_id;
 			// send notifcation about new log entry
 			// 2 = TASK_LOG
-			$this->_hditem->notify( 2, $task_log->task_log_id );
+			$this->_hditem->notify(2, $task_log->task_log_id);
 			
 		}
+		
 		//if no project specified than we will not do anything
 		if ($this->file_project != 0) {
 			$this->_project = new CProject();
 			$this->_project->load($this->file_project);
 			$mail = new Mail;		
-
+			
 			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject( $this->_project->project_name."::".$this->file_name, $locale_char_set);
+				$mail->Subject($this->_project->project_name . '::' . $this->file_name, 
+				               $locale_char_set);
 			} else { //notify all assigned users			
 				$this->_task = new CTask();
 				$this->_task->load($this->file_task);
-				$mail->Subject( $this->_project->project_name."::".$this->_task->task_name."::".$this->file_name, $locale_char_set);
+				$mail->Subject($this->_project->project_name . '::' . $this->_task->task_name 
+							   . '::' . $this->file_name, $locale_char_set);
 			}
 			
-			$body = $AppUI->_('Project').": ".$this->_project->project_name;
-			$body .= "\n".$AppUI->_('URL').':     ' . DP_BASE_URL . '/index.php?m=projects&a=view&project_id='.$this->_project->project_id;
+			$body = $AppUI->_('Project').': '.$this->_project->project_name;
+			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+			          . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id);
 			
+			$q  = new DBQuery;
 			if (intval($this->_task->task_id) != 0) {
-				$body .= "\n\n".$AppUI->_('Task').":    ".$this->_task->task_name;
-				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL . '/index.php?m=tasks&a=view&task_id='.$this->_task->task_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->_task->task_description;
+				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
+				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				          . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id);
+				$body .= ("\n" . $AppUI->_('Description') . ':' . "\n" 
+				          . $this->_task->task_description);
 				
 				//preparing users array
-				$q  = new DBQuery;
 				$q->addTable('tasks', 't');
-				$q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
-						 creator_first_name, cc.contact_last_name as creator_last_name,
-						 oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
-						 oc.contact_last_name as owner_last_name, a.user_id as assignee_id, 
-						 ac.contact_email as assignee_email, ac.contact_first_name as
-						 assignee_first_name, ac.contact_last_name as assignee_last_name');
+				$q->addQuery('t.task_id, cc.contact_email as creator_email' 
+				             . ', cc.contact_first_name as creator_first_name' 
+			             	. ', cc.contact_last_name as creator_last_name' 
+				             . ', oc.contact_email as owner_email' 
+				             . ', oc.contact_first_name as owner_first_name' 
+				             . ', oc.contact_last_name as owner_last_name' 
+				             . ', a.user_id as assignee_id, ac.contact_email as assignee_email' 
+				             . ', ac.contact_first_name as assignee_first_name' 
+				             . ', ac.contact_last_name as assignee_last_name');
 				$q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
 				$q->addJoin('users', 'o', 'o.user_id = t.task_owner');
 				$q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
@@ -353,7 +361,6 @@ class CFile extends CDpObject {
 				$this->_users = $q->loadList();
 			} else {
 				//find project owner and notify him about new or modified file
-				$q  = new DBQuery;
 				$q->addTable('users', 'u');
 				$q->addTable('projects', 'p');
 				$q->addQuery('u.*');
@@ -361,37 +368,42 @@ class CFile extends CDpObject {
 				$q->addWhere('p.project_id = '.$this->file_project);
 				$this->_users = $q->loadList();
 			}
-			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
-			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').':     ' . DP_BASE_URL . '/fileviewer.php?file_id='.$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":" . "\n".$this->file_description;	
+			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
+			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
+			if ($this->_message != 'deleted') {
+				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				          . '/fileviewer.php?file_id=' . $this->file_id);
+				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;	
 			}
 			
 			//send mail			
-			$mail->Body( $body, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "" );
-			$mail->From ( '"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
+			$mail->Body($body, 
+			            (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+			$mail->From ('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' 
+			             . $AppUI->user_email . '>');
 			
 			if (intval($this->_task->task_id) != 0) {
 				foreach ($this->_users as $row) {
-					if ($row['assignee_id'] != $AppUI->user_id) {
-						if ($mail->ValidEmail($row['assignee_email'])) {
-							$mail->To( $row['assignee_email'], true );
+					if ($row['assignee_id'] != $AppUI->user_id 
+					    && $mail->ValidEmail($row['assignee_email'])) {
+						//send e-mails
+						$mail->To($row['assignee_email'], true);
+						$mail->Send();
+					}
+				}
+			} else { 
+				foreach ($this->_users as $row) {
+					if ($row['user_id'] != $AppUI->user_id) {
+						if ($mail->ValidEmail($row['user_email'])) {
+						    //sending mail to project owner (there should be only one) 
+							$mail->To($row['user_email'], true);
 							$mail->Send();
 						}
 					}
 				}
-			} else { //sending mail to project owner
-				foreach ($this->_users as $row) { //there should be only one row
-					if ($row['user_id'] != $AppUI->user_id) {
-						if ($mail->ValidEmail($row['user_email'])) {
-							$mail->To( $row['user_email'], true );
-							$mail->Send();
-						}
-					}
-				}				
 			}
 		}
-	}//notify
+	}
 
 	function notifyContacts() {
 		GLOBAL $AppUI, $dPconfig, $locale_char_set;
@@ -399,114 +411,125 @@ class CFile extends CDpObject {
 		if ($this->file_project != 0) {
 			$this->_project = new CProject();
 			$this->_project->load($this->file_project);
-			$mail = new Mail;		
-
+			$mail = new Mail;
+			
 			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject( $AppUI->_('Project').": ".$this->_project->project_name."::".$this->file_name, $locale_char_set);
-			} else { //notify all assigned users			
+				$mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name 
+				               . '::' . $this->file_name, $locale_char_set);
+			} else { //notify all assigned users
 				$this->_task = new CTask();
 				$this->_task->load($this->file_task);
-				$mail->Subject( $AppUI->_('Project').": ".$this->_project->project_name."::".$this->_task->task_name."::".$this->file_name, $locale_char_set);
+				$mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' 
+				               . $this->_task->task_name . '::' . $this->file_name, 
+				               $locale_char_set);
 			}
-
-			$body = $AppUI->_('Project').": ".$this->_project->project_name;
-			$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=projects&a=view&project_id='.$this->_project->project_id;
 			
+			$body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
+			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+			          . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id);
+			
+			$q = new DBQuery;
 			if (intval($this->_task->task_id) != 0) {
-				$body .= "\n\n".$AppUI->_('Task').":    ".$this->_task->task_name;
-				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/index.php?m=tasks&a=view&task_id='.$this->_task->task_id;
-				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->_task->task_description;
-
-				$q = new DBQuery;
+				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
+				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				          . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id);
+				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
+				
 				$q->addTable('project_contacts', 'pc');
-  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+				$q->addQuery('c.contact_email as contact_email' 
+				             . ', c.contact_first_name as contact_first_name' 
+				             . ', c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addWhere('pc.project_id = '.$this->_project->project_id);
-                        $sql = '('.$q->prepare().')';
-                        $q->clear();
-				//$sql = "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM project_contacts INNER JOIN contacts ON (project_contacts.contact_id = contacts.contact_id) WHERE (project_contacts.project_id = ".$this->_project->project_id.")) ";				
-				$sql .= " UNION ";				
+				$sql = '(' . $q->prepare() . ')';
+				$q->clear();   
+				
+				$sql .= ' UNION ';
+				
 				$q->addTable('task_contacts', 'tc');
-  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+				$q->addQuery('c.contact_email as contact_email' 
+				             . ', c.contact_first_name as contact_first_name' 
+				             . ', c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addWhere('tc.task_id = '.$this->_task->task_id);
-                        $sql .= '('.$q->prepare().')';
-                        $q->clear();
-				//$sql .= "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM task_contacts INNER JOIN contacts ON (task_contacts.contact_id = contacts.contact_id) WHERE (task_contacts.task_id = ".$this->_task->task_id."));";				
+				$q->addWhere('tc.task_id = ' . $this->_task->task_id);
+				$sql .= '(' . $q->prepare() . ')';
+				$q->clear();
+				
   				$this->_users = db_loadList($sql);
 			} else {			
-				$q = new DBQuery;
+				
 				$q->addTable('project_contacts', 'pc');
 				$q->addQuery('pc.project_id, pc.contact_id');
-  	    		      $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+				$q->addQuery('c.contact_email as contact_email' 
+				             . ', c.contact_first_name as contact_first_name' 
+				             . ', c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addWhere('pc.project_id = '.$this->file_project);
-
+				$q->addWhere('pc.project_id = ' . $this->file_project);
+				
 				$this->_users = $q->loadList();
 				$q->clear();
 			}
 			
-			$body .= "\n\nFile ".$this->file_name." was ".$this->_message." by ".$AppUI->user_first_name . " " . $AppUI->user_last_name;
-			if ($this->_message != "deleted") {
-				$body .= "\n".$AppUI->_('URL').':     '.DP_BASE_URL.'/fileviewer.php?file_id='.$this->file_id;
-				$body .= "\n" . $AppUI->_('Description') . ":\n".$this->file_description;	
+			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
+			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
+			if ($this->_message != 'deleted') {
+				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				          . '/fileviewer.php?file_id=' . $this->file_id);
+				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;	
 			}
 			
-			//send mail			
-			$mail->Body( $body, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "" );
-			$mail->From ( '"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
-
-
-
+			// send mail
+			$mail->Body($body, 
+			            (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+			$mail->From ('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' 
+			             . $AppUI->user_email . '>');
+			
+			
 			foreach ($this->_users as $row) {
-				
 				if ($mail->ValidEmail($row['contact_email'])) {
-					$mail->To( $row['contact_email'], true );
+					$mail->To($row['contact_email'], true);
 					$mail->Send();
 				}
-			}		
-			return '';
+			}
 		}
+		return '';
 	}
 
-	function getOwner()
-	{
+	function getOwner() {
 		$owner = '';
-		if (! $this->file_owner)
+		if (! $this->file_owner) {
 			return $owner;
-
-		$this->_query->clear();
-		$this->_query->addTable('users', 'a');
-		$this->_query->leftJoin('contacts', 'b', 'b.contact_id = a.user_contact');
-		$this->_query->addQuery('contact_first_name, contact_last_name');
-		$this->_query->addWhere('a.user_id = ' . $this->file_owner);
-		if ($qid =& $this->_query->exec())
+		}
+		
+		$q = new DBQuery;
+		$q->addTable('users', 'a');
+		$q->leftJoin('contacts', 'b', 'b.contact_id = a.user_contact');
+		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addWhere('a.user_id = ' . $this->file_owner);
+		if ($qid =& $q->exec()) {
 			$owner = $qid->fields['contact_first_name'] . ' ' . $qid->fields['contact_last_name'];
-		$this->_query->clear();
+		}
+		$q->clear();
 		
 		return $owner;
 	}
 
-	function getTaskName()
-	{
+	function getTaskName() {
 		$taskname = '';
-		if (! $this->file_task)
+		if (! $this->file_task) {
 			return $taskname;
-
-		$this->_query->clear();
-		$this->_query->addTable('tasks');
-		$this->_query->addQuery('task_name');
-		$this->_query->addWhere('task_id = ' . $this->file_task);
-		if ($qid =& $this->_query->exec()) {
-			if ($qid->fields['task_name'])
-				$taskname = $qid->fields['task_name'];
-			else
-				$taskname = $qid->fields[0];
 		}
-		$this->_query->clear();
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addQuery('task_name');
+		$q->addWhere('task_id = ' . $this->file_task);
+		if ($qid =& $this->_query->exec()) {
+			$taskname = (($qid->fields['task_name']) ? $qid->fields['task_name'] : $qid->fields[0]);
+		}
+		$q->clear();
 		return $taskname;
 	}
-
+	
 }
 
 /**
@@ -523,191 +546,174 @@ class CFileFolder extends CDpObject {
 	var $file_folder_description = null;
 	
 	function CFileFolder() {
-		$this->CDpObject( 'file_folders', 'file_folder_id' );
+		$this->CDpObject('file_folders', 'file_folder_id');
 	}
 	
-	function getAllowedRecords($uid) {
-		$q = new DBQuery();
-      	$q->addTable('file_folders');
-      	$q->addQuery('*');
-      	$q->addOrder('file_folder_parent');
-      	$q->addOrder('file_folder_name');
-      	return $q->loadHashList();
-	}
-	
-	function getDeniedRecords($uid) {
-		$q = new DBQuery();
-      	$q->addTable('file_folders');
-      	$q->addQuery('*');
-      	$q->addWhere('0=1');
-      	$q->addOrder('file_folder_parent');
-      	$q->addOrder('file_folder_name');
-      	return $q->loadHashList();
-	}
-      	
 	function check() {
-		$this->file_folder_id = intval( $this->file_folder_id );
-		$this->file_folder_parent = intval( $this->file_folder_parent );
+		$this->file_folder_id = intval($this->file_folder_id);
+		$this->file_folder_parent = intval($this->file_folder_parent);
 		return null;
 	}
 	
-	function delete( $oid=null ) {
-		$k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval( $oid );
-		}
-		if (!$this->canDelete( $msg, ($oid ? $oid : $this->file_folder_id) )) {
-			return $msg;
-		}
-		$this->$k = $this->$k ? $this->$k : intval( ($oid ? $oid : $this->file_folder_id) );
-
-		$q = new DBQuery();
-		$q->setDelete($this->_tbl);
-		$q->addWhere("{$this->_tbl_key} = {$this->$k}");
-		$sql=$q->prepare();
-		$q->clear();
-//		$sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '".$this->$k."'";
-		if (!db_exec( $sql )) {
-			return db_error();
-		} else {
-			return NULL;
-		}
+	function delete($oid=null) {
+		$oid = intval(($oid ? $oid : $this->file_folder_id));
+	    return parent :: delete($oid);
 	}
 	
-	function canDelete(&$msg, $oid) {
+	function canDelete(&$msg, $oid=null, $joins=null) {
 		global $AppUI;
+		
+		$oid = intval(($oid ? $oid : $this->file_folder_id));
+		
+		if (!(parent::canDelete($msg, $oid, $joins))) {
+			return false;
+		}
+		
 		$q = new DBQuery();
-      	$q->addTable('file_folders');
+      	$q->addTable($this->_tbl);
       	$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
-      	$q->addWhere("file_folder_parent=$oid");
+      	$q->addWhere('file_folder_parent=' . $oid);
       	$sql1 = $q->prepare();
       	$q->clear();
-
+		
       	$q = new DBQuery();
       	$q->addTable('files');
       	$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
-      	$q->addWhere("file_folder=$oid");
+      	$q->addWhere('file_folder=' . $oid);
       	$sql2 = $q->prepare();
       	$q->clear();
-//		$sql = "SELECT COUNT(DISTINCT file_folder_id) AS num_of_subfolders FROM file_folders WHERE file_folder_parent = {$oid}";
+		
 		if (db_loadResult($sql1) > 0 || db_loadResult($sql2) > 0) {
-			$msg[] = 'File Folders';
-			$msg = $AppUI->_( "Can't delete folder, it has files and/or subfolders." ) . ": " . implode( ', ', $msg );
-			return false;	
+			$msg = $AppUI->_('Can not delete folder, it has files and/or subfolders.');
+			return false;
 		}
 		
-		return true;	
-		//$joins[] = array('label'=>'Files','name'=>'files','idfield'=>'file_id','joinfield'=>'file_folder');
-		//return parent::canDelete(&$msg, $oid, $joins );
+		return true;
 	}
 	
 	/** @return string Returns the name of the parent folder or null if no parent was found **/
 	function getParentFolderName() {
 		$q = new DBQuery();
-      	$q->addTable('file_folders');
+      	$q->addTable($this->_tbl);
       	$q->addQuery('file_folder_name');
-      	$q->addWhere("file_folder_id=$this->file_folder_parent");
+      	$q->addWhere('file_folder_id=' . $this->file_folder_parent);
       	$sql = $q->prepare();
-/*		$sql = "SELECT file_folder_name" .
-				"FROM file_folders" .
-				"WHERE file_folder_id = $this->file_folder_parent";*/
 		return db_loadResult($sql);
 	}
-
+	
 	function countFolders() {
 		$q = new DBQuery();
       	$q->addTable($this->_tbl);
       	$q->addQuery('COUNT(*)');
       	$sql = $q->prepare();
-//		$sql = "SELECT COUNT(*) FROM $this->_tbl;";
 		$result = db_loadResult($sql);
 		return $result;
 	}
 }
 
 
-function file_size($size)
-{
-        if ($size > 1024*1024*1024)
-                return round($size / 1024 / 1024 / 1024, 2) . ' Gb';
-        if ($size > 1024*1024)
-                return round($size / 1024 / 1024, 2) . ' Mb';
-        if ($size > 1024)
-                return round($size / 1024, 2) . ' Kb';
-        return $size . ' B';
+function file_size($size) {
+  
+	$size_measurments = array( 0 => 'B', 1 => 'KiB', 2 => 'MiB', 3 => 'GiB', 4 => 'TiB');
+	$size_length = sizeof($size_measurments);
+	
+	for ($i = 0; $i < ($size_length - 1); $i++ ) {
+		if ($size < pow(2, (10 * ($i + 1)))) {
+			break;
+		}
+	}
+	
+	return (round(($size / pow(2, 10 * ($i))), 2) . ' ' . $size_measurments[$i]);
 }
 
-function last_file($file_versions, $file_name, $file_project)
-{
-        $latest = NULL;
-        //global $file_versions;
-        if (isset($file_versions))
-        foreach ($file_versions as $file_version)
-                if ($file_version['file_name'] == $file_name && $file_version['file_project'] == $file_project)
-                        if ($latest == NULL || $latest['file_version'] < $file_version['file_version'])
-                                $latest = $file_version;
-
-        return $latest;
+function last_file($file_versions, $file_name, $file_project) {
+	$latest = NULL;
+	
+	if (isset($file_versions)) {
+		foreach ($file_versions as $file_version) {
+			if ($file_version['file_name'] == $file_name 
+			    && $file_version['file_project'] == $file_project 
+			    && ($latest == NULL || $latest['file_version'] < $file_version['file_version'])) {
+				$latest = $file_version;
+			}
+		}
+	}
+	
+	return $latest;
 }
 
 function getIcon($file_type) {
-      global $dPconfig;
-      $result = '';
-      $mime = str_replace('/','-',$file_type);
-      $icon = 'gnome-mime-'.$mime;
-      if (is_file(DP_BASE_DIR.'/modules/files/images/icons/'.$icon.'.png')) {
-    		$result = "icons/$icon.png";
-      } else {
-            $mime = split("/", $file_type);
-            switch($mime[0]){
-            	case "audio" : 
-            		$result = "icons/wav.png";
-            		break;
-            	case "image" :
-            		$result = "icons/image.png";
-            		break;
-            	case "text" :
-            		$result = "icons/text.png";
-            		break;
-            	case "video" :
-            		$result = "icons/video.png";
-            		break;
-            }
-            if ($mime[0] == "application"){
-            		switch($mime[1]){
-            			case "vnd.ms-excel" : 
-            				$result = "icons/spreadsheet.png";
-            				break;
-            			case "vnd.ms-powerpoint" :
-            				$result = "icons/quicktime.png";
-            				break;
-            			case "octet-stream" :
-            				$result = "icons/source_c.png";
-            				break;
-            			default :
-            				$result = "icons/documents.png";
-            		}
-            }
-      }      
-      
-      if ($result == ''){
-      	switch($obj->$file_category){
-      		default : // no idea what's going on
-      			$result = "icons/unknown.png";
+	global $dPconfig;
+	$result = '';
+	$mime = str_replace('/','-',$file_type);
+	$icon = 'gnome-mime-'.$mime;
+	if (is_file(DP_BASE_DIR.'/modules/files/images/icons/'.$icon.'.png')) {
+		$result = 'icons/$icon.png';
+	} else {
+		$mime = split('/', $file_type);
+		switch ($mime[0]) {
+		case 'audio' : 
+			$result = 'icons/wav.png';
+			break;
+		case 'image' :
+			$result = 'icons/image.png';
+			break;
+		case 'text' :
+			$result = 'icons/text.png';
+			break;
+		case 'video' :
+			$result = 'icons/video.png';
+			break;
+		}
+		if ($mime[0] == 'application') {
+			switch($mime[1]){
+			case 'vnd.ms-excel' : 
+				$result = 'icons/spreadsheet.png';
+            	break;
+			case 'vnd.ms-powerpoint' :
+				$result = 'icons/quicktime.png';
+            	break;
+			case 'octet-stream' :
+				$result = 'icons/source_c.png';
+            	break;
+			default :
+				$result = 'icons/documents.png';
+			}
+		}
+	}
+	
+	if ($result == ''){
+		switch ($obj->$file_category) {
+		default: // no idea what's going on
+			$result = 'icons/unknown.png';
       	}
-      }
-      return $result;      
+	}
+	return $result;      
+}
+
+function getNextVersionID() {
+	
+	$q = new DBQuery;
+	$q->addTable('files');
+	$q->addQuery('MAX(file_version_id)');
+	$q->addGroup('file_version_id');
+	$latest_file_version = $q->loadResult();
+	$q->clear();
+	
+	return ($latest_file_version + 1);
 }
 
 function getFolderSelectList() {
 	global $AppUI;
-	$folders = array( 0 => '' );
-      $q = new DBQuery();
-	$q->addTable('file_folders');
-	$q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
-	$q->addOrder('file_folder_name');
-	$sql = $q->prepare();
-	$folders = arrayMerge( array( '0'=>array( 0, $AppUI->_('Root'), -1 ) ), db_loadHashList( $sql, 'file_folder_id' ));
+	
+	$folder = new CFileFolder();
+	$allowed_folders = $folder->getAllowedRecords($AppUI->user_id, 
+	                                              ('file_folder_id,file_folder_name' 
+	                                               . ',file_folder_parent'), 
+	                                              'file_folder_name');
+	
+	$folders = arrayMerge(array(array(0, $AppUI->_('Root'), -1)), 
+	                      $allowed_folders);
 	return $folders;
 }
 ?>

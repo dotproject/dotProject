@@ -7,7 +7,7 @@ $contact_id = intval( dPgetParam( $_GET, 'contact_id', 0 ) );
 $AppUI->savePlace();
 
 // check permissions for this record
-//$canEdit = !getDenyEdit( $m, $contact_id );
+//$canEdit = getPermission($m, 'edit', $contact_id);
 //if (!$canEdit) {
 //	$AppUI->redirect( "m=public&a=access_denied" );
 //}

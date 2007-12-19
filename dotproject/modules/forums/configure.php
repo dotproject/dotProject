@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')){
 }
 
 // deny all but system admins
-$canEdit = !getDenyEdit( 'system' );
+$canEdit = getPermission('system', 'view');
 if (!$canEdit) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }

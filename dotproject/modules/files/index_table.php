@@ -1,19 +1,14 @@
-<?php
+<?php /* FILES $Id$ */
+
 if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-/* FILES $Id$ */
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
-GLOBAL $AppUI, $deny1, $canRead, $canEdit, $canAdmin;
-global $company_id, $project_id, $task_id;
-
-global $currentTabId;
-global $currentTabName;
-global $tabbed, $m;
-
-//require_once( DP_BASE_DIR.'/modules/files/index_table.lib.php');
+GLOBAL $AppUI, $m, $canRead, $canEdit, $canAdmin;
+GLOBAL $company_id, $project_id, $task_id;
+GLOBAL $currentTabId, $currentTabName, $tabbed;
 
 // ****************************************************************************
 // Page numbering variables
@@ -35,9 +30,9 @@ global $tabbed, $m;
 // $xpg_result		- pointer to results from SELECT LIMIT
 
 $tab = ((!$company_id && !$project_id && !$task_id) || $m=='files') ? $currentTabId : 0;
-$page = dPgetParam( $_GET, "page", 1);
+$page = dPgetParam($_GET, "page", 1);
 if (!isset($project_id)) {
-	$project_id = dPgetParam( $_REQUEST, 'project_id', 0);
+	$project_id = dPgetParam($_REQUEST, 'project_id', 0);
 }
 if (!isset($showProject)) {
 	$showProject = true;
@@ -46,29 +41,31 @@ $xpg_pagesize = 30; //TODO?: Set by System Config Value ...
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
-include_once $AppUI->getModuleClass( 'projects' );
-include_once $AppUI->getModuleClass( 'tasks' );
-require_once $AppUI->getSystemClass( 'query' );
-require_once $AppUI->getModuleClass( 'files' );
+include_once $AppUI->getModuleClass('projects');
+include_once $AppUI->getModuleClass('tasks');
+require_once $AppUI->getSystemClass('query');
+require_once $AppUI->getModuleClass('files');
 
 $project = new CProject();
 $task = new CTask();
+$cfObj = new CFileFolder();
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
 $file_types = dPgetSysVal("FileType");
 if (($company_id || $project_id || $task_id) && !($m=='files')) {
-	$catsql = false;
+	$category_filter = false;
 } else if ($tabbed) {
-	$catsql = (($tab <= 0) ? false : ("file_category = " . --$tab)) ;
+	$category_filter = (($tab <= 0) ? false : ("file_category = " . --$tab)) ;
 } else {
-	$catsql = (($tab < 0) ? false : ("file_category = " . $tab)) ;
+	$category_filter = (($tab < 0) ? false : ("file_category = " . $tab)) ;
 }
 
 // Fetch permissions once for all queries
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
+$allowedFolders = $cfObj->getAllowedSQL($AppUI->user_id, 'file_folder');
 
 // SQL text for count the total recs from the selected option
 $q = new DBQuery;
@@ -77,13 +74,16 @@ $q->addTable('files', 'f');
 $q->addJoin('projects', 'p', 'p.project_id = file_project');
 $q->addJoin('tasks', 't', 't.task_id = file_task');
 if (count ($allowedProjects)) {
-  $q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+	$q->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR file_project = 0)');
 }
 if (count ($allowedTasks)) {
-  $q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+	$q->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR file_task = 0)');
 }
-if ($catsql) {
-	$q->addWhere($catsql);
+if (count($allowedFolders)) {
+	$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
+}
+if ($category_filter) {
+	$q->addWhere($category_filter);
 }
 if ($company_id) {
 	$q->addWhere("project_company = $company_id");
@@ -108,13 +108,16 @@ $q2->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
 $q2->addJoin('projects', 'p', 'p.project_id = file_project');
 $q2->addJoin('tasks', 't', 't.task_id = file_task');
 if (count ($allowedProjects)) {
-  $q2->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+	$q2->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR file_project = 0)');
 }
 if (count ($allowedTasks)) {
-  $q2->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+	$q2->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR file_task = 0)');
 }
-if ($catsql) {
-	$q2->addWhere($catsql);
+if (count($allowedFolders)) {
+	$q2->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
+}
+if ($category_filter) {
+	$q2->addWhere($category_filter);
 }
 if ($company_id) {
 	$q2->addWhere("project_company = $company_id");
@@ -145,13 +148,16 @@ $q3->addJoin('tasks', 't', 't.task_id = file_task');
 $q3->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 $q3->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 if (count ($allowedProjects)) {
-  $q3->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+	$q3->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR file_project = 0)');
 }
 if (count ($allowedTasks)) {
-  $q3->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+	$q3->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR file_task = 0)');
 }
-if ($catsql) {
-	$q3->addWhere($catsql);
+if (count($allowedFolders)) {
+	$q3->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
+}
+if ($category_filter) {
+	$q3->addWhere($category_filter);
 }
 if ($company_id) {
 	$q3->addWhere("project_company = $company_id");
@@ -189,18 +195,18 @@ function expand(id){
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'File Name' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Description' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Versions' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Category' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Folder' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Task Name' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Owner' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Size' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Type' );?></a></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Date' );?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('co'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Versions'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Category'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 </tr>
 <?php
 $fp=-1;
@@ -209,7 +215,7 @@ $file_date = new CDate();
 $id = 0;
 foreach ($files as $file_row) {
 	$latest_file = $file_versions[$file_row['latest_id']];
-	$file_date = new CDate( $latest_file['file_date'] );
+	$file_date = new CDate($latest_file['file_date']);
 	
 	if ($fp != $latest_file["file_project"]) {
 		if (!$latest_file["file_project"]) {
@@ -218,140 +224,248 @@ foreach ($files as $file_row) {
 		}
 		if ($showProject) {
 			$style = "background-color:#$latest_file[project_color_identifier];color:" . bestColor($latest_file["project_color_identifier"]);
-			$s = '<tr>';
-			$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
-			$s .= '<a href="?m=projects&a=view&project_id=' . $latest_file['file_project'] . '">';
-			$s .= '<span style="' . $style . '">' . $latest_file["project_name"] . '</span></a>';
-			$s .= '</td></tr>';
-			echo $s;
+?>
+<tr>
+	<td colspan="20" style="border: outset 2px #eeeeee;<?php echo $style; ?>">
+	<a href="?m=projects&a=view&project_id=<?php echo $latest_file['file_project']; ?>">
+	<span style="<?php echo $style; ?>"><?php echo $latest_file['project_name']; ?></span></a>
+	</td>
+</tr>
+<?php
 		}
 	}
 	$fp = $latest_file["file_project"];
 ?>
 <tr>
 	<td nowrap="nowrap" width="20">
-	<?php 
-if ($canEdit 
-	&& ( empty($latest_file['file_checkout']) 
-		 || ( $latest_file['file_checkout'] == 'final' 
-			  && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id) ))) { 
-	echo "\n".'<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file["file_id"] . '">';
-	echo dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' );
-	echo "\n</a>";
-}
+	  <?php 
+	if ($canEdit && (empty($latest_file['file_checkout']) 
+	                 || ($latest_file['file_checkout'] == 'final' 
+	                     && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+		echo ('<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] 
+		      . '">' . "\n");
+		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 
+		                  'edit file') . "\n");
+		echo '</a>';
+	}
 ?>
 	</td>
 	<td nowrap="nowrap">
-	<?php 
-if ($canEdit && empty($latest_file['file_checkout']) ) {
-	echo ( '<a href="?m=files&a=co&file_id='. $latest_file['file_id'].'">' );
-	echo (dPshowImage( DP_BASE_URL . '/modules/files/images/up.png', '16', '16','checkout','checkout file' ));
-	echo ( '</a>');
-} else if ($latest_file['file_checkout'] == $AppUI->user_id) { 
-	echo ( '<a href="?m=files&a=addedit&ci=1&file_id='. $latest_file['file_id'].'">' );
-	echo (dPshowImage( DP_BASE_URL . '/modules/files/images/down.png', '16', '16','checkin','checkin file' ));
-	echo ( '</a>');
-} else if ($latest_file['file_checkout'] == 'final') {
-	echo ('final');
-} else {
-	echo $latest_file['co_contact_first_name'].' '.$latest_file['co_contact_last_name'] .'<br>('.$latest_file['co_user'].')'; 
-}
-		?>
-				
-		</td>
-		<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
-		<td nowrap="8%">
-		<?php 
-$fnamelen = 32;
-$filename = $latest_file['file_name'];
-if (strlen($latest_file['file_name']) > $fnamelen+9) {
-	$ext = substr($filename, strrpos($filename, '.')+1);
-	$filename = substr($filename, 0, $fnamelen);
-	$filename .= '[...].' . $ext;
-}
-$file_icon = getIcon($file_row['file_type']);
-echo ('<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] 
-	  . '" title="' . $latest_file['file_description'] .'">');
-echo (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16'));
-echo ('&nbsp;' . $filename . "</a>"); //$latest_file['file_name']
+	  <?php 
+	if ($canEdit && empty($latest_file['file_checkout'])) {
 ?>
+	  <a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>">
+	<?php 
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/up.png'), '16', '16', 'checkout', 
+		                 'checkout file');
+?>
+	  </a>
+<?php
+	} else if ($latest_file['file_checkout'] == $AppUI->user_id) { 
+?>
+	  <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>">
+	<?php 
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/down.png'), '16', '16', 'checkin', 
+		                 'checkin file');
+?>
+	  </a>
+<?php
+	} else if ($latest_file['file_checkout'] == 'final') {
+		echo $AppUI->_('final');
+	} else {
+		echo ('	  ' . $latest_file['co_contact_first_name'] . ' ' 
+		      . $latest_file['co_contact_last_name'] . '<br />(' . $latest_file['co_user'] . ')'); 
+	}
+?>				
 	</td>
-	<td width="20%"><?php echo $latest_file['file_description'];?></td>
-	<td width="5%" nowrap="nowrap" align="center">
-		<?php
-				$hidden_table = '';
-				echo $file_row['file_lastversion'];
-				if ($file_row['file_versions'] > 1)
-				{
-				 echo ' <a href="#" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $file_row['file_versions'] . ')</a>';
-				 $hidden_table = '<tr><td colspan="20">
-<table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<tr>
-		<th nowrap="nowrap">&nbsp;</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'File Name' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Description' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Versions' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Category' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Folder' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Task Name' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Owner' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Size' ) . '</th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Type' ) . '</a></th>
-		<th nowrap="nowrap">' . $AppUI->_( 'Date' ) . '</th>
-</tr>
-';
-				foreach($file_versions as $file) {
-						if ($file['file_version_id'] == $latest_file['file_version_id']) {
-							  $file_icon = getIcon($file['file_type']);
-					$hdate = new Date($file['file_date']);
-									  $hidden_table .= '
-					  <tr>
-					  <td nowrap="nowrap" width="20">&nbsp;';
-									  if ($canEdit && $dPconfig['files_show_versions_edit'])
-									  {
-											  $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file["file_id"] . '">' . dPshowImage( DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 'edit file' ) . "</a>";
-									  }
-									  $hidden_table .= '
-					  </td>
-					  <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
-							  title="' . $file['file_description'] . '">' . 
-							  (dPshowImage( (DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16')) 
-										. '&nbsp;' . 
-							  $file['file_name'] . '
-					  </a></td>
-					  <td width="20%">' . $file['file_description'] . '</td>
-					  <td width="5%" nowrap="nowrap" align="center">' . $file['file_version'] . '</td>
-					  <td width="10%" nowrap="nowrap" align="center">' . $file_types[$file['file_category']] . '</td>
-					  <td width="10%" nowrap="nowrap" align="center">' .
-						 (($file['file_folder_name'] != '') ? '<a href="'.DP_BASE_URL.'/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $file['file_folder_name'] . '</a>' : 'Root').
-					'</td>
-					  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
-					  <td width="15%" nowrap="nowrap">' . $file["contact_first_name"].' '.$file["contact_last_name"] . '</td>
-					  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
-					  <td nowrap="nowrap">' . substr($file['file_type'], strpos($file['file_type'], '/')+1) . '</td>
-					  <td width="15%" nowrap="nowrap" align="right">' . $hdate->format("$df $tf") . '</td>
-					  </tr>';
-						}
-				}	   
-				$hidden_table .= '</table>';
-				//$hidden_table .= '</span>';
-				}
-		?>
-		</td>
-		<td width="10%" nowrap="nowrap" align="center"><?php echo $file_types[$latest_file["file_category"]]; ?></td> 
-	<td width="10%" nowrap="nowrap" align="center"><?php
-		echo ($latest_file['file_folder_name'] != '') ? '<a href="' . DP_BASE_URL . '/index.php?m=files&tab='. (count($file_types)+1).'&folder='. $latest_file['file_folder_id'].'">' . dPshowImage( DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 'folder icon', 'show only this folder' ) . $latest_file['file_folder_name'] . '</a>' : 'Root';
-	?></td>
-	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task'];?>"><?php echo $latest_file["task_name"];?></a></td>
-	<td width="15%" nowrap="nowrap"><?php echo $latest_file["contact_first_name"].' '.$latest_file["contact_last_name"];?></td>
-	<td width="5%" nowrap="nowrap" align="right"><?php echo file_size(intval($latest_file["file_size"]));?></td>
-	<td nowrap="nowrap"><?php echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/')+1));?></td>
-	<td width="15%" nowrap="nowrap" align="right"><?php echo $file_date->format( "$df $tf" );?></td>
-</tr>
+	<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
+	<td nowrap="8%">
+
 <?php 
-	echo $hidden_table;
-		$hidden_table = '';
-}?>
+	$fnamelen = 32;
+	$filename = $latest_file['file_name'];
+	if (strlen($latest_file['file_name']) > $fnamelen+9) {
+		$ext = substr($filename, strrpos($filename, '.')+1);
+		$filename = substr($filename, 0, $fnamelen);
+		$filename .= '[...].' . $ext;
+	}
+	$file_icon = getIcon($file_row['file_type']);
+?>
+	  <a href="./fileviewer.php?file_id=<?php echo $latest_file['file_id']; ?>" 
+	   title="<?php echo $latest_file['file_description']; ?>">
+	  <?php
+	echo (dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16') . "\n" 
+	      . '&nbsp;' . $filename);
+?>
+	  </a>
+	</td>
+	<td width="20%"><?php echo $latest_file['file_description']; ?></td>
+	<td width="5%" nowrap="nowrap" align="center">
+	<?php 
+	echo $file_row['file_lastversion'];
+	if ($file_row['file_versions'] > 1) {
+?>
+	  <a href="#" onClick="expand('versions_<?php echo $latest_file['file_id']; ?>');">
+	  (<?php echo $file_row['file_versions']; ?>)
+	  </a>
+<?php 
+	}
+?>
+		</td>
+		<td width="10%" nowrap="nowrap" align="center">
+		  <?php echo $file_types[$latest_file["file_category"]]; ?>
+		</td>
+		<td width="10%" nowrap="nowrap" align="center">
+		  <?php
+	if ($file['file_folder_name'] != '') {
+		$file_folder_url = (DP_BASE_URL . '/index.php?m=files&tab=' . (count($file_types)+1) 
+		                    . '&folder=' . $file['file_folder_id']);
+?>
+		  <a href="<?php echo $file_folder_url; ?>">
+		  <?php 
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
+		                 '16', '16', 'folder icon', 'show only this folder');
+?> 
+		  <?php echo  $file['file_folder_name']; ?>
+		  </a>
+		  <?php
+	} else {
+		echo $AppUI->_('Root');
+	}
+?>
+		</td>
+		<td width="5%" align="center">
+		  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>">
+		  <?php 
+echo $latest_file["task_name"];
+?>
+		  </a>
+		</td>
+		<td width="15%" nowrap="nowrap">
+		  <?php 
+echo ($latest_file["contact_first_name"] . ' ' . $latest_file["contact_last_name"]);
+?>
+		</td>
+		<td width="5%" nowrap="nowrap" align="right">
+		  <?php 
+echo file_size(intval($latest_file["file_size"]));
+?>
+		</td>
+		<td nowrap="nowrap">
+		  <?php 
+echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/')+1)); 
+?>
+		</td>
+		<td width="15%" nowrap="nowrap" align="right">
+		  <?php echo $file_date->format($df.' '.$tf); ?>
+		</td>
+</tr>
+
+<?php
+	if ($file_row['file_versions'] > 1) {
+?>
+
+	  <tr><td colspan="20">
+		<table style="display: none" id="versions_<?php echo $latest_file['file_id']; ?>" 
+		 width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+	  <tr>
+		<th nowrap="nowrap">&nbsp;</th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Versions'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Category'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
+	  </tr>
+<?php
+		foreach($file_versions as $file) {
+			if ($file['file_version_id'] == $latest_file['file_version_id']) {
+				$file_icon = getIcon($file['file_type']);
+				$hdate = new Date($file['file_date']);
+?>
+		  <tr>
+			<td nowrap="nowrap" width="20">&nbsp;
+<?php
+				if ($canEdit && $dPconfig['files_show_versions_edit']){
+?>
+			<a href="./index.php?m=files&a=addedit&file_id=<?php echo $file['file_id']; ?>">
+			<?php
+					echo dPshowImage((DP_BASE_URL . '/modules/files/images/kedit.png'), '16', '16', 
+				                 'edit file', 'edit file');
+?>
+			</a>
+<?php
+				}
+?>
+			</td>
+			<td nowrap="8%">
+			  <a href="./fileviewer.php?file_id=<?php echo $file['file_id']; ?>" 
+			   title="<?php echo $file['file_description']; ?>">
+			  <?php
+				echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16');
+?>
+			  <?php echo $file['file_name']; ?> 
+			  </a>
+			</td>
+			<td width="20%"><?php echo $file['file_description']; ?></td>
+			<td width="5%" nowrap="nowrap" align="center"><?php echo $file['file_version']; ?></td>
+			<td width="10%" nowrap="nowrap" align="center">
+			  <?php echo $file_types[$file['file_category']]; ?>
+			</td>
+			<td width="10%" nowrap="nowrap" align="center">
+			  <?php
+				if ($file['file_folder_name'] != '') {
+					$file_folder_url = (DP_BASE_URL . '/index.php?m=files&tab=' 
+					                    . (count($file_types)+1) . '&folder=' 
+					                    . $file['file_folder_id']);
+?>
+			  <a href="<?php echo $file_folder_url; ?>">
+			  <?php 
+					echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
+					                 '16', '16', 'folder icon', 'show only this folder');
+?> 
+					<?php echo  $file['file_folder_name']; ?>
+			  </a>
+			  <?php
+				} else {
+					echo $AppUI->_('Root');
+				}
+?>
+			</td>
+			<td width="5%" align="center">
+			  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['file_task']; ?>">
+			  <?php echo $file['task_name']; ?>
+			  </a>
+			</td>
+			<td width="15%" nowrap="nowrap">
+			  <?php echo ($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
+			</td>
+			<td width="5%" nowrap="nowrap" align="right">
+			  <?php echo file_size(intval($file['file_size'])); ?>
+			</td>
+			<td nowrap="nowrap">
+			  <?php echo substr($file['file_type'], strpos($file['file_type'], '/')+1) ?>
+			</td>
+			<td width="15%" nowrap="nowrap" align="right">
+			  <?php echo $hdate->format("$df $tf"); ?>
+			</td>
+		  </tr>
+<?php
+			}
+		}
+?>
+		</table>
+	  </td></tr>
+<?php
+	}
+?>
+<?php 
+}
+?>
 </table>
 <?php
 shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);

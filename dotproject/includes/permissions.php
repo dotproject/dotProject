@@ -16,8 +16,6 @@ define( 'PERM_READ', '1' );
 
 define( 'PERM_ALL', '-1' );
 
-// TODO: getDeny* should return true/false instead of 1/0
-
 function getReadableModule() {
 	global $AppUI;
 	$perms =& $AppUI->acl();
@@ -32,6 +30,7 @@ function getReadableModule() {
 	return null;
 }
 
+// TODO: checkFlag should be depricated as it's old and unused
 /**
  * This function is used to check permissions.
  */
@@ -51,6 +50,7 @@ function checkFlag($flag, $perm_type, $old_flag) {
 	}
 }
 
+// TODO: isAllowed should be depricated as it's old and unused
 /**
  * This function checks certain permissions for
  * a given module and optionally an item_id.
@@ -93,6 +93,9 @@ function getPermission( $mod, $perm, $item_id = 0) {
 	return $result;
 }
 
+
+// TODO: getDeny* should be depricated as its usage is counter-intuitive and/or assuming
+// Simply using getPermission function is clearer
 function getDenyRead( $mod, $item_id = 0 ) {
  	return ! getPermission($mod, 'view', $item_id);
 }

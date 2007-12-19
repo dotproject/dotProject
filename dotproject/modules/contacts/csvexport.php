@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')){
 // get GETPARAMETER for contact_id
 $contact_id = 1;
 
-$canRead = !getDenyRead( 'contacts' );
+$canRead = getPermission('contacts', 'view');
 if (!$canRead) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }

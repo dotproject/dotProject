@@ -211,7 +211,7 @@ $dialog = dPgetParam( $_GET, 'dialog', 0 );
 
 		foreach ($nav as $module) {
 
-			if (!getDenyRead( $module['mod_directory'] )) {
+			if (getPermission($module['mod_directory'], 'view')) {
 
 				$s .= '<tr><td align="center" valign="middle" class="nav">'
 

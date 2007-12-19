@@ -177,11 +177,7 @@ function setTask( key, val ) {
 		<table cellspacing="1" cellpadding="2" width="60%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Folder' );?>:</td>
-			<?php if ($file_id == 0 && !$ci) { ?>
-				<td align="left"><?php echo arraySelectTree( $folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder) ); ?></td>
-			<?php } else { ?>
-				<td align="left"><?php echo arraySelectTree( $folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $obj->file_folder) ); ?></td>
-			<?php } ?>
+			<td align="left"><?php echo arraySelectTree( $folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : (($file_id == 0 && !$ci)?$folder:$obj->file_folder)) ); ?></td>
 		</tr>		
 	<?php if ($file_id) { ?>
 		<tr>
@@ -365,7 +361,7 @@ function file_show_attr()
 }
 
 function getHelpdeskFolder() {
-      $q = new DBQuery();
+	$q = new DBQuery();
 	$q->addTable('file_folders', 'ff');
 	$q->addQuery('file_folder_id');
 	$q->addWhere('ff.file_folder_name = "Helpdesk"');

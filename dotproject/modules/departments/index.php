@@ -21,7 +21,7 @@ if (isset( $_POST['department'] )) {
 }
 $department = $AppUI->getState( 'DeptIdxDepartment' ) !== NULL ? $AppUI->getState( 'DeptIdxDepartment' ) : ($AppUI->user_department > 0 ? $AppUI->user_department : $company_prefix.$AppUI->user_company);
 
-$canRead = !getDenyRead( $m, $department);
+$canRead = getPermission($m, 'view', $department);
 if (!$canRead) {
 	$AppUI->redirect( 'm=public&a=access_denied' );
 }

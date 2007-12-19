@@ -12,10 +12,9 @@ class CTitleBlock extends CTitleBlock_core {
 class CTabBox extends CTabBox_core {
 	function show( $extra='', $js_tabs = false ) {
 		GLOBAL $AppUI, $dPconfig, $currentTabId, $currentTabName;
-		$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
-		if (! $uistyle) {
-			$uistyle = 'default';
-		}
+		$uistyle = ($AppUI->getPref( 'UISTYLE' ) 
+		            ? $AppUI->getPref( 'UISTYLE' ) 
+		            : (($dPconfig['host_style']) ? $dPconfig['host_style'] : 'default'));
 		reset( $this->tabs );
 		$s = '';
 		
@@ -31,14 +30,14 @@ class CTabBox extends CTabBox_core {
 		} else {
 			if ($extra) {
 				echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%">' 
-					  . "\n<tr>\n" . $extra . "</tr>\n</table>\n");
+				      . "\n<tr>\n" . $extra . "</tr>\n</table>\n");
 			} else {
 				echo '<img src="./images/shim.gif" height="10" width="1" alt="" />' . "\n";
 			}
 		}
 
 		if ($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 ) {
-		// flat view, active = -1
+			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
 			foreach ($this->tabs as $k => $v) {
 				echo '<tr><td><strong>'.($v[2] ? $v[1] : $AppUI->_($v[1]))."</strong></td></tr>\n";

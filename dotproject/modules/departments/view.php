@@ -7,8 +7,8 @@ global $department, $min_view;
 $dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);
 
 // check permissions
-$canRead = !getDenyRead( $m, $dept_id );
-$canEdit = !getDenyEdit( $m, $dept_id );
+$canRead = getPermission($m, 'view', $dept_id);
+$canEdit = getPermission($m, 'edit', $dept_id);
 
 if (!$canRead) {
 	$AppUI->redirect( 'm=public&a=access_denied' );

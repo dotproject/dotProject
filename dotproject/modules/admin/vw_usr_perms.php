@@ -7,23 +7,35 @@ GLOBAL $AppUI, $user_id, $canEdit, $canDelete, $tab;
 
 $perms =& $AppUI->acl();
 $module_list = $perms->getModuleList();
+
+//get list of 'real' modules
 $pgos = array();
 $q  = new DBQuery;
 $q->addTable('modules', 'm');
 $q->addQuery('mod_id, mod_name, permissions_item_table');
 $q->addWhere('permissions_item_table is not null');
 $q->addWhere("permissions_item_table <> ''");
-$pgo_list = $q->loadHashList('mod_name');
+$module_pgo_list = $q->loadHashList('mod_name');
 $q->clear();
+
+//list of additional 'pseudo-modules'
+$pseudo_module_pgo_list = array('File Folders' => array('mod_id' => -1, 
+                                                        'mod_name' => 'file_folders', 
+                                                        'permissions_item_table' => 'file_folders')
+                                );
+
+//combine modules and 'pseudo-modules'
+$pgo_list = arrayMerge($module_pgo_list, $pseudo_module_pgo_list);
 
 // Build an intersection array for the modules and their listing
 $modules = array();
 $offset = 0;
 foreach ($module_list as $module) {
-  $modules[ $module['type'] . "," . $module['id']] = $module['name'];
-  if ($module['type'] = 'mod' && isset($pgo_list[$module['name']]))
-    $pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
-  $offset++;
+	$modules[ $module['type'] . "," . $module['id']] = $module['name'];
+	if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
+		$pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
+	} 
+	$offset++;
 }
 $count = 0;
 

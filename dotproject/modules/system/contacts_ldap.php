@@ -5,8 +5,8 @@ if (!defined('DP_BASE_DIR')){
 
 $AppUI->savePlace();
 
-$canEdit = !getDenyEdit( $m );
-$canRead = !getDenyRead( $m );
+$canEdit = getPermission($m, 'edit');
+$canRead = getPermission($m, 'view');
 if (!$canRead) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }

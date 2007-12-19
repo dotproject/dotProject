@@ -4,8 +4,9 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
 }
 
-if ($mode == 'upgrade')
+if ($mode == 'upgrade') {
 	include_once DP_BASE_DIR.'/includes/config.php';
+}
 require_once DP_BASE_DIR.'/includes/main_functions.php';
 require_once DP_BASE_DIR.'/install/install.inc.php';
 require_once DP_BASE_DIR.'/includes/db_adodb.php';
@@ -141,37 +142,34 @@ $perms->add_acl($access_perms, null, array($anon_role), null, array($non_admin_m
 // Worker has All on non-admin
 $perms->add_acl($all_perms, null, array($worker_role), null, array($non_admin_mods), 1, 1, null, null, 'user');
 
-
+// Now we have the basic set up we need to create objects for all users
 dPmsg('Converting admin user permissions to Administrator Role');
-// Now we have the basics set up we need to create objects for all users
-
-$sql = 'SELECT user_id, user_username, permission_id ' 
-  . 'FROM users LEFT JOIN permissions ON permission_user = users.user_id' 
-  . ' WHERE permission_grant_on = ' . "'all'" 
-  ." AND permission_item = -1 AND permission_value = -1";
+$sql = ('SELECT user_id, user_username, permission_id ' 
+		. 'FROM users LEFT JOIN permissions ON permission_user = users.user_id' 
+		. ' WHERE permission_grant_on = ' . "'all'" 
+		." AND permission_item = -1 AND permission_value = -1");
 
 $res = db_exec($sql);
 if ($res) {
-  while ($row = db_fetch_assoc($res)) {
-    // Add the basic ARO
-    $perms->add_object('user', $row['user_username'], $row['user_id'], 1, 0, 'aro');
-    if ($row['permission_id']) {
-      $perms->add_group_object($admin_role, 'user', $row['user_id'], 'aro');
-    }
-  }
+	while ($row = db_fetch_assoc($res)) {
+		// Add the basic ARO
+		$perms->add_object('user', $row['user_username'], $row['user_id'], 1, 0, 'aro');
+		if ($row['permission_id']) {
+			$perms->add_group_object($admin_role, 'user', $row['user_id'], 'aro');
+		}
+	}
 }
 
-dPmsg('Searching for add-on modules to add to new permissions');
 // Upgrade permissions for custom modules
-$sql = 'SELECT mod_directory, mod_name, permissions_item_table FROM modules '
-  .'WHERE mod_ui_active = 1 AND mod_type = '."'user'";
+dPmsg('Searching for add-on modules to add to new permissions');
+$sql = ('SELECT mod_directory, mod_name, permissions_item_table FROM modules '
+		.'WHERE mod_ui_active = 1 AND mod_type = '."'user'");
 $custom_modules = db_loadList($sql);
-foreach($custom_modules as $mod)
-{
-  $perms->addModule($mod['mod_directory'], $mod['mod_name']);
-  $perms->addGroupItem($mod['mod_directory'], 'non_admin');
-                
-  if (isset($mod['permissions_item_table']) && $mod['permissions_item_table'])
-    $perms->addModuleSection($mod['permissions_item_table']);
+foreach ($custom_modules as $mod) { 
+	$perms->addModule($mod['mod_directory'], $mod['mod_name']);
+	$perms->addGroupItem($mod['mod_directory'], 'non_admin');	
+	if (isset($mod['permissions_item_table']) && $mod['permissions_item_table']) {
+		$perms->addModuleSection($mod['permissions_item_table']);
+	}
 }
 ?>

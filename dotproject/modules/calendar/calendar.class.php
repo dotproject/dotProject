@@ -117,12 +117,11 @@ class CMonthCalendar {
 		setlocale(LC_ALL, $AppUI->user_lang);
 		
 		$this->prev_month = new CDate($date);
-
+		
 		setlocale(LC_TIME, 'en_AU');
 		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
 		setlocale(LC_ALL, $AppUI->user_lang);
 		$this->next_month =  new CDate($date);
-
 	}
 
 /**

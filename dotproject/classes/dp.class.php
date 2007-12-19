@@ -286,7 +286,7 @@ class CDpObject {
      *	Can be overloaded/supplemented by the child class
      *	@return null|string null if successful otherwise returns and error message
      */
-	function delete( $oid=null ) {
+	function delete( $oid=null, $history_desc = '',  $history_proj = 0) {
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval( $oid );
@@ -301,7 +301,7 @@ class CDpObject {
 		$result = ((!$q->exec())?db_error():null);
 		if (!$result) {
 			// only record history if deletion actually occurred
-			addHistory($this->_tbl, $this->$k, 'delete');
+			addHistory($this->_tbl, $this->$k, 'delete', $history_desc, $history_proj);
 		}
 		$q->clear();
 		return $result;
