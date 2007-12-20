@@ -2065,17 +2065,25 @@ class CTaskLog extends CDpObject
 	}
 }
 
-function openClosedTask($task_id){
+function openClosedTask($task){
 	global $tasks_opened;
 	global $tasks_closed;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$to_open_task = new CTask();
 	
-	if ($task_id > 0) {
-		$to_open_task->peek($task_id);
+	if (is_array($task) || $task > 0) {
+		if (is_array($task)) {
+			$task_dynamic = $task['task_dynamic'];
+			$task_id = $task['task_id'];
+
+		} else {
+			$to_open_task->peek($task);
+			$task_dynamic = $to_open_task->task_dynamic;
+			$task_id = $task;
+		}
 		// don't "open" non-dynamic tasks
-		if ($to_open_task->task_dynamic == 1) {
+		if ($task_dynamic == 1) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_closed);
 			if ($index !== false) {
@@ -2108,17 +2116,24 @@ function openClosedTaskRecursive($task_id) {
 	}
 }
 
-function closeOpenedTask($task_id){
+function closeOpenedTask($task){
 	global $tasks_opened;
 	global $tasks_closed;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$to_close_task = new CTask();
 	
-	if ($task_id > 0) {	
-		$to_close_task->peek($task_id);
+	if (is_array($task) || $task > 0) {	
+		if (is_array($task)) {
+			$task_id = $task['task_id'];
+			$task_dynamic = $task['task_dynamic'];
+		} else {
+			$to_close_task->peek($task);
+			$task_id = $task;
+			$task_dynamic = $to_close_task->task_dynamic;
+		}
 		// don't "close" non-dynamic tasks
-		if ($to_close_task->task_dynamic == 1) {
+		if ($task_dynamic == 1) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_opened);
 			if ($index !== false) {
@@ -2169,17 +2184,17 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$perms =& $AppUI->acl();
 	$show_all_assignees = dPgetConfig('show_all_task_assignees', false);
 	
-	if (!(in_array($a['task_id'], $done)))	{ 
-		$done[] = $a['task_id'];
+	if (!isset($done[$a['task_id']]))	{ 
+		$done[$a['task_id']] = 1;
 	} else if (!($allowRepeat)) {
 		//by default, we shouldn't allow repeat displays of the same task
 		return;
 	}
 	
 	if ($is_opened) {
-		openClosedTask($a['task_id']);
+		openClosedTask($a);
 	} else {
-		closeOpenedTask($a['task_id']);
+		closeOpenedTask($a);
 	}
 	
 	$start_date = intval($a['task_start_date']) ? new CDate($a['task_start_date']) : null;
