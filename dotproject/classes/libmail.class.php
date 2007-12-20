@@ -606,7 +606,7 @@ function _build_attachement() {
     $k=0;
 
     // for each attached file, do...
-    for( $i=0; $i < count( $this->aattach); $i++ ) {
+    for( $i=0, $cnt = count($this->aattach); $i < $cnt; $i++ ) {
         $filename = $this->aattach[$i];
         $basename = basename($filename);
         $ctype = $this->actype[$i];    // content-type

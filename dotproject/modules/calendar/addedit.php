@@ -167,9 +167,11 @@ $times = array();
 $t = new CDate();
 $t->setTime( 0,0,0 );
 //$m clashes with global $m (module)
-for ($minutes=0; $minutes < ((24 * 60) / $inc); $minutes++) {
+$check = (24 * 60) / $inc;
+$addMins = $inc * 60;
+for ($minutes=0; $minutes < $check; $minutes++) {
 	$times[$t->format( "%H%M%S" )] = $t->format( $AppUI->getPref('TIMEFORMAT')  );
-	$t->addSeconds( $inc * 60 );
+	$t->addSeconds( $addMins );
 }
 ?>
 

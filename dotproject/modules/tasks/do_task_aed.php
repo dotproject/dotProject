@@ -96,7 +96,7 @@ if ($sub_form) {
 	//format hperc_assign user_id=percentage_assignment;user_id=percentage_assignment;user_id=percentage_assignment;
 	$tmp_ar = explode(";", $hperc_assign);
 	$hperc_assign_ar = array();
-	for ($i = 0; $i < sizeof($tmp_ar); $i++) {
+	for ($i = 0, $xi = sizeof($tmp_ar); $i < $xi; $i++) {
 		$tmp = explode("=", $tmp_ar[$i]);
 		if (count($tmp) > 1)
 			$hperc_assign_ar[$tmp[0]] = $tmp[1];

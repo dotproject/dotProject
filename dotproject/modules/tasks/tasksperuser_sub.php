@@ -407,7 +407,7 @@ if($do_report){
                                 <B><a href='index.php?m=calendar&a=day_view&user_id=$user_id&tab=1'>"
 					  .$userAlloc[$user_id]['userFC']
 					  ."</a></B></font></td>";
-		    for($w=0;$w<=(4+weekCells($display_week_hours,$sss,$sse));$w++) {
+		    for($w=0,$wx==(4+weekCells($display_week_hours,$sss,$sse)); $w <=$wx; $w++) {
 				 $tmpuser.="<td bgcolor='#D0D0D0'></td>";
 			}
 

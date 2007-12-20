@@ -148,7 +148,7 @@ if ($start_date && $end_date){
         // find out DateRange from gant_arr
         $d_start = new CDate();
         $d_end = new CDate();
-        for($i = 0; $i < count(@$projects); $i++ ){
+        for($i = 0, $xi = count(@$projects); $i < $xi; $i++ ){
                 $start = substr($p["project_start_date"], 0, 10);
                 $end = substr($p["project_end_date"], 0, 10);
 

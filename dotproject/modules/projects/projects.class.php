@@ -462,15 +462,17 @@ function projects_list_data($user_id = false) {
 	if (count($deny)) {
 		$q->addWhere('NOT (t.task_project IN (' . implode (',', $deny) . '))');
 	}
-    $q->addWhere('t.task_id = t.task_parent');
+	$q->addWhere('t.task_id = t.task_parent');
 	
 	$q->addGroup('t.task_project');
 	$tasks_sum = $q->exec();
 	$q->clear();
 	
+	// At this stage tasks_sum contains the project id, and the total of tasks as percentage complate and project duration.
+	// I.e. one record per project
     
-    // Task total table
-    $q->createTemp('tasks_total');
+	// Task total table
+	$q->createTemp('tasks_total');
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_project, COUNT(distinct t.task_id) AS total_tasks');
 	if ($user_id) {
@@ -483,6 +485,8 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('t.task_project');
 	$tasks_total = $q->exec();
 	$q->clear();
+
+	// tasks_total contains the total number of tasks for each project.
     
 	// temporary My Tasks
 	// by Pablo Roca (pabloroca@mvps.org)
@@ -498,6 +502,8 @@ function projects_list_data($user_id = false) {
 	$tasks_summy = $q->exec();
 	$q->clear();
 	
+	// tasks_summy contains total count of tasks for each project that I own.
+
 	// temporary critical tasks
 	$q->createTemp('tasks_critical');
 	$q->addTable('tasks', 't');
@@ -512,6 +518,8 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('t.task_project');
 	$tasks_critical = $q->exec();
 	$q->clear();
+
+	// tasks_critical contains the latest ending task and its end date.
 	
 	// temporary task problem logs
 	$q->createTemp('tasks_problems');
@@ -522,6 +530,8 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('t.task_project');
 	$tasks_problems = $q->exec();
 	$q->clear();
+
+	// tasks_problems contains an indication of any projects that have task logs set to problem.
 	
 	if ($addProjectsWithAssignedTasks) {
 		// temporary users tasks
@@ -538,6 +548,8 @@ function projects_list_data($user_id = false) {
 		$tasks_users = $q->exec();
 		$q->clear();
 	}
+
+	// tasks_users contains all projects with tasks that have user assignments. (isn't this getting pointless?)
 	
 	// add Projects where the Project Owner is in the given department
 	if ($addPwOiD && isset($department)) {

@@ -624,13 +624,13 @@ class CEvent extends CDpObject {
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
 		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
-		for ($i=0; $i < sizeof($eventListRec);  $i++) {
+		for ($i=0, $sz=sizeof($eventListRec); $i < $sz;  $i++) {
             
             //note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
             // So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
             // This way the original and all recurrances are covered.
 			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
-            for ($j=0; $j <= intval($eventListRec[$i]['event_times_recuring']); $j++) {
+            for ($j=0, $end= intval($eventListRec[$i]['event_times_recuring']);$j<$end; $j++) {
 				if ($periodLength == 1) { 
 					// Daily View: show all
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date

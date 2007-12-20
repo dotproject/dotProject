@@ -432,7 +432,7 @@ function delIt() {
 			    			echo '<tr><th color="white">'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
 			    			foreach($contacts as $contact_id => $contact_data){
 			    				echo '<tr>';
-			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
+			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
 			    				echo '<td class="hilite"><a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a></td>';
 			    				echo '<td class="hilite">'.$contact_data['contact_phone'].'</td>';
 			    				echo '<td class="hilite">'.$contact_data['dept_name'].'</td>';

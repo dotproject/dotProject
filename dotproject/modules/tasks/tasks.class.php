@@ -2369,7 +2369,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 					   . join (', ', $a_u_tmp_array) .'">(+' . ($a['assignee_count'] - 1) . ')</a>'
 					   . '<span style="display: none" id="users_' . $a['task_id'] . '">');
 				$a_u_tmp_array[] = $assigned_users[0]['user_username'];
-				for ($i = 1; $i < count($assigned_users); $i++) {
+				for ($i = 1, $xi = count($assigned_users); $i < $xi; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
 					$s .= ('<br /><a href="?m=admin&a=viewuser&user_id=' 
 						   . $assigned_users[$i]['user_id'] . '" title="' 
@@ -2461,7 +2461,7 @@ function array_csort() {   //coded by Ichier2003
 	foreach ($args as $arg) {
 		$i++;
 		if (is_string($arg)) {
-			for ($j=0; $j < count($marray); $j++) {
+			for ($j=0, $xj = count($marray); $j < $xj; $j++) {
 				
 				/* we have to calculate the end_date via start_date+duration for 
 				 ** end='0000-00-00 00:00:00' before sorting, see mantis #1509:

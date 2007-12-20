@@ -203,7 +203,7 @@ function highlight($text, $keyval) {
 
 function recode2regexp_utf8($input) {
       $result="";
-      for($i=0; $i<strlen($input); ++$i)
+      for($i=0, $ln=strlen($input); $i<$ln; ++$i)
       switch($input[$i]) {
           case 'A':
           case 'a':

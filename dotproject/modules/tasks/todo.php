@@ -140,7 +140,7 @@ $tasks = db_loadList( $sql );
 /* we have to calculate the end_date via start_date+duration for 
 ** end='0000-00-00 00:00:00' 
 */
-for ($j=0; $j < count($tasks); $j++) {
+for ($j=0, $xj=count($tasks); $j < $xj; $j++) {
 		
 	if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
 		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){

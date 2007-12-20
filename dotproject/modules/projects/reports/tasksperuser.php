@@ -281,7 +281,7 @@ if($do_report){
 					  .$user_data['contact_last_name']
 					  .'</b></font>
 	</td>';
-		    for($w=0;$w<=(1 + ($project_id == 0 ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w++) {
+		    for($w=0,$wx=(1 + ($project_id == 0 ? 1 : 0) + weekCells($display_week_hours,$sss,$sse));$w<=$wx;$w++) {
 				 $tmpuser.='<td bgcolor="#D0D0D0">&nbsp;</td>';
 			}
 			$tmpuser.='</tr>';

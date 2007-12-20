@@ -190,7 +190,7 @@ shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 $fp=-1;
 
 $id = 0;
-for ($i = ($page - 1)*$xpg_pagesize; $i < $page*$xpg_pagesize && $i < $xpg_totalrecs; $i++){
+for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i < $xpg_totalrecs; $i++){
 	$row = $links[$i];
 	$link_date = new CDate( $row['link_date'] );
 

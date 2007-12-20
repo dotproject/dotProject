@@ -167,7 +167,7 @@ class DBQuery {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
 			$values = ((is_array($value)) ? $value : explode(',', $value));
 			
-			for($i = 0; $i < count($fields); $i++) {
+			for($i = 0, $fc=count($fields); $i < $fc; $i++) {
 				$this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
 			}
 		} else if (!$func) {
@@ -191,7 +191,7 @@ class DBQuery {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
 			$values = ((is_array($value)) ? $value : explode(',', $value));
 
-			for($i = 0; $i < count($fields); $i++) {
+			for($i = 0, $fc=count($fields); $i < $fc; $i++) {
 				$this->addMap('update_list', $values[$i], $fields[$i]);
 			}
 		} else {

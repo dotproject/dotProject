@@ -136,7 +136,7 @@ else { // All this appears to already be handled in todo.php ... should consider
 	 ** as it is normally done in array_csort function in order to economise
 	 ** cpu time as we have to go through the array there anyway
 	 */
-	for ($j=0; $j < count($tasks); $j++) {	
+	for ($j=0, $xj = count($tasks); $j < $xj; $j++) {	
 		if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
 			if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){
 				$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"

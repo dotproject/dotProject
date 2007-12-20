@@ -17,7 +17,7 @@ if ($start === null ) $start = 8;
 if ($end   === null ) $end = 17;
 if ($inc   === null)  $inc = 15;
 $hours = array();
-for ( $current = $start; $current < $end + 1; $current++ ) {
+for ( $current = $start; $current <= $end; $current++ ) {
 	if ( $current < 10 ) { 
 		$current_key = "0" . $current;
 	} else {

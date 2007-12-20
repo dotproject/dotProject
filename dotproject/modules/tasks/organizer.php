@@ -34,7 +34,7 @@ function task_link($task) {
 
 function search_task($task_id) {
 	global $tasks;
-	for($i = 0; $i < count($tasks) ; $i++) {
+	for($i = 0, $xi = count($tasks); $i < $xi ; $i++) {
 		if($tasks[$i]["task_id"] == $task_id) return $i;
 	}
 	return -1;
@@ -427,7 +427,7 @@ if($do != "conf") {
 	}
 	
 	if(!$errors) {
-		for($i = 0; $i < count($tasks) ; $i++) {
+		for($i = 0, $xi = count($tasks); $i < $xi ; $i++) {
 			process_dependencies($i);
 		}
 	}	

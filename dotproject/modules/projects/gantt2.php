@@ -125,7 +125,7 @@ if ($start_date && $end_date){
         // find out DateRange from gant_arr
         $d_start = new CDate();
         $d_end = new CDate();
-        for($i = 0; $i < count(@$taskMinMax); $i++ ){
+        for($i = 0, $xi = count(@$taskMinMax); $i < $xi; $i++ ){
                 $start = substr($taskMinMax["task_min_date"], 0, 10);
                 $end = substr($taskMinMax["task_max_date"], 0, 10);
 

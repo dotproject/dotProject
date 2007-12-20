@@ -169,7 +169,7 @@ if ($do_report) {
 	if (count($allowedTasks)) {
 		$obj->getAllowedSQL($AppUI->user_id, $q);
 	}
-	$q->addOrder('task_start_date');
+	$q->addOrder('project_start_date', 'task_project', 'task_parent', 'task_start_date');
 	$Task_List = $q->exec();
 
 	echo "<table cellspacing=\"1\" cellpadding=\"4\" border=\"0\" class=\"tbl\">";
