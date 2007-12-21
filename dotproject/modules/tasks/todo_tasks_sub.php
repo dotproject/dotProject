@@ -29,7 +29,7 @@ if ($other_users) {
 	
 	if (($rows = db_loadList( $usersql, NULL ))) {
 		foreach ($rows as $row) {
-		  echo ('<option value="' . $row['user_id'] . "'" 
+		  echo ('<option value="' . $row['user_id'] . '"' 
 				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . '>' 
 				. $row['contact_last_name'].', ' . $row["contact_first_name"]) ;
 		}
