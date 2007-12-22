@@ -421,7 +421,7 @@ class CProject extends CDpObject {
 function projects_list_data($user_id = false) {
 	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department;
 	global $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems;
-	global $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId;
+	global $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $project_status;
 
 	$addProjectsWithAssignedTasks = (($AppUI->getState('addProjWithTasks')) 
 	                                 ? $AppUI->getState('addProjWithTasks') : 0);
@@ -596,6 +596,9 @@ function projects_list_data($user_id = false) {
 	$q->addJoin('tasks_summy', 'tsy', 'p.project_id = tsy.task_project');	
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'p.project_id = tu.task_project');
+	}
+	if (isset($project_status)) {
+		$q->addWhere('p.project_status = '.$project_status);
 	}
 	if (isset($department)) {
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');

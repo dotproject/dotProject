@@ -93,7 +93,25 @@ if (($rows = db_loadList($usersql, NULL))) {
 	}
 }
 
-// collect the full projects list data via function in projects.class.php
+/* setting this to filter project_list_data function below
+ 0 = undefined
+ 3 = active
+ 5 = completed
+ 7 = archived
+
+Because these are "magic" numbers, if the values for ProjectStatus change under 'System Admin', they'll
+need to change here as well (sadly).
+*/
+if ($tab != 7 && $tab != 8) {
+	$project_status = $tab;
+} elseif ($tab == 0) {
+	$project_status = 0;
+}
+if ($tab == 5 || $tab == 7) {
+	$project_active = 0;
+}
+
+// collect the full (or filtered) projects list data via function in projects.class.php
 projects_list_data();
 
 // setup the title block
@@ -119,41 +137,54 @@ $complete = 0;
 $archive = 0;
 $proposed = 0;
 
-foreach ($project_types as $key=>$value) {
-	$counter[$key] = 0;
-	if (is_array($projects)) {
-		foreach ($projects as $p) {
-			if ($p['project_status'] == $key) {
-				++$counter[$key];
-			}
-		}
-	}
-	$project_types[$key] = ($AppUI->_($project_types[$key], UI_OUTPUT_RAW) 
-	                        . ' (' . $counter[$key] . ')');
+// count number of projects per project_status
+$q  = new DBQuery();
+$q->addTable('projects');
+$q->addQuery('project_status, COUNT(project_id) as count');
+$q->addGroup('project_status');
+$statuses = $q->loadHashList('project_status');
+$q->clear();
+
+foreach ($statuses as $k => $v) {
+	$project_types[$v['project_status']] = $AppUI->_($project_types[$v['project_status']], UI_OUTPUT_RAW) . ' (' . $v['count'] . ')';
 }
 
-
-if (is_array($projects)) {
-	foreach ($projects as $p) {
-		switch ($p['project_status']) {
-		case 3:
-		  ++$active;
-		  break;
-		case 5:
-		  ++$complete;
-		  break;
-		default:
-		  ++$proposed;
-		  break;
-		}
-	}
-}
+// count archived projects
+$q->addTable('projects');
+$q->addQuery('COUNT(project_id) as count');
+$q->addWhere('project_status = 7');
+$archive = $q->loadResult();
+$q->clear();
+// count completed projects
+$q->addTable('projects');
+$q->addQuery('COUNT(project_id) as count');
+$q->addWhere('project_status = 5');
+$complete = $q->loadResult();
+$q->clear();
+// count active projects
+$q->addTable('projects');
+$q->addQuery('COUNT(project_id) as count');
+$q->addWhere('project_status = 3');
+$active = $q->loadResult();
+$q->clear();
+// count proposed projects
+$q->addTable('projects');
+$q->addQuery('COUNT(project_id) as count');
+$q->addWhere('project_status = 1');
+$proposed = $q->loadResult();
+$q->clear();
+// count all projects
+$q->addTable('projects');
+$q->addQuery('COUNT(project_id) as count');
+$q->addWhere('1');
+$all_projects = $q->loadResult();
+$q->clear();
 
 $fixed_types = array($AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' 
                      => 'vw_idx_active',
                      $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')' 
                      => 'vw_idx_complete',
-                     $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $counter['7'] . ')' 
+                     $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')' 
                      => 'vw_idx_archived');
 
 /**
@@ -172,7 +203,7 @@ foreach ($project_types as $project_type) {
 // tabbed information boxes
 $tabBox = new CTabBox('?m=projects', DP_BASE_DIR . '/modules/projects/', $tab);
 
-$tabBox->add('vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW) . ' (' . count($projects) . ')' , true,  500);
+$tabBox->add('vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW) . ' (' . $all_projects . ')' , true,  500);
 foreach ($project_types as $ptk=>$project_type) {
 		$tabBox->add($project_file_type[$project_type], $project_type, true, $ptk);
 }
