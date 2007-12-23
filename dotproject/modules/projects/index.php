@@ -145,34 +145,14 @@ $q->addGroup('project_status');
 $statuses = $q->loadHashList('project_status');
 $q->clear();
 
+$active = $statuses[3];
+$complete = $statuses[5];
+$archive = $statuses[7];
+
 foreach ($statuses as $k => $v) {
 	$project_types[$v['project_status']] = $AppUI->_($project_types[$v['project_status']], UI_OUTPUT_RAW) . ' (' . $v['count'] . ')';
 }
 
-// count archived projects
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id) as count');
-$q->addWhere('project_status = 7');
-$archive = $q->loadResult();
-$q->clear();
-// count completed projects
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id) as count');
-$q->addWhere('project_status = 5');
-$complete = $q->loadResult();
-$q->clear();
-// count active projects
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id) as count');
-$q->addWhere('project_status = 3');
-$active = $q->loadResult();
-$q->clear();
-// count proposed projects
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id) as count');
-$q->addWhere('project_status = 1');
-$proposed = $q->loadResult();
-$q->clear();
 // count all projects
 $q->addTable('projects');
 $q->addQuery('COUNT(project_id) as count');
