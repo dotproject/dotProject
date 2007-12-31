@@ -422,7 +422,7 @@ function projects_list_data($user_id = false) {
 	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department;
 	global $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems;
 	global $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $project_status;
-
+	global $currentTabId;
 	$addProjectsWithAssignedTasks = (($AppUI->getState('addProjWithTasks')) 
 	                                 ? $AppUI->getState('addProjWithTasks') : 0);
 	
@@ -597,7 +597,7 @@ function projects_list_data($user_id = false) {
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'p.project_id = tu.task_project');
 	}
-	if (isset($project_status)) {
+	if (isset($project_status) && $currentTabId != 500) {
 		$q->addWhere('p.project_status = '.$project_status);
 	}
 	if (isset($department)) {
