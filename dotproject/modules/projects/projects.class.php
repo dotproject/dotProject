@@ -340,8 +340,10 @@ class CProject extends CDpObject {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . $project_id . ' AND !isnull(task_end_date)' 
-		             . " AND task_end_date !=  '0000-00-00 00:00:00'");
+		if ($project_id) {
+			$q->addWhere('task_project = ' . $project_id);
+		}
+		$q->addWhere("!isnull(task_end_date) AND task_end_date !=  '0000-00-00 00:00:00'");
 		$q->addOrder('task_end_date DESC');
 		$q->setLimit($limit);
 		
