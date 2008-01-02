@@ -15,51 +15,22 @@
 	}
 ?>
 <script language="javascript">
-// ECMA Script section Carsten Menke <menke@smp-synergie.de>
 function setContactIDs (method,querystring)
 {
 	var URL = 'index.php?m=public&a=contact_selector';
     
-	// !! DO NOT USE !!
-	//
-	//    document.frmContactSelect.elements['contact_id[]');
-	//
-	// as the length of the array is undefined if there is just 1 contact Field present
-	
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
 	var tmp = new Array();
-	var tmp2 = new Array();
-	tmp = selected_contacts_id.value.split(',');
     
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
 	}
 	
-	// We copy the values of tmp to tmp2, using
-	// the value of tmp as an indice for tmp2, therefore
-	// we can later on easily check if a checked field exists
-	// we do not use the associative Array hack here, because
-	// then methods like tmp2.length would not work.
-    
-	for (i = 0; i < tmp.length; i++) {
-		tmp2[tmp[i]] = tmp[i];
-	}
-	for (i = 0; i < field.length; i++) {
-		if (field[i].checked == true && !tmp2[field[i].value]) {
-			tmp2[field[i].value] = field[i].value;
-		} else if (tmp2[field[i].value]) {
-			delete tmp2[field[i].value];
-		} else{ 
-		  i = i; // does nothing, for looks and so any bad JS interpreters don't freak out
-		}
-	}
-	tmp = new Array();
 	var count = 0;
-	for (i = 0; i < tmp2.length; i++){
-		if (tmp2[i]) {
-		  tmp[count] = tmp2[i];
-		  count++;
+	for (i = 0; i < field.length; i++) {
+		if (field[i].checked) {
+			tmp[count++] = field[i].value;
 		}
 	}
 	selected_contacts_id.value = tmp.join(',');
