@@ -58,7 +58,7 @@ $titleBlock->addCell(arraySelect($projects, 'project_id',
  * override the file module's $canEdit variable passed from the main index.php 
  * in order to check on file folder permissions
  */
-$canAccess_folders = getPermission('file_folders', 'access');
+$canAuthor_folders = getPermission('file_folders', 'add');
 
 if ($canAuthor) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') 
