@@ -90,6 +90,7 @@ if (!defined('DP_BASE_DIR')){
 	}
 
 	$html_types = Array(
+		'file' => $AppUI->_('File'),
 		'textinput'=>$AppUI->_('Text Input'),
 		'textarea'=>$AppUI->_('Text Area'),
 		'checkbox'=>$AppUI->_('Checkbox'),

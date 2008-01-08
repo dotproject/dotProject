@@ -3,6 +3,10 @@
 if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
+
+// For the CustomField type FileLink the files class is needed
+require_once ($AppUI->getModuleClass('files'));
+
 /*
  *	CustomField Classes
  */
@@ -345,6 +349,123 @@ class CustomFieldWeblink extends CustomField
 	}
 }
 
+/* CustomFieldFilelink
+** Produces a FILE Upload Element of the FILE type in edit mode 
+** and a <a href> </a> weblink in display/view mode
+**
+** Make sure that the target form where the cf are included
+** is of the following type:  
+**
+** enctype="multipart/form-data"
+*/
+
+class CustomFieldFilelink extends CustomField {
+
+	function CustomFieldFilelink ( $field_id, $field_name, $field_order, $field_description, $field_extratags )	{
+		$this->CustomField( $field_id, $field_name, $field_order, $field_description, $field_extratags );
+		$this->field_htmltype = 'file';
+	}
+
+	function getHTML($mode)	{
+		// load the file object 
+		$cv = $this->charValue();
+		if (!empty($cv) && $cv>0) {
+			$obj = new CFile();
+			$obj->load($cv);
+		}
+
+		switch($mode) {
+			case "edit":
+				/* additionally add the hidden field	$this->field_name.'_id' 
+				** to track the file id for file replacements/updates (cf. store() method).
+				**
+				** The <a href...> </a> link is needed since browsers do not support
+				** prevalues in the <input type="file" .../> fields.
+				*/
+				$html = $this->field_description.': </td><td>'.(($cv > 0) ? '<a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>&nbsp;' : '') .'<input type="file" name="'.$this->field_name.'" '.$this->field_extratags.' /> <input type="hidden" name="'.$this->field_name.'_id" value="'.(!empty($cv) ? $cv : 0).'"/>';
+				break;
+			case "view":
+				$html = $this->field_description.': </td><td class="hilite" width="100%"><a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>';
+				break;
+		}
+		return $html;
+	}
+
+	/*
+	** Extending the parent::store function
+	** - in order to store files
+	*/
+	function store($object_id) {
+		global $AppUI, $db, $_FILES, $m, $_POST;
+						
+		$file_uploaded = false;
+		
+		// instantiate the file object and eventually load exsiting file data
+		$obj = new CFile();
+		if ($_POST[$this->field_name.'_id']){
+			$obj->load($_POST[$this->field_name.'_id']);
+
+			// create an old object for the case that
+			// the file must be replaced
+			if ($_POST[$this->field_name.'_id']>0) {
+				$oldObj = new CFile();
+				$oldObj->load($_POST[$this->field_name.'_id']);
+			}
+		}
+		
+		// if the cf lives in the projects module
+		// affiliate the file to the suitable project
+		if ($m == 'projects' && !empty($_POST['project_id'])) {
+			$obj->file_project = $_POST['project_id'];
+		} 
+		// todo: implement task affiliation here, too
+
+		$upload = null;
+		if (isset($_FILES[$this->field_name])) {
+			$upload = $_FILES[$this->field_name];
+
+			if ($upload['size'] > 0) {
+				// store file with a unique name
+				$obj->file_name = $upload['name'];
+				$obj->file_type = $upload['type'];
+				$obj->file_size = $upload['size'];
+				$obj->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
+				$obj->file_real_filename = uniqid(rand());
+				$obj->file_owner = $AppUI->user_id;
+				$obj->file_version++;
+				$obj->file_version_id = $obj->file_id;
+				
+				$res = $obj->moveTemp($upload);
+				if ($res) {
+					$file_uploaded = true;
+				}
+
+				if (($msg = $obj->store())) {
+					$AppUI->setMsg($msg, UI_MSG_ERROR);
+				} else {
+					// reset the cf field_name to the file_id
+					$this->setValue($obj->file_id);
+				}
+			}
+		}
+
+		// Delete the existing (old) file in case of file replacement 
+		// (through addedit not through c/o-versions)
+		if (($_POST[$this->field_name.'_id']) && ($upload['size'] > 0) && $file_uploaded) {
+			$oldObj->deleteFile();
+		}
+
+		if (($upload['size'] > 0) && $file_uploaded) {
+			return parent::store($object_id);
+		} else if (($upload['size'] > 1) && !$file_uploaded) {
+			$AppUI->setMsg('File could not be stored!', UI_MSG_ERROR, true);
+			return true;
+		}
+	}
+}
+
+
+
 // CustomFields class - loads all custom fields related to a module, produces a html table of all custom fields
 // Also loads values automatically if the obj_id parameter is supplied. The obj_id parameter is the ID of the module object 
 // eg. company_id for companies module
@@ -374,6 +495,9 @@ class CustomFields
 				switch ($row['field_htmltype']) {
 					case 'checkbox':
 						$new_method = 'CustomFieldCheckbox';
+						break;
+					case 'file':
+						$new_method = 'CustomFieldFilelink';
 						break;
 					case 'href':
 						$new_method = 'CustomFieldWeblink';

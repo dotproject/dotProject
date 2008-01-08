@@ -58,12 +58,13 @@ else {
 		
 		if ( $importTask_projectId = dPgetParam( $_POST, 'import_tasks_from', '0' ) )
 			$obj->importTasks ($importTask_projectId);
+		$AppUI->setMsg( $isNotNew ? 'Project updated' : 'Project inserted', UI_MSG_OK, true);
 
  		$custom_fields = New CustomFields( $m, 'addedit', $obj->project_id, "edit" );
  		$custom_fields->bind( $_POST );
  		$sql = $custom_fields->store( $obj->project_id ); // Store Custom Fields
 
-		$AppUI->setMsg( $isNotNew ? 'Project updated' : 'Project inserted', UI_MSG_OK);
+
 	}
 	$AppUI->redirect();
 }

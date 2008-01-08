@@ -242,7 +242,7 @@ function setDepartment(department_id_string){
 </script>
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
-<form name="editFrm" action="./index.php?m=projects" method="post">
+<form name="editFrm" action="./index.php?m=projects" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 	<input type="hidden" name="project_creator" value="<?php echo $AppUI->user_id;?>" />
