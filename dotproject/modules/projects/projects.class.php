@@ -632,7 +632,7 @@ function projects_list_data($user_id = false) {
 	
 	$q->addGroup('p.project_id');
 	$q->addOrder($orderby . ' ' . $orderdir);
-	$obj_project->setAllowedSQL($AppUI->user_id, $q);
+	$obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');
 	$projects = $q->loadList();
 	
 	
