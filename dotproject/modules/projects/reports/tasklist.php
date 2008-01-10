@@ -6,6 +6,9 @@ if (!defined('DP_BASE_DIR')){
 /**
 * Generates a report of the task logs for given dates
 */
+
+require_once $AppUI->getSystemClass('tree');
+
 //error_reporting( E_ALL );
 $do_report = dPgetParam( $_POST, "do_report", 0 );
 $log_all = dPgetParam( $_POST, 'log_all', 0 );
@@ -148,15 +151,12 @@ function setCalendar( idate, fdate ) {
 
 if ($do_report) {
 	
-	if ($project_id == 0){ 
-		$q = new DBQuery;
-		$q->addTable('tasks', 'a');
-		$q->addTable('projects', 'b');
-		$q->addQuery('a.*, b.project_name');
-		$q->addWhere('a.task_project = b.project_id');
-	} else {
-		$q = new DBQuery;
-		$q->addTable('tasks', 'a');
+	$q = new DBQuery;
+	$q->addTable('tasks', 'a');
+	$q->addTable('projects', 'b');
+	$q->addQuery('a.*, b.project_name');
+	$q->addWhere('a.task_project = b.project_id');
+	if ($project_id != 0){ 
 		$q->addWhere('task_project ='.$project_id);
 	}
 	if (!$log_all) {
@@ -181,6 +181,8 @@ if ($do_report) {
 	echo "<th>Completion</th></tr>";
 	
 	$pdfdata = array();
+	$tree = new CDpTree();
+
 	$columns = array(	
 	"<b>".$AppUI->_('Task Name')."</b>",
 	"<b>".$AppUI->_('Task Description')."</b>",
@@ -190,16 +192,16 @@ if ($do_report) {
 	"<b>".$AppUI->_('Completion')."</b>"
 	);
 	if ($project_id==0) { array_unshift($columns, "<b>".$AppUI->_('Project Name')."</b>");}		
+
 	while ($Tasks = db_fetch_assoc($Task_List)){
-		$start_date = intval($Tasks['task_start_date']) ? new CDate( $Tasks['task_start_date'] ) : ' ';
-		$end_date = intval($Tasks['task_end_date']) ? new CDate( $Tasks['task_end_date'] ) : ' ';
+		$Tasks['start_date'] = intval($Tasks['task_start_date']) ? new CDate( $Tasks['task_start_date'] ) : ' ';
+		$Tasks['end_date'] = intval($Tasks['task_end_date']) ? new CDate( $Tasks['task_end_date'] ) : ' ';
 		$task_id = $Tasks['task_id'];
 		
 		$q = new DBQuery;
 		$q->addTable('user_tasks');
 		$q->addWhere('task_id = '.$task_id);
 		$sql_user = $q->exec();
-		
 		
 		$users = null;
 		while ($Task_User = db_fetch_assoc($sql_user)){
@@ -221,42 +223,19 @@ if ($do_report) {
 			$user_list = db_fetch_assoc($sql_user_array);
 			$users .= $user_list['contact_first_name']." ".$user_list['contact_last_name'];
 		}
-		$str =  "<tr>";
-		if ($project_id==0) {$str .= "<td>".$Tasks['project_name']."</td>";}
-		$str .= "<td><a href='?m=tasks&a=view&task_id=".$Tasks['task_id']. "'>".$Tasks['task_name']."</a></td>";
-		$str .= "<td>".$Tasks['task_description']."</td>";
-		$str .= "<td>".$users."</td>";
-		$str .= "<td>";
-		($start_date != ' ') ? $str .= $start_date->format( $df )."</td>" : $str .= ' '."</td>";			
-		$str .= "<td>";		
-		($end_date != ' ') ? $str .= $end_date->format( $df )."</td>" : $str .= ' '."</td>";
-		$str .= "<td align=\"center\">".$Tasks['task_percent_complete']."%</td>";
-		$str .= "</tr>";
-		echo $str;
-		if ($project_id==0) {	
-		$pdfdata[] = array(
-			$Tasks['project_name'],
-			$Tasks['task_name'],
-			$Tasks['task_description'],
-			$users,
-			(($start_date != ' ') ? $start_date->format( $df ) : ' '),
-			(($end_date != ' ') ? $end_date->format( $df ) : ' '),
-			$Tasks['task_percent_complete']."%",);
-			}
-		else {
-			$pdfdata[] = array(
-			$Tasks['task_name'],
-			$Tasks['task_description'],
-			$users,
-			(($start_date != ' ') ? $start_date->format( $df ) : ' '),
-			(($end_date != ' ') ? $end_date->format( $df ) : ' '),
-			$Tasks['task_percent_complete']."%",
-			);
-		}		
+		$Tasks['users'] = $users;
+		$tree->add($Tasks['task_parent'], $task_id, $Tasks);
+		unset($Tasks);
 	}
+
+	// Now show the tasks as HTML
+	$tree->display('show_task_as_html');
+
 	echo "</table>";
 if ($log_pdf) {
 	// make the PDF file
+		$pdfdata = array();
+		$tree->display('collate_pdf_task');
 		$q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('project_name');
@@ -325,3 +304,50 @@ if ($log_pdf) {
 }
 ?>
 </table>
+<?php
+
+function show_task_as_html($depth, $task)
+{
+	global $project_id, $df;
+
+	$str =  "<tr>";
+	if ($project_id==0) {$str .= "<td>".$task['project_name']."</td>";}
+	$str .= "<td><a href='?m=tasks&a=view&task_id=".$task['task_id']. "'>";
+	for ($i = 1; $i < $depth; $i++) {
+		$str .= '&nbsp;&nbsp;';
+	}
+	$str .= $task['task_name']."</a></td>";
+	$str .= "<td>".$task['task_description']."</td>";
+	$str .= "<td>".$task['users']."</td>";
+	$str .= "<td>";
+	($task['start_date'] != ' ') ? $str .= $task['start_date']->format( $df )."</td>" : $str .= ' '."</td>";			
+	$str .= "<td>";		
+	($task['end_date'] != ' ') ? $str .= $task['end_date']->format( $df )."</td>" : $str .= ' '."</td>";
+	$str .= "<td align=\"center\">".$task['task_percent_complete']."%</td>";
+	$str .= "</tr>";
+	echo $str;
+}
+
+function collate_pdf_task($depth, $task)
+{
+	global $pdfdata, $df;
+
+	$spacer = '';
+	for ($i = 1; $i < $depth; $i++) {
+		$spacer .= '  ';
+	}
+
+	$data = array();
+	if ($project_id==0) {	
+		$data[] = $task['project_name'];
+	}
+	$data[] = $spacer . $task['task_name'];
+	$data[] = $task['task_description'];
+	$data[] = $task['users'];
+	$data[] = (($task['start_date'] != ' ') ? $task['start_date']->format( $df ) : ' ');
+	$data[] = (($task['end_date'] != ' ') ? $task['end_date']->format( $df ) : ' ');
+	$data[] = $task['task_percent_complete']."%";
+	$pdfdata[] = $data;
+	unset($data);
+}
+?>
