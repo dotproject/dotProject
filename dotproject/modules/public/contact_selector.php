@@ -1,7 +1,7 @@
 <?php
-//if (!defined('DP_BASE_DIR')){
-//  die('You should not access this file directly.');
-//}
+if (!defined('DP_BASE_DIR')){
+  die('You should not access this file directly.');
+}
 
 	$show_all             = dPgetParam($_REQUEST, 'show_all', 0);
 	$company_id           = dPgetParam($_REQUEST, 'company_id', 0);
