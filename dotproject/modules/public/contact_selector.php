@@ -9,8 +9,7 @@ if (!defined('DP_BASE_DIR')){
 	$call_back            = dPgetParam($_GET, 'call_back', null);
 	$contacts_submited    = dPgetParam($_POST, 'contacts_submited', 0);
 	$selected_contacts_id = dPgetParam($_GET, 'selected_contacts_id', '');
-	if (dPgetParam($_POST, 'selected_contacts_id'))
-	{
+	if (dPgetParam($_POST, 'selected_contacts_id'))	{
 		$selected_contacts_id = dPgetParam($_POST, 'selected_contacts_id');
 	}
 ?>
@@ -22,7 +21,7 @@ function setContactIDs (method,querystring)
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
 	var tmp = new Array();
-    
+	
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
 	}
@@ -48,7 +47,7 @@ function setContactIDs (method,querystring)
 function remove_invalid($arr) {
 	$result = array();
 	foreach ($arr as $val) {
-		if (! empty($val) && trim($val) !== '') {
+		if (! empty($val) && trim($val) !== '' && is_numeric($val)) {
 			$result[] = $val;
 		}
 	}	
