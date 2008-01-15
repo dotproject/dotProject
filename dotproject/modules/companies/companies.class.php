@@ -65,5 +65,25 @@ class CCompany extends CDpObject {
 	// call the parent class method to assign the oid
 		return CDpObject::canDelete( $msg, $oid, $tables );
 	}
+
+	/*
+	** Retrieve a hash list of companies filtered by company_type
+	** @param		array		array of types, e.g. array(6,5)
+	** @return	array 	HashList
+	*/
+
+	function listCompaniesByType ( $type ) {
+		global $AppUI;
+		$q = new DBQuery;
+		$q->addQuery('company_id, company_name');
+		$q->addTable('companies');
+		foreach ($type as $t) { 
+			$q->addWhere('company_type ='. $t);
+		}
+		$this->setAllowedSQL($AppUI->user_id, $q);
+		$q->addOrder('company_name');
+
+		return $q->loadHashList();
+	}
 }
 ?>

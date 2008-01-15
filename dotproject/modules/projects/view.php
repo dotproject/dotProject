@@ -55,12 +55,13 @@ $q->clear();
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 if ($hasTasks) { 
     $q->addTable('projects');
-    $q->addQuery("company_name, CONCAT_WS(', ',contact_last_name,contact_first_name) user_name, projects.*,"
+		$q->addQuery("com.company_name AS company_name, com_internal.company_name AS company_name_internal, CONCAT_WS(', ',contact_last_name,contact_first_name) user_name, projects.*,"
                  ." SUM(t1.task_duration * t1.task_percent_complete"
                  ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
                  ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
                  ." AS project_percent_complete");
-    $q->addJoin('companies', 'com', 'company_id = project_company');
+		$q->addJoin('companies', 'com', 'com.company_id = project_company');
+		$q->addJoin('companies', 'com_internal', 'com_internal.company_id = project_company_internal');
     $q->addJoin('users', 'u', 'user_id = project_owner');
     $q->addJoin('contacts', 'con', 'contact_id = user_contact');
     $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
@@ -70,9 +71,10 @@ if ($hasTasks) {
 }
 else {
     $q->addTable('projects');
-    $q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, projects.*, "
+		$q->addQuery("com.company_name AS company_name, com_internal.company_name AS company_name_internal, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, projects.*, "
                  ."(0.0) AS project_percent_complete");
-    $q->addJoin('companies', 'com', 'company_id = project_company');
+		$q->addJoin('companies', 'com', 'com.company_id = project_company');
+		$q->addJoin('companies', 'com_internal', 'com_internal.company_id = project_company_internal');
     $q->addJoin('users', 'u', 'user_id = project_owner');
     $q->addJoin('contacts', 'con', 'contact_id = user_contact');
     $q->addWhere('project_id = '.$project_id);
@@ -245,6 +247,14 @@ function delIt() {
             			<td class="hilite" width="100%"> <?php echo "<a href='?m=companies&a=view&company_id=" . $obj->project_company ."'>" . htmlspecialchars( $obj->company_name, ENT_QUOTES) . '</a>' ;?></td>
 			<?php } else {?>
             			<td class="hilite" width="100%"><?php echo htmlspecialchars( $obj->company_name, ENT_QUOTES) ;?></td>
+			<?php }?>
+		</tr>
+		<tr>
+			<td align="right" nowrap><?php echo $AppUI->_('Internal Company');?>:</td>
+			<?php if ($perms->checkModuleItem( 'companies', 'access', $obj->project_company_internal )) {?>
+    		<td class="hilite" width="100%"> <?php echo "<a href='?m=companies&a=view&company_id=" . $obj->project_company_internal ."'>" . htmlspecialchars( $obj->company_name_internal, ENT_QUOTES) . '</a>' ;?></td>
+			<?php } else {?>
+    		<td class="hilite" width="100%"><?php echo htmlspecialchars( $obj->company_name_internal, ENT_QUOTES) ;?></td>
 			<?php }?>
 		</tr>
 		<tr>

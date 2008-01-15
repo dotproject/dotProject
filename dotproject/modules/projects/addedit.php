@@ -5,6 +5,7 @@ if (!defined('DP_BASE_DIR')){
 
 $project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
 $company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
+$company_internal_id = intval( dPgetParam( $_GET, "company_internal_id", 0 ) );
 $contact_id = intval( dPgetParam( $_GET, "contact_id", 0 ) );
 
 $perms =& $AppUI->acl();
@@ -21,6 +22,10 @@ require_once( $AppUI->getModuleClass ('companies' ) );
 $row = new CCompany();
 $companies = $row->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
 $companies = arrayMerge( array( '0'=>'' ), $companies );
+
+// get internal companies
+$companies_internal = $row->listCompaniesByType( array('6')); // 6 is standard value for internal companies
+$companies_internal = arrayMerge( array( '0'=>'' ), $companies_internal );
 
 // pull users
 $q  = new DBQuery;
@@ -278,6 +283,13 @@ function setDepartment(department_id_string){
 ?> *</td>
 		</tr>
 		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Internal Company');?></td>
+			<td width="100%" nowrap="nowrap" colspan="2">
+<?php
+		echo arraySelect( $companies_internal, 'project_company_internal', 'class="text" size="1"', $row->project_company_internal );
+?></td>
+ 		</tr>
+		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
 			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
 				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" />
@@ -318,7 +330,7 @@ function setDepartment(department_id_string){
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2"><hr noshade="noshade" size="1"></td>
+			<td colspan="3"><hr noshade="noshade" size="1"></td>
 		</tr>
 <tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date');?></td>

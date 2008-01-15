@@ -21,6 +21,7 @@ require_once ($AppUI->getModuleClass('departments'));
 class CProject extends CDpObject {
 	var $project_id = NULL;
 	var $project_company = NULL;
+	var $project_company_internal = NULL;
 	var $project_department = NULL;
 	var $project_name = NULL;
 	var $project_short_name = NULL;
