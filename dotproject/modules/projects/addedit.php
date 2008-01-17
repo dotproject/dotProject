@@ -283,7 +283,7 @@ function setDepartment(department_id_string){
 ?> *</td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Internal Company');?></td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Internal Division');?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
 <?php
 		echo arraySelect( $companies_internal, 'project_company_internal', 'class="text" size="1"', $row->project_company_internal );
