@@ -250,6 +250,7 @@ CREATE TABLE `permissions` (
 CREATE TABLE `projects` (
   `project_id` int(11) NOT NULL auto_increment,
   `project_company` int(11) NOT NULL default '0',
+  `project_company_internal` int(11) NOT NULL default '0',
   `project_department` int(11) NOT NULL default '0',
   `project_name` varchar(255) default NULL,
   `project_short_name` varchar(10) default NULL,
