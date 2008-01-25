@@ -86,7 +86,7 @@ $tabbed = $tabBox->isTabbed();
 $i = 0;
 foreach($file_types as $file_type) {
 	$q = new DBQuery;
-	$q->addQuery('count(file_id)');
+	$q->addQuery('count(DISTINCT file_version_id)');
 	$q->addTable('files', 'f');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
 	$q->addJoin('tasks', 't', 't.task_id = file_task');
