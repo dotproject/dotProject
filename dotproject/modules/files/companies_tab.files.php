@@ -4,6 +4,7 @@ if (!defined('DP_BASE_DIR')){
 }
 
 GLOBAL $AppUI, $company_id, $deny, $canRead, $canEdit, $dPconfig;
+
 require_once( $AppUI->getModuleClass( 'files' ) );
    
 $cfObj = new CFileFolder();
@@ -23,5 +24,12 @@ $canEdit = true;
 $canEdit = false;
 }
 $showProject = false;
-require( DP_BASE_DIR . '/modules/files/folders_table.php' );
+
+$canAccess_folders = getPermission('file_folders', 'access');
+if ($canAccess_folders) {
+	$folder = dPgetParam($_GET, 'folder', 0);
+	require( DP_BASE_DIR . '/modules/files/folders_table.php' );
+} else {
+	require( DP_BASE_DIR . '/modules/files/index_table.php' );
+}
 ?>
