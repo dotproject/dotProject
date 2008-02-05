@@ -262,7 +262,11 @@ class CTask extends CDpObject
 		$modified_task = new CTask();
 		
 		if ($fromChildren){
-			$modified_task = &$this;
+			if (version_compare(phpversion(), '5.0.0', '>=')) {
+				$modified_task = $this;
+			} else {
+				$modified_task =& $this;
+			}
 		} else {
 			$modified_task->load($this->task_parent);
 			$modified_task->htmlDecode();
