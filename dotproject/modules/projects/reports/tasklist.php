@@ -330,7 +330,7 @@ function show_task_as_html($depth, $task)
 
 function collate_pdf_task($depth, $task)
 {
-	global $pdfdata, $df;
+	global $project_id, $pdfdata, $df;
 
 	$spacer = '';
 	for ($i = 1; $i < $depth; $i++) {
