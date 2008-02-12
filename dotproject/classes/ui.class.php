@@ -193,7 +193,7 @@ class CAppUI {
 		$dirs = array();
 		$d = dir( DP_BASE_DIR."/$path" );
 		while (false !== ($name = $d->read())) {
-			if(is_dir( DP_BASE_DIR."/$path/$name" ) && $name != "." && $name != ".." && $name != "CVS") {
+			if(is_dir( DP_BASE_DIR."/{$path}/{$name}" ) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
 				$dirs[$name] = $name;
 			}
 		}
