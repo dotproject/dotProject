@@ -469,7 +469,8 @@ function SMTPSend()
     $this->socketSend('Date: ' . date('r'), FALSE);
     $this->socketSend('', FALSE);
     $this->socketSend($this->fullBody, FALSE);
-    $result = $this->socketSend(".\r\nQUIT");
+    $result = $this->socketSend('.');
+    $this->socketSend('QUIT');
     if (strpos($result, '250') === 0)
         return TRUE;
     else {
