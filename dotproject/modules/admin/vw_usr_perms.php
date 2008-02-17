@@ -167,10 +167,18 @@ foreach ($user_acls as $acl){
 			foreach ($permission['axo'] as $key => $section) {
 				// Find the module based on the key
 				$mod_info = $perms->get_object_full($key, 'app', 1, 'axo');
-				$modlist[] = $AppUI->_($mod_info['name']);
+				if ($mod_info['name']) {
+					$modlist[] = $AppUI->_($mod_info['name']);
+				} else {
+					$itemlist[] = $AppUI->_('ALL');
+				}
 				foreach ($section as $id) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
-					$itemlist[] = $AppUI->_($mod_data['name']);
+					if ($mod_info['name']) {
+						$itemlist[] = $AppUI->_($mod_data['name']);
+					} else {
+						$modlist[] = $AppUI->_($mod_data['name']);
+					}
 				}
 			}
 		}
