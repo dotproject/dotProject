@@ -590,7 +590,7 @@ function projects_list_data($user_id = false) {
 	             . ', com.company_description, tc.critical_task, tc.project_actual_end_date' 
 	             . ', tp.task_log_problem, tt.total_tasks, tsy.my_tasks' 
 	             . ', ts.project_percent_complete, ts.project_duration, u.user_username');
-	$q->addJoin('companies', 'com', 'p.project_company = company_id');
+	$q->addJoin('companies', 'com', 'p.project_company = com.company_id');
 	$q->addJoin('users', 'u', 'p.project_owner = u.user_id');
 	$q->addJoin('tasks_critical', 'tc', 'p.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'p.project_id = tp.task_project');
