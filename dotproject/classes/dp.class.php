@@ -160,7 +160,7 @@ class CDpObject {
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
 		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone $this;
+			$newObj = clone ($this);
 		} else {
 			$newObj = $this;
 		}
