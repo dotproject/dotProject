@@ -533,8 +533,13 @@ function SendQueuedMail($mod, $type, $originator, $owner, &$args)
     if ($this->transport == 'smtp') {
         return $this->SMTPSend();
     } else {
-        $headers = preg_replace("/Subject: .*?\r\n(?! )/Ds", '', $headers);
-        $headers = preg_replace("/To: .*?\r\n(?! )/Ds", '', $headers);
+        $headers = '';
+	foreach ($xheaders as $k => $v) {
+		if ($k == 'To' || $k == 'Subject') {
+			continue;
+		}
+		$headers .= "$k: $v\r\n";
+	}
         return @mail( $xheaders['To'], $xheaders['Subject'], $fullBody, $headers );
     }
 }
