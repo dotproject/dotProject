@@ -150,7 +150,7 @@ function displayFolders($folder_id=0, $level=0) {
 				//add folder
 				if ($canAuthor_this) {
 					echo ('<a href="./index.php?m=files&a=addedit_folder&file_folder_parent=' 
-					      . $folder_id . '&file_folder_id=0">' 
+					      . $folder_id . '&folder=0">' 
 					      . dPshowImage(DP_BASE_URL . '/modules/files/images/edit_add.png', '16',
 					                    '16', 'new folder', 'add a new subfolder') . '</a>');
 				}
