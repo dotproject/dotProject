@@ -211,8 +211,8 @@ class CProject extends CDpObject {
 		$tasks = $q->loadColumn();
 		
 		// Update dates based on new project's start date. 
-		$newTask = new CTask();
 		foreach ($tasks as $task_id) {
+			$newTask = new CTask();
 			$newTask->load($task_id);
 			// Fix task start date from project start date offset
 			$origDate->setDate ($newTask->task_start_date);
