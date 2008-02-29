@@ -106,10 +106,10 @@ function clickDay( idate, fdate ) {
 
 <?php
 // tabbed information boxes
-$tabBox = new CTabBox( "?m=calendar&a=day_view&date=" . $this_day->format( FMT_TIMESTAMP_DATE ),
-		DP_BASE_DIR.'/modules/calendar/', $tab );
-$tabBox->add( 'vw_day_events', 'Events' );
-$tabBox->add( 'vw_day_tasks', 'Tasks' );
+$tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format( FMT_TIMESTAMP_DATE ), '', $tab);
+$tabBox->add( "{$dPconfig['root_dir']}/modules/calendar/vw_day_events", 'Events' );
+$tabBox->add( "{$dPconfig['root_dir']}/modules/calendar/vw_day_tasks", 'Tasks' );
+$tabBox->loadExtras($m);
 $tabBox->show();
 ?>
 		</td>
