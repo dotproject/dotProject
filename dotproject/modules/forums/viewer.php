@@ -57,7 +57,7 @@ $titleBlock->show();
 </tr>
 <tr>
 	<td align="left" nowrap><?php echo $AppUI->_( 'Related Project' );?>:</td>
-	<td nowrap><strong><?php echo $forum["project_name"];?></strong></td>
+	<td nowrap="nowrap"><strong><a href="./index.php?m=projects&a=view&project_id=<?php echo $forum['forum_project']; ?>"><strong><?php echo $forum["project_name"];?></a></strong></td>
 	<td valign="top" width="50%" rowspan="99">
 		<strong><?php echo $AppUI->_( 'Description' );?>:</strong>
 		<br /><?php echo @str_replace(chr(13), "&nbsp;<br />",$forum["forum_description"]);?>

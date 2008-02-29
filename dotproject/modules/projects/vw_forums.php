@@ -46,3 +46,9 @@ while ($row = db_fetch_assoc( $rc )) { ?>
 $q->clear();
 ?>
 </table>
+<form method="get" action="./index.php">
+<input type="hidden" name="m" value="forums" />
+<input type="hidden" name="a" value="addedit" />
+<input type="hidden" name="forum_project" value="<?php echo $project_id; ?>" />
+<input type="submit" value="new forum" class="button" />
+</form>

@@ -6,6 +6,7 @@ if (!defined('DP_BASE_DIR')){
 // Add / Edit forum
 
 $forum_id = intval( dPgetParam( $_GET, 'forum_id', 0 ) );
+$forum_project = intval(dPgetParam($_GET, 'forum_project', 0));
 $perms =& $AppUI->acl();
 
 // check permissions for this record
@@ -45,6 +46,10 @@ if (isset($company_id))
 $projects = array( '0' => '' ) + $q->loadHashList();
 echo db_error();
 
+if (!in_array($forum_project, array_keys($projects))) {
+	$forum_project = 0;
+}
+
 $perms =& $AppUI->acl();
 $permittedUsers =& $perms->getPermittedUsers();
 $users = array( '0' => '' ) + $permittedUsers;
@@ -54,8 +59,8 @@ $titleBlock = new CTitleBlock( $ttl, 'support.png', $m, "$m.$a" );
 $titleBlock->addCrumb( "?m=forums", "forums list" );
 if ($canDelete) {
 	$titleBlock->addCrumbRight(
-		'<a href="javascript:delIt()">' . $AppUI->_('delete forum')
-			. '&nbsp;<img align="absmiddle" src="' . dPfindImage( 'stock_delete-16.png', $m ) . '" width="16" height="16" alt="" border="0" /></a>'
+		'<a href="javascript:delIt()"><img align="absmiddle" src="' . dPfindImage( 'stock_delete-16.png', $m ) . '" width="16" height="16" alt="" border="0" />&nbsp;' . $AppUI->_('delete forum')
+			. '</a>'
 	);
 }
 $titleBlock->show();
@@ -114,7 +119,7 @@ function delIt(){
 			<td align="right"><?php echo $AppUI->_('Related Project');?></td>
 			<td>
 		<?php
-			echo arraySelect( $projects, 'forum_project', 'size="1" class="text"', $forum_info['forum_project'] );
+			echo arraySelect( $projects, 'forum_project', 'size="1" class="text"', ($forum_info['forum_project'] != '' ? $forum_info['forum_project'] : $forum_project) );
 		?>
 			</td>
 		</tr>

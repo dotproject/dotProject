@@ -87,7 +87,7 @@ $titleBlock->addCell(
 if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new forum').'">', '',
-		'<form action="?m=forums&a=addedit" method="post">', '</form>'
+		'<form action="index.php" method="get"><input type="hidden" name="m" value="forums" /><input type="hidden" name="a" value="addedit" />', '</form>'
 	);
 }
 $titleBlock->show();
