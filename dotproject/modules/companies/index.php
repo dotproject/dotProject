@@ -9,8 +9,15 @@ if (!$canAccess) {
 }
 $AppUI->savePlace();
 
+$valid_ordering = array(
+	'company_name',
+	'countp',
+	'inactive',
+	'company_type',
+);
+
 // retrieve any state parameters
-if (isset( $_GET['orderby'] )) {
+if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
     $orderdir = $AppUI->getState( 'CompIdxOrderDir' ) ? ($AppUI->getState( 'CompIdxOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';
 	$AppUI->setState( 'CompIdxOrderBy', $_GET['orderby'] );
     $AppUI->setState( 'CompIdxOrderDir', $orderdir);

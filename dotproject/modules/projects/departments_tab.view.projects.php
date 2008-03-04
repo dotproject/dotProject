@@ -28,7 +28,21 @@ if (isset( $_GET['tab'] )) {
 	$AppUI->setState( 'DeptProjIdxTab', $_GET['tab'] );
 }
 
-if (isset( $_GET['orderby'] )) {
+$valid_ordering = array(
+	'project_color_identifier',
+	'company_name',
+	'project_name',
+	'project_start_date',
+	'project_duration',
+	'project_end_date',
+	'project_actual_end_date',
+	'task_log_problem',
+	'user_username',
+	'total_tasks',
+	'my_tasks',
+	'project_status',
+);
+if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
     $orderdir = $AppUI->getState( 'DeptProjIdxOrderDir' ) ? ($AppUI->getState( 'DeptProjIdxOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';    
     $AppUI->setState( 'DeptProjIdxOrderBy', $_GET['orderby'] );
     $AppUI->setState( 'DeptProjIdxOrderDir', $orderdir);

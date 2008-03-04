@@ -60,8 +60,22 @@ if (!(strpos($department, $company_prefix)===false)) {
 	unset($department);
 }
 
+$valid_ordering = array(
+	'project_name',
+	'user_username',
+	'my_tasks desc',
+	'total_tasks desc',
+	'total_tasks',
+	'my_tasks',
+	'project_color_identifier',
+	'company_name',
+	'project_end_date',
+	'project_start_date',
+	'project_actual_end_date',
+	'task_log_problem',
+);
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
-if (isset($_GET['orderby'])) {
+if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
 	$orderdir = (($AppUI->getState('ProjIdxOrderDir') == 'asc') ? 'desc' : 'asc');
 	$AppUI->setState('ProjIdxOrderBy', $_GET['orderby']);
 }

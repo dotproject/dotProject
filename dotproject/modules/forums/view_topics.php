@@ -4,9 +4,16 @@ if (!defined('DP_BASE_DIR')){
 }
 
 $AppUI->savePlace();
+$valid_ordering = array(
+	'watch_user',
+	'message_title',
+	'user_username',
+	'replies',
+	'latest_reply',
+);
 
 // retrieve any state parameters
-if (isset( $_GET['orderby'] )) {
+if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
     $orderdir = $AppUI->getState( 'ForumVwOrderDir' ) ? ($AppUI->getState( 'ForumVwOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';
 	$AppUI->setState( 'ForumVwOrderBy', $_GET['orderby'] );
     $AppUI->setState( 'ForumVwOrderDir', $orderdir);

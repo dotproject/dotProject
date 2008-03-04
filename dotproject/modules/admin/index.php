@@ -26,7 +26,14 @@ if (isset( $_GET['stub'] )) {
 $stub = $AppUI->getState( 'UserIdxStub' );
 $where = $AppUI->getState( 'UserIdxWhere' );
 
-if (isset( $_GET['orderby'] )) {
+$valid_ordering = array(
+	'user_username',
+	'contact_last_name',
+	'contact_company',
+	'date_time_in',
+	'user_ip',
+);
+if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
     $AppUI->setState( 'UserIdxOrderby', $_GET['orderby'] );
 }
 $orderby = $AppUI->getState( 'UserIdxOrderby' ) ? $AppUI->getState( 'UserIdxOrderby' ) : 'user_username';
