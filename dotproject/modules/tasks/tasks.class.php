@@ -407,6 +407,7 @@ class CTask extends CDpObject
 	 * @return object The new record object or null if error
 	 */
 	function copy($destProject_id = 0, $destTask_id = -1) {
+		$task_id = $this->task_id;
 		$newObj = $this->duplicate();
 		
 		// Copy this task to another project if it's specified
@@ -424,6 +425,29 @@ class CTask extends CDpObject
 			$newObj->task_parent = '';
 		}
 		$newObj->store();
+		
+		// Copy assigned users as well
+		$q = new DBQuery();
+		$q->addQuery('user_id, user_type, perc_assignment, user_task_priority');
+		$q->addTable('user_tasks');
+		$q->addWhere('task_id = ' . $task_id);
+		$users = $q->loadList();
+		
+		$q->setDelete('user_tasks');
+		$q->addWhere('task_id = ' . $newObj->task_id);
+		$q->exec();
+		$q->clear();
+		
+		$fields = array('user_id', 'user_type', 'perc_assignment', 'user_task_priority', 'task_id');
+		foreach ($users as $user) {
+			$user['task_id'] = $newObj->task_id;
+			$values = array_values($user);
+			
+			$q->addTable('user_tasks');
+			$q->addInsert($fields, $values, true);
+			$q->exec();
+			$q->clear();
+		}
 		
 		return $newObj;
 	}// end of copy()
