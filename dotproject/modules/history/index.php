@@ -20,7 +20,15 @@ function show_history($history)
 	GLOBAL $AppUI;
         $id = $history['history_item'];
         $module = $history['history_table'];        
-	$table_id = (substr($module, -1) == 's'?substr($module, 0, -1):$module) . '_id';
+
+        switch ($module)
+        {
+        case 'companies': // special case since the singular of companies is company and not companie
+            $table_id = "company_id";
+            break;
+        default:
+            $table_id = (substr($module, -1) == 's'?substr($module, 0, -1):$module) . '_id';
+        }
         
         if ($module == 'login')
                return $AppUI->_('User') . ' \'' . $history['history_description'] . '\' ' . $AppUI->_($history['history_action']);
