@@ -415,7 +415,8 @@ function SMTPSend()
 
     $this->socket = fsockopen($this->host, $this->port, $error_number, $error_message, $this->timeout);
     if (! $this->socket) {
-        dprint(__FILE__, __LINE__, 1, "Error on connecting to host {$this->host} at port {$this->port}: $error_message ($error_number)");
+        dprint(__FILE__, __LINE__, 1, 
+			   "Error on connecting to host {$this->host} at port {$this->port}: $error_message ($error_number)");
         $AppUI->setMsg("Cannot connect to SMTP Host: $error_message ($error_number)");
         return FALSE;
     }
@@ -423,6 +424,11 @@ function SMTPSend()
     $this->socketRead();
     // Send the protocol start
     $this->socketSend('HELO ' . $this->getHostName());
+	do {
+		//clear out any excess data from the socket so we can correctly check for authentication
+		$chatter = trim($this->socketRead());
+	} while (! feof($this->socket) && $chatter != '');
+	
     if ($this->sasl && $this->username) {
         $this->socketSend("AUTH LOGIN");
         $this->socketSend(base64_encode($this->username));
