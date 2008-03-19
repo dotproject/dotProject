@@ -646,9 +646,9 @@ function getIcon($file_type) {
 	global $dPconfig;
 	$result = '';
 	$mime = str_replace('/','-',$file_type);
-	$icon = 'gnome-mime-'.$mime;
-	if (is_file(DP_BASE_DIR.'/modules/files/images/icons/'.$icon.'.png')) {
-		$result = 'icons/$icon.png';
+	$icon = 'gnome-mime-' . $mime;
+	if (is_file(DP_BASE_DIR . '/modules/files/images/icons/' . $icon . '.png')) {
+		$result = 'icons/' . $icon . '.png';
 	} else {
 		$mime = split('/', $file_type);
 		switch ($mime[0]) {
