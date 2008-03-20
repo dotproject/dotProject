@@ -302,7 +302,8 @@ function displayFiles($folder_id) {
 	
 	// most recent version
 	$q->addTable('files', 'f');
-	$q->addQuery('f.*, fmc.file_versions, fmc.file_lastversion, u.user_username as file_owner, ff.file_folder_name' 
+	$q->addQuery('f.*, fmc.file_versions, round(fmc.file_lastversion, 2) as file_lastversion' 
+				 . ', u.user_username as file_owner, ff.file_folder_name' 
 	             . ', ff.file_folder_id, ff.file_folder_name, p.project_name' 
 	             . ', p.project_color_identifier, p.project_owner, c.contact_first_name' 
 	             . ', c.contact_last_name, t.task_name, u.user_username as file_owner' 
@@ -310,7 +311,7 @@ function displayFiles($folder_id) {
 	             . ', co.contact_last_name as checkout_last_name');
 	$q->addJoin('files_count_max' . $folder_id, 'fmc', 
 				'(fmc.file_lastversion=f.file_version AND fmc.file_version_id=f.file_version_id' 
-				. ' AND fmc.file_version_id=f.file_version_id AND fmc.file_project=f.file_project)', 'inner');
+				. ' AND fmc.file_project=f.file_project)', 'inner');
 	$q->addJoin('projects', 'p', 'p.project_id = f.file_project');
 	$q->addJoin('users', 'u', 'u.user_id = f.file_owner');
 	$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');

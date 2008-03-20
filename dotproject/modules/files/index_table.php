@@ -49,7 +49,7 @@ require_once $AppUI->getModuleClass('files');
 $project = new CProject();
 $task = new CTask();
 $cfObj = new CFileFolder();
-
+$compObj = new CCompany();
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
@@ -66,9 +66,12 @@ if (($company_id || $project_id || $task_id) && !($m=='files')) {
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 $allowedFolders = $cfObj->getAllowedSQL($AppUI->user_id, 'file_folder');
+$allowedCompanies = $compObj->getAllowedSQL($AppUI->user_id);
 
 // SQL text for count the total recs from the selected option
 $q = new DBQuery;
+$r = new DBQuery;
+
 $q->addQuery('count(file_id)');
 $q->addTable('files', 'f');
 $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -86,47 +89,79 @@ if ($category_filter) {
 	$q->addWhere($category_filter);
 }
 if ($company_id) {
-	$q->addWhere("project_company = $company_id");
+	$q->addWhere('project_company = ' . $company_id);
 }
 if ($project_id) {
-	$q->addWhere("file_project = $project_id");
+	$q->addWhere('file_project = '. $project_id);
 }
 if ($task_id) {
-	$q->addWhere("file_task = $task_id");
+	$q->addWhere('file_task = '. $task_id);
 }
 $q->addGroup('file_version_id');
 
 
+// most recent version info per file_project and file_version_id
+$r->createTemp('files_count_max');
+$r->addTable('files', 'f');
+$r->addQuery('DISTINCT count(f.file_version) as file_versions, max(DISTINCT f.file_version) as file_lastversion' 
+			 . ', file_version_id, f.file_project');
+$r->addJoin('projects', 'p', 'p.project_id = f.file_project');
+$r->addJoin('tasks', 't', 't.task_id = f.file_task');
+$r->addJoin('file_folders', 'ff', 'ff.file_folder_id = f.file_folder');
+
+if (count ($allowedProjects)) {
+	$r->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+}
+if (count ($allowedTasks)) {
+	$r->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+}
+if (count($allowedFolders)) {
+	$r->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
+}
+if ($company_id) {
+	$r->innerJoin('companies', 'co', 'co.company_id = p.project_company');
+	$r->addWhere('co.company_id = '. $company_id);
+	$r->addWhere($allowedCompanies);
+}
+
+$r->addGroup('file_project');
+$r->addGroup('file_version_id');
+$file_version_max_counts = $r->exec();
+$r->clear();
+
 // SETUP FOR FILE LIST
 $q2 = new DBQuery;
 $q2->addQuery('f.*'.
-	', max(f.file_id) as latest_id'
-	.', count(f.file_version) as file_versions, round(max(f.file_version),2) as file_lastversion');
+	', f.file_id as latest_id'
+	.', fmc.file_versions , round(fmc.file_lastversion, 2) as file_lastversion');
 $q2->addQuery('ff.*');
 $q2->addTable('files', 'f');
-$q2->addJoin('file_folders','ff','ff.file_folder_id = file_folder');
-$q2->addJoin('projects', 'p', 'p.project_id = file_project');
-$q2->addJoin('tasks', 't', 't.task_id = file_task');
+$q2->addJoin('files_count_max', 'fmc', 
+			 '(fmc.file_lastversion=f.file_version AND fmc.file_version_id=f.file_version_id' 
+			 . ' AND  fmc.file_project=f.file_project)', 'inner');
+$q2->addJoin('file_folders','ff','ff.file_folder_id = f.file_folder');
+$q2->addJoin('projects', 'p', 'p.project_id = f.file_project');
+$q2->addJoin('tasks', 't', 't.task_id = f.file_task');
 if (count ($allowedProjects)) {
-	$q2->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR file_project = 0)');
+	$q2->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 }
 if (count ($allowedTasks)) {
-	$q2->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR file_task = 0)');
+	$q2->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0)');
 }
 if (count($allowedFolders)) {
-	$q2->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
+	$q2->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
 }
 if ($category_filter) {
 	$q2->addWhere($category_filter);
 }
 if ($company_id) {
-	$q2->addWhere("project_company = $company_id");
+	$q2->addWhere('project_company = '. $company_id);
 }
 if ($project_id) {
-	$q2->addWhere("file_project = $project_id");
+	$q2->addWhere('file_project = '. $project_id);
 }
 if ($task_id) {
-	$q2->addWhere("file_task = $task_id");
+	$q2->addWhere('file_task = '. $task_id);
 }
 $q2->setLimit($xpg_pagesize, $xpg_min);
 // Adding an Order by that is different to a group by can cause
@@ -160,13 +195,13 @@ if ($category_filter) {
 	$q3->addWhere($category_filter);
 }
 if ($company_id) {
-	$q3->addWhere("project_company = $company_id");
+	$q3->addWhere('project_company = '. $company_id);
 }
 if ($project_id) {
-	$q3->addWhere("file_project = $project_id");
+	$q3->addWhere('file_project = '. $project_id);
 }
 if ($task_id) {
-	$q3->addWhere("file_task = $task_id");
+	$q3->addWhere('file_task = '. $task_id);
 }
 
 $files = array();
