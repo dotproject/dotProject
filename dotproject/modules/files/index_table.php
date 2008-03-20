@@ -214,6 +214,8 @@ if ($canRead) {
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
 
+$r->dropTemp('files_count_max');
+
 // How many pages are we dealing with here ??
 $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 1;
 
