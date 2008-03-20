@@ -707,10 +707,17 @@ function getFolderSelectList() {
 	global $AppUI;
 	
 	$folder = new CFileFolder();
-	$allowed_folders = $folder->getAllowedRecords($AppUI->user_id, 
-	                                              ('file_folder_id,file_folder_name' 
-	                                               . ',file_folder_parent'), 
-	                                              'file_folder_name');
+	$allowed_folders_pre = $folder->getAllowedRecords($AppUI->user_id, 
+													  ('file_folder_id, file_folder_name' 
+													   . ', file_folder_parent'), 
+													  'file_folder_name', 'file_folder_id');
+	//get array in proper "format" for tree
+	foreach ($allowed_folders_pre as $results) {
+		$folder_id = $results['file_folder_id'];
+		$allowed_folders[$folder_id] = array($results['file_folder_id'], 
+											 $results['file_folder_name'], 
+											 $results['file_folder_parent']);
+	}
 	
 	$folders = arrayMerge(array(array(0, $AppUI->_('Root'), -1)), 
 	                      $allowed_folders);
