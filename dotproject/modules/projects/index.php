@@ -72,7 +72,7 @@ $valid_ordering = array(
 	'project_end_date',
 	'project_start_date',
 	'project_actual_end_date',
-	'task_log_problem',
+	'task_log_problem DESC,project_priority',
 );
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
@@ -146,11 +146,6 @@ $titleBlock->show();
 
 $project_types = dPgetSysVal("ProjectStatus");
 
-$active = 0;
-$complete = 0;
-$archive = 0;
-$proposed = 0;
-
 // count number of projects per project_status
 $q  = new DBQuery();
 $q->addTable('projects');
@@ -159,12 +154,9 @@ $q->addGroup('project_status');
 $statuses = $q->loadHashList('project_status');
 $q->clear();
 
-$active = $statuses[3];
-$complete = $statuses[5];
-$archive = $statuses[7];
-
 foreach ($statuses as $k => $v) {
-	$project_types[$v['project_status']] = $AppUI->_($project_types[$v['project_status']], UI_OUTPUT_RAW) . ' (' . $v['count'] . ')';
+	$project_status_tabs[$v['project_status']] = ($AppUI->_($project_types[$v['project_status']]) 
+													  . ' (' . $v['count'] . ')');
 }
 
 // count all projects
@@ -174,32 +166,29 @@ $q->addWhere('1');
 $all_projects = $q->loadResult();
 $q->clear();
 
-$fixed_types = array($AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' 
-                     => 'vw_idx_active',
-                     $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')' 
-                     => 'vw_idx_complete',
-                     $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')' 
-                     => 'vw_idx_archived');
+//set file used per project status title
+$fixed_status = array('In Progress' => 'vw_idx_active',
+					  'Complete' => 'vw_idx_complete',
+					  'Archived' => 'vw_idx_archived');
 
 /**
 * Now, we will figure out which vw_idx file are available
-* for each project type using the $fixed_types array 
+* for each project status using the $fixed_status array 
 */
-$project_type_file = array();
-
-foreach ($project_types as $project_type) {
-	$project_type = trim($project_type);
-	// if there is no fixed vw_idx file, we will use vw_idx_proposed
-	$project_file_type[$project_type] = ((isset($fixed_types[$project_type])) 
-	                                     ? $fixed_types[$project_type] : 'vw_idx_proposed');
+$project_status_file = array();
+foreach ($project_types as $status_id => $status_title) {
+	//if there is no fixed vw_idx file, we will use vw_idx_proposed
+	$project_status_file[$status_id] = ((isset($fixed_status[$status_title])) 
+										? $fixed_status[$status_title] : 'vw_idx_proposed');
 }
 
 // tabbed information boxes
 $tabBox = new CTabBox('?m=projects', DP_BASE_DIR . '/modules/projects/', $tab);
 
-$tabBox->add('vw_idx_proposed', $AppUI->_('All', UI_OUTPUT_RAW) . ' (' . $all_projects . ')' , true,  500);
-foreach ($project_types as $ptk=>$project_type) {
-		$tabBox->add($project_file_type[$project_type], $project_type, true, $ptk);
+$tabBox->add('vw_idx_proposed', $AppUI->_('All') . ' (' . $all_projects . ')' , true,  500);
+foreach ($project_types as $psk => $project_status) {
+		$tabBox->add($project_status_file[$psk], 
+					 (($project_status_tabs[$psk]) ? $project_status_tabs[$psk] : $AppUI->_($project_status)), true, $psk);
 }
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');

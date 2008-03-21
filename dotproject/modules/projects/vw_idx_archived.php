@@ -3,14 +3,26 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-GLOBAL $AppUI, $projects, $company_id;
+GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
+
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
+
+$base_table_cols = 6;
+$table_cols = $base_table_cols + ((($perms->checkModuleItem('projects', 'edit', 
+															$row['project_id']))) ? 1 : 0);
+$added_cols = $table_cols - $base_table_cols;
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
-	<td align="right" width="65" nowrap="nowrap"><?php echo $AppUI->_('sort by');?>:</td>
+<?php 
+	echo ("\t" . '<td colspan="' . $base_table_cols . '" nowrap="nowrap">' 
+		  . $AppUI->_('sort by') . ':</td>');
+if ($added_cols) {
+	echo ("\t" . '<th colspan="' . $added_cols . '" nowrap="nowrap">&nbsp;</td>');
+}
+?>
 </tr>
 <tr>
 	<th nowrap="nowrap">
@@ -41,6 +53,15 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 		<?php echo $AppUI->_('Finished');?>
 		</a>
 	</th>
+<?php 
+if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+?>
+	<th nowrap="nowrap">
+		<?php echo $AppUI->_('Selection'); ?>
+	</th>
+<?php
+}
+?>
 </tr>
 
 <?php
@@ -93,15 +114,35 @@ foreach ($projects as $row) {
 		$s .= $CR . '<td align="right" nowrap="nowrap">';
 		$s .= $CT . ($end_date ? $end_date->format($df) : '-');
 		$s .= $CR . '</td>';
+		if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+			$s .= $CR . '<td align="center">';
+			if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+				$s .= ($CT . '<input type="checkbox" name="project_id[]" value="' 
+					   . $row['project_id'] . '" />');
+			} else {
+  	    		$s .= $CT . '&nbsp;';
+			}
+			$s .= $CR . '</td>';
+		}
 		$s .= $CR . '</tr>';
 		echo $s;
 	}
 }
+
 if ($none) {
-	echo $CR . '<tr><td colspan="6">' . $AppUI->_('No projects available') . '</td></tr>';
-}
+	echo $CR . '<tr><td colspan="' . $table_cols . '">' . $AppUI->_('No projects available') . '</td></tr>';
+} else {
 ?>
 <tr>
-	<td colspan="6">&nbsp;</td>
+	<td colspan="<?php echo ($table_cols);?>" align="right">
+<?php
+echo '<input type="submit" class="button" value="'.$AppUI->_('Update projects status').'" />';
+echo '<input type="hidden" name="update_project_status" value="1" />';
+echo '<input type="hidden" name="m" value="projects" />';
+echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', 2, true);
+}
+?>
+	</td>
 </tr>
 </table>
+</form>

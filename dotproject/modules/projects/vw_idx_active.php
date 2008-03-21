@@ -3,16 +3,26 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-global $projects;
-global $AppUI, $company_id, $priority;
+GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
 
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
+
+$base_table_cols = 9;
+$table_cols = $base_table_cols + ((($perms->checkModuleItem('projects', 'edit', 
+															$row['project_id']))) ? 1 : 0);
+$added_cols = $table_cols - $base_table_cols;
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
-	<td align="right" width="65" nowrap="nowrap"><?php echo $AppUI->_('sort by');?>:</td>
+<?php 
+	echo ("\t" . '<td colspan="' . $base_table_cols . '" nowrap="nowrap">' 
+		  . $AppUI->_('sort by') . ':</td>');
+if ($added_cols) {
+	echo ("\t" . '<th colspan="' . $added_cols . '" nowrap="nowrap">&nbsp;</td>');
+}
+?>
 </tr>
 <tr>
 	<th nowrap="nowrap">
@@ -46,7 +56,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 		</a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=task_log_problem" class="hdr">
+		<a href="?m=projects&orderby=task_log_problem%20DESC,project_priority" class="hdr">
 		<?php echo $AppUI->_('P');?>
 		</a>
 	</th>
@@ -59,6 +69,15 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 		<a href="?m=projects&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks');?></a>
 		<a href="?m=projects&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My');?>)</a>
 	</th>
+<?php 
+if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+?>
+	<th nowrap="nowrap">
+		<?php echo $AppUI->_('Selection'); ?>
+	</th>
+<?php
+}
+?>
 </tr>
 
 <?php
@@ -130,28 +149,54 @@ foreach ($projects as $row) {
 		$s .= $actual_end_date ? '</a>' : '';
 		$s .= $CR . '</td>';
 		$s .= $CR . '<td align="center">';
-		$s .= (($row['task_log_problem']) 
-		       ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' 
-		       : '');
-		$s .= (($row['task_log_problem']) 
-		       ? dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') 
-		       : '-');
-		$s .= $CR . $row['task_log_problem'] ? '</a>' : '';
+		
+		if ($row['task_log_problem']) {
+			$s .= ('<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' 
+				   . dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') 
+				   . '</a>');
+		} else if ($row['project_priority'] != 0) {
+		  $s .= "\n\t\t" . dPshowImage(('./images/icons/priority' . (($row['project_priority'] > 0) 
+																	 ? '+' : '-') 
+										. abs($row['project_priority']) . '.gif'), 13, 16, '', '');
+		} else {
+			$s .= '&nbsp;';
+		}
+		
 		$s .= $CR . '</td>';
 		$s .= ($CR . '<td nowrap="nowrap">' 
 		       . htmlspecialchars($row['user_username'], ENT_QUOTES) . '</td>');
 		$s .= $CR . '<td align="center" nowrap="nowrap">';
 		$s .= $CT . $row['total_tasks'] . ($row['my_tasks'] ? ' ('.$row['my_tasks'].')' : '');
 		$s .= $CR . '</td>';
+		if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+			$s .= $CR . '<td align="center">';
+			if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+				$s .= ($CT . '<input type="checkbox" name="project_id[]" value="' 
+					   . $row['project_id'] . '" />');
+			} else {
+  	    		$s .= $CT . '&nbsp;';
+			}
+			$s .= $CR . '</td>';
+		}
 		$s .= $CR . '</tr>';
 		echo $s;
 	}
 }
+
 if ($none) {
-	echo $CR . '<tr><td colspan="10">' . $AppUI->_('No projects available') . '</td></tr>';
-}
+	echo $CR . '<tr><td colspan="' . $table_cols . '">' . $AppUI->_('No projects available') . '</td></tr>';
+} else {
 ?>
 <tr>
-	<td colspan="9">&nbsp;</td>
+	<td colspan="<?php echo ($table_cols);?>" align="right">
+<?php
+echo '<input type="submit" class="button" value="'.$AppUI->_('Update projects status').'" />';
+echo '<input type="hidden" name="update_project_status" value="1" />';
+echo '<input type="hidden" name="m" value="projects" />';
+echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', 2, true);
+}
+?>
+	</td>
 </tr>
 </table>
+</form>

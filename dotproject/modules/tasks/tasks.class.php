@@ -2282,26 +2282,26 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		   . $AppUI->_($pin_prefix . 'pin Task') . '" border="0" width="12" height="12">'
 		   . "\n\t\t</a>\n\t</td>");
 	// New Log
-	if (@$a['task_log_problem']>0) {
-		$s .= ('<td align="center" valign="middle"><a href="?m=tasks&a=view&task_id=' 
-			   . $a['task_id'] . '&tab=0&problem=1">' 
-			   . dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') 
-			   . '</a></td>');
-	} else if ($canViewLog && $a['task_dynamic'] != 1) {
-		$s .= ("\n\t" . '<td align="center"><a href="?m=tasks&a=view&task_id=' . $a['task_id'] 
-			   . '&tab=1">' . $AppUI->_('Log') . '</a></td>');
+	$s .= ("\n\t" . '<td align="center">');
+	if ($canViewLog && $a['task_dynamic'] != 1) {
+		$s .= ('<a href="?m=tasks&a=view&task_id=' . $a['task_id'] . '&tab=1">' 
+			   . $AppUI->_('Log') . '</a>');
 	} else {
-		$s .= "\n\t" . '<td align="center">' . $AppUI->_('-') . '</td>';
+		$s .= $AppUI->_('-');
 	}
+	$s .= ('</td>');
 	// percent complete and priority
 	$s .= ("\n\t" . '<td align="right">' . intval($a['task_percent_complete']) . '%</td>' 
 		   . "\n\t" . '<td align="center" nowrap="nowrap">');
-	if ($a['task_priority'] < 0) {
-		$s .= "\n\t\t" . '<img src="./images/icons/priority-' . -$a['task_priority'] 
-		  . '.gif" width="13" height="16">';
-	} else if ($a['task_priority'] > 0) {
-		$s .= "\n\t\t" . '<img src="./images/icons/priority+' . $a['task_priority'] 
-		  . '.gif" width="13" height="16">';
+	if (@$a['task_log_problem']>0) {
+		$s .= ('<a href="?m=tasks&a=view&task_id=' 
+			   . $a['task_id'] . '&tab=0&problem=1">' 
+			   . dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') 
+			   . '</a>');
+	} else if ($a['task_priority'] != 0) {
+		$s .= "\n\t\t" . dPshowImage(('./images/icons/priority' . (($a['task_priority'] > 0) 
+																   ? '+' : '-') 
+									  . abs($a['task_priority']) . '.gif'), 13, 16, '', '');
 	}
 	$s .= ((@$a['file_count'] > 0) ? '<img src="./images/clip.png" alt="F">' : '') . '</td>';
 	// dots
