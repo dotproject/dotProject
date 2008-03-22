@@ -208,6 +208,11 @@ class CTask extends CDpObject
 			}
 		} // parent
 		
+		//Is dynamic and no child
+		if ($this->task_dynamic == 1 && empty($this->getChildren())) {
+			return 'BadDyn_NoChild';
+		}
+		
 		return NULL;
 	}
 	

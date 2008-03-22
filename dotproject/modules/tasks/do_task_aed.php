@@ -22,10 +22,9 @@ if ($sub_form) {
 	// in add-edit, so set it to what it should be
 	$AppUI->setState('TaskAeTabIdx', $_POST['newTab']);
 	if (isset($_POST['subform_processor'])) {
-		if (isset($_POST['subform_module']))
-			$mod = $AppUI->checkFileName($_POST['subform_module']);
-		else
-			$mod = 'tasks';
+		$mod = ((isset($_POST['subform_module'])) 
+				? $AppUI->checkFileName($_POST['subform_module']) 
+				: 'tasks');
 		$proc = $AppUI->checkFileName($_POST['subform_processor']);
 		include DP_BASE_DIR."/modules/$mod/$proc.php";
 	} 
@@ -35,16 +34,18 @@ if ($sub_form) {
 	foreach (findTabModules('tasks', 'addedit') as $mod) {
 		$fname = DP_BASE_DIR . "/modules/$mod/tasks_dosql.addedit.php";
 		dprint(__FILE__, __LINE__, 3, "checking for $fname");
-		if (file_exists($fname))
+		if (file_exists($fname)) {
 			require_once $fname;
+		}
 	}
 
 	$obj = new CTask();
 
 	// If we have an array of pre_save functions, perform them in turn.
 	if (isset($pre_save)) {
-		foreach ($pre_save as $pre_save_function)
+		foreach ($pre_save as $pre_save_function) {
 			$pre_save_function();
+		}
 	} else {
 		dprint(__FILE__, __LINE__, 2, "No pre_save functions.");
 	}
@@ -60,8 +61,9 @@ if ($sub_form) {
 		$obj->bind($_POST);
 	}
 
-	if (! $obj->task_owner)
+	if (! $obj->task_owner) {
 		$obj->task_owner = $AppUI->user_id;
+	}
 
 	if (!$obj->bind( $_POST )) {
 		$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
@@ -98,10 +100,7 @@ if ($sub_form) {
 	$hperc_assign_ar = array();
 	for ($i = 0, $xi = sizeof($tmp_ar); $i < $xi; $i++) {
 		$tmp = explode("=", $tmp_ar[$i]);
-		if (count($tmp) > 1)
-			$hperc_assign_ar[$tmp[0]] = $tmp[1];
-		else
-			$hperc_assign_ar[$tmp[0]] = 100;
+		$hperc_assign_ar[$tmp[0]] = ((count($tmp) > 1) ? $tmp[1] : 100);
 	}
 
 	// let's check if there are some assigned departments to task
@@ -173,55 +172,54 @@ if ($sub_form) {
 			// we will reset the task's start date based upon dependencies
 			// and shift the end date appropriately
 			if ($adjustStartDate && !is_null($hdependencies)) {
-
-							// load already stored task data for this task
-							$tempTask = new CTask();
-							$tempTask->load( $obj->task_id );
-
-							// shift new start date to the last dependency end date
-							$nsd = new CDate ($tempTask->get_deps_max_end_date( $tempTask ) );
-							
-							// prefer Wed 8:00 over Tue 16:00 as start date
-							$nsd = $nsd->next_working_day();
-							 
-							// prepare the creation of the end date
-							$ned = new CDate();
-							$ned->copy($nsd);
-							
-							if (empty($obj->task_start_date)) {
-								// appropriately calculated end date via start+duration
-								$ned->addDuration($obj->task_duration, $obj->task_duration_type);		
-								
-							} else { 			
-								// calc task time span start - end
-								$d = $tsd->calcDuration($ted);
-	
-								// Re-add (keep) task time span for end date.
-								// This is independent from $obj->task_duration.
-								// The value returned by Date::Duration() is always in hours ('1') 
-								$ned->addDuration($d, '1');
-	
-							}
-							
-							// prefer tue 16:00 over wed 8:00 as an end date
-							$ned = $ned->prev_working_day();
-							
-							$obj->task_start_date = $nsd->format( FMT_DATETIME_MYSQL );
-							$obj->task_end_date = $ned->format( FMT_DATETIME_MYSQL );						
-							
-							$q = new DBQuery;
-					    $q->addTable('tasks', 't');							
-							$q->addUpdate('task_start_date', $obj->task_start_date);	
-              $q->addUpdate('task_end_date', $obj->task_end_date);
-              $q->addWhere('task_id = '.$obj->task_id);
-              $q->addWhere('task_dynamic != 1');
-              $q->exec();
-              $q->clear();
-						}
-
+				
+				// load already stored task data for this task
+				$tempTask = new CTask();
+				$tempTask->load( $obj->task_id );
+				
+				// shift new start date to the last dependency end date
+				$nsd = new CDate ($tempTask->get_deps_max_end_date( $tempTask ) );
+				
+				// prefer Wed 8:00 over Tue 16:00 as start date
+				$nsd = $nsd->next_working_day();
+				
+				// prepare the creation of the end date
+				$ned = new CDate();
+				$ned->copy($nsd);
+				
+				if (empty($obj->task_start_date)) {
+					// appropriately calculated end date via start+duration
+					$ned->addDuration($obj->task_duration, $obj->task_duration_type);		
+					
+				} else { 			
+					// calc task time span start - end
+					$d = $tsd->calcDuration($ted);
+					
+					// Re-add (keep) task time span for end date.
+					// This is independent from $obj->task_duration.
+					// The value returned by Date::Duration() is always in hours ('1') 
+					$ned->addDuration($d, '1');
+					
+				}
+				
+				// prefer tue 16:00 over wed 8:00 as an end date
+				$ned = $ned->prev_working_day();
+				
+				$obj->task_start_date = $nsd->format( FMT_DATETIME_MYSQL );
+				$obj->task_end_date = $ned->format( FMT_DATETIME_MYSQL );						
+				
+				$q = new DBQuery;
+				$q->addTable('tasks', 't');							
+				$q->addUpdate('task_start_date', $obj->task_start_date);	
+				$q->addUpdate('task_end_date', $obj->task_end_date);
+				$q->addWhere('task_id = '.$obj->task_id);
+				$q->addWhere('task_dynamic != 1');
+				$q->exec();
+				$q->clear();
+			}
 		}
+		
 		// If there is a set of post_save functions, then we process them
-
 		if (isset($post_save)) {
 			foreach ($post_save as $post_save_function) {
 				$post_save_function();
