@@ -1130,7 +1130,7 @@ class CTask extends CDpObject
 		$deny = $proj->getDeniedRecords($AppUI->user_id);
 		// check permissions on tasks
 		$obj = new CTask();
-		$allow = $obj->getAllowedSQL($AppUI->user_id);
+		$allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
 		
 		$q->addTable('tasks', 't');
 		if ($user_id) {
