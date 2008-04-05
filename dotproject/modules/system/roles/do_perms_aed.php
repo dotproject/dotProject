@@ -17,8 +17,9 @@ if ($del) {
 		$AppUI->redirect();
 	}
 } else {
-	// No longer have update, only add.
-	if ($obj->addRolePermission()) {
+	// No longer have update, only add, also addRolePermssion is
+	// no longer different to addUserPermission.
+	if ($obj->addUserPermission()) {
 		$AppUI->setMsg( 'added', UI_MSG_OK, true );
 	} else {
 		$AppUI->setMsg( $obj->msg(), UI_MSG_ERROR );

@@ -779,12 +779,6 @@ class dPacl extends gacl_api {
       $this->debug_text("you must select at least one permission");
       return false;
     }
-    /*
-    echo "<pre>\n";
-    var_dump($_POST);
-    echo "</pre>\n";
-    return true;
-    */
 
     $mod_type = substr($_POST['permission_module'],0,4);
     $mod_id = substr($_POST['permission_module'],4);
@@ -811,9 +805,15 @@ class dPacl extends gacl_api {
 	$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
       }
     }
-    $aro_info = $this->get_object_data($_POST['permission_user'], 'aro');
-    $aro_map = array();
-    $aro_map[$aro_info[0][0]][] = $aro_info[0][1];
+    if (!empty($_POST['role_id'])) {
+	$user_map = null;
+    	$role_map = array($_POST['role_id']);
+    } else {
+	$role_map = null;
+        $aro_info = $this->get_object_data($_POST['permission_user'], 'aro');
+	$user_map = array();
+	$user_map[$aro_info[0][0]][] = $aro_info[0][1];
+    }
     // Build the permissions info
     $type_map = array();
     foreach ($_POST['permission_type'] as $tid) {
@@ -824,8 +824,8 @@ class dPacl extends gacl_api {
     }
     return $this->add_acl(
       $type_map,
-      $aro_map,
-      null,
+      $user_map,
+      $role_map,
       $mod_mod,
       $mod_group,
       $_POST['permission_access'],
@@ -835,44 +835,11 @@ class dPacl extends gacl_api {
       "user");
   }
 
+  /**
+   * Deprecated, now just calls addUserPermission
+   */
   function addRolePermission() {
-    if (! is_array($_POST['permission_type'])) {
-      $this->debug_text("you must select at least one permission");
-      return false;
-    }
-
-    $mod_type = substr($_POST['permission_module'],0,4);
-    $mod_id = substr($_POST['permission_module'],4);
-    $mod_group = null;
-    $mod_mod = null;
-    if ($mod_type == 'grp,') {
-      $mod_group = array($mod_id);
-    } else {
-      // Get the module information
-      $mod_info = $this->get_object_data($mod_id, 'axo');
-      $mod_mod = array();
-      $mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
-    }
-    $aro_map = array($_POST['role_id']);
-    // Build the permissions info
-    $type_map = array();
-    foreach ($_POST['permission_type'] as $tid) {
-      $type = $this->get_object_data($tid, 'aco');
-      foreach ($type as $t) {
-	$type_map[$t[0]][] = $t[1];
-      }
-    }
-    return $this->add_acl(
-      $type_map,
-      null,
-      $aro_map,
-      $mod_mod,
-      $mod_group,
-      $_POST['permission_access'],
-      1,
-      null,
-      null,
-      "user");
+      return $this->addUserPermission();
   }
 
   // Some function overrides.
