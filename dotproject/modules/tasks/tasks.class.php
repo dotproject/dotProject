@@ -644,7 +644,7 @@ class CTask extends CDpObject
 		if (!empty($this->task_id)) {
 			$this->updateDependencies($this->getDependencies());
 		} else {
-			print_r($this);
+			// print_r($this);
 		}
 		
 		if (!$ret) {

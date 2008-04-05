@@ -351,8 +351,6 @@ for ($x=0; $x < $nums; $x++) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 
-echo ('<pre>' . print_r($projects[$row['task_project']]['tasks'], true) . '</pre>');
-
 $showEditCheckbox = ((isset($canEdit) && $canEdit && $dPconfig['direct_edit_assignment'])?true:false);
 
 ?>
