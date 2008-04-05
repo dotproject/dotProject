@@ -123,14 +123,14 @@ foreach ($tasks as $tId=>$task) {
 }
 
 // sorting tasks
-if ( $task_sort_item1 != "" ) {
-	if ( $task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2 )
-		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1
-								  , $task_sort_item2, $task_sort_order2, $task_sort_type2 );
-	else $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1 );
-} 
-
-else { // All this appears to already be handled in todo.php ... should consider deleting this else block
+if ($task_sort_item1 != '') {
+	if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
+		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1, 
+							 $task_sort_item2, $task_sort_order2, $task_sort_type2);
+	} else {
+		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1);
+	}
+}else { // All this appears to already be handled in todo.php ... should consider deleting this else block
 	/* we have to calculate the end_date via start_date+duration for 
 	 ** end='0000-00-00 00:00:00' if array_csort function is not used
 	 ** as it is normally done in array_csort function in order to economise

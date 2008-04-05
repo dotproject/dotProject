@@ -56,7 +56,7 @@ if (isset($_GET['pin'])) {
 	$AppUI->redirect('', -1);
 }
 
-if($task_id > 0){
+if ($task_id > 0) {
 	$_GET['open_task_id'] = $task_id;
 }
 
@@ -90,10 +90,10 @@ $task_project = intval(dPgetParam($_GET, 'task_project', null));
 //$task_id = intval(dPgetParam($_GET, 'task_id', null));
 
 $task_sort_item1 = dPgetParam($_GET, 'task_sort_item1', '');
-$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', '');
-$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
-$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', '');
+$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', 0);
 $task_sort_order1 = intval(dPgetParam($_GET, 'task_sort_order1', 0));
+$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
+$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', 0);
 $task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 if (isset($_POST['show_task_options'])) {
 	$AppUI->setState('TaskListShowIncomplete', dPgetParam($_POST, 'show_incomplete', 0));
@@ -119,7 +119,7 @@ $q->addQuery('company_name, project_id, project_color_identifier, project_name, 
 			 . ', t1.task_duration_type)) AS project_percent_complete ');
 $q->addJoin('companies', 'com', 'company_id = project_company');
 $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-$q->addWhere($where_list.(($where_list)?' AND ':'').'t1.task_id = t1.task_parent');
+$q->addWhere($where_list . (($where_list) ? ' AND ' : '') . 't1.task_id = t1.task_parent');
 $q->addGroup('project_id');
 $q->addOrder('project_name');
 $psql = $q->prepare();
@@ -129,7 +129,7 @@ $q->clear();
 $q->addTable('projects');
 $q->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
 $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-if($where_list) {
+if ($where_list) {
 	$q->addWhere($where_list);
 }
 $q->addGroup('project_id');
@@ -166,7 +166,8 @@ $select = ('distinct tasks.task_id, task_parent, task_name, task_start_date, tas
 		   . 'usernames.user_id, task_milestone, assignees.user_username as assignee_username, ' 
 		   . 'count(distinct assignees.user_id) as assignee_count, '
 		   . 'co.contact_first_name, co.contact_last_name, ' 
-		   . 'count(distinct files.file_task) as file_count, tlog.task_log_problem');
+		   . 'count(distinct files.file_task) as file_count, ' 
+		   . 'if(tlog.task_log_problem IS NULL, 0, tlog.task_log_problem) AS task_log_problem');
 $from = 'tasks';
 $mods = $AppUI->getActiveModules();
 if (!empty($mods['history']) && getPermission('history', 'view')) {
@@ -350,6 +351,8 @@ for ($x=0; $x < $nums; $x++) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 
+echo ('<pre>' . print_r($projects[$row['task_project']]['tasks'], true) . '</pre>');
+
 $showEditCheckbox = ((isset($canEdit) && $canEdit && $dPconfig['direct_edit_assignment'])?true:false);
 
 ?>
@@ -468,7 +471,7 @@ function chAssignment(project_id, rmUser, del) {
   <th width="10"><?php echo $AppUI->_('Pin'); ?></th>
   <th width="10"><?php echo $AppUI->_('New Log'); ?></th>
   <th width="20"><?php echo $AppUI->_('Work');?></th>
-  <th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+  <th align="center"><?php sort_by_item_title('P', 'task_log_problem_priority', SORT_NUMERIC); ?></th>
   <th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING);?></th>
   <th nowrap="nowrap"><?php sort_by_item_title('Task Creator', 'user_username', SORT_STRING);?></th>
   <th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users')?></th>

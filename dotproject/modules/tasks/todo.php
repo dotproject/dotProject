@@ -10,13 +10,13 @@ $showEditCheckbox = true;
 $project_on_hold_status = 4;
 $perms =& $AppUI->acl();
 
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'ToDoTab', $_GET['tab'] );
+if (isset($_GET['tab'])) {
+	$AppUI->setState('ToDoTab', $_GET['tab']);
 }
-$tab = $AppUI->getState( 'ToDoTab' ) !== NULL ? $AppUI->getState( 'ToDoTab' ) : 0;
+$tab = $AppUI->getState('ToDoTab') !== NULL ? $AppUI->getState('ToDoTab') : 0;
 
-$project_id = intval( dPgetParam( $_GET, 'project_id', 0 ) );
-$date = (!dPgetParam( $_GET, 'date', '' ) == '') ?  $this_day->format( FMT_TIMESTAMP_DATE ) : intval( dPgetParam( $_GET, 'date', '' ));
+$project_id = intval(dPgetParam($_GET, 'project_id', 0));
+$date = (!dPgetParam($_GET, 'date', '') == '') ?  $this_day->format(FMT_TIMESTAMP_DATE) : intval(dPgetParam($_GET, 'date', ''));
 $user_id    = $AppUI->user_id;
 $no_modify	= false;
 $other_users	= false;
@@ -33,52 +33,52 @@ if($perms->checkModule("admin","view")){ // let's see if the user has sysadmin a
 }
 
 // check permissions
-$canEdit = $perms->checkModule( $m, 'edit' );
+$canEdit = $perms->checkModule($m, 'edit');
 
 // retrieve any state parameters
-if (isset( $_POST['show_form'] )) {
-	$AppUI->setState( 'TaskDayShowArc', dPgetParam( $_POST, 'show_arc_proj', 0 ) );
-	$AppUI->setState( 'TaskDayShowLow', dPgetParam( $_POST, 'show_low_task', 0 ) );
-	$AppUI->setState( 'TaskDayShowHold', dPgetParam($_POST, 'show_hold_proj', 0 ) );
-	$AppUI->setState( 'TaskDayShowDyn', dPgetParam($_POST, 'show_dyn_task', 0) );
-	$AppUI->setState( 'TaskDayShowPin', dPgetParam($_POST, 'show_pinned', 0));
-	$AppUI->setState( 'TaskDayShowEmptyDate', dPgetParam($_POST, 'show_empty_date', 0));
+if (isset($_POST['show_form'])) {
+	$AppUI->setState('TaskDayShowArc', dPgetParam($_POST, 'show_arc_proj', 0));
+	$AppUI->setState('TaskDayShowLow', dPgetParam($_POST, 'show_low_task', 0));
+	$AppUI->setState('TaskDayShowHold', dPgetParam($_POST, 'show_hold_proj', 0));
+	$AppUI->setState('TaskDayShowDyn', dPgetParam($_POST, 'show_dyn_task', 0));
+	$AppUI->setState('TaskDayShowPin', dPgetParam($_POST, 'show_pinned', 0));
+	$AppUI->setState('TaskDayShowEmptyDate', dPgetParam($_POST, 'show_empty_date', 0));
 
 }
 // Required for today view.
 global $showArcProjs, $showLowTasks, $showHoldProjs,$showDynTasks,$showPinned, $showEmptyDate;
 
-$showArcProjs = $AppUI->getState( 'TaskDayShowArc', 0 );
-$showLowTasks = $AppUI->getState( 'TaskDayShowLow', 1);
-$showHoldProjs = $AppUI->getState( 'TaskDayShowHold', 0);
+$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
+$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
+$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
 $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
-$task_sort_item1 = dPgetParam( $_GET, 'task_sort_item1', '' );
-$task_sort_type1 = dPgetParam( $_GET, 'task_sort_type1', '' );
-$task_sort_item2 = dPgetParam( $_GET, 'task_sort_item2', '' );
-$task_sort_type2 = dPgetParam( $_GET, 'task_sort_type2', '' );
-$task_sort_order1 = intval( dPgetParam( $_GET, 'task_sort_order1', 0 ) );
-$task_sort_order2 = intval( dPgetParam( $_GET, 'task_sort_order2', 0 ) );
+$task_sort_item1 = dPgetParam($_GET, 'task_sort_item1', '');
+$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', 0);
+$task_sort_order1 = intval(dPgetParam($_GET, 'task_sort_order1', 0));
+$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
+$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', 0);
+$task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 
 // if task priority set and items selected, do some work
-$task_priority = dPgetParam( $_POST, 'task_priority', 99 );
-$selected = dPgetParam( $_POST, 'selected_task', 0 );
+$task_priority = dPgetParam($_POST, 'task_priority', 99);
+$selected = dPgetParam($_POST, 'selected_task', 0);
 
-if (is_array($selected) && count( $selected )) {
+if (is_array($selected) && count($selected)) {
 	foreach ($selected as $key => $val) {
-		if ( $task_priority == 'c' ) {
+		if ($task_priority == 'c') {
 			// mark task as completed
 			$sql = "UPDATE tasks SET task_percent_complete=100 WHERE task_id=$val";
-		} else if ( $task_priority == 'd' ) {
+		} else if ($task_priority == 'd') {
 			// delete task
 			$sql = "DELETE FROM tasks WHERE task_id=$val";
-		} else if ( $task_priority > -2 && $task_priority < 2 ) {
+		} else if ($task_priority > -2 && $task_priority < 2) {
 			// set priority
 			$sql = "UPDATE tasks SET task_priority=$task_priority WHERE task_id=$val";
 		}
-		db_exec( $sql );
+		db_exec($sql);
 		echo db_error();		
 	}
 }
@@ -104,7 +104,7 @@ $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' 
 
 $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere("ut.user_id = '$user_id'");
-$q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
+$q->addWhere('(ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
 $q->addWhere("ta.task_status = '0'");
 $q->addWhere("pr.project_id = ta.task_project");
 if (!$showArcProjs)
@@ -135,7 +135,7 @@ $sql = $q->prepare();
 //echo "<pre>$sql</pre>";
 $q->clear();
 global $tasks;
-$tasks = db_loadList( $sql );
+$tasks = db_loadList($sql);
 
 /* we have to calculate the end_date via start_date+duration for 
 ** end='0000-00-00 00:00:00' 
@@ -160,11 +160,11 @@ $priorities = array(
 );
 
 global $durnTypes;
-$durnTypes = dPgetSysVal( 'TaskDurationType' );
+$durnTypes = dPgetSysVal('TaskDurationType');
 
 if (!@$min_view) {
-	$titleBlock = new CTitleBlock( 'My Tasks To Do', 'applet-48.png', $m, "$m.$a" );
-	$titleBlock->addCrumb( "?m=tasks", "tasks list" );
+	$titleBlock = new CTitleBlock('My Tasks To Do', 'applet-48.png', $m, "$m.$a");
+	$titleBlock->addCrumb("?m=tasks", "tasks list");
 	$titleBlock->show();
 }
 
@@ -180,13 +180,13 @@ if ($m == 'tasks' && $a == 'todo') {
 	<td width="80%" valign="top">
   <?php
   // Tabbed information boxes
-  $tabBox = new CTabBox( '?m=tasks&a=todo', DP_BASE_DIR . '/modules/', $tab );
-  $tabBox->add( 'tasks/todo_tasks_sub', 'My Tasks' );
-  $tabBox->add( 'tasks/todo_gantt_sub', 'My Gantt' );
+  $tabBox = new CTabBox('?m=tasks&a=todo', DP_BASE_DIR . '/modules/', $tab);
+  $tabBox->add('tasks/todo_tasks_sub', 'My Tasks');
+  $tabBox->add('tasks/todo_gantt_sub', 'My Gantt');
 	// Wouldn't it be better to user $tabBox->loadExtras('tasks', 'todo'); and then
 	// add tasks_tab.todo.my_open_requests.php in helpdesk?  
   if ($AppUI->isActiveModule('helpdesk')){ 
-  $tabBox->add( 'helpdesk/vw_idx_my', 'My Open Requests' );
+  $tabBox->add('helpdesk/vw_idx_my', 'My Open Requests');
   }
   $tabBox->show();
   ?>

@@ -2480,9 +2480,30 @@ function findchild(&$tarr, $parent, $level=0) {
 	}
 }
 
-/* please throw this in an include file somewhere, its very useful */
+/*
+array_csort($data_array [,$col, $order, $type [, $col, $order, $type [...]]]);
 
-function array_csort() {   //coded by Ichier2003
+$data_array - multi-dimensional array of query results to sort
+$col - data table "column" to sort by
+$order - SORT_ASC or SORT_DESC flag values
+$type - SORT_REGULAR, SORT_NUMERIC, or SORT_STRING flag values
+
+...any number of column, order, and type values can be passed 
+but they must be specified in that order and all sets except 
+the last must be defined fully
+
+Examples - 
+valid:
+array_csort($data_array,$col, $order, $type, $col2, $order2, $type2);
+array_csort($data_array,$col, $order, $type, $col2, $order2,);
+array_csort($data_array,$col, $order, $type, $col2, $type2);
+array_csort($data_array);
+
+invalid:
+array_csort($data_array,$col, $type, $col2, $order2, $type2);
+
+*/
+function array_csort() {   
 
 	$args = func_get_args();
 	$marray = array_shift($args);
@@ -2495,9 +2516,10 @@ function array_csort() {   //coded by Ichier2003
 	$msortline = 'return(array_multisort(';
 	$sortarr = array();
 	foreach ($args as $arg) {
-		$i++;
-		if (is_string($arg)) {
-			for ($j=0, $xj = count($marray); $j < $xj; $j++) {
+		if ($i % 3) {
+			$msortline .= $arg . ', ';
+		} else {
+			foreach ($marray as $j => $item) {
 				
 				/* we have to calculate the end_date via start_date+duration for 
 				 ** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
@@ -2512,18 +2534,16 @@ function array_csort() {   //coded by Ichier2003
 				 ** via start_date+duration, it may be that the order gets wrong due to the fact 
 				 ** that sorting has taken place _before_.
 				 */
-				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
-					$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
+				if ($item['task_end_date'] == '0000-00-00 00:00:00') {
+					$item['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
 				}
-				$sortarr[$i][] = $marray[$j][$arg];
+				$sortarr[$i][$j] = $marray[$j][$arg];
 			}
-		} else {
-			$sortarr[$i] = $arg;
+			$msortline .= '$sortarr[' . $i . '], ';
 		}
-		$msortline .= '$sortarr[' . $i . '],';
+		$i++;
 	}
 	$msortline .= '$marray));';
-	
 	eval($msortline);
 	
 	return $marray;
@@ -2552,6 +2572,10 @@ function sort_by_item_title($title, $item_name, $item_type, $a='') {
 	if ($task_sort_item1 == $item_name) {
 		$item_order = $task_sort_order1;
 	}
+	//Hack for Problem Log/Priority Sorting
+	if ($item_name == 'task_log_problem_priority' && $task_sort_item2 == 'task_priority') {
+		$item_order = $task_sort_order2;
+	}
 	
 	if (isset($item_order)) {
 		echo ('<img src="./images/arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') 
@@ -2569,17 +2593,26 @@ function sort_by_item_title($title, $item_name, $item_type, $a='') {
 		echo ('<a href="./index.php?m=projects' 
 			  . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
 	}
-	echo '&task_sort_item1=' . $item_name;
-	echo '&task_sort_type1=' . $item_type;
-	echo '&task_sort_order1=' . $item_order;
-	if ($task_sort_item1 == $item_name) {
-		echo '&task_sort_item2=' . $task_sort_item2;
-		echo '&task_sort_type2=' . $task_sort_type2;
-		echo '&task_sort_order2=' . $task_sort_order2;
+	
+	if ($item_name == 'task_log_problem_priority') {
+		echo '&task_sort_item1=task_log_problem';
+		echo '&task_sort_type1=' . $item_type;
+		echo '&task_sort_order1=' . SORT_DESC;
+		echo '&task_sort_item2=task_priority';
+		echo '&task_sort_type2=' . $item_type;
+		echo '&task_sort_order2=' . $item_order;
 	} else {
-		echo '&task_sort_item2=' . $task_sort_item1;
-		echo '&task_sort_type2=' . $task_sort_type1;
-		echo '&task_sort_order2=' . $task_sort_order1;
+		echo '&task_sort_item1=' . $item_name;
+		echo '&task_sort_type1=' . $item_type;
+		echo '&task_sort_order1=' . $item_order;
+		
+		if ((($task_sort_item1 && $task_sort_item1 != $item_name) 
+			 || $task_sort_item2) && $task_sort_item2 != 'task_priority')  {
+			$item_num = (($task_sort_item1 == $item_name) ? '2' : '1');
+			echo '&task_sort_item2=' . ${'task_sort_item' . $item_num};
+			echo '&task_sort_type2=' . ${'task_sort_type' . $item_num};
+			echo '&task_sort_order2=' . ${'task_sort_order' . $item_num};
+		}
 	}
 	echo '" class="hdr">';
 	

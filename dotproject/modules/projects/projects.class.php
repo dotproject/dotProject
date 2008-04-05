@@ -588,8 +588,9 @@ function projects_list_data($user_id = false) {
 	             . ', p.project_end_date, p.project_color_identifier, p.project_company' 
 	             . ', p.project_status, p.project_priority, com.company_name' 
 	             . ', com.company_description, tc.critical_task, tc.project_actual_end_date' 
-	             . ', tp.task_log_problem, tt.total_tasks, tsy.my_tasks' 
-	             . ', ts.project_percent_complete, ts.project_duration, u.user_username');
+	             . ', if(tp.task_log_problem IS NULL, 0, tp.task_log_problem) AS task_log_problem' 
+				 . ', tt.total_tasks, tsy.my_tasks, ts.project_percent_complete' 
+				 . ', ts.project_duration, u.user_username');
 	$q->addJoin('companies', 'com', 'p.project_company = com.company_id');
 	$q->addJoin('users', 'u', 'p.project_owner = u.user_id');
 	$q->addJoin('tasks_critical', 'tc', 'p.project_id = tc.task_project');
