@@ -19,6 +19,9 @@ db_connect(dPgetConfig('dbhost'), dPgetConfig('dbname'),
 	dPgetConfig('dbuser'), dPgetConfig('dbpass'), dPgetConfig('dbpersist'));
 
 	
+// Quick hack to ensure MySQL behaves itself (#2323)
+$db->Execute("SET sql_mode := ''");
+
 /*
 * Having successfully established the database connection now,
 * we will hurry up to load the system configuration details from the database.

@@ -74,6 +74,9 @@ if(!empty($db)) {
     $existing_db = $db->SelectDB($dbname);
 } else { $dbc = false; }
 
+// Quick hack to ensure MySQL behaves itself (#2323)
+$db->Execute("SET sql_mode := ''");
+
 
 $current_version = $dp_version_major . '.' . $dp_version_minor;
 $current_version .= isset($dp_version_patch) ? ('.'.$dp_version_patch) : '';
