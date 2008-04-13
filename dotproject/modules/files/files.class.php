@@ -707,6 +707,7 @@ function getFolderSelectList() {
 	global $AppUI;
 	
 	$folder = new CFileFolder();
+	$allowed_folders = array();
 	$allowed_folders_pre = $folder->getAllowedRecords($AppUI->user_id, 
 													  ('file_folder_id, file_folder_name' 
 													   . ', file_folder_parent'), 
