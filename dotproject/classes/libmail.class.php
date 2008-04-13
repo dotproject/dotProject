@@ -746,8 +746,8 @@ function _addressesEncode(&$aaddr, $hdr)
     $n = count($aaddr);
     $this->xheaders[$hdr] = $this->_addressEncode($aaddr[0], strlen("$hdr: "));
     for ($i=1 /*skip first one*/; $i<$n; ++$i ) {
-        $val = $this->_addressEncode($aaddr[$i], 1);
-        $this->xheaders[$hdr] .= ",\r\n $val" ;
+        $val = $this->_addressEncode($aaddr[$i], 8);
+        $this->xheaders[$hdr] .= ",\r\n\t$val" ;
     }
 }
 
