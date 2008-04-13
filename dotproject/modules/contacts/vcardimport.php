@@ -35,15 +35,20 @@ if ( isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && ($_GET['suppres
 			$contactValues["contact_first_name"] = $ci['N'][0]['value'][1][0];
 			$contactValues["contact_title"] = $ci['N'][0]['value'][3][0];
 			$contactValues["contact_birthday"] = $ci['BDAY'][0]['value'][0][0];
-			$contactValues["contact_company"] = $ci['UID'][0]['value'][0][0];
+			$contactValues["contact_company"] = $ci['ORG'][0]['value'][0][0];
 			$contactValues["contact_type"] = $ci['N'][0]['value'][2][0];
 			$contactValues["contact_email"] = $ci['EMAIL'][0]['value'][0][0];
 			$contactValues["contact_email2"] = $ci['EMAIL'][1]['value'][0][0];
 			$contactValues["contact_phone"] = $ci['TEL'][0]['value'][0][0];
 			$contactValues["contact_phone2"] = $ci['TEL'][1]['value'][0][0];
 			$contactValues["contact_mobile"] = $ci['TEL'][2]['value'][0][0];
-			$contactValues["contact_address1"] = $ci['ADR'][0]['value'][2][0];
-			$contactValues["contact_address2"] = $ci['ADR'][0]['value'][1][0].', '.$ci['ORG'][0]['value'][0][0];
+			if ($ci['ADR'][0]['value'][1][0]) {
+				$contactValues['contact_address1'] = $ci['ADR']['0']['value']['1']['0'];
+				$contactValues['contact_address2'] = $ci['ADR']['0']['value']['2']['0'];
+			} else {
+				$contactValues['contact_address1'] = $ci['ADR']['0']['value']['2']['0'];
+				$contactValues['cotnact_address2'] = '';
+			}
 			$contactValues["contact_city"] = $ci['ADR'][0]['value'][3][0];
 			$contactValues["contact_state"] = $ci['ADR'][0]['value'][4][0];
 			$contactValues["contact_zip"] = $ci['ADR'][0]['value'][5][0];
