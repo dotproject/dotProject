@@ -197,62 +197,65 @@ if ($pinned_only) {
 }
 
 $f = (($f) ? $f : '');
-$never_show_with_dots = array('children',''); //used when displaying tasks
+$never_show_with_dots = array(/*'children', */''); //used when displaying tasks
 switch ($f) {
- case 'all':
-	 break;
- case 'myfinished7days':
-	 $where .= ' AND user_tasks.user_id = '.$user_id;
- case 'allfinished7days':		 // patch 2.12.04 tasks finished in the last 7 days
-	 $from = 'user_tasks, '.$from;
-	 $where .= (' AND task_project = projects.project_id AND user_tasks.task_id = tasks.task_id '
+	case 'all':
+		break;
+	case 'myfinished7days':
+		$where .= ' AND user_tasks.user_id = '.$user_id;
+	case 'allfinished7days':		 // patch 2.12.04 tasks finished in the last 7 days
+		$from = 'user_tasks, '.$from;
+		$where .= (' AND task_project = projects.project_id AND user_tasks.task_id = tasks.task_id '
 				. "AND task_percent_complete = 100 AND task_end_date >= '"
 				. date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d')-7, date('Y'))) . "'");
-	 break;
- case 'children':
-	 // patch 2.13.04 2, fixed ambigious task_id
-	 $where .= ' AND task_parent = ' . $task_id . ' AND tasks.task_id <> ' . $task_id;
-	 break;
- case 'myproj':
-	 $where .= ' AND project_owner = ' . $user_id;
-	 break;
- case 'mycomp':
-	 if(!$AppUI->user_company){
-		 $AppUI->user_company = 0;
-	 }
-	 $where .= ' AND project_company = ' . $AppUI->user_company;
-	 break;
- case 'myunfinished':
-	 $from = 'user_tasks, '.$from;
-	 // This filter checks all tasks that are not already in 100%
-	 // and the project is not on hold nor completed
-	 // patch 2.12.04 finish date required to be consider finish
-	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
+		break;
+	case 'children':
+		$task_child_search = new CTask();
+		$task_child_search->peek($task_id);
+		$childrenlist = $task_child_search->getDeepChildren();
+		
+		$where .= ' AND tasks.task_id IN (' . implode(',', $childrenlist) . ')';
+		break;
+	case 'myproj':
+		$where .= ' AND project_owner = ' . $user_id;
+		break;
+	case 'mycomp':
+		if(!$AppUI->user_company){
+			$AppUI->user_company = 0;
+		}
+		$where .= ' AND project_company = ' . $AppUI->user_company;
+		break;
+	case 'myunfinished':
+		$from = 'user_tasks, '.$from;
+		// This filter checks all tasks that are not already in 100%
+		// and the project is not on hold nor completed
+		// patch 2.12.04 finish date required to be consider finish
+		$where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
 				. 'AND user_tasks.task_id = tasks.task_id ' 
 				. "AND (task_percent_complete < 100 OR task_end_date = '') "
 				. 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
 				. 'AND projects.project_status <> 5');
-	 break;
- case 'allunfinished':
-	 // patch 2.12.04 finish date required to be consider finish
-	 // patch 2.12.04 2, also show unassigned tasks
-   $where .= (' AND task_project = projects.project_id ' 
-			  . "AND (task_percent_complete < 100 OR task_end_date = '') " 
-			  . 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
-			  . 'AND projects.project_status <> 5');
-	 break;
- case 'unassigned':
-	 $join .= ' LEFT JOIN user_tasks ON tasks.task_id = user_tasks.task_id';
-	 $where .= ' AND user_tasks.task_id IS NULL';
-	 break;
- case 'taskcreated':
-	 $where .= ' AND task_owner = ' . $user_id;
-	 break;
+		break;
+	case 'allunfinished':
+		// patch 2.12.04 finish date required to be consider finish
+		// patch 2.12.04 2, also show unassigned tasks
+		$where .= (' AND task_project = projects.project_id ' 
+				. "AND (task_percent_complete < 100 OR task_end_date = '') " 
+				. 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
+				. 'AND projects.project_status <> 5');
+		break;
+	case 'unassigned':
+		$join .= ' LEFT JOIN user_tasks ON tasks.task_id = user_tasks.task_id';
+		$where .= ' AND user_tasks.task_id IS NULL';
+		break;
+	case 'taskcreated':
+		$where .= ' AND task_owner = ' . $user_id;
+		break;
  default:
-	 $from = 'user_tasks, '.$from;
-	 $where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
+		$from = 'user_tasks, '.$from;
+		$where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id . ' ' 
 				. 'AND user_tasks.task_id = tasks.task_id');
-	 break;
+		break;
 }
 
 if ($project_id && $showIncomplete) {
@@ -637,11 +640,11 @@ foreach ($projects as $k => $p) {
 						}
 					} else if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
 						/*
-						 * don't "mess with" display when showing "Child tasks" 
+						 * don't "mess with" display when showing certain views 
 						 * (or similiar filters that don't involve "breaking apart" a task tree 
-						 * for that matter, even though they might not use this page ever)
+						 * even though they might not use this page ever)
 						 */
-						if((in_array($f, $never_show_with_dots)) ){
+						if ((in_array($f, $never_show_with_dots)) ) {
 						  showtask($t1, 1, true, false, true); 
 						} else {
 							//display as close to "tree-like" as possible
@@ -650,7 +653,8 @@ foreach ($projects as $k => $p) {
 							//check for child
 							$no_children = empty($children_of[$t1['task_id']]);
 							
-							showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
+							$my_level = (($task_id && $t1['task_parent'] == $task_id) ? 0 : -1);
+							showtask($t1, $my_level, $is_opened, false, $no_children); // indeterminate depth for child task
 							if($is_opened && !($no_children)) {
 								findchild($p['tasks'], $t1['task_id']);
 							}

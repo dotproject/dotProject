@@ -266,7 +266,7 @@ class CTask extends CDpObject
 	
 	function updateDynamics($fromChildren = false) {
 		//Has a parent or children, we will check if it is dynamic so that it's info is updated also
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		$modified_task = new CTask();
 		
 		if ($fromChildren){
@@ -465,7 +465,7 @@ class CTask extends CDpObject
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
 		if (!empty($children)) {
-			$tempTask = & new CTask();
+			$tempTask = new CTask();
 			foreach ($children as $child) {
 				$tempTask->peek($child);
 				$tempTask->htmlDecode($child);
@@ -493,7 +493,7 @@ class CTask extends CDpObject
 		$this->move($destProject_id, $destTask_id);
 		$children = $this->getDeepChildren();
 		if (!empty($children)) {
-			$tempChild = & new CTask();
+			$tempChild = new CTask();
 			foreach ($children as $child) {
 				$tempChild->peek($child);
 				$tempChild->htmlDecode($child);
@@ -508,7 +508,7 @@ class CTask extends CDpObject
 	 */
 	function store() {
 		GLOBAL $AppUI;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$this->dPTrimAll();
 		
@@ -532,7 +532,7 @@ class CTask extends CDpObject
 			// see function update_dep_dates
 			GLOBAL $oTsk;
 			$oTsk = new CTask();
-			$oTsk->peek ($this->task_id);
+			$oTsk->peek($this->task_id);
 			
 			// if task_status changed, then update subtasks
 			if ($this->task_status != $oTsk->task_status) {
@@ -659,7 +659,7 @@ class CTask extends CDpObject
 	 * @todo Can't delete a task with children
 	 */
 	function delete() {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		$this->_action = 'deleted';
 		// delete linked user tasks
 		$q->setDelete('user_tasks');
@@ -736,7 +736,7 @@ class CTask extends CDpObject
 	}
 	
 	function updateDependencies($cslist) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// delete all current entries
 		$q->setDelete('task_dependencies');
 		$q->addWhere('dependencies_task_id=' . $this->task_id);
@@ -777,7 +777,7 @@ class CTask extends CDpObject
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
 	function staticGetDependencies ($taskId) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		if (empty($taskId)) {
 			return '';
 		}
@@ -794,7 +794,7 @@ class CTask extends CDpObject
 	
 	
 	function notifyOwner() {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		GLOBAL $AppUI, $locale_char_set;
 		
 		$q->addTable('projects');
@@ -864,7 +864,7 @@ class CTask extends CDpObject
 	
 	//additional comment will be included in email body
 	function notify($comment = '') {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		GLOBAL $AppUI, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -957,7 +957,7 @@ class CTask extends CDpObject
 		global $AppUI, $locale_char_set, $dPconfig;
 		
 		$mail_recipients = array();
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		if (isset($assignees) && $assignees == 'on') {
 			$q->addTable('user_tasks', 'ut');
 			$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
@@ -1111,7 +1111,7 @@ class CTask extends CDpObject
 	 */
 	function getTasksForPeriod($start_date, $end_date, $company_id=0, $user_id=null) {
 		GLOBAL $AppUI;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
@@ -1169,7 +1169,7 @@ class CTask extends CDpObject
 	}
 	
 	function canAccess($user_id) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		// Let's see if this user has admin privileges
 		if (getPermission('admin', 'view')) {
@@ -1226,7 +1226,7 @@ class CTask extends CDpObject
 	 *		 @param	 boolean		 false for no recursion (needed for calc_end_date)
 	 **/
 	function dependentTasks ($taskId = false, $isDep = false, $recurse = true) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		static $aDeps = false;
 		// Initialize the dependencies array
 		if (($taskId == false) && ($isDep == false)) {
@@ -1308,7 +1308,7 @@ class CTask extends CDpObject
 	*/
 	function update_dep_dates($task_id) {
 		GLOBAL $tracking_dynamics;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$newTask = new CTask();
 		$newTask->load($task_id);
@@ -1386,7 +1386,7 @@ class CTask extends CDpObject
 	
 	function get_deps_max_end_date($taskObj) {
 		global $tracked_dynamics;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$deps = $taskObj->getDependencies();
 		$obj = new CTask();
@@ -1497,7 +1497,7 @@ class CTask extends CDpObject
 	
 	// unassign a user from task
 	function removeAssigned($user_id) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// delete all current entries
 		$q->setDelete('user_tasks');
 		$q->addWhere('task_id = ' . $this->task_id . ' AND user_id = ' . $user_id);
@@ -1508,7 +1508,7 @@ class CTask extends CDpObject
 	//using user allocation percentage ($perc_assign)
 	// @return returns the Names of the over-assigned users (if any), otherwise false
 	function updateAssigned($cslist, $perc_assign, $del=true, $rmUsers=false) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		// process assignees
 		$tarr = explode(',', $cslist);
@@ -1557,7 +1557,7 @@ class CTask extends CDpObject
 	}
 	
 	function getAssignedUsers(){
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
@@ -1575,7 +1575,7 @@ class CTask extends CDpObject
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// retrieve the systemwide default preference for the assignment maximum
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_value');
@@ -1620,7 +1620,7 @@ class CTask extends CDpObject
 	}
 	
 	function getUserSpecificTaskPriority($user_id = 0, $task_id = NULL) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
 		
@@ -1635,7 +1635,7 @@ class CTask extends CDpObject
 	
 	function updateUserSpecificTaskPriority($user_task_priority = 0, $user_id = 0
 											, $task_id = NULL) {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
 		
@@ -1648,7 +1648,7 @@ class CTask extends CDpObject
 	}
 	
 	function getProject() {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$q->addTable('projects');
 		$q->addQuery('project_name, project_short_name, project_color_identifier');
@@ -1661,7 +1661,7 @@ class CTask extends CDpObject
 	
 	//Returns task children IDs
 	function getChildren() {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
@@ -1674,21 +1674,21 @@ class CTask extends CDpObject
 	
 	// Returns task deep children IDs
 	function getDeepChildren() {
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_parent = ' . $this->task_id);
+		$q->addWhere("task_id <> '" . $this->task_id . "' AND task_parent = '" . $this->task_id ."'");
 		$sql = $q->prepare();
 		$q->clear();
 		$children = db_loadColumn($sql);
 		
 		if ($children) {
 			$deep_children = array();
-			$tempTask = &new CTask();
+			$tempTask = new CTask();
 			foreach ($children as $child) {
 				$tempTask->peek($child);
-				$deep_children = array_merge($deep_children, $this->getChildren());
+				$deep_children = array_merge($deep_children, $tempTask->getDeepChildren());
 			}
 			
 			return array_merge($children, $deep_children);
@@ -1701,7 +1701,7 @@ class CTask extends CDpObject
 	 * to the one passed as parameter
 	 */
 	function updateSubTasksStatus($new_status, $task_id = null){
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		if (is_null($task_id)) {
 			$task_id = $this->task_id;
@@ -1738,7 +1738,7 @@ class CTask extends CDpObject
 	 * to the one passed as parameter
 	 */
 	function updateSubTasksProject($new_project , $task_id = null){
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		if (is_null($task_id)) {
 			$task_id = $this->task_id;
@@ -1875,7 +1875,7 @@ class CTask extends CDpObject
 	*/
 	function remind($module, $type, $id, $owner, &$args) {
 		global $locale_char_set, $AppUI;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$tf = $AppUI->getPref('TIMEFORMAT');
@@ -2049,7 +2049,7 @@ class CTaskLog extends CDpObject
 	
 	function canDelete(&$msg, $oid=null, $joins=null) {
 		global $AppUI;
-		$q =& new DBQuery;
+		$q = new DBQuery;
 		
 		// First things first.	Are we allowed to delete?
 		$acl =& $AppUI->acl();
