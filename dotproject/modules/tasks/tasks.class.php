@@ -209,7 +209,7 @@ class CTask extends CDpObject
 		} // parent
 		
 		//Is dynamic and no child
-		if ($this->task_dynamic == 1) {
+		if (dPgetConfig('check_task_empty_dynamic') && $this->task_dynamic == 1) {
 			$children_of_dynamic = $this->getChildren();
 			if (empty($children_of_dynamic)) {
 				return 'BadDyn_NoChild';

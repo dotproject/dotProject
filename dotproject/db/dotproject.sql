@@ -545,6 +545,7 @@ CREATE TABLE `sysvals` (
 
 INSERT INTO `syskeys` VALUES (1, "SelectList", "Enter values for list", "0", "\n", "|");
 INSERT INTO `syskeys` VALUES (2, 'CustomField', 'Serialized array in the following format:\r\n<KEY>|<SERIALIZED ARRAY>\r\n\r\nSerialized Array:\r\n[type] => text | checkbox | select | textarea | label\r\n[name] => <Field\'s name>\r\n[options] => <html capture options>\r\n[selects] => <options for select and checkbox>', 0, '\n', '|');
+#'
 INSERT INTO `syskeys` VALUES (3, "ColorSelection", "Hex color values for type=>color association.", "0", "\n", "|");
 
 INSERT INTO `sysvals` (`sysval_key_id`,`sysval_title`,`sysval_value`) VALUES (1, "ProjectStatus", "0|Not Defined\r\n1|Proposed\r\n2|In Planning\r\n3|In Progress\r\n4|On Hold\r\n5|Complete\r\n6|Template\r\n7|Archived");
@@ -671,6 +672,7 @@ INSERT INTO `config` VALUES (0, 'password_min_len', '4', '', 'text');
 INSERT INTO `config` VALUES (0, 'enable_gantt_charts', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'log_changes', 'false', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'check_task_dates', 'true', '', 'checkbox');
+INSERT INTO `config` VALUES (0, 'check_task_empty_dynamic', 'false', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'locale_warn', 'false', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'locale_alert', '^', '', 'text');
 INSERT INTO `config` VALUES (0, 'daily_working_hours', '8.0', '', 'text');

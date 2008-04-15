@@ -45,6 +45,8 @@
 "check_overallocation_tooltip"=>"The over allocation component of dotProject is an incomplete function which has been developed.  It is the basis of a system that will allow Project Managers to establish the maximum % of time that a resource can be allocated to a particular task for a particular period of time.   ",
 "check_task_dates_title"=>"Check Task Dates",
 "check_task_dates_tooltip"=>"If this option is turned on the start and end dates will be required in all tasks before they can be added.",
+"check_task_empty_dynamic_title"=>"Check Empty Dynamic Tasks",
+"check_task_empty_dynamic_tooltip"=>"If this option is turned on, a task must be a parent to at least one other tasks before it can be set as dynamic.",
 "clear",
 "cn"=>"Chinese",
 "company_name_title"=>"Company Name",
