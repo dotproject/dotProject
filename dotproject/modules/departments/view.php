@@ -11,19 +11,22 @@ $canRead = getPermission($m, 'view', $dept_id);
 $canEdit = getPermission($m, 'edit', $dept_id);
 
 if (!$canRead) {
-	$AppUI->redirect( 'm=public&a=access_denied' );
+	$AppUI->redirect('m=public&a=access_denied');
 }
 $AppUI->savePlace();
 
-if (isset( $dept_id ) && $dept_id >0) {
-	$AppUI->setState( 'DeptIdxDepartment', $dept_id );
+if (isset($dept_id) && $dept_id >0) {
+	$AppUI->setState('DeptIdxDepartment', $dept_id);
 }
-$dept_id = $AppUI->getState( 'DeptIdxDepartment' ) !== NULL ? $AppUI->getState( 'DeptIdxDepartment' ) : ($AppUI->user_department > 0 ? $AppUI->user_department : $company_prefix.$AppUI->user_company);
+$dept_id = (($AppUI->getState('DeptIdxDepartment') !== NULL) 
+	? $AppUI->getState('DeptIdxDepartment') 
+	: (($AppUI->user_department > 0) ? $AppUI->user_department 
+		: $company_prefix . $AppUI->user_company));
 
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'DeptVwTab', $_GET['tab'] );
+if (isset($_GET['tab'])) {
+	$AppUI->setState('DeptVwTab', $_GET['tab']);
 }
-$tab = $AppUI->getState( 'DeptVwTab' ) !== NULL ? $AppUI->getState( 'DeptVwTab' ) : 0;
+$tab = $AppUI->getState('DeptVwTab') !== NULL ? $AppUI->getState('DeptVwTab') : 0;
 
 if ($dept_id > 0) {
 	// pull data
@@ -40,9 +43,9 @@ if ($dept_id > 0) {
 	$sql = $q->prepare();
 	$q->clear();
 }
-	if (!db_loadHash( $sql, $dept )) {
-			$titleBlock = new CTitleBlock( 'Invalid Department ID', 'users.gif', $m, $m.'.'.$a );
-			$titleBlock->addCrumb( '?m=companies', 'companies list' );
+	if (!db_loadHash($sql, $dept)) {
+			$titleBlock = new CTitleBlock('Invalid Department ID', 'users.gif', $m, $m.'.'.$a);
+			$titleBlock->addCrumb('?m=companies', 'companies list');
 			$titleBlock->show();
 	} elseif ($dept_id <= 0) {
 				echo $AppUI->_('Please choose a Department first!');
@@ -50,7 +53,7 @@ if ($dept_id > 0) {
 		$company_id = $dept['dept_company'];
 		if (!$min_view) {
 			// setup the title block
-			$titleBlock = new CTitleBlock( 'View Department', 'users.gif', $m, $m.'.'.$a );
+			$titleBlock = new CTitleBlock('View Department', 'users.gif', $m, $m.'.'.$a);
 			if ($canEdit) {
 				$titleBlock->addCell();
 				$titleBlock->addCell(
@@ -58,13 +61,13 @@ if ($dept_id > 0) {
 					'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
 				);
 			}
-			$titleBlock->addCrumb( '?m=companies', 'company list' );
-			$titleBlock->addCrumb( '?m=companies&a=view&company_id='.$company_id, 'view this company' );
+			$titleBlock->addCrumb('?m=companies', 'company list');
+			$titleBlock->addCrumb('?m=companies&a=view&company_id='.$company_id, 'view this company');
 			if ($canEdit) {
-				$titleBlock->addCrumb( '?m=departments&a=addedit&dept_id='.$dept_id, 'edit this department' );
+				$titleBlock->addCrumb('?m=departments&a=addedit&dept_id='.$dept_id, 'edit this department');
 
 				if ($canDelete) {
-					$titleBlock->addCrumbDelete( 'delete department', $canDelete, $msg );
+					$titleBlock->addCrumbDelete('delete department', $canDelete, $msg);
 				}
 			}
 			$titleBlock->show();
@@ -78,7 +81,7 @@ if ($dept_id > 0) {
 if ($canDelete) {
 ?>
 function delIt() {
-	if (confirm( "<?php echo $AppUI->_('departmentDelete', UI_OUTPUT_JS);?>" )) {
+	if (confirm("<?php echo $AppUI->_('departmentDelete', UI_OUTPUT_JS);?>")) {
 		document.frmDelete.submit();
 	}
 }
@@ -120,7 +123,7 @@ function delIt() {
 			<td align="right" nowrap><?php echo $AppUI->_('Address'); ?>:</td>
 			<td bgcolor="#ffffff"><?php
 				echo @$dept['dept_address1']
-					.( ($dept['dept_address2']) ? '<br />'.$dept['dept_address2'] : '' )
+					.(($dept['dept_address2']) ? '<br />'.$dept['dept_address2'] : '')
 					.'<br />'.$dept['dept_city']
 					.'&nbsp;&nbsp;'.$dept['dept_state']
 					.'&nbsp;&nbsp;'.$dept['dept_zip']
@@ -133,7 +136,7 @@ function delIt() {
 		<strong><?php echo $AppUI->_('Description'); ?></strong>
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
-			<td bgcolor="#ffffff" width="100%"><?php echo str_replace( chr(10), "<br />", $dept['dept_desc']);?>&nbsp;</td>
+			<td bgcolor="#ffffff" width="100%"><?php echo str_replace(chr(10), "<br />", $dept['dept_desc']);?>&nbsp;</td>
 		</tr>
 		</table>
 	</td>
@@ -142,8 +145,9 @@ function delIt() {
 <?php
 
 	// tabbed information boxes
-	$tabBox = new CTabBox( '?m=departments&a='.$a.'&dept_id='.$dept_id, '', $tab );
-	$tabBox->add(DP_BASE_DIR.'/modules/departments/vw_contacts', 'Contacts');
+	$moddir = DP_BASE_DIR . '/modules/departments/';
+	$tabBox = new CTabBox('?m=' . $m . '&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
+	$tabBox->add($moddir . 'vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
 	$tabBox->loadExtras($m, 'view');		
 	$tabBox->show();

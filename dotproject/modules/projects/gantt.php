@@ -3,7 +3,9 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id, $dPconfig;
+global $AppUI, $m, $a, $company_id, $dept_ids, $department, $locale_char_set;
+global $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt;
+global $sortTasksByName, $user_id, $dPconfig;
 
 ini_set('max_execution_time', 180);
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
@@ -13,15 +15,7 @@ include ($AppUI->getLibraryClass( 'jpgraph/src/jpgraph_gantt'));
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
-
-$projectStatus = dPgetSysVal( 'ProjectStatus' );
-$projectStatus = arrayMerge( array( '-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $user_id = dPgetParam($_REQUEST, 'user_id', $AppUI->user_id);
-if ($AppUI->user_id == $user_id) {
-	$projectStatus = arrayMerge( array( '-3' => $AppUI->_('My projects')), $projectStatus);
-} else {
-	$projectStatus = arrayMerge( array( '-3' => $AppUI->_('User\'s projects')), $projectStatus);
-}
 $proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = dPgetParam($_REQUEST, 'company_id', 0);
 $department = dPgetParam($_REQUEST, 'department', 0);
@@ -29,6 +23,13 @@ $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
 $sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
 $addPwOiD = dPgetParam($_REQUEST, 'addPwOiD', 0);
+
+
+$projectStatus = dPgetSysVal( 'ProjectStatus' );
+$projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress'), 
+			'-3' => $AppUI->_(($AppUI->user_id == $user_id) ? 'My projects' : "User's projects")), $projectStatus);
+
+
 
 $pjobj =& new CProject;
 $working_hours = $dPconfig['daily_working_hours'];
@@ -66,19 +67,29 @@ if ($department > 0) {
 if ($department > 0 && !$addPwOiD) {
 	$q->addWhere('pd.department_id = '.$department);
 }
-if ($proFilter == '-3'){
-        $q->addWhere('project_owner = '.$user_id);
+
+if ($proFilter == '-4'){
+	$q->addWhere('project_status != 7');
+} else if ($proFilter == '-3'){
+	$q->addWhere('project_owner = '.$user_id);
 } else if ($proFilter == '-2'){
-        $q->addWhere('project_status != 3');
+	$q->addWhere('project_status != 3');
 } else if ($proFilter != '-1') {
-         $q->addWhere('project_status = '.$proFilter);
+	$q->addWhere('project_status = '.$proFilter);
 }
+
+
 if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-        $q->addWhere('project_company = '.$company_id);
+	$q->addWhere('project_company = '.$company_id);
+}
+
+if ($user_id && $m == 'admin' && $a == 'admin') {
+	$q->addWhere('project_owner = '.$user_id);
 }
 // Show Projects where the Project Owner is in the given department
-if ($addPwOiD && !empty($owner_ids))
+if ($addPwOiD && !empty($owner_ids)) {
 	$q->addWhere('p.project_owner IN ('.implode(',', $owner_ids).')');
+ }
 
 if ($showInactive != '1') {
         $q->addWhere('project_status != 7');

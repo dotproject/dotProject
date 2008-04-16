@@ -183,6 +183,7 @@ $tabBox->add( $moddir . 'vw_depts', 'Departments' );
 $tabBox->add( $moddir . 'vw_users', 'Users' );
 $tabBox->add( $moddir . 'vw_contacts', 'Contacts' );
 $tabBox->loadExtras($m);
+$tabBox->loadExtras($m, 'view');
 $tabBox->show();
 
 ?>

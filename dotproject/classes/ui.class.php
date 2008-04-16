@@ -935,17 +935,16 @@ the active tab, and the selected tab **/
 */
 	function add( $file, $title, $translated = false, $key= NULL ) {
 		$t = array( $file, $title, $translated);
-		if (isset($key))
+		if (isset($key)) {
 			$this->tabs[$key] = $t;
-		else
+		} else {
  			$this->tabs[] = $t;
+		}
 	}
 
 	function isTabbed() {
 		global $AppUI;
-		if ($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 )
-			return false;
-		return true;
+		return (($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 ) ? false : true);
 	}
 
 /**
@@ -1000,16 +999,18 @@ the active tab, and the selected tab **/
 				$s .= "\n\t\t<img src=\"./images/shim.gif\" height=\"1\" width=\"1\" alt=\"\" />";
 				$s .= "\n\t</td>";
 				$s .= "\n\t<td id=\"toptab_" . $k . "\" width=\"1%\" nowrap=\"nowrap\"";
-				if ($js_tabs)
+				if ($js_tabs) {
 					$s .= " class=\"$class\"";
+				}
 				$s .= ">";
 				$s .= "\n\t\t<a href=\"";
-				if ($this->javascript)
+				if ($this->javascript) {
 					$s .= "javascript:" . $this->javascript . "({$this->active}, $k)";
-				else if ($js_tabs)
+				} else if ($js_tabs) {
 					$s .= 'javascript:show_tab(' . $k . ')';
-				else
+				} else {
 					$s .= $this->baseHRef . "tab=$k";
+				}
 				$s .= "\">". ($v[2] ? $v[1] : $AppUI->_($v[1])). "</a>";
 				$s .= "\n\t</td>";
 			}
@@ -1020,16 +1021,15 @@ the active tab, and the selected tab **/
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
 
-			if ( $this->baseInc.$this->tabs[$this->active][0] != "" ) {
+			if ($this->baseInc . $this->tabs[$this->active][0] != "") {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
-				if (!$js_tabs)
-					require $this->baseInc.$this->tabs[$this->active][0].'.php';
+				if (!$js_tabs) {
+					require $this->baseInc.$this->tabs[$this->active][0] . '.php';
+				}
 			}
-			if ($js_tabs)
-			{
-				foreach( $this->tabs as $k => $v ) 
-				{
+			if ($js_tabs) {
+				foreach($this->tabs as $k => $v) {
 					echo '<div class="tab" id="tab_'.$k.'">';
 					require $this->baseInc.$v[0].'.php';
 					echo '</div>';
@@ -1041,9 +1041,10 @@ the active tab, and the selected tab **/
 
 	function loadExtras($module, $file = null) {
 		global $AppUI;
-		if (! isset($_SESSION['all_tabs']) || ! isset($_SESSION['all_tabs'][$module]))
+		if (! (isset($_SESSION['all_tabs']) && isset($_SESSION['all_tabs'][$module]))) {
 			return false;
-
+		}
+		
 		if ($file) {
 			if (isset($_SESSION['all_tabs'][$module][$file]) && is_array($_SESSION['all_tabs'][$module][$file])) {
 				$tab_array =& $_SESSION['all_tabs'][$module][$file];
@@ -1066,22 +1067,24 @@ the active tab, and the selected tab **/
 	function findTabModule($tab) {
 		global $AppUI, $m, $a;
 
-		if (! isset($_SESSION['all_tabs']) || ! isset($_SESSION['all_tabs'][$m]))
+		if (! (isset($_SESSION['all_tabs']) && isset($_SESSION['all_tabs'][$m]))) {
 			return false;
-
+		}
 		if (isset($a)) {
-			if (isset($_SESSION['all_tabs'][$m][$a]) && is_array($_SESSION['all_tabs'][$m][$a]))
+			if (isset($_SESSION['all_tabs'][$m][$a]) && is_array($_SESSION['all_tabs'][$m][$a])) {
 				$tab_array =& $_SESSION['all_tabs'][$m][$a];
-			else
+			} else {
 				$tab_array =& $_SESSION['all_tabs'][$m];
+			}
 		} else {
 			$tab_array =& $_SESSION['all_tabs'][$m];
 		}
 
 		list($file, $name) = $this->tabs[$tab];
 		foreach ($tab_array as $tab_elem) {
-			if (isset($tab_elem['name']) && $tab_elem['name'] == $name && $tab_elem['file'] == $file)
+			if (isset($tab_elem['name']) && $tab_elem['name'] == $name && $tab_elem['file'] == $file) {
 				return $tab_elem['module'];
+			}
 		}
 		return false;
 	}

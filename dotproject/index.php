@@ -255,14 +255,12 @@ if (! isset($_SESSION['all_tabs'][$m]) ) {
 	}
 	$_SESSION['all_tabs'][$m] = array();
 	$all_tabs =& $_SESSION['all_tabs'][$m];
-	foreach ($AppUI->getActiveModules() as $dir => $module)
-	{
+	foreach ($AppUI->getActiveModules() as $dir => $module)	{
 		if (! $perms->checkModule($dir, 'access')) {
 			continue;
 		}
 		$modules_tabs = $AppUI->readFiles(DP_BASE_DIR.'/modules/'.$dir.'/', '^' . $m . '_tab.*\.php');
-		foreach($modules_tabs as $tab)
-		{
+		foreach($modules_tabs as $tab) {
 			// Get the name as the subextension
 			// cut the module_tab. and the .php parts of the filename 
 			// (begining and end)
