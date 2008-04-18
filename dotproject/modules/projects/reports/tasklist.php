@@ -9,15 +9,15 @@ if (!defined('DP_BASE_DIR')){
 
 require_once $AppUI->getSystemClass('tree');
 
-//error_reporting( E_ALL );
-$do_report = dPgetParam( $_POST, "do_report", 0 );
-$log_all = dPgetParam( $_POST, 'log_all', 0 );
-$log_pdf = dPgetParam( $_POST, 'log_pdf', 0 );
-$log_ignore = dPgetParam( $_POST, 'log_ignore', 0 );
-$days = dPgetParam( $_POST, 'days', 30 );
+//error_reporting(E_ALL);
+$do_report = dPgetParam($_POST, "do_report", 0);
+$log_all = dPgetParam($_POST, 'log_all', 0);
+$log_pdf = dPgetParam($_POST, 'log_pdf', 0);
+$log_ignore = dPgetParam($_POST, 'log_ignore', 0);
+$days = dPgetParam($_POST, 'days', 30);
 
-$list_start_date = dPgetParam( $_POST, "list_start_date", 0 );
-$list_end_date = dPgetParam( $_POST, "list_end_date", 0 );
+$list_start_date = dPgetParam($_POST, "list_start_date", 0);
+$list_end_date = dPgetParam($_POST, "list_end_date", 0);
 
 $period = dPgetParam($_POST, "period", 0);
 $period_value = dPgetParam($_POST, "pvalue", 1);
@@ -42,9 +42,9 @@ if ($period)
         $end_date = new CDate($ts);
 
         if ($sign > 0)
-                $end_date->addSpan( new Date_Span("$days,0,0,0") );
+                $end_date->addSpan(new Date_Span("$days,0,0,0"));
         else
-                $start_date->subtractSpan( new Date_Span("$days,0,0,0") );
+                $start_date->subtractSpan(new Date_Span("$days,0,0,0"));
 
         $do_report = 1;
         
@@ -52,34 +52,34 @@ if ($period)
 else
 {
 // create Date objects from the datetime fields
-        $start_date = intval( $list_start_date ) ? new CDate( $list_start_date ) : new CDate();
-        $end_date = intval( $list_end_date ) ? new CDate( $list_end_date ) : new CDate();
+        $start_date = intval($list_start_date) ? new CDate($list_start_date) : new CDate();
+        $end_date = intval($list_end_date) ? new CDate($list_end_date) : new CDate();
 }
 
 
 if (!$list_start_date) {
-	$start_date->subtractSpan( new Date_Span( "14,0,0,0" ) );
+	$start_date->subtractSpan(new Date_Span("14,0,0,0"));
 }
-$end_date->setTime( 23, 59, 59 );
+$end_date->setTime(23, 59, 59);
 
 ?>
 <script language="javascript">
 
 var calendarField = '';
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
-	idate = eval( 'document.editFrm.list_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.list_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.list_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.list_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -116,16 +116,16 @@ function setCalendar( idate, fdate ) {
 
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="list_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" />
+		<input type="hidden" name="list_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
 		<a href="#" onclick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="list_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" />
+		<input type="hidden" name="list_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 		<a href="#" onclick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
@@ -133,11 +133,11 @@ function setCalendar( idate, fdate ) {
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-		<label for="log_all"><?php echo $AppUI->_( 'Log All' );?></label>
+		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-		<label for="log_pdf"><?php echo $AppUI->_( 'Make PDF' );?></label>
+		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
 	</td>
 
 	<td align="right" width="50%" nowrap="nowrap">
@@ -160,8 +160,8 @@ if ($do_report) {
 		$q->addWhere('task_project ='.$project_id);
 	}
 	if (!$log_all) {
-		$q->addWhere("task_start_date >= '".$start_date->format( FMT_DATETIME_MYSQL )."'");
-		$q->addWhere("task_start_date <= '".$end_date->format( FMT_DATETIME_MYSQL )."'");
+		$q->addWhere("task_start_date >= '".$start_date->format(FMT_DATETIME_MYSQL)."'");
+		$q->addWhere("task_start_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'");
 	}
 
 	$obj =& new CTask;
@@ -194,8 +194,8 @@ if ($do_report) {
 	if ($project_id==0) { array_unshift($columns, "<b>".$AppUI->_('Project Name')."</b>");}		
 
 	while ($Tasks = db_fetch_assoc($Task_List)){
-		$Tasks['start_date'] = intval($Tasks['task_start_date']) ? new CDate( $Tasks['task_start_date'] ) : ' ';
-		$Tasks['end_date'] = intval($Tasks['task_end_date']) ? new CDate( $Tasks['task_end_date'] ) : ' ';
+		$Tasks['start_date'] = intval($Tasks['task_start_date']) ? new CDate($Tasks['task_start_date']) : ' ';
+		$Tasks['end_date'] = intval($Tasks['task_end_date']) ? new CDate($Tasks['task_end_date']) : ' ';
 		$task_id = $Tasks['task_id'];
 		
 		$q = new DBQuery;
@@ -245,28 +245,28 @@ if ($log_pdf) {
 		$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 		$temp_dir = DP_BASE_DIR.'/files/temp';
 		
-		require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+		require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 		$pdf =& new Cezpdf($paper='A4',$orientation='landscape');
-		$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-		$pdf->selectFont( "$font_dir/Helvetica.afm" );
+		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+		$pdf->selectFont("$font_dir/Helvetica.afm");
 
-		$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
-		// $pdf->ezText( dPgetConfig( 'company_name' ).' :: '.dPgetConfig( 'page_title' ), 12 );		
+		$pdf->ezText(dPgetConfig('company_name'), 12);
+		// $pdf->ezText(dPgetConfig('company_name').' :: '.dPgetConfig('page_title'), 12);		
 
 		$date = new CDate();
-		$pdf->ezText( "\n" . $date->format( $df ) , 8 );
+		$pdf->ezText("\n" . $date->format($df) , 8);
 
-		$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-		$pdf->ezText( "\n" . $AppUI->_('Project Task Report'), 12 );
-		if ($project_id != 0) {$pdf->ezText( $pname, 15 );}
+		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
+		$pdf->ezText("\n" . $AppUI->_('Project Task Report'), 12);
+		if ($project_id != 0) {$pdf->ezText($pname, 15);}
 		if ($log_all) {
-			$pdf->ezText( "All task entries", 9 );
+			$pdf->ezText("All task entries", 9);
 		} else {		
-			if($end_date != ' ') {$pdf->ezText( "Task entries from ".$start_date->format( $df ).' to '.$end_date->format( $df ), 9 );} else {$pdf->ezText( "Task entries from ".$start_date->format( $df ),9);}
+			if($end_date != ' ') {$pdf->ezText("Task entries from ".$start_date->format($df).' to '.$end_date->format($df), 9);} else {$pdf->ezText("Task entries from ".$start_date->format($df),9);}
 		}
-		$pdf->ezText( "\n" );
-		$pdf->selectFont( "$font_dir/Helvetica.afm" );
+		$pdf->ezText("\n");
+		$pdf->selectFont("$font_dir/Helvetica.afm");
 		//$columns = null; This is already defined above... :)
 		$title = null;
 		$options = array(
@@ -286,17 +286,17 @@ if ($log_pdf) {
 					5=>array('justification'=>'center','width'=>75))
 		);
 
-		$pdf->ezTable( $pdfdata, $columns, $title, $options );
+		$pdf->ezTable($pdfdata, $columns, $title, $options);
 
-		if ($fp = fopen( $temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb' )) {
-			fwrite( $fp, $pdf->ezOutput() );
-			fclose( $fp );
+		if ($fp = fopen($temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb')) {
+			fwrite($fp, $pdf->ezOutput());
+			fclose($fp);
 			echo '<a href="'.DP_BASE_URL.'/files/temp/temp'.$AppUI->user_id.'.pdf" target="pdf">';
-			echo $AppUI->_( "View PDF File" );
+			echo $AppUI->_("View PDF File");
 			echo "</a>";
 		} else {
 			echo "Could not open file to save PDF.  ";
-			if (!is_writable( $temp_dir )) {
+			if (!is_writable($temp_dir)) {
 				"The files/temp directory is not writable.  Check your file system permissions.";
 			}
 		}
@@ -320,9 +320,9 @@ function show_task_as_html($depth, $task)
 	$str .= "<td>".$task['task_description']."</td>";
 	$str .= "<td>".$task['users']."</td>";
 	$str .= "<td>";
-	($task['start_date'] != ' ') ? $str .= $task['start_date']->format( $df )."</td>" : $str .= ' '."</td>";			
+	($task['start_date'] != ' ') ? $str .= $task['start_date']->format($df)."</td>" : $str .= ' '."</td>";			
 	$str .= "<td>";		
-	($task['end_date'] != ' ') ? $str .= $task['end_date']->format( $df )."</td>" : $str .= ' '."</td>";
+	($task['end_date'] != ' ') ? $str .= $task['end_date']->format($df)."</td>" : $str .= ' '."</td>";
 	$str .= "<td align=\"center\">".$task['task_percent_complete']."%</td>";
 	$str .= "</tr>";
 	echo $str;
@@ -344,8 +344,8 @@ function collate_pdf_task($depth, $task)
 	$data[] = $spacer . $task['task_name'];
 	$data[] = $task['task_description'];
 	$data[] = $task['users'];
-	$data[] = (($task['start_date'] != ' ') ? $task['start_date']->format( $df ) : ' ');
-	$data[] = (($task['end_date'] != ' ') ? $task['end_date']->format( $df ) : ' ');
+	$data[] = (($task['start_date'] != ' ') ? $task['start_date']->format($df) : ' ');
+	$data[] = (($task['end_date'] != ' ') ? $task['end_date']->format($df) : ' ');
 	$data[] = $task['task_percent_complete']."%";
 	$pdfdata[] = $data;
 	unset($data);

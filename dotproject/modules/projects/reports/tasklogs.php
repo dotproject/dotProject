@@ -10,41 +10,41 @@ $perms =& $AppUI->acl();
 if (! $perms->checkModule('tasks', 'view')) {
 	redirect('m=public&a=access_denied');
 }	
-$do_report = dPgetParam( $_GET, "do_report", 0 );
-$log_all = dPgetParam( $_GET, 'log_all', 0 );
-$log_pdf = dPgetParam( $_GET, 'log_pdf', 0 );
-$log_ignore = dPgetParam( $_GET, 'log_ignore', 0 );
-$log_userfilter = dPgetParam( $_GET, 'log_userfilter', '0' );
+$do_report = dPgetParam($_GET, "do_report", 0);
+$log_all = dPgetParam($_GET, 'log_all', 0);
+$log_pdf = dPgetParam($_GET, 'log_pdf', 0);
+$log_ignore = dPgetParam($_GET, 'log_ignore', 0);
+$log_userfilter = dPgetParam($_GET, 'log_userfilter', '0');
 
-$log_start_date = dPgetParam( $_GET, "log_start_date", 0 );
-$log_end_date = dPgetParam( $_GET, "log_end_date", 0 );
+$log_start_date = dPgetParam($_GET, "log_start_date", 0);
+$log_end_date = dPgetParam($_GET, "log_end_date", 0);
 
 // create Date objects from the datetime fields
-$start_date = intval( $log_start_date ) ? new CDate( $log_start_date ) : new CDate();
-$end_date = intval( $log_end_date ) ? new CDate( $log_end_date ) : new CDate();
+$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
+$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan( new Date_Span( "14,0,0,0" ) );
+	$start_date->subtractSpan(new Date_Span("14,0,0,0"));
 }
-$end_date->setTime( 23, 59, 59 );
+$end_date->setTime(23, 59, 59);
 
 ?>
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
-	idate = eval( 'document.editFrm.log_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.log_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.log_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.log_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -61,16 +61,16 @@ function setCalendar( idate, fdate ) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" style="width: 80px" />
+		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" style="width: 80px" />
 		<a href="#" onClick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
+		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
 		<a href="#" onClick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
@@ -86,15 +86,15 @@ function setCalendar( idate, fdate ) {
 		FROM users LEFT JOIN contacts ON user_contact = contact_id ORDER BY user_username
 		";
 
-		if ( $log_userfilter == 0 ) {
-			echo '<OPTION VALUE="0" SELECTED>'.$AppUI->_('All users' );
+		if ($log_userfilter == 0) {
+			echo '<OPTION VALUE="0" SELECTED>'.$AppUI->_('All users');
 		} else {
 			echo '<OPTION VALUE="0">All users';
 		}
 
-		if (($rows = db_loadList( $usersql, NULL ))) {
+		if (($rows = db_loadList($usersql, NULL))) {
 			foreach ($rows as $row) {
-				if ( $log_userfilter == $row["user_id"])
+				if ($log_userfilter == $row["user_id"])
 					echo "<OPTION VALUE='".$row["user_id"]."' SELECTED>".$row["user_username"];
 				else
 					echo "<OPTION VALUE='".$row["user_id"]."'>".$row["user_username"];
@@ -108,17 +108,17 @@ function setCalendar( idate, fdate ) {
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-		<label for="log_all"><?php echo $AppUI->_( 'Log All' );?></label>
+		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-		<label for="log_pdf"><?php echo $AppUI->_( 'Make PDF' );?></label>
+		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
 	</td>
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_ignore" id="log_ignore" />
-		<label for="log_ignore"><?php echo $AppUI->_( 'Ignore 0 hours' );?></label>
+		<label for="log_ignore"><?php echo $AppUI->_('Ignore 0 hours');?></label>
 	</td>
 
 	<td align="right" width="50%" nowrap="nowrap">
@@ -143,8 +143,8 @@ if ($do_report) {
 		$sql .= "\nAND task_project = $project_id";
 	}
 	if (!$log_all) {
-		$sql .= "\n	AND task_log_date >= '".$start_date->format( FMT_DATETIME_MYSQL )."'"
-		."\n	AND task_log_date <= '".$end_date->format( FMT_DATETIME_MYSQL )."'";
+		$sql .= "\n	AND task_log_date >= '".$start_date->format(FMT_DATETIME_MYSQL)."'"
+		."\n	AND task_log_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'";
 	}
 	if ($log_ignore) {
 		$sql .= "\n	AND task_log_hours > 0";
@@ -163,7 +163,7 @@ if ($do_report) {
 
 	//echo "<pre>$sql</pre>";
 
-	$logs = db_loadList( $sql );
+	$logs = db_loadList($sql);
 	echo db_error();
 ?>
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
@@ -183,15 +183,15 @@ if ($do_report) {
 	$pdfdata = array();
 
         foreach ($logs as $log) {
-		$date = new CDate( $log['task_log_date'] );
+		$date = new CDate($log['task_log_date']);
 		$hours += $log['task_log_hours'];
 
 		$pdfdata[] = array(
 			$log['creator'],
 			$log['task_log_name'],
 			$log['task_log_description'],
-			$date->format( $df ),
-			sprintf( "%.2f", $log['task_log_hours'] ),
+			$date->format($df),
+			sprintf("%.2f", $log['task_log_hours']),
 			$log['billingcode_name'],
 		);
 ?>
@@ -205,21 +205,21 @@ if ($do_report) {
 		</td>
 		<td><?php
       $transbrk = "\n[translation]\n";
-			$descrip = str_replace( "\n", "<br />", $log['task_log_description'] );
-			$tranpos = strpos( $descrip, str_replace( "\n", "<br />", $transbrk ) );
-			if ( $tranpos === false) {
+			$descrip = str_replace("\n", "<br />", $log['task_log_description']);
+			$tranpos = strpos($descrip, str_replace("\n", "<br />", $transbrk));
+			if ($tranpos === false) {
 				echo $descrip;
 			} else {
-				$descrip = substr( $descrip, 0, $tranpos );
-				$tranpos = strpos( $log['task_log_description'], $transbrk );
-				$transla = substr( $log['task_log_description'], $tranpos + strlen( $transbrk ) );
-				$transla = trim( str_replace( "'", '"', $transla ) );
+				$descrip = substr($descrip, 0, $tranpos);
+				$tranpos = strpos($log['task_log_description'], $transbrk);
+				$transla = substr($log['task_log_description'], $tranpos + strlen($transbrk));
+				$transla = trim(str_replace("'", '"', $transla));
 				echo $descrip."<div style='font-weight: bold; text-align: right'><a title='$transla' class='hilite'>[".$AppUI->_("translation")."]</a></div>";
 			}
 // dylan_cuthbert; auto-translation end
 			?></td>
-		<td><?php echo $date->format( $df );?></td>
-		<td align="right"><?php printf( "%.2f", $log['task_log_hours'] );?></td>
+		<td><?php echo $date->format($df);?></td>
+		<td align="right"><?php printf("%.2f", $log['task_log_hours']);?></td>
 		<td><?php echo $log['billingcode_name'];?></td>
 	</tr>
 <?php
@@ -229,7 +229,7 @@ if ($do_report) {
 		'',
 		'',
 		$AppUI->_('Total Hours').':',
-		sprintf( "%.2f", $hours ),
+		sprintf("%.2f", $hours),
 		'',
 	);
 ?>
@@ -238,7 +238,7 @@ if ($do_report) {
 			<td></td>
 		<?php } ?>
 		<td align="right" colspan="4"><?php echo $AppUI->_('Total Hours');?>:</td>
-		<td align="right"><?php printf( "%.2f", $hours );?></td>
+		<td align="right"><?php printf("%.2f", $hours);?></td>
 	</tr>
 	</table>
 <?php
@@ -246,7 +246,7 @@ if ($do_report) {
 	// make the PDF file
 		if ($project_id != 0) {
 			$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
-			$pname = db_loadResult( $sql );
+			$pname = db_loadResult($sql);
 		} else {
 			$pname = "All Projects";
 		}
@@ -255,26 +255,26 @@ if ($do_report) {
 		$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 		$temp_dir = DP_BASE_DIR.'/files/temp';
 		
-		require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+		require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 		$pdf =& new Cezpdf();
-		$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-		$pdf->selectFont( "$font_dir/Helvetica.afm" );
+		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+		$pdf->selectFont("$font_dir/Helvetica.afm");
 
-		$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
+		$pdf->ezText(dPgetConfig('company_name'), 12);
 
 		$date = new CDate();
-		$pdf->ezText( "\n" . $date->format( $df ) , 8 );
+		$pdf->ezText("\n" . $date->format($df) , 8);
 
-		$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-		$pdf->ezText( "\n" . $AppUI->_('Task Log Report'), 12 );
-		$pdf->ezText( "$pname", 15 );
+		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
+		$pdf->ezText("\n" . $AppUI->_('Task Log Report'), 12);
+		$pdf->ezText("$pname", 15);
 		if ($log_all) {
-			$pdf->ezText( "All task log entries", 9 );
+			$pdf->ezText("All task log entries", 9);
 		} else {
-			$pdf->ezText( "Task log entries from ".$start_date->format( $df ).' to '.$end_date->format( $df ), 9 );
+			$pdf->ezText("Task log entries from ".$start_date->format($df).' to '.$end_date->format($df), 9);
 		}
-		$pdf->ezText( "\n\n" );
+		$pdf->ezText("\n\n");
 
 		$title = 'Task Logs';
 
@@ -303,7 +303,7 @@ if ($do_report) {
 	                                  '',
 	                                  '',
 	                                  '',
-	                                  );
+	                                 );
 		$pdf->ezTable($pdfheaderdata,$pdfheaders,$title,$options);
 			 
 	        $options['col_options'] = array(
@@ -311,22 +311,22 @@ if ($do_report) {
 			                        3 => array('width' => 55),
 			                        4 => array('width' => 30),
 			                        5 => array('width' => 30),
-			                        );
+			                       );
 	        $options['showHeadings'] = 0;
 	        $options['showLines'] = 1;
 	        $options['fontSize'] = 8;
 	        
-		$pdf->ezTable( $pdfdata,'','',$options );
+		$pdf->ezTable($pdfdata,'','',$options);
 
-		if ($fp = fopen( $temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb' )) {
-			fwrite( $fp, $pdf->ezOutput() );
-			fclose( $fp );
+		if ($fp = fopen($temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb')) {
+			fwrite($fp, $pdf->ezOutput());
+			fclose($fp);
 			echo '<a href="'.DP_BASE_URL.'/files/temp/temp'.$AppUI->user_id.'.pdf" target="pdf">';
-			echo $AppUI->_( "View PDF File" );
+			echo $AppUI->_("View PDF File");
 			echo "</a>";
 		} else {
 			echo "Could not open file to save PDF.  ";
-			if (!is_writable( $temp_dir )) {
+			if (!is_writable($temp_dir)) {
 				"The files/temp directory is not writable.  Check your file system permissions.";
 			}
 		}

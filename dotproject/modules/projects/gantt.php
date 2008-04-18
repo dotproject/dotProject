@@ -68,11 +68,11 @@ if ($department > 0 && !$addPwOiD) {
 	$q->addWhere('pd.department_id = '.$department);
 }
 
-if ($proFilter == '-4'){
+if ($proFilter == '-4') {
 	$q->addWhere('project_status != 7');
-} else if ($proFilter == '-3'){
+} else if ($proFilter == '-3') {
 	$q->addWhere('project_owner = '.$user_id);
-} else if ($proFilter == '-2'){
+} else if ($proFilter == '-2') {
 	$q->addWhere('project_status != 3');
 } else if ($proFilter != '-1') {
 	$q->addWhere('project_status = '.$proFilter);

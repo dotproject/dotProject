@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-if ( isset($_REQUEST['clash_action'])) {
+if (isset($_REQUEST['clash_action'])) {
   $do_include = false;
   switch ($_REQUEST['clash_action']) {
     case 'suggest':  clash_suggest(); break;
@@ -32,7 +32,7 @@ if ( isset($_REQUEST['clash_action'])) {
 </script>
 <?php
 
-  $titleBlock =& new CTitleBlock( ($obj->event_id ? "Edit Event" : "Add Event"), "myevo-appointments.png", $m, "$m.$a");
+  $titleBlock =& new CTitleBlock(($obj->event_id ? "Edit Event" : "Add Event"), "myevo-appointments.png", $m, "$m.$a");
   $titleBlock->show();
 
   $_SESSION['add_event_post'] = get_object_vars($obj);
@@ -85,38 +85,38 @@ function clash_suggest()
   $df = $AppUI->getPref('SHDATEFORMAT');
   $start_secs = $start_date->getTime();
   $end_secs = $end_date->getTime();
-  $duration = (int) (( $end_secs - $start_secs ) / 60);
+  $duration = (int) (($end_secs - $start_secs) / 60);
 
-  $titleBlock =& new CTitleBlock( 'Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m.'.'.$a);
+  $titleBlock =& new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m.'.'.$a);
   $titleBlock->show();
   $calurl = DP_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
   $times = array();
   $t = new CDate();
-  $t->setTime( 0,0,0 );
+  $t->setTime(0,0,0);
   if (!defined('LOCALE_TIME_FORMAT'))
     define('LOCALE_TIME_FORMAT', '%I:%M %p');
   for ($m=0; $m < 60; $m++) {
-	  $times[$t->format( "%H%M%S" )] = $t->format( LOCALE_TIME_FORMAT );
-	  $t->addSeconds( 1800 );
+	  $times[$t->format("%H%M%S")] = $t->format(LOCALE_TIME_FORMAT);
+	  $t->addSeconds(1800);
   }
 
 ?>
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
-	idate = eval( 'document.editFrm.event_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.event_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.event_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.event_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -152,13 +152,13 @@ function set_clash_action(action) {
 <tr>
   <td width='50%' align='right'><?php echo $AppUI->_('Earliest Start Time'); ?>:</td>
   <td width='50%' align='left'>
-    <?php echo arraySelect( $times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S") ); ?>
+    <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S")); ?>
   </td>
 </tr>
 <tr>
   <td width='50%' align='right'><?php echo $AppUI->_('Latest Finish Time'); ?>:</td>
   <td width='50%' align='left'>
-    <?php echo arraySelect( $times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S") ); ?>
+    <?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S")); ?>
   </td>
 </tr>
 <tr>
@@ -208,7 +208,7 @@ function clash_process()
 
   // First find any events in the range requested.
   $event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL),
-  	$end_date->format(FMT_DATETIME_MYSQL),(int)( $_POST['start_time'] / 100),
+  	$end_date->format(FMT_DATETIME_MYSQL),(int)($_POST['start_time'] / 100),
 	(int)($_POST['end_time'] / 100), $users);
   $event_start_date =& new CDate($_POST['event_start_date'] . $_POST['start_time']);
   $event_end_date =& new CDate($_POST['event_end_date'] . $_POST['end_time']);
@@ -257,7 +257,7 @@ function clash_process()
 	    'start_time' => $j,
 	    'end_time' => $j + $_POST['duration'],
 	    'committed' => false
-	  );
+	 );
       }
     } 
     $first_date->addSpan($oneday);

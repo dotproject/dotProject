@@ -3,37 +3,37 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$do_report 		    = dPgetParam( $_POST, "do_report", 0 );
-$log_start_date 	= dPgetParam( $_POST, "log_start_date", 0 );
-$log_end_date 	    = dPgetParam( $_POST, "log_end_date", 0 );
-$user_id            = dPgetParam( $_POST, "user_id", $AppUI->user_id);
+$do_report 		    = dPgetParam($_POST, "do_report", 0);
+$log_start_date 	= dPgetParam($_POST, "log_start_date", 0);
+$log_end_date 	    = dPgetParam($_POST, "log_end_date", 0);
+$user_id            = dPgetParam($_POST, "user_id", $AppUI->user_id);
 
 // create Date objects from the datetime fields
-$start_date = intval( $log_start_date ) ? new CDate( $log_start_date ) : new CDate();
-$end_date   = intval( $log_end_date )   ? new CDate( $log_end_date ) : new CDate();
+$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
+$end_date   = intval($log_end_date)   ? new CDate($log_end_date) : new CDate();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan( new Date_Span( "14,0,0,0" ) );
+	$start_date->subtractSpan(new Date_Span("14,0,0,0"));
 }
-$end_date->setTime( 23, 59, 59 );
+$end_date->setTime(23, 59, 59);
 ?>
 
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
-	idate = eval( 'document.editFrm.log_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.log_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.log_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.log_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -49,16 +49,16 @@ function setCalendar( idate, fdate ) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" />
+		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
 		<a href="#" onClick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" />
+		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 		<a href="#" onClick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
@@ -100,8 +100,8 @@ if($do_report){
         $user_filter  = " and ut.user_id = $user_id
                          and ut.task_id = t.task_id ";
     }
-    $sql.=" where task_end_date   >= '".$start_date->format( FMT_DATETIME_MYSQL )."'
-                and task_end_date <= '".$end_date->format( FMT_DATETIME_MYSQL )."'
+    $sql.=" where task_end_date   >= '".$start_date->format(FMT_DATETIME_MYSQL)."'
+                and task_end_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'
                 and p.project_id   = t.task_project
                 and t.task_dynamic = '0'
                 and t.task_owner = u.user_id

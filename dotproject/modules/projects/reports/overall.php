@@ -6,40 +6,40 @@ if (!defined('DP_BASE_DIR')){
 /**
 * Generates a report of the task logs for given dates
 */
-$do_report = dPgetParam( $_POST, "do_report", 0 );
-$log_pdf = dPgetParam( $_POST, 'log_pdf', 0 );
+$do_report = dPgetParam($_POST, "do_report", 0);
+$log_pdf = dPgetParam($_POST, 'log_pdf', 0);
 
-$log_start_date = dPgetParam( $_POST, "log_start_date", 0 );
-$log_end_date = dPgetParam( $_POST, "log_end_date", 0 );
-$log_all = dPgetParam( $_POST, 'log_all', 0 );
+$log_start_date = dPgetParam($_POST, "log_start_date", 0);
+$log_end_date = dPgetParam($_POST, "log_end_date", 0);
+$log_all = dPgetParam($_POST, 'log_all', 0);
 
 // create Date objects from the datetime fields
-$start_date = intval( $log_start_date ) ? new CDate( $log_start_date ) : new CDate();
-$end_date = intval( $log_end_date ) ? new CDate( $log_end_date ) : new CDate();
+$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
+$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan( new Date_Span( "14,0,0,0" ) );
+	$start_date->subtractSpan(new Date_Span("14,0,0,0"));
 }
-$end_date->setTime( 23, 59, 59 );
+$end_date->setTime(23, 59, 59);
 
 $fullaccess = ($AppUI->user_type == 1);
 ?>
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
-	idate = eval( 'document.editFrm.log_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.log_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.log_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.log_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -54,16 +54,16 @@ function setCalendar( idate, fdate ) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" style="width: 80px" />
+		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" style="width: 80px" />
 		<a href="#" onClick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
+		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
 		<a href="#" onClick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
@@ -71,11 +71,11 @@ function setCalendar( idate, fdate ) {
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-		<label for="log_all"><?php echo $AppUI->_( 'Log All' );?></label>
+		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-		<label for="log_pdf"><?php echo $AppUI->_( 'Make PDF' );?></label>
+		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
 	</td>
 
 	<td align="right" width="50%" nowrap="nowrap">
@@ -169,7 +169,7 @@ function showcompany($company, $restricted = false)
 		{
 			if (isset($task_logs[$code]))
 			{
-				$value = sprintf( "%.2f", $task_logs[$code] );
+				$value = sprintf("%.2f", $task_logs[$code]);
 				$project_row .= '<td>' . $value . '</td>';
 				$project_hours += $task_logs[$code];
 				$pdfproject[] = $value;
@@ -228,7 +228,7 @@ else
 	
 
 echo '<h2>' . $AppUI->_('Total Hours') . ":"; 
-printf( "%.2f", $total );
+printf("%.2f", $total);
 echo '</h2>';
 
 
@@ -238,29 +238,29 @@ if ($log_pdf) {
 		$font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 		$temp_dir = DP_BASE_DIR.'/files/temp';
 		
-		require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+		require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 		$pdf =& new Cezpdf();
-		$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-		$pdf->selectFont( "$font_dir/Helvetica.afm" );
+		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+		$pdf->selectFont("$font_dir/Helvetica.afm");
 
-		$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
-		// $pdf->ezText( dPgetConfig( 'company_name' ).' :: '.$AppUI->getConfig( 'page_title' ), 12 );		
+		$pdf->ezText(dPgetConfig('company_name'), 12);
+		// $pdf->ezText(dPgetConfig('company_name').' :: '.$AppUI->getConfig('page_title'), 12);		
 
 		if ($log_all)
 		{
 			$date = new CDate();
-			$pdf->ezText( "\nAll hours as of " . $date->format( $df ) , 8 );
+			$pdf->ezText("\nAll hours as of " . $date->format($df) , 8);
 		}
 		else
 		{
 			$sdate = new CDate($log_start_date);
 			$edate = new CDate($log_end_date);
-			$pdf->ezText( "\nHours from " . $sdate->format( $df ) .  " to " . $edate->format( $df ), 8);
+			$pdf->ezText("\nHours from " . $sdate->format($df) .  " to " . $edate->format($df), 8);
 		}
 
-		$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-		$pdf->ezText( "\n" . $AppUI->_('Overall Report'), 12 );
+		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
+		$pdf->ezText("\n" . $AppUI->_('Overall Report'), 12);
 
 	foreach($allpdfdata as $company => $data)
 	{
@@ -276,17 +276,17 @@ if ($log_pdf) {
 			'width'=>'500'
 		);
 
-		$pdf->ezTable( $data, NULL, $title, $options );
+		$pdf->ezTable($data, NULL, $title, $options);
 	}
-		if ($fp = fopen( $temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb' )) {
-			fwrite( $fp, $pdf->ezOutput() );
-			fclose( $fp );
+		if ($fp = fopen($temp_dir.'/temp'.$AppUI->user_id.'.pdf', 'wb')) {
+			fwrite($fp, $pdf->ezOutput());
+			fclose($fp);
 			echo '<a href="'.DP_BASE_URL.'/files/temp/temp'.$AppUI->user_id.'.pdf" target="pdf">';
-			echo $AppUI->_( "View PDF File" );
+			echo $AppUI->_("View PDF File");
 			echo "</a>";
 		} else {
 			echo "Could not open file to save PDF.  ";
-			if (!is_writable( $temp_dir )) {
+			if (!is_writable($temp_dir)) {
 				"The files/temp directory is not writable.  Check your file system permissions.";
 			}
 		}

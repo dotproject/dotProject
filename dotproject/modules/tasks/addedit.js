@@ -33,7 +33,7 @@ function setTasksStartDate(form, datesForm) {
 		
 		//check end date of parent task 
 		// Why? Parent task is for updating dynamics or angle icon
-		if ( 0 && form.task_parent.options.selectedIndex!=0) {
+		if (0 && form.task_parent.options.selectedIndex!=0) {
 			var i = form.task_parent.options[form.task_parent.options.selectedIndex].value;	
 			var val = projTasksWithEndDates[i][0]; //format 05/03/2004	
 			var sdate = new Date(val.substring(6,10),val.substring(3,5)-1, val.substring(0,2));
@@ -63,18 +63,18 @@ function popContacts() {
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
-function popCalendar( field ){
+function popCalendar(field){
 	calendarField = field;
 	task_cal = document.getElementById('task_' + field.name);
 	idate = task_cal.value;
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, resizable=yes' );
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
+function setCalendar(idate, fdate) {
 	fld_date = document.getElementById('task_' + calendarField.name);
 	calendarField.value = fdate;
 	fld_date.value = idate;
@@ -83,7 +83,7 @@ function setCalendar( idate, fdate ) {
 	e_date = document.getElementById('task_' + 'end_date');
 	e_fdate = document.getElementById('end_date');
 	if (calendarField.name == 'start_date') {
-		if( e_date.value < idate) {
+		if(e_date.value < idate) {
 			e_date.value = idate;
 			e_fdate.value = fdate;
 		}
@@ -101,7 +101,7 @@ function setContacts(contact_id_string){
 
 function submitIt(form){
 	if (form.task_name.value.length < 3) {
-			alert( task_name_msg );
+			alert(task_name_msg);
 			form.task_name.focus();
 			return false;
 	}
@@ -133,9 +133,9 @@ function addUser(form) {
 
 	//Pull selected resources and add them to list
 	for (fl; fl > -1; fl--) {
-		if (form.resources.options[fl].selected && users.indexOf( "," + form.resources.options[fl].value + "," ) == -1) {
+		if (form.resources.options[fl].selected && users.indexOf("," + form.resources.options[fl].value + ",") == -1) {
 			t = form.assigned.length
-			opt = new Option( form.resources.options[fl].text+" ["+perc+"%]", form.resources.options[fl].value);
+			opt = new Option(form.resources.options[fl].text+" ["+perc+"%]", form.resources.options[fl].value);
 			form.hperc_assign.value += form.resources.options[fl].value+"="+perc+";";
 			form.assigned.options[t] = opt
 		}
@@ -203,9 +203,9 @@ function addTaskDependency(form, datesForm) {
 
 	//Pull selected resources and add them to list
 	for (at; at > -1; at--) {
-		if (form.all_tasks.options[at].selected && tasks.indexOf( "," + form.all_tasks.options[at].value + "," ) == -1) {
+		if (form.all_tasks.options[at].selected && tasks.indexOf("," + form.all_tasks.options[at].value + ",") == -1) {
 			t = form.task_dependencies.length
-			opt = new Option( form.all_tasks.options[at].text, form.all_tasks.options[at].value );
+			opt = new Option(form.all_tasks.options[at].text, form.all_tasks.options[at].value);
 			form.task_dependencies.options[t] = opt
 		}
 	}
@@ -226,10 +226,10 @@ function removeTaskDependency(form, datesForm) {
 	setTasksStartDate(form, datesForm);
 }
 
-function setAMPM( field) {
+function setAMPM(field) {
 	ampm_field = document.getElementById(field.name + "_ampm");
 	if (ampm_field) {
-		if ( field.value > 11 ){
+		if (field.value > 11){
 			ampm_field.value = "pm";
 		} else {
 			ampm_field.value = "am";
@@ -275,7 +275,7 @@ function calcDuration(f) {
 	for (var i = 0; i < duration; i++) {
 		//var myDate = new Date(int_st_date.substring(0,4), (int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10));
 		var myDay = myDate.getDate();
-		if ( !isInArray(working_days, myDate.getDay()) ) {
+		if (!isInArray(working_days, myDate.getDay())) {
 			weekendDays++;
 		}
 		myDate.setDate(myDay + 1);
@@ -287,7 +287,7 @@ function calcDuration(f) {
 	// check if the last day is a weekendDay
 	// if so we subtracted some hours too much before, 
 	// we have to fill up the last working day until cal_day_start + daily_working_hours
-	if ( !isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
+	if (!isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
 		durn = durn + Math.max(0, (cal_day_start + daily_working_hours - eDate.getHours()));
 	}
 	
@@ -299,7 +299,7 @@ function calcDuration(f) {
 		// durn is absolute weekday hours
 		
 		//if first day equals last day we're already done
-		if( durn_abs < daily_working_hours ) {
+		if(durn_abs < daily_working_hours) {
 
 			durn = durn_abs;
 
@@ -327,19 +327,19 @@ function calcDuration(f) {
 			// check if the last day is a weekendDay
 			// if so we subtracted some hours too much before, 
 			// we have to fill up the last working day until cal_day_start + daily_working_hours
-			if ( !isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
+			if (!isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
 				durn = durn + Math.max(0, (cal_day_start + daily_working_hours - eDate.getHours()));
 			}
 		}
 
-	} else if (durnType == 24 ) {
+	} else if (durnType == 24) {
 		//we should talk about working days so a task duration of 41 hrs means 6 (NOT 5) days!!!
 		if (durn > Math.round(durn))
 			durn++;
 		}
 
-	if ( s > e ) {
-		alert( 'End date is before start date!');
+	if (s > e) {
+		alert('End date is before start date!');
 		return false;
 	} else {
 		f.task_duration.value = Math.round(durn);
@@ -349,13 +349,13 @@ function calcDuration(f) {
 /**
 * Get the end of the previous working day 
 */
-function prev_working_day( dateObj ) {
-	while ( ! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() < cal_day_start ||
-	      (	dateObj.getHours() == cal_day_start && dateObj.getMinutes() == 0 ) ){
+function prev_working_day(dateObj) {
+	while (! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() < cal_day_start ||
+	      (	dateObj.getHours() == cal_day_start && dateObj.getMinutes() == 0)){
 
 		dateObj.setDate(dateObj.getDate()-1);
-		dateObj.setHours( cal_day_end );
-		dateObj.setMinutes( 0 );
+		dateObj.setHours(cal_day_end);
+		dateObj.setMinutes(0);
 	}
 
 	return dateObj;
@@ -363,11 +363,11 @@ function prev_working_day( dateObj ) {
 /**
 * Get the start of the next working day 
 */
-function next_working_day( dateObj ) {
-	while ( ! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() >= cal_day_end ) {
+function next_working_day(dateObj) {
+	while (! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() >= cal_day_end) {
 		dateObj.setDate(dateObj.getDate()+1);
-		dateObj.setHours( cal_day_start );
-		dateObj.setMinutes( 0 );
+		dateObj.setHours(cal_day_start);
+		dateObj.setMinutes(0);
 	}
 
 	return dateObj;
@@ -402,36 +402,36 @@ function calcFinish(f) {
 	if ((e.getMinutes() + durnMins) >= 60)
 		inc++;
 
-	var mins = ( e.getMinutes() + durnMins ) % 60;
+	var mins = (e.getMinutes() + durnMins) % 60;
 	if (mins > 38)
-		e.setMinutes( 45 );
+		e.setMinutes(45);
 	else if (mins > 23)
-		e.setMinutes( 30 );
+		e.setMinutes(30);
 	else if (mins > 8)
-		e.setMinutes( 15 );
+		e.setMinutes(15);
 	else
-		e.setMinutes( 0 );
+		e.setMinutes(0);
 	
 	// jump over to the first working day
 	for (var i = 0; i < k; i++){
-		if ( !isInArray(working_days, e.getDay()) ) {
+		if (!isInArray(working_days, e.getDay())) {
 			e.setDate(e.getDate() + 1);
 		}
 	}
 		
 	/*
-	if ( durnType==24 ) {
+	if (durnType==24) {
 		hoursToAddToFirstDay = inc * 
 		fullWorkingDays = Math.ceil(inc)+1;
-		e.setMinutes( 0 );
+		e.setMinutes(0);
 
 		// Include start day as a working day (if it is one)
-		if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
+		if (isInArray(working_days, e.getDay())) fullWorkingDays--;
 
 	 	for (var i = 0; i < fullWorkingDays; i++)
 		{
 			e.setDate(e.getDate() + 1);
-			if ( !isInArray(working_days, e.getDay()) ) i--;			
+			if (!isInArray(working_days, e.getDay())) i--;			
 		}
 		
 		f.end_hour.value = f.start_hour.value;
@@ -439,9 +439,9 @@ function calcFinish(f) {
 	*/
 		
 		hoursToAddToFirstDay = inc;
-		if ( e.getHours() + inc > cal_day_end )
+		if (e.getHours() + inc > cal_day_end)
 			hoursToAddToFirstDay = cal_day_end - e.getHours();
-		if ( hoursToAddToFirstDay > workHours )
+		if (hoursToAddToFirstDay > workHours)
 			hoursToAddToFirstDay = workHours;
 		inc -= hoursToAddToFirstDay;
 		hoursToAddToLastDay = inc % workHours;
@@ -474,7 +474,7 @@ function calcFinish(f) {
 			}
 			g = false;
 			// calculate overriden non-working days
-			if ( !isInArray(working_days, e.getDay()) ) {
+			if (!isInArray(working_days, e.getDay())) {
 				e.setDate(e.getDate() + 1);
 				i--;
 				g = true;
@@ -490,13 +490,13 @@ function calcFinish(f) {
 	// and in the negative case postpone the end date by appropriate days
 	for (var i = 0; i < 7-working_days.length; i++){
 		// override  possible non-working enddays
-		if ( !isInArray(working_days, e.getDay()) ) {
+		if (!isInArray(working_days, e.getDay())) {
 			e.setDate(e.getDate() + 1);
 		}
 	}
 
-	if ( e.getDate() < 10 ) tz1 = "0";
-	if ( (e.getMonth()+1) < 10 ) tz2 = "0";
+	if (e.getDate() < 10) tz1 = "0";
+	if ((e.getMonth()+1) < 10) tz2 = "0";
 
 	f.task_end_date.value = e.getUTCFullYear()+tz2+(e.getMonth()+1)+tz1+e.getDate();
 	//f.end_date.value = tz2+(e.getMonth()+1)+"/"+tz1+e.getDate()+"/"+e.getUTCFullYear(); // MM/DD/YY
@@ -562,12 +562,12 @@ function fd_seed()
 function checkDates(form) {
 	if (can_edit_time_information && check_task_dates) {
 		if (!form.task_start_date.value) {
-			alert( task_start_msg );
+			alert(task_start_msg);
 			form.task_start_date.focus();
 			return false;
 		}
 		if (!form.task_end_date.value) {
-			alert( task_end_msg );
+			alert(task_end_msg);
 			form.task_end_date.focus();
 			return false;
 		}
@@ -577,8 +577,8 @@ function checkDates(form) {
 
 		var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 		var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
-		if ( s > e ) {
-			alert( 'End date is before start date!');
+		if (s > e) {
+			alert('End date is before start date!');
 			return false;
 		}
 	}
@@ -638,10 +638,10 @@ function copyForm(form, to, extras) {
 
 function saveDates(form) {
 	if (can_edit_time_information) {
-		if ( form.task_start_date.value.length > 0 ) {
+		if (form.task_start_date.value.length > 0) {
 			form.task_start_date.value += form.start_hour.value + form.start_minute.value;
 		}
-		if ( form.task_end_date.value.length > 0 ) {
+		if (form.task_end_date.value.length > 0) {
 			form.task_end_date.value += form.end_hour.value + form.end_minute.value;
 		}
 	}

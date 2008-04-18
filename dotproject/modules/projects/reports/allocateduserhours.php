@@ -3,37 +3,37 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-$coarseness 		 = dPgetParam( $_POST, "coarseness", 1 );
-$do_report 		 = dPgetParam( $_POST, "do_report", 0 );
+$coarseness 		 = dPgetParam($_POST, "coarseness", 1);
+$do_report 		 = dPgetParam($_POST, "do_report", 0);
 $hideNonWd		 = dPgetParam($_POST, "hideNonWd", 0);
-$log_start_date          = dPgetParam( $_POST, "log_start_date", 0 );
-$log_end_date 	         = dPgetParam( $_POST, "log_end_date", 0 );
+$log_start_date          = dPgetParam($_POST, "log_start_date", 0);
+$log_end_date 	         = dPgetParam($_POST, "log_end_date", 0);
 $use_assigned_percentage = dPgetParam($_POST, "use_assigned_percentage", 0);
 $user_id                 = dPgetParam($_POST, "user_id", $AppUI->user_id);
 
 // create Date objects from the datetime fields
-$start_date = intval( $log_start_date ) ? new CDate( $log_start_date ) : new CDate(date("Y-m-01"));
-$end_date   = intval( $log_end_date )   ? new CDate( $log_end_date ) : new CDate();
+$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate(date("Y-m-01"));
+$end_date   = intval($log_end_date)   ? new CDate($log_end_date) : new CDate();
 
-$end_date->setTime( 23, 59, 59 );
+$end_date->setTime(23, 59, 59);
 ?>
 
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar( field ) {
+function popCalendar(field) {
 	calendarField = field;
-	idate = eval( 'document.editFrm.log_' + field + '.value' );
-	window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no' );
+	idate = eval('document.editFrm.log_' + field + '.value');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.log_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.log_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 }
@@ -49,28 +49,28 @@ function setCalendar( idate, fdate ) {
 
 <tr>
 	<td nowrap="nowrap"><?php echo $AppUI->_('For period');?>:
-		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" />
+		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
 		<a href="#" onClick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td nowrap="nowrap"><?php echo $AppUI->_('to');?>
-		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" />
+		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 		<a href="#" onClick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 	<td nowrap='nowrap'>
 	   <input type="radio" name="coarseness" value="1" <?php if ($coarseness == 1) echo "checked" ?> />
-	   <?php echo $AppUI->_( 'Days' );?>
+	   <?php echo $AppUI->_('Days');?>
 	   <input type="radio" name="coarseness" value="7" <?php if ($coarseness == 7) echo "checked" ?> />
-	   <?php echo $AppUI->_( 'Weeks' );?>
+	   <?php echo $AppUI->_('Weeks');?>
 </td>
 	<td nowrap='nowrap'>
 	   <?php 
-	       echo $AppUI->_( 'Tasks created by' );
+	       echo $AppUI->_('Tasks created by');
 	       echo " ";
 	       echo getUsersCombo($user_id);
 	   ?>
@@ -79,12 +79,12 @@ function setCalendar( idate, fdate ) {
 <tr>
 	<td nowrap="nowrap" colspan="3" align="center">
 		<input type="checkbox" name="log_all_projects" id="log_all_projects" <?php if ($log_all_projects) echo 'checked="checked"' ?> />
-		<label for="log_all_projects"><?php echo $AppUI->_( 'Log All Projects' );?></label>
+		<label for="log_all_projects"><?php echo $AppUI->_('Log All Projects');?></label>
 	   <input type="checkbox" name="use_assigned_percentage" id="use_assigned_percentage" <?php if ($use_assigned_percentage) echo 'checked="checked"' ?> />
-	   <labe for="use_assigned_percentage"><?php echo $AppUI->_( 'Use assigned percentage' );?></label>
+	   <labe for="use_assigned_percentage"><?php echo $AppUI->_('Use assigned percentage');?></label>
 	
 	   <input type="checkbox" name="hideNonWd" id="hideNonWd" <?php if ($hideNonWd) echo 'checked="checked"' ?> />
-	   <label for="hideNonWd"><?php echo $AppUI->_( 'Hide non-working days' );?></label>
+	   <label for="hideNonWd"><?php echo $AppUI->_('Hide non-working days');?></label>
 	</td>	
 	<td align="left" width="50%" nowrap="nowrap">
 		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit');?>" />
@@ -109,13 +109,13 @@ if ($do_report) {
 	$q->addTable('user_tasks', 'ut');
 	$q->addTable('projects', 'p');
 	$q->addQuery('t.*, ut.*, p.project_name');
-	$q->addWhere("( task_start_date
-			   BETWEEN \"".$start_date->format( FMT_DATETIME_MYSQL )."\" 
-	                AND \"".$end_date->format( FMT_DATETIME_MYSQL )."\" 
-	           OR task_end_date	BETWEEN \"".$start_date->format( FMT_DATETIME_MYSQL )."\" 
-	                AND \"".$end_date->format( FMT_DATETIME_MYSQL )."\" 
-		   OR ( task_start_date <= \"".$start_date->format( FMT_DATETIME_MYSQL )."\"
-	                AND task_end_date >= \"".$end_date->format( FMT_DATETIME_MYSQL )."\") )");
+	$q->addWhere("(task_start_date
+			   BETWEEN \"".$start_date->format(FMT_DATETIME_MYSQL)."\" 
+	                AND \"".$end_date->format(FMT_DATETIME_MYSQL)."\" 
+	           OR task_end_date	BETWEEN \"".$start_date->format(FMT_DATETIME_MYSQL)."\" 
+	                AND \"".$end_date->format(FMT_DATETIME_MYSQL)."\" 
+		   OR (task_start_date <= \"".$start_date->format(FMT_DATETIME_MYSQL)."\"
+	                AND task_end_date >= \"".$end_date->format(FMT_DATETIME_MYSQL)."\"))");
 	$q->addWhere('task_end_date IS NOT NULL');
 	$q->addWhere("task_end_date != '0000-00-00 00:00:00'");
 	$q->addWhere('task_start_date IS NOT NULL');
@@ -161,8 +161,8 @@ if ($do_report) {
 	$user_tasks_counted_in = array();
 	$user_names = array();
 	
-	if ( count($task_list) == 0 ) {
-		echo "<p>" . $AppUI->_( 'No data available' ) ."</p>";
+	if (count($task_list) == 0) {
+		echo "<p>" . $AppUI->_('No data available') ."</p>";
 	} else {
 		foreach ($task_list as $task) {
 			$task_start_date  = new CDate($task->task_start_date);
@@ -325,7 +325,7 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 				if (isset($user_usage[$user_id][$awoy])) {
 					$hours = number_format($user_usage[$user_id][$awoy],2);
 					$table_rows .= $hours;
-					$percentage_used = round(($hours/(dPgetConfig("daily_working_hours")*count(explode(",",dPgetConfig("cal_working_days")))) )*100);
+					$percentage_used = round(($hours/(dPgetConfig("daily_working_hours")*count(explode(",",dPgetConfig("cal_working_days")))))*100);
 					$bar_color       = "blue";
 					if ($percentage_used > 100) {
 						$bar_color = "red";
@@ -342,7 +342,7 @@ GLOBAL   $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user
 */
 			$array_sum = array_sum($user_usage[$user_id]);
 
-			$average_user_usage = number_format( ($array_sum/( $week_difference * count(explode(",",dPgetConfig("cal_working_days")))*dPgetConfig("daily_working_hours")))*100, 2);
+			$average_user_usage = number_format(($array_sum/($week_difference * count(explode(",",dPgetConfig("cal_working_days")))*dPgetConfig("daily_working_hours")))*100, 2);
 			$allocated_hours_sum += $array_sum;
 
 			$bar_color = "blue";
@@ -458,7 +458,7 @@ function showDays() {
 				}
 */
 				$array_sum = array_sum($user_usage[$user_id]);
-				$average_user_usage = number_format( ($array_sum/($working_days_count*dPgetConfig("daily_working_hours")))*100, 2);
+				$average_user_usage = number_format(($array_sum/($working_days_count*dPgetConfig("daily_working_hours")))*100, 2);
 				$allocated_hours_sum += $array_sum;
 				
 				$bar_color = "blue";
