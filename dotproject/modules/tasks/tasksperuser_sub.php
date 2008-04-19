@@ -623,7 +623,8 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	foreach ($users as $row) {
 		if ($row['user_id']) {
 			$us .= ($sep . '<a href=\"?m=admin&a=viewuser&user_id=$row[0]\">'
-			        . $row['contact_last_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>');
+			        . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '&nbsp;(' 
+			        . $row['perc_assignment'] . '%)</a>');
 			$sep = ', ';
 		}
 		
