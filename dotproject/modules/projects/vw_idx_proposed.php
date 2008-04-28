@@ -14,9 +14,10 @@ $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $base_table_cols = 9;
+$base_table_cols += (($show_all_projects) ? 1 : 0);
+
 $table_cols = $base_table_cols + ((($perms->checkModuleItem('projects', 'edit', 
 															$row['project_id']))) ? 1 : 0);
-$table_cols += (($show_all_projects) ? 1 : 0);
 $added_cols = $table_cols - $base_table_cols;
 ?>
 
@@ -78,9 +79,11 @@ if ($added_cols) {
 		<a href="?m=projects&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My');?>)</a>
 	</th>
 <?php 
-if($show_all_projects){
+if ($show_all_projects) {
 ?>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></th>
+	<th nowrap="nowrap">
+		<a href="?m=projects&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Status');?></a>
+	</th>
 <?php
 }
 ?>
