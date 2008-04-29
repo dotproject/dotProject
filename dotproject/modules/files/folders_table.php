@@ -41,7 +41,7 @@ if (!$project_id) {
 global $allowedCompanies, $allowedProjects, $allowedTasks, $allowedFolders;
 
 $company = new CCompany();
-$allowedCompanies = $company->getAllowedSQL($AppUI->user_id);
+$allowedCompanies = $company->getAllowedSQL($AppUI->user_id, 'co.company_id');
 
 $project = new CProject();
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'f.file_project');
@@ -212,15 +212,18 @@ function countFiles($folder_id) {
 	
 	//get file count for folder
 	$q->addTable('files', 'f');
+	$q->addJoin('projects', 'p', 'p.project_id = f.file_project');
+	$q->addJoin('tasks', 't', 't.task_id = f.file_task');
+	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = f.file_folder');
 	$q->addQuery('count(f.file_id)', 'file_in_folder');
 	$q->addWhere('f.file_folder = '. $folder_id);
 	if (count($allowedFolders)) {
-		$q->addWhere($allowedFolders);
+		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
 	}
-	if (count ($allowedProjects)) {
+	if (count($allowedProjects)) {
 		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
 	}
-	if (count ($allowedTasks)) {
+	if (count($allowedTasks)) {
 		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') f.OR file_task = 0 )');
 	}
 	if ($project_id) {
@@ -230,10 +233,11 @@ function countFiles($folder_id) {
 		$q->addWhere('f.file_task = '. $task_id);
 	}
 	if ($company_id) {
-		$q->addJoin('projects', 'p', 'p.project_id = f.file_project');
-		$q->innerJoin('companies','co','co.company_id = p.project_company');
+		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
 		$q->addWhere('co.company_id = '. $company_id);
-		$q->addWhere($allowedCompanies);
+		if (count($allowedCompanies)) {
+			$q->addWhere('(' . implode(' AND ', $allowedCompanies) . ')');
+		}
 	}
 	
 	$sql = $q->prepare();
@@ -293,7 +297,9 @@ function displayFiles($folder_id) {
 	if ($company_id) {
 		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
 		$q->addWhere('co.company_id = '. $company_id);
-		$q->addWhere($allowedCompanies);
+		if (count($allowedCompanies)) {
+			$q->addWhere('(' . implode(' AND ', $allowedCompanies) . ')');
+		}
 	}
 	
 	$q->addGroup('f.file_version_id');
@@ -341,7 +347,9 @@ function displayFiles($folder_id) {
 	if ($company_id) {
 		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
 		$q->addWhere('co.company_id = '. $company_id);
-		$q->addWhere($allowedCompanies);
+		if (count($allowedCompanies)) {
+			$q->addWhere('(' . implode(' AND ', $allowedCompanies) . ')');
+		}
 	}
 	
 	$q->addOrder('p.project_name');
@@ -379,9 +387,11 @@ function displayFiles($folder_id) {
 		$q->addWhere('f.file_task = '. $task_id);
 	}
 	if ($company_id) {
-		$q->innerJoin('companies','co','co.company_id = p.project_company');
+		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
 		$q->addWhere('co.company_id = '. $company_id);
-		$q->addWhere($allowedCompanies);
+		if (count($allowedCompanies)) {
+			$q->addWhere('(' . implode(' AND ', $allowedCompanies) . ')');
+		}
 	}
 				
 	$file_versions_sql = $q->prepare();
