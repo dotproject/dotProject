@@ -894,8 +894,9 @@ if ($folder) {
 	echo ("\t\t\t" . '</a>' . "\n");
 ?>
 <?php 
-
-	$canRead_parent = $perms->checkModuleItem('file_folders', 'view', $cfObj->file_folder_parent);
+	
+	$canRead_parent = (($folder) 
+	                   ? getPermission('file_folders', 'view', $cfObj->file_folder_parent) : true);
 	if ($canRead_parent) {
 		echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder=' 
 		      . $cfObj->file_folder_parent . '">' . "\n");
