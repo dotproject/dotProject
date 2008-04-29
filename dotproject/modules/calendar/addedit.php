@@ -294,7 +294,7 @@ function removeUser() {
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">
 	<?php echo $AppUI->_('Description'); ?> :<br/>
-		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo @$obj->event_description;?></textarea></td>
+		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo $obj->event_description;?></textarea></td>
 	</td>
 </tr>
 
@@ -302,7 +302,7 @@ function removeUser() {
 	<td align="right"><?php echo $AppUI->_('Type');?>:</td>
 	<td>
 <?php
-	echo arraySelect($types, 'event_type', 'size="1" class="text"', @$obj->event_type, true);
+	echo arraySelect($types, 'event_type', 'size="1" class="text"', $obj->event_type, true);
 ?>
 	</td>
 </tr>
@@ -311,7 +311,7 @@ function removeUser() {
 	<td align="right"><?php echo $AppUI->_('Project');?>:</td>
 	<td>
 <?php
-	echo arraySelect($projects, 'event_project', 'size="1" class="text"', @$obj->event_project);
+	echo arraySelect($projects, 'event_project', 'size="1" class="text"', $obj->event_project);
 ?>
 	</td>
 </tr>
