@@ -29,12 +29,12 @@ $q->clear();
 $q->createTemp('tasks_summy');
 $q->addQuery('task_project, COUNT(DISTINCT task_id) AS my_tasks');
 $q->addTable('tasks');
-$q->addWhere('task_owner = '.$AppUI->user_id);
+$q->addWhere('task_owner = ' . $AppUI->user_id);
 $q->addGroup('task_project');
 $q->exec();
 $q->clear();
 
-$q->addTable('projects');
+$q->addTable('projects', 'pr');
 $q->addQuery('project_id, project_name, project_status, project_color_identifier,
 	project_start_date, project_end_date, project_priority,
 	ts.total_tasks, tsm.my_tasks, ts.project_percent_complete,

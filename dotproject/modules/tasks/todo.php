@@ -94,19 +94,18 @@ $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 // query my sub-tasks (ignoring task parents)
 
 $q = new DBQuery;
-$q->addQuery('ta.*');
-$q->addQuery('project_name, project_id, project_color_identifier');
-$q->addQuery('tp.task_pinned');
-$q->addTable('projects', 'pr');
-$q->addTable('tasks', 'ta');
-$q->addTable('user_tasks', 'ut');
-$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . $user_id);
 
-$q->addWhere('ut.task_id = ta.task_id');
-$q->addWhere("ut.user_id = '$user_id'");
-$q->addWhere('(ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
-$q->addWhere("ta.task_status = '0'");
-$q->addWhere("pr.project_id = ta.task_project");
+$q->addTable('tasks', 'ta');
+$q->leftJoin('projects', 'pr', 'pr.project_id = ta.task_project');
+$q->leftJoin('user_tasks', 'ut', 'ut.task_id = ta.task_id AND ut.user_id = ' . $user_id);
+$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id AND tp.user_id = ' . $user_id);
+
+$q->addQuery('ta.*');
+$q->addQuery('pr.project_name, pr.project_id, pr.project_color_identifier');
+$q->addQuery('tp.task_pinned');
+
+$q->addWhere('(ta.task_percent_complete < 100 OR ta.task_percent_complete IS NULL)');
+$q->addWhere('ta.task_status = 0');
 if (!$showArcProjs)
 	$q->addWhere('project_status <> 7');
 if (!$showLowTasks)
@@ -153,11 +152,7 @@ for ($j=0, $xj=count($tasks); $j < $xj; $j++) {
 }
 
 global $priorities;
-$priorities = array(
-	'1' => 'high',
-	'0' => 'normal',
-        '-1' => 'low'
-);
+$priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
 
 global $durnTypes;
 $durnTypes = dPgetSysVal('TaskDurationType');
@@ -178,18 +173,18 @@ if ($m == 'tasks' && $a == 'todo') {
 <table cellspacing="0" cellpadding="2" border="0" width="100%">
 <tr>
 	<td width="80%" valign="top">
-  <?php
-  // Tabbed information boxes
-  $tabBox = new CTabBox('?m=tasks&a=todo', DP_BASE_DIR . '/modules/', $tab);
-  $tabBox->add('tasks/todo_tasks_sub', 'My Tasks');
-  $tabBox->add('tasks/todo_gantt_sub', 'My Gantt');
+		<?php
+	// Tabbed information boxes
+	$tabBox = new CTabBox('?m=tasks&a=todo', DP_BASE_DIR . '/modules/', $tab);
+	$tabBox->add('tasks/todo_tasks_sub', 'My Tasks');
+	$tabBox->add('tasks/todo_gantt_sub', 'My Gantt');
 	// Wouldn't it be better to user $tabBox->loadExtras('tasks', 'todo'); and then
 	// add tasks_tab.todo.my_open_requests.php in helpdesk?  
-  if ($AppUI->isActiveModule('helpdesk')){ 
-  $tabBox->add('helpdesk/vw_idx_my', 'My Open Requests');
-  }
-  $tabBox->show();
-  ?>
+	if ($AppUI->isActiveModule('helpdesk')){ 
+		$tabBox->add('helpdesk/vw_idx_my', 'My Open Requests');
+	}
+	$tabBox->show();
+?>
 	</td>
 </tr>
 </table>
