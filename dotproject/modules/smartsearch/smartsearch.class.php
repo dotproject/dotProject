@@ -3,11 +3,13 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
+require_once $AppUI->getSystemClass('dp');
+
 class smartsearch  {
 
 	var $table = null;
 	var $table_alias = null;
-	var $table_module	= null;
+	var $table_module = null;
 	var $table_key = null;	// primary key in searched table
 	var $table_key2 = null; // primary key in parent table
 	var $table_link = null;	// first part of link
@@ -40,165 +42,163 @@ class smartsearch  {
 	}
 	
 	function createlink() {
-	$tmplink="";
-	if (isset($this->table_link) && isset($this->table_key)) 
-	$tmplink=$this->table_link.$records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key)];
-	
-	if (isset($this->table_link2) && isset($this->table_key2)) 
-	$tmplink=$this->table_link.$records[$this->table_key].$this->table_link2.$records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key2)];
-	
-	return $tmplink;
+		$tmplink = "";
+		if (isset($this->table_link) && isset($this->table_key)) {
+			$tmplink = ($this->table_link 
+			            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key)]);
+		}
+		
+		if (isset($this->table_link2) && isset($this->table_key2)) {
+			$tmplink = ($this->table_link . $records[$this->table_key] . $this->table_link2 
+			            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key2)]);
+		}
+		return $tmplink;
 	}
-	function fetchResults(&$permissions, &$record_count){
+	function fetchResults(&$record_count){
 		global $AppUI;
-		$sql = $this->_buildQuery();
-		$results = db_loadList($sql);
-		if($results){
+		
+		$results = $this->_searchResults();
+		if ($results && getPermission($this->table_module, 'access')) {
 			$record_count += count($results);
-			$outstring= "<tr><th><b>".$AppUI->_($this->table_title). ' (' . count($results) . ')'."</b></th></tr> \n";
-			foreach($results as $records){
-			    if ($permissions->checkModuleItem($this->table_module, "view", $records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key)])) {
-// --MSy-				
-					$ii=0;
-					$display_val = "";
-					foreach($this->display_fields as $fld){
+			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . count($results) 
+			              . ')' . '</b></th></tr>' . "\n");
+			foreach ($results as $records) {
+				if (getPermission($this->table_module, 'access', $records[$this->table_key])) {
+					$ii = 0;
+					$display_val = '';
+					foreach ($this->display_fields as $fld) {
 						$ii++;
-						if (!($this->search_options['display_all_flds']=="on") && ($ii>2))
+						if (!($this->search_options['display_all_flds'] == 'on') && ($ii > 2)) {
 							break;
-						$display_val=$display_val." ".$records[preg_replace('/^.*\.([^\.]+)$/','$1',$fld)];
-					}	
-//--MSy-				
-					$tmplink="";
-					if (isset($this->table_link) && isset($this->table_key)) 
-						$tmplink=$this->table_link.$records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key)];
-					if (isset($this->table_link2) && isset($this->table_key2)) 
-						$tmplink=$this->table_link.$records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key)].$this->table_link2.$records[preg_replace('/^.*\.([^\.]+)$/','$1',$this->table_key2)];
-//--MSy--
-					$outstring .= "<tr>";
-    				$outstring .= "<td>";
-    				$outstring .= "<a href = \" ".$tmplink."\">".highlight($display_val,$this->keywords)."</a>\n";
-    				$outstring .= "</td>\n";
-                        $outstring .= "</tr>";
+						}
+						$display_val .= ((($display_val) ? ' ' : '') 
+						                 . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $fld)]);
+					}
+					$tmplink = "";
+					if (isset($this->table_link) && isset($this->table_key)) {
+						$tmplink = ($this->table_link 
+						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
+						                                    $this->table_key)]);
+					}
+					if (isset($this->table_link2) && isset($this->table_key2)) {
+						$tmplink = ($this->table_link 
+						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
+						                                    $this->table_key)] . $this->table_link2 
+						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
+						                                    $this->table_key2)]);
+					}
+					$outstring .= ('<tr><td>'."\n" . '<a href="' . $tmplink . '">' 
+					               . highlight($display_val, $this->keywords) . '</a>' . "\n" 
+					               . '</td></tr>' . "\n");
 			    }
 			}
 		}
-		else {
-			if ($this->search_options['show_empty']=="on") {
-				$outstring= "<tr><th><b>".$AppUI->_($this->table_title). ' (' . count($results) . ')'."</b></th></tr> \n";
-				$outstring .= "<tr>"."<td>".$AppUI->_('Empty')."</td>"."</tr>";
-			}
+		else if ($this->search_options['show_empty'] == 'on') {
+			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . count($results) 
+			              . ')' . '</b></th></tr>' . "\n" .'<tr><td>' . $AppUI->_('Empty') 
+			              .'</td></tr>' . "\n");
 		}
 		return $outstring;
 	}
 	
 	function setKeyword($keyw){
-		$this->keyword= $keyw;
+		$this->keyword = $keyw;
 	}
 	function setAdvanced($search_opts){
 		$this->search_options = $search_opts;
-		$this->keywords= $search_opts['keywords'];
+		$this->keywords = $search_opts['keywords'];
 	}
 	
-	function _buildQuery(){
-                $q  = new DBQuery;
-                
-                if ($this->table_alias) {
-                        $q->addTable($this->table, $this->table_alias);
-                } else {
-                        $q->addTable($this->table);                
-                }
-                $q->addQuery($this->table_key);
-                if (isset($this->table_key2)) {
-                        $q->addQuery($this->table_key2);
-                }
-//--MSy--
-                foreach($this->table_joins as $join){
-                  	$q->addJoin($join['table'],$join['alias'],$join['join']);
-                }
-
-                foreach($this->display_fields as $fld){
-                  	$q->addQuery($fld);
-                }
-                
-                $q->addOrder($this->table_orderby);
-				
-                if ($this->table_extra) {
-                	      $q->addWhere($this->table_extra);
-   	          }
-                
-                $sql = '';
-                foreach(array_keys($this->keywords) as $keyword) {
-				$sql.= '(';
-
-				foreach($this->search_fields as $field){
-//OR treatment to each keyword
-// Search for semi-colons, commas or spaces and allow any to be separators
-						$or_keywords = preg_split('/[\s,;]+/', $keyword);
-						foreach ($or_keywords as $or_keyword) {
-							if ($this->search_options['ignore_specchar']=="on"){
-								$tmppattern = recode2regexp_utf8($or_keyword);
-								if ($this->search_options['ignore_case']=="on")
-									$sql.=" $field REGEXP '$tmppattern' or ";
-								else
-									$sql.=" $field REGEXP BINARY '$tmppattern' or ";
-							}	
-							else
-								if ($this->search_options['ignore_case']=="on")
-									$sql.=" $field LIKE '%$or_keyword%' or ";
-								else
-									$sql.=" $field LIKE BINARY '%$or_keyword%' or ";
-						}
-				} // foreach $field
-				$sql = substr($sql,0,-4);
-
-				if ($this->search_options['all_words']=="on") {
-						$sql.= ') and ';
-				} else {
-						$sql.= ') or ';
+	function _searchResults() {
+		global $AppUI, $locale_char_set;
+		$q = new DBQuery;
+		$dPObj = new CDpObject($this->table, $this->table_key);
+		
+		$q->addTable($this->table, $this->table_alias);
+		foreach($this->table_joins as $join){
+			$q->addJoin($join['table'],$join['alias'],$join['join']);
+		}
+		
+		$q->addQuery($this->table_key);
+		if (isset($this->table_key2)) {
+			$q->addQuery($this->table_key2);
+		}
+		foreach ($this->display_fields as $fld) {
+			$q->addQuery($fld);
+		}
+		
+		$q->addOrder($this->table_orderby);
+		
+		$dPObj->setAllowedSQL($AppUI->user_id, &$q);
+		if ($this->table_extra) {
+			$q->addWhere($this->table_extra);
+		}
+        
+		$keys = '';
+		$keys2 = '';
+		foreach (array_keys($this->keywords) as $keyword) {
+			if ($keys2) {
+				$keys .= (($this->search_options['all_words'] == 'on') ? ' AND ' : ' OR ');
+				$keys2 = '';
+			}
+			foreach ($this->search_fields as $field) {
+				// OR treatment to each keyword
+				// Search for semi-colons, commas or spaces and allow any to be separators
+				$or_keywords = preg_split('/[\s,;]+/', $keyword);
+				foreach ($or_keywords as $or_keyword) {
+					$search_pattern = (($this->search_options['ignore_specchar'] == 'on') 
+					                   ? recode2regexp_utf8($or_keyword) 
+									   : ('(' . $or_keyword . ')'));
+					$keys2 .= (($keys2) ? ' OR ' : '');
+					$keys2 .= ('(' . $field . ' REGEXP ' 
+					           . (($this->search_options['ignore_case'] == 'on') 
+					              ? '' : ' BINARY ') . "'.*" . $search_pattern . ".*'" 
+							   . ((($this->search_options['ignore_specchar'] == 'on')) 
+								  ? ' COLLATE utf8_general_ci' : '') . ')');
 				}
-
-                } // foreach $keyword
-//--MSy--					
-                $sql = substr($sql,0,-4);
-                if ($sql) {
-                	$q->addWhere($sql);
-                	return $q->prepare(true);
-                } else {
-                	return '/* */';
-                }
+			}
+			$keys .= (($keys2) ? ('(' . $keys2 . ')') : '');
+		}
+		
+		if ($keys) {
+			$q->addWhere($keys);
+		}
+		
+		$results = $q->loadList();
+		return ($results);
 	}
 }
 
 function highlight($text, $keyval) {
-      global $ssearch;
-      
-      $txt = $text;
-      $hicolor = array("#FFFF66","#ADD8E6","#90EE8A","#FF99FF");
-      $keys=array();
-      if (!is_array($keyval)) 
-      	$keys=array($keyval);
-      else
-      	$keys=$keyval;
-      	
-      foreach ($keys as $key) {
-      	if (strlen($key[0])>0) {
-      	      $key[0] = stripslashes($key[0]);
-      		if (isset ($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar']=="on") ) {
-      			if ($ssearch['ignore_case']=='on')
-            			$txt= eregi_replace ( (recode2regexp_utf8($key[0])), "<span style=\"background:".$hicolor[$key[1]]."\" >\\0</span>", $txt ); 
-      			else
-            			$txt= ereg_replace ( (recode2regexp_utf8($key[0])), "<span style=\"background:".$hicolor[$key[1]]."\" >\\0</span>", $txt ); 
-     			} elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar']=="") ) {
-      			if ($ssearch['ignore_case']=='on')
-            			$txt= eregi_replace ( $key[0], "<span style=\"background:".$hicolor[$key[1]]."\" >\\0</span>", $txt ); 
-      			else
-            			$txt= ereg_replace ( $key[0], "<span style=\"background:".$hicolor[$key[1]]."\" >\\0</span>", $txt );      			
-     			} else {
-     			    $txt= eregi_replace ( (sql_regcase($key[0])), "<span style=\"background:".$hicolor[$key[1]]."\" >\\0</span>", $txt ); 
-		      }
-      	}
-      }
-      return $txt; 
+	global $ssearch;
+	
+	$txt = $text;
+	$hicolor = array('#FFFF66','#ADD8E6','#90EE8A','#FF99FF');
+	$keys=array();
+	$keys = ((!(is_array($keyval))) ? array($keyval) : $keyval);
+	
+	foreach ($keys as $key) {
+		if (strlen($key[0])>0) {
+			 $key[0] = stripslashes($key[0]);
+			if (isset($ssearch['ignore_specchar']) && $ssearch['ignore_specchar'] == 'on') {
+				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
+				$txt = $rep_func(recode2regexp_utf8($key[0]), 
+								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
+								 $txt );
+			} elseif (!(isset($ssearch['ignore_specchar'])) || $ssearch['ignore_specchar'] == '') {
+				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
+				$txt = $rep_func($key[0], 
+								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
+								 $txt );
+			} else {
+				$rep_func = 'eregi_replace';
+				$txt = $rep_func(sql_regcase($key[0]), 
+								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
+								 $txt );
+			}
+		}
+	}
+	return $txt; 
 }
 
 function recode2regexp_utf8($input) {
@@ -207,62 +207,62 @@ function recode2regexp_utf8($input) {
       switch($input[$i]) {
           case 'A':
           case 'a':
-      		$result.="(a|A!|A¤|A?|A„)";
+      		$result.='(' . $input[$i] . "|A!|A¤|A?|A„)";
       		break;
           case 'C':
           case 'c':
-      		$result.="(c|Ä?|ÄO)";
+      		$result .= '(' . $input[$i] . "|Ä?|ÄO)";
       		break;
           case 'D':
           case 'd':
-      		$result.="(d|Ä?|ÄŽ)";
+      		$result .= '(' . $input[$i] . "|Ä?|ÄŽ)";
       		break;
           case 'E':
           case 'e':
-      		$result.="(e|A©|Ä›|A‰|Äš)";
+      		$result .= '(' . $input[$i] . "|A©|Ä›|A‰|Äš)";
       		break;
           case 'I':
           case 'i':
-      		$result.="(i|A­|A?)";
+      		$result .= '(' . $input[$i] . "|A­|A?)";
       		break;
           case 'L':
           case 'l':
-      		$result.="(l|Äo|Ä3|Ä1|Ä1)";
+      		$result .= '(' . $input[$i] . "|Äo|Ä3|Ä1|Ä1)";
       		break;
           case 'N':
           case 'n':
-      		$result.="(n|A^|A‡)";
+      		$result .= '(' . $input[$i] . "|A^|A‡)";
       		break;
           case 'O':
           case 'o':
-      		$result.="(o|A3|A´|A“|A”)";
+      		$result .= '(' . $input[$i] . "|A3|A´|A“|A”)";
       		break;
           case 'R':
           case 'r':
-      		$result.="(r|A•|A™|A”|A~)";
+      		$result .= '(' . $input[$i] . "|A•|A™|A”|A~)";
       		break;
           case 'S':
           case 's':
-      		$result.="(s|A!|A )";
+      		$result .= '(' . $input[$i] . "|A!|A )";
       		break;
           case 'T':
           case 't':
-      		$result.="(t|AY|A¤)";
+      		$result .= '(' . $input[$i] . "|AY|A¤)";
       		break;
           case 'U':
           case 'u':
-      		$result.="(u|Ao|A—|Aš|A®)";
+      		$result .= '(' . $input[$i] . "|Ao|A—|Aš|A®)";
       		break;
           case 'Y':
           case 'y':
-      		$result.="(y|A1|A?)";
+      		$result .= '(' . $input[$i] . "|A1|A?)";
       		break;
           case 'Z':
           case 'z':
-      		$result.="(z|A3|A1)";
+      		$result .= '(' . $input[$i] . "|A3|A1)";
       		break;
           default:
-      		$result.=$input[$i];
+      		$result .= $input[$i];
       }
       return $result;
 }	

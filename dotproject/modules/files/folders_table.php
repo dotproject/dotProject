@@ -14,7 +14,7 @@ $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
 
 $folder = dPgetParam($_GET, 'folder', 0);
-$page = dPgetParam( $_GET, "page", 1);
+$page = dPgetParam( $_GET, 'page', 1);
 
 
 global $canAccess_folders, $canRead_folders, $canEdit_folders;
