@@ -5,12 +5,10 @@
 global $AppUI, $company_id, $pstatus, $dPconfig;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
-
-$show_all_projects = true;
+$project_types = dPgetSysVal('ProjectStatus');
 
 // get any records denied from viewing
 $obj = new CProject();
-$deny = $obj->getDeniedRecords( $AppUI->user_id );
 
 // Task sum table
 // by Pablo Roca (pabloroca@mvps.org)
@@ -48,10 +46,8 @@ $q->addJoin('tasks_summy', 'tsm', 'projects.project_id = tsm.task_project');
 $q->addWhere('projects.project_status <> 7');
 $q->addWhere('projects.project_status <> 5');
 $allowed_where = $obj->getAllowedSQL($AppUI->user_id);
-if (count($allowed_where) > 1) {
-	$q->addWhere(implode('AND', $allowed_where));
-} else {
-	$q->addWhere($allowed_where[0]);
+if ($allowed_where) {
+	$q->addWhere(implode(' AND ', $allowed_where));
 }
 $q->addOrder('project_end_date');
 
@@ -71,14 +67,10 @@ $projects = $q->loadList();
 		<a href="?m=projects&orderby=my_tasks%20desc" class="hdr"><?php echo $AppUI->_('My Tasks');?></a>
 		<a href="?m=projects&orderby=total_tasks%20desc" class="hdr">(<?php echo $AppUI->_('All');?>)</a>
 	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Selection'); ?>
-	</th>
-	<?php if ($show_all_projects): ?>
-		<th nowrap="nowrap">
-			<?php echo $AppUI->_('Status'); ?>
-		</th>
-	<?php endif; ?>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></th>
+<!--
+	<th nowrap="nowrap"><?php echo $AppUI->_('Selection'); ?></th>
+-->
 </tr>
 
 <?php
@@ -86,59 +78,43 @@ $CR = "\n";
 $CT = "\n\t";
 $none = true;
 
-// When in plain view, $AppUI->getState( 'ProjIdxTab' ) doesn't contain the selected index for which we want
-// to filter projects, we must get the current box name from the calling file overrides.php variable $v
-if ( $tab == -1 ){
-	//Plain view
-	foreach ($project_types as $project_key => $project_type){
-		$project_type = trim($project_type);
-		$flip_project_types[$project_type] = $project_key;
-	}
-	$project_status_filter = $flip_project_types[$v[1]];
-} else{
-	//Tabbed view
-	$project_status_filter = $tab;
-	//Project not defined
-	if ($tab == count($project_types)-1)
-		$project_status_filter = 0;
-}
-
 foreach ($projects as $row) {
-	if ($show_all_projects || 
-	    ($row['project_status'] > 7 && $row['project_status'] == $project_status_filter)) {
-		$none = false;
-		$end_date = intval( @$row['project_end_date'] ) ? new CDate( $row['project_end_date'] ) : null;
-
-		$s = '<tr>';
-		$s .= '<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#'
-			. $row['project_color_identifier'] . '">';
-		$s .= $CT . '<font color="' . bestColor( $row['project_color_identifier'] ) . '">'
-			. sprintf( "%.1f%%", $row['project_percent_complete'] )
-			. '</font>';
-		$s .= $CR . '</td>';
-		$s .= $CR . '<td width="100%">';
-		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars( $row['project_description'], ENT_QUOTES ) . '">' . htmlspecialchars( $row['project_name'], ENT_QUOTES ) . '</a>';
-		$s .= $CR . '</td>';
-		$s .= $CR . '<td nowrap="nowrap">' . htmlspecialchars( $row['user_username'], ENT_QUOTES ) . '</td>';
-		$s .= $CR . '<td align="center" nowrap="nowrap">';
-		$s .= $CT . ($row['my_tasks'] ? $row['my_tasks'].' ('.$row['total_tasks'].')' : $row['total_tasks']);
-		$s .= $CR . '</td>';
-		$s .= $CR . '<td align="center">';
-		$s .= $CT . '<input type="checkbox" name="project_id[]" value="'.$row['project_id'].'" />';
-		$s .= $CR . '</td>';
-
-		if($show_all_projects){
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $AppUI->_($project_types[$row['project_status']]);
-			$s .= $CR . '</td>';
-		}
-		
-		$s .= $CR . '</tr>';
-		echo $s;
-	}
+	$none = false;
+	$end_date = (intval(@$row['project_end_date']) ? new CDate($row['project_end_date']) : null);
+	$s = '';
+?>	
+<tr>
+	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#<?php
+	echo $row['project_color_identifier']; ?>">
+		<span style="font-color: <?php echo bestColor($row['project_color_identifier']); ?>">
+		<?php echo sprintf("%.1f%%", $row['project_percent_complete']); ?>
+		</span>
+	</td>
+	<td width="100%">
+		<a href="?m=projects&a=view&project_id=<?php echo $row['project_id']; ?>" title="<?php 
+	echo htmlspecialchars($row['project_description'], ENT_QUOTES); ?>"><?php 
+	echo htmlspecialchars($row['project_name'], ENT_QUOTES); ?>
+		</a>
+	</td>
+	<td nowrap="nowrap"><?php echo htmlspecialchars($row['user_username'], ENT_QUOTES); ?></td>
+	<td align="center" nowrap="nowrap">
+		<?php echo ($row['my_tasks'] . ' ('.$row['total_tasks'] . ')'); ?>
+	</td>
+	<td align="center" nowrap="nowrap">
+		<?php 
+	echo $AppUI->_((($row['project_status']) 
+	                ? $project_types[$row['project_status']] : 'Not Defined')); ?>
+	</td>
+<!--
+	<td align="center">
+		<input type="checkbox" name="project_id[]" value="<?php echo $row['project_id']; ?>" />
+	</td>
+-->
+</tr>
+<?php
 }
 if ($none) {
-	echo $CR . '<tr><td colspan="6">' . $AppUI->_( 'No projects available' ) . '</td></tr>';
+	echo ('<tr><td colspan="6">' . $AppUI->_('No projects available') . '</td></tr>');
 }
 ?>
 </table>

@@ -145,7 +145,7 @@ if ($canAuthor) {
 }
 $titleBlock->show();
 
-$project_types = dPgetSysVal("ProjectStatus");
+$project_types = dPgetSysVal('ProjectStatus');
 
 // count number of projects per project_status
 $q  = new DBQuery();
