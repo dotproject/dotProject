@@ -14,7 +14,7 @@ if (!defined('DP_BASE_DIR')){
 * @param int the company id to filter by
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id=0, $filter_) {
+function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id=0) {
 	GLOBAL $a, $AppUI, $dPconfig;
 	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, true);
 
