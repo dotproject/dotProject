@@ -1135,7 +1135,8 @@ class CTask extends CDpObject
 	 * @param Date End date of the period
 	 * @param integer The target company
 	 */
-	function getTasksForPeriod($start_date, $end_date, $company_id=0, $user_id=null) {
+	function getTasksForPeriod($start_date, $end_date, $company_id=0, $user_id=null, 
+	                           $filter_proj_archived=false, $filter_proj_completed=false) {
 		GLOBAL $AppUI;
 		$q = new DBQuery;
 		// convert to default db time stamp
@@ -1183,6 +1184,12 @@ class CTask extends CDpObject
 		}
 		if (count($allow) > 0) {
 			$q->addWhere('(' . implode(' AND ', $allow) . ')');
+		}
+		if ($filter_proj_archived) {
+			$q->addWhere('p.project_status <> 7');
+		}
+		if ($filter_proj_archived) {
+			$q->addWhere('p.project_status <> 5');
 		}
 		$q->addOrder('t.task_start_date');
 		

@@ -16,7 +16,7 @@ if (!defined('DP_BASE_DIR')){
 */
 function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id=0) {
 	GLOBAL $a, $AppUI, $dPconfig;
-	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, true);
+	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, $AppUI->user_id, true);
 
 	$durnTypes = dPgetSysVal('TaskDurationType');
 
@@ -41,7 +41,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		$durn = $row['task_duration'];
 		$durnType = $row['task_duration_type'];
 		
-		if (($start->after($startPeriod) || $start->equals($startPeriod)) && ($start->before($endPeriod) || $start->equals($endPeriod))) {
+		if (($start->after($startPeriod) || $start->equals($startPeriod)) 
+		    && ($start->before($endPeriod) || $start->equals($endPeriod))) {
 			$temp = $link;
 			$temp['alt'] = "START [".$row['task_duration'].' '.$AppUI->_($durnTypes[$row['task_duration_type']])."]\n".$link['alt'];
 			if ($a != 'day_view') {
