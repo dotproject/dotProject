@@ -415,9 +415,8 @@ class CTask extends CDpObject
 	 * @return object The new record object or null if error
 	 */
 	function copy($destProject_id = 0, $destTask_id = -1) {
-		$task_id = $this->task_id;
-		$newObj = $this->duplicate();
 		
+		$newObj = $this->duplicate();
 		// Copy this task to another project if it's specified
 		if ($destProject_id != 0) {
 			$newObj->task_project = $destProject_id;
@@ -438,7 +437,7 @@ class CTask extends CDpObject
 		$q = new DBQuery();
 		$q->addQuery('user_id, user_type, perc_assignment, user_task_priority');
 		$q->addTable('user_tasks');
-		$q->addWhere('task_id = ' . $task_id);
+		$q->addWhere('task_id = ' . $this->task_id);
 		$users = $q->loadList();
 		
 		$q->setDelete('user_tasks');
@@ -456,6 +455,9 @@ class CTask extends CDpObject
 			$q->exec();
 			$q->clear();
 		}
+		//copy dependancies
+		$dep_list = $this->getDependencies();
+		$newObj->updateDependencies($dep_list);
 		
 		return $newObj;
 	}// end of copy()
@@ -463,16 +465,40 @@ class CTask extends CDpObject
 	function deepCopy($destProject_id = 0, $destTask_id = 0) {
 		$children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
-		$new_id = $newObj->task_id;
 		if (!empty($children)) {
 			$tempTask = new CTask();
+			$new_child_ids = array();
 			foreach ($children as $child) {
 				$tempTask->peek($child);
 				$tempTask->htmlDecode($child);
-				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
+				$newChild = $tempTask->deepCopy($destProject_id, $newObj->task_id);
 				$newChild->store();
+				
+				//old id to new id translation table
+				$old_id = $tempTask->task_id;
+				$new_child_ids[$old_id] = $newChild->task_id;
+			}
+			/*
+			 * We cannot update beyond the new child id without complicating matters
+			 * by mapping "old" id's to new in an array that would be accessible in 
+			 * *every* level of recursive call and get executed just before returning 
+			 * from a given call. Also we may not want to do this as there could be 
+			 * good reasons for keeping some of the old non-child dependancy ids anyway
+			 */
+			//update dependancies on old child ids to new child id
+			$dep_list = $newObj->getDependencies();
+			if ($dep_list) {
+				$dep_array = explode(',', $dep_list);
+				foreach ($dep_array as $key => $dep_id) {
+					if ($new_child_ids[$dep_id]) {
+						$dep_array[$key] = $new_child_ids[$dep_id];
+					}
+				}
+				$dep_list = implode(',', $dep_array);
+				$newObj->updateDependencies($dep_list);
 			}
 		}
+		
 		
 		return $newObj;
 	}
@@ -762,7 +788,7 @@ class CTask extends CDpObject
 	 *		  @author		 handco		   <handco@users.sourceforge.net>
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
-	function getDependencies () {
+	function getDependencies() {
 		// Call the static method for this object
 		$result = $this->staticGetDependencies ($this->task_id);
 		return $result;
@@ -776,7 +802,7 @@ class CTask extends CDpObject
 	 *		  @param		integer		   ID of the task we want dependencies
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
-	function staticGetDependencies ($taskId) {
+	function staticGetDependencies($taskId) {
 		$q = new DBQuery;
 		if (empty($taskId)) {
 			return '';
