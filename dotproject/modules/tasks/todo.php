@@ -97,7 +97,7 @@ $q = new DBQuery;
 
 $q->addTable('tasks', 'ta');
 $q->leftJoin('projects', 'pr', 'pr.project_id = ta.task_project');
-$q->leftJoin('user_tasks', 'ut', 'ut.task_id = ta.task_id AND ut.user_id = ' . $user_id);
+$q->innerJoin('user_tasks', 'ut', 'ut.task_id = ta.task_id AND ut.user_id = ' . $user_id);
 $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id AND tp.user_id = ' . $user_id);
 
 $q->addQuery('ta.*');
@@ -106,18 +106,24 @@ $q->addQuery('tp.task_pinned');
 
 $q->addWhere('(ta.task_percent_complete < 100 OR ta.task_percent_complete IS NULL)');
 $q->addWhere('ta.task_status = 0');
-if (!$showArcProjs)
+if (!$showArcProjs) {
 	$q->addWhere('project_status <> 7');
-if (!$showLowTasks)
+ }
+if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');
-if (!$showHoldProjs)
+ }
+if (!$showHoldProjs) {
 	$q->addWhere('project_status != ' . $project_on_hold_status);
-if (!$showDynTasks)
+ }
+if (!$showDynTasks) {
 	$q->addWhere('task_dynamic != 1');
-if ($showPinned)
+ }
+if ($showPinned) {
 	$q->addWhere('task_pinned = 1');
-if (!$showEmptyDate)
+ }
+if (!$showEmptyDate) {
 	$q->addWhere("ta.task_start_date != '' AND ta.task_start_date != '0000-00-00 00:00:00'");
+ }
 
 
 if (count($allowedTasks))
