@@ -39,12 +39,12 @@ $q->addQuery('project_id, project_name, project_status, project_color_identifier
 	project_start_date, project_end_date, project_priority,
 	ts.total_tasks, tsm.my_tasks, ts.project_percent_complete,
 	contact_first_name, contact_last_name, user_username');
-$q->addJoin('users', 'u', 'u.user_id = projects.project_owner');
+$q->addJoin('users', 'u', 'u.user_id = pr.project_owner');
 $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
-$q->addJoin('tasks_summy', 'tsm', 'projects.project_id = tsm.task_project');
-$q->addWhere('projects.project_status <> 7');
-$q->addWhere('projects.project_status <> 5');
+$q->addJoin('tasks_sum', 'ts', 'pr.project_id = ts.task_project');
+$q->addJoin('tasks_summy', 'tsm', 'pr.project_id = tsm.task_project');
+$q->addWhere('pr.project_status <> 7');
+$q->addWhere('pr.project_status <> 5');
 $allowed_where = $obj->getAllowedSQL($AppUI->user_id);
 if ($allowed_where) {
 	$q->addWhere(implode(' AND ', $allowed_where));
