@@ -224,7 +224,7 @@ function countFiles($folder_id) {
 		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
 	}
 	if (count($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') f.OR file_task = 0 )');
+		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
 	}
 	if ($project_id) {
 		$q->addWhere('f.file_project = '. $project_id);
