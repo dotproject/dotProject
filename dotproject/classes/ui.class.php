@@ -10,27 +10,27 @@ if (! defined('DP_BASE_DIR')) {
 }
 
 // Message No Constants
-define( 'UI_MSG_OK', 1 );
-define( 'UI_MSG_ALERT', 2 );
-define( 'UI_MSG_WARNING', 3 );
-define( 'UI_MSG_ERROR', 4 );
+define('UI_MSG_OK', 1);
+define('UI_MSG_ALERT', 2);
+define('UI_MSG_WARNING', 3);
+define('UI_MSG_ERROR', 4);
 
 // global variable holding the translation array
 $GLOBALS['translate'] = array();
 
-define( "UI_CASE_MASK", 0x0F );
-define( "UI_CASE_UPPER", 1 );
-define( "UI_CASE_LOWER", 2 );
-define( "UI_CASE_UPPERFIRST", 3 );
+define('UI_CASE_MASK', 0x0F);
+define('UI_CASE_UPPER', 1);
+define('UI_CASE_LOWER', 2);
+define('UI_CASE_UPPERFIRST', 3);
 
-define ("UI_OUTPUT_MASK", 0xF0);
-define ("UI_OUTPUT_HTML", 0);
-define ("UI_OUTPUT_JS", 0x10);
-define ("UI_OUTPUT_RAW", 0x20);
+define ('UI_OUTPUT_MASK', 0xF0);
+define ('UI_OUTPUT_HTML', 0);
+define ('UI_OUTPUT_JS', 0x10);
+define ('UI_OUTPUT_RAW', 0x20);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
-require_once DP_BASE_DIR."/classes/permissions.class.php";
+require_once DP_BASE_DIR.'/classes/permissions.class.php';
 /**
 * The Application User Interface Class.
 *
@@ -110,7 +110,7 @@ class CAppUI {
 		
 		$this->project_id = 0;
 
-		$this->defaultRedirect = "";
+		$this->defaultRedirect = '';
 // set up the default preferences
 		$this->setUserLocale($this->base_locale);
 		$this->user_prefs = array();
@@ -120,7 +120,7 @@ class CAppUI {
 * @param string $name The class root file name (excluding .class.php)
 * @return string The path to the include file
  */
-	function getSystemClass( $name=null ) {
+	function getSystemClass($name=null) {
 		if ($name) {
 			return DP_BASE_DIR."/classes/$name.class.php";
 		}
@@ -132,7 +132,7 @@ class CAppUI {
 * @param string $name The class root file name (excluding .class.php)
 * @return string The path to the include file
 */
-	function getLibraryClass( $name=null ) {
+	function getLibraryClass($name=null) {
 		if ($name) {
 			return DP_BASE_DIR."/lib/$name.php";
 		}
@@ -143,7 +143,7 @@ class CAppUI {
 * @param string $name The class root file name (excluding .class.php)
 * @return string The path to the include file
  */
-	function getModuleClass( $name=null ) {
+	function getModuleClass($name=null) {
 		if ($name) {
 			return DP_BASE_DIR."/modules/$name/$name.class.php";
 		}
@@ -155,16 +155,16 @@ class CAppUI {
 */
 	function getVersion() {
 		global $dPconfig;
-		if ( ! isset($this->version_major)) {
+		if (! isset($this->version_major)) {
 			include_once DP_BASE_DIR . '/includes/version.php';
 			$this->version_major = $dp_version_major;
 			$this->version_minor = $dp_version_minor;
 			$this->version_patch = $dp_version_patch;
-			$this->version_string = $this->version_major . "." . $this->version_minor;
+			$this->version_string = $this->version_major . '.' . $this->version_minor;
 			if (isset($this->version_patch))
-			  $this->version_string .= "." . $this->version_patch;
+			  $this->version_string .= '.' . $this->version_patch;
 			if (isset($dp_version_prepatch))
-			  $this->version_string .= "-" . $dp_version_prepatch;
+			  $this->version_string .= '-' . $dp_version_prepatch;
 		}
 		return $this->version_string;
 	}
@@ -174,7 +174,7 @@ class CAppUI {
 */
 	function checkStyle() {
 		// check if default user's uistyle is installed
-		$uistyle = $this->getPref("UISTYLE");
+		$uistyle = $this->getPref('UISTYLE');
 
 		if ($uistyle && !is_dir(DP_BASE_DIR."/style/$uistyle")) {
 			// fall back to host_style if user style is not installed
@@ -189,11 +189,11 @@ class CAppUI {
 * @param string The path to read.
 * @return array A named array of the directories (the key and value are identical).
 */
-	function readDirs( $path ) {
+	function readDirs($path) {
 		$dirs = array();
-		$d = dir( DP_BASE_DIR."/$path" );
+		$d = dir(DP_BASE_DIR."/$path");
 		while (false !== ($name = $d->read())) {
-			if(is_dir( DP_BASE_DIR."/{$path}/{$name}" ) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
+			if(is_dir(DP_BASE_DIR."/{$path}/{$name}") && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
 				$dirs[$name] = $name;
 			}
 		}
@@ -207,12 +207,12 @@ class CAppUI {
 * @param string A regular expression to filter by.
 * @return array A named array of the files (the key and value are identical).
 */
-	function readFiles( $path, $filter='.' ) {
+	function readFiles($path, $filter='.') {
 		$files = array();
 
-		if (is_dir($path) && ($handle = opendir( $path )) ) {
-			while (false !== ($file = readdir( $handle ))) {
-				if ($file != "." && $file != ".." && preg_match( "/$filter/", $file )) { 
+		if (is_dir($path) && ($handle = opendir($path))) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != '.' && $file != '..' && preg_match("/$filter/", $file)) { 
 					$files[$file] = $file; 
 				} 
 			}
@@ -229,16 +229,16 @@ class CAppUI {
 * @param string The file name.
 * @return array A named array of the files (the key and value are identical).
 */
-	function checkFileName( $file ) {
+	function checkFileName($file) {
 		global $AppUI;
 
 		// define bad characters and their replacement
 		$bad_chars = ";/\\";
-		$bad_replace = "...."; // Needs the same number of chars as $bad_chars
+		$bad_replace = '....'; // Needs the same number of chars as $bad_chars
 
 		// check whether the filename contained bad characters
-		if ( strpos( strtr( $file, $bad_chars, $bad_replace), '.') !== false ) {
-			$AppUI->redirect( "m=public&a=access_denied" );
+		if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
+			$AppUI->redirect('m=public&a=access_denied');
 		}
 		else {
 			return $file;
@@ -255,9 +255,9 @@ class CAppUI {
 * @param string The file name.
 * @return array A named array of the files (the key and value are identical).
 */
-	function makeFileNameSafe( $file ) {
-		$file = str_replace( '../', '', $file );
-		$file = str_replace( '..\\', '', $file );
+	function makeFileNameSafe($file) {
+		$file = str_replace('../', '', $file);
+		$file = str_replace('..\\', '', $file);
 		return $file;
 	}
 
@@ -267,7 +267,7 @@ class CAppUI {
 * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
 * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
 */
-	function setUserLocale( $loc='', $set = true ) {
+	function setUserLocale($loc='', $set = true) {
 		global $locale_char_set;
 
 		$LANGUAGES = $this->loadLanguages();
@@ -294,7 +294,7 @@ class CAppUI {
 			$lcs = (isset($locale_char_set)) ? $locale_char_set : 'utf-8';
 
 		if (version_compare(phpversion(), '4.3.0', 'ge'))
-			$user_lang = array( $loc . '.' . $lcs, $default_language, $loc, $base_locale);
+			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
 		else {
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 				$user_lang = $default_language;
@@ -344,7 +344,7 @@ class CAppUI {
  */
 	function loadLanguages() {
 
-		if ( isset($_SESSION['LANGUAGES'])) {
+		if (isset($_SESSION['LANGUAGES'])) {
 			$LANGUAGES =& $_SESSION['LANGUAGES'];
 		} else {
 			$LANGUAGES = array();
@@ -373,7 +373,7 @@ class CAppUI {
 * @param int Option flags, can be case handling or'd with output styles
 * @return string
 */
-	function _( $str, $flags= 0 ) {
+	function _($str, $flags= 0) {
 		if (is_array($str)) {
 			$translated = array();
 			foreach ($str as $s)
@@ -384,9 +384,9 @@ class CAppUI {
 		}
 	}
 
-	function __( $str, $flags = 0) {
+	function __($str, $flags = 0) {
 		$str = trim($str);
-		if (empty( $str )) {
+		if (empty($str)) {
 			return '';
 		}
 		$x = @$GLOBALS['translate'][$str];
@@ -395,19 +395,19 @@ class CAppUI {
 			$str = $x;
 		} else if (dPgetConfig('locale_warn')) {
 			if ($this->base_locale != $this->user_locale ||
-				($this->base_locale == $this->user_locale && !in_array( $str, @$GLOBALS['translate'] )) ) {
+				($this->base_locale == $this->user_locale && !in_array($str, @$GLOBALS['translate']))) {
 				$str .= dPgetConfig('locale_alert');
 			}
 		}
 		switch ($flags & UI_CASE_MASK) {
 			case UI_CASE_UPPER:
-				$str = strtoupper( $str );
+				$str = strtoupper($str);
 				break;
 			case UI_CASE_LOWER:
-				$str = strtolower( $str );
+				$str = strtolower($str);
 				break;
 			case UI_CASE_UPPERFIRST:
-				$str = ucwords( $str );
+				$str = ucwords($str);
 				break;
 		}
 		/* Altered to support multiple styles of output, to fix
@@ -445,7 +445,7 @@ class CAppUI {
 * Set the display of warning for untranslated strings
 * @param string
 */
-	function setWarning( $state=true ) {
+	function setWarning($state=true) {
 		$temp = @$this->cfg['locale_warn'];
 		$this->cfg['locale_warn'] = $state;
 		return $temp;
@@ -458,7 +458,7 @@ class CAppUI {
 * would be a nonsense in this case.
 * @param string If not set then the current url query string is used
 */
-	function savePlace( $query='' ) {
+	function savePlace($query='') {
 		if (!$query) {
 			$query = @$_SERVER['QUERY_STRING'];
 		}
@@ -490,7 +490,7 @@ class CAppUI {
 * @param string The URL query string to append to the URL
 * @param string A marker for a historic 'place, only -1 or an empty string is valid.
 */
-	function redirect( $params='', $hist='' ) {
+	function redirect($params='', $hist='') {
 		$session_id = SID;
 
 		session_write_close();
@@ -500,14 +500,15 @@ class CAppUI {
 			$params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
 		}
 		// Fix to handle cookieless sessions
-		if ($session_id != "") {
-		  if (!$params)
-		    $params = $session_id;
-		  else
-		    $params .= "&" . $session_id;
+		if ($session_id != '') {
+			if (!$params) {
+				$params = $session_id;
+			} else {
+				$params .= '&' . $session_id;
+			}
 		}
 		ob_implicit_flush(); // Ensure any buffering is disabled.
-		header( "Location: index.php?$params" );
+		header('Location: index.php?' . $params);
 		exit();	// stop the PHP execution
 	}
 /**
@@ -525,8 +526,8 @@ class CAppUI {
 * @param boolean If true, $msg is appended to the current string otherwise
 * the existing message is overwritten with $msg.
 */
-	function setMsg( $msg, $msgNo=0, $append=false ) {
-		$msg = $this->_( $msg );
+	function setMsg($msg, $msgNo=0, $append=false) {
+		$msg = $this->_($msg);
 		$this->msg = $append ? $this->msg.' '.$msg : $msg;
 		$this->msgNo = $msgNo;
 	}
@@ -534,30 +535,30 @@ class CAppUI {
 * Display the formatted message and icon
 * @param boolean If true the current message state is cleared.
 */
-	function getMsg( $reset=true ) {
+	function getMsg($reset=true) {
 		$img = '';
 		$class = '';
 		$msg = $this->msg;
 
-		switch( $this->msgNo ) {
+		switch($this->msgNo) {
 		case UI_MSG_OK:
-			$img = dPshowImage( dPfindImage( 'stock_ok-16.png' ), 16, 16, '' );
-			$class = "message";
+			$img = dPshowImage(dPfindImage('stock_ok-16.png'), 16, 16, '');
+			$class = 'message';
 			break;
 		case UI_MSG_ALERT:
-			$img = dPshowImage( dPfindImage( 'rc-gui-status-downgr.png' ), 16, 16, '' );
-			$class = "message";
+			$img = dPshowImage(dPfindImage('rc-gui-status-downgr.png'), 16, 16, '');
+			$class = 'message';
 			break;
 		case UI_MSG_WARNING:
-			$img = dPshowImage( dPfindImage( 'rc-gui-status-downgr.png' ), 16, 16, '' );
-			$class = "warning";
+			$img = dPshowImage(dPfindImage('rc-gui-status-downgr.png'), 16, 16, '');
+			$class = 'warning';
 			break;
 		case UI_MSG_ERROR:
-			$img = dPshowImage( dPfindImage( 'stock_cancel-16.png' ), 16, 16, '' );
-			$class = "error";
+			$img = dPshowImage(dPfindImage('stock_cancel-16.png'), 16, 16, '');
+			$class = 'error';
 			break;
 		default:
-			$class = "message";
+			$class = 'message';
 			break;
 		}
 		if ($reset) {
@@ -578,7 +579,7 @@ class CAppUI {
 * @param string The label or key of the state variable
 * @param mixed Value to assign to the label/key
 */
-	function setState( $label, $value = null) {
+	function setState($label, $value = null) {
 		if (isset($value))
 			$this->state[$label] = $value;
 	}
@@ -587,7 +588,7 @@ class CAppUI {
 * If a default value is supplied and no value is found, set the default.
 * @return mixed
 */
-	function getState( $label, $default_value = null ) {
+	function getState($label, $default_value = null) {
 		if (array_key_exists($label, $this->state)) {
 			return $this->state[$label];
 		} else if (isset($default_value)) {
@@ -636,15 +637,15 @@ class CAppUI {
 * @param string The user password
 * @return boolean True if successful, false if not
 */
-	function login( $username, $password ) {
-		require_once DP_BASE_DIR."/classes/authenticator.class.php";
+	function login($username, $password) {
+		require_once DP_BASE_DIR.'/classes/authenticator.class.php';
 
 		$auth_method = dPgetConfig('auth_method', 'sql');
 		if (@$_POST['login'] != 'login' && @$_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method)
-			die("You have chosen to log in using an unsupported or disabled login method");
+			die('You have chosen to log in using an unsupported or disabled login method');
 		$auth =& getauth($auth_method);
 		
-		$username = trim( db_escape( $username ) );
+		$username = trim(db_escape($username));
 		$password = trim($password);
 
 		if (!$auth->authenticate($username, $password)) {
@@ -657,8 +658,8 @@ class CAppUI {
 		// access the system
 		if (! isset($GLOBALS['acl']))
 		  $GLOBALS['acl'] =& new dPacl;
-		if ( ! $GLOBALS['acl']->checkLogin($user_id)) {
-		  dprint(__FILE__, __LINE__, 1, "Permission check failed");
+		if (! $GLOBALS['acl']->checkLogin($user_id)) {
+		  dprint(__FILE__, __LINE__, 1, 'Permission check failed');
 		  return false;
 		}
 
@@ -671,13 +672,13 @@ class CAppUI {
 		$q->clear();
 		dprint(__FILE__, __LINE__, 7, "Login SQL: $sql");
 
-		if( !db_loadObject( $sql, $this ) ) {
-			dprint(__FILE__, __LINE__, 1, "Failed to load user information");
+		if(!db_loadObject($sql, $this)) {
+			dprint(__FILE__, __LINE__, 1, 'Failed to load user information');
 			return false;
 		}
 
 // load the user preferences
-		$this->loadPrefs( $this->user_id );
+		$this->loadPrefs($this->user_id);
 		$this->setUserLocale();
 		$this->checkStyle();
 		return true;
@@ -689,7 +690,7 @@ class CAppUI {
 	   function registerLogin(){
 		$q  = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addInsert('user_id', "$this->user_id");
+		$q->addInsert('user_id', $this->user_id);
 		$q->addInsert('date_time_in', 'now()', false, true);
 		$q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
                 $q->exec();
@@ -703,7 +704,7 @@ class CAppUI {
           function registerLogout($user_id){
 		$q  = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_out', date("Y-m-d H:i:s"));
+		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
 		$q->addWhere("user_id = '$user_id' and (date_time_out='0000-00-00 00:00:00' or isnull(date_time_out)) ");
 		if ($user_id > 0){
 			$q->exec();
@@ -717,7 +718,7 @@ class CAppUI {
           function updateLastAction($last_insert_id){
 		$q  = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_last_action', date("Y-m-d H:i:s"));
+		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
 		$q->addWhere("user_access_log_id = $last_insert_id");
                 if ($last_insert_id > 0){
                     $q->exec();
@@ -740,7 +741,7 @@ class CAppUI {
 * Gets the value of the specified user preference
 * @param string Name of the preference
 */
-	function getPref( $name ) {
+	function getPref($name) {
 		return @$this->user_prefs[$name];
 	}
 /**
@@ -748,7 +749,7 @@ class CAppUI {
 * @param string Name of the preference
 * @param mixed The value of the preference
 */
-	function setPref( $name, $val ) {
+	function setPref($name, $val) {
 		$this->user_prefs[$name] = $val;
 	}
 /**
@@ -762,18 +763,18 @@ class CAppUI {
 *
 * @param int User id number
 */
-	function loadPrefs( $uid=0 ) {
+	function loadPrefs($uid=0) {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_name, pref_value');
 		if ($uid) {
-			$q->addWhere("pref_user in ( 0, $uid)");
-			$q->addOrder("pref_user");
+			$q->addWhere("pref_user in (0, $uid)");
+			$q->addOrder('pref_user');
 		} else {
-			$q->addWhere("pref_user = 0");
+			$q->addWhere('pref_user = 0');
 		}
 		$prefs = $q->loadHashList();
-		$this->user_prefs = array_merge( $this->user_prefs, $prefs );
+		$this->user_prefs = array_merge($this->user_prefs, $prefs);
 	}
 
 // --- Module connectors
@@ -851,7 +852,7 @@ class CAppUI {
 	    $root .= '/';
 
 	  $base = dPgetConfig('base_url');
-	  if ( substr($base, -1) != '/')
+	  if (substr($base, -1) != '/')
 	    $base .= '/';
 	  // Load the basic javascript used by all modules.
 	  $jsdir = dir("{$root}js");
@@ -914,10 +915,10 @@ the active tab, and the selected tab **/
 * @param string Optional javascript method to be used to execute tabs.
 *	Must support 2 arguments, currently active tab, new tab to activate.
 */
-	function CTabBox_core( $baseHRef='', $baseInc='', $active=0, $javascript = null ) {
+	function CTabBox_core($baseHRef='', $baseInc='', $active=0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
-		$this->baseHRef = ($baseHRef ? "$baseHRef&" : "?");
+		$this->baseHRef = ($baseHRef ? "$baseHRef&" : '?');
 		$this->javascript = $javascript;
 		$this->baseInc = $baseInc;
 	}
@@ -925,7 +926,7 @@ the active tab, and the selected tab **/
 * Gets the name of a tab
 * @return string
 */
-	function getTabName( $idx ) {
+	function getTabName($idx) {
 		return $this->tabs[$idx][1];
 	}
 /**
@@ -933,8 +934,8 @@ the active tab, and the selected tab **/
 * @param string File to include
 * @param The display title/name of the tab
 */
-	function add( $file, $title, $translated = false, $key= NULL ) {
-		$t = array( $file, $title, $translated);
+	function add($file, $title, $translated = false, $key= NULL) {
+		$t = array($file, $title, $translated);
 		if (isset($key)) {
 			$this->tabs[$key] = $t;
 		} else {
@@ -944,7 +945,7 @@ the active tab, and the selected tab **/
 
 	function isTabbed() {
 		global $AppUI;
-		return (($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 ) ? false : true);
+		return (($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) ? false : true);
 	}
 
 /**
@@ -954,12 +955,12 @@ the active tab, and the selected tab **/
 *
 * @param string Can't remember whether this was useful
 */
-	function show( $extra='', $js_tabs = false ) {
+	function show($extra='', $js_tabs = false) {
 		GLOBAL $AppUI, $currentTabId, $currentTabName;
-		reset( $this->tabs );
+		reset($this->tabs);
 		$s = '';
 	// tabbed / flat view options
-		if (@$AppUI->getPref( 'TABVIEW' ) == 0) {
+		if (@$AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
 			$s .= '<a href="'.$this->baseHRef.'tab=0">'.$AppUI->_('tabbed').'</a> : ';
 			$s .= '<a href="'.$this->baseHRef.'tab=-1">'.$AppUI->_('flat').'</a>';
@@ -973,7 +974,7 @@ the active tab, and the selected tab **/
 			}
 		}
 
-		if ($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 ) {
+		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
 		// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
@@ -981,19 +982,19 @@ the active tab, and the selected tab **/
 				echo '<tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
-				include $this->baseInc.$v[0].".php";
+				include $this->baseInc.$v[0].'.php';
 				echo '</td></tr>';
 			}
 			echo '</table>';
 		} else {
 		// tabbed view
 			$s = '<table width="100%" border="0" cellpadding="3" cellspacing="0">'."\n".'<tr>';
-			if ( count($this->tabs)-1 < $this->active ) {
+			if (count($this->tabs)-1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
 				// Breaks classic view.
 				// $this->active = 0;
 			}
-			foreach( $this->tabs as $k => $v ) {
+			foreach($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$s .= "\n\t<td width=\"1%\" nowrap=\"nowrap\" class=\"tabsp\">";
 				$s .= "\n\t\t<img src=\"./images/shim.gif\" height=\"1\" width=\"1\" alt=\"\" />";
@@ -1111,7 +1112,7 @@ class CTitleBlock_core {
 * have permission to view the help module, then the context help icon is
 * not displayed.
 */
-	function CTitleBlock_core( $title, $icon='', $module='', $helpref='' ) {
+	function CTitleBlock_core($title, $icon='', $module='', $helpref='') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->module = $module;
@@ -1126,37 +1127,37 @@ class CTitleBlock_core {
 *
 * Cells are added from left to right.
 */
-	function addCell( $data='', $attribs='', $prefix='', $suffix='' ) {
-		$this->cells1[] = array( $attribs, $data, $prefix, $suffix );
+	function addCell($data='', $attribs='', $prefix='', $suffix='') {
+		$this->cells1[] = array($attribs, $data, $prefix, $suffix);
 	}
 /**
 * Adds a table 'cell' to left-aligned bread-crumbs
 *
 * Cells are added from left to right.
 */
-	function addCrumb( $link, $label, $icon='' ) {
-		$this->crumbs[$link] = array( $label, $icon );
+	function addCrumb($link, $label, $icon='') {
+		$this->crumbs[$link] = array($label, $icon);
 	}
 /**
 * Adds a table 'cell' to the right-aligned bread-crumbs
 *
 * Cells are added from left to right.
 */
-	function addCrumbRight( $data='', $attribs='', $prefix='', $suffix='' ) {
-		$this->cells2[] = array( $attribs, $data, $prefix, $suffix );
+	function addCrumbRight($data='', $attribs='', $prefix='', $suffix='') {
+		$this->cells2[] = array($attribs, $data, $prefix, $suffix);
 	}
 /**
 * Creates a standarised, right-aligned delete bread-crumb and icon.
 */
-	function addCrumbDelete( $title, $canDelete='', $msg='' ) {
+	function addCrumbDelete($title, $canDelete='', $msg='') {
 		global $AppUI;
 		$this->addCrumbRight(
 			'<table cellspacing="0" cellpadding="0" border="0"><tr><td>'
 			. '<a href="javascript:delIt()" title="'.($canDelete?'':$msg).'">'
-			. dPshowImage( './images/icons/'.($canDelete?'stock_delete-16.png':'stock_trash_full-16.png'), '16', '16',  '' )
+			. dPshowImage('./images/icons/'.($canDelete?'stock_delete-16.png':'stock_trash_full-16.png'), '16', '16',  '')
 			. '</a>'
 			. '</td><td>&nbsp;'
-			. '<a href="javascript:delIt()" title="'.($canDelete?'':$msg).'">' . $AppUI->_( $title ) . '</a>'
+			. '<a href="javascript:delIt()" title="'.($canDelete?'':$msg).'">' . $AppUI->_($title) . '</a>'
 			. '</td></tr></table>'
 		);
 	}
@@ -1171,7 +1172,7 @@ class CTitleBlock_core {
 		$s .= $CR . '<tr>';
 		if ($this->icon) {
 			$s .= $CR . '<td width="42">';
-			$s .= dPshowImage( dPFindImage( $this->icon, $this->module ));
+			$s .= dPshowImage(dPFindImage($this->icon, $this->module));
 			$s .= '</td>';
 		}
 		$s .= $CR . '<td align="left" width="100%" nowrap="nowrap"><h1>' . $AppUI->_($this->title) . '</h1></td>';
@@ -1184,21 +1185,21 @@ class CTitleBlock_core {
 		}
 		if ($this->showhelp) {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
-			//$s .= $CT . contextHelp( '<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_( 'Help' ).'" />', $this->helpref );
+			//$s .= $CT . contextHelp('<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_('Help').'" />', $this->helpref);
 
-			$s .= "\n\t<a href=\"#".$this->helpref."\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_( 'Help' )."\">";
-			$s .= "\n\t\t" . dPshowImage( './images/icons/stock_help-16.png', '16', '16', $AppUI->_( 'Help' ) );
+			$s .= "\n\t<a href=\"#".$this->helpref."\" onClick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\" title=\"".$AppUI->_('Help')."\">";
+			$s .= "\n\t\t" . dPshowImage('./images/icons/stock_help-16.png', '16', '16', $AppUI->_('Help'));
 			$s .= "\n\t</a>";
 			$s .= "\n</td>";
 		}
 		$s .= "\n</tr>";
 		$s .= "\n</table>";
 
-		if (count( $this->crumbs ) || count( $this->cells2 )) {
+		if (count($this->crumbs) || count($this->cells2)) {
 			$crumbs = array();
 			foreach ($this->crumbs as $k => $v) {
-				$t = $v[1] ? '<img src="' . dPfindImage( $v[1], $this->module ) . '" border="" alt="" />&nbsp;' : '';
-				$t .= $AppUI->_( $v[0] );
+				$t = $v[1] ? '<img src="' . dPfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
+				$t .= $AppUI->_($v[0]);
 				$crumbs[] = "<a href=\"$k\">$t</a>";
 			}
 			$s .= "\n<table border=\"0\" cellpadding=\"4\" cellspacing=\"0\" width=\"100%\">";

@@ -129,11 +129,11 @@ if (isset($_REQUEST['login'])) {
 	if (!$ok) {
 		$AppUI->setMsg( 'Login Failed');
 	} else {
-	           //Register login in user_acces_log
-	           $AppUI->registerLogin();
+		//Register login in user_acces_log
+		$AppUI->registerLogin();
 	}
-        addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
-	$AppUI->redirect( ''.$redirect );
+	addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
+	$AppUI->redirect($redirect);
 }
 
 // supported since PHP 4.2
@@ -260,12 +260,12 @@ if (! isset($_SESSION['all_tabs'][$m]) ) {
 			continue;
 		}
 		$modules_tabs = $AppUI->readFiles(DP_BASE_DIR.'/modules/'.$dir.'/', '^' . $m . '_tab.*\.php');
-		foreach($modules_tabs as $tab) {
+		foreach($modules_tabs as $mod_tab) {
 			// Get the name as the subextension
 			// cut the module_tab. and the .php parts of the filename 
 			// (begining and end)
-			$nameparts = explode('.', $tab);
-			$filename = substr($tab, 0, -4);
+			$nameparts = explode('.', $mod_tab);
+			$filename = substr($mod_tab, 0, -4);
 			if (count($nameparts) > 3) {
 				$file = $nameparts[1];
 				if (! isset($all_tabs[$file])) {
