@@ -114,8 +114,8 @@ if (($rows = db_loadList($usersql, NULL))) {
  5 = completed
  7 = archived
 
-Because these are "magic" numbers, if the values for ProjectStatus change under 'System Admin', they'll
-need to change here as well (sadly).
+Because these are "magic" numbers, if the values for ProjectStatus change under 'System Admin', 
+they'll need to change here as well (sadly).
 */
 if ($tab != 7 && $tab != 8) {
 	$project_status = $tab;
@@ -126,6 +126,8 @@ if ($tab == 5 || $tab == 7) {
 	$project_active = 0;
 }
 
+//for getting permissions for records related to projects
+$obj_project = new CProject();
 // collect the full (or filtered) projects list data via function in projects.class.php
 projects_list_data();
 
@@ -151,21 +153,17 @@ $project_types = dPgetSysVal('ProjectStatus');
 $q  = new DBQuery();
 $q->addTable('projects');
 $q->addQuery('project_status, COUNT(project_id) as count');
+$obj_project->setAllowedSQL($AppUI->user_id, $q);
 $q->addGroup('project_status');
 $statuses = $q->loadHashList('project_status');
 $q->clear();
-
+$all_projects = 0;
 foreach ($statuses as $k => $v) {
 	$project_status_tabs[$v['project_status']] = ($AppUI->_($project_types[$v['project_status']]) 
 													  . ' (' . $v['count'] . ')');
+	//count all projects
+	$all_projects += $v['count'];
 }
-
-// count all projects
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id) as count');
-$q->addWhere('1');
-$all_projects = $q->loadResult();
-$q->clear();
 
 //set file used per project status title
 $fixed_status = array('In Progress' => 'vw_idx_active',

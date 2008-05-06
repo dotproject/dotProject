@@ -429,10 +429,8 @@ function projects_list_data($user_id = false) {
 	$addProjectsWithAssignedTasks = (($AppUI->getState('addProjWithTasks')) 
 	                                 ? $AppUI->getState('addProjWithTasks') : 0);
 	
-	// get any records denied from viewing
+	//for getting permissions on project records
 	$obj_project = new CProject();
-	$deny = $obj_project->getDeniedRecords($AppUI->user_id);
-	
 	
 	// Let's delete temproary tables
 	$q  = new DBQuery;
@@ -462,11 +460,7 @@ function projects_list_data($user_id = false) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('ut.user_id = ' . $user_id);
 	}
-	if (count($deny)) {
-		$q->addWhere('NOT (t.task_project IN (' . implode (',', $deny) . '))');
-	}
 	$q->addWhere('t.task_id = t.task_parent');
-	
 	$q->addGroup('t.task_project');
 	$tasks_sum = $q->exec();
 	$q->clear();
@@ -482,9 +476,6 @@ function projects_list_data($user_id = false) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('ut.user_id = ' . $user_id);
 	}
-	if (count($deny)) {
-		$q->addWhere('NOT (t.task_project IN (' . implode (',', $deny) . '))');
-	}
 	$q->addGroup('t.task_project');
 	$tasks_total = $q->exec();
 	$q->clear();
@@ -498,9 +489,6 @@ function projects_list_data($user_id = false) {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_project, COUNT(DISTINCT t.task_id) AS my_tasks');
 	$q->addWhere('t.task_owner = ' . (($user_id) ? $user_id : $AppUI->user_id));
-	if (count($deny)) {
-		$q->addWhere('NOT (task_project IN (' . implode (',', $deny) . '))');
-	}
 	$q->addGroup('t.task_project');
 	$tasks_summy = $q->exec();
 	$q->clear();
@@ -514,9 +502,6 @@ function projects_list_data($user_id = false) {
 	             . ', MAX(t.task_end_date) AS project_actual_end_date');
 	// MerlinYoda: we don't join tables if we don't get anything out of the process
 	// $q->addJoin('projects', 'p', 'p.project_id = t.task_project');
-	if (count($deny)) {
-		$q->addWhere('NOT (t.task_project IN (' . implode (',', $deny) . '))');
-	}
 	$q->addOrder('t.task_end_date DESC');
 	$q->addGroup('t.task_project');
 	$tasks_critical = $q->exec();
@@ -529,7 +514,7 @@ function projects_list_data($user_id = false) {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_project, tl.task_log_problem');
 	$q->addJoin('task_log', 'tl', 'tl.task_log_task = t.task_id');
-	$q->addWhere("tl.task_log_problem > '0'");
+	$q->addWhere('tl.task_log_problem > 0');
 	$q->addGroup('t.task_project');
 	$tasks_problems = $q->exec();
 	$q->clear();
@@ -540,8 +525,7 @@ function projects_list_data($user_id = false) {
 		// temporary users tasks
 		$q->createTemp('tasks_users');
 		$q->addTable('tasks', 't');
-		$q->addQuery('t.task_project');
-		$q->addQuery('ut.user_id');
+		$q->addQuery('t.task_project, ut.user_id');
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		if ($user_id) {
 			$q->addWhere('ut.user_id = ' . $user_id);
@@ -631,7 +615,6 @@ function projects_list_data($user_id = false) {
 	if ($addPwOiD && !empty($owner_ids)) {
 		$q->addWhere('p.project_owner IN (' . implode(',', $owner_ids) . ')');
 	}
-	
 	$q->addGroup('p.project_id');
 	$q->addOrder($orderby . ' ' . $orderdir);
 	$obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');
