@@ -675,8 +675,10 @@ foreach ($projects as $k => $p) {
 	<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> :
 	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>
 	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;
+<!-- removed project-level report buttons per Mantis Report #2374
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>" 
    onclick="javascript:window.location='index.php?m=projects&a=reports&project_id=<?php echo $k;?>';" />
+-->
   <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart');?>" 
    onclick="javascript:window.location='index.php?m=tasks&a=viewgantt&project_id=<?php echo $k;?>';" />
   </td>
