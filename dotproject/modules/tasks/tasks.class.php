@@ -516,8 +516,8 @@ class CTask extends CDpObject
 	}
 	
 	function deepMove($destProject_id = 0, $destTask_id = 0) {
+		$children = $this->getChildren();
 		$this->move($destProject_id, $destTask_id);
-		$children = $this->getDeepChildren();
 		if (!empty($children)) {
 			$tempChild = new CTask();
 			foreach ($children as $child) {
