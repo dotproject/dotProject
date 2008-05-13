@@ -232,7 +232,7 @@ function db_insertArray($table, &$hash, $verbose=false) {
 		$fields[] = $k;
 		$values[] = "'" . db_escape($v) . "'";
 	}
-	$sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
+	$sql = sprintf($fmtsql, implode(',', $fields) ,  implode(',', $values));
 
 	($verbose) && print "$sql<br />\n";
 
@@ -267,7 +267,7 @@ function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 		}
 		$tmp[] = "$k=$val";
 	}
-	$sql = sprintf($fmtsql, implode(",", $tmp) , $where);
+	$sql = sprintf($fmtsql, implode(',', $tmp) , $where);
 	($verbose) && print "$sql<br />\n";
 	$ret = db_exec($sql);
 	return $ret;

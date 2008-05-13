@@ -71,7 +71,7 @@ function db_exec( $sql ) {
 			echo '<script language="JavaScript"> location.reload(); </script>';
 		}
 	}
-	if (!($qid && preg_match('/^\<select\>/i', $sql))) {
+	if (!($qid) && preg_match('/^\<select\>/i', $sql)) {
 		dprint(__FILE__, __LINE__, 0, $sql);
 	}
 	return $qid;
