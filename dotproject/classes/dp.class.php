@@ -197,11 +197,11 @@ class CDpObject {
         $this->dPTrimAll();
         
 		$msg = $this->check();
-		if($msg) {
+		if ($msg) {
 			return (get_class($this) . '::store-check failed<br />' . $msg);
 		}
 		$k = $this->_tbl_key;
-		if($this->$k) {
+		if ($this->$k) {
             $store_type = 'update';
 			$ret = db_updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
 		} 
@@ -210,7 +210,7 @@ class CDpObject {
 			$ret = db_insertObject($this->_tbl, $this, $this->_tbl_key);
 		}
 		
-		if($ret) {
+		if ($ret) {
 			// only record history if an update or insert actually occurs.
 			addHistory($this->_tbl, $this->$k, $store_type, 
 			           ($this->_tbl . '_' . $store_type . '(' . $this->$k . ')'));
