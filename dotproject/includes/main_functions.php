@@ -2,7 +2,7 @@
 ##
 ## Global General Purpose Functions
 ##
-if (!defined('DP_BASE_DIR')) {
+if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 

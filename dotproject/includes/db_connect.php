@@ -5,7 +5,7 @@
 * @todo Encapsulate into a database object
 */
 
-if (!defined('DP_BASE_DIR')) {
+if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
@@ -32,7 +32,7 @@ $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.
 	$rsArr = $rs->GetArray();
-
+	
 	foreach ($rsArr as $c) {
 		if ($c['config_type'] == 'checkbox') {
 			$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
@@ -50,7 +50,9 @@ if ($rs) { // Won't work in install mode.
 */
 function db_loadResult($sql) {
 	$cur = db_exec($sql);
-	$cur or exit(db_error());
+	if (!($cur)) {
+		exit(db_error());
+	}
 	$ret = null;
 	if ($row = db_fetch_row($cur)) {
 		$ret = $row[0];
@@ -70,21 +72,23 @@ function db_loadResult($sql) {
 function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
 	if ($object != null) {
 		$hash = array();
-		if(!db_loadHash($sql, $hash)) {
+		if(!(db_loadHash($sql, $hash))) {
 			return false;
 		}
 		bindHashToObject($hash, $object, null, $strip, $bindAll);
 		return true;
 	} else {
 		$cur = db_exec($sql);
-		$cur or exit(db_error());
-		if ($object = db_fetch_object($cur)) {
+		if (!($cur)) {
+			exit(db_error());
+		}
+		$object = db_fetch_object($cur);
+		if ($object) {
 			db_free_result($cur);
-			return true;
 		} else {
 			$object = null;
-			return false;
 		}
+		return (($object) ? true : false);
 	}
 }
 
@@ -97,14 +101,12 @@ function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
 */
 function db_loadHash($sql, &$hash) {
 	$cur = db_exec($sql);
-	$cur or exit(db_error());
+	if (!($cur)) {
+		exit(db_error());
+	}
 	$hash = db_fetch_assoc($cur);
 	db_free_result($cur);
-	if ($hash == false) {
-		return false;
-	} else {
-		return true;
-	}
+	return ((!($hash)) ? false : true);
 }
 
 /**
@@ -116,10 +118,12 @@ function db_loadHash($sql, &$hash) {
 */
 function db_loadHashList($sql, $index='') {
 	$cur = db_exec($sql);
-	$cur or exit(db_error());
+	if (!($cur)) {
+		exit(db_error());
+	}
 	$hashlist = array();
 	while ($hash = db_fetch_array($cur)) {
-		$hashlist[$hash[$index ? $index : 0]] = $index ? $hash : $hash[1];
+		$hashlist[$hash[(($index) ? $index : 0)]] = $index ? $hash : $hash[1];
 	}
 	db_free_result($cur);
 	return $hashlist;
@@ -167,7 +171,7 @@ function db_loadColumn($sql, $maxrows=NULL) {
 	$cnt = 0;
 	$row_index = null;
 	while ($row = db_fetch_row($cur)) {
-		if (! isset($row_index)) {
+		if (!(isset($row_index))) {
 			if (isset($row[0])) {
 				$row_index = 0;
 			} else {
@@ -190,14 +194,14 @@ function db_loadColumn($sql, $maxrows=NULL) {
  */
 function db_loadObjectList($sql, $object, $maxrows = NULL) {
 	$cur = db_exec($sql);
-	if (!$cur) {
-		die("db_loadObjectList : " . db_error());
+	if (!($cur)) {
+		die('db_loadObjectList : ' . db_error());
 	}
 	$list = array();
 	$cnt = 0;
 	$row_index = null;
 	while ($row = db_fetch_array($cur)) {
-		if (! isset($row_index)) {
+		if (!(isset($row_index))) {
 			if (isset($row[0]))
 				$row_index = 0;
 			else {
@@ -224,19 +228,21 @@ function db_loadObjectList($sql, $object, $maxrows = NULL) {
 * @param [type] $verbose
 */
 function db_insertArray($table, &$hash, $verbose=false) {
-	$fmtsql = "insert into $table (%s) values(%s) ";
+	$fmtsql = "INSERT INTO $table (%s) VALUES(%s) ";
 	foreach ($hash as $k => $v) {
-		if (is_array($v) or is_object($v) or $v == NULL) {
+		if (is_array($v) || is_object($v) || $v == NULL) {
 			continue;
 		}
 		$fields[] = $k;
 		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf($fmtsql, implode(',', $fields) ,  implode(',', $values));
-
-	($verbose) && print "$sql<br />\n";
-
-	if (!db_exec($sql)) {
+	
+	if ($verbose) { 
+		print "$sql<br />\n";
+	}
+	
+	if (!(db_exec($sql))) {
 		return false;
 	}
 	$id = db_insert_id();
@@ -253,22 +259,21 @@ function db_insertArray($table, &$hash, $verbose=false) {
 function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 	$fmtsql = "UPDATE $table SET %s WHERE %s";
 	foreach ($hash as $k => $v) {
-		if(is_array($v) or is_object($v) or $k[0] == '_') // internal or NA field
+		if(is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
+		}
 
 		if($k == $keyName) { // PK not to be updated
 			$where = "$keyName='" . db_escape($v) . "'";
 			continue;
 		}
-		if ($v == '') {
-			$val = 'NULL';
-		} else {
-			$val = "'" . db_escape($v) . "'";
-		}
+		$val = (($v == '') ? 'NULL' : ("'" . db_escape($v) . "'"));
 		$tmp[] = "$k=$val";
 	}
 	$sql = sprintf($fmtsql, implode(',', $tmp) , $where);
-	($verbose) && print "$sql<br />\n";
+	if ($verbose) { 
+		print "$sql<br />\n";
+	}
 	$ret = db_exec($sql);
 	return $ret;
 }
@@ -298,7 +303,7 @@ function db_delete($table, $keyName, $keyValue) {
 function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 	$fmtsql = "INSERT INTO `$table` (%s) VALUES (%s) ";
 	foreach (get_object_vars($object) as $k => $v) {
-		if (is_array($v) or is_object($v) or $v == NULL) {
+		if (is_array($v) || is_object($v) || $v == NULL) {
 			continue;
 		}
 		if ($k[0] == '_') { // internal field
@@ -308,14 +313,19 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
-	($verbose) && print "$sql<br />\n";
-	if (!db_exec($sql)) {
+	if ($verbose) { 
+		print "$sql<br />\n";
+	}
+	if (!(db_exec($sql))) {
 		return false;
 	}
 	$id = db_insert_id();
-	($verbose) && print "id=[$id]<br />\n";
-	if ($keyName && $id)
+	if ($verbose) { 
+		print "id=[$id]<br />\n";
+	}
+	if ($keyName && $id) {
 		$object->$keyName = $id;
+	}
 	return true;
 }
 
@@ -329,21 +339,17 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 function db_updateObject($table, &$object, $keyName, $updateNulls=true) {
 	$fmtsql = "UPDATE `$table` SET %s WHERE %s";
 	foreach (get_object_vars($object) as $k => $v) {
-		if(is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
+		if(is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
 		}
 		if($k == $keyName) { // PK not to be updated
 			$where = "$keyName='" . db_escape($v) . "'";
 			continue;
 		}
-		if ($v === NULL && !$updateNulls) {
+		if ($v === NULL && !($updateNulls)) {
 			continue;
 		}
-		if($v === '') {
-			$val = "''";
-		} else {
-			$val = "'" . db_escape($v). "'";
-		}
+		$val = (($v === '') ? "''" : ("'" . db_escape($v) . "'"));
 		$tmp[] = "$k=$val";
 	}
 	if (count ($tmp)) {
@@ -374,14 +380,12 @@ function db_dateConvert($src, &$dest, $srcFmt) {
 * @param [type] $timestamp
 */
 function db_datetime($timestamp = NULL) {
-	if (!$timestamp) {
+	if (!($timestamp)) {
 		return NULL;
 	}
-	if (is_object($timestamp)) {
-		return $timestamp->toString('%Y-%m-%d %H:%M:%S');
-	} else {
-		return strftime('%Y-%m-%d %H:%M:%S', $timestamp);
-	}
+	$datetime_str = ((is_object($timestamp)) ? $timestamp->toString('%Y-%m-%d %H:%M:%S') 
+	                 : strftime('%Y-%m-%d %H:%M:%S', $timestamp));
+	return $datetime_str;
 }
 
 /**
@@ -391,12 +395,12 @@ function db_datetime($timestamp = NULL) {
 *
 */
 function db_dateTime2locale($dateTime, $format) {
+	$dateTime = null;
 	if (intval($dateTime)) {
 		$date = new CDate($dateTime);
-		return $date->format($format);
-	} else {
-		return null;
+		$dateTime = $date->format($format);
 	}
+	return $dateTime;
 }
 
 /*
@@ -410,25 +414,26 @@ function db_dateTime2locale($dateTime, $format) {
 * @param boolean
 */
 function bindHashToObject($hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindAll=false) {
-	is_array($hash) or die('bindHashToObject : hash expected');
-	is_object($obj) or die('bindHashToObject : object expected');
-	
+	if (!(is_array($hash))) {
+		die('bindHashToObject : hash expected');
+	} else if (!(is_object($obj))) {
+		die('bindHashToObject : object expected');
+	}
 	/* 
 	 * checking that all hash values are non-objects so that stripslashes() and other such 
 	 * functions are correctly used as well as making sure that we actually create new values and 
 	 * not just copy a reference to an object. bind() already filters non-objects but we still need 
 	 * to check on this should the funtion be called independently of bind()
 	 */
-	$go_on = true;
+	
 	foreach ($hash as $k => $v) {
 		if (is_object($hash[$k])) {
 			$error_str .= ('bindHashToObject : non-object expected for hash value with key ' 
 			               . $k . "\n");
-			$go_on = false;
+			die ($error_str);
 		}
 	}
-	$go_on or die ($error_str);
-
+	
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {
 			$obj->$k = (($checkSlashes && get_magic_quotes_gpc()) ? stripslashes($hash[$k]) 

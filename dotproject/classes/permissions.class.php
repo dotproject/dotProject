@@ -16,21 +16,21 @@
  * the main dP environment.
  */
 
-if (!defined('DP_BASE_DIR')) {
+if (!(defined('DP_BASE_DIR'))) {
 	die('This file should not be called directly.');
 }
 
-// Set the ADODB directory
-if (!defined('ADODB_DIR')) {
+//Set the ADODB directory
+if (!(defined('ADODB_DIR'))) {
 	define('ADODB_DIR', DP_BASE_DIR . '/lib/adodb');
 }
 
-// Include the PHPGACL library
+//Include the PHPGACL library
 require_once DP_BASE_DIR . '/lib/phpgacl/gacl.class.php';
 require_once DP_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
-// Include the db_connections 
+//Include the db_connections 
 
-// Now extend the class
+//Now extend the class
 /**
  * Extend the gacl_api class.	There is an argument to separate this
  * into a gacl and gacl_api class on the premise that normal activity
@@ -53,9 +53,10 @@ class dPacl extends gacl_api {
 		$opts['db_password'] = dPgetConfig('dbpass');
 		$opts['db_name'] = dPgetConfig('dbname');
 		$opts['db'] = $db;
-		// We can add an ADODB instance instead of the database
-		// connection details.	This might be worth looking at in
-		// the future.
+		/*
+		 * We can add an ADODB instance instead of the database connection details. 
+		 * This might be worth looking at in the future.
+		 */
 		if (dPgetConfig('debug', 0) > 10) {
 			$this->_debug = true;
 		}
@@ -63,7 +64,7 @@ class dPacl extends gacl_api {
 	}
 	
 	function checkLogin($login) {
-		// Simple ARO<->ACO check, no AXO's required.
+		//Simple ARO<->ACO check, no AXO's required.
 		return $this->acl_check('system', 'login', 'user', $login);
 	}
 	
@@ -86,7 +87,7 @@ class dPacl extends gacl_api {
 		}
 		
 		$result = $this->acl_query('application', $op, 'user', $userid, $module, $item, null);
-		// If there is no acl_id then we default back to the parent lookup
+		//If there is no acl_id then we default back to the parent lookup
 		if (!($result && $result['acl_id'])) {
 			dprint(__FILE__, __LINE__, 2, 
 			       "checkModuleItem($module, $op, $userid) did not return a record");
@@ -125,7 +126,7 @@ class dPacl extends gacl_api {
 		if (!($id)) {
 			return $this->addLogin($login, $username);
 		}
-		// Check if the details have changed.
+		//Check if the details have changed.
 		list ($osec, $val, $oord, $oname, $ohid) = $this->get_object_data($id, 'aro');
 		if ($oname != $username) {
 			$res = $this->edit_object( $id, 'user', $username, $login, 1, 0, 'aro');
@@ -168,6 +169,8 @@ class dPacl extends gacl_api {
 	}
 	
 	function addModuleItem($mod, $itemid, $itemdesc) {
+		//Verify that description is properly escaped (no effect if already escaped)
+		$itemdesc = addslashes(stripslashes($itemdesc));
 		$res = $this->add_object($mod, $itemdesc, $itemid, 0, 0, 'axo');
 		return $res;
 	}
@@ -215,11 +218,11 @@ class dPacl extends gacl_api {
 	** @return
 	*/
 	function deleteModuleItems($mod) {
-		// Declaring the return string
+		//Declaring the return string
 		$ret = null;
 		$q = new DBQuery;
 		
-		// Fetching module-associated ACL ID's
+		//Fetching module-associated ACL ID's
 		$q->addTable('gacl_axo_map');
 		$q->addQuery('acl_id');
 		$q->addWhere("value = '" . $mod ."'");
@@ -228,7 +231,7 @@ class dPacl extends gacl_api {
 		
 		$tables = array('gacl_aco_map' => 'acl_id', 'gacl_aro_map' => 'acl_id', 'gacl_acl' => 'id');
 		foreach ($acls as $acl => $k) {
-			// Deleting gacl_aco_map, gacl_aro_map, and gacl_aco_map entries
+			//Deleting gacl_aco_map, gacl_aro_map, and gacl_aco_map entries
 			foreach ($tables as $acl_table => $acl_tab_key) {
 				$q->setDelete($acl_table);
 				$q->addWhere($acl_tab_key . ' = ' . $acl);
@@ -239,7 +242,7 @@ class dPacl extends gacl_api {
 			}
 		}
 		
-		// Returning null (no error) or database error message (error)
+		//Returning null (no error) or database error message (error)
 		return $ret;
 	}
 	
@@ -256,9 +259,11 @@ class dPacl extends gacl_api {
 	}
 	
 	function getPermittedUsers($module = null) {
-		// Not as pretty as I'd like, but we can do it reasonably well.
-		// Check to see if we are allowed to see other users.
-		// If not we can only see ourselves.
+		/*
+		 * Not as pretty as I'd like, but we can do it reasonably well.
+		 * Check to see if we are allowed to see other users.
+		 * If not we can only see ourselves.
+		 */
 		global $AppUI;
 		$canViewUsers = $this->checkModule('users', 'view');
 		$q	= new DBQuery;
@@ -284,7 +289,7 @@ class dPacl extends gacl_api {
 		if (!($uid)) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
-		// Grab a list of all acls that match the user/module, for which Deny permission is set.
+		//Grab a list of all acls that match the user/module, for which Deny permission is set.
 		return $this->search_acl('application', 'view', 'user', $uid, false, $module, 
 		                         false, false, false);
 	}
@@ -318,9 +323,9 @@ class dPacl extends gacl_api {
 		}
 		
 		$acls = $this->getItemACLs($module, $uid);
-		// If we get here we should have an array.
+		//If we get here we should have an array.
 		if (is_array($acls)) {
-			// Grab the item values
+			//Grab the item values
 			foreach ($acls as $acl) {
 				$acl_entry = $this->get_acl($acl);
 				if ($acl_entry['allow'] == false && $acl_entry['enabled'] == true 
@@ -338,7 +343,7 @@ class dPacl extends gacl_api {
 		return $items;
 	}
 	
-	// This is probably redundant.
+	//This is probably redundant.
 	function & getAllowedItems($module, $uid = null) {
 		$items = array();
 		if (!($uid)) {
@@ -362,10 +367,11 @@ class dPacl extends gacl_api {
 		       "getAllowedItems($module, $uid) returning " . count($items) . ' items');
 		return $items;
 	}
-	
-	// Copied from get_group_children in the parent class, this version returns
-	// all of the fields, rather than just the group ids.	This makes it a bit
-	// more efficient as it doesn't need the get_group_data call for each row.
+	/*
+	 * Copied from get_group_children in the parent class, this version returns
+	 * all of the fields, rather than just the group ids. This makes it a bit
+	 * more efficient as it doesn't need the get_group_data call for each row.
+	 */
 	function getChildren($group_id, $group_type = 'ARO', $recurse = 'NO_RECURSE') {
 		$this->debug_text(('get_group_children(): Group_ID: ' . $group_id . ' Group Type: ' 
 						   . $group_type . ' Recurse: ' . $recurse));
@@ -423,7 +429,7 @@ class dPacl extends gacl_api {
 	}
 	
 	function deleteRole($id) {
-		// Delete all of the group assignments before deleting group.
+		//Delete all of the group assignments before deleting group.
 		$objs = $this->get_group_objects($id);
 		foreach ($objs as $section => $value) {
 			$this->del_group_object($id, $section, $value);
@@ -432,9 +438,9 @@ class dPacl extends gacl_api {
 	}
 	
 	function insertUserRole($role, $user) {
-		// Check to see if the user ACL exists first.
+		//Check to see if the user ACL exists first.
 		$id = $this->get_object_id('user', $user, 'aro');
-		if (! $id) {
+		if (!($id)) {
 			$q = new DBQuery;
 			$q->addTable('users');
 			$q->addQuery('user_username');
@@ -459,8 +465,10 @@ class dPacl extends gacl_api {
 		return $this->del_group_object($role, 'user', $user);
 	}
 	
-	// Returns the group ids of all groups this user is mapped to.
-	// Not provided in original phpGacl, but useful.
+	/*
+	 * Returns the group ids of all groups this user is mapped to. 
+	 * Not provided in original phpGacl, but useful.
+	 */
 	function getUserRoles($user) {
 		$id = $this->get_object_id('user', $user, 'aro');
 		$result = $this->get_group_map($id);
@@ -470,8 +478,7 @@ class dPacl extends gacl_api {
 		return $result;
 	}
 	
-	// Return a list of module groups and modules that a user can
-	// be permitted access to.
+	// Return a list of module groups and modules that a user can be permitted access to.
 	function getModuleList() {
 		$result = array();
 		// First grab all the module groups.
@@ -488,7 +495,7 @@ class dPacl extends gacl_api {
 		} else {
 			dprint(__FILE__, __LINE__, 1, "No groups available for $parent_id");
 		}
-		// Now the individual modules.
+		//Now the individual modules.
 		$modlist = $this->get_objects_full('app', 0, 'axo');
 		if (is_array($modlist)) {
 			foreach ($modlist as $mod) {
@@ -498,9 +505,10 @@ class dPacl extends gacl_api {
 		}
 		return $result;
 	}
-	
-	// An assignable module is one where there is a module sub-group
-	// Effectivly we just list those module in the section "modname"
+	/*
+	 * An assignable module is one where there is a module sub-group
+	 * Effectivly we just list those module in the section "modname"
+	 */
 	function getAssignableModules() {
 		return $this->get_object_sections(null, 0, 'axo', 'value not in ("sys", "app")');
 	}
@@ -509,7 +517,7 @@ class dPacl extends gacl_api {
 		$result = array();
 		$list = $this->get_objects_full('application', 0, 'aco');
 		if (is_array($list)) {
-			// We only need the id and the name
+			//We only need the id and the name
 			foreach ($list as $perm) {
 				$result[$perm['id']] = $perm['name'];
 			}
@@ -598,7 +606,7 @@ class dPacl extends gacl_api {
 			return false;
 		}
 		
-		// Return Object info.
+		//Return Object info.
 		return array('id' => $row[0], 'section_value' => $row[1], 'name' => $row[2], 
 		             'value' => $row[3], 'order_value' => $row[4], 'hidden' => $row[5]);
 	}
@@ -657,7 +665,7 @@ class dPacl extends gacl_api {
 		}
 		$q->clear();
 		
-		// Return objects
+		//Return objects
 		return $retarr;
 	}
 	
@@ -709,14 +717,13 @@ class dPacl extends gacl_api {
 		}
 		$q->clear();
 		
-		// Return objects
+		//Return objects
 		return $retarr;
 	}
 	
-	/** Called from do_perms_aed, allows us to add a new ACL */
+	//Called from do_perms_aed, allows us to add a new ACL 
 	function addUserPermission() {
-		// Need to have a user id, 
-		// parse the permissions array
+		//Need to have a user id, parse the permissions array
 		if (!(is_array($_POST['permission_type']))) {
 			$this->debug_text('you must select at least one permission');
 			return false;
@@ -731,18 +738,18 @@ class dPacl extends gacl_api {
 		} else if (isset($_POST['permission_item']) && $_POST['permission_item']) {
 			$mod_mod = array();
 			$mod_mod[$_POST['permission_table']][] =	$_POST['permission_item'];
-			// check if the item already exists, if not create it.
-			// First need to check if the section exists.
+			//First need to check if the section exists.
 			if (!($this->get_object_section_section_id(null, $_POST['permission_table'], 'axo'))) {
 					$this->addModuleSection($_POST['permission_table']);
 			}
+			//check if the item already exists, if not create it.
 			if (!($this->get_object_id($_POST['permission_table'], $_POST['permission_item'], 
 			                           'axo'))) {
 				$this->addModuleItem($_POST['permission_table'], $_POST['permission_item'], 
 									 $_POST['permission_name']);
 			}
 		} else {
-			// Get the module information
+			//Get the module information
 			$mod_info = $this->get_object_data($mod_id, 'axo');
 			$mod_mod = array();
 			$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
@@ -757,7 +764,7 @@ class dPacl extends gacl_api {
 			$user_map = array();
 			$user_map[$aro_info[0][0]][] = $aro_info[0][1];
 		}
-		// Build the permissions info
+		//Build the permissions info
 		$type_map = array();
 		foreach ($_POST['permission_type'] as $tid) {
 			$type = $this->get_object_data($tid, 'aco');
@@ -769,14 +776,12 @@ class dPacl extends gacl_api {
 		                      $_POST['permission_access'], 1, null, null, 'user');
 	}
 	
-	/**
-	 * Deprecated, now just calls addUserPermission
-	 */
+	//Deprecated, now just calls addUserPermission
 	function addRolePermission() {
 			return $this->addUserPermission();
 	}
 	
-	// Some function overrides.
+	//Some function overrides.
 	function debug_text($text) {
 		$this->_debug_msg = $text;
 		dprint(__FILE__, __LINE__, 9, $text);

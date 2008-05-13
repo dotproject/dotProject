@@ -9,7 +9,7 @@
 	A generic database layer providing a set of low to middle level functions
 	originally written for WEBO project, see webo source for "real life" usages
 */
-if (!defined('DP_BASE_DIR')) {
+if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
@@ -31,7 +31,7 @@ function db_connect( $host='localhost', $dbname, $user='root', $passwd='', $pers
 
 function db_error() {
 	global $db;
-	if (! is_object($db)) {
+	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
 	return $db->ErrorMsg();
@@ -39,7 +39,7 @@ function db_error() {
 
 function db_errno() {
 	global $db;
-	if (! is_object($db)) {
+	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
 	return $db->ErrorNo();
@@ -47,7 +47,7 @@ function db_errno() {
 
 function db_insert_id() {
 	global $db;
-	if (! is_object($db)) {
+	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
 	return $db->Insert_ID();
@@ -56,7 +56,7 @@ function db_insert_id() {
 function db_exec( $sql ) {
 	global $db;
 	
-	if (! is_object($db)) {
+	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
 	$qid = $db->Execute( $sql );
@@ -67,7 +67,7 @@ function db_exec( $sql ) {
 		// Useless statement, but it is being executed only on error, 
 		// and it stops infinite loop.
 		$db->Execute( $sql );
-		if (!db_error()) {
+		if (!(db_error())) {
 			echo '<script language="JavaScript"> location.reload(); </script>';
 		}
 	}
@@ -110,12 +110,12 @@ function db_fetch_assoc( &$qid ) {
 }
 
 function db_fetch_array( &$qid  ) {
-	if (! is_object($qid)) {
+	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_array.');
 	}
 	$result = $qid->FetchRow();
 	// Ensure there are numerics in the result.
-	if ($result && ! isset($result[0])) {
+	if ($result && !(isset($result[0]))) {
 		$ak = array_keys($result);
 		foreach ($ak as $k => $v) {
 			$result[$k] = $result[$v];
@@ -125,7 +125,7 @@ function db_fetch_array( &$qid  ) {
 }
 
 function db_fetch_object( $qid  ) {
-	if (! is_object($qid)) {
+	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_object.');
 	}
 	return $qid->FetchNextObject(false);
