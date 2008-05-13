@@ -151,7 +151,8 @@ class CTask extends CDpObject
 				$dependent_task = new CTask();
 				$dependent_task->load($dependent);
 				if ($dependent_task->task_id != $dependent_task->task_parent) {
-					$more_dependents = explode(',', $this->dependentTasks($dependent_task->task_parent));
+					$more_dependents = explode(',', 
+					                           $this->dependentTasks($dependent_task->task_parent));
 				}
 			}
 			$this_dependents = array_merge($this_dependents, $more_dependents);
@@ -1164,8 +1165,9 @@ class CTask extends CDpObject
 			$q->innerJoin('user_tasks', 'ut', 't.task_id=ut.task_id');
 		}
 		$q->innerJoin('projects', 'p', 't.task_project = p.project_id');
-		$q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' 
-					 . ', t.task_duration_type, p.project_color_identifier AS color, p.project_name');
+		$q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date' 
+		             . ', t.task_duration, t.task_duration_type' 
+		             . ', p.project_color_identifier AS color, p.project_name');
 		$q->addWhere('task_status > -1' 
 					 . " AND (task_start_date <= '{$db_end}' AND (task_end_date >= '{$db_start}'" 
 					 . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL))");
