@@ -321,11 +321,31 @@ class dPacl extends gacl_api {
 		if (!($uid)) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
+		//first get role items
+		$roles = $this->getUserRoles($uid);
+		foreach ($roles as $role_arr) {
+			$acls = $this->getRoleACLs($role_arr['id']);
+			if (is_array($acls)) {
+				foreach ($acls as $acl) {
+					$acl_entry = $this->get_acl($acl);
+					if (in_array('view', $acl_entry['aco']['application']) 
+					    && $acl_entry['allow'] == false && $acl_entry['enabled'] == true 
+					    && isset($acl_entry['axo'][$module])) {
+						foreach ($acl_entry['axo'][$module] as $id) {
+							$items[] = $id;
+						}
+					}
+				}
+			} else {
+				dprint(__FILE__, __LINE__, 2, 
+				       "getDeniedItems($module, $uid) - no role ACL's match");
+			}
+		}
 		
+		
+		//now get use specific items
 		$acls = $this->getItemACLs($module, $uid);
-		//If we get here we should have an array.
 		if (is_array($acls)) {
-			//Grab the item values
 			foreach ($acls as $acl) {
 				$acl_entry = $this->get_acl($acl);
 				if ($acl_entry['allow'] == false && $acl_entry['enabled'] == true 
@@ -334,9 +354,10 @@ class dPacl extends gacl_api {
 						$items[] = $id;
 					}
 				}
+					echo ('<pre>User:' . print_r($acl_entry, true) . '</pre>');
 			}
 		} else {
-			dprint(__FILE__, __LINE__, 2, "getDeniedItems($module, $uid) - no ACL's match");
+			dprint(__FILE__, __LINE__, 2, "getDeniedItems($module, $uid) - no user ACL's match");
 		}
 		dprint(__FILE__,__LINE__, 2, 
 		       "getDeniedItems($module, $uid) returning " . count($items) . ' items');
@@ -349,6 +370,29 @@ class dPacl extends gacl_api {
 		if (!($uid)) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
+		
+		//first get role items
+		$roles = $this->getUserRoles($uid);
+		foreach ($roles as $role_arr) {
+			$acls = $this->getRoleACLs($role_arr['id']);
+			if (is_array($acls)) {
+				foreach ($acls as $acl) {
+					$acl_entry = $this->get_acl($acl);
+					if (in_array('view', $acl_entry['aco']['application']) 
+					    && $acl_entry['allow'] == true && $acl_entry['enabled'] == true 
+					    && isset($acl_entry['axo'][$module])) {
+						foreach ($acl_entry['axo'][$module] as $id) {
+							$items[] = $id;
+						}
+					}
+				}
+			} else {
+				dprint(__FILE__, __LINE__, 2, 
+				       "getAllowedItems($module, $uid) - no role ACL's match");
+			}
+		}
+		
+		//now get use specific items
 		$acls = $this->getItemACLs($module, $uid);
 		if (is_array($acls)) {
 			foreach ($acls as $acl) {
@@ -361,7 +405,7 @@ class dPacl extends gacl_api {
 				}
 			}
 		} else {
-			dprint(__FILE__, __LINE__, 2, "getAllowedItems($module, $uid) - no ACL's match");
+			dprint(__FILE__, __LINE__, 2, "getAllowedItems($module, $uid) - no user ACL's match");
 		}
 		dprint(__FILE__,__LINE__, 2, 
 		       "getAllowedItems($module, $uid) returning " . count($items) . ' items');
