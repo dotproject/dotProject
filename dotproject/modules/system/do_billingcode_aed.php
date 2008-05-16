@@ -13,23 +13,26 @@ $obj->_billingcode_id = isset($_POST['billingcode_id']) ? $_POST['billingcode_id
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg( 'Billing Codes' );
 if ($del) {
-	if (($msg = $obj->delete()))
+	if (($msg = $obj->delete())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	else
+	} else {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
+	}
 } else {
-	if ($edit)
+	if ($edit) {
 		$obj->_billingcode_id = $edit;
+	}
 	
 	$obj->billingcode_value=$_REQUEST['billingcode_value'];
 	$obj->billingcode_name=$_REQUEST['billingcode_name'];
 	$obj->billingcode_desc=$_REQUEST['billingcode_desc'];
 	$obj->company_id=$_REQUEST['company_id'];
 	
-	if (($msg = $obj->store()))
+	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	else
+	} else{
 		$AppUI->setMsg('updated', UI_MSG_OK, true);
+	}
 }
 
 $AppUI->redirect('m=system&a=billingcode&company_id='.$_REQUEST['company_id']);
