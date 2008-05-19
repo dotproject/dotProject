@@ -160,18 +160,19 @@ class CProject extends CDpObject {
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . $from_project_id);
-		//$q->addWhere('task_id = task_parent');
 		$sql = $q->prepare();
 		$q->clear();
 		$tasks = array_flip(db_loadColumn ($sql));
 		
 		$origDate = new CDate($origProject->project_start_date);
 		$destDate = new CDate ($this->project_start_date);
-		$timeOffset = $destDate->getTime() - $origDate->getTime();
 		
-		// Old dependencies array
+		$dateOffset = $destDate->dateDiff($origDate);
+		
+		
+		// Old dependencies array from imported tasks
 		$deps = array();
-		// New dependencies array
+		// New dependencies array for new copies of imported tasks
 		$newDeps = array();
 		// Old2New task ID array
 		$taskXref = array();
@@ -181,10 +182,10 @@ class CProject extends CDpObject {
 		// Copy each task into this project and get their deps
 		foreach ($tasks as $orig => $void) {
 			$objTask = new CTask();
-			$objTask->load ($orig);
+			$objTask->load($orig);
 			
 			// Grab the old parent id
-			$oldParent = (integer)$objTask->task_parent;
+			$oldParent = (integer) $objTask->task_parent;
 			
 			$deps[$orig] = $objTask->getDependencies ();
 			$destTask = $objTask->copy($this->project_id, 0);
@@ -205,6 +206,7 @@ class CProject extends CDpObject {
 			$newDeps[$ndkey] = $ndt;
 		}
 		
+
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . $this->project_id);
@@ -214,26 +216,31 @@ class CProject extends CDpObject {
 		foreach ($tasks as $task_id) {
 			$newTask = new CTask();
 			$newTask->load($task_id);
-			// Fix task start date from project start date offset
-			$origDate->setDate ($newTask->task_start_date);
-			$destDate->setDate ($origDate->getTime() + $timeOffset, DATE_FORMAT_UNIXTIME); 
-			$destDate = $destDate->next_working_day();
-			$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);   
-			
-			// Fix task end date from start date + work duration
-			//$newTask->calc_task_end_date();
-			if (!empty($newTask->task_end_date) 
-			    && $newTask->task_end_date != '0000-00-00 00:00:00') {
-				$origDate->setDate ($newTask->task_end_date);
-				$destDate->setDate (($origDate->getTime() + $timeOffset), DATE_FORMAT_UNIXTIME); 
+			if (in_array($task_id, $taskXref)) {
+				// Fix task start date from project start date offset
+				$origDate->setDate($newTask->task_start_date);
+				$destDate->setDate($newTask->task_start_date);
+				$destDate->addDays($dateOffset);
 				$destDate = $destDate->next_working_day();
-				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
-			}
+				$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
+				
+				// Fix task end date from start date + work duration
+				//$newTask->calc_task_end_date();
+				if (!empty($newTask->task_end_date) 
+				    && $newTask->task_end_date != '0000-00-00 00:00:00') {
+					$origDate->setDate($newTask->task_end_date);
+					$destDate->setDate($newTask->task_end_date);
+					$destDate->addDays($dateOffset);
+					$destDate = $destDate->next_working_day();
+					$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
+				}
+				
+				$newTask->task_parent = $taskXref[$nid2op[$newTask->task_id]];
 			
-			$newTask->task_parent = $taskXref[$nid2op[$newTask->task_id]];
-			
+				$newTask->store();
+				$newTask->updateDependencies($newDeps[$task_id]);
+			}// end check if imported task
 			$newTask->store();
-			$newTask->updateDependencies($newDeps[$task_id]);
 		} // end Fix record integrity	
 		
 	} // end of importTasks
