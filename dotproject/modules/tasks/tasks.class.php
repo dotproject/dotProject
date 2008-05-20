@@ -95,7 +95,9 @@ class CTask extends CDpObject
 		
 		$this->task_percent_complete = intval($this->task_percent_complete);
 		
-		if (!$this->task_duration) {
+		if ($this->task_milestone) {
+			$this->task_duration = '0';
+		} else if (!($this->task_duration)) {
 			$this->task_duration = '1';
 		}
 		if (!$this->task_creator) {
@@ -1498,10 +1500,9 @@ class CTask extends CDpObject
 	 * Function that returns the amount of hours this
 	 * task consumes per user each week
 	 */
-	function getTaskDurationPerWeek($use_percent_assigned = false){
-		$duration = $this->task_duration*($this->task_duration_type == 24 
-										  ? dPgetConfig('daily_working_hours') 
-										  : $this->task_duration_type);
+	function getTaskDurationPerWeek($use_percent_assigned = false) {
+		$duration = ($this->task_duration_type == 24 ? dPgetConfig('daily_working_hours') 
+		             : $this->task_duration_type) * $this->task_duration;
 		$task_start_date = new CDate($this->task_start_date);
 		$task_finish_date = new CDate($this->task_end_date);
 		$assigned_users = $this->getAssignedUsers();
@@ -1598,7 +1599,7 @@ class CTask extends CDpObject
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
 		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority' 
 		             . ', co.contact_first_name, co.contact_last_name');
-		$q->addWhere(" ut.task_id = '" . $this->task_id . "'");
+		$q->addWhere('ut.task_id = ' . $this->task_id);
 		$sql = $q->prepare();
 		$q->clear();
 		return db_loadHashList($sql, 'user_id');
