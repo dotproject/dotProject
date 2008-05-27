@@ -9,7 +9,7 @@ $perms =& $AppUI->acl();
 
 // check permissions
 if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
-	$AppUI->redirect('m=publice&a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $canEdit = $perms->checkModuleItem('task_log', 'edit', $task_id);
