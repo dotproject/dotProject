@@ -336,9 +336,10 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 *
 * @param [type] $updateNulls
 */
-function db_updateObject($table, &$object, $keyName, $updateNulls=true) {
+function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descriptionField = NULL) {
 	$fmtsql = "UPDATE `$table` SET %s WHERE %s";
-	foreach (get_object_vars($object) as $k => $v) {
+	$obj_vars_arr = get_object_vars($object);
+	foreach ($obj_vars_arr as $k => $v) {
 		if(is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
 		}
@@ -354,10 +355,30 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true) {
 	}
 	if (count ($tmp)) {
 		$sql = sprintf($fmtsql, implode(",", $tmp) , $where);
-		return db_exec($sql);
+		$retval = db_exec($sql);
+		if ($retval) {
+			global $perms;
+			$perm_item_id = $perms->get_object_id($table, $obj_vars_arr[$keyName], 'axo');
+			if ($perm_item_id) {
+				if ($descriptionField) {
+					$keyDesc = $descriptionField;
+				} else {
+					//try to get a valid label field from module table by default
+					$keyDesc = db_loadResult('SELECT permissions_item_label FROM modules' 
+					                         . " WHERE permissions_item_table = '" . $table . "'");
+				}
+				
+				if ($keyDesc) {
+					$perms->edit_object($perm_item_id, $table, $obj_vars_arr[$keyDesc], 
+					                    $obj_vars_arr[$keyName], 0, 0, 'axo');
+				}
+			}
+		}
 	} else {
-		return true;
+		$retval = true;
 	}
+	
+	return $retval;
 }
 
 /**
