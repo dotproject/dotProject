@@ -123,13 +123,13 @@ if ($dbc && ($do_db || $do_db_cfg)) {
 
   if ($dbdrop) { 
    dPmsg('Dropping previous database');
-   $db->Execute('DROP DATABASE IF EXISTS '.$dbname); 
+   $db->Execute('DROP DATABASE IF EXISTS `'.$dbname.'`'); 
 	 $existing_db = false;
   }
 
   if (! $existing_db) {
 		dPmsg('Creating new Database');
-		$db->Execute('CREATE DATABASE '.$dbname);
+		$db->Execute('CREATE DATABASE `'.$dbname.'`');
          $dbError = $db->ErrorNo();
  
          if ($dbError <> 0 && $dbError <> 1007) {
@@ -141,7 +141,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  }
 
  // For some reason a db->SelectDB call here doesn't work.
- $db->Execute('USE ' . $dbname);
+ $db->Execute('USE `' . $dbname .'`');
  $db_version = InstallGetVersion($mode, $db);
 
  $code_updated = '';
