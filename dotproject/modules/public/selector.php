@@ -102,10 +102,11 @@ case "tasks":
 	$task_project = dPgetParam( $_GET, 'task_project', 0 );
 
 	$title = 'Task';
-	$q->addQuery( 'task_id, task_name, task_parent');
+	$q->addQuery( 'task_id, task_name, task_parent, p.project_name');
 	$q->addOrder('task_parent, task_parent = task_id desc');
 	if ($task_project)
 		$q->addWhere("task_project = $task_project");
+	$q->innerJoin('projects', 'p', 'task_project = p.project_id');
 	$task_list = $q->loadList();
 	$level = 0;
 	$query_result = array();
@@ -120,7 +121,7 @@ case "tasks":
 			$last_parent = 0;
 			$level = 0;
 		}
-		$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+		$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['project_name'].' - '.$task['task_name'];
 	}
 	break;
 case 'users':
