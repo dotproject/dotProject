@@ -354,7 +354,6 @@ class dPacl extends gacl_api {
 						$items[] = $id;
 					}
 				}
-					echo ('<pre>User:' . print_r($acl_entry, true) . '</pre>');
 			}
 		} else {
 			dprint(__FILE__, __LINE__, 2, "getDeniedItems($module, $uid) - no user ACL's match");
