@@ -280,8 +280,9 @@ class CForumMessage {
 		$mail->Body( $body, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ""  );
 		$mail->From( $AppUI->_('forumEmailFrom', UI_OUTPUT_RAW) );
 
+		$perms =& $AppUI->acl();
 		while ($row = db_fetch_assoc( $res )) {
-			if ($mail->ValidEmail( $row['contact_email'] )) {
+			if ($mail->ValidEmail( $row['contact_email'] ) && $perms->isUserPermitted($row['user_id'])) {
 				$mail->To( $row['contact_email'], true );
 				$mail->Send();
 			}
