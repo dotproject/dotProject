@@ -11,6 +11,9 @@ $perms =& $AppUI->acl();
 $AppUI->setMsg( 'Roles' );
 
 if ($del) {
+	if (!$perms->checkModule($m, 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
 	if ($perms->deleteUserRole($_REQUEST['role_id'], $_REQUEST['user_id'])) {
 		$AppUI->setMsg( "deleted", UI_MSG_ALERT, true );
 		$AppUI->redirect();
@@ -22,6 +25,9 @@ if ($del) {
 }
 
 if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
+	if (! $perms->checkModule($m, 'edit') || ! $perms->checkModule($m, 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
 	if ( $perms->insertUserRole($_REQUEST['user_role'], $_REQUEST['user_id'])) {
 		$AppUI->setMsg( "added", UI_MSG_ALERT, true );
 		$AppUI->redirect();
