@@ -23,8 +23,14 @@ $obj->user_username = strtolower($obj->user_username);
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg( 'User' );
 
+$perms =& $AppUI->acl();
+
 // !User's contact information not deleted - left for history.
 if ($del) {
+	if (! $perms->checkModule('admin', 'delete')
+	|| ! $perms->checkModuleItem('users', 'delete', $_REQUEST['user_id'])) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg( $msg, UI_MSG_ERROR );
 		$AppUI->redirect();
@@ -36,6 +42,10 @@ if ($del) {
 }
 	$isNewUser = !($_REQUEST['user_id']);
 	if ( $isNewUser ) {
+		if (! $perms->checkModule('admin', 'add')
+		|| ! $perms->checkModule('users', 'add')) {
+			$AppUI->redirect('m=admin&a=access_denied');
+		}
 		// check if a user with the param Username already exists
 		$userEx = FALSE;
 
@@ -64,7 +74,13 @@ if ($del) {
 		}
 
 		$contact->contact_owner = $AppUI->user_id;
+	} else {
+		if (! $perms->checkModule('admin', 'edit')
+		|| ! $perms->checkModuleItem('users', 'edit', $_REQUEST['user_id'])) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 	}
+
 
       if (($msg = $contact->store())) {
                 $AppUI->setMsg( $msg, UI_MSG_ERROR );
