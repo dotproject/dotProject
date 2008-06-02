@@ -299,7 +299,10 @@ $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);
 }
-
+$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_parent');
+if (count($allowedChildrenTasks)) {
+	$where .= ' AND ' . implode(' AND ', $allowedChildrenTasks);
+}
 // echo "<pre>$where</pre>";
 
 // Filter by company

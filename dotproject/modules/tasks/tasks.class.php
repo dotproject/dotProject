@@ -1161,6 +1161,7 @@ class CTask extends CDpObject
 		// check permissions on tasks
 		$obj = new CTask();
 		$allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
+		$parent_task_allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_parent');
 		
 		$q->addTable('tasks', 't');
 		if ($user_id) {
@@ -1188,6 +1189,9 @@ class CTask extends CDpObject
 		}
 		if (count($allow) > 0) {
 			$q->addWhere('(' . implode(' AND ', $allow) . ')');
+		}
+		if (count($parent_task_allow) > 0) {
+			$q->addWhere('(' . implode(' AND ', $parent_task_allow) . ')');
 		}
 		if ($filter_proj_archived) {
 			$q->addWhere('p.project_status <> 7');

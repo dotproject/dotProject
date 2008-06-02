@@ -112,7 +112,13 @@ function popChgPwd() {
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Company');?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=companies&a=view&company_id=<?php echo @$user["contact_company"];?>"><?php echo @$user["company_name"];?></a>
+				<?php
+				if ($perms->checkModuleItem('companies', 'access', $user['contact_company'])) {
+					echo '<a href="?m=companies&a=view&company_id=' . $user['contact_company'] . '" title="' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '">' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '</a>';
+				} else {
+					echo htmlspecialchars($user['company_name'], ENT_QUOTES);
+				}
+				?>
 			</td>
 		</tr>
 		<tr>

@@ -258,6 +258,17 @@ if ($do_report) {
 	if ($log_userfilter !=0 ) {
 		$sql->addWhere('ut.user_id = ' . $log_userfilter);
 	}
+	
+	$task = new CTask();
+	$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 't.task_id');
+	if (count($allowedTasks)) {
+		$sql->addWhere(implode(' AND ', $allowedTasks));
+	}
+	$allowedChildrenTasks = $task->getAllowedSQL($AppUI->user_id, 't.task_parent');
+	if (count($allowedChildrenTasks)) {
+		$sql->addWhere(implode(' AND ', $allowedChildrenTasks));
+	}
+	
 	// Now add the required restrictions.
 	$proj->setAllowedSQL($AppUI->user_id, $sql, null, 'p');
 	$sql->addOrder('task_project, task_end_date, task_start_date');

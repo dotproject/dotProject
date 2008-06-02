@@ -80,7 +80,7 @@ if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
 	$orderdir = (($AppUI->getState('ProjIdxOrderDir') == 'asc') ? 'desc' : 'asc');
 	$AppUI->setState('ProjIdxOrderBy', $_GET['orderby']);
 }
-$orderby = (($AppUI->getState('ProjIdxOrderBy')) 
+$orderby = (($AppUI->getState('ProjIdxOrderBy'))
             ? $AppUI->getState('ProjIdxOrderBy') : 'project_end_date');
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 

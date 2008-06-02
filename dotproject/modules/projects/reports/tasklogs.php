@@ -159,6 +159,16 @@ if ($do_report) {
 		$sql .= "\n     AND " . implode(" AND ", $allowedProjects);
 	}
 
+	$obj =& new CTask;
+	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
+	if (count($allowedTasks)) {
+		$sql .= ' AND ' . implode(' AND ', $allowedTasks);
+	}
+	$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_parent');
+	if (count($allowedChildrenTasks)) {
+		$sql .= ' AND ' . implode(' AND ', $allowedChildrenTasks);
+	}
+
 	$sql .= " ORDER BY task_log_date";
 
 	//echo "<pre>$sql</pre>";
