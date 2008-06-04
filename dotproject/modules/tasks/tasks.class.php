@@ -501,35 +501,34 @@ class CTask extends CDpObject
 				$newObj->updateDependencies($dep_list);
 			}
 		}
-		
+		$newObj->store();
 		
 		return $newObj;
 	}
 	
 	function move($destProject_id = 0, $destTask_id = -1) {
-		if ($destProject_id != 0) {
+		if ($destProject_id) {
 			$this->task_project = $destProject_id;
 		}
-		
-		if ($destTask_id == 0) {
-			$this->task_parent = $this->task_id;
-		} else if ($destTask_id > 0) {
-			$this->task_parent = $destTask_id;
+		if ($destTask_id >= 0) {
+			$this->task_parent = (($destTask_id) ? $destTask_id : $this->task_id);
 		}
+		$this->store();
 	}
 	
 	function deepMove($destProject_id = 0, $destTask_id = 0) {
 		$children = $this->getChildren();
 		$this->move($destProject_id, $destTask_id);
 		if (!empty($children)) {
-			$tempChild = new CTask();
 			foreach ($children as $child) {
+				$tempChild = new CTask();
 				$tempChild->peek($child);
 				$tempChild->htmlDecode($child);
 				$tempChild->deepMove($destProject_id, $this->task_id);
 				$tempChild->store();
 			}
 		}
+		$this->store();
 	}
 	
 	/**
@@ -689,49 +688,51 @@ class CTask extends CDpObject
 	 */
 	function delete() {
 		$q = new DBQuery;
-		$this->_action = 'deleted';
-		// delete linked user tasks
-		$q->setDelete('user_tasks');
-		$q->addWhere('task_id=' . $this->task_id);
-		if (!($q->exec())) {
-			return db_error();
+		if (!($this->task_id)) {
+			return 'invalid task id';
 		}
-		$q->clear();
 		
-		//load it before deleting it because we need info on it to update the parents later on
-		$this->load($this->task_id);
-		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
+		//load task first because we need info on it to update the parent tasks later
+		$task = new CTask();
+		$task->load($this->task_id);
+		//get child tasks so we can delete them too (no orphans)
+		$childrenlist = $task->getDeepChildren();
 		
-		// delete the tasks...what about orphans?
-		// delete task with parent is this task
-		$childrenlist = $this->getDeepChildren();
 		
-		$q->setDelete('tasks');
-		$q->addWhere('task_id=' . $this->task_id);
-		if (!($q->exec())) {
-			return db_error();
-		} else if ($this->task_parent != $this->task_id){
-			// Has parent, run the update sequence, this child will no longer be in the
-			// database
+		//delete task (if we're actually allowed to delete this task)
+		$err_msg = parent::delete($task->task_id, $task->task_name, $task->task_project);
+		if ($err_msg) {
+			return $err_msg;
+		}
+		$this->_action = 'deleted';
+		
+		if ($task->task_parent != $task->task_id){
+			//Has parent, run the update sequence, this child will no longer be in the database
 			$this->updateDynamics();
 		}
 		$q->clear();
 		
-		// delete children
+		//delete children
 		if (!empty($childrenlist)) {
-			$q->setDelete('tasks');
-			$q->addWhere('task_parent IN (' . implode(', ', $childrenlist) 
-						 . ', ' . $this->task_id . ')');
-			if (!($q->exec())) {
-				return db_error();
-			} else{
-				$this->updateDynamics(); // to update after children are deleted (see above)
-				$this->_action = 'deleted with children'; // always overriden?
+			foreach ($childrenlist as $child_id) {
+				$ctask = new CTask();
+				$ctask->load($child_id);
+				//ignore permissions on child tasks by deleteing task directly from the database
+				$q->setDelete('tasks');
+				$q->addWhere('task_id=' . $ctask->task_id);
+				if (!($q->exec())) {
+					return db_error();
+				}
+				$q->clear();
+				addHistory('tasks', $ctask->task_id, 'delete', 
+				           $ctask->task_name, $ctask->task_project);
+				
+				$this->updateDynamics(); //to update after children are deleted (see above)
 			}
-			$q->clear();
+			$this->_action = 'deleted with children';
 		}
 		
-		// delete affiliated task_logs
+		//delete affiliated task_logs (overrides any task_log permissions)
 		$q->setDelete('task_log');
 		if (!empty($childrenlist)) {
 			$q->addWhere('task_log_task IN (' . implode(', ', $childrenlist) 
@@ -745,19 +746,30 @@ class CTask extends CDpObject
 		}
 		$q->clear();
 		
-		// delete affiliated task_dependencies
+		//delete affiliated task_dependencies
 		$q->setDelete('task_dependencies');
 		if (!empty($childrenlist)) {
 			$q->addWhere('dependencies_task_id IN (' . implode(', ', $childrenlist) 
-						 . ', ' . $this->task_id . ')');
+						 . ', ' . $task->task_id . ')');
 		} else {
-			$q->addWhere('dependencies_task_id=' . $this->task_id);
+			$q->addWhere('dependencies_task_id=' . $task->task_id);
 		}
 		
 		if (!($q->exec())) {
 			return db_error();
+		}
+		$q->clear();
+		
+		// delete linked user tasks
+		$q->setDelete('user_tasks');
+		if (!empty($childrenlist)) {
+			$q->addWhere('task_id IN (' . implode(', ', $childrenlist) 
+						 . ', ' . $task->task_id . ')');
 		} else {
-			$this->_action = 'deleted';
+			$q->addWhere('task_id=' . $task->task_id);
+		}
+		if (!($q->exec())) {
+			return db_error();
 		}
 		$q->clear();
 		
@@ -2086,59 +2098,6 @@ class CTaskLog extends CDpObject
 	function check() {
 		$this->task_log_hours = (float) $this->task_log_hours;
 		return NULL;
-	}
-	
-	function canDelete(&$msg, $oid=null, $joins=null) {
-		global $AppUI;
-		$q = new DBQuery;
-		
-		// First things first.	Are we allowed to delete?
-		$acl =& $AppUI->acl();
-		if (! $acl->checkModuleItem('task_log', 'delete', $oid)) {
-			$msg = $AppUI->_('noDeletePermission');
-			return false;
-		}
-		
-		$k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval($oid);
-		}
-		if (is_array($joins)) {
-			$q->addTable($this->_tbl, 'k');
-			$q->addQuery($k);
-			$i = 0;
-			foreach ($joins as $table) {
-				$table_alias = 't' . $i++;
-				$q->leftJoin($table['name'], $table_alias
-							 , $table_alias . '.' . $table['joinfield'] . ' = ' . 'k' . '.' . $k);
-				$q->addQuery('COUNT(DISTINCT ' . $table_alias . '.' . $table['idfield'] . ') AS ' 
-							 . $table['idfield']);
-			}
-			$q->addWhere($k . ' = ' . $this->$k);
-			$q->addGroup($k);
-			$sql = $q->prepare();
-			$q->clear();
-			
-			$obj = null;
-			if (!db_loadObject($sql, $obj)) {
-				$msg = db_error();
-				return false;
-			}
-			$msg = array();
-			foreach ($joins as $table) {
-				$k = $table['idfield'];
-				if ($obj->$k) {
-					$msg[] = $AppUI->_($table['label']);
-				}
-			}
-			
-			if (count($msg)) {
-				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-				return false;
-			}
-		}
-		
-		return true;
 	}
 }
 
