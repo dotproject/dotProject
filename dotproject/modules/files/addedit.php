@@ -134,19 +134,15 @@ function popTask() {
     }
 }
 
-function finalCI()
-{
-        var f = document.uploadFrm;
-        if (f.final_ci.value == '1')
-        {
-                f.file_checkout.value = 'final';
-                f.file_co_reason.value = 'Final Version';
-        }
-        else
-        {
-                f.file_checkout.value = '';
-                f.file_co_reason.value = '';
-        }
+function finalCI() {
+	var f = document.uploadFrm;
+	if (f.final_ci.checked == true) {
+		f.file_checkout.value = 'final';
+		f.file_co_reason.value = 'Final Version';
+	} else {
+		f.file_checkout.value = '';
+		f.file_co_reason.value = '';
+	}
 }
 
 // Callback function for the generic selector
