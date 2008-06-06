@@ -702,20 +702,22 @@ $AppUI->savePlace();
 </table>
 <table>
 <tr>
-  <td><?php echo $AppUI->_('Key');?>:&nbsp;&nbsp;</td>
+  <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
   <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Future Task');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Future Task'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#E6EEDD; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Started and on time');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Started and on time'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#FFEEBB; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Should have started');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Should have started'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#CC6666; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Overdue');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Done');?>&nbsp;&nbsp;
+  <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
 	<?php if($min_view) { ?>
-	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> : 
-	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a> 
+	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1'; ?>"><?php 
+echo $AppUI->_('Open'); ?></a> : 
+	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1'; ?>"><?php 
+echo $AppUI->_('Close All Tasks'); ?></a> 
 	<?php } 
 ?>
 	</td>

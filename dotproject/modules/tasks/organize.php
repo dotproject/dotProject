@@ -193,12 +193,12 @@ function showtask_edit($task, $level=0) {
 <?php 
 	if ($perms->checkModuleItem('tasks', 'edit', $task['task_id'])) { 
 ?>
-		<a href="./index.php?m=tasks&a=addedit&task_id=<?php echo $task['task_id'];?>">
+		<a href="./index.php?m=tasks&a=addedit&task_id=<?php echo $task['task_id']; ?>">
 		<img src="./images/icons/pencil.gif" alt="Edit Task" border="0" width="12" height="12">
 		</a>
 <?php } ?>
 	</td>
-	<td align="right"><?php echo intval($task['task_percent_complete']);?>%</td>
+	<td align="right"><?php echo intval($task['task_percent_complete']); ?>%</td>
 	<td>
 <?php 
 	if ($task['task_priority'] < 0) {
@@ -218,7 +218,7 @@ function showtask_edit($task, $level=0) {
 			echo '<img src="./images/corner-dots.gif" width="16" height="12" border="0">'; 
 		}
 ?>	
-		<a href="./index.php?m=tasks&a=view&task_id=<?php echo $task['task_id'];?>" title="<?php
+		<a href="./index.php?m=tasks&a=view&task_id=<?php echo $task['task_id']; ?>" title="<?php
 		echo (((isset($task['parent_name'])) 
 		       ? ('*** ' . $AppUI->_('Parent Task') . ' ***' . "\n" 
 		          . htmlspecialchars($task['parent_name'], ENT_QUOTES) . "\n\n") : '') 
@@ -227,12 +227,12 @@ function showtask_edit($task, $level=0) {
 					<?php echo htmlspecialchars($task['task_name'], ENT_QUOTES); ?>
 		</a>
 	</td>
-	<td style="<?php echo $style;?>">
+	<td style="<?php echo $style; ?>">
 <?php
 	echo $task['task_duration'] . ' ' . $AppUI->_($durnTypes[$task['task_duration_type']]);
 ?>
 	</td>
-	<td nowrap align="right" style="<?php echo $style;?>"><?php echo $days; ?></td>
+	<td nowrap align="right" style="<?php echo $style; ?>"><?php echo $days; ?></td>
 	<td><input type="checkbox" name="selected[]" value="<?php echo $task['task_id'] ?>"></td>
 </tr>
 <?php } // END of displaying tasks function.}}}
@@ -242,29 +242,29 @@ function showtask_edit($task, $level=0) {
 echo "m=$m&a=$a&project_id=$project_id"; ?>">
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
-	<th width="20" colspan="2"><?php echo $AppUI->_('Progress');?></th>
-	<th width="15" align="center"><?php echo $AppUI->_('P');?></th>
+	<th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
+	<th width="15" align="center"><?php echo $AppUI->_('P'); ?></th>
 	<th>
 		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
-echo $project_id;?>&sort=task_name">
-		<?php echo $AppUI->_('Task');?>
+echo $project_id; ?>&sort=task_name">
+		<?php echo $AppUI->_('Task'); ?>
 		</a>
 	</th>
 	<th nowrap="nowrap">
 		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
-echo $project_id;?>&sort=task_duration">
-		<?php echo $AppUI->_('Duration');?>
+echo $project_id; ?>&sort=task_duration">
+		<?php echo $AppUI->_('Duration'); ?>
 		</a>
 	</th>
 	<th nowrap="nowrap">
 		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
-echo $project_id;?>&sort=task_end_date">
-		<?php echo $AppUI->_('Due In');?>
+echo $project_id; ?>&sort=task_end_date">
+		<?php echo $AppUI->_('Due In'); ?>
 		</a>
 	</th>
 	<th width="60">
 		<input type="checkbox" name="toggleSelects" id="toggleSelects" onclick="toggleTasks();"/>
-		<?php echo $AppUI->_('Select');?>
+		<?php echo $AppUI->_('Select'); ?>
 	</th>
 </tr>
 
@@ -332,26 +332,26 @@ foreach($tasks as $t) {
 	<td><?php echo arraySelect($projects, 'new_project', ' onChange="updateTasks();"', '0'); ?></td>
 	<td><?php echo ($ts)?arraySelect($ts, 'new_task', '', '0'):''; ?></td>
 	<td><input type="submit" class="button" value="<?php 
-echo $AppUI->_('update selected tasks');?>"></td>
+echo $AppUI->_('update selected tasks'); ?>"></td>
 </tr>
 </table>
 </form>
 
 <table>
 <tr>
-  <td><?php echo $AppUI->_('Key');?>:&nbsp;&nbsp;</td>
+  <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
   <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Future Task');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Future Task'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#E6EEDD; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Started and on time');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Started and on time'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#FFEEBB; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Should have started');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Should have started'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#CC6666; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Overdue');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Done');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:lightgray; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Unknown');?>&nbsp;&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Unknown'); ?>&nbsp;&nbsp;</td>
 </tr>
 </table>
 

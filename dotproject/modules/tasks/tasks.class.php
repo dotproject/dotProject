@@ -2561,10 +2561,11 @@ function calcEndByStartAndDuration($task) {
 	return $end_date->format(FMT_DATETIME_MYSQL);
 }
 
-function sort_by_item_title($title, $item_name, $item_type, $a='') {
-	global $AppUI, $project_id, $task_id, $min_view, $m;
+function sort_by_item_title($title, $item_name, $item_type) {
+	global $AppUI, $project_id, $task_id, $min_view;
 	global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 	global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+	
 	
 	if ($task_sort_item2 == $item_name) {
 		$item_order = $task_sort_order2;
@@ -2586,12 +2587,14 @@ function sort_by_item_title($title, $item_name, $item_type, $a='') {
 	
 	/* flip the sort order for the link */
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
-	if ($m == 'tasks') {
-		echo ('<a href="./index.php?m=tasks' 
-			  . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a));
-	} else {
-		echo ('<a href="./index.php?m=projects' 
-			  . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
+	
+	echo ('<a href="./index.php?');
+	foreach ($_GET as $var => $val) {
+		if (!(in_array($var, array('task_sort_item1', 'task_sort_type1', 'task_sort_order1', 
+		                           'task_sort_item2', 'task_sort_type2', 'task_sort_order2')))) {
+			echo ((($not_first) ? '&' : '') . $var . '=' . $val);
+			$not_first = 1;
+		}
 	}
 	
 	if ($item_name == 'task_log_problem_priority') {
