@@ -7,17 +7,24 @@ $task_id = intval(dPgetParam($_GET, 'task_id', 0));
 $task_log_id = intval(dPgetParam($_GET, 'task_log_id', 0));
 $reminded = intval(dPgetParam($_GET, 'reminded', 0));
 
+$obj = new CTask();
+$msg = '';
 
 // check permissions for this record
 $canRead = getPermission($m, 'view', $task_id);
 $canEdit = getPermission($m, 'edit', $task_id);
-// check permissions for this record
+// check if this record has dependencies to prevent deletion
+$canDelete = $obj->canDelete($msg, $task_id);
+// check permissions for this record (module level)
 $canReadModule = getPermission($m, 'view');
 
-
-if (!$canRead) {
+if (!($canRead)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+if (!($obj->canAccess($AppUI->user_id))) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 
 $q =& new DBQuery;
 $perms =& $AppUI->acl();
@@ -33,10 +40,6 @@ $q->addQuery('u1.user_username as username');
 $q->addQuery('ROUND(SUM(task_log_hours),2) as log_hours_worked');
 $q->addGroup('task_id');
 
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$obj = new CTask();
-$canDelete = $obj->canDelete($msg, $task_id);
 
 //$obj = null;
 $sql = $q->prepare();
@@ -48,10 +51,6 @@ if (!db_loadObject($sql, $obj, true, false)) {
 	$AppUI->redirect();
 } else {
 	$AppUI->savePlace();
-}
-
-if (!$obj->canAccess($AppUI->user_id)) {
-	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // Clear any reminders

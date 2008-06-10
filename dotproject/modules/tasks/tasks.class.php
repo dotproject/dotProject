@@ -1224,6 +1224,12 @@ class CTask extends CDpObject
 	function canAccess($user_id) {
 		$q = new DBQuery;
 		
+		//check whether we are explicitly denied at task level
+		$denied_tasks = $this->getDeniedRecords($user_id);
+		if (in_array($this->task_id, $denied_tasks)) {
+			return false;
+		}
+		
 		// Let's see if this user has admin privileges
 		if (getPermission('admin', 'view')) {
 			return true;
@@ -1233,12 +1239,20 @@ class CTask extends CDpObject
 		case 0:
 			// public
 			$retval = true;
+			/*
+			$proj_obj = new CProject();
+			$denied_projects = $proj_obj->getDeniedRecords($user_id);
+			if (in_array($this->task_project, $denied_projects)) {
+				$retval = false;
+			}
+			*/
 			break;
 		case 1:
 			// protected
-			$q->addTable('users');
-			$q->addQuery('user_company');
-			$q->addWhere('user_id=' . $user_id . ' OR user_id=' . $this->task_owner);
+			$q->addTable('users', 'u');
+			$q->innerJoin('contacts', 'c' 'c.contact_id=u.user_contact');
+			$q->addQuery('c.contact_company');
+			$q->addWhere('u.user_id=' . $user_id . ' OR u.user_id=' . $this->task_owner);
 			$sql = $q->prepare();
 			$q->clear();
 			$user_owner_companies = db_loadColumn($sql);
@@ -1252,9 +1266,9 @@ class CTask extends CDpObject
 		case 2:
 			// participant
 			$company_match = ((isset($company_match)) ? $company_match : true);
-			$q->addTable('user_tasks');
+			$q->addTable('user_tasks', 'ut');
 			$q->addQuery('COUNT(*)');
-			$q->addWhere('user_id=' . $user_id . ' AND task_id=' . $this->task_id);
+			$q->addWhere('ut.user_id=' . $user_id . ' AND ut.task_id=' . $this->task_id);
 			$sql = $q->prepare();
 			$q->clear();
 			$count = db_loadResult($sql);
