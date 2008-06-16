@@ -194,31 +194,13 @@ if ($do_report) {
 		$task_id = $Tasks['task_id'];
 		
 		$q = new DBQuery;
-		$q->addTable('user_tasks');
-		$q->addWhere('task_id = '.$task_id);
-		$sql_user = $q->exec();
-		
-		$users = null;
-		while ($Task_User = db_fetch_assoc($sql_user)){
-			//$current_user = $Task_User['user_id'];
-			if ($users!=null){
-				$users.=", ";
-			}
-
-			$q->clear();
-			$q = new DBQuery;
-			$q->addTable('users', 'u');
-			$q->addTable('contacts', 'c');
-			$q->addQuery('contact_first_name, contact_last_name');
-			$q->addWhere('u.user_contact = c.contact_id');
-			$q->addWhere('user_id = '.$Task_User['user_id']);
-
-			$sql_user_array = $q->exec();
-			$q->clear();
-			$user_list = db_fetch_assoc($sql_user_array);
-			$users .= $user_list['contact_first_name']." ".$user_list['contact_last_name'];
-		}
-		$Tasks['users'] = $users;
+		$q->addQuery('CONCAT_WS(\' \', c.contact_first_name, c.contact_last_name) as contact_name');
+		$q->addTable('user_tasks', 'ut');
+		$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
+		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->addWhere('ut.task_id = '.$task_id);
+		$sql_user = $q->loadColumn();
+		$Tasks['users'] = implode(', ', $sql_user);
 		$tree->add($Tasks['task_parent'], $task_id, $Tasks);
 		unset($Tasks);
 	}
