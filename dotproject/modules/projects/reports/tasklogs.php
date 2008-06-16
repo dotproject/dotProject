@@ -131,7 +131,7 @@ function setCalendar(idate, fdate) {
 <?php
 if ($do_report) {
 
-	$sql = "SELECT p.project_id, p.project_name, t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator, " 
+	$sql = "SELECT p.project_id, p.project_name, t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator_name, " 
 		."\n if(bc.billingcode_name is null, '', bc.billingcode_name) as billingcode_name"
 		."\nFROM task_log AS t"
 		."\nLEFT JOIN billingcode bc ON bc.billingcode_id = t.task_log_costcode "
@@ -197,7 +197,7 @@ if ($do_report) {
 		$hours += $log['task_log_hours'];
 
 		$pdfdata[] = array(
-			$log['creator'],
+			$log['creator_name'],
 			$log['task_log_name'],
 			$log['task_log_description'],
 			$date->format($df),
@@ -206,7 +206,7 @@ if ($do_report) {
 		);
 ?>
 	<tr>
-		<td><?php echo $log['creator'];?></td>
+		<td><?php echo $log['creator_name'];?></td>
 		<?php if ($project_id == 0) { ?>
 			<td><a href="index.php?m=projects&a=view&project_id=<?php echo $log['project_id']; ?>"><?php echo $log['project_name'] ?></a></td>
 		<?php } ?>
