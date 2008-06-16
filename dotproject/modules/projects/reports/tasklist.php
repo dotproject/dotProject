@@ -99,13 +99,10 @@ function setCalendar(idate, fdate) {
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Month'); ?>" />
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Week'); ?>" />
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Day'); ?>" />
-        </td>
-        <td nowrap="nowrap">
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Day'); ?>" />
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Week'); ?>" />
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Month'); ?>" />
-          </td>
-        <td colspan="4"><input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons</td>
+        <input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons</td>
 <!--
         <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Month'); ?>" onClick="set(-30)" /></td>
         <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Week'); ?>" onClick="set(-7)" /></td>
@@ -122,25 +119,15 @@ function setCalendar(idate, fdate) {
 		<a href="#" onclick="popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
-	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
-	<td nowrap="nowrap">
 		<input type="hidden" name="list_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 		<a href="#" onclick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
-	</td>
-
-	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
 		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
-	</td>
-	<td nowrap="nowrap">
 		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
 		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
-	</td>
-	<td nowrap="nowrap">
 		<input type="checkbox" name="incomplete" id="incomplete" <?php if ($incomplete) echo 'checked="checked"' ?> />
 		<label for="log_pdf"><?php echo $AppUI->_('Incomplete Tasks');?></label>
 	</td>
