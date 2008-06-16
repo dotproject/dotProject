@@ -1250,7 +1250,7 @@ class CTask extends CDpObject
 		case 1:
 			// protected
 			$q->addTable('users', 'u');
-			$q->innerJoin('contacts', 'c' 'c.contact_id=u.user_contact');
+			$q->innerJoin('contacts', 'c', 'c.contact_id=u.user_contact');
 			$q->addQuery('c.contact_company');
 			$q->addWhere('u.user_id=' . $user_id . ' OR u.user_id=' . $this->task_owner);
 			$sql = $q->prepare();

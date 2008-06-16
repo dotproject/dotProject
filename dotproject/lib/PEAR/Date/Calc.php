@@ -921,12 +921,12 @@ class Date_Calc
                     - $this_weekday + 1;
         }
         else
-                $beginOfWeek = (Date_Calc::dateToDays($day,$month,$year)
-                    - $this_weekday);
+                /* $beginOfWeek = (Date_Calc::dateToDays($day,$month,$year)
+                    - $this_weekday); */
 
 
-       /*  $beginOfWeek = (Date_Calc::dateToDays($day,$month,$year)
-            - ($this_weekday - $fdow)); */
+         $beginOfWeek = (Date_Calc::dateToDays($day,$month,$year)
+            - ($this_weekday - $fdow));
 
         return(Date_Calc::daysToDate($beginOfWeek,$format));
 

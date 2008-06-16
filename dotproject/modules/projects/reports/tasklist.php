@@ -13,6 +13,7 @@ require_once $AppUI->getSystemClass('tree');
 $do_report = dPgetParam($_POST, "do_report", 0);
 $log_all = dPgetParam($_POST, 'log_all', 0);
 $log_pdf = dPgetParam($_POST, 'log_pdf', 0);
+$incomplete = dPgetParam($_POST, 'incomplete', 0);
 $log_ignore = dPgetParam($_POST, 'log_ignore', 0);
 $days = dPgetParam($_POST, 'days', 30);
 
@@ -104,7 +105,7 @@ function setCalendar(idate, fdate) {
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Week'); ?>" />
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Month'); ?>" />
           </td>
-        <td colspan="3"><input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons</td>
+        <td colspan="4"><input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons</td>
 <!--
         <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Month'); ?>" onClick="set(-30)" /></td>
         <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Week'); ?>" onClick="set(-7)" /></td>
@@ -139,6 +140,10 @@ function setCalendar(idate, fdate) {
 		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
 		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
 	</td>
+	<td nowrap="nowrap">
+		<input type="checkbox" name="incomplete" id="incomplete" <?php if ($incomplete) echo 'checked="checked"' ?> />
+		<label for="log_pdf"><?php echo $AppUI->_('Incomplete Tasks');?></label>
+	</td>
 
 	<td align="right" width="50%" nowrap="nowrap">
 		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit');?>" />
@@ -162,6 +167,9 @@ if ($do_report) {
 	if (!$log_all) {
 		$q->addWhere("task_start_date >= '".$start_date->format(FMT_DATETIME_MYSQL)."'");
 		$q->addWhere("task_start_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'");
+	}
+	if ($incomplete) {
+		$q->addWhere("task_percent_complete < 100");
 	}
 
 	$obj =& new CTask;
