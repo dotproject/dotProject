@@ -12,8 +12,9 @@ require_once($AppUI->getSystemClass('date'));
 
 // user based access
 $task_access = array('0'=>'Public',
-					 '1'=>'Protected',
+					 '4'=>'Privileged',
 					 '2'=>'Participant',
+					 '1'=>'Protected',
 					 '3'=>'Private');
 
 /*
@@ -1237,18 +1238,17 @@ class CTask extends CDpObject
 		
 		switch ($this->task_access) {
 		case 0:
-			// public
+			//public
 			$retval = true;
-			/*
 			$proj_obj = new CProject();
 			$denied_projects = $proj_obj->getDeniedRecords($user_id);
 			if (in_array($this->task_project, $denied_projects)) {
 				$retval = false;
 			}
-			*/
+			
 			break;
 		case 1:
-			// protected
+			//protected
 			$q->addTable('users', 'u');
 			$q->innerJoin('contacts', 'c', 'c.contact_id=u.user_contact');
 			$q->addQuery('c.contact_company');
@@ -1264,7 +1264,7 @@ class CTask extends CDpObject
 			}
 			
 		case 2:
-			// participant
+			//participant
 			$company_match = ((isset($company_match)) ? $company_match : true);
 			$q->addTable('user_tasks', 'ut');
 			$q->addQuery('COUNT(*)');
@@ -1275,8 +1275,37 @@ class CTask extends CDpObject
 			$retval = (($company_match && $count > 0) || $this->task_owner == $user_id);
 			break;
 		case 3:
-			// private
+			//private
 			$retval = ($this->task_owner == $user_id);
+			break;
+		case 4:
+			//privileged
+			$retval = true;
+			if ($this->task_project != '') {
+				$q->clear();
+				
+				$q->addTable('users', 'u');
+				$q->innerJoin('contacts', 'c' 'c.contact_id=u.user_contact');
+				$q->addQuery('c.contact_company');
+				$q->addWhere('u.user_id = ' . $user_id); 
+				$user_company = $q->loadResult();
+				$q->clear();
+				
+				$q->addTable('projects', 'p');
+				$q->addQuery('p.project_company');
+				$q->addWhere('p.project_id = ' . $this->task_project);
+				$project_company = $q->loadResult();
+				$q->clear();
+				
+				$q->addTable('user_tasks', 'ut');
+				$q->addQuery('COUNT(ut.*) AS user_task_count');
+				$q->addWhere('ut.user_id = ' . $user_id . ' AND ut.task_id = ' . $this->task_id);
+				$count = $q->loadResult();
+				$q->clear();
+				
+				$retval = (($user_company == $project_company) || $this->task_owner == $user_id 
+				           || $count);
+			}
 			break;
 		default:
 			$retval = false;
