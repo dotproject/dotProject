@@ -1285,7 +1285,7 @@ class CTask extends CDpObject
 				$q->clear();
 				
 				$q->addTable('users', 'u');
-				$q->innerJoin('contacts', 'c' 'c.contact_id=u.user_contact');
+				$q->innerJoin('contacts', 'c', 'c.contact_id=u.user_contact');
 				$q->addQuery('c.contact_company');
 				$q->addWhere('u.user_id = ' . $user_id); 
 				$user_company = $q->loadResult();
