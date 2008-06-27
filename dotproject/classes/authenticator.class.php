@@ -233,7 +233,7 @@ if (!defined('DP_BASE_DIR')){
 			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;	
 			$ldap_bind_pw = empty($this->ldap_search_pass) ? NULL : $this->ldap_search_pass;
 
-			if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $this->ldap_search_pass))
+			if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw))
 			{
 				// Uncomment for LDAP debugging
 				/*	
