@@ -359,7 +359,7 @@ function BuildMail()
     $this->xheaders['X-Mailer'] = 'dotProject v' . $AppUI->getVersion();
     $this->headers = '';
     foreach ($this->xheaders as $h=>$v) {
-        $this->headers .= "$h: $v\r\n";
+        $this->headers .= "$h: " . trim($v) . "\r\n";
     }
 
 
@@ -391,7 +391,7 @@ function Send()
 		if ($k == 'To' || $k == 'Subject') {
 			continue;
 		}
-		$headers .= "$k: $v\r\n";
+		$headers .= "$k: " . trim($v) . "\r\n";
 	}
 	return @mail( $this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers );
     }
@@ -544,7 +544,7 @@ function SendQueuedMail($mod, $type, $originator, $owner, &$args)
 		if ($k == 'To' || $k == 'Subject') {
 			continue;
 		}
-		$headers .= "$k: $v\r\n";
+		$headers .= "$k: " . trim($v) . "\r\n";
 	}
         return @mail( $xheaders['To'], $xheaders['Subject'], $fullBody, $headers );
     }
@@ -747,7 +747,10 @@ function _addressesEncode(&$aaddr, $hdr)
     $this->xheaders[$hdr] = $this->_addressEncode($aaddr[0], strlen("$hdr: "));
     for ($i=1 /*skip first one*/; $i<$n; ++$i ) {
         $val = $this->_addressEncode($aaddr[$i], 8);
-        $this->xheaders[$hdr] .= ",\r\n\t$val" ;
+	$val = trim($val);
+	if ($val) {
+		$this->xheaders[$hdr] .= ",\r\n\t$val" ;
+	}
     }
 }
 
