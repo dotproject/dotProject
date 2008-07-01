@@ -2246,7 +2246,7 @@ function closeOpenedTaskRecursive($task_id){
 function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOpenCloseLink=false
 				  , $allowRepeat = false) {
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $tasks_opened, $tasks_closed;
+	global $tasks_opened, $tasks_closed, $user_id;
 	
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
@@ -2262,6 +2262,13 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		$done[$a['task_id']] = 1;
 	} else if (!($allowRepeat)) {
 		//by default, we shouldn't allow repeat displays of the same task
+		return;
+	}
+	
+	$task_obj = new CTask();
+	$task_obj->peek($a['task_id']);
+	if (!($task_obj->canAccess((($user_id) ? $user_id : $AppUI->user_id)))) {
+		//don't show tasks that we can't access
 		return;
 	}
 	

@@ -21,6 +21,7 @@ $canReadModule = getPermission($m, 'view');
 if (!($canRead)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+$obj->peek($task_id); //we need to peek at the task's data to determine its access level
 if (!($obj->canAccess($AppUI->user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

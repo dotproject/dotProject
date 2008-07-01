@@ -16,18 +16,22 @@ if (isset($_GET['tab'])) {
 $tab = $AppUI->getState('ToDoTab') !== NULL ? $AppUI->getState('ToDoTab') : 0;
 
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
-$date = (!dPgetParam($_GET, 'date', '') == '') ?  $this_day->format(FMT_TIMESTAMP_DATE) : intval(dPgetParam($_GET, 'date', ''));
-$user_id    = $AppUI->user_id;
-$no_modify	= false;
-$other_users	= false;
+$date = ((!dPgetParam($_GET, 'date', '') == '') 
+         ?  $this_day->format(FMT_TIMESTAMP_DATE) 
+         : intval(dPgetParam($_GET, 'date', '')));
+$user_id = $AppUI->user_id;
+$no_modify = false;
+$other_users = false;
 
-if($perms->checkModule('admin','view')){ // let's see if the user has sysadmin access
+if ($perms->checkModule('admin','view')) {
+	// let's see if the user has sysadmin access
 	$other_users = true;
-	if(($show_uid = dPgetParam($_REQUEST, "show_user_todo", 0)) != 0){ // lets see if the user wants to see anothers user mytodo
+	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) {
+	// lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
 		$no_modify = true;
 		$AppUI->setState('tasks_todo_user_id', $user_id);
-	} elseif ($AppUI->getState('tasks_todo_user_id')) {
+	} else if ($AppUI->getState('tasks_todo_user_id')) {
 		$user_id = $AppUI->getState('tasks_todo_user_id');
 	}
 }
@@ -108,29 +112,31 @@ $q->addWhere('(ta.task_percent_complete < 100 OR ta.task_percent_complete IS NUL
 $q->addWhere('ta.task_status = 0');
 if (!$showArcProjs) {
 	$q->addWhere('project_status <> 7');
- }
+}
 if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');
- }
+}
 if (!$showHoldProjs) {
 	$q->addWhere('project_status != ' . $project_on_hold_status);
- }
+}
 if (!$showDynTasks) {
 	$q->addWhere('task_dynamic != 1');
- }
+}
 if ($showPinned) {
 	$q->addWhere('task_pinned = 1');
- }
+}
 if (!$showEmptyDate) {
 	$q->addWhere("ta.task_start_date != '' AND ta.task_start_date != '0000-00-00 00:00:00'");
- }
+}
 
 
-if (count($allowedTasks))
+if (count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
+}
 
-if (count($allowedProjects))
+if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
+}
 
 $q->addGroup('ta.task_id');
 $q->addOrder('ta.task_end_date');
@@ -148,8 +154,10 @@ $tasks = db_loadList($sql);
 for ($j=0, $xj=count($tasks); $j < $xj; $j++) {
 		
 	if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == ''){
-			$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
+		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' 
+		    || $tasks[$j]['task_start_date'] == '') {
+			//just to be sure start date is "zeroed"
+			$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00';
 			$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
 		} else {
 			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
