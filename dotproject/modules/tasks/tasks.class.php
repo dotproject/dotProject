@@ -1231,11 +1231,6 @@ class CTask extends CDpObject
 			return false;
 		}
 		
-		// Let's see if this user has admin privileges
-		if (getPermission('admin', 'view')) {
-			return true;
-		}
-		
 		switch ($this->task_access) {
 		case 0:
 			//public
