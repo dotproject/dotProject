@@ -52,6 +52,10 @@ class dPacl extends gacl_api {
 		$opts['db_user'] = dPgetConfig('dbuser');
 		$opts['db_password'] = dPgetConfig('dbpass');
 		$opts['db_name'] = dPgetConfig('dbname');
+		$opts['caching'] = dPgetConfig('gacl_cache', false);
+		$opts['force_cache_expire'] = dPgetConfig('gacl_expire', true);
+		$opts['cache_dir'] = dPgetConfig('gacl_cache_dir', '/tmp');
+		$opts['cache_expire_time'] = dPgetConfig('gacl_timeout', 600);
 		$opts['db'] = $db;
 		/*
 		 * We can add an ADODB instance instead of the database connection details. 

@@ -21,3 +21,12 @@ UPDATE `modules` SET `permissions_item_table`='events', `permissions_item_field`
 UPDATE `modules` SET `permissions_item_table`='contacts', `permissions_item_field`='contact_id', permissions_item_label='contact_title' WHERE mod_directory = 'contacts';
 UPDATE `modules` SET `permissions_item_table`='departments', `permissions_item_field`='dept_id', permissions_item_label='dept_name' WHERE mod_directory = 'departments';
 UPDATE `modules` SET `permissions_item_table`='links', `permissions_item_field`='link_id', permissions_item_label='link_name' WHERE mod_directory = 'links';
+
+# 20080702
+# GACL Caching options
+INSERT INTO config VALUES 
+(NULL, 'gacl_cache', 'false', 'gacl', 'checkbox'),
+(NULL, 'gacl_expire', 'true', 'gacl', 'checkbox'),
+(NULL, 'gacl_cache_dir', '/tmp', 'gacl', 'text'),
+(NULL, 'gacl_timeout', '600', 'gacl', 'text');
+

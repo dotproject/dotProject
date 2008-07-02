@@ -781,6 +781,14 @@ INSERT INTO config_list (`config_id`, `config_list_name`)
 # Queue scanning on garbage collection
 INSERT INTO config VALUES (NULL, 'session_gc_scan_queue', 'false', 'session', 'checkbox');
 
+# 20080702
+# GACL Caching options
+INSERT INTO config VALUES 
+(NULL, 'gacl_cache', 'false', 'gacl', 'checkbox'),
+(NULL, 'gacl_expire', 'true', 'gacl', 'checkbox'),
+(NULL, 'gacl_cache_dir', '/tmp', 'gacl', 'text'),
+(NULL, 'gacl_timeout', '600', 'gacl', 'text');
+
 # 20050302
 # new custom fields
 CREATE TABLE custom_fields_struct (
