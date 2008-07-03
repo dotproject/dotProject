@@ -519,7 +519,7 @@ class CustomFields
 						break; 
 				}
 				$field_name = $row['field_name'];
-				$this->fields[$field] = new $new_method($row['field_id'], $field_name, 
+				$this->fields[$field_name] = new $new_method($row['field_id'], $field_name, 
 				                                        $row['field_order'], 
 				                                        stripslashes($row['field_description']), 
 				                                        stripslashes($row['field_extratags']));
