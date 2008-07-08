@@ -30,9 +30,7 @@ define('DATE_CALC_BEGIN_WEEKDAY', 1);
 
 class Date_Calc
 {
-    var $months = null;
-    var $weekdays = null;
-
+    
     /**
      * Returns the current local date. NOTE: This function
      * retrieves the local date using strftime(), which may
@@ -1580,13 +1578,14 @@ class Date_Calc
     */
     function getMonthNames()
     {
-	if (! isset($this->months)) {
-		$this->months = array();
+	global $Date_Calc_months;
+	if (!(isset($Date_Calc_months))) {
+		$Date_Calc_months = array();
 		for($i=1;$i<13;$i++){
-		    $this->months[$i] = strftime('%B', mktime(0, 0, 0, $i, 1, 2001));
+		    $Date_Calc_months[$i] = strftime('%B', mktime(0, 0, 0, $i, 1, 2001));
 		}
 	}
-        return($this->months);
+        return($Date_Calc_months);
     }
 
     /**
@@ -1600,13 +1599,15 @@ class Date_Calc
     */
     function getWeekDays()
     {
-	if (! isset($this->weekdays)) {
-		$this->weekdays = array();
+	global $Date_Calc_weekdays;
+	if (!(isset($Date_Calc_weekdays))) {
+		$Date_Calc_weekdays = array();
+        
 		for($i=0;$i<7;$i++){
-		    $this->weekdays[$i] = strftime('%A', mktime(0, 0, 0, 1, $i, 2001));
+		    $Date_Calc_weekdays[$i] = strftime('%A', mktime(0, 0, 0, 1, $i, 2001));
 		}
 	}
-        return($this->weekdays);
+        return($Date_Calc_weekdays);
     }
 
 } // end class Date_calendar
