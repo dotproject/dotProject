@@ -151,9 +151,20 @@ $project_types = dPgetSysVal('ProjectStatus');
 
 // count number of projects per project_status
 $q  = new DBQuery();
-$q->addTable('projects');
-$q->addQuery('project_status, COUNT(project_id) as count');
+$q->addTable('projects', 'p');
+$q->addQuery('p.project_status, COUNT(p.project_id) as count');
 $obj_project->setAllowedSQL($AppUI->user_id, $q);
+if ($owner > 0) {
+	$q->addWhere('p.project_owner = ' . $owner);
+}
+if (isset($department)) {
+	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
+	if (!$addPwOiD) {
+		$q->addWhere('pd.department_id in (' . implode(',',$dept_ids) . ')');
+	}
+} else if ($company_id &&!$addPwOiD) {
+	$q->addWhere('p.project_company = ' . $company_id);
+}
 $q->addGroup('project_status');
 $statuses = $q->loadHashList('project_status');
 $q->clear();

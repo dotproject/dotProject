@@ -33,7 +33,8 @@ if ($showAllGantt!='0') {
 if (isset( $_POST['proFilter'])) {
 	$AppUI->setState('ProjectIdxFilter',  $_POST['proFilter']);
 }
-$proFilter = $AppUI->getState('ProjectIdxFilter') !== NULL ? $AppUI->getState('ProjectIdxFilter') : '-1';
+$proFilter = (($AppUI->getState('ProjectIdxFilter') !== NULL) 
+              ? $AppUI->getState('ProjectIdxFilter') : '-1');
 
 
 $projectStatus = dPgetSysVal('ProjectStatus');
@@ -42,7 +43,7 @@ $projFilter = arrayMerge(array('-1' => 'All Projects', '-2' => 'All w/o in progr
 if (!(empty($projFilter_extra))) {
 	$projFilter = arrayMerge($projFilter, $projFilter_extra);
 }
-sort($projFilter);
+natsort($projFilter);
 
 
 // months to scroll

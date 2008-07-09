@@ -481,8 +481,8 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 		} else {
 			$bar_label_array = array($name, $dur, $startdate->format($df), $enddate->format($df));
 		}
-		$bar = new GanttBar($row++, $bar_label_array, substr($start, 2, 8), substr($end, 2, 8), 
-							$cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+		$bar = new GanttBar($row++, $bar_label_array, $start, $end, $cap, 
+		                    ($a['task_dynamic'] == 1 ? 0.1 : 0.6));
 		$bar->progress->Set(min(($progress/100),1));
 		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		
