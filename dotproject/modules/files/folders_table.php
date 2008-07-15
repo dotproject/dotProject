@@ -405,6 +405,7 @@ function displayFiles($folder_id) {
 		$file_versions = db_loadHashList($file_versions_sql, 'file_id');
 	}
 	$q->dropTemp('files_count_max' . $folder_id);
+	$q->exec();
 	if ($files == array()) {
 		return;	
 	}
