@@ -315,8 +315,8 @@ function displayFiles($folder_id) {
 	             . ', ff.file_folder_id, ff.file_folder_name, p.project_name' 
 	             . ', p.project_color_identifier, p.project_owner, c.contact_first_name' 
 	             . ', c.contact_last_name, t.task_name, u.user_username as file_owner' 
-	             . ', co.contact_first_name as checkout_first_name' 
-	             . ', co.contact_last_name as checkout_last_name');
+	             . ', cc.contact_first_name as checkout_first_name' 
+	             . ', cc.contact_last_name as checkout_last_name');
 	$q->addJoin('files_count_max' . $folder_id, 'fmc', 
 				'(fmc.file_lastversion=f.file_version AND fmc.file_version_id=f.file_version_id' 
 				. ' AND fmc.file_project=f.file_project)', 'inner');
@@ -326,7 +326,7 @@ function displayFiles($folder_id) {
 	$q->addJoin('tasks', 't', 't.task_id = f.file_task');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = f.file_folder');
 	$q->leftJoin('users', 'cu', 'cu.user_id = f.file_checkout');
-	$q->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
+	$q->leftJoin('contacts', 'cc', 'cc.contact_id = cu.user_contact');
 	
 	$q->addWhere('f.file_folder = '. $folder_id);
 	if (count ($allowedProjects)) {
@@ -357,7 +357,7 @@ function displayFiles($folder_id) {
 	
 	$files_sql = $q->prepare();
 	$q->clear();
-
+	
 	
 	// all versions
 	$q->addTable('files', 'f');
@@ -393,7 +393,7 @@ function displayFiles($folder_id) {
 			$q->addWhere('(' . implode(' AND ', $allowedCompanies) . ')');
 		}
 	}
-				
+	
 	$file_versions_sql = $q->prepare();
 	$q->clear();
 	

@@ -120,7 +120,7 @@ class CFile extends CDpObject {
 	}
 	
 	function checkout($userId, $fileId, $coReason) {
-		$q  = new DBQuery;
+		$q = new DBQuery;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
 		$q->addUpdate('file_co_reason', $coReason);
@@ -496,9 +496,9 @@ class CFile extends CDpObject {
 	}
 
 	function getOwner() {
-		$owner = '';
-		if (! $this->file_owner) {
-			return $owner;
+		
+		if (!($this->file_owner)) {
+			return '';
 		}
 		
 		$q = new DBQuery;
@@ -506,28 +506,34 @@ class CFile extends CDpObject {
 		$q->leftJoin('contacts', 'b', 'b.contact_id = a.user_contact');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addWhere('a.user_id = ' . $this->file_owner);
-		if ($qid =& $q->exec()) {
-			$owner = $qid->fields['contact_first_name'] . ' ' . $qid->fields['contact_last_name'];
+		if (!$q->exec()) {
+			$q->clear();
+			return db_error();
 		}
+		$row = $q->fetchRow();
 		$q->clear();
 		
-		return $owner;
+		return ($row['contact_first_name'] . ' ' . $row['contact_last_name']);
 	}
-
+	
 	function getTaskName() {
-		$taskname = '';
-		if (! $this->file_task) {
-			return $taskname;
+		
+		if (!($this->file_task)) {
+			return '';
 		}
+		
 		$q = new DBQuery;
 		$q->addTable('tasks');
 		$q->addQuery('task_name');
 		$q->addWhere('task_id = ' . $this->file_task);
-		if ($qid =& $this->_query->exec()) {
-			$taskname = (($qid->fields['task_name']) ? $qid->fields['task_name'] : $qid->fields[0]);
+		if (!$q->exec()) {
+			$q->clear();
+			return db_error();
 		}
+		$row = $q->fetchRow();
 		$q->clear();
-		return $taskname;
+		
+		return $row['task_name'];
 	}
 	
 }
