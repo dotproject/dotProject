@@ -221,6 +221,7 @@ if ($canRead) {
 $xpg_totalrecs = count($q->loadList());
 
 $r->dropTemp('files_count_max');
+$r->exec();
 
 // How many pages are we dealing with here ??
 $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 1;
