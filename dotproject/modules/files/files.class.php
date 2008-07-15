@@ -700,10 +700,9 @@ function getIcon($file_type) {
 function getNextVersionID() {
 	
 	$q = new DBQuery;
-	$q->addTable('files');
-	$q->addQuery('MAX(file_version_id)');
-	$q->addGroup('file_version_id');
-	$latest_file_version = $q->loadResult();
+	$q->addTable('files', 'f');
+	$q->addQuery('MAX(f.file_version_id) AS max_version_id');
+	$latest_file_version = intval($q->loadResult());
 	$q->clear();
 	
 	return ($latest_file_version + 1);
