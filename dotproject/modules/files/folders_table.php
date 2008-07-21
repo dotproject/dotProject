@@ -949,9 +949,9 @@ $q = new DBQuery;
 $q->addTable('projects', 'p');
 $q->addJoin('companies', 'co', 'co.company_id = p.project_company');
 $q->addQuery('p.project_id, co.company_name');
-if (count($allowedProjects)) {
-	$q->addWhere($allowedProjects);
-}
+$q->addWhere('p.project_id IN (0' . ((count($projects_list)) 
+                                     ? (',' . implode(',', array_keys($projects_list))) 
+                                     : '') . ')');
 $proj_companies = $q->loadHashList();
 $q->clear();
 
