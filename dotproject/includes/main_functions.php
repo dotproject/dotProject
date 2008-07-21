@@ -34,7 +34,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 		return '';
 	}
 	reset($arr);
-	$s = "\n<select name=\"$select_name\" $select_attribs>";
+	$s = ("\n" . '<select name="' . $select_name . '" ' . $select_attribs . '>');
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
@@ -83,7 +83,7 @@ function tree_recurse($id, $indent, $list, $children) {
 			$id = $v[0];
 			$txt = $v[1];
 			$pt = $v[2];
-			$list[$id] = "$indent $txt";
+			$list[$id] = ($indent . ' ' . $txt);
 			$list = tree_recurse($id, "$indent--", $list, $children);
 		}
 	}
@@ -104,14 +104,14 @@ function tree_recurse($id, $indent, $list, $children) {
 */
 
 function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $selected, 
-								   $excludeProjWithId = null) {
+                                   $excludeProjWithId = null) {
 	global $AppUI ;
 	$q = new DBQuery();
 	$q->addTable('projects');
 	$q->addQuery('project_id, co.company_name, project_name');
-		if (!empty($excludeProjWithId)){
-			$q->addWhere('project_id != '.$excludeProjWithId);
-		}
+	if (!empty($excludeProjWithId)) {
+		$q->addWhere('project_id != '.$excludeProjWithId);
+	}
 	$proj = new CProject();
 	$proj->setAllowedSQL($user_id, $q);
 	$q->addOrder('co.company_name, project_name');
@@ -268,7 +268,7 @@ function dPshowImage($src, $wid='', $hgt='', $alt='', $title='') {
 	
 	return ('<img src="' . $src . '" ' . (($wid) ? (' width="' . $wid . '"') : '') 
 	        . (($hgt) ? (' height="' . $hgt . '"') : '') 
-	        . (($alt) ? (' alt="' . $AppUI->_($alt) . '"') : '') 
+	        . ' alt="' . (($alt) ? $AppUI->_($alt) : $src) . '"'
 	        . (($title) ? (' title="' . $AppUI->_($title) . '"') : '') . ' border="0" />');
 }
 
@@ -657,6 +657,7 @@ function format_backtrace($bt, $file, $line, $msg) {
 		}
 		echo ")\n";
 	}
+	echo "<\pre>\n";
 }
 
 function dprint($file, $line, $level, $msg) {
