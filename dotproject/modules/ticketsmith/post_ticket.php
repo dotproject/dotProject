@@ -20,7 +20,7 @@ $titleBlock->show();
 
 ?>
 
-<SCRIPT language="javascript">
+<script type="text/javascript" language="javascript">
 function submitIt() {
 	var f = document.ticketform;
 	var msg = '';

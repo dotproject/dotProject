@@ -70,7 +70,7 @@ if (!db_loadHash( $sql, $user ) && $user_id > 0) {
 	}
 	$titleBlock->show();
 ?>
-<SCRIPT language="javascript">
+<script type="text/javascript" language="javascript">
 function submitIt(){
     var form = document.editFrm;
    if (form.user_username.value.length < <?php echo dPgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo dPgetConfig('admin_username'); ?>') {
