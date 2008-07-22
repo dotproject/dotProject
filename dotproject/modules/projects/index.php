@@ -153,7 +153,7 @@ $project_types = dPgetSysVal('ProjectStatus');
 $q  = new DBQuery();
 $q->addTable('projects', 'p');
 $q->addQuery('p.project_status, COUNT(p.project_id) as count');
-$obj_project->setAllowedSQL($AppUI->user_id, $q);
+$obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');
 if ($owner > 0) {
 	$q->addWhere('p.project_owner = ' . $owner);
 }
