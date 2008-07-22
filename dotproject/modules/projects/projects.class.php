@@ -279,7 +279,7 @@ class CProject extends CDpObject {
 	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$oCpy = new CCompany;
 		parent::setAllowedSQL($uid, $query, $index, $key);
-		$oCpy->setAllowedSQL($uid, $query, ($key . '.project_company'));
+		$oCpy->setAllowedSQL($uid, $query, ((($key) ? ($key . '.') : '') .'project_company'));
 	}
 	
 	/**
