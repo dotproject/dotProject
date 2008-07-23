@@ -923,35 +923,33 @@ class CTask extends CDpObject
 		// a = assignee
 		// o = owner
 		$q->addTable('tasks', 't');
-		$q->leftJoin('user_tasks', 'u', 'u.task_id = t.task_id');
+		$q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->leftJoin('users', 'o', 'o.user_id = t.task_owner');
 		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
 		$q->leftJoin('users', 'c', 'c.user_id = t.task_creator');
 		$q->leftJoin('contacts', 'cc', 'cc.contact_id = c.user_contact');
-		$q->leftJoin('users', 'a', 'a.user_id = u.user_id');
+		$q->leftJoin('users', 'a', 'a.user_id = ut.user_id');
 		$q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
-		$q->addQuery('t.task_id, cc.contact_email as creator_email' 
+		$q->addQuery('t.task_id, c.user_id as creator_id, cc.contact_email as creator_email' 
 					 . ', cc.contact_first_name as creator_first_name' 
 					 . ', cc.contact_last_name as creator_last_name' 
-					 . ', oc.contact_email as owner_email' 
+					 . ', o.user_id as owner_id, oc.contact_email as owner_email' 
 					 . ', oc.contact_first_name as owner_first_name' 
 					 . ', oc.contact_last_name as owner_last_name' 
 					 . ', a.user_id as assignee_id, ac.contact_email as assignee_email' 
 					 . ', ac.contact_first_name as assignee_first_name' 
 					 . ', ac.contact_last_name as assignee_last_name');
 		$q->addWhere(' t.task_id = ' . $this->task_id);
-		$sql = $q->prepare();
-		$q->clear();
-		$users = db_loadList($sql);
+		$users = $q->loadList();
 		
 		if (count($users)) {
 			$task_start_date = new CDate($this->task_start_date);
 			$task_finish_date = new CDate($this->task_end_date);
+			$priority = dPgetSysVal('TaskPriority');
 			
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" 
 					 . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
-			//Priority not working for some reason, will wait till later
-			//$body .= "\n".$AppUI->_('Priority'). ': ' . $this->task_priority;
+			$body .= "\n" . $AppUI->_('Priority'). ': ' . $priority[$this->task_priority];
 			$body .= ("\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' 
 					  . $task_start_date->format($df) . "\n" 
 					  . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' 
@@ -976,18 +974,29 @@ class CTask extends CDpObject
 								? $GLOBALS['locale_char_set'] : ''));
 			$mail->From ('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name 
 						 . '" <' . $AppUI->user_email . '>');
-		}
-		
-		$mail_owner = $AppUI->getPref('MAILALL');
-		
-		foreach ($users as $row) {
-			if ($mail_owner || $row['assignee_id'] != $AppUI->user_id) {
+			
+			$owner_is_assigned = false;
+			foreach ($users as $row) {
 				if ($mail->ValidEmail($row['assignee_email'])) {
 					$mail->To($row['assignee_email'], true);
 					$mail->Send();
 				}
+				if ($row['assignee_id'] == $row['owner_id']) {
+					$owner_is_assigned = true;
+				}
+			}
+			
+			if ($AppUI->getPref('MAILALL') && !($owner_is_assigned)) {
+				$last_record = array_pop($users);
+				$owner_email = $last_record['owner_email'];
+				array_push($users, $last_record);
+				if ($mail->ValidEmail($owner_email)) {
+					$mail->To($owner_email, true);
+					$mail->Send();
+				}
 			}
 		}
+		
 		return '';
 	}
 	
