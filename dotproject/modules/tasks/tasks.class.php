@@ -1666,6 +1666,9 @@ class CTask extends CDpObject
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
+		if (! dPgetConfig('check_overallocation') ) {
+			return array();
+		}
 		$q = new DBQuery;
 		// retrieve the systemwide default preference for the assignment maximum
 		$q->addTable('user_preferences');
