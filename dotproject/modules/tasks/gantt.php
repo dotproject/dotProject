@@ -7,16 +7,25 @@ if (!defined('DP_BASE_DIR')){
  * Gantt.php - by J. Christopher Pereira
  * TASKS $Id$
  */
-global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned;
-global $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id, $dPconfig;
+global $caller, $locale_char_set;
+global $user_id, $dPconfig;
+
+$showLabels = dPgetParam($_GET, 'showLabels', 0);
+$showWork = dPgetParam($_GET, 'showWork', 0);
+$sortByName = dPgetParam($_GET, 'sortByName', 0);
+$showPinned = dPgetParam( $_REQUEST, 'showPinned', false );
+$showArcProjs = dPgetParam( $_REQUEST, 'showArcProjs', false );
+$showHoldProjs = dPgetParam( $_REQUEST, 'showHoldProjs', false );
+$showDynTasks = dPgetParam( $_REQUEST, 'showDynTasks', false );
+$showLowTasks = dPgetParam( $_REQUEST, 'showLowTasks', true);
 
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
-$project_id = defVal(@$_REQUEST['project_id'], 0);
-$f = defVal(@$_REQUEST['f'], 0);
+$project_id = dPgetParam($_REQUEST, 'project_id', 0);
+$f = dPgetParam($_REQUEST, 'f', 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -53,12 +62,7 @@ if ($caller == 'todo') {
  	$projects[$project_id]['project_name'] = $AppUI->_('Todo for').' '.dPgetUsername($user_id);
  	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 	
- 	$showPinned = dPgetParam( $_REQUEST, 'showPinned', false );
- 	$showArcProjs = dPgetParam( $_REQUEST, 'showArcProjs', false );
- 	$showHoldProjs = dPgetParam( $_REQUEST, 'showHoldProjs', false );
- 	$showDynTasks = dPgetParam( $_REQUEST, 'showDynTasks', false );
- 	$showLowTasks = dPgetParam( $_REQUEST, 'showLowTasks', true);
-	
+
  	$q->addTable('tasks', 't');
  	$q->innerJoin('projects', 'p', 'p.project_id = t.task_project');
  	$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . $user_id);
