@@ -97,13 +97,12 @@ if ($project_id) {
 if ($task_id) {
 	$q->addWhere('f.file_task = '. $task_id);
 }
-$q->addGroup('f.file_version_id');
 
 
 // most recent version info per file_project and file_version_id
 $r->createTemp('files_count_max');
 $r->addTable('files', 'f');
-$r->addQuery('DISTINCT count(f.file_version) as file_versions' 
+$r->addQuery('DISTINCT count(f.file_id) as file_versions' 
              . ', max(DISTINCT f.file_version) as file_lastversion' 
              . ', f.file_version_id, f.file_project');
 $r->addJoin('projects', 'p', 'p.project_id = f.file_project');

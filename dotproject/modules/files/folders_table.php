@@ -277,7 +277,7 @@ function displayFiles($folder_id) {
 	// most recent version info per file_project and file_version_id
 	$q->createTemp('files_count_max' . $folder_id);
 	$q->addTable('files', 'f');
-	$q->addQuery('DISTINCT count(f.file_version) as file_versions' 
+	$q->addQuery('DISTINCT count(f.file_id) as file_versions' 
 	             . ', max(DISTINCT f.file_version) as file_lastversion' 
 	             . ', file_version_id, f.file_project');
 	$q->addJoin('projects', 'p', 'p.project_id = f.file_project');
