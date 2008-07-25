@@ -96,6 +96,8 @@ class Mail
     var $password;
     var $transport;
     var $defer;
+    var $response;
+    var $err = false;
 
 /**
  *    Mail constructor
@@ -421,19 +423,19 @@ function SMTPSend()
         return FALSE;
     }
     // Read the opening stuff;
-    $this->socketRead();
+    $this->socketReadPattern(220, 300);
     // Send the protocol start
     $this->socketSend('HELO ' . $this->getHostName());
-	do {
-		//clear out any excess data from the socket so we can correctly check for authentication
-		$chatter = trim($this->socketRead());
-	} while (! feof($this->socket) && $chatter != '');
-	
+    $this->socketReadPattern(250, 300);
+
     if ($this->sasl && $this->username) {
         $this->socketSend("AUTH LOGIN");
+	$this->socketReadPattern(334);
         $this->socketSend(base64_encode($this->username));
-        $rcv = $this->socketSend(base64_encode($this->password));
-        if (strpos($rcv, '235') !== 0) {
+	$this->socketReadPattern(334);
+        $this->socketSend(base64_encode($this->password));
+	$rcv = $this->socketReadPattern(235);
+	if ($this->err) {
             dprint(__FILE__, __LINE__, 1, 'Authentication failed on server: '.$rcv);
             $AppUI->setMsg('Failed to login to SMTP server: '.$rcv);
             fclose($this->socket);
@@ -450,8 +452,9 @@ function SMTPSend()
         else
             $from = $headers['From'];
     }
-    $rcv = $this->socketSend("MAIL FROM: <$from>");
-    if (substr($rcv,0,1) != '2') {
+    $this->socketSend("MAIL FROM: <$from>");
+    $rcv = $this->socketReadPattern(250, 300);
+    if ($this->err) {
         $AppUI->setMsg("Failed to send email: $rcv", UI_MSG_ERROR);
         return FALSE;
     }
@@ -461,41 +464,84 @@ function SMTPSend()
             if (isset($matches[1]))
                 $to_address = $matches[1];
         }
-        $rcv = $this->socketSend("RCPT TO: <$to_address>");
-        if (substr($rcv,0,1) != '2') {
+        $this->socketSend("RCPT TO: <$to_address>");
+	$rcv = $this->socketReadPattern(array(250,251), 300);
+        if ($this->err) {
             $AppUI->setMsg("Failed to send email: $rcv", UI_MSG_ERROR);
             return FALSE;
         }
     }
     $this->socketSend('DATA');
+    $rcv = $this->socketReadPattern(354, 120);
+    if ($this->err) {
+    	$AppUI->setMsg('Failed to send email: ' . $rcv, UI_MSG_ERROR);
+	return FALSE;
+    }
     foreach ($headers as $hdr => $val) {
-            $this->socketSend("$hdr: $val", FALSE);
+            $this->socketSend("$hdr: $val");
     }
     // Now build the To Headers as well.
-    $this->socketSend('Date: ' . date('r'), FALSE);
-    $this->socketSend('', FALSE);
-    $this->socketSend($this->fullBody, FALSE);
-    $result = $this->socketSend('.');
-    $this->socketSend('QUIT');
-    if (strpos($result, '250') === 0)
-        return TRUE;
-    else {
+    $this->socketSend('Date: ' . date('r'));
+    $this->socketSend('');
+    $this->socketSend($this->fullBody);
+    $this->socketSend('.');
+    $result = $this->socketReadPattern(250, 600);
+    if ($this->err) {
         dprint(__FILE__, __LINE__, 1, "Failed to send email from $from to $to_address: $result");
         $AppUI->setMsg("Failed to send email: $result");
         return FALSE;
     }
+    $this->socketSend('QUIT');
+    $this->socketReadPattern(221, 300);
+    // Don't error at this stage, but return regardless.
+    return true;
 }
 
-function socketRead()
+function socketRead($timeout = null)
 {
+    if ($timeout !== null) {
+    	stream_set_timeout($this->socket, $timeout);
+    }
     $result = fgets($this->socket, 4096);
     dprint(__FILE__, __LINE__, 12, "server said: $result");
+    $info = stream_get_meta_data($this->socket);
+    if (!empty($info['timed_out'])) {
+	$this->err = true;
+    	return false;
+    }
+    if ($result === false) {
+    	$this->err = true;
+    }
     return $result;
 }
 
-function socketSend($msg, $rcv = TRUE)
+/**
+ * Using the method used by Zend_Mail to handle the SMTP protocol
+ */
+function socketReadPattern($pattern, $timeout = null)
+{
+	$this->response = array();
+	$cmd = '';
+	$msg = '';
+
+	if (!is_array($pattern)) {
+		$pattern = array($pattern);
+	}
+	do {
+		$this->response[] = $result = $this->socketRead($timeout);
+		sscanf($result, '%d%s', $cmd, $msg);
+		if ($cmd === null || ! in_array($cmd, $pattern)) {
+			$this->err = true;
+			return false;
+		}
+	} while (strpos($msg, '-') === 0);
+	return $msg;
+}
+
+function socketSend($msg, $rcv = FALSE)
 {
     dprint(__FILE__, __LINE__, 12, "sending: $msg");
+    $this->err = false;
     $sent = fputs($this->socket, $msg . "\r\n");
     if ($rcv)
         return $this->socketRead();
