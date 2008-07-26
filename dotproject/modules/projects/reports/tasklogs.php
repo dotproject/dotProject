@@ -197,12 +197,12 @@ if ($do_report) {
 		$hours += $log['task_log_hours'];
 
 		$pdfdata[] = array(
-			$log['creator'],
-			$log['task_log_name'],
-			$log['task_log_description'],
+			safe_utf8_decode($log['creator']),
+			safe_utf8_decode($log['task_log_name']),
+			safe_utf8_decode($log['task_log_description']),
 			$date->format($df),
 			sprintf("%.2f", $log['task_log_hours']),
-			$log['billingcode_name'],
+			safe_utf8_decode($log['billingcode_name']),
 		);
 ?>
 	<tr>
@@ -238,7 +238,7 @@ if ($do_report) {
 		'',
 		'',
 		'',
-		$AppUI->_('Total Hours').':',
+		safe_utf8_decode($AppUI->_('Total Hours')).':',
 		sprintf("%.2f", $hours),
 		'',
 	);
@@ -271,14 +271,14 @@ if ($do_report) {
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont("$font_dir/Helvetica.afm");
 
-		$pdf->ezText(dPgetConfig('company_name'), 12);
+		$pdf->ezText(safe_utf8_decode(dPgetConfig('company_name')), 12);
 
 		$date = new CDate();
 		$pdf->ezText("\n" . $date->format($df) , 8);
 
 		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
-		$pdf->ezText("\n" . $AppUI->_('Task Log Report'), 12);
-		$pdf->ezText("$pname", 15);
+		$pdf->ezText("\n" . safe_utf8_decode($AppUI->_('Task Log Report')), 12);
+		$pdf->ezText(safe_utf8_decode($pname), 15);
 		if ($log_all) {
 			$pdf->ezText("All task log entries", 9);
 		} else {
@@ -289,12 +289,12 @@ if ($do_report) {
 		$title = 'Task Logs';
 
 	        $pdfheaders = array(
-		        $AppUI->_('Created by'),
-        		$AppUI->_('Summary'),
-        		$AppUI->_('Description'),
-        		$AppUI->_('Date'),
-        		$AppUI->_('Hours'),
-	        	$AppUI->_('Cost Code')
+		        safe_utf8_decode($AppUI->_('Created by')),
+        		safe_utf8_decode($AppUI->_('Summary')),
+        		safe_utf8_decode($AppUI->_('Description')),
+        		safe_utf8_decode($AppUI->_('Date')),
+        		safe_utf8_decode($AppUI->_('Hours')),
+	        	safe_utf8_decode($AppUI->_('Cost Code'))
         	);
 
         	$options = array(

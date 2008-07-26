@@ -23,21 +23,15 @@ require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
 $pdf =& new Cezpdf($paper='A4',$orientation='landscape');
 $pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
 $pdf->selectFont( "$font_dir/Helvetica.afm" );
-if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) 
-	$pdf->ezText( utf8_decode(dPgetConfig( 'company_name' )), 12 );
-else
-	$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
+$pdf->ezText( safe_utf8_decode(dPgetConfig( 'company_name' )), 12 );
 $date = new CDate();
 $pdf->ezText( "\n" . $date->format( $df ) , 8 );
 $next_week = new CDate($date);
 $next_week->addSpan(new Date_Span(array(7,0,0,0)));
 
 $pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-$pdf->ezText( "\n" . $AppUI->_('Project Overdue Task Report'), 12 );  
-if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) 
-	$pdf->ezText( utf8_decode($pname), 15 );
-else 
-	$pdf->ezText( $pname, 15 );
+$pdf->ezText( "\n" . safe_utf8_decode($AppUI->_('Project Overdue Task Report')), 12 );  
+$pdf->ezText( safe_utf8_decode($pname), 15 );
 $pdf->ezText( "\n" );
 $pdf->selectFont( "$font_dir/Helvetica.afm" );
 $title = null;
@@ -66,12 +60,12 @@ if ($hasResources)
 // Build the data to go into the table.
 $pdfdata = array();
 $columns = array();
-$columns[] = "<b>" . $AppUI->_('Task Name') . "</b>";
-$columns[] = "<b>" . $AppUI->_('Owner') . "</b>";
-$columns[] = "<b>" . $AppUI->_('Assigned Users') . "</b>";
+$columns[] = "<b>" . safe_utf8_decode($AppUI->_('Task Name')) . "</b>";
+$columns[] = "<b>" . safe_utf8_decode($AppUI->_('Owner')) . "</b>";
+$columns[] = "<b>" . safe_utf8_decode($AppUI->_('Assigned Users')) . "</b>";
 if ($hasResources)
-	$columns[] = "<b>" . $AppUI->_('Assigned Resources') . "</b>";
-$columns[] = "<b>" . $AppUI->_('Finish Date') . "</b>";
+	$columns[] = "<b>" . safe_utf8_decode($AppUI->_('Assigned Resources')) . "</b>";
+$columns[] = "<b>" . safe_utf8_decode($AppUI->_('Finish Date')) . "</b>";
 
 // Grab the completed items in the last week
 $q =& new DBQuery;
@@ -111,7 +105,7 @@ if (count($tasks)) {
 	}
 	while ($row = db_fetch_assoc($res)) {
 		$assigned_users[$row['task_id']][$row['user_id']] 
-		= "$row[contact_first_name] $row[contact_last_name] [$row[perc_assignment]%]";
+		= safe_utf8_decode("$row[contact_first_name] $row[contact_last_name] [$row[perc_assignment]%]");
 	}
 	$q->clear();
 }
@@ -134,7 +128,7 @@ if ($hasResources && count($tasks)) {
 	}
 	while ($row = db_fetch_assoc($res)) {
 		$resources[$row['task_id']][$row['resource_id']] 
-		= $row['resource_name'] . " [" . $row['percent_allocated'] . "%]";
+		= safe_utf8_decode($row['resource_name']) . " [" . $row['percent_allocated'] . "%]";
 	}
 	$q->clear();
 }
@@ -142,8 +136,8 @@ if ($hasResources && count($tasks)) {
 // Build the data columns
 foreach ($tasks as $task_id => $detail) {
 	$row =& $pdfdata[];
-	$row[] = $detail['task_name'];
-	$row[] = $detail['user_username'];
+	$row[] = safe_utf8_decode($detail['task_name']);
+	$row[] = safe_utf8_decode($detail['user_username']);
 	$row[] = implode("\n",$assigned_users[$task_id]);
 	if ($hasResources)
 		$row[] = implode("\n", $resources[$task_id]);

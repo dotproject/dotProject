@@ -925,4 +925,37 @@ function dPcheckMem($min = 0, $revert = false) {
 	return (($now < $want || $now < $min) ? false : true);
 }
 
+/*
+ * From the PHP Manual, slightly modified to improve performance.
+ * This is still a bit of a pig and is worse if there is nothing to find.
+ */
+function seems_utf8($Str) {
+ for ($i=0, $len = strlen($Str); $i<$len; $i++) {
+  if (($ord = ord($Str[$i])) < 0x80) continue; # 0bbbbbbb
+  elseif (($ord & 0xE0) == 0xC0) $n=1; # 110bbbbb
+  elseif (($ord & 0xF0) == 0xE0) $n=2; # 1110bbbb
+  elseif (($ord & 0xF8) == 0xF0) $n=3; # 11110bbb
+  elseif (($ord & 0xFC) == 0xF8) $n=4; # 111110bb
+  elseif (($ord & 0xFE) == 0xFC) $n=5; # 1111110b
+  else return false; # Does not match any model
+  for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
+   if ((++$i == $len) || ((ord($Str[$i]) & 0xC0) != 0x80))
+   return false;
+  }
+ }
+ return true;
+}
+
+
+/**
+ * "safe" utf8 decoder, only decodes if it finds utf8.
+ */
+function safe_utf8_decode($string)
+{
+	if (seems_utf8($string)) {
+		return utf8_decode($string);
+	} else {
+		return $string;
+	}
+}
 ?>

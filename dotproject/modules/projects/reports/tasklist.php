@@ -228,15 +228,15 @@ if ($log_pdf) {
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont("$font_dir/Helvetica.afm");
 
-		$pdf->ezText(dPgetConfig('company_name'), 12);
+		$pdf->ezText(safe_utf8_decode(dPgetConfig('company_name')), 12);
 		// $pdf->ezText(dPgetConfig('company_name').' :: '.dPgetConfig('page_title'), 12);		
 
 		$date = new CDate();
 		$pdf->ezText("\n" . $date->format($df) , 8);
 
 		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
-		$pdf->ezText("\n" . $AppUI->_('Project Task Report'), 12);
-		if ($project_id != 0) {$pdf->ezText($pname, 15);}
+		$pdf->ezText("\n" . safe_utf8_decode($AppUI->_('Project Task Report')), 12);
+		if ($project_id != 0) {$pdf->ezText(safe_utf8_decode($pname), 15);}
 		if ($log_all) {
 			$pdf->ezText("All task entries", 9);
 		} else {		
@@ -244,7 +244,14 @@ if ($log_pdf) {
 		}
 		$pdf->ezText("\n");
 		$pdf->selectFont("$font_dir/Helvetica.afm");
-		//$columns = null; This is already defined above... :)
+		$columns = array(	
+			"<b>".safe_utf8_decode($AppUI->_('Task Name'))."</b>",
+			"<b>".safe_utf8_decode($AppUI->_('Task Description'))."</b>",
+			"<b>".safe_utf8_decode($AppUI->_('Assigned To'))."</b>",
+			"<b>".safe_utf8_decode($AppUI->_('Task Start Date'))."</b>",
+			"<b>".safe_utf8_decode($AppUI->_('Task End Date'))."</b>",
+			"<b>".safe_utf8_decode($AppUI->_('Completion'))."</b>"
+		);
 		$title = null;
 		$options = array(
 			'showLines' => 2,
@@ -305,6 +312,9 @@ function show_task_as_html($depth, $task)
 	echo $str;
 }
 
+/**
+ * Need to use safe_utf8_decode because eZPDF doesn't understand UTF8, only Latin1
+ */
 function collate_pdf_task($depth, $task)
 {
 	global $project_id, $pdfdata, $df;
@@ -316,14 +326,14 @@ function collate_pdf_task($depth, $task)
 
 	$data = array();
 	if ($project_id==0) {	
-		$data[] = $task['project_name'];
+		$data[] = safe_utf8_decode($task['project_name']);
 	}
-	$data[] = $spacer . $task['task_name'];
-	$data[] = $task['task_description'];
-	$data[] = $task['users'];
-	$data[] = (($task['start_date'] != ' ') ? $task['start_date']->format($df) : ' ');
-	$data[] = (($task['end_date'] != ' ') ? $task['end_date']->format($df) : ' ');
-	$data[] = $task['task_percent_complete']."%";
+	$data[] = $spacer . safe_utf8_decode($task['task_name']);
+	$data[] = safe_utf8_decode($task['task_description']);
+	$data[] = safe_utf8_decode($task['users']);
+	$data[] = safe_utf8_decode(($task['start_date'] != ' ') ? $task['start_date']->format($df) : ' ');
+	$data[] = safe_utf8_decode(($task['end_date'] != ' ') ? $task['end_date']->format($df) : ' ');
+	$data[] = safe_utf8_decode($task['task_percent_complete']."%");
 	$pdfdata[] = $data;
 	unset($data);
 }

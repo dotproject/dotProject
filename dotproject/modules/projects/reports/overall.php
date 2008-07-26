@@ -145,7 +145,7 @@ function showcompany($company, $restricted = false)
         foreach ($projects as $project => $name)
         {
 		$pdfproject = array();
-		$pdfproject[] = $name;
+		$pdfproject[] = safe_utf8_decode($name);
 		$project_hours = 0;
 		$project_row = "<tr><td>$name</td>";
 		$sql = "SELECT task_log_costcode, sum(task_log_hours) as hours
@@ -260,11 +260,11 @@ if ($log_pdf) {
 		}
 
 		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
-		$pdf->ezText("\n" . $AppUI->_('Overall Report'), 12);
+		$pdf->ezText("\n" . safe_utf8_decode($AppUI->_('Overall Report')), 12);
 
 	foreach($allpdfdata as $company => $data)
 	{
-		$title = $company;
+		$title = safe_utf8_decode($company);
 		$options = array(
 			'showLines' => 1,
 			'showHeadings' => 0,
