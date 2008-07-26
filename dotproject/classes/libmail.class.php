@@ -98,6 +98,7 @@ class Mail
     var $defer;
     var $response;
     var $err = false;
+    var $last_error = false;
 
 /**
  *    Mail constructor
@@ -431,13 +432,17 @@ function SMTPSend()
     if ($this->sasl && $this->username) {
         $this->socketSend("AUTH LOGIN");
 	$this->socketReadPattern(334);
-        $this->socketSend(base64_encode($this->username));
-	$this->socketReadPattern(334);
-        $this->socketSend(base64_encode($this->password));
-	$rcv = $this->socketReadPattern(235);
+	if (! $this->err) {
+		$this->socketSend(base64_encode($this->username));
+		$this->socketReadPattern(334);
+	}
+	if (! $this->err) {
+		$this->socketSend(base64_encode($this->password));
+		$rcv = $this->socketReadPattern(235);
+	}
 	if ($this->err) {
-            dprint(__FILE__, __LINE__, 1, 'Authentication failed on server: '.$rcv);
-            $AppUI->setMsg('Failed to login to SMTP server: '.$rcv);
+            dprint(__FILE__, __LINE__, 1, 'Authentication failed on server: '.implode("\n", $this->response));
+            $AppUI->setMsg('Failed to login to SMTP server: '.$this->last_error);
             fclose($this->socket);
             return FALSE;
         }
@@ -455,7 +460,7 @@ function SMTPSend()
     $this->socketSend("MAIL FROM: <$from>");
     $rcv = $this->socketReadPattern(250, 300);
     if ($this->err) {
-        $AppUI->setMsg("Failed to send email: $rcv", UI_MSG_ERROR);
+        $AppUI->setMsg("Failed to send email: " . $this->last_error, UI_MSG_ERROR);
         return FALSE;
     }
     foreach ($this->ato as $to_address) {
@@ -467,14 +472,14 @@ function SMTPSend()
         $this->socketSend("RCPT TO: <$to_address>");
 	$rcv = $this->socketReadPattern(array(250,251), 300);
         if ($this->err) {
-            $AppUI->setMsg("Failed to send email: $rcv", UI_MSG_ERROR);
+            $AppUI->setMsg("Failed to send email: " . $this->last_error, UI_MSG_ERROR);
             return FALSE;
         }
     }
     $this->socketSend('DATA');
     $rcv = $this->socketReadPattern(354, 120);
     if ($this->err) {
-    	$AppUI->setMsg('Failed to send email: ' . $rcv, UI_MSG_ERROR);
+    	$AppUI->setMsg('Failed to send email: ' . $this->last_error, UI_MSG_ERROR);
 	return FALSE;
     }
     foreach ($headers as $hdr => $val) {
@@ -487,8 +492,8 @@ function SMTPSend()
     $this->socketSend('.');
     $result = $this->socketReadPattern(250, 600);
     if ($this->err) {
-        dprint(__FILE__, __LINE__, 1, "Failed to send email from $from to $to_address: $result");
-        $AppUI->setMsg("Failed to send email: $result");
+        dprint(__FILE__, __LINE__, 1, "Failed to send email from $from to $to_address: " . implode("\n", $this->response));
+        $AppUI->setMsg("Failed to send email: " . $this->last_error);
         return FALSE;
     }
     $this->socketSend('QUIT');
@@ -521,6 +526,7 @@ function socketRead($timeout = null)
 function socketReadPattern($pattern, $timeout = null)
 {
 	$this->response = array();
+	$this->last_error = '';
 	$cmd = '';
 	$msg = '';
 
@@ -532,6 +538,7 @@ function socketReadPattern($pattern, $timeout = null)
 		sscanf($result, '%d%s', $cmd, $msg);
 		if ($cmd === null || ! in_array($cmd, $pattern)) {
 			$this->err = true;
+			$this->last_error = $result;
 			return false;
 		}
 	} while (strpos($msg, '-') === 0);
