@@ -30,7 +30,7 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
 function dPupgrade($from_version, $to_version, $last_updated)
 {
 
-	$latest_update = '20071204'; // Set to the latest upgrade date.
+	$latest_update = '20080728'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
@@ -131,8 +131,6 @@ function dPupgrade($from_version, $to_version, $last_updated)
 
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		case '20071104': // Last changed date.
-		case '20071114': // Current release
-		case '20071218':
 			// Add the permissions for task_log
 			dPmsg('Adding File Folder permissions');
 			$perms->add_object('app', 'File Folders', 'file_folders', 6, 0, 'axo');
@@ -140,6 +138,10 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$nonadmin = $perms->get_group_id('non_admin', null, 'axo');
 			$perms->add_group_object($all_mods, 'app', 'file_folders', 'axo');
 			$perms->add_group_object($nonadmin, 'app', 'file_folders', 'axo');
+
+		case '20071114':
+		case '20071204':
+		case '20071218':
 		default:
 			break;
 	}
