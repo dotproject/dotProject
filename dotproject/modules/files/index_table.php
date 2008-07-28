@@ -131,7 +131,7 @@ $r->clear();
 
 // SETUP FOR FILE LIST
 $q2 = new DBQuery;
-$q2->addQuery('f.*, f.file_id as latest_id'
+$q2->addQuery('SQL_CALC_FOUND_ROWS f.*, f.file_id as latest_id'
               . ', fmc.file_versions , round(fmc.file_lastversion, 2) as file_lastversion');
 $q2->addQuery('ff.*');
 $q2->addTable('files', 'f');
@@ -213,11 +213,11 @@ $files = array();
 $file_versions = array();
 if ($canRead) {
 	
+	$q2->includeCount();
 	$files = $q2->loadList();
+	$xpg_totalrecs = $q2->foundRows();
 	$file_versions = $q3->loadHashList('file_id');
 }
-// counts total recs from selection
-$xpg_totalrecs = count($q->loadList());
 
 $r->dropTemp('files_count_max');
 $r->exec();

@@ -85,40 +85,7 @@ $tabBox = new CTabBox( '?m=files', DP_BASE_DIR . '/modules/files/', $tab );
 $tabbed = $tabBox->isTabbed();
 $i = 0;
 foreach($file_types as $file_type) {
-	$q = new DBQuery;
-	$q->addQuery('count(DISTINCT file_id)');
-	$q->addTable('files', 'f');
-	$q->addJoin('projects', 'p', 'p.project_id = file_project');
-	$q->addJoin('tasks', 't', 't.task_id = file_task');
-	if (count ($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
-	}
-	if (count ($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
-	}
-	if (count($allowedFolders)) {
-		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR file_folder = 0)');
-	}
-	if ($catsql) {
-		$q->addWhere($catsql);
-	}
-	if ($company_id) {
-		$q->addWhere("project_company = $company_id");
-	}
-	if ($project_id) {
-		$q->addWhere("file_project = $project_id");
-	}
-	if ($task_id) {
-		$q->addWhere("file_task = $task_id");
-	}
-	$key = array_search($file_type, $fts);
-	if ($i>0 || !$tabbed) {
-		$q->addWhere('file_category = '.$key);
-	}
-	if ($project_id>0) {
-		$q->addWhere('file_project = '.$project_id);
-	}
-	$tabBox->add('index_table', $file_type . ' (' . $q->loadResult() .')');
+	$tabBox->add('index_table', $file_type );
 	++$i;
 }
 if ($canAccess_folders) {
