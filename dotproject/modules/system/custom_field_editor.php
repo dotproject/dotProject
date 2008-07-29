@@ -44,7 +44,7 @@ if (!defined('DP_BASE_DIR')){
 			echo "</td><td class=\"hilite\">";
 			echo "<a href=\"?m=system&a=custom_field_addedit&field_id=".$f["field_id"]."&delete=1\"><img src='./images/icons/stock_delete-16.png' align='center' width='16' height='16' border='0'>Delete</a> ";
 			echo "</td><td class=\"hilite\">";
-			echo stripslashes($f["field_description"])."\n";
+			echo htmlspecialchars($f["field_description"])."\n";
 			echo "</td></tr>";
 		}
 	}

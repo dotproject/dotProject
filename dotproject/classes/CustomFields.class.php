@@ -113,6 +113,10 @@ class CustomField
 	function charValue() {
 		return $this->value_charvalue;
 	}
+
+	function charValueHTML() {
+		return htmlspecialchars($this->value_charvalue);
+	}
 	
 	function value() {
 		return charValue();
@@ -134,6 +138,10 @@ class CustomField
 		return $this->field_description;
 	}
 		
+	function fieldDescriptionHTML() {
+		return htmlspecialchars($this->field_description);
+	}
+	
 	function fieldId() {
 		return $this->field_id;
 	}
@@ -162,13 +170,13 @@ class CustomFieldCheckBox extends CustomField
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
-				$html .= ($this->field_description . ': </td><td><input type="checkbox" name="' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td><input type="checkbox" name="' 
 				          . $this->field_name . '" value="1"' 
 				          . (($this->intValue()) ? ' checked="checked" ' : ' ') 
 				          . $this->field_extratags . ' />');
 				break;
 			case 'view':
-				$html .= ($this->field_description . ': </td><td class="hilite" width="100%">' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td class="hilite" width="100%">' 
 						  . (($this->intValue()) ? 'Yes' : 'No'));
 				break;
 		}
@@ -195,13 +203,13 @@ class CustomFieldText extends CustomField
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
-				$html .= ($this->field_description . ': </td><td><input type="text" name="' 
-				          . $this->field_name . '" value="' . $this->charValue() . '" ' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td><input type="text" name="' 
+				          . $this->field_name . '" value="' . $this->charValueHTML() . '" ' 
 				          . $this->field_extratags . ' />');
 				break;
 			case 'view':
-				$html .= ($this->field_description . ': </td><td class="hilite" width="100%">' 
-				          . $this->charValue());
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td class="hilite" width="100%">' 
+				          . $this->charValueHTML());
 				break;
 		}
 		$html .= '</td>';
@@ -223,13 +231,13 @@ class CustomFieldTextArea extends CustomField
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
-				$html .= ($this->field_description . ': </td><td><textarea name="' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td><textarea name="' 
 				          . $this->field_name . '" ' . $this->field_extratags . '>' 
-				          . $this->charValue() . '</textarea>');
+				          . $this->charValueHTML() . '</textarea>');
 				break;
 			case 'view':
-				$html .= ($this->field_description . ': </td><td class="hilite" width="100%">' 
-						  . nl2br($this->charValue()));
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td class="hilite" width="100%">' 
+						  . nl2br($this->charValueHTML()));
 				break;
 		}
 		$html .= '</td>';
@@ -251,7 +259,7 @@ class CustomFieldLabel extends CustomField
 		// We don't really care about its mode
 		$html = '<td nowrap="nowrap">';
 		$html .= ('<span' . (($this->field_extratags) ? (' ' . $this->field_extratags) : '') . '>' 
-		          . $this->field_description . '</span>');
+		          . $this->fieldDescriptionHTML() . '</span>');
 		
 		$html .= '</td>';
 		return $html;
@@ -295,12 +303,12 @@ class CustomFieldSelect extends CustomField
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
-				$html .= ($this->field_description . ': </td><td>' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td>' 
 				          . $this->options->getHTML($this->field_name, $this->intValue()));
 				break;
 			case 'view':
-				$html .= ($this->field_description . ': </td><td class="hilite" width="100%">' 
-				          . $this->options->itemAtIndex($this->intValue()));
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td class="hilite" width="100%">' 
+				          . htmlspecialchars($this->options->itemAtIndex($this->intValue())));
 				break;
 		}
 		$html .= '</td>';
@@ -334,14 +342,14 @@ class CustomFieldWeblink extends CustomField
 		$html .= '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
-				$html .= ($this->field_description . ': </td><td><input type="text" name="' 
-				          . $this->field_name . '" value="' . $this->charValue() . '" ' 
+				$html .= ($this->fieldDescriptionHTML() . ': </td><td><input type="text" name="' 
+				          . $this->field_name . '" value="' . $this->charValueHTML(). '" ' 
 				          . $this->field_extratags . ' />');
 				break;
 			case 'view':
-				$html .= ($this->field_description 
+				$html .= ($this->fieldDescriptionHTML() 
 				          . ': </td><td class="hilite" width="100%"><a href="' 
-				          . $this->charValue() . '">' . $this->charValue() . '</a>');
+				          . $this->charValueHTML(). '">' . $this->charValueHTML(). '</a>');
 				break;
 		}
 		$html .= '</td>';
@@ -374,6 +382,7 @@ class CustomFieldFilelink extends CustomField {
 			$obj->load($cv);
 		}
 
+		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case "edit":
 				/* additionally add the hidden field	$this->field_name.'_id' 
@@ -382,10 +391,10 @@ class CustomFieldFilelink extends CustomField {
 				** The <a href...> </a> link is needed since browsers do not support
 				** prevalues in the <input type="file" .../> fields.
 				*/
-				$html = $this->field_description.': </td><td>'.(($cv > 0) ? '<a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>&nbsp;' : '') .'<input type="file" name="'.$this->field_name.'" '.$this->field_extratags.' /> <input type="hidden" name="'.$this->field_name.'_id" value="'.(!empty($cv) ? $cv : 0).'"/>';
+				$html .= $this->fieldDescriptionHTML().': </td><td>'.(($cv > 0) ? '<a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>&nbsp;' : '') .'<input type="file" name="'.$this->field_name.'" '.$this->field_extratags.' /> <input type="hidden" name="'.$this->field_name.'_id" value="'.(!empty($cv) ? $cv : 0).'"/>';
 				break;
 			case "view":
-				$html = $this->field_description.': </td><td class="hilite" width="100%"><a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>';
+				$html .= $this->fieldDescriptionHTML().': </td><td class="hilite" width="100%"><a href="./fileviewer.php?file_id='.$this->charValue().'">'.$obj->file_name.'</a>';
 				break;
 		}
 		return $html;
@@ -733,7 +742,7 @@ class CustomOptionList
 			$q->addTable('custom_fields_lists');
 			$q->addInsert('field_id', $this->field_id);
 			$q->addInsert('list_option_id', $optid);
-			$q->addInsert('list_value', db_escape(strip_tags($opt)));
+			$q->addInsert('list_value', db_escape($opt));
 			
 			if (!$q->exec()) {
 				$insert_error = $db->ErrorMsg();
@@ -780,7 +789,7 @@ class CustomOptionList
 		foreach ($this->options as $i => $opt) {
 		 	$html .= ("\t" . '<option value=' . $i . '"' 
 			          . (($i == $selected) ?' selected="selected"' : '') . '>' 
-			          . $opt . '</option>');
+			          . htmlspecialchars($opt) . '</option>');
 		}	
 		$html .= "</select>\n";
 		return $html;

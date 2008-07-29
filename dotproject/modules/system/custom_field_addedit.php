@@ -177,12 +177,12 @@ if (!defined('DP_BASE_DIR')){
 		<br />
 		<?php echo $AppUI->_('(No Spaces)')?>
 		</td><td>
-		<input type="text" name="field_name" maxlength="100" value="<?php echo $field_name?>" onblur='this.value=this.value.replace(/[^a-z|^A-Z|^0-9]*/gi,"");' />
+		<input type="text" name="field_name" maxlength="100" value="<?php echo htmlspecialchars($field_name)?>" onblur='this.value=this.value.replace(/[^a-z|^A-Z|^0-9]*/gi,"");' />
 	</td></tr>
 	<tr><td>
 		<?php echo $AppUI->_('Field Description')?>:
 		</td><td>
-		<input type="text" name="field_description" size="40" maxlength="250" value="<?php echo $field_description?>" />
+		<input type="text" name="field_description" size="40" maxlength="250" value="<?php echo htmlspecialchars($field_description)?>" />
 	</td></tr>
 	<tr><td>
 		<?php echo $AppUI->_('Field Display Type')?>:
@@ -210,11 +210,12 @@ if (!defined('DP_BASE_DIR')){
 			<?php
 				foreach( $select_items as $itm)
 				{
+					$itmhtml = htmlspecialchars($itm);
 					echo "<tr><td>";
-					echo "<li>".$itm."</li>\n";
-					echo "<input type=\"hidden\" name=\"select_items[]\" value=\"".$itm."\" />";
+					echo "<li>".$itmhtml."</li>\n";
+					echo "<input type=\"hidden\" name=\"select_items[]\" value=\"".$itmhtml."\" />";
 					echo "</td><td>";
-					echo "<a href=\"javascript:deleteItem('".$itm."')\">[Delete]</a>";
+					echo "<a href=\"javascript:deleteItem('".addslashes($itm)."')\">[Delete]</a>";
 					echo "</td></tr>";
 				}
 			?>
