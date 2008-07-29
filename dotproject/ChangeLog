@@ -1,375 +1,1093 @@
-2007-11-15 13:13  (ajdonnison)
----------------------------------
-db/upgrade_21_to_211.sql
-- file upgrade_21_to_211.sql was initially added on branch stable_2.
-
-2007-11-15 13:13  (ajdonnison)
----------------------------------
-db/dotproject.sql
-db/upgrade_21_to_211.sql
-db/upgrade_latest.php
-db/upgrade_latest.sql
-includes/version.php
-install/do_install_db.php
-- Preparatory changes for 2.1.1 release.
-
-2007-11-15 12:54  (ajdonnison)
----------------------------------
-modules/tasks/addedit.js
-- #2214 - Calculate days as multiples of working hours per day.
-
-2007-11-15 12:16  (ajdonnison)
----------------------------------
-locales/en/admin.inc
-locales/en/calendar.inc
-locales/en/common.inc
-locales/en/companies.inc
-locales/en/contacts.inc
-locales/en/departments.inc
-locales/en/files.inc
-locales/en/forums.inc
-locales/en/history.inc
-locales/en/links.inc
-locales/en/projects.inc
-locales/en/public.inc
-locales/en/resources.inc
-locales/en/smartsearch.inc
-locales/en/system.inc
-locales/en/tasks.inc
-locales/en/ticketsmith.inc
-- #2215 - Added missing translation strings.
-
-2007-11-15 10:15  (ajdonnison)
----------------------------------
-modules/public/selector.php
-- #2240 - Make task selection show hierarchy.
-
-2007-11-15 07:58  (ajdonnison)
----------------------------------
-modules/history/index.php
-- Change history limit per page to something more reasonable.
-
-2007-11-14 22:55  (ajdonnison)
----------------------------------
-classes/query.class.php
-modules/history/index.php
-- #2216 - Support pagination of history - note that there may still be issues
-- with old data and with records not visible due to permissions.
-
-2007-11-14 21:54  (ajdonnison)
----------------------------------
-modules/calendar/calendar.class.php
-- Make module php4 compatible.
-
-2007-11-14 20:35  (ajdonnison)
----------------------------------
-classes/ui.class.php
-- #2238 - Fix Gantt chart display in classic theme.
-
-2007-11-14 19:23  (ajdonnison)
----------------------------------
-modules/tasks/do_updatetask.php
-- #2194 - Make sure end hour is kept when changing end date.
-
-2007-11-14 19:08  (ajdonnison)
----------------------------------
-modules/tasks/tasks.class.php
-- #2192 - Display of Log option not following correct logic (should only be disabled for dynamic tasks).
-
-2007-11-14 19:00  (ajdonnison)
----------------------------------
-modules/companies/view.php
-- #2208 - Add Owner to company details page.
-
-2007-11-14 18:54  (ajdonnison)
----------------------------------
-modules/tasks/organize.php
-- #2209 - Add option to select/deselect all tasks.
-
-2007-11-14 18:54  (ajdonnison)
----------------------------------
-db/dotproject.sql
-db/upgrade_latest.sql
-- Fixed NOT NULL problem with some windows installs.
-
-2007-11-14 18:12  (ajdonnison)
----------------------------------
-modules/projects/gantt.php
-- #2187 - Change missing task start/end dates to match project start/end date.
-
-2007-11-14 17:43  (ajdonnison)
----------------------------------
-modules/tasks/gantt.php
-modules/tasks/viewgantt.php
-- #2199 - Search for orphans when showing tasks by parent
-- Remove EmptyDates option which is not supported by gantt.php
-
-2007-11-14 17:16  (ajdonnison)
----------------------------------
-modules/tasks/ae_resource.php
-- Make the adding of a new task consistent.
-
-2007-11-14 16:35  (ajdonnison)
----------------------------------
-modules/tasks/ae_resource.php
-- #2231 - Adjust human resource list so that even if you aren't allowed to view the user list, you can view users that are allocated to the task you can edit.
-
-2007-11-14 16:07  (ajdonnison)
----------------------------------
-modules/tasks/tasks.class.php
-- #2193 - Included patch from phpgus to fix tasks listings on calendar pages.
-
-2007-11-14 15:00  (ajdonnison)
----------------------------------
-modules/calendar/calendar.class.php
-modules/calendar/projects_tab.events.php
-- #2217 Added support for project-specific events tab.  Added tab.
-
-2007-11-14 15:00  (ajdonnison)
----------------------------------
-modules/calendar/projects_tab.events.php
-- file projects_tab.events.php was initially added on branch stable_2.
-
-2007-11-14 13:55  (ajdonnison)
----------------------------------
-index.php
-modules/companies/index.php
-- #2183 - Make sure companies module is correctly disabled, while not disabling myInfo and other functions.
-
-2007-11-14 13:27  (ajdonnison)
----------------------------------
-modules/files/files.class.php
-- Dump helpdesk linkages as it looks like the current version of helpdesk doesn't work this way anymore.
-- And why we have external modules hacking core code is beyond me.
-
-2007-11-14 12:56  (ajdonnison)
----------------------------------
-classes/ui.class.php
-- #2201 - Fix help link (I know we don't need it, but we may as well fix it).
-
-2007-11-14 12:48  (merlinyoda)
----------------------------------
-modules/files/folders_table.php
-- Fix for Mantis Bug Report #2210
-
-2007-11-14 12:27  (merlinyoda)
----------------------------------
-modules/tasks/viewgantt.php
-- Added POST check to fix for Mantis Bug Report 2189
-
-2007-11-14 12:24  (merlinyoda)
----------------------------------
-modules/tasks/viewgantt.php
-- More definitive fix for Mantis Bug Report #2189
-
-2007-11-14 12:18  (merlinyoda)
----------------------------------
-modules/tasks/viewgantt.php
-- Fix for Mantis Bug Report #2189
-
-2007-11-14 12:14  (ajdonnison)
----------------------------------
-modules/projects/gantt.php
-- #2226 - Reduced size of fonts to ensure UTF-8 characters display correctly (as per gvl).
-
-2007-11-14 12:07  (ajdonnison)
----------------------------------
-modules/files/do_file_co.php
-- #2234 - Incorporated fix from phpgus on safe mode warnings on file checkout.
-
-2007-11-14 11:32  (ajdonnison)
----------------------------------
-modules/forums/post_message.php
-- #2202 - Don't go all the way back to forums index after editing/adding.
-
-2007-11-14 11:18  (ajdonnison)
----------------------------------
-modules/tasks/tasks.class.php
-- #2231 - Fix at least one part of the multiple unassigments issue.
-
-2007-11-14 11:13  (merlinyoda)
----------------------------------
-modules/tasks/todo.php
-modules/tasks/todo_tasks_sub.php
-- Fix for Mantis Bug Report #2188
-
-2007-11-14 11:03  (ajdonnison)
----------------------------------
-classes/libmail.class.php
-- #2236 - fix line endings when no attachments involved.
-
-2007-11-13 03:22  (cyberhorse)
----------------------------------
-modules/history/index.php
-- Added tasks as an option in the history module for filtering
-
-2007-11-13 03:15  (cyberhorse)
----------------------------------
-includes/db_adodb.php
-- Improved debugging message for sql errors
-
-2007-11-09 16:04  (ajdonnison)
----------------------------------
-modules/tasks/tasks.class.php
-- #2180 - fix supplied by phpgus for dependencies on copy.
-
-2007-11-06 09:35  (ajdonnison)
----------------------------------
-base.php
-index.php
-- Move error reporting options from index.php to base.php so it affects all
-- files (like fileviewer)
-
-2007-11-05 21:27  (ajdonnison)
----------------------------------
-classes/dp.class.php
-- Make sure default history insert adds meaningful data.
-
-2007-11-04 21:00  (cyberhorse)
----------------------------------
-modules/files/do_file_aed.php
-modules/files/folders_table.php
-- #2204 - when copying files, keep their folder and project
-- Fixed folder view (grouping on version_id instead of just name)
-
-2007-11-04 20:37  (ajdonnison)
----------------------------------
-db/upgrade_latest.php
-modules/calendar/addedit.php
-modules/tasks/addedit.php
-- #2195 - Fix user permissions in calendar/tasks
-
-2007-11-04 17:08  (ajdonnison)
----------------------------------
-modules/tasks/tasks.class.php
-- #2228 - Fixed incorrect URL on sortable column headings
-- #2207 - Empty end dates cannot be overdue.
-
-2007-11-01 19:40  (ajdonnison)
----------------------------------
-style/default/header.php
-style/dp-grey-theme/header.php
-- #2211 - Remove forcing of tab in today view.
-
-2007-10-29 21:29  (ajdonnison)
----------------------------------
-includes/session.php
-- #2182 - Fix session destroy behaviour, and while we are at it make sure
-- session garbage collection works as expected.
-
-2007-10-28 07:44  (cyberhorse)
----------------------------------
-modules/history/setup.php
-- Increased the size of table fields (avoids an error when history module
-- is enabled and folders are used in the files module)
-
-2007-10-28 07:43  (cyberhorse)
----------------------------------
-classes/query.class.php
-- Added mechanisms to alter db fields
-
-2007-10-25 21:54  (ajdonnison)
----------------------------------
-modules/system/addeditpref.php
-- #2198 - Fix spelling mistake.
-
-2007-10-25 21:22  (ajdonnison)
----------------------------------
-includes/main_functions.php
-- Minor tweak to allow test to be non-intrusive.
-
-2007-10-25 21:18  (ajdonnison)
----------------------------------
-includes/main_functions.php
-locales/en/common.inc
-modules/projects/viewgantt.php
-modules/tasks/viewgantt.php
-- #2212 - Inconsistent display of Gantt charts.
-
-2007-10-25 17:35  (ajdonnison)
----------------------------------
-modules/projects/gantt.php
-modules/projects/viewgantt.php
-modules/tasks/gantt.php
-- Move memory_limit set to where it will actually do some good.
-- Minor cleanups to limit width of gantt, reduce overall memory footprint.
-
-2007-10-25 17:07  (ajdonnison)
----------------------------------
-classes/libmail.class.php
-- Remove debug.
-
-2007-10-25 17:06  (ajdonnison)
----------------------------------
-classes/libmail.class.php
-- #2190 - Subject not set if no encoding performed.
-
-2007-10-25 10:57  (revelation7)
----------------------------------
-style/classic/main.css
-- Fix for bug #0002200: Multi-Line Selection boxes are not expanded in the dotProject Classic Theme
-
-2007-10-24 15:05  (revelation7)
----------------------------------
-.cvsignore
-modules/tasks/vw_log_update.php
-- Fix for bug #0002185 Task Log editing - original user is overwritten
-
-2007-10-24 15:05  (revelation7)
----------------------------------
-.cvsignore
-- file .cvsignore was initially added on branch stable_2.
-
-2007-10-19 23:28  (nybod)
----------------------------------
-index.php
-- Mantis 2183
-
-2007-10-19 06:26  (merlinyoda)
----------------------------------
-modules/tasks/tasks.class.php
-- More tweaks on "query class" changes.
-- Possiblly fixes Mantis Bug Report #2180
-
-2007-10-19 00:27  (nybod)
----------------------------------
-modules/companies/vw_active.php
-modules/companies/vw_archived.php
-- Mantis 2181
-
-2007-10-19 00:24  (nybod)
----------------------------------
-modules/projects/gantt.php
-- Debug code removed
-
-2007-10-18 09:36  (merlinyoda)
----------------------------------
-modules/tasks/tasks.class.php
-- 
-- Small line placement change for consistancy.
-
-2007-10-18 09:27  (merlinyoda)
----------------------------------
-modules/tasks/tasks.class.php
-- 
-- Resolving issue Bruce came across in forums:
-- http://www.dotproject.net/vbulletin/showthread.php?p=33760#post33760
-
-2007-10-18 03:06  (merlinyoda)
----------------------------------
-modules/tasks/tasks.class.php
-- 
-- Fixed copy/paste error made when converting "static" queries
-- to "query class" queries.
-
-2007-10-18 02:02  (merlinyoda)
----------------------------------
-modules/tasks/tasks.class.php
-- 
-- Fix on Mantis Bug Report #2178
-
-2007-10-17 10:10  (nybod)
----------------------------------
-modules/tasks/tasks.class.php
-- Mantis 2177 - Fixed typo in getAssignedUsers function.
+------------------------------------------------------------------------
+r5530 | ajdonnison | 2007-11-15 18:59:09 +1100 (Thu, 15 Nov 2007) | 2 lines
 
+#2241 - Fix broken html.
+
+------------------------------------------------------------------------
+r5531 | ajdonnison | 2007-11-16 17:19:40 +1100 (Fri, 16 Nov 2007) | 2 lines
+
+Fix the broken orphan handling which was duplicating tasks at the end of the display.  This probably isn't necessary any more as you can no longer assign someone who can't see other tasks in the project.
+
+------------------------------------------------------------------------
+r5532 | ajdonnison | 2007-11-16 23:00:14 +1100 (Fri, 16 Nov 2007) | 2 lines
+
+Fix bug where Subject header is duplicated in output.
+
+------------------------------------------------------------------------
+r5533 | ajdonnison | 2007-11-16 23:13:12 +1100 (Fri, 16 Nov 2007) | 2 lines
+
+#2245 - Fix headers used in php mail function.  Original version would clobber Reply-To headers, munging email.
+
+------------------------------------------------------------------------
+r5535 | ajdonnison | 2007-11-18 10:09:01 +1100 (Sun, 18 Nov 2007) | 2 lines
+
+#2247 - Make sure events tab for projects only shows events for that project and not events unbound to projects.
+
+------------------------------------------------------------------------
+r5536 | ajdonnison | 2007-11-19 08:57:31 +1100 (Mon, 19 Nov 2007) | 2 lines
+
+#2248 - Fix Debian bug in downloading files.
+
+------------------------------------------------------------------------
+r5537 | ajdonnison | 2007-11-21 20:36:54 +1100 (Wed, 21 Nov 2007) | 2 lines
+
+#2249 - Fix quoted printable encoding of headers.  Don't bother trying to compensate for an arbitrary line length as it is not a mandatory part of the standard.
+
+------------------------------------------------------------------------
+r5538 | ajdonnison | 2007-11-22 21:26:23 +1100 (Thu, 22 Nov 2007) | 2 lines
+
+#2220 - Fix dependecies across import using patch from mckinnej
+
+------------------------------------------------------------------------
+r5539 | ajdonnison | 2007-11-22 21:51:44 +1100 (Thu, 22 Nov 2007) | 2 lines
+
+#2251 - Fix broken URL in file update notification email with workaround from TheBAFH
+
+------------------------------------------------------------------------
+r5540 | cyberhorse | 2007-11-25 14:47:06 +1100 (Sun, 25 Nov 2007) | 2 lines
+
+FEATURE improved module upgrade messages
+
+------------------------------------------------------------------------
+r5541 | ajdonnison | 2007-11-26 09:31:12 +1100 (Mon, 26 Nov 2007) | 2 lines
+
+#2254 - Patch from beni_gf to fix invalid permissions in forums.
+
+------------------------------------------------------------------------
+r5542 | ajdonnison | 2007-11-26 20:00:05 +1100 (Mon, 26 Nov 2007) | 2 lines
+
+#2250 - Fix user preferences so that default are just that.
+
+------------------------------------------------------------------------
+r5543 | merlinyoda | 2007-11-27 06:37:16 +1100 (Tue, 27 Nov 2007) | 4 lines
+
+Cleaned up some display output that was not using the _() translation function.
+Hopefully this helps with Mantis Report #2258
+
+
+------------------------------------------------------------------------
+r5544 | merlinyoda | 2007-11-27 12:04:12 +1100 (Tue, 27 Nov 2007) | 5 lines
+
+
+Changes to clean up calandar view. 
+Also fixes made to errors that snuck in when working on Mantis Report #2258
+
+
+------------------------------------------------------------------------
+r5545 | ajdonnison | 2007-11-28 08:46:18 +1100 (Wed, 28 Nov 2007) | 2 lines
+
+#2253 - Don't bother doing db lookups on tasks when opening/closing all.
+
+------------------------------------------------------------------------
+r5546 | merlinyoda | 2007-11-29 10:54:52 +1100 (Thu, 29 Nov 2007) | 5 lines
+
+
+Tweaks towards fixing Mantis Report #2261. 
+Some changes made here should probably be reflected in trunk.
+
+
+------------------------------------------------------------------------
+r5547 | merlinyoda | 2007-11-29 12:18:07 +1100 (Thu, 29 Nov 2007) | 3 lines
+
+More file module clean-up.
+
+
+------------------------------------------------------------------------
+r5548 | ajdonnison | 2007-11-29 12:22:46 +1100 (Thu, 29 Nov 2007) | 2 lines
+
+Update mime type and files to ensure they aren't corrupted by SVN.
+
+------------------------------------------------------------------------
+r5549 | merlinyoda | 2007-11-30 02:28:02 +1100 (Fri, 30 Nov 2007) | 5 lines
+
+
+Fixed issue mentioned on Maintenance List: some html was getting "translated". 
+Seems I got a little overzealous with translation when fixing Mantis Report #2258 :-)
+
+
+------------------------------------------------------------------------
+r5550 | ajdonnison | 2007-12-02 09:47:30 +1100 (Sun, 02 Dec 2007) | 2 lines
+
+Still corrupting, looks like they had an svn:eol-style property set.
+
+------------------------------------------------------------------------
+r5551 | ajdonnison | 2007-12-05 09:24:16 +1100 (Wed, 05 Dec 2007) | 2 lines
+
+Removed blank line that was causing gantts to fail.
+
+------------------------------------------------------------------------
+r5552 | merlinyoda | 2007-12-06 12:13:45 +1100 (Thu, 06 Dec 2007) | 5 lines
+
+
+Fix for Manits Bug Report #2264
+Also some clean-up on files I was checking through while hunting bug.
+
+
+------------------------------------------------------------------------
+r5553 | ajdonnison | 2007-12-07 09:49:51 +1100 (Fri, 07 Dec 2007) | 2 lines
+
+Fix for permissions related problem relating to http://forums.dotproject.net/showthread.php?t=7735
+
+------------------------------------------------------------------------
+r5554 | cyberhorse | 2007-12-07 14:16:09 +1100 (Fri, 07 Dec 2007) | 1 line
+
+When task dates' checks are disabled, make sure there is some date submitted (0000-00-00). Otherwise, there is a fatal error.
+------------------------------------------------------------------------
+r5556 | cyberhorse | 2007-12-07 15:06:41 +1100 (Fri, 07 Dec 2007) | 1 line
+
+#2187 - A better fix, covering also cases where the end project dates are not set ... and a few other exceptional conditions
+------------------------------------------------------------------------
+r5557 | merlinyoda | 2007-12-08 11:25:04 +1100 (Sat, 08 Dec 2007) | 7 lines
+
+
+Modifications to fix Mantis Report #2258.
+Quick locale flip to 'en_AU' before Date_Calc function calls.
+Locale is changed immedaitely to user's locale setting after call is complete
+Prevents strftime calls in some Date_Calc functions from translating information before we can.
+
+
+------------------------------------------------------------------------
+r5559 | ajdonnison | 2007-12-10 08:22:12 +1100 (Mon, 10 Dec 2007) | 2 lines
+
+#2271 - Fix problem with forgot password redirect error.
+
+------------------------------------------------------------------------
+r5577 | ajdonnison | 2007-12-17 22:00:06 +1100 (Mon, 17 Dec 2007) | 2 lines
+
+#2249 - Encode UTF8 characters into quoted printable making sure they encode on a single line.
+
+------------------------------------------------------------------------
+r5579 | ajdonnison | 2007-12-18 08:07:27 +1100 (Tue, 18 Dec 2007) | 2 lines
+
+Minor fix to handle = and ? in headers.
+
+------------------------------------------------------------------------
+r5580 | ajdonnison | 2007-12-18 08:11:46 +1100 (Tue, 18 Dec 2007) | 2 lines
+
+No longer uses imap_8bit, no need to check for it.
+
+------------------------------------------------------------------------
+r5585 | merlinyoda | 2007-12-20 10:38:33 +1100 (Thu, 20 Dec 2007) | 1 line
+
+Merged branches/stable_2_experimental changes r5563:5584 into branches/stable_2.
+------------------------------------------------------------------------
+r5587 | ajdonnison | 2007-12-20 20:56:21 +1100 (Thu, 20 Dec 2007) | 2 lines
+
+Performance improvements:  a) don't re-read the task from the db just to see if it is dynamic and b) use key lookups on arrays, they are faster.
+
+------------------------------------------------------------------------
+r5588 | ajdonnison | 2007-12-20 22:06:21 +1100 (Thu, 20 Dec 2007) | 2 lines
+
+Minor performance improvements throughout, cleanup of some collateral damage from branch merge.
+
+------------------------------------------------------------------------
+r5589 | cyberhorse | 2007-12-22 10:03:48 +1100 (Sat, 22 Dec 2007) | 1 line
+
+#2284 - Fixed XHTML validity issue
+------------------------------------------------------------------------
+r5590 | cyberhorse | 2007-12-22 10:14:27 +1100 (Sat, 22 Dec 2007) | 1 line
+
+#2277 Suggested fix applied for missing report description files
+------------------------------------------------------------------------
+r5592 | TheIdeaMan | 2007-12-23 07:52:28 +1100 (Sun, 23 Dec 2007) | 1 line
+
+#2287 - project listing speed improvements
+------------------------------------------------------------------------
+r5593 | TheIdeaMan | 2007-12-23 15:06:45 +1100 (Sun, 23 Dec 2007) | 1 line
+
+removing unnecessary count queries
+------------------------------------------------------------------------
+r5594 | merlinyoda | 2008-01-01 07:51:46 +1100 (Tue, 01 Jan 2008) | 3 lines
+
+Clean-up and attempt to fix Mantis Bug Report #2273
+
+
+------------------------------------------------------------------------
+r5595 | merlinyoda | 2008-01-01 08:14:58 +1100 (Tue, 01 Jan 2008) | 3 lines
+
+Fix for Mantis Report #2290
+
+
+------------------------------------------------------------------------
+r5596 | merlinyoda | 2008-01-01 09:12:03 +1100 (Tue, 01 Jan 2008) | 4 lines
+
+Fixed bug that was causing "All" tab under Projects not to display properly.
+It seems the "magic number" 500 was being used as a project_status value.
+
+
+------------------------------------------------------------------------
+r5597 | merlinyoda | 2008-01-01 09:37:27 +1100 (Tue, 01 Jan 2008) | 4 lines
+
+Fixed bug involving unhandeled case where method is called without 
+passing an id value and object is not "loaded" prior to calling.
+
+
+------------------------------------------------------------------------
+r5598 | ajdonnison | 2008-01-02 18:58:33 +1100 (Wed, 02 Jan 2008) | 2 lines
+
+#2294 - selections only remember newest checked selection.
+
+------------------------------------------------------------------------
+r5599 | gregorerhardt | 2008-01-08 23:57:22 +1100 (Tue, 08 Jan 2008) | 1 line
+
+new custom field type for files which are automatically uploaded
+------------------------------------------------------------------------
+r5600 | merlinyoda | 2008-01-09 00:50:25 +1100 (Wed, 09 Jan 2008) | 4 lines
+
+Changed check for access permission to check add permission.
+Basically a copy/paste error I overlooked.
+
+
+------------------------------------------------------------------------
+r5602 | ajdonnison | 2008-01-10 19:14:24 +1100 (Thu, 10 Jan 2008) | 3 lines
+
+Enable the tasks list report to display similar to normal task lists
+using a tree structure.
+
+------------------------------------------------------------------------
+r5603 | ajdonnison | 2008-01-10 21:59:14 +1100 (Thu, 10 Jan 2008) | 2 lines
+
+#2303 - Fix for permissions problem in projects listing
+
+------------------------------------------------------------------------
+r5604 | merlinyoda | 2008-01-15 02:24:10 +1100 (Tue, 15 Jan 2008) | 4 lines
+
+Code to disallow direct file access was commented out for some reason since 4 July 2007. 
+I'm guessing they were put in place to test a bug fix and were just never removed.
+
+
+------------------------------------------------------------------------
+r5605 | merlinyoda | 2008-01-15 06:26:38 +1100 (Tue, 15 Jan 2008) | 3 lines
+
+Patched SQL Injection Bug found by Ivan by means of daily google searchings.
+
+
+------------------------------------------------------------------------
+r5606 | gregorerhardt | 2008-01-16 09:56:09 +1100 (Wed, 16 Jan 2008) | 1 line
+
+Adding Internal Company Field to Projects View and AddEdit
+------------------------------------------------------------------------
+r5607 | gregorerhardt | 2008-01-17 21:30:52 +1100 (Thu, 17 Jan 2008) | 1 line
+
+Internal Company denominator renamed to Internal Division
+------------------------------------------------------------------------
+r5608 | ajdonnison | 2008-01-18 23:46:28 +1100 (Fri, 18 Jan 2008) | 2 lines
+
+Added Greg's changes.
+
+------------------------------------------------------------------------
+r5609 | cyberhorse | 2008-01-25 15:07:16 +1100 (Fri, 25 Jan 2008) | 1 line
+
+#2299 - Fixed counter in tabs (same as number of major files inside)
+------------------------------------------------------------------------
+r5610 | cyberhorse | 2008-01-25 15:26:41 +1100 (Fri, 25 Jan 2008) | 1 line
+
+#2297 - fixed. Had to do with folder permissions
+------------------------------------------------------------------------
+r5612 | ajdonnison | 2008-02-05 19:23:30 +1100 (Tue, 05 Feb 2008) | 2 lines
+
+#2281 - Later versions of PHP bitch when using references to $this.
+
+------------------------------------------------------------------------
+r5613 | ajdonnison | 2008-02-09 11:05:14 +1100 (Sat, 09 Feb 2008) | 2 lines
+
+Fix problem where fields for single project still include project name and push all fields one to the right.
+
+------------------------------------------------------------------------
+r5621 | TheIdeaMan | 2008-02-13 06:20:59 +1100 (Wed, 13 Feb 2008) | 1 line
+
+readDirs now ignores .svn files
+------------------------------------------------------------------------
+r5622 | ajdonnison | 2008-02-14 22:39:20 +1100 (Thu, 14 Feb 2008) | 2 lines
+
+#2330 - Fix email sending on some SMTP servers.
+
+------------------------------------------------------------------------
+r5623 | ajdonnison | 2008-02-17 13:55:54 +1100 (Sun, 17 Feb 2008) | 2 lines
+
+Fix problem on some versions of MySQL which return an ambiguous company_id.
+
+------------------------------------------------------------------------
+r5624 | ajdonnison | 2008-02-17 14:14:12 +1100 (Sun, 17 Feb 2008) | 2 lines
+
+Use brackets (even though not required) so that php 4 will parse the clone as a function and not return an error.
+
+------------------------------------------------------------------------
+r5625 | ajdonnison | 2008-02-17 20:47:57 +1100 (Sun, 17 Feb 2008) | 2 lines
+
+#2296 - Make display of permissions more consistent.
+
+------------------------------------------------------------------------
+r5626 | ajdonnison | 2008-02-19 08:57:27 +1100 (Tue, 19 Feb 2008) | 2 lines
+
+Fix issue with Reply-To headers in queued email.
+
+------------------------------------------------------------------------
+r5627 | merlinyoda | 2008-02-19 11:56:40 +1100 (Tue, 19 Feb 2008) | 3 lines
+
+Applying change noted in Mantis report #0002326.
+
+
+------------------------------------------------------------------------
+r5628 | merlinyoda | 2008-02-27 10:17:31 +1100 (Wed, 27 Feb 2008) | 3 lines
+
+Fix for Mantis Report #2318. 
+$newTask variable was not being re-initialized for each newly imported/updated task.
+
+------------------------------------------------------------------------
+r5629 | TheIdeaMan | 2008-03-01 03:26:48 +1100 (Sat, 01 Mar 2008) | 1 line
+
+minor forum module display and project relation improvements
+------------------------------------------------------------------------
+r5630 | TheIdeaMan | 2008-03-01 03:29:49 +1100 (Sat, 01 Mar 2008) | 1 line
+
+active project listing tab for calendar day_view; loadExtras added to calendar day_view
+------------------------------------------------------------------------
+r5631 | ajdonnison | 2008-03-04 18:31:09 +1100 (Tue, 04 Mar 2008) | 2 lines
+
+Fix potential SQL injection bug.
+
+------------------------------------------------------------------------
+r5632 | cyberhorse | 2008-03-06 11:25:09 +1100 (Thu, 06 Mar 2008) | 1 line
+
+Keep assigned users when importing from template project 
+------------------------------------------------------------------------
+r5633 | cyberhorse | 2008-03-12 22:14:40 +1100 (Wed, 12 Mar 2008) | 1 line
+
+Record IP of users that change passwords
+------------------------------------------------------------------------
+r5634 | cyberhorse | 2008-03-12 22:17:26 +1100 (Wed, 12 Mar 2008) | 1 line
+
+#2344 - Fixed history module issue with plural forms in english language
+------------------------------------------------------------------------
+r5639 | merlinyoda | 2008-03-20 05:25:58 +1100 (Thu, 20 Mar 2008) | 6 lines
+
+Fix for Mantis Report #2353
+
+Needed to clear out socket before sending authentication information.
+Some "chatty" mail servers would throw off the code for SMTP authentication.
+
+
+------------------------------------------------------------------------
+r5640 | merlinyoda | 2008-03-20 10:39:55 +1100 (Thu, 20 Mar 2008) | 5 lines
+
+Fix for bug related to Mantis Report #2346
+(a count was incorrect but not in the way the reporter describes it)
+
+Also fixed some other file and folder module view-related errors.
+
+------------------------------------------------------------------------
+r5641 | merlinyoda | 2008-03-20 11:17:54 +1100 (Thu, 20 Mar 2008) | 4 lines
+
+More tweaks to file listings. Fixes fixes residual issues 
+noted in Mantis Report #2343 
+
+
+------------------------------------------------------------------------
+r5642 | merlinyoda | 2008-03-20 11:21:38 +1100 (Thu, 20 Mar 2008) | 2 lines
+
+Forgot to drop temporary table used for listing.
+
+------------------------------------------------------------------------
+r5643 | merlinyoda | 2008-03-21 02:04:43 +1100 (Fri, 21 Mar 2008) | 5 lines
+
+Fix for Mantis Report #2329. Data being returned was different than expected.
+Added parameters to call to getAllowedRecords() and massaged results 
+into useable format.
+
+
+------------------------------------------------------------------------
+r5644 | merlinyoda | 2008-03-21 11:32:25 +1100 (Fri, 21 Mar 2008) | 5 lines
+
+Attempt at Fix for Mantis Report #2311
+
+Also "resurected" other vw_idx_* views which didn't 
+seem to be getting referenced properly.
+
+------------------------------------------------------------------------
+r5645 | merlinyoda | 2008-03-22 11:03:31 +1100 (Sat, 22 Mar 2008) | 11 lines
+
+Added functionality to "fix" problem of users trying 
+to set tasks as dynamic when task has no children. 
+The system will now throw an error if a user tries to 
+set a childless task as dynamic in the same way it 
+would throw an error if there was a dependancy error
+(in some ways it *is* a dependancy error).
+
+Also cleaned up some formatting in do_task_aed.php 
+while pondering the best place for this check.
+
+
+------------------------------------------------------------------------
+r5647 | merlinyoda | 2008-03-27 00:23:26 +1100 (Thu, 27 Mar 2008) | 6 lines
+
+Tweak to new code in check() in task class. 
+It seems that PHP had a problem with returning 
+a result from a self-referenced class function 
+and using it as the argument of a global function.
+
+
+------------------------------------------------------------------------
+r5648 | merlinyoda | 2008-03-27 08:25:34 +1100 (Thu, 27 Mar 2008) | 2 lines
+
+Fix for Mantis Report #2361. colum index needed to be more explicitly specified.
+
+------------------------------------------------------------------------
+r5649 | merlinyoda | 2008-03-29 04:06:54 +1100 (Sat, 29 Mar 2008) | 10 lines
+
+Replaced check against function call to checkModuleItem() 
+with check against variable containing the return value 
+of the same call to checkModuleItem().
+
+This call is now done once and it's return value stored 
+before the foreach loop it is used within rather than 
+it being called for each interation.
+
+Also some minor formatting clean-up.
+
+------------------------------------------------------------------------
+r5654 | merlinyoda | 2008-04-05 11:40:08 +1100 (Sat, 05 Apr 2008) | 10 lines
+
+Task sorting by project/priority per Mantis Report #2311
+Also modified behavior of array_csort() in tasks.class.php 
+to behave in a less dynamic but more stable fashion.
+Previous implementation of said function (improperly?) assumed
+that flag values did not evaluate as strings and thus 
+may not have been sorting properly in all cases.
+
+Also did some minor format cleaning.
+
+
+------------------------------------------------------------------------
+r5655 | ajdonnison | 2008-04-05 13:44:01 +1100 (Sat, 05 Apr 2008) | 2 lines
+
+Simplify the logic so we don't have two separate functions that do pretty much the same thing.
+
+------------------------------------------------------------------------
+r5656 | ajdonnison | 2008-04-05 16:00:25 +1100 (Sat, 05 Apr 2008) | 2 lines
+
+#2323 - Make sure MySQL modes don't cause us grief.
+
+------------------------------------------------------------------------
+r5657 | ajdonnison | 2008-04-05 16:14:10 +1100 (Sat, 05 Apr 2008) | 2 lines
+
+Remove debug left behind.
+
+------------------------------------------------------------------------
+r5658 | ajdonnison | 2008-04-05 16:43:07 +1100 (Sat, 05 Apr 2008) | 3 lines
+
+#2305 - Now respects company/project restrictions so you can't
+see tasks from projects you don't have view access to.
+
+------------------------------------------------------------------------
+r5659 | cyberhorse | 2008-04-07 06:08:05 +1000 (Mon, 07 Apr 2008) | 1 line
+
+Ignore Eclipse project files
+------------------------------------------------------------------------
+r5669 | ajdonnison | 2008-04-13 15:03:30 +1000 (Sun, 13 Apr 2008) | 2 lines
+
+Fixed warning error with no folders.
+
+------------------------------------------------------------------------
+r5670 | ajdonnison | 2008-04-13 15:41:29 +1000 (Sun, 13 Apr 2008) | 2 lines
+
+Attempt to fix problem with Gmail - assuming it is because it doesn't handle the RFC correctly and requires TAB instead of whitespace.
+
+------------------------------------------------------------------------
+r5671 | ajdonnison | 2008-04-13 15:42:03 +1000 (Sun, 13 Apr 2008) | 2 lines
+
+#2378 - Fix vCard input.
+
+------------------------------------------------------------------------
+r5673 | merlinyoda | 2008-04-16 05:36:53 +1000 (Wed, 16 Apr 2008) | 3 lines
+
+Revising fix for Mantis Report #2269. 
+Made check optional. Toggled by new system config variable.
+
+------------------------------------------------------------------------
+r5674 | merlinyoda | 2008-04-16 07:56:22 +1000 (Wed, 16 Apr 2008) | 9 lines
+
+Fix for Mantis Report #2348. 
+All level of a task's "Child Tasks" tree now 
+display as opposed the first level.
+
+Also some minor format clean-up and removed obsolete 
+use of '=&' assignment operator in conjunction with 
+the 'new' operator (i.e. $t =& new Task();). 
+
+
+------------------------------------------------------------------------
+r5675 | merlinyoda | 2008-04-16 11:54:04 +1000 (Wed, 16 Apr 2008) | 3 lines
+
+Fixes for Mantis Report #2300 and #2301
+Some additional files to be added.
+
+------------------------------------------------------------------------
+r5676 | merlinyoda | 2008-04-16 11:56:40 +1000 (Wed, 16 Apr 2008) | 2 lines
+
+New file to resolve Mantis Report #2300
+
+------------------------------------------------------------------------
+r5681 | merlinyoda | 2008-04-19 09:45:55 +1000 (Sat, 19 Apr 2008) | 6 lines
+
+Fix for Mantis Report #2371 and also some major clean up to 
+"Task per User" related pages as well 
+as some suplemental clean-up (i.e. removing depricated 
+functions from main_functions.php, Gantt-related page touch-up, etc.)
+
+
+------------------------------------------------------------------------
+r5682 | merlinyoda | 2008-04-19 10:00:37 +1000 (Sat, 19 Apr 2008) | 4 lines
+
+Adding first name of contact back in getAssignedUsers() 
+function's output for use in display.
+
+
+------------------------------------------------------------------------
+r5685 | merlinyoda | 2008-04-29 09:14:00 +1000 (Tue, 29 Apr 2008) | 6 lines
+
+Fix for Mantis Bug Report #2377:
+Projects now sort by status "numerically" 
+(based on order of status in the status list)
+instead "alphabetically" (based on status title)
+
+
+------------------------------------------------------------------------
+r5686 | merlinyoda | 2008-04-29 09:48:20 +1000 (Tue, 29 Apr 2008) | 5 lines
+
+Fix for Mantis Report #2382:
+Removed all traces of ambiguous column names 
+as well as potentially ambiguous column names.
+
+
+------------------------------------------------------------------------
+r5687 | merlinyoda | 2008-04-29 10:21:22 +1000 (Tue, 29 Apr 2008) | 4 lines
+
+Fix for Mantis Report #2385:
+Joined in necessary tables to satisfy permission 
+checks against necessary IDs
+
+------------------------------------------------------------------------
+r5688 | merlinyoda | 2008-04-29 10:39:22 +1000 (Tue, 29 Apr 2008) | 6 lines
+
+Fix for Mantis Report #2384:
+Replaced call to permission object function 
+using undefined permission object with general 
+permission check function used elsewhere in code
+
+
+------------------------------------------------------------------------
+r5689 | merlinyoda | 2008-04-30 04:21:18 +1000 (Wed, 30 Apr 2008) | 4 lines
+
+Possibly a fix for Mantis Report #2376 
+... or fix was made previously 
+... either way it *seems* to have disappeared :-)
+
+------------------------------------------------------------------------
+r5690 | merlinyoda | 2008-04-30 10:50:20 +1000 (Wed, 30 Apr 2008) | 3 lines
+
+Fix for Mantis Report #2295:
+Search results now honor permissions.
+
+------------------------------------------------------------------------
+r5691 | merlinyoda | 2008-05-01 07:34:23 +1000 (Thu, 01 May 2008) | 4 lines
+
+Fix for Mantis Report #2373:
+The status type array hadn't been fetched into the variable referencing it.
+... also somce minor "cleanup" on a few files I stumbled across in the process
+
+------------------------------------------------------------------------
+r5692 | merlinyoda | 2008-05-01 08:52:52 +1000 (Thu, 01 May 2008) | 4 lines
+
+Submitting some clean-up changes. 
+May have, by coincidence, fixed Mantis Report #2375 
+in or previous to this submission.
+
+------------------------------------------------------------------------
+r5693 | merlinyoda | 2008-05-01 11:00:15 +1000 (Thu, 01 May 2008) | 7 lines
+
+Fix (hopefully) for Mantis Report #2383:
+Added code to copy dependancies to copy() function. Added code to deepCopy() 
+function to update a parent tasks' dependancies so that any dependancies 
+to old child tasks (only one level down) are now dependancies on the 
+child tasks' copies
+
+
+------------------------------------------------------------------------
+r5694 | merlinyoda | 2008-05-02 07:24:34 +1000 (Fri, 02 May 2008) | 5 lines
+
+Fix for problem noted in but unrelated to Mantis Report #2375:
+Neglected to change leftJoin() call to innerJoin() call.
+
+... also some indentation/spacing clean up in an unrelated file
+
+------------------------------------------------------------------------
+r5695 | merlinyoda | 2008-05-02 07:36:50 +1000 (Fri, 02 May 2008) | 4 lines
+
+Fixed small "work in progress" error
+... never submit changes for small fixes when working on a larger issue :-)
+
+
+------------------------------------------------------------------------
+r5696 | merlinyoda | 2008-05-02 07:43:37 +1000 (Fri, 02 May 2008) | 2 lines
+
+More fixes for fixes...
+
+------------------------------------------------------------------------
+r5697 | merlinyoda | 2008-05-02 09:07:50 +1000 (Fri, 02 May 2008) | 3 lines
+
+Fix for Mantis Report# 2375:
+Added code to limit results returned for generating links.
+
+------------------------------------------------------------------------
+r5698 | merlinyoda | 2008-05-06 01:11:35 +1000 (Tue, 06 May 2008) | 3 lines
+
+Fix for Mantis Report #2396
+... check-in weirdness
+
+------------------------------------------------------------------------
+r5699 | merlinyoda | 2008-05-06 04:55:11 +1000 (Tue, 06 May 2008) | 3 lines
+
+Fix towards Mantis Report #2395
+... also some formatting cleanup.
+
+------------------------------------------------------------------------
+r5700 | merlinyoda | 2008-05-06 05:46:29 +1000 (Tue, 06 May 2008) | 2 lines
+
+"Fix" for Mantis Report 2356.
+
+------------------------------------------------------------------------
+r5701 | merlinyoda | 2008-05-07 02:52:34 +1000 (Wed, 07 May 2008) | 3 lines
+
+Fix for remaining isues on Mantis Report #2264
+Needed permission checking on project status counts.
+
+------------------------------------------------------------------------
+r5702 | merlinyoda | 2008-05-07 08:28:35 +1000 (Wed, 07 May 2008) | 3 lines
+
+Fix for Mantis Report 2374:
+Swaped "per project" report buttons for breadcrumb to reports on index page.
+
+------------------------------------------------------------------------
+r5703 | merlinyoda | 2008-05-08 07:43:18 +1000 (Thu, 08 May 2008) | 3 lines
+
+More fixes towards Mantis Report #2383.
+
+
+------------------------------------------------------------------------
+r5705 | merlinyoda | 2008-05-14 05:26:24 +1000 (Wed, 14 May 2008) | 4 lines
+
+Clean-up in base permissions class. 
+Minor formatting clean-up in modules/tasks/tasks.class.php.
+
+
+------------------------------------------------------------------------
+r5706 | merlinyoda | 2008-05-14 06:13:27 +1000 (Wed, 14 May 2008) | 2 lines
+
+Formatting and clean-up
+
+------------------------------------------------------------------------
+r5707 | merlinyoda | 2008-05-14 07:13:16 +1000 (Wed, 14 May 2008) | 2 lines
+
+More cleaning and fix from cleaning.
+
+------------------------------------------------------------------------
+r5708 | merlinyoda | 2008-05-14 08:55:58 +1000 (Wed, 14 May 2008) | 4 lines
+
+Fix for Mantis Report #2320:
+Verify that descriptions on module items are properly escaped.
+... also some formatting clean-up
+
+------------------------------------------------------------------------
+r5709 | merlinyoda | 2008-05-17 03:29:36 +1000 (Sat, 17 May 2008) | 3 lines
+
+Formatting and code improvements made while investigating 
+Mantis Report # 2406
+
+------------------------------------------------------------------------
+r5710 | merlinyoda | 2008-05-17 08:50:43 +1000 (Sat, 17 May 2008) | 7 lines
+
+Fix for Mantis Report #2388:
+Added code to check through user's roles for item-level permissions
+in getDeniedItems() and getAllowedItems() functions in dP's permission class.
+
+... makes me wonder how long these methods were functionally broken like this 
+and how may permissions bugs I just fixed and/or caused :-)
+
+------------------------------------------------------------------------
+r5711 | merlinyoda | 2008-05-17 09:31:00 +1000 (Sat, 17 May 2008) | 2 lines
+
+Removed call to invalid function dPRealPath().
+
+------------------------------------------------------------------------
+r5712 | merlinyoda | 2008-05-20 03:48:31 +1000 (Tue, 20 May 2008) | 7 lines
+
+Fixed issues related to Mantis Report #2331:
+
+Offest added to imported tasks goes by days instead of 
+time to avoid the mess of Daylight Saving Time.
+
+Non-imported tasks are left untouched by the import modification process.
+
+------------------------------------------------------------------------
+r5713 | merlinyoda | 2008-05-21 01:12:16 +1000 (Wed, 21 May 2008) | 4 lines
+
+Fix for Mantis Report #2387:
+The durration on milestone tasks is forced to 0 whenever check() is called.
+
+
+------------------------------------------------------------------------
+r5714 | merlinyoda | 2008-05-21 10:47:24 +1000 (Wed, 21 May 2008) | 7 lines
+
+Fix for Mantis Report #2402:
+Gantt chart object for Milestone tasks now displays properly.
+The object will always appear in the middle of the day 
+of the task's start date reguardless of the time value.
+
+... also a lot of incidental clean up.
+
+------------------------------------------------------------------------
+r5715 | merlinyoda | 2008-05-27 23:03:24 +1000 (Tue, 27 May 2008) | 3 lines
+
+Fix for Mantis Report #2416:
+Fixed typo.
+
+------------------------------------------------------------------------
+r5716 | merlinyoda | 2008-05-28 09:50:04 +1000 (Wed, 28 May 2008) | 3 lines
+
+Fix for Mantis Report #2302:
+Item level permission names now update when related module item name updates.
+
+------------------------------------------------------------------------
+r5717 | ajdonnison | 2008-05-28 19:04:08 +1000 (Wed, 28 May 2008) | 2 lines
+
+Forum post # 37513 - Handle special chars in database name.
+
+------------------------------------------------------------------------
+r5718 | theideaman | 2008-05-29 01:22:54 +1000 (Thu, 29 May 2008) | 1 line
+
+display project name when selecting task to allow or deny
+------------------------------------------------------------------------
+r5719 | merlinyoda | 2008-05-29 23:40:26 +1000 (Thu, 29 May 2008) | 3 lines
+
+Fix for Mantis Report #2418:
+Removed echo statement used for debugging.
+
+------------------------------------------------------------------------
+r5721 | ajdonnison | 2008-05-30 21:49:09 +1000 (Fri, 30 May 2008) | 2 lines
+
+From A.Schaeffer (post #37559) on the forums, slightly tweaked.
+
+------------------------------------------------------------------------
+r5722 | ajdonnison | 2008-05-31 12:25:52 +1000 (Sat, 31 May 2008) | 2 lines
+
+Fix for problem reported to Secunia Research (before it was reported to us), and related problem with permissions not being applied to pages actually doing the work.
+
+------------------------------------------------------------------------
+r5723 | ajdonnison | 2008-05-31 12:40:15 +1000 (Sat, 31 May 2008) | 2 lines
+
+Check permissions before we do anything with users.
+
+------------------------------------------------------------------------
+r5724 | theideaman | 2008-06-03 02:01:37 +1000 (Tue, 03 Jun 2008) | 1 line
+
+fixing per-task permission loop-holes; fixed company view link from user info screen
+------------------------------------------------------------------------
+r5725 | merlinyoda | 2008-06-03 02:20:34 +1000 (Tue, 03 Jun 2008) | 4 lines
+
+"Fix" for Mantis Report #2422:
+Removed newline at end of style/default/overrides.php
+
+
+------------------------------------------------------------------------
+r5726 | merlinyoda | 2008-06-03 10:44:18 +1000 (Tue, 03 Jun 2008) | 3 lines
+
+Fix for Mantis Report #2403 as well as several permissions improvements.
+Especially improvements towards history view.
+
+------------------------------------------------------------------------
+r5727 | merlinyoda | 2008-06-05 08:44:25 +1000 (Thu, 05 Jun 2008) | 8 lines
+
+Fix (hopefully) for Mantis Report 2401:
+More liberal use of the store() call in move() and deepMove() functions.
+
+... also some "clean up" in various files while investigating
+... also added "permissions name" class variable for base dP class to be used
+in place of the "table name" for permissions checks (defaults to "table name"
+if not specified (as the name of the module is usually the same as the table)
+
+------------------------------------------------------------------------
+r5728 | merlinyoda | 2008-06-06 09:59:32 +1000 (Fri, 06 Jun 2008) | 4 lines
+
+Fix for Mantis Report 2427:
+JavaScript function used improper method for testing 
+whether checkbox was check or not.
+
+------------------------------------------------------------------------
+r5730 | merlinyoda | 2008-06-07 04:44:57 +1000 (Sat, 07 Jun 2008) | 3 lines
+
+Fix for Mantis Report 2428:
+"sort by" link function makes use of $_GET array instead of assuming values.
+
+------------------------------------------------------------------------
+r5731 | merlinyoda | 2008-06-07 09:02:31 +1000 (Sat, 07 Jun 2008) | 4 lines
+
+Fix for Mantis Report #2430:
+Force empty task start/end date post field values to '000000000000' 
+to keep PEAR warmings from displaying.
+
+------------------------------------------------------------------------
+r5732 | merlinyoda | 2008-06-09 23:47:11 +1000 (Mon, 09 Jun 2008) | 3 lines
+
+Fix for Mantis Report #2431:
+Updated README with appropriate URLs.
+
+------------------------------------------------------------------------
+r5734 | merlinyoda | 2008-06-11 03:24:00 +1000 (Wed, 11 Jun 2008) | 3 lines
+
+Fixed some small quirks with task access levels noted in forums
+Forum thread URL: http://forums.dotproject.net/showthread.php?p=37712
+
+------------------------------------------------------------------------
+r5736 | ajdonnison | 2008-06-16 19:19:49 +1000 (Mon, 16 Jun 2008) | 2 lines
+
+Fix typo
+
+------------------------------------------------------------------------
+r5737 | ajdonnison | 2008-06-16 19:38:56 +1000 (Mon, 16 Jun 2008) | 1 line
+
+Simplify options table to make layout cleaner
+------------------------------------------------------------------------
+r5738 | ajdonnison | 2008-06-16 19:55:13 +1000 (Mon, 16 Jun 2008) | 2 lines
+
+Fix selection of user details.
+
+------------------------------------------------------------------------
+r5739 | ajdonnison | 2008-06-16 22:09:35 +1000 (Mon, 16 Jun 2008) | 2 lines
+
+Fix problem with MySQL 5.1 where CREATOR is now a reserved word.
+
+------------------------------------------------------------------------
+r5740 | ajdonnison | 2008-06-16 22:14:44 +1000 (Mon, 16 Jun 2008) | 2 lines
+
+Reverted change, looking at the error message incorrectly.
+
+------------------------------------------------------------------------
+r5741 | merlinyoda | 2008-06-18 00:34:01 +1000 (Wed, 18 Jun 2008) | 4 lines
+
+Applied changes noted in Mantis Report #2435.
+Task Access types are now (in order of "increasing" restriction): 
+Public, Privileged, Participant, Protected, and Private
+
+------------------------------------------------------------------------
+r5742 | merlinyoda | 2008-06-18 00:38:19 +1000 (Wed, 18 Jun 2008) | 2 lines
+
+Fixed typo.
+
+------------------------------------------------------------------------
+r5744 | merlinyoda | 2008-06-20 02:35:16 +1000 (Fri, 20 Jun 2008) | 2 lines
+
+Fixed minor symantic error. Needed double qhotes when single quotes where used.
+
+------------------------------------------------------------------------
+r5749 | ajdonnison | 2008-06-27 10:15:16 +1000 (Fri, 27 Jun 2008) | 2 lines
+
+Make sure that the carefully prepared bind password is the one used in the bind.
+
+------------------------------------------------------------------------
+r5751 | ajdonnison | 2008-06-29 18:04:18 +1000 (Sun, 29 Jun 2008) | 3 lines
+
+Add validation code to ensure we don't get empty(ish) lines in the headers.
+There is a vague possibility this is causing the Sender in To field error.
+
+------------------------------------------------------------------------
+r5752 | ajdonnison | 2008-06-29 20:00:25 +1000 (Sun, 29 Jun 2008) | 2 lines
+
+Fixed clash email to use the correct field for identifying recipients.
+
+------------------------------------------------------------------------
+r5760 | merlinyoda | 2008-07-02 03:39:08 +1000 (Wed, 02 Jul 2008) | 6 lines
+
+Removing "admin" permission override.
+Having view permissions on admin module should not override task permissions.
+
+... also some formatting clean-up.
+
+
+------------------------------------------------------------------------
+r5761 | merlinyoda | 2008-07-02 04:52:45 +1000 (Wed, 02 Jul 2008) | 3 lines
+
+Updated fix for Mantis Report 2435:
+Needed to load task data from database record into object.
+
+------------------------------------------------------------------------
+r5762 | ajdonnison | 2008-07-02 20:20:46 +1000 (Wed, 02 Jul 2008) | 4 lines
+
+Add GACL Caching options to the system configs so people don't have to
+manually edit files.
+Cache Month and Weekday lookups.
+
+------------------------------------------------------------------------
+r5763 | ajdonnison | 2008-07-03 19:37:28 +1000 (Thu, 03 Jul 2008) | 2 lines
+
+#2442 Fix handling of multiple custom fields, thanks to phpgus.
+
+------------------------------------------------------------------------
+r5764 | merlinyoda | 2008-07-09 07:46:12 +1000 (Wed, 09 Jul 2008) | 6 lines
+
+Fix for Mantis Report 2447:
+Can't use class variables in PEAR's Date_Calc class 
+because it is always called statically. Replaced class variables 
+with distinct global variables. 
+... Not the "best" solution, but the "best for now" solution.
+
+------------------------------------------------------------------------
+r5766 | merlinyoda | 2008-07-10 05:54:52 +1000 (Thu, 10 Jul 2008) | 8 lines
+
+Implemented fix for task module gantt chart provided in Mantis Report #2444
+Also fixed issue with project gantt not submitting the "project type" filter 
+because sort() was used to organize the array used to generate the drop-down 
+select which broke all previously establiished key/value pairs. Used a sorting 
+method that preserves key/value pairs instead.
+
+... Also some "clean-up" in related files.
+
+------------------------------------------------------------------------
+r5767 | merlinyoda | 2008-07-10 06:14:59 +1000 (Thu, 10 Jul 2008) | 4 lines
+
+Fix for Mantis Report #2437
+File tabs now display record-for-record "physical" file count 
+instead of count of vesion ids of "logical" files.
+
+------------------------------------------------------------------------
+r5768 | merlinyoda | 2008-07-15 03:12:24 +1000 (Tue, 15 Jul 2008) | 3 lines
+
+Fix for Mantis Bug Report #2452:
+Typo in script tag. Also made tag more XHTML compliant.
+
+------------------------------------------------------------------------
+r5769 | ajdonnison | 2008-07-15 18:19:08 +1000 (Tue, 15 Jul 2008) | 3 lines
+
+#2450 - make sure the drop table is actually executed
+
+
+------------------------------------------------------------------------
+r5770 | ajdonnison | 2008-07-15 18:26:46 +1000 (Tue, 15 Jul 2008) | 2 lines
+
+dropTemp doesn't actually execute unless you call exec.
+
+------------------------------------------------------------------------
+r5771 | merlinyoda | 2008-07-16 00:41:58 +1000 (Wed, 16 Jul 2008) | 5 lines
+
+Fixes against Mantis Report #2455:
+Made file tab views more consistant. If the user has access rights to the 
+folder module, the folder view will be displayed; otherwise, the standard 
+file index view will be displayed if they have view access to the files module.
+
+------------------------------------------------------------------------
+r5772 | merlinyoda | 2008-07-16 02:56:58 +1000 (Wed, 16 Jul 2008) | 3 lines
+
+Fix for Bug causing Mantis Report 2454:
+The getNextVersionID() function wasn't returning the correct values.
+
+------------------------------------------------------------------------
+r5773 | merlinyoda | 2008-07-22 01:04:07 +1000 (Tue, 22 Jul 2008) | 5 lines
+
+Fixes for Matnis Report #2453:
+Fixed a couple XHTML complance issues. Many issues remain. 
+Some issues could likely be fixed easily in functions that generate HTML.
+Other issues would have to be fixed on a mode tedious page by page basis.
+
+------------------------------------------------------------------------
+r5774 | merlinyoda | 2008-07-22 02:21:24 +1000 (Tue, 22 Jul 2008) | 4 lines
+
+Making dPshowImage more XHTML compliant by setting image tag's 
+alt atribute value to be the same as the src attribute in cases 
+where a value for the alt attribute hasn't been specified.
+
+------------------------------------------------------------------------
+r5775 | merlinyoda | 2008-07-22 06:19:48 +1000 (Tue, 22 Jul 2008) | 4 lines
+
+Fix for Mantis Report #2458:
+Company/Project drop-down results filtered by different means 
+with respect to allowed projects/companies.
+
+------------------------------------------------------------------------
+r5776 | merlinyoda | 2008-07-22 23:36:04 +1000 (Tue, 22 Jul 2008) | 6 lines
+
+Fix for Mantis Report #2459:
+Needed to specify table alias in setAllowedSQL to disambiguate column in query.
+Also made minor improvement in setAllowedSQL in project.class.php to make use 
+of the key supplied. It is now also appended it to the index parameter of 
+setAllowedSQL which is called through the company class.
+
+------------------------------------------------------------------------
+r5777 | merlinyoda | 2008-07-23 07:15:15 +1000 (Wed, 23 Jul 2008) | 2 lines
+
+Tweak to previous improvement to fix introduced bug.
+
+------------------------------------------------------------------------
+r5778 | ajdonnison | 2008-07-23 18:04:29 +1000 (Wed, 23 Jul 2008) | 2 lines
+
+Don't waste time calculating allocations if we are not checking the over allocation.
+
+------------------------------------------------------------------------
+r5780 | merlinyoda | 2008-07-24 03:16:31 +1000 (Thu, 24 Jul 2008) | 8 lines
+
+Fix for Mantis Report #2455:
+Task notify method was not using 'MAILALL' preference as intended.
+'MAILALL' was being used to include/exclude the user making the task change 
+from being notified as opposed to being used to include the task owner in the 
+notification list (if the owner was not already notified otherwise). 
+The task class notify() function now behaves more like its calendar class 
+counterpart.
+
+------------------------------------------------------------------------
+r5781 | ajdonnison | 2008-07-24 20:49:36 +1000 (Thu, 24 Jul 2008) | 2 lines
+
+#2457 - Fix passing in of gantt options.
+
+------------------------------------------------------------------------
+r5782 | merlinyoda | 2008-07-25 07:02:34 +1000 (Fri, 25 Jul 2008) | 4 lines
+
+Fixes for Mantis Report #2437:
+Consitantly count by file_id instead of file_version_id.
+Removed invalid addGroup() call using file_version_id on total file count.
+
+------------------------------------------------------------------------
+r5783 | ajdonnison | 2008-07-25 21:49:46 +1000 (Fri, 25 Jul 2008) | 2 lines
+
+Pinch SMTP protocol code from Zend to try and improve reliability.
+
+------------------------------------------------------------------------
+r5784 | ajdonnison | 2008-07-26 13:56:57 +1000 (Sat, 26 Jul 2008) | 2 lines
+
+#2461 - Get over the fact that ezPDF only understands latin1, while all of our data should be in utf8.
+
+------------------------------------------------------------------------
+r5785 | ajdonnison | 2008-07-26 15:19:39 +1000 (Sat, 26 Jul 2008) | 2 lines
+
+#2358 - Update error messages to correctly return last message from server.
+
+------------------------------------------------------------------------
+r5786 | ajdonnison | 2008-07-28 19:27:47 +1000 (Mon, 28 Jul 2008) | 3 lines
+
+Remove total line count from the tabs as it is confusing.
+Fix the total record counts within the tab so it uses the data that is presented.
+
+------------------------------------------------------------------------
+r5787 | ajdonnison | 2008-07-28 19:58:00 +1000 (Mon, 28 Jul 2008) | 2 lines
+
+Preparing for release. Set version numbering correctly.
+
+------------------------------------------------------------------------
+r5788 | ajdonnison | 2008-07-28 20:05:48 +1000 (Mon, 28 Jul 2008) | 2 lines
+
+Final upgrade logic.
+
+------------------------------------------------------------------------
+r5789 | ajdonnison | 2008-07-29 20:24:02 +1000 (Tue, 29 Jul 2008) | 2 lines
+
+#2465 - Patch from phpgus to fix problems with HTML special chars in custom fields.
+
+------------------------------------------------------------------------
