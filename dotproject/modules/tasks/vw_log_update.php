@@ -37,14 +37,14 @@ if (!($task->canAccess($AppUI->user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$proj = &new CProject();
-$proj->load($obj->task_project);
-
 $q = new DBQuery;
-$q->addTable('billingcode', 'b');
-$q->addQuery('billingcode_id, billingcode_name');
-$q->addWhere('billingcode_status = 0');
-$q->addOrder('billingcode_name');
+$q->addTable('tasks', 't');
+$q->innerJoin('projects', 'p', 'p.project_id = t.task_project');
+$q->innerJoin('billingcode', 'b', 'b.company_id = p.project_company OR b.company_id = 0');
+$q->addQuery('b.billingcode_id, b.billingcode_name');
+$q->addWhere('b.billingcode_status = 0');
+$q->addWhere('t.task_id = ' . $task_id);
+$q->addOrder('b.billingcode_name');
 $task_log_costcodes = $q->loadHashList();
 $task_log_costcodes[0] = '';
 $q->clear();
