@@ -57,6 +57,7 @@ $perms->add_object('app', 'Companies', 'companies', 3, 0, 'axo');
 $perms->add_object('app', 'Contacts', 'contacts', 4, 0, 'axo');
 $perms->add_object('app', 'Departments', 'departments', 5, 0, 'axo');
 $perms->add_object('app', 'Files', 'files', 6, 0, 'axo');
+$perms->add_object('app', 'File Folders', 'file_folders', 6, 0, 'axo');
 $perms->add_object('app', 'Forums', 'forums', 7, 0, 'axo');
 $perms->add_object('app', 'Help', 'help', 8, 0, 'axo');
 $perms->add_object('app', 'Projects', 'projects', 9, 0, 'axo');
@@ -76,6 +77,7 @@ $perms->add_group_object($all_mods, 'app', 'events', 'axo');
 $perms->add_group_object($all_mods, 'app', 'contacts', 'axo');
 $perms->add_group_object($all_mods, 'app', 'departments', 'axo');
 $perms->add_group_object($all_mods, 'app', 'files', 'axo');
+$perms->add_group_object($all_mods, 'app', 'file_folders', 'axo');
 $perms->add_group_object($all_mods, 'app', 'forums', 'axo');
 $perms->add_group_object($all_mods, 'app', 'help', 'axo');
 $perms->add_group_object($all_mods, 'app', 'projects', 'axo');
@@ -100,6 +102,7 @@ $perms->add_group_object($non_admin_mods, 'app', 'companies', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'contacts', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'departments', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'files', 'axo');
+$perms->add_group_object($non_admin_mods, 'app', 'file_folders', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'forums', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'help', 'axo');
 $perms->add_group_object($non_admin_mods, 'app', 'projects', 'axo');
@@ -141,6 +144,9 @@ $perms->add_acl($access_perms, null, array($anon_role), null, array($non_admin_m
 
 // Worker has All on non-admin
 $perms->add_acl($all_perms, null, array($worker_role), null, array($non_admin_mods), 1, 1, null, null, 'user');
+
+// Set view permissions to users table to guest and worker roles.
+$perms->add_acl($view_perms, null, array($worker_role, $guest_role), array('app' => array('users')), null, 1, 1, null, null, 'user');
 
 // Now we have the basic set up we need to create objects for all users
 dPmsg('Converting admin user permissions to Administrator Role');

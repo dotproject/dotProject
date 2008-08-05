@@ -30,7 +30,7 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
 function dPupgrade($from_version, $to_version, $last_updated)
 {
 
-	$latest_update = '20080728'; // Set to the latest upgrade date.
+	$latest_update = '20080805'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
@@ -129,7 +129,6 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$worker = $perms->get_group_id('normal', null, 'aro');
 			$perms->add_acl(array('application' => array('view')), null, array($worker, $guest), array('app' => array('users')), null, 1, 1, null, null, 'user');
 
-		// TODO:  Add new versions here.  Keep this message above the default label.
 		case '20071104': // Last changed date.
 			// Add the permissions for task_log
 			dPmsg('Adding File Folder permissions');
@@ -142,6 +141,21 @@ function dPupgrade($from_version, $to_version, $last_updated)
 		case '20071114':
 		case '20071204':
 		case '20071218':
+		case '20080728':
+			// Seeing as we had a bug in installation/upgrade logic in previous
+			// upgrades, we need to make sure we check that the latest permissions
+			// are there.  Luckily the permissions system won't double-add objects
+			dPmsg('Checking/Updating permissions');
+			$guest = $perms->get_group_id('guest', null, 'aro');
+			$worker = $perms->get_group_id('normal', null, 'aro');
+			$perms->add_acl(array('application' => array('view')), null, array($worker, $guest), array('app' => array('users')), null, 1, 1, null, null, 'user');
+			$perms->add_object('app', 'File Folders', 'file_folders', 6, 0, 'axo');
+			$all_mods = $perms->get_group_id('all', null, 'axo');
+			$nonadmin = $perms->get_group_id('non_admin', null, 'axo');
+			$perms->add_group_object($all_mods, 'app', 'file_folders', 'axo');
+			$perms->add_group_object($nonadmin, 'app', 'file_folders', 'axo');
+
+		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;
 	}
