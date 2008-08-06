@@ -189,7 +189,7 @@ function dPgetUsername($user) {
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere("user_username LIKE '$user' OR user_id = " . $user);
+	$q->addWhere("user_username LIKE '$user' OR user_id = " . (int)$user);
 	$r = $q->loadList();
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }
@@ -199,7 +199,7 @@ function dPgetUsernameFromID($user) {
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere('user_id = ' . $user);
+	$q->addWhere('user_id = ' . (int)$user);
 	$r = $q->loadList();
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }
@@ -466,7 +466,7 @@ function dPgetSysVal($title) {
 
 function dPuserHasRole($name) {
 	global $AppUI;
-	$uid = $AppUI->user_id;
+	$uid = (int)$AppUI->user_id;
 	
 	$q	= new DBQuery;
 	$q->addTable('roles', 'r');
