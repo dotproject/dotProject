@@ -1302,7 +1302,7 @@ class CTask extends CDpObject
 				$q->clear();
 				
 				$q->addTable('user_tasks', 'ut');
-				$q->addQuery('COUNT(ut.*) AS user_task_count');
+				$q->addQuery('COUNT(*) AS user_task_count');
 				$q->addWhere('ut.user_id = ' . $user_id . ' AND ut.task_id = ' . $this->task_id);
 				$count = $q->loadResult();
 				$q->clear();
