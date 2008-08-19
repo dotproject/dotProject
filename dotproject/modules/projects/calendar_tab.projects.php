@@ -15,6 +15,10 @@ $obj = new CProject();
 // 16 August 2003
 
 $q = new DBQuery();
+$q->dropTemp('tasks_sum, tasks_summy');
+$q->exec();
+$q->clear();
+
 $q->createTemp('tasks_sum');
 $q->addQuery('task_project, COUNT(DISTINCT task_id) AS total_tasks,
 			SUM(task_duration * task_duration_type * task_percent_complete) / SUM(task_duration * task_duration_type) AS project_percent_complete');
