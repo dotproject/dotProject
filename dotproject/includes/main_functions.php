@@ -185,17 +185,17 @@ function dPgetConfig($key, $default = null) {
 }
 
 function dPgetUsername($user) {
-	$q	= new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere("user_username LIKE '$user' OR user_id = " . (int)$user);
+	$q->addWhere("user_username LIKE '" . $user . "'");
 	$r = $q->loadList();
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }
 
 function dPgetUsernameFromID($user) {
-	$q	= new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
@@ -206,7 +206,7 @@ function dPgetUsernameFromID($user) {
 
 function dPgetUsers() {
 	global $AppUI;
-	$q	= new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('user_id, concat_ws(" ", contact_first_name, contact_last_name) as name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
@@ -399,7 +399,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	if (!dPgetConfig('log_changes')) return;
 	$description = str_replace("'", "\'", $description);
 	
-	$q	= new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('modules');
 	$q->addWhere("mod_name = 'History' AND mod_active = 1");
 	$qid = $q->exec();
@@ -430,7 +430,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 ## Looks up a value from the SYSVALS table
 ##
 function dPgetSysVal($title) {
-	$q	= new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('sysvals');
 	$q->leftJoin('syskeys', 'sk', 'syskey_id = sysval_key_id');
 	$q->addQuery('syskey_type, syskey_sep1, syskey_sep2, sysval_value');
