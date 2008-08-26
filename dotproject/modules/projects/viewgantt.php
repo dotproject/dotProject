@@ -141,7 +141,12 @@ function showFullProject() {
 <tr>
 	<td>
 		<table border="0" cellpadding="4" cellspacing="0" class="tbl">
-		<form name="editFrm" method="post" action="?<?php echo 'm='.$m.'&a='.$a. (isset($user_id) ? '&user_id='.$user_id : '').'&tab='.$tab;?>">
+		<form name="editFrm" method="post" action="?<?php 
+foreach ($_GET as $key => $val) {
+	$url_query_string .= (($url_query_string) ? '&amp;' : '') . $key . '=' . $val;
+}
+echo ($url_query_string);
+?>">
 		<input type="hidden" name="display_option" value="<?php echo $display_option;?>" />
 		<tr>
 			<td align="left" valign="top" width="20">

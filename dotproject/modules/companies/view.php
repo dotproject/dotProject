@@ -3,28 +3,28 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-$company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
+$company_id = intval(dPgetParam($_GET, 'company_id', 0));
 
 // check permissions for this record
 $perms =& $AppUI->acl();
-$canRead = $perms->checkModuleItem( $m, 'view', $company_id );
-$canEdit = $perms->checkModuleItem( $m, 'edit', $company_id );
+$canRead = $perms->checkModuleItem($m, 'view', $company_id);
+$canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
 
 
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 // retrieve any state parameters
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'CompVwTab', $_GET['tab'] );
+if (isset($_GET['tab'])) {
+	$AppUI->setState('CompVwTab', $_GET['tab']);
 }
-$tab = $AppUI->getState( 'CompVwTab' ) !== NULL ? $AppUI->getState( 'CompVwTab' ) : 0;
+$tab = $AppUI->getState('CompVwTab') !== NULL ? $AppUI->getState('CompVwTab') : 0;
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $obj = new CCompany();
-$canDelete = $obj->canDelete( $msg, $company_id );
+$canDelete = $obj->canDelete($msg, $company_id);
 
 // load the record data
 $q  = new DBQuery;
@@ -39,20 +39,20 @@ $sql = $q->prepare();
 $q->clear();
 
 $obj = null;
-if (!db_loadObject( $sql, $obj )) {
-	$AppUI->setMsg( 'Company' );
-	$AppUI->setMsg( "invalidID", UI_MSG_ERROR, true );
+if (!db_loadObject($sql, $obj)) {
+	$AppUI->setMsg('Company');
+	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
 	$AppUI->redirect();
 } else {
 	$AppUI->savePlace();
 }
 
 // load the list of project statii and company types
-$pstatus = dPgetSysVal( 'ProjectStatus' );
-$types = dPgetSysVal( 'CompanyType' );
+$pstatus = dPgetSysVal('ProjectStatus');
+$types = dPgetSysVal('CompanyType');
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'View Company', 'handshake.png', $m, "$m.$a" );
+$titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(
@@ -64,12 +64,12 @@ if ($canEdit) {
 		'<form action="?m=projects&a=addedit&company_id='.$company_id.'" method="post">', '</form>'
 	);
 }
-$titleBlock->addCrumb( "?m=companies", "company list" );
+$titleBlock->addCrumb("?m=companies", "company list");
 if ($canEdit) {
-	$titleBlock->addCrumb( "?m=companies&a=addedit&company_id=$company_id", "edit this company" );
+	$titleBlock->addCrumb("?m=companies&a=addedit&company_id=$company_id", "edit this company");
 	
 	if ($canDelete) {
-		$titleBlock->addCrumbDelete( 'delete company', $canDelete, $msg );
+		$titleBlock->addCrumbDelete('delete company', $canDelete, $msg);
 	}
 }
 $titleBlock->show();
@@ -82,7 +82,7 @@ $titleBlock->show();
 if ($canDelete) {
 ?>
 function delIt() {
-	if (confirm( "<?php echo $AppUI->_('doDelete').' '.$AppUI->_('Company').'?';?>" )) {
+	if (confirm("<?php echo $AppUI->_('doDelete').' '.$AppUI->_('Company').'?';?>")) {
 		document.frmDelete.submit();
 	}
 }
@@ -134,10 +134,10 @@ function delIt() {
 			<a href='http://maps.google.com/maps?q=<?php echo @$obj->company_address1;?>+<?php echo @$obj->company_address2;?>+<?php echo @$obj->company_city;?>+<?php echo @$obj->company_state;?>+<?php echo @$obj->company_zip;?>+<?php echo @$obj->company_country;?>' target='_blank'><image align="right" border="0" src="./images/googlemaps.gif" width="55" height="22" alt="Find It on Google" /></a>
 			<?php
 						echo @$obj->company_address1
-							.( ($obj->company_address2) ? '<br />'.$obj->company_address2 : '' )
-							.( ($obj->company_city) ? '<br />'.$obj->company_city : '' )
-							.( ($obj->company_state) ? '<br />'.$obj->company_state : '' )
-							.( ($obj->company_zip) ? '<br />'.$obj->company_zip : '' )
+							.(($obj->company_address2) ? '<br />'.$obj->company_address2 : '')
+							.(($obj->company_city) ? '<br />'.$obj->company_city : '')
+							.(($obj->company_state) ? '<br />'.$obj->company_state : '')
+							.(($obj->company_zip) ? '<br />'.$obj->company_zip : '')
 							;
 			?></td>
 		</tr>
@@ -159,14 +159,14 @@ function delIt() {
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo str_replace( chr(10), "<br />", $obj->company_description);?>&nbsp;
+				<?php echo str_replace(chr(10), "<br />", $obj->company_description);?>&nbsp;
 			</td>
 		</tr>
 		
 		</table>
 		<?php
-			require_once($AppUI->getSystemClass( 'CustomFields' ));
-			$custom_fields = New CustomFields( $m, $a, $obj->company_id, "view" );
+			require_once($AppUI->getSystemClass('CustomFields'));
+			$custom_fields = New CustomFields($m, $a, $obj->company_id, "view");
 			$custom_fields->printHTML();
 		?>
 	</td>
@@ -176,12 +176,12 @@ function delIt() {
 <?php
 // tabbed information boxes
 $moddir = DP_BASE_DIR . '/modules/companies/';
-$tabBox = new CTabBox( "?m=companies&a=view&company_id=$company_id", "", $tab );
-$tabBox->add( $moddir . 'vw_active', 'Active Projects' );
-$tabBox->add( $moddir . 'vw_archived', 'Archived Projects' );
-$tabBox->add( $moddir . 'vw_depts', 'Departments' );
-$tabBox->add( $moddir . 'vw_users', 'Users' );
-$tabBox->add( $moddir . 'vw_contacts', 'Contacts' );
+$tabBox = new CTabBox("?m=companies&a=view&company_id=$company_id", "", $tab);
+$tabBox->add($moddir . 'vw_active', 'Active Projects');
+$tabBox->add($moddir . 'vw_archived', 'Archived Projects');
+$tabBox->add($moddir . 'vw_depts', 'Departments');
+$tabBox->add($moddir . 'vw_users', 'Users');
+$tabBox->add($moddir . 'vw_contacts', 'Contacts');
 $tabBox->loadExtras($m);
 $tabBox->loadExtras($m, 'view');
 $tabBox->show();

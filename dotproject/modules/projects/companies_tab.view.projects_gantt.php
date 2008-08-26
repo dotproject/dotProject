@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-global $m, $a, $addPwOiD, $AppUI, $buffer, $company_id, $min_view, $priority, $projects, $tab, $user_id;
+global $m, $a, $addPwOiD, $AppUI, $buffer, $company_id, $min_view, $priority, $projects, $tab;
 
 $perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -20,7 +20,6 @@ if (isset($_GET['tab'])) {
 	$AppUI->setState('DeptProjIdxTab', $_GET['tab']);
 }
 
-$extraGet = '&user_id='.$user_id;
 ?>
 <?php
 $min_view = true;
