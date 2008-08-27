@@ -107,7 +107,7 @@ class Hashed_Cache_Lite extends Cache_Lite
     function _create_dir_structure($dir)
     {
 		if (!@file_exists($dir)) {
-			_create_dir_structure(dirname($dir));
+			Hashed_Cache_Lite::_create_dir_structure(dirname($dir));
 			if (!mkdir($dir, 0771)) {
 				Cache_Lite::raiseError("Cache_Lite : problem creating directory \"$dir\" !", -3);
             }
