@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')){
 
 global $AppUI, $m, $a, $company_id, $dept_ids, $department, $locale_char_set;
 global $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt;
-global $sortTasksByName, $user_id, $dPconfig;
+global $sortTasksByName, $user_id, $dPconfig, $m_orig, $a_orig;
 
 ini_set('max_execution_time', 180);
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
@@ -23,6 +23,8 @@ $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
 $sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
 $addPwOiD = dPgetParam($_REQUEST, 'addPwOiD', 0);
+$m_orig = dPgetParam($_REQUEST, 'm_orig', $m);
+$a_orig = dPgetParam($_REQUEST, 'a_orig', $a);
 
 
 $projectStatus = dPgetSysVal('ProjectStatus');
@@ -84,9 +86,10 @@ if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
 	$q->addWhere('project_company = '.$company_id);
 }
 
-if ($user_id && $m == 'admin' && $a == 'admin') {
+if ($user_id && $m_orig == 'admin' && $a_orig == 'viewuser') {
 	$q->addWhere('project_owner = '.$user_id);
 }
+
 // Show Projects where the Project Owner is in the given department
 if ($addPwOiD && !empty($owner_ids)) {
 	$q->addWhere('p.project_owner IN (' . implode(',', $owner_ids) . ')');

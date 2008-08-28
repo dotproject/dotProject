@@ -4,10 +4,11 @@ if (!defined('DP_BASE_DIR')){
 }
 
 global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
+global $m_orig, $a_orig;
 
-$min_view = defVal(@$min_view, false);
-$project_id = defVal(@$_GET['project_id'], 0);
-$user_id = defVal(@$_GET['user_id'], $AppUI->user_id);
+$min_view = defVal($min_view, false);
+$project_id = dPgetParam($_GET, 'project_id', 0);
+$user_id = dPgetParam($_GET, 'user_id', $AppUI->user_id);
 // sdate and edate passed as unix time stamps
 $sdate = dPgetParam($_POST, 'sdate', 0);
 $edate = dPgetParam($_POST, 'edate', 0);
@@ -17,6 +18,8 @@ $sortTasksByName = dPgetParam($_POST, 'sortTasksByName', '0');
 $showAllGantt = dPgetParam($_POST, 'showAllGantt', '0');
 $showTaskGantt = dPgetParam($_POST, 'showTaskGantt', '0');
 $addPwOiD = dPgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
+$m_orig = $m;
+$a_orig = $a;
 
 //if set GantChart includes user labels as captions of every GantBar
 if ($showLabels!='0') {
@@ -218,7 +221,7 @@ $src = ("?m=projects&a=gantt&suppressHeaders=1" .
 	. "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) " 
 	. "+ '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter" 
 	. "&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids" 
-	. "&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD");
+	. "&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD&m_orig=$m_orig&a_orig=$a_orig");
 echo "<script>document.write('<img src=\"$src\">')</script>";
 if (!dPcheckMem(32*1024*1024)) {
 	echo "</td></tr><tr><td>";
