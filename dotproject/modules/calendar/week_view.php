@@ -12,7 +12,8 @@ require_once($AppUI->getModuleClass('tasks'));
 if (isset($_REQUEST['company_id'])) {
 	$AppUI->setState('CalIdxCompany', intval($_REQUEST['company_id']));
 }
-$company_id = $AppUI->getState('CalIdxCompany') !== NULL ? $AppUI->getState('CalIdxCompany') : $AppUI->user_company;
+$company_id = ($AppUI->getState('CalIdxCompany') !== NULL ? $AppUI->getState('CalIdxCompany') 
+               : $AppUI->user_company);
 
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 'EVENTFILTER', 'my');
 
@@ -26,14 +27,17 @@ $mm = $this_week->getMonth();
 $yy = $this_week->getYear();
 
 // prepare time period for 'events'
-$first_time = new CDate(Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$first_time = new CDate(Date_calc::beginOfWeek($dd, $mm, $yy, 
+                                               FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $first_time->setTime(0, 0, 0);
 $first_time->subtractSeconds(1);
 $last_time = new CDate(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
 
-$prev_week = new CDate(Date_calc::beginOfPrevWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
-$next_week = new CDate(Date_calc::beginOfNextWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$prev_week = new CDate(Date_calc::beginOfPrevWeek($dd, $mm, $yy, 
+                                                  FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$next_week = new CDate(Date_calc::beginOfNextWeek($dd, $mm, $yy, 
+                                                  FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 
 $tasks = CTask::getTasksForPeriod($first_time, $last_time, $company_id);
 $events = CEvent::getEventsForPeriod($first_time, $last_time);

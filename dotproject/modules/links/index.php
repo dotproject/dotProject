@@ -6,19 +6,19 @@ if (!defined('DP_BASE_DIR')){
 $AppUI->savePlace();
 
 // retrieve any state parameters
-if (isset( $_REQUEST['project_id'] )) {
-	$AppUI->setState( 'LinkIdxProject', $_REQUEST['project_id'] );
+if (isset($_REQUEST['project_id'])) {
+	$AppUI->setState('LinkIdxProject', intval($_REQUEST['project_id']));
 }
 
-$project_id = $AppUI->getState( 'LinkIdxProject' ) !== NULL ? $AppUI->getState( 'LinkIdxProject' ) : 0;
+$project_id = $AppUI->getState('LinkIdxProject') !== NULL ? $AppUI->getState('LinkIdxProject') : 0;
 
-if (dPgetParam($_GET, 'tab', -1) != -1 ) {
-        $AppUI->setState( 'LinkIdxTab', dPgetParam($_GET, 'tab'));
+if (dPgetParam($_GET, 'tab', -1) != -1) {
+	$AppUI->setState('LinkIdxTab', intval(dPgetParam($_GET, 'tab')));
 }
-$tab = $AppUI->getState( 'LinkIdxTab' ) !== NULL ? $AppUI->getState( 'LinkIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'LinkIdxTab' ) );
+$tab = $AppUI->getState('LinkIdxTab') !== NULL ? $AppUI->getState('LinkIdxTab') : 0;
+$active = intval(!$AppUI->getState('LinkIdxTab'));
 
-require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once($AppUI->getModuleClass('projects'));
 
 // get the list of visible companies
 $extra = array(
@@ -27,19 +27,19 @@ $extra = array(
 );
 
 $project = new CProject();
-$projects = $project->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra );
-$projects = arrayMerge( array( '0'=>$AppUI->_('All', UI_OUTPUT_JS) ), $projects );
+$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra);
+$projects = arrayMerge(array('0'=>$AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Links', 'folder5.png', $m, "$m.$a" );
-$titleBlock->addCell( $AppUI->_('Search') . ':' );
+$titleBlock = new CTitleBlock('Links', 'folder5.png', $m, "$m.$a");
+$titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell(
         '<input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" .         'title="'. $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>'
  ,'',       '<form action="?m=links" method="post" id="searchfilter">', '</form>'
 );
-$titleBlock->addCell( $AppUI->_('Filter') . ':' );
+$titleBlock->addCell($AppUI->_('Filter') . ':');
 $titleBlock->addCell(
-	arraySelect( $projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id ), '',
+	arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id), '',
 	'<form name="pickProject" action="?m=links" method="post">', '</form>'
 );
 if ($canEdit) {
@@ -50,20 +50,19 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$link_types = dPgetSysVal("LinkType");
-if ( $tab != -1 ) {
-	array_unshift($link_types, "All Links");
+$link_types = dPgetSysVal('LinkType');
+if ($tab != -1) {
+	array_unshift($link_types, 'All Links');
 }
 array_map(array($AppUI, '_'), $link_types);
 
-$tabBox = new CTabBox( "?m=links", DP_BASE_DIR.'/modules/links/', $tab );
+$tabBox = new CTabBox('?m=links', DP_BASE_DIR.'/modules/links/', $tab);
 
 $i = 0;
 
-foreach($link_types as $link_type)
-{
-        $tabBox->add("index_table", $link_type);
-        ++$i;
+foreach($link_types as $link_type) {
+	$tabBox->add('index_table', $link_type);
+	++$i;
 }
                                                                                 
 $tabBox->show();

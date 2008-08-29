@@ -15,10 +15,10 @@ include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
-$user_id = dPgetParam($_REQUEST, 'user_id', $AppUI->user_id);
+$user_id = intval(dPgetParam($_REQUEST, 'user_id', $AppUI->user_id));
 $proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
-$company_id = dPgetParam($_REQUEST, 'company_id', 0);
-$department = dPgetParam($_REQUEST, 'department', 0);
+$company_id = intval(dPgetParam($_REQUEST, 'company_id', 0));
+$department = intval(dPgetParam($_REQUEST, 'department', 0));
 $showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
 $showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
 $sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
@@ -83,11 +83,11 @@ if ($proFilter == '-4') {
 }
 
 if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('project_company = '.$company_id);
+	$q->addWhere('project_company = ' . $company_id);
 }
 
 if ($user_id && $m_orig == 'admin' && $a_orig == 'viewuser') {
-	$q->addWhere('project_owner = '.$user_id);
+	$q->addWhere('project_owner = ' . $user_id);
 }
 
 // Show Projects where the Project Owner is in the given department

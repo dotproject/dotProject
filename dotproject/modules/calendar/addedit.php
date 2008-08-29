@@ -3,12 +3,12 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$event_id = intval(dPgetParam($_GET, "event_id", 0));
+$event_id = intval(dPgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
 // check permissions
 if (!$canEdit) {
-	$AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // get the passed timestamp (today if none)
@@ -18,11 +18,11 @@ $date = dPgetParam($_GET, 'date', null);
 $obj = new CEvent();
 
 if ($is_clash) {
-  $obj->bind($_SESSION['add_event_post']);
+	$obj->bind($_SESSION['add_event_post']);
 }
 else if (!$obj->load($event_id) && $event_id) {
 	$AppUI->setMsg('Event');
-	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 
@@ -38,14 +38,13 @@ $assigned = array();
 if ($is_clash) {
 	$assignee_list = $_SESSION['add_event_attendees'];
 	if (isset($assignee_list) && $assignee_list) {
-		$q  = new DBQuery;
+		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('user_id, CONCAT_WS(" " , contact_first_name, contact_last_name)');
-		$q->addWhere("user_id in ($assignee_list)");
+		$q->addWhere('user_id IN (' . $assignee_list . ')');
 		$q->addWhere("user_contact = contact_id");
 		$assigned = $q->loadHashList();
-	} else {
 	}
 } else if ($event_id == 0) {
 	$assigned[$AppUI->user_id] = "$AppUI->user_first_name $AppUI->user_last_name";
@@ -67,10 +66,11 @@ if ($_GET['event_project']) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event') , 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event') , 
+                               'myevo-appointments.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=calendar', 'month view');
 if ($event_id) {
-	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id='.$event_id, 'view this event');
+	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id=' . $event_id, 'view this event');
 }
 $titleBlock->show();
 
@@ -105,62 +105,52 @@ if ($event_id || $is_clash) {
 }
 
 $inc = intval(dPgetConfig('cal_day_increment')) ? intval(dPgetConfig('cal_day_increment')) : 30;
-if (!$event_id && !$is_clash)
-{
-
+if (!$event_id && !$is_clash) {
 	$seldate = new CDate($date);
 	// If date is today, set start time to now + inc
-	if ($date == date('Ymd'))
-	{
+	if ($date == date('Ymd')) {
 		$h = date('H');
 		// an interval after now.
 		$min = intval(date('i') / $inc) + 1;
 		$min *= $inc;
-		if ($min > 60)
-		{
+		if ($min > 60) {
 			$min = 0;
 			$h++;
 		}
 	}
-	if ($h && $h < dPgetConfig('cal_day_end'))
-	{
+	if ($h && $h < dPgetConfig('cal_day_end')) {
 		$seldate->setTime($h, $min, 0);
-		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
-		$seldate->addSeconds($inc * 60);
-		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
-	}	
-	else
-	{
+	} else {
 		$seldate->setTime(dPgetConfig('cal_day_start'),0,0);
-		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
-		$seldate->setTime(dPgetConfig('cal_day_end'),0,0);
-		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	}
+	$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+	if ($h && $h < dPgetConfig('cal_day_end')) {
+		$seldate->addSeconds($inc * 60);
+	} else {
+		$seldate->setTime(dPgetConfig('cal_day_end'),0,0);
+	}
+	$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 }
 
-$recurs =  array (
-	'Never',
-	'Hourly',
-	'Daily',
-	'Weekly',
-	'Bi-Weekly',
-	'Monthly',
-	'Quarterly',
-	'Semi-Annually',
-	'Annually'
-);
+$recurs =  array ('Never',
+                  'Hourly',
+                  'Daily',
+                  'Weekly',
+                  'Bi-Weekly',
+                  'Monthly',
+                  'Quarterly',
+                  'Semi-Annually',
+                  'Annually');
 
-$remind = array (
-	"900" => '15 mins',
-	"1800" => '30 mins',
-	"3600" => '1 hour',
-	"7200" => '2 hours',
-	"14400" => '4 hours',
-	"28800" => '8 hours',
-	"56600" => '16 hours',
-	"86400" => '1 day',
-	"172800" => '2 days'
-);
+$remind = array ('900' => '15 mins',
+                 '1800' => '30 mins',
+                 '3600' => '1 hour',
+                 '7200' => '2 hours',
+                 '14400' => '4 hours',
+                 '28800' => '8 hours',
+                 '56600' => '16 hours',
+                 '86400' => '1 day',
+                 '172800' => '2 days');
 
 // build array of times in 30 minute increments
 $times = array();
@@ -170,7 +160,7 @@ $t->setTime(0,0,0);
 $check = (24 * 60) / $inc;
 $addMins = $inc * 60;
 for ($minutes=0; $minutes < $check; $minutes++) {
-	$times[$t->format("%H%M%S")] = $t->format($AppUI->getPref('TIMEFORMAT') );
+	$times[$t->format('%H%M%S')] = $t->format($AppUI->getPref('TIMEFORMAT') );
 	$t->addSeconds($addMins);
 }
 ?>
@@ -218,7 +208,7 @@ var calendarField = '';
 function popCalendar(field){
 	calendarField = field;
 	idate = eval('document.editFrm.event_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240, scrollbars=no, status=no');
+	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240,scrollbars=no,status=no');
 }
 
 /**
@@ -290,11 +280,13 @@ function removeUser() {
 <tr>
 	<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title');?>:</td>
 	<td width="20%">
-		<input type="text" class="text" size="25" name="event_title" value="<?php echo @$obj->event_title;?>" maxlength="255">
+		<input type="text" class="text" size="25" name="event_title" value="<?php 
+echo @$obj->event_title;?>" maxlength="255">
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">
 	<?php echo $AppUI->_('Description'); ?> :<br/>
-		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo $obj->event_description;?></textarea></td>
+		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php 
+echo $obj->event_description;?></textarea></td>
 	</td>
 </tr>
 
@@ -318,48 +310,63 @@ function removeUser() {
 
 
 <tr>
-	<td align="right" nowrap="nowrap"><label for="event_private"><?php echo $AppUI->_('Private Entry'); ?>:</label></td>
+	<td align="right" nowrap="nowrap"><label for="event_private"><?php 
+echo $AppUI->_('Private Entry'); ?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_private" id="event_private" <?php echo (@$obj->event_private ? 'checked="checked"' : '');?> />
+		<input type="checkbox" value="1" name="event_private" id="event_private" <?php 
+echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 	</td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?>:</td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>">
-		<input type="text" name="start_date" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled">
+		<input type="hidden" name="event_start_date" value="<?php 
+echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>">
+		<input type="text" name="start_date" value="<?php 
+echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled">
 		<a href="#" onClick="popCalendar('start_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
+echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time');?>:</td>
-	<td><?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S")); ?></td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
+	<td><?php 
+echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S")); 
+?></td>
 </tr>
 
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date');?>:</td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>">
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled">
+		<input type="hidden" name="event_end_date" value="<?php 
+echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>">
+		<input type="text" name="end_date" value="<?php 
+echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled">
 		<a href="#" onClick="popCalendar('end_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
+echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time');?>:</td>
-	<td><?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S")); ?></td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
+	<td><?php 
+echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S")); ?></td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs');?>:</td>
-	<td><?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); ?></td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
+	<td><?php 
+echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); 
+?></td>
 	<td align="right">x</td>
 	<td>
-		<input type="text"  name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring))?($obj->event_times_recuring):'1');?>" maxlength="2" size=3> <?php echo $AppUI->_('times');?>
+		<input type="text"  name="event_times_recuring" value="<?php 
+echo ((isset($obj->event_times_recuring)) ? $obj->event_times_recuring : '1'); 
+?>" maxlength="2" size=3> <?php echo $AppUI->_('times'); ?>
 	</td>
 </tr>
 <?php /* FUNCTIONALITY NOT YET ENABLED ?>
 <tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Remind Me');?>:</td>
-	<td><?php echo arraySelect($remind, 'event_remind', 'size="1" class="text"', $obj['event_remind']); ?> <?php echo $AppUI->_('in advance');?></td>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Remind Me'); ?>:</td>
+	<td><?php echo arraySelect($remind, 'event_remind', 'size="1" class="text"', $obj['event_remind']); ?> <?php echo $AppUI->_('in advance'); ?></td>
 </tr>
 <?php */ ?>
 
@@ -371,10 +378,14 @@ function removeUser() {
 </tr>
 <tr>
 	<td colspan="2" align="right">
-	<?php echo arraySelect($users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+	<?php 
+echo arraySelect($users, 'resources', 
+                 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 	</td>
 	<td colspan="2" align="left">
-	<?php echo arraySelect($assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+	<?php 
+echo arraySelect($assigned, 'assigned', 
+                 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 	</td>
 </tr>
 <tr>
@@ -389,29 +400,35 @@ function removeUser() {
 			</tr>
 		</table>
 	</td>
-	<td align="left"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
+	<td align="left"><label for="mail_invited"><?php 
+echo $AppUI->_('Mail Attendees?'); ?></label> 
+	<input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_('Show only on Working Days');?>:</label></td>
+	<td align="right" nowrap="nowrap"><label for="event_cwd"><?php 
+echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo (@$obj->event_cwd ? 'checked="checked"' : '');?> />
+		<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php 
+echo (@$obj->event_cwd ? 'checked="checked"' : ''); ?> />
 	</td>
 </tr>
 <tr>
 	<td colspan="2" align="right">
 			<?php
-				// $m does not equal 'calendar' here???
-				require_once $AppUI->getSystemClass("CustomFields");
-				$custom_fields = New CustomFields('calendar', 'addedit', $obj->event_id, "edit");
-				$custom_fields->printHTML();
-			?>
+// $m does not equal 'calendar' here???
+require_once $AppUI->getSystemClass("CustomFields");
+$custom_fields = New CustomFields('calendar', 'addedit', $obj->event_id, "edit");
+$custom_fields->printHTML();
+?>
 	</td>
 <tr>
 	<td colspan="2">
-		<input type="button" value="<?php echo $AppUI->_('back');?>" class="button" onclick="javascript:history.back();">
+		<input type="button" value="<?php 
+echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back();">
 	</td>
 	<td align="right" colspan="2">
-		<input type="button" value="<?php echo $AppUI->_('submit');?>" class="button" onClick="submitIt()">
+		<input type="button" value="<?php 
+echo $AppUI->_('submit'); ?>" class="button" onClick="submitIt()">
 	</td>
 </tr>
 </form>

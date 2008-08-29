@@ -7,8 +7,8 @@ global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id,
 global $m_orig, $a_orig;
 
 $min_view = defVal($min_view, false);
-$project_id = dPgetParam($_GET, 'project_id', 0);
-$user_id = dPgetParam($_GET, 'user_id', $AppUI->user_id);
+$project_id = intval(dPgetParam($_GET, 'project_id', 0));
+$user_id = intval(dPgetParam($_GET, 'user_id', $AppUI->user_id));
 // sdate and edate passed as unix time stamps
 $sdate = dPgetParam($_POST, 'sdate', 0);
 $edate = dPgetParam($_POST, 'edate', 0);

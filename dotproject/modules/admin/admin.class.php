@@ -12,7 +12,7 @@ class CUser extends CDpObject {
 	var $user_password = NULL;
 	var $user_parent = NULL;
 	var $user_type = NULL;
-        var $user_contact = NULL;
+	var $user_contact = NULL;
 	var $user_signature = NULL;
 /*	var $user_first_name = NULL;
 	var $user_last_name = NULL;
@@ -64,7 +64,8 @@ class CUser extends CDpObject {
 			$pwd = $q->loadResult();
 			if ($pwd != $this->user_password) {
 				$this->user_password = md5($this->user_password);
-				addHistory($this->_tbl, $this->user_id, 'password changed', 'Password changed from IP ' . $_SERVER['REMOTE_ADDR']);
+				addHistory($this->_tbl, $this->user_id, 'password changed', 
+						   'Password changed from IP ' . $_SERVER['REMOTE_ADDR']);
 			} else {
 				$this->user_password = null;
 			}
@@ -90,7 +91,7 @@ class CUser extends CDpObject {
 		if (! $result) {
 			$acl =& $GLOBALS['AppUI']->acl();
 			$acl->deleteLogin($id);
-			$q  = new DBQuery;
+			$q = new DBQuery;
 			$q->setDelete('user_preferences');
 			$q->addWhere('pref_user = '.$this->user_id);
 			$q->exec();
