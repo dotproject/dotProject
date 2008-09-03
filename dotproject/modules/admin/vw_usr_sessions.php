@@ -141,7 +141,7 @@ foreach ($rows as $row) {
 	echo ("    </td>\n");
 	echo ("    <td align=\"center\" nowrap=\"nowrap\">\n") ;
 	if ($canEdit && $canDelete && $logoutUserFlag) {
-		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_session') 
+		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_user') 
 		      .'" onclick="logoutUser(\'' . $row['u_user_id']  ."', '" 
 		      . ($row['contact_first_name'] . ' ' . $row['contact_last_name']) . '\');" />' . "\n");
 	}
