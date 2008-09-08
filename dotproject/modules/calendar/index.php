@@ -27,22 +27,25 @@ $date = dPgetParam($_GET, 'date', $today);
 
 // get the list of visible companies
 $company = new CCompany();
-$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 
+										 'company_name');
 $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
 #echo '<pre>';print_r($events);echo '</pre>';
 // setup the title block
 $titleBlock = new CTitleBlock('Monthly Calendar', 'myevo-appointments.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Company').':');
-$titleBlock->addCell(
-	arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '',
-	'<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>'
-);
+$titleBlock->addCell(arraySelect($companies, 'company_id', 
+								 'onChange="document.pickCompany.submit()" class="text"', 
+								 $company_id), '',
+					 ('<form action="' . $_SERVER['REQUEST_URI'] 
+					  . '" method="post" name="pickCompany">'), '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
-$titleBlock->addCell(
-	arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"',
-	$event_filter, true), '', "<Form action='{$_SERVER['REQUEST_URI']}' method='post' name='pickFilter'>", '</form>'
-);
+$titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 
+								 'onChange="document.pickFilter.submit()" class="text"',
+								 $event_filter, true), '', 
+					 ('<Form action="' . $_SERVER['REQUEST_URI'] 
+					  . '" method="post" name="pickFilter">'), '</form>');
 $titleBlock->show();
 ?>
 
