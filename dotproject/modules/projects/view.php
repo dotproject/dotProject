@@ -257,7 +257,7 @@ echo ((($perms->checkModuleItem('companies', 'access', $obj->project_company))
             <td class="hilite" width="100%"><?php 
 echo ((($perms->checkModuleItem('companies', 'access', $obj->project_company_internal)) 
        ? ('<a href="?m=companies&a=view&company_id=' . $obj->project_company_internal . '">') : '') 
-      . htmlspecialchars($obj->company_name, ENT_QUOTES) 
+      . htmlspecialchars($obj->company_name_internal, ENT_QUOTES) 
 	  . (($perms->checkModuleItem('companies', 'access', $obj->project_company_internal)) 
          ? '</a>' : '')); 
 ?></td>
