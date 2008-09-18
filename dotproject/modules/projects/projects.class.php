@@ -599,6 +599,10 @@ function projects_list_data($user_id = false) {
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
 		if (!$addPwOiD) {
 			$q->addWhere('pd.department_id in (' . implode(',',$dept_ids) . ')');
+		} else {
+			// Show Projects where the Project Owner is in the given department
+			$q->addWhere('p.project_owner IN (' 
+			             . ((!empty($owner_ids)) ? implode(',', $owner_ids) : 0) . ')');
 		}
 	} else if ($company_id &&!$addPwOiD) {
 		$q->addWhere('p.project_company = ' . $company_id);
@@ -618,10 +622,6 @@ function projects_list_data($user_id = false) {
 		$q->addWhere('p.project_owner = ' . $owner);
 	}
 	
-	// Show Projects where the Project Owner is in the given department
-	if ($addPwOiD && !empty($owner_ids)) {
-		$q->addWhere('p.project_owner IN (' . implode(',', $owner_ids) . ')');
-	}
 	$q->addGroup('p.project_id');
 	$q->addOrder($orderby . ' ' . $orderdir);
 	$obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');

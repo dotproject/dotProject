@@ -43,8 +43,8 @@ $q = new DBQuery;
  * wants to see the ProjectsWithOwnerInDeparment (PwOiD)
  * instead of the projects related to the given department.
  */
-if ($addPwOiD && $department>0) {
-	$owner_ids = array();
+$owner_ids = array();
+if ($addPwOiD && $department > 0) {
 	$q->addTable('users');
 	$q->addQuery('user_id');
 	$q->addJoin('contacts', 'c', 'c.contact_id = user_contact');
@@ -67,9 +67,16 @@ $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'p.project_company = c1.company_id');
 if ($department > 0) {
 	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
-}
-if ($department > 0 && !$addPwOiD) {
-	$q->addWhere('pd.department_id = ' . $department);
+	
+	if (!$addPwOiD) {
+		$q->addWhere('pd.department_id = ' . $department);
+	} else {
+		// Show Projects where the Project Owner is in the given department
+		$q->addWhere('p.project_owner IN (' 
+		             . ((!empty($owner_ids)) ? implode(',', $owner_ids) : 0) . ')');
+	}
+} else if ($company_id != 0 && !$addPwOiD) {
+	$q->addWhere('project_company = ' . $company_id);
 }
 
 if ($proFilter == '-4') {
@@ -82,17 +89,8 @@ if ($proFilter == '-4') {
 	$q->addWhere('project_status = ' . $proFilter);
 }
 
-if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('project_company = ' . $company_id);
-}
-
 if ($user_id && $m_orig == 'admin' && $a_orig == 'viewuser') {
 	$q->addWhere('project_owner = ' . $user_id);
-}
-
-// Show Projects where the Project Owner is in the given department
-if ($addPwOiD && !empty($owner_ids)) {
-	$q->addWhere('p.project_owner IN (' . implode(',', $owner_ids) . ')');
 }
 
 if ($showInactive != '1') {
