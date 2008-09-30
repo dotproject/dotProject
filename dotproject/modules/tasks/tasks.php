@@ -265,13 +265,11 @@ if ($project_id && $showIncomplete) {
 $task_status = 0;
 if ($min_view && isset($_GET['task_status'])) {
 	$task_status = intval(dPgetParam($_GET, 'task_status', null));
-}
-else if (stristr($currentTabName, 'inactive')) {
-	$task_status = '-1';
-}
-// If we aren't tabbed we are in the tasks list.
-else if (! $currentTabName) {
+} else if (!($currentTabName)) {
+	// If we aren't tabbed we are in the tasks list.
 	$task_status = intval($AppUI->getState('inactive'));
+} else if (stristr($currentTabName, 'inactive')) {
+	$task_status = '-1';
 }
 
 $where .= ' AND task_status = ' . $task_status;
