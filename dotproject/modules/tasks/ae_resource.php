@@ -9,7 +9,7 @@ global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $t
 
 // Make sure that we can see users that are allocated to the task.
 
-if ( $task_id == 0 ) {
+if ($task_id == 0) {
 	// Add task creator to assigned users by default
 	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));	
 } else {
@@ -23,7 +23,7 @@ if ( $task_id == 0 ) {
 			 WHERE task_id =$task_id
 			 AND task_id <> 0
 			 ";
-	$assigned_perc = db_loadHashList( $sql, 'user_id' );	
+	$assigned_perc = db_loadHashList($sql, 'user_id');	
 }
 
 $initPercAsignment = "";
@@ -56,16 +56,17 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 	<td valign="top" align="center">
 		<table cellspacing="0" cellpadding="2" border="0">
 			<tr>
-				<td><?php echo $AppUI->_( 'Human Resources' );?>:</td>
-				<td><?php echo $AppUI->_( 'Assigned to Task' );?>:</td>
+				<td><?php echo $AppUI->_('Human Resources');?>:</td>
+				<td><?php echo $AppUI->_('Assigned to Task');?>:</td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo arraySelect( $users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null ); ?>
+					<?php echo arraySelect($users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 				</td>
 				<td>
-					<?php echo arraySelect( $assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null ); ?>
+					<?php echo arraySelect($assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 				</td>
+			</tr>
 			<tr>
 				<td colspan="2" align="center">
 					<table>
@@ -75,7 +76,7 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 							<select name="percentage_assignment" class="text">
 							<?php 
 								for ($i = 5; $i <= 100; $i+=5) {
-									echo "<option ".(($i==100)? "selected=\"true\"" : "" )." value=\"".$i."\">".$i."%</option>";
+									echo "<option ".(($i==100)? "selected=\"true\"" : "")." value=\"".$i."\">".$i."%</option>";
 								}
 							?>
 							</select>
@@ -85,20 +86,14 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 					</table>
 				</td>
 			</tr>
-			</tr>
-<!-- 			<tr>
-				<td colspan=3 align="center">
-					<input type="checkbox" name="task_notify" value="1" <?php //if($obj->task_notify!="0") echo "checked"?> /> <?php //echo $AppUI->_( 'notifyChange' );?>
-				</td>
-			</tr> -->
 		</table>
 	</td>
 	<td valign="top" align="center">
 		<table><tr><td align="left">
-		<?php echo $AppUI->_( 'Additional Email Comments' );?>:		
+		<?php echo $AppUI->_('Additional Email Comments');?>:		
 		<br />
 		<textarea name="email_comment" class="textarea" cols="60" rows="10" wrap="virtual"></textarea><br />
-		<input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if($obj->task_notify!="0") echo 'checked="checked"'?> /> <label for="task_notify"><?php echo $AppUI->_( 'notifyChange' ); ?></label>
+		<input type="checkbox" name="task_notify" id="task_notify" value="1"<?php if ($obj->task_notify != 0) { echo ' checked="checked"'; } ?> /> <label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
 		</td></tr></table><br />
 		
 	</td>

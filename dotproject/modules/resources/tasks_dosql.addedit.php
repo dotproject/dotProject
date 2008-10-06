@@ -15,12 +15,10 @@ $other_resources = null;
  * is destroyed.  It can be used to save this data to be used later in
  * the postsave function.
  */
-function resource_presave()
-{
-  global $other_resources;
-  // check to see if we are in the post save list or if we need to
-  // interrogate the session.
-  $other_resources = setItem('hresource_assign');
+function resource_presave() {
+	global $other_resources;
+	//check to see if we are in the post save list or if we need to query the session.
+	$other_resources = dPgetParam($_POST, 'hresource_assign');
 	dprint(__FILE__, __LINE__, 5, "setting other resources to $other_resources");
 }
 
