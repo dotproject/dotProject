@@ -49,7 +49,7 @@ if($search_string != ''){
 $search_string = dPformSafe($search_string, true);
 
 $perms =& $AppUI->acl();
-$owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('companies');
+$owner_list = array(-1 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('companies');
 //db_loadHashList($sql);
 $owner_combo = arraySelect($owner_list, 'owner_filter_id', 
                            'class="text" onchange="javascript:document.searchform.submit()"', 
@@ -58,7 +58,7 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id',
 // setup the title block
 $titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string=' 
-                      . $search_string . ' method="post">' . "\n" . '<table><tr><td><strong>' 
+                      . $search_string . '" method="post">' . "\n" . '<table><tr><td><strong>' 
                       . $AppUI->_('Search') 
                       . '</strong><input class="text" type="text" name="search_string" value="' 
                       . $search_string . '" /><br />' 
