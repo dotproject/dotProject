@@ -58,12 +58,18 @@ else
 		<table cellpadding="0" cellspacing="0">
 		<tr><td>
 <?php
-	$newItem = array( 0=>'- New Item -' );
-	if ($perms->checkModule( 'companies', 'add' )) $newItem["companies"] = "Company";
-	if ($perms->checkModule( 'contacts', 'add' )) $newItem["contacts"] = "Contact";
-	if ($perms->checkModule( 'calendar', 'add' )) $newItem["calendar"] = "Event";
-	if ($perms->checkModule( 'files', 'add' )) $newItem["files"] = "File";
-	if ($perms->checkModule( 'projects', 'add' )) $newItem["projects"] = "Project";
+	$newItemPermCheck = array('companies' => 'Company',
+							  'contacts' => 'Contact',
+							  'calendar' => 'Event',
+							  'files' => 'File',
+							  'projects' => 'Project');
+	
+	$newItem = array(0=>'- New Item -');
+	foreach ($newItemPermCheck as $mod_check => $mod_check_title) {
+		if ($perms->checkModule($mod_check, 'add')) {
+			$newItem[$mod_check] = $mod_check_title;
+		}
+	}
 
 	echo arraySelect( $newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if(mod) f.submit();"', '', true);
 

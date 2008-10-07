@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')){
 }
 
 // Copyright 2004 Adam Donnison <adam@saki.com.au>
-$resource_id = intval(dPgetParam($_GET, "resource_id", null));
+$resource_id = intval(dPgetParam($_GET, 'resource_id', null));
 $perms =& $AppUI->acl();
 $canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
 $canView = $perms->checkModuleItem('resources', 'view', $resource_id);
@@ -20,13 +20,12 @@ if ($resource_id && ! $obj->load($resource_id)) {
   $AppUI->redirect();
 }
 
-$titleBlock =& new CTitleBlock(
-  ($resource_id ? "Edit Resource" : "Add Resource"),
-  'handshake.png', $m, "$m.$a"
+$titleBlock =& new CTitleBlock((($resource_id) ? 'Edit Resource' : 'Add Resource'), 
+							   'helpdesk.png', $m, "$m.$a"
 );
-$titleBlock->addCrumb("?m=resources", "resource list");
+$titleBlock->addCrumb('?m=resources', 'resource list');
 if ($resource_id)
-  $titleBlock->addCrumb("?m=resources&a=view&resource_id=$resource_id", "view this resource");
+  $titleBlock->addCrumb("?m=resources&a=view&resource_id=$resource_id", 'view this resource');
 $titleBlock->show();
 
 $typelist = $obj->typeSelect();

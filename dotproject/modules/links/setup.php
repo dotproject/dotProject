@@ -19,7 +19,7 @@ $config['mod_directory'] = 'links';          // tell dotProject where to find th
 $config['mod_setup_class'] = 'CSetupLinks';  // the name of the PHP setup class (used below)
 $config['mod_type'] = 'user';                   // 'core' for modules distributed with dP by standard, 'user' for additional modules from dotmods
 $config['mod_ui_name'] = 'Links';            // the name that is shown in the main menu of the User Interface
-$config['mod_ui_icon'] = 'communicate.gif';     // name of a related icon
+$config['mod_ui_icon'] = 'folder5.png';     // name of a related icon
 $config['mod_description'] = 'Links related to tasks';     // some description of the module
 $config['mod_config'] = false;                   // show 'configure' link in viewmods
 

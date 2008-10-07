@@ -10,7 +10,7 @@ $obj =& new CResource;
 $perms =& $AppUI->acl();
 $canEdit = $perms->checkModule($m, "edit");
 
-$titleBlock =& new CTitleBlock('Resources', 'handshake.png', $m, "$m.$a");
+$titleBlock =& new CTitleBlock('Resources', 'helpdesk.png', $m, "$m.$a");
 if ($canEdit) {
   $titleBlock->addCell(
     '<input type="submit" class="button" value="'. $AppUI->_('new resource').'">', '',

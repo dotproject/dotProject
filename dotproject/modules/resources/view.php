@@ -31,7 +31,7 @@ if (! $obj->load($resource_id)) {
   $AppUI->savePlace();
 }
 
-$titleBlock =& new CTitleBlock('View Resource', 'handshake.png', $m, "$m.$a");
+$titleBlock =& new CTitleBlock('View Resource', 'helpdesk.png', $m, "$m.$a");
 if ($canAuthor) {
   $titleBlock->addCell(
     '<input type="submit" class="button" value="'. $AppUI->_('new resource').'" />', '',
