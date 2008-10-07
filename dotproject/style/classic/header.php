@@ -129,11 +129,12 @@ echo dPcontextHelp('Help');?>
 		foreach ($nav as $module) {
 			if (getPermission($module['mod_directory'], 'access')) {
 				$s .= ('<tr><td align="center" valign="middle" class="nav">' 
+					   . '<a href="?m=' . $module['mod_directory'] . '">' 
 					   . '<table cellspacing=0 cellpadding=0 border=0><tr><td class="clsBtnOff">' 
-					   . '<a href="?m=' . $module['mod_directory'] . '"><img src="' 
+					   . '<img src="' 
 					   . dPfindImage($module['mod_ui_icon'], $module['mod_directory']) 
-					   . '" alt="" border="0" width="30" height="30"></a></td></tr></table>' 
-					   . $AppUI->_($module['mod_ui_name']) ."</td></tr>\n");
+					   . '" alt="" border="0" width="30" height="30"></td></tr></table>' 
+					   . $AppUI->_($module['mod_ui_name']) ."</a></td></tr>\n");
 			}
 		}
 		echo $s;
