@@ -768,7 +768,7 @@ class DBQuery {
 	 * Load a single column result from a single row
 	 */
 	function loadResult() {
-		global $AppUI;
+		global $AppUI, $db;
 		
 		$result = false;
 		
