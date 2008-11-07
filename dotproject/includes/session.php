@@ -100,9 +100,9 @@ function dPsessionDestroy($id, $user_access_log_id=0) {
 	dprint(__FILE__, __LINE__, 11, "Killing session $id");
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q->addWhere('user_access_log_id = ' 
-	             . (($user_access_log_id) ? $user_access_log_id
-	                : "(SELECT session_user from sessions WHERE session_id = '$id')"));
+	$q->addWhere('user_access_log_id' 
+	             . (($user_access_log_id) ? (' = ' . $user_access_log_id)
+	                : " IN (SELECT session_user from sessions WHERE session_id = '$id')"));
 	$q->exec();
 	$q->clear();
 	
