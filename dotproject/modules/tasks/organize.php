@@ -161,7 +161,6 @@ function showtask_edit($task, $level=0) {
 	global $AppUI, $perms, $durnTypes, $now, $df;
 	
 	$style = '';
-	$sign = 1;
 	$start = intval(@$task['task_start_date']) ? new CDate($task['task_start_date']) : null;
 	$end = intval(@$task['task_end_date']) ? new CDate($task['task_end_date']) : null;
 	
@@ -177,11 +176,10 @@ function showtask_edit($task, $level=0) {
 	}
 
 	if ($now->after($end)) {
-		$sign = -1;
 		$style = (($end) ? 'background-color:#cc6666;color:#ffffff' 
 		          : 'background-color:lightgray;');
 	} 
-	$days = (($start) ? ($now->dateDiff($end) * $sign) : 0);
+	$days = (($start) ? ($end->dateDiff($now)) : 0);
 	
 	if ($task['task_percent_complete'] == 100) {
 		$days = 'n/a';

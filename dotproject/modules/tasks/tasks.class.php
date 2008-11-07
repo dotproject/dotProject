@@ -2044,7 +2044,7 @@ class CTask extends CDpObject
 		$expires = new CDate($this->task_end_date);
 		$now = new CDate();
 		$diff = $expires->dateDiff($now);
-		$diff *= CDate::compare($expires, $now);
+		
 		$prefix = $AppUI->_('Task Due', UI_OUTPUT_RAW);
 		if ($diff == 0) {
 			$msg = $AppUI->_('TODAY', UI_OUTPUT_RAW);
@@ -2296,7 +2296,6 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 					? new CDate($a['last_update']) : null);
 	
 	// prepare coloured highlight of task time information
-	$sign = 1;
 	$style = '';
 	if ($start_date) {
 		
@@ -2307,7 +2306,6 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		}
 		
 		if (!empty($end_date) && $now->after($end_date)) {
-			$sign = -1;
 			$style = 'background-color:#cc6666;color:#ffffff';
 		}
 
@@ -2325,7 +2323,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			$style = 'background-color:#aaddaa; color:#00000';
 		}
 		
-		$days = $now->dateDiff($end_date) * $sign;
+		$days = $end_date->dateDiff($now);
 	}
 	
 	$s = "\n<tr>";

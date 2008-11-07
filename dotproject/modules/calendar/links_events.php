@@ -23,7 +23,7 @@ function getEventLinks( $startPeriod, $endPeriod, &$links, $strMaxLen ) {
 		$date = $start;
 		$cwd = explode(",", $GLOBALS["dPconfig"]['cal_working_days']);
 
-		for($i=0, $x=$start->dateDiff($end); $i <= $x; $i++) {
+		for($i=0, $x=$end->dateDiff($start); $i <= $x; $i++) {
 		// the link
 			// optionally do not show events on non-working days 
 			if ( ( $row['event_cwd'] && in_array($date->getDayOfWeek(), $cwd ) ) || !$row['event_cwd'] ) {

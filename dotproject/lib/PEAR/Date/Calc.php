@@ -748,8 +748,8 @@ class Date_Calc
         if(!Date_Calc::isValidDate($day2,$month2,$year2))
             return -1;
 
-        return(abs((Date_Calc::dateToDays($day1,$month1,$year1))
-                    - (Date_Calc::dateToDays($day2,$month2,$year2))));
+        return(((Date_Calc::dateToDays($day1,$month1,$year1))
+                 - (Date_Calc::dateToDays($day2,$month2,$year2))));
 
     } // end func dateDiff
 
