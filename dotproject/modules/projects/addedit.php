@@ -24,7 +24,8 @@ $companies = $row->getAllowedRecords( $AppUI->user_id, 'company_id,company_name'
 $companies = arrayMerge( array( '0'=>'' ), $companies );
 
 // get internal companies
-$companies_internal = $row->listCompaniesByType( array('6')); // 6 is standard value for internal companies
+// 6 is standard value for internal companies
+$companies_internal = $row->listCompaniesByType( array('6')); 
 $companies_internal = arrayMerge( array( '0'=>'' ), $companies_internal );
 
 // pull users
@@ -426,10 +427,18 @@ function setDepartment(department_id_string){
 		</tr>
 		<tr>
 			<td align="left" nowrap="nowrap">
-				<?php   echo $AppUI->_('Import tasks from');?>:<br/>
+				<?php echo $AppUI->_('Import tasks from');?>:<br/>
 			</td>
 			<td colspan="3">
 <?php echo projectSelectWithOptGroup( $AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id ); ?>
+			</td>
+		</tr>
+		<tr>
+			<td align="left" nowrap="nowrap">
+				<?php echo $AppUI->_('Scale Imported Tasks');?>:<br/>
+			</td>
+			<td colspan="3">
+				<input type="checkbox" name="scale_project" id="scale_project" value="1" />
 			</td>
 		</tr>
 		<tr>

@@ -63,7 +63,7 @@ class CProject extends CDpObject {
 		return null; // object is ok
 	}
 	
-	function load($oid=null, $strip = true) {
+	function load($oid=null, $strip=true) {
 		$result = parent::load($oid, $strip);
 		if ($result && $oid) {
 			$working_hours = ((dPgetConfig('daily_working_hours')) 
@@ -151,10 +151,10 @@ class CProject extends CDpObject {
 	*	@param	int		Project ID of the tasks come from.
 	*	@return	bool	
 	**/
-	function importTasks ($from_project_id) {
+	function importTasks($from_project_id, $scale_project=false) {
 		
 		// Load the original
-		$origProject = new CProject ();
+		$origProject = new CProject();
 		$origProject->load($from_project_id);
 		$q = new DBQuery;
 		$q->addTable('tasks');
@@ -164,11 +164,30 @@ class CProject extends CDpObject {
 		$q->clear();
 		$tasks = array_flip(db_loadColumn ($sql));
 		
-		$origDate = new CDate($origProject->project_start_date);
-		$destDate = new CDate ($this->project_start_date);
+		//Pristine Start and End Dates of Source and Destination Projects
+		$origStartDate = new CDate($origProject->project_start_date);
+		$origEndDate = new CDate($origProject->project_end_date);
+		$destStartDate = new CDate ($this->project_start_date);
+		$destEndDate = new CDate ($this->project_end_date);
 		
-		$dateOffset = $destDate->dateDiff($origDate);
+		$dateOffset = $destStartDate->dateDiff($origStartDate);
 		
+		//Check that we have enough information to scale properly 
+		//(i.e. no information is missing or "zero")
+		if (empty($origProject->project_start_date)  || empty($origProject->project_end_date) 
+		    || empty($this->project_start_date) || empty($this->project_end_date) 
+		    || $origProject->project_start_date == '0000-00-00 00:00:00' 
+		    || $origProject->project_end_date == '0000-00-00 00:00:00'
+		    || $this->project_start_date == '0000-00-00 00:00:00' 
+		    || $this->project_end_date == '0000-00-00 00:00:00') {
+			$scale_project = false;
+		}
+		
+		if ($scale_project) {
+			//get ratio for scaling, protect from division by 0
+			$ratio = (abs($destEndDate->dateDiff($destStartDate)) 
+			          / max(abs($origEndDate->dateDiff($origStartDate)), 1));
+		}
 		
 		// Old dependencies array from imported tasks
 		$deps = array();
@@ -206,37 +225,53 @@ class CProject extends CDpObject {
 			$newDeps[$ndkey] = $ndt;
 		}
 		
-
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . $this->project_id);
 		$tasks = $q->loadColumn();
 		
 		// Update dates based on new project's start date. 
+		$origDate = new CDate($origProject->project_start_date);
+		$destDate = new CDate ($this->project_start_date);
 		foreach ($tasks as $task_id) {
 			$newTask = new CTask();
 			$newTask->load($task_id);
 			if (in_array($task_id, $taskXref)) {
 				// Fix task start date from project start date offset
-				$origDate->setDate($newTask->task_start_date);
-				$destDate->setDate($newTask->task_start_date);
-				$destDate->addDays($dateOffset);
-				$destDate = $destDate->next_working_day();
-				$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
-				
+				if (!empty($newTask->task_start_date) 
+				    && $newTask->task_start_date != '0000-00-00 00:00:00') {
+					$origDate->setDate($newTask->task_start_date);
+					$destDate->setDate($newTask->task_start_date);
+					if ($scale_project) {
+						$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
+						              - $origDate->dateDiff($origStartDate));
+						$destDate->addDays($offsetAdd);
+					}
+					$destDate->addDays($dateOffset);
+					$destDate = $destDate->next_working_day();
+					$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
+				}
 				// Fix task end date from start date + work duration
 				//$newTask->calc_task_end_date();
 				if (!empty($newTask->task_end_date) 
 				    && $newTask->task_end_date != '0000-00-00 00:00:00') {
 					$origDate->setDate($newTask->task_end_date);
 					$destDate->setDate($newTask->task_end_date);
+					if ($scale_project) {
+						$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
+						              - $origDate->dateDiff($origStartDate));
+						$destDate->addDays($offsetAdd);
+					}
 					$destDate->addDays($dateOffset);
 					$destDate = $destDate->next_working_day();
 					$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
 				}
-				
+				//Adjust durration to scale
+				if ($scale_project) {
+					$newTask->task_duration = round(($newTask->task_duration  * $ratio), 2);
+				}
 				$newTask->task_parent = $taskXref[$nid2op[$newTask->task_id]];
-			
+				
 				$newTask->store();
 				$newTask->updateDependencies($newDeps[$task_id]);
 			}// end check if imported task
@@ -268,7 +303,7 @@ class CProject extends CDpObject {
 				
 	}
 	
-	function getAllowedSQL($uid, $index = null) {
+	function getAllowedSQL($uid, $index=null) {
 		$oCpy = new CCompany ();
 		
 		$where = $oCpy->getAllowedSQL ($uid, 'project_company');
@@ -276,7 +311,7 @@ class CProject extends CDpObject {
 		return array_merge($where, $project_where);
 	}
 	
-	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	function setAllowedSQL($uid, &$query, $index=null, $key=null) {
 		$oCpy = new CCompany;
 		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, ((($key) ? ($key . '.') : '') .'project_company'));
@@ -344,7 +379,7 @@ class CProject extends CDpObject {
 	 * @param int SQL-limit to limit the number of returned tasks
 	 * @return array List of criticalTasks
 	 */
-	function getCriticalTasks($project_id = NULL, $limit = 1) {
+	function getCriticalTasks($project_id=NULL, $limit=1) {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
@@ -428,7 +463,7 @@ class CProject extends CDpObject {
 			current viewing user $AppUI->user_id is used.
 */
 
-function projects_list_data($user_id = false) {
+function projects_list_data($user_id=false) {
 	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department;
 	global $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems;
 	global $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $project_status;
