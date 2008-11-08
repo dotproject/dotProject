@@ -232,40 +232,38 @@ class CProject extends CDpObject {
 		
 		// Update dates based on new project's start date. 
 		$origDate = new CDate($origProject->project_start_date);
+		$origStartHour = new CDate ($this->project_start_date);
 		$destDate = new CDate ($this->project_start_date);
 		foreach ($tasks as $task_id) {
 			$newTask = new CTask();
 			$newTask->load($task_id);
 			if (in_array($task_id, $taskXref)) {
-				// Fix task start date from project start date offset
-				if (!empty($newTask->task_start_date) 
-				    && $newTask->task_start_date != '0000-00-00 00:00:00') {
-					$origDate->setDate($newTask->task_start_date);
-					$destDate->setDate($newTask->task_start_date);
-					if ($scale_project) {
-						$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
-						              - $origDate->dateDiff($origStartDate));
-						$destDate->addDays($offsetAdd);
+				$task_date_vars = array('task_start_date' , 'task_end_date');
+				
+				//Adjust task dates based on calculated offsets
+				foreach ($task_date_vars as $my_date) {
+					if (!empty($newTask->$my_date) 
+					    && $newTask->$my_date != '0000-00-00 00:00:00') {
+						$origDate->setDate($newTask->$my_date);
+						$origStartHour->setDate($newTask->$my_date);
+						$origStartHour->setTime(intval(dPgetConfig('cal_day_start')));
+						$destDate->setDate($newTask->$my_date);
+						$destDate->addDays($dateOffset);
+						if ($scale_project) {
+							$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
+							              - $origDate->dateDiff($origStartDate));
+							$destDate->addDays($offsetAdd);
+							if ($newTask->task_duration_type == 1 || true) {
+								$hours_in = $origStartHour->calcDuration($origDate);
+								$offsetAddHours = (round($hours_in * $ratio) - $hours_in);
+								$destDate->addDuration($offsetAddHours);
+							}
+						}
+						$destDate = $destDate->next_working_day();
+						$newTask->$my_date = $destDate->format(FMT_DATETIME_MYSQL);
 					}
-					$destDate->addDays($dateOffset);
-					$destDate = $destDate->next_working_day();
-					$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
 				}
-				// Fix task end date from start date + work duration
-				//$newTask->calc_task_end_date();
-				if (!empty($newTask->task_end_date) 
-				    && $newTask->task_end_date != '0000-00-00 00:00:00') {
-					$origDate->setDate($newTask->task_end_date);
-					$destDate->setDate($newTask->task_end_date);
-					if ($scale_project) {
-						$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
-						              - $origDate->dateDiff($origStartDate));
-						$destDate->addDays($offsetAdd);
-					}
-					$destDate->addDays($dateOffset);
-					$destDate = $destDate->next_working_day();
-					$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
-				}
+				
 				//Adjust durration to scale
 				if ($scale_project) {
 					$newTask->task_duration = round(($newTask->task_duration  * $ratio), 2);

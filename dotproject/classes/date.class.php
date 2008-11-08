@@ -8,26 +8,26 @@ if (!defined('DP_BASE_DIR')){
 }
 
 
-require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
+require_once($AppUI->getLibraryClass('PEAR/Date'));
 
-define( 'FMT_DATEISO', '%Y%m%dT%H%M%S' );
-define( 'FMT_DATELDAP', '%Y%m%d%H%M%SZ' );
-define( 'FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S' );
-define( 'FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S' );
-define( 'FMT_TIMESTAMP', '%Y%m%d%H%M%S' );
-define( 'FMT_TIMESTAMP_DATE', '%Y%m%d' );
-define( 'FMT_TIMESTAMP_TIME', '%H%M%S' );
-define( 'FMT_UNIX', '3' );
-define( 'WDAY_SUNDAY',	  0 );
-define( 'WDAY_MONDAY',	  1 );
-define( 'WDAY_TUESDAY',	  2 );
-define( 'WDAY_WEDNESDAY', 3 );
-define( 'WDAY_THURSDAY',  4 );
-define( 'WDAY_FRIDAY',	  5 );
-define( 'WDAY_SATURDAY',  6 );
-define( 'SEC_MINUTE',	 60 );
-define( 'SEC_HOUR',	   3600 );
-define( 'SEC_DAY',	  86400 );
+define('FMT_DATEISO', '%Y%m%dT%H%M%S');
+define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
+define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
+define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
+define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
+define('FMT_TIMESTAMP_DATE', '%Y%m%d');
+define('FMT_TIMESTAMP_TIME', '%H%M%S');
+define('FMT_UNIX', '3');
+define('WDAY_SUNDAY',	  0);
+define('WDAY_MONDAY',	  1);
+define('WDAY_TUESDAY',	  2);
+define('WDAY_WEDNESDAY', 3);
+define('WDAY_THURSDAY',  4);
+define('WDAY_FRIDAY',	  5);
+define('WDAY_SATURDAY',  6);
+define('SEC_MINUTE',	 60);
+define('SEC_HOUR',	   3600);
+define('SEC_DAY',	  86400);
 
 /**
 * dotProject implementation of the Pear Date class
@@ -71,14 +71,14 @@ class CDate extends Date {
 * @param int Positive or negative number of days
 * @author J. Christopher Pereira <kripper@users.sf.net>
 */
-	function addDays( $n ) {
+	function addDays($n) {
 		$timeStamp = $this->getTime();
 		$oldHour = $this->getHour();
-		$this->setDate( $timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
+		$this->setDate($timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
 		
 		if(($oldHour - $this->getHour()) || !is_int($n)) {
 			$timeStamp += ($oldHour - $this->getHour()) * SEC_HOUR;
-			$this->setDate( $timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
+			$this->setDate($timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
 		}
 	}
 
@@ -87,9 +87,9 @@ class CDate extends Date {
 * @param int Positive or negative number of months
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function addMonths( $n ) {
-		$an = abs( $n );
-		$years = floor( $an / 12 );
+	function addMonths($n) {
+		$an = abs($n);
+		$years = floor($an / 12);
 		$months = $an % 12;
 		
 		if ($n < 0) {
@@ -114,7 +114,7 @@ class CDate extends Date {
 * @param Date The date to compare to
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function dateDiff( $when ) {
+	function dateDiff($when) {
 		return Date_calc::dateDiff($this->getDay(), $this->getMonth(), $this->getYear(),
 								   $when->getDay(), $when->getMonth(), $when->getYear());	
 	}
@@ -126,10 +126,10 @@ class CDate extends Date {
 * @param int second
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function setTime( $h=0, $m=0, $s=0 ) {
-		$this->setHour( $h );
-		$this->setMinute( $m );
-		$this->setSecond( $s );
+	function setTime($h=0, $m=0, $s=0) {
+		$this->setHour($h);
+		$this->setMinute($m);
+		$this->setSecond($s);
 	}
 	
 	function isWorkingDay(){
@@ -141,19 +141,19 @@ class CDate extends Date {
 	}
 	
 	function getAMPM() {
-		return (( $this->getHour() > 11 ) ? 'pm' : 'am' );
+		return (($this->getHour() > 11) ? 'pm' : 'am');
 	}
 	
 	/* Return date obj for the end of the next working day
 	 ** @param	bool	Determine whether to set time to start of day or preserve the time of the given object
 	 */ 
-	function next_working_day( $preserveHours = false ) {
+	function next_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = $this;
 		$end = intval(dPgetConfig('cal_day_end'));
 		$start = intval(dPgetConfig('cal_day_start'));
-		while ( ! $this->isWorkingDay() || $this->getHour() > $end ||
-				( $preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0' ) ) {
+		while (! $this->isWorkingDay() || $this->getHour() > $end ||
+				($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
 			$this->addDays(1);
 			$this->setTime($start, '0', '0');
 		}
@@ -169,13 +169,13 @@ class CDate extends Date {
 	/* Return date obj for the end of the previous working day
 	 ** @param	bool	Determine whether to set time to end of day or preserve the time of the given object
 	 */ 
-	function prev_working_day( $preserveHours = false ) {
+	function prev_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = $this;
 		$end = intval(dPgetConfig('cal_day_end'));
 		$start = intval(dPgetConfig('cal_day_start'));
-		while ( ! $this->isWorkingDay() || ( $this->getHour() < $start ) ||
-				( $this->getHour() == $start && $this->getMinute() == '0' ) ) {
+		while (! $this->isWorkingDay() || ($this->getHour() < $start) ||
+				($this->getHour() == $start && $this->getMinute() == '0')) {
 			$this->addDays(-1);
 			$this->setTime($end, '0', '0');
 		}
@@ -195,7 +195,7 @@ class CDate extends Date {
 	 ** @return	obj	Shifted DateObj
 	 */ 
 	
-	function addDuration( $duration = '8', $durationType ='1') {
+	function addDuration($duration = '8', $durationType ='1') {
 		// using a sgn function lets us easily cover 
 		// prospective and retrospective calcs at the same time
 		
@@ -209,9 +209,9 @@ class CDate extends Date {
 			$full_working_days = $duration;
 		} else if ($durationType == '1') { // durationType is 1 hour
 		// get dP time constants
-			$cal_day_start = intval(dPgetConfig( 'cal_day_start' ));
-			$cal_day_end = intval(dPgetConfig( 'cal_day_end' ));
-			$dwh = intval(dPgetConfig( 'daily_working_hours' ));
+			$cal_day_start = intval(dPgetConfig('cal_day_start'));
+			$cal_day_end = intval(dPgetConfig('cal_day_end'));
+			$dwh = intval(dPgetConfig('daily_working_hours'));
 			
 			// move to the next working day if the first day is a non-working day
 			($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
@@ -267,9 +267,9 @@ class CDate extends Date {
 		
 		// proceeding the fulldays finally which is easy
 		// Full days
-		for ( $i = 0 ; $i < $full_working_days ; $i++ ) {
+		for ($i = 0 ; $i < $full_working_days ; $i++) {
 			$this->addDays(1 * $sgn);
-			if ( !$this->isWorkingDay() ) {
+			if (!$this->isWorkingDay()) {
 				// just 'ignore' this non-working day		
 				$full_working_days++;
 			}
@@ -296,9 +296,9 @@ class CDate extends Date {
 		$s->copy($this);
 		
 		// get dP time constants
-		$cal_day_start = intval(dPgetConfig( 'cal_day_start' ));
-		$cal_day_end = intval(dPgetConfig( 'cal_day_end' ));
-		$dwh = intval(dPgetConfig( 'daily_working_hours' ));
+		$cal_day_start = intval(dPgetConfig('cal_day_start'));
+		$cal_day_end = intval(dPgetConfig('cal_day_end'));
+		$dwh = intval(dPgetConfig('daily_working_hours'));
 		
 		// assume start is before end and set a default signum for the duration	
 		$sgn = 1;
@@ -314,34 +314,35 @@ class CDate extends Date {
 		}	 
 		
 		// determine the (working + non-working) day difference between the two dates
-		$days = $e->dateDiff($s);
+		$days = abs($e->dateDiff($s));
 		
 		// if it is an intraday difference one is finished very easily
 		if($days == 0) {
-			return min($dwh, abs($e->hour - $s->hour))*$sgn;
+			return min($dwh, abs($e->hour - $s->hour)) * $sgn;
 		}
 		
 		// initialize the duration var
 		$duration = 0;
 		
 		// process the first day
-		
 		// take into account the first day if it is a working day!
-		$duration += $s->isWorkingDay() ? min($dwh, abs($cal_day_end - $s->hour)) : 0;
-		$s->addDays(1);
+		$day_endpoint = (($sgn > 0) ? $cal_day_end : $cal_day_start);
+		$duration += $s->isWorkingDay() ? min($dwh, abs($day_endpoint - $s->hour)) : 0;
+		$s->addDays(1 * $sgn);
 		
 		// end of processing the first day
 		
 		// calc workingdays between start and end
 		for ($i=1; $i < $days; $i++) {
 			$duration += $s->isWorkingDay() ? $dwh : 0;
-			$s->addDays(1);
+			$s->addDays(1 * $sgn);
 		}
 		
 		// take into account the last day in span only if it is a working day!
-		$duration += $s->isWorkingDay() ? min($dwh, abs($e->hour - $cal_day_start)) : 0;
+		$day_endpoint = (($sgn > 0) ? $cal_day_start : $cal_day_end);
+		$duration += $s->isWorkingDay() ? min($dwh, abs($e->hour - $day_endpoint)) : 0;
 		
-		return $duration*$sgn;
+		return $duration * $sgn;
 	}	
 	
 	function workingDaysInSpan($e){
@@ -360,8 +361,8 @@ class CDate extends Date {
 		$days = $e->dateDiff($this);
 		$start = $this;
 		
-		for ( $i = 0 ; $i <= $days ; $i++ ){
-			if ( $start->isWorkingDay()) {
+		for ($i = 0 ; $i <= $days ; $i++){
+			if ($start->isWorkingDay()) {
 				$wd++;
 			}
 			$start->addDays(1 * $sgn);
