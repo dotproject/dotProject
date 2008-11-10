@@ -74,7 +74,8 @@ $html .= ($AppUI->_('Event Filter') . ":"
                         $event_filter, true));
 if ($other_users) {
 	$html .= ($AppUI->_("Show Events for") . ":" 
-	          . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">');
+	          . '<select name="show_user_events" onchange="document.pickFilter.submit()"' 
+	          . ' class="text">');
 	$q = new DBQuery;
 	$q->addTable('users', 'u');
 	$q->addTable('contacts', 'con');
@@ -85,7 +86,7 @@ if ($other_users) {
 		foreach ($rows as $row) {
 			$html .= ('<option value="' . $row['user_id'] . '"' 
 					  . (($user_id == $row['user_id']) ? ' selected="selected"' : '')
-					  . '>'.$row['user_username'] . '</option>');
+					  . '>'.htmlspecialchars($row['user_username']) . '</option>');
 		}
 	}
 	$html .= '</select>';
@@ -124,9 +125,10 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 
 
 			$html .= (($href) 
-					  ? "\n\t\t" . '<a href="' . $href . '" class="event" title="' . $alt . '">' 
+					  ? ("\n\t\t" . '<a href="' . $href 
+			             . '" class="event" title="' . htmlspecialchars($alt) . '">') 
 					  : '');
-			$html .= "\n\t\t" . $row['event_title'];
+			$html .= "\n\t\t" . htmlspecialchars($row['event_title']);
 			$html .= (($href) ? "\n\t\t</a>" : '');
 			$html .= "\n\t</td>";
 		}
