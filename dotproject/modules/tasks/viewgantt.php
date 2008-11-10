@@ -276,10 +276,9 @@ if ($cnt[0]['N'] > 0) {
 	$src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id 
 	        . (($display_option == 'all') ? '' 
 	           : ('&start_date=' . $start_date->format('%Y-%m-%d') 
-	              . '&end_date=' . $end_date->format('%Y-%m-%d'))) 
-	        . "&width=' + ((navigator.appName=='Netscape'" 
-	        . "?window.innerWidth:document.body.offsetWidth)*0.95) + '" 
-	        . '&showLabels=' . $showLabels . '&showWork=' . $showWork 
+	              . '&end_date=' . $end_date->format('%Y-%m-%d'))) . "&width='" 
+			. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)" 
+			. "+'&showLabels=" . $showLabels . '&showWork=' . $showWork 
 	        . '&sortByName=' . $sortByName . '&showPinned=' . $showPinned 
 	        . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs 
 	        . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks 

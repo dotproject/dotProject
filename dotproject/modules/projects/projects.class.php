@@ -185,8 +185,8 @@ class CProject extends CDpObject {
 		
 		if ($scale_project) {
 			//get ratio for scaling, protect from division by 0
-			$ratio = (abs($destEndDate->dateDiff($destStartDate)) 
-			          / max(abs($origEndDate->dateDiff($origStartDate)), 1));
+			$ratio = ((abs($destEndDate->dateDiff($destStartDate)) + 1) 
+			          / (abs($origEndDate->dateDiff($origStartDate)) + 1));
 		}
 		
 		// Old dependencies array from imported tasks
