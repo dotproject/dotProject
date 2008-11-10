@@ -60,22 +60,27 @@ $next_day = new CDate(Date_calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
 // get the list of visible companies
 $company = new CCompany();
 global $companies;
-$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 
+                                         'company_name');
 $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Day View', 'myevo-appointments.png', $m, "$m.$a");
-$titleBlock->addCrumb("?m=calendar&date=".$this_day->format(FMT_TIMESTAMP_DATE), "month view");
-$titleBlock->addCrumb("?m=calendar&a=week_view&date=".$this_week, "week view");
-$titleBlock->addCell($AppUI->_('Company').':');
-$titleBlock->addCell(
-	arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '',
-	'<td><form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany"><table border="0" cellspacing="0" cellpadding="0"><tr>', '</tr></table></form></td>'
-);
-$titleBlock->addCell(
-		'<input type="submit" class="button" value="'.$AppUI->_('new event').'" />', '',
-		'<td><form action="?m=calendar&a=addedit&date=' . $this_day->format(FMT_TIMESTAMP_DATE)  . '" method="post"><table border="0" cellspacing="0" cellpadding="0"><tr>', '</tr></table></form></td>'
-);
+$titleBlock->addCrumb(('?m=calendar&date=' . $this_day->format(FMT_TIMESTAMP_DATE)), 'month view');
+$titleBlock->addCrumb(('?m=calendar&a=week_view&date=' . $this_week), 'week view');
+$titleBlock->addCell(($AppUI->_('Company') . ':'));
+$titleBlock->addCell(arraySelect($companies, 'company_id', 
+                                 'onChange="document.pickCompany.submit()" class="text"', 
+                                 $company_id), '', 
+                     ('<td><form action="' . $_SERVER['REQUEST_URI'] 
+                      . '" method="post" name="pickCompany">' 
+                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
+                     '</tr></table></form></td>');
+$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event') 
+                      . '" />'), '', ('<td><form action="?m=calendar&a=addedit&date=' 
+									  . $this_day->format(FMT_TIMESTAMP_DATE)  . '" method="post">' 
+                                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
+                     '</tr></table></form></td>');
 $titleBlock->show();
 ?>
 <script language="javascript">
@@ -87,29 +92,38 @@ function clickDay(idate, fdate) {
 <table width="100%" cellspacing="0" cellpadding="4">
 	<tr>
 		<td valign="top">
-				<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
-				<tr>
-						<td>
-								<a href="<?php echo '?m=calendar&a=day_view&date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="images/prev.gif" width="16" height="16" alt="pre" border="0" /></a>
-						</td>
-						<th width="100%">
-								<?php echo $AppUI->_($this_day->format('%A')) . ', ' . $this_day->format($df); ?>
-						</th>
-						<td>
-								<a href="<?php echo ('?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>"><img src="images/next.gif" width="16" height="16" alt="next" border="0" /></a>
-						</td>
-				</tr>
-				</table>
+			<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
+			<tr>
+				<td>
+					<a href="<?php 
+echo '?m=calendar&a=day_view&date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>">
+					<?php 
+echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous day')); ?>
+					</a>
+				</td>
+				<th width="100%">
+					<?php 
+echo ($AppUI->_($this_day->format('%A')) . ', ' . $this_day->format($df)); ?>
+				</th>
+				<td>
+					<a href="<?php 
+echo ('?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>">
+					<?php 
+echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
+					</a>
+				</td>
+			</tr>
+			</table>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-
-<?php
+			<?php
 // tabbed information boxes
-$tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), '', $tab);
-$tabBox->add("{$dPconfig['root_dir']}/modules/calendar/vw_day_events", 'Events');
-$tabBox->add("{$dPconfig['root_dir']}/modules/calendar/vw_day_tasks", 'Tasks');
+$tabBox = new CTabBox(('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '', 
+					  $tab);
+$tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_events', 'Events');
+$tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_tasks', 'Tasks');
 $tabBox->loadExtras($m);
 $tabBox->show();
 ?>
@@ -117,7 +131,7 @@ $tabBox->show();
 <?php if ($dPconfig['cal_day_view_show_minical']) { ?>
 		<td valign="top" width="175">
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr><td align="center" >
+			<tr><td align="center">
 <?php
 $minical = new CMonthCalendar($this_day);
 $minical->setStyles('minititle', 'minical');
@@ -146,9 +160,9 @@ $minical->setDate($minical->next_month);
 echo $minical->show(); 
 ?>
 
-		</td></tr>
-	</table>
-	</td>
+			</td></tr>
+		</table>
+		</td>
  <?php } ?>
-</tr>
+	</tr>
 </table>

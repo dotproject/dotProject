@@ -23,8 +23,10 @@ if (isset( $links[$dayStamp] )) {
 ?>
 	<tr><td>
 		<?php
-		echo ((($href) ? '<a href="' . $href .'" class="event" title="' . $alt . '">' : '') 
-		      . $e['text'] . (($href) ? '</a>' : ''));
+		echo ((($href) 
+		       ? ('<a href="' .  htmlspecialchars($href) .'" class="event" title="' 
+		          . htmlspecialchars($alt) . '">') 
+		       : '') . htmlspecialchars($e['text']) . (($href) ? '</a>' : ''));
 ?>
 	</td></tr>
 <?php

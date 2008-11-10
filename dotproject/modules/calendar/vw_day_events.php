@@ -125,7 +125,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 
 
 			$html .= (($href) 
-					  ? ("\n\t\t" . '<a href="' . $href 
+					  ? ("\n\t\t" . '<a href="' . htmlspecialchars($href) 
 			             . '" class="event" title="' . htmlspecialchars($alt) . '">') 
 					  : '');
 			$html .= "\n\t\t" . htmlspecialchars($row['event_title']);

@@ -83,7 +83,7 @@ require_once(DP_BASE_DIR.'/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 20);
 
 // create the main calendar
-$cal = new CMonthCalendar($date );
+$cal = new CMonthCalendar($date);
 $cal->setStyles('motitle', 'mocal');
 $cal->setLinkFunctions('clickDay', 'clickWeek');
 $cal->setEvents($links);
@@ -100,12 +100,12 @@ $minical->clickMonth = true;
 $minical->setLinkFunctions('clickDay');
 
 echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-echo '<td valign="top" align="center" width="200">'.$minical->show().'</td>';
+echo ('<td valign="top" align="center" width="200">' . $minical->show() . '</td>');
 echo '<td valign="top" align="center" width="100%">&nbsp;</td>';
 
 $minical->setDate($cal->next_month);
 
-echo '<td valign="top" align="center" width="200">'.$minical->show().'</td>';
+echo ('<td valign="top" align="center" width="200">' . $minical->show() . '</td>');
 echo '</tr></table>';
 ?>
 </td></tr></table>

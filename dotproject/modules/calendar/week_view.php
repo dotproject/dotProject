@@ -15,7 +15,8 @@ if (isset($_REQUEST['company_id'])) {
 $company_id = ($AppUI->getState('CalIdxCompany') !== NULL ? $AppUI->getState('CalIdxCompany') 
                : $AppUI->user_company);
 
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 'EVENTFILTER', 'my');
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 'EVENTFILTER', 
+                                       'my');
 
 // get the passed timestamp (today if none)
 $date = dPgetParam($_GET, 'date', null);
@@ -33,7 +34,6 @@ $first_time->setTime(0, 0, 0);
 $first_time->subtractSeconds(1);
 $last_time = new CDate(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
-
 $prev_week = new CDate(Date_calc::beginOfPrevWeek($dd, $mm, $yy, 
                                                   FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $next_week = new CDate(Date_calc::beginOfNextWeek($dd, $mm, $yy, 
@@ -52,24 +52,30 @@ getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 require_once(DP_BASE_DIR.'/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 50);
 
+$cal_week = new CMonthCalendar($date);
+$cal_week->setEvents($links);
+
 // get the list of visible companies
 $company = new CCompany();
-$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 
+                                         'company_name');
 $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Week View', 'myevo-appointments.png', $m, "$m.$a");
-$titleBlock->addCrumb("?m=calendar&date=".$this_week->format(FMT_TIMESTAMP_DATE), "month view");
+$titleBlock->addCrumb('?m=calendar&date='.$this_week->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCell($AppUI->_('Company').':');
-$titleBlock->addCell(
-	arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '',
-	'<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>'
-);
+$titleBlock->addCell(arraySelect($companies, 'company_id', 
+                                 'onChange="document.pickCompany.submit()" class="text"', 
+                                 $company_id), '', 
+                     ('<form action="' . $_SERVER['REQUEST_URI'] 
+                      . '" method="post" name="pickCompany">'), '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
-$titleBlock->addCell(
-	arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"',
-	$event_filter, true), '', "<Form action='{$_SERVER['REQUEST_URI']}' method='post' name='pickFilter'>", '</form>'
-);
+$titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 
+                                 'onChange="document.pickFilter.submit()" class="text"',
+                                 $event_filter, true), '', 
+                     ('<Form action="' . $_SERVER['REQUEST_URI'] 
+                      . '" method="post" name="pickFilter">'), '</form>');
 $titleBlock->show();
 ?>
 
@@ -87,13 +93,21 @@ TD.weekDay  {
 <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
 <tr>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date='.$prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="images/prev.gif" width="16" height="16" alt="pre" border="0"></A>
+		<a href="<?php 
+echo ('?m=calendar&a=week_view&date='.$prev_week->format(FMT_TIMESTAMP_DATE)); ?>">
+		<?php echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous week')); ?>
+		</a>
 	</td>
 	<th width="100%">
-		<span style="font-size:12pt"><?php echo $AppUI->_('Week').' '.htmlentities($first_time->format("%U - %Y"), ENT_COMPAT, $locale_char_set); ?></span>
+		<span style="font-size:12pt"><?php 
+echo ($AppUI->_('Week') . ' ' 
+      . htmlentities($first_time->format('%U - %Y'), ENT_COMPAT, $locale_char_set)); ?></span>
 	</th>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date='.$next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="images/next.gif" width="16" height="16" alt="next" border="0"></A>
+		<a href="<?php 
+echo ('?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE)); ?>">
+		<?php echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next week')); ?>
+		</a>
 	</td>
 </tr>
 </table>
@@ -110,57 +124,46 @@ for ($i=0; $i < 7; $i++) {
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 
 	$day  = $show_day->getDay();
-	$href = "?m=calendar&a=day_view&date=$dayStamp&tab=0";
-
+	$href = ('?m=calendar&a=day_view&date=' . $dayStamp . '&tab=0"');
+	
+	
 	$s = '';
 	if ($column == 0) {
-		$s .= '<tr>';
+		$s .= "\t<tr>\n";
 	}
-	$s .= '<td class="weekDay" style="width:50%;">';
-
-	$s .= '<table style="width:100%;border-spacing:0;">';
-	$s .= '<tr><td align="';
-	$s .= ($column == 0) ? 'left' : 'right';
-	$s .= '"><a href="'.$href.'">';
-
-	$s .= $dayStamp == $today ? '<span style="color:red">' : '';
-	$day_string = "<strong>" . htmlentities($show_day->format("%d"), ENT_COMPAT, $locale_char_set) . "</strong>";
-	$day_name = htmlentities($show_day->format("%A"), ENT_COMPAT, $locale_char_set);
-	$s .= ($column == 0) ? "$day_string $day_name" :  "$day_name $day_string";
+	$s .= "\t\t" . '<td class="weekDay" style="width:50%;">' ."\n";
 	
-	$s .= $dayStamp == $today ? '</span>' : '';
-	$s .= '</a></td></tr>';
-
-	$s .= '<tr><td>';
-
-	if (isset($links[$dayStamp])) {
-		foreach ($links[$dayStamp] as $e) {
-			$href = isset($e['href']) ? $e['href'] : null;
-			$alt = isset($e['alt']) ? $e['alt'] : null;
-
-			$s .= "<br />";
-			$s .= $href ? "<a href=\"$href\" class=\"event\" title=\"$alt\">" : '';
-			$s .= "{$e['text']}";
-			$s .= $href ? '</a>' : '';
-		}
-	}
-
-	$s .= '</td></tr></table>';
-
-	$s .= '</td>';
+	$s .= "\t\t" . '<table style="width:100%;border-spacing:0;">' ."\n";
+	$s .= ("\t\t\t" . '<tr><td align="' . (($column == 0) ? 'left' : 'right') 
+	       . '"><a href="' . htmlspecialchars($href) . '">');
+	$s .= (($dayStamp == $today) ? '<span style="color:red">' : '');
+	$day_string = trim('<strong>' 
+	                   . htmlentities($show_day->format('%d'), ENT_COMPAT, $locale_char_set) 
+	                   . '</strong>');
+	$day_name = trim(htmlentities($show_day->format("%A"), ENT_COMPAT, $locale_char_set));
+	$s .= trim(($column == 0) ? ($day_string . ' ' . $day_name) : ($day_name . ' ' . $day_string));
+	
+	$s .= (($dayStamp == $today) ? '</span>' : '');
+	$s .= "\t\t\t" . '</a></td></tr>' ."\n";
+	
+	$s .= "\t\t\t" . '<tr><td>' . $cal_week->_drawEvents($dayStamp) . '</td></tr>' ."\n";
+	
+	$s .= "\t\t</table>\n";
+	
+	$s .= "\t\t</td>\n";
 	if ($column == 1) {
-		$s .= '</tr>';
+		$s .= "\t</tr>\n";
 	}
 	$column = 1 - $column;
-
-// select next day
+	
+	// select next day
 	$show_day->addSeconds(24*3600);
 	echo $s;
 }
 ?>
 <tr>
 	<td colspan="2" align="right" bgcolor="#efefe7">
-		<a href="./index.php?m=calendar&a=week_view"><?php echo $AppUI->_('today');?></A>
+		<a href="./index.php?m=calendar&a=week_view"><?php echo $AppUI->_('today');?></a>
 	</td>
 </tr>
 </table>

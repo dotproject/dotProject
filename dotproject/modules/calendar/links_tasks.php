@@ -26,14 +26,15 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 
 	foreach ($tasks as $row) {
 		// the link
-		$link['href'] = "?m=tasks&a=view&task_id=".$row['task_id'];
-		$link['alt'] = $row['project_name'].":\n".$row['task_name'];
+		$link['href'] = ('?m=tasks&a=view&task_id="' . $row['task_id']);
+		$link['alt'] = ($row['project_name'] . ":\n" . $row['task_name']);
 		
 		// the link text
 		if (strlen($row['task_name']) > $strMaxLen) {
-			$row['task_name'] = substr($row['task_name'], 0, $strMaxLen).'...';
+			$row['task_name'] = (substr($row['task_name'], 0, $strMaxLen) . '...');
 		}
-		$link['text'] = '<span style="color:'.bestColor($row['color']).';background-color:#'.$row['color'].'">'.$row['task_name'].'</span>';
+		$link['text'] = ('<span style="color:' . bestColor($row['color']) . ';background-color:#' 
+		                 . $row['color'] . '">' . $row['task_name'] . '</span>');
 		
 		// determine which day(s) to display the task
 		$start = new CDate($row['task_start_date']);
@@ -44,22 +45,21 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		if (($start->after($startPeriod) || $start->equals($startPeriod)) 
 		    && ($start->before($endPeriod) || $start->equals($endPeriod))) {
 			$temp = $link;
-			$temp['alt'] = "START [".$row['task_duration'].' '.$AppUI->_($durnTypes[$row['task_duration_type']])."]\n".$link['alt'];
+			$temp['alt'] = ('START [' . $row['task_duration'] . ' ' 
+			                . $AppUI->_($durnTypes[$row['task_duration_type']]) . "]\n" 
+			                . $link['alt']);
 			if ($a != 'day_view') {
-				$temp['text'] = dPshowImage(dPfindImage('block-start-16.png')).$temp['text'];
+				$temp['text'] = (dPshowImage(dPfindImage('block-start-16.png')) . $temp['text']);
 			}
 			$links[$start->format(FMT_TIMESTAMP_DATE)][] = $temp;
 		}
-		if ($end && $end->after($startPeriod) && $end->before($endPeriod)
-				&& $start->before($end)) {
-			
+		if ($end && $end->after($startPeriod) && $end->before($endPeriod) && $start->before($end)) {
 			$temp = $link;
-			$temp['alt'] = "FINISH\n".$link['alt'];
+			$temp['alt'] = ("FINISH\n" . $link['alt']);
 			if ($a != 'day_view') {
 				$temp['text'].= dPshowImage(dPfindImage('block-end-16.png'));
 			}
 			$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
-			
 		}
 		// convert duration to days
 		if ($durnType < 24.0) {
