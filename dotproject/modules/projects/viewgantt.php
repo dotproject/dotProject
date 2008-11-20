@@ -237,8 +237,8 @@ $src = ("?m=projects&a=gantt&suppressHeaders=1" .
          : ('&start_date=' . $start_date->format("%Y-%m-%d") 
            . '&end_date=' . $end_date->format("%Y-%m-%d"))) . "&width='" 
 		. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)" 
-		. "+'&showLabels=" . $showLabels . '&sortTasksByName='. .$sortTasksByName 
-		. '&proFilter='. .$proFilter . '&showInactive=' . $showInactive 
+		. "+'&showLabels=" . $showLabels . '&sortTasksByName=' .$sortTasksByName 
+		. '&proFilter=' .$proFilter . '&showInactive=' . $showInactive 
 		. '&company_id=' . $company_id . '&department=' . $department . '&dept_ids=' . $dept_ids 
 		. '&showAllGantt=' . $showAllGantt . '&user_id=' . $user_id . '&addPwOiD=' . $addPwOiD 
 		. '&m_orig=' . $m_orig . '&a_orig=' . $a_orig);
