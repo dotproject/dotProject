@@ -41,6 +41,7 @@ The full text of the GPL is in the COPYING file.
 
 	$AppUI = new CAppUI;
 	$AppUI->setUserLocale();
+	$perms =& $AppUI->acl();
 
 	echo "Scanning Queue ...\n";
 	$queue = new EventQueue;
