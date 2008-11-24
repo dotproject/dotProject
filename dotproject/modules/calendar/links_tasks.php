@@ -26,16 +26,17 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 
 	foreach ($tasks as $row) {
 		// the link
-		$link['href'] = ('?m=tasks&a=view&task_id="' . $row['task_id']);
+		$link['href'] = ('?m=tasks&a=view&task_id=' . $row['task_id']);
 		$link['alt'] = ($row['project_name'] . ":\n" . $row['task_name']);
 		
 		// the link text
 		if (strlen($row['task_name']) > $strMaxLen) {
 			$row['task_name'] = (substr($row['task_name'], 0, $strMaxLen) . '...');
 		}
-		$link['text'] = ('<span style="color:' . bestColor($row['color']) . ';background-color:#' 
-		                 . $row['color'] . '">' . $row['task_name'] . '</span>');
-		
+		$link['text'] = ($row['task_name']);
+		$link['style'] = ('color:' . bestColor($row['color']) 
+						  . ';background-color:#' . $row['color']);
+
 		// determine which day(s) to display the task
 		$start = new CDate($row['task_start_date']);
 		$end = $row['task_end_date'] ? new CDate($row['task_end_date']) : null;

@@ -390,10 +390,12 @@ class CMonthCalendar {
 			$alt = isset($e['alt']) ? str_replace("\n",' ',$e['alt']) : null;
 			
 			$s .= "<div>\n";
+			$s .=  '<span style="' . htmlspecialchars($e['style']) . '">';
 			$s .= (($href) ? ('<a href="' . htmlspecialchars($href) . '" class="event" title="' 
 							  . htmlspecialchars($alt) .'">') : '');
 			$s .=  $e['text'];
 			$s .= (($href) ? '</a>' : '');
+			$s .=  '</span>';
 			$s .= "</div>\n";
 		}
 		return $s;
