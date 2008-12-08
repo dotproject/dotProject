@@ -270,7 +270,7 @@ foreach ($files as $file_row) {
 ?>
 <tr>
 	<td colspan="20" style="border: outset 2px #eeeeee;<?php echo $style; ?>">
-	<a href="?m=projects&a=view&project_id=<?php echo $latest_file['file_project']; ?>">
+	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $latest_file['file_project']; ?>">
 	<span style="<?php echo $style; ?>"><?php echo $latest_file['project_name']; ?></span></a>
 	</td>
 </tr>
@@ -285,7 +285,7 @@ foreach ($files as $file_row) {
 	if ($canEdit && (empty($latest_file['file_checkout']) 
 	                 || ($latest_file['file_checkout'] == 'final' 
 	                     && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
-		echo ('<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] 
+		echo ('<a href="./index.php?m=files&amp;a=addedit&amp;file_id=' . $latest_file['file_id'] 
 		      . '">' . "\n");
 		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 
 		                  'edit file') . "\n");
@@ -297,7 +297,7 @@ foreach ($files as $file_row) {
 	  <?php 
 	if ($canEdit && empty($latest_file['file_checkout'])) {
 ?>
-	  <a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>">
+	  <a href="?m=files&amp;a=co&amp;file_id=<?php echo $latest_file['file_id']; ?>">
 	<?php 
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/up.png'), '16', '16', 'checkout', 
 		                 'checkout file');
@@ -306,7 +306,7 @@ foreach ($files as $file_row) {
 <?php
 	} else if ($latest_file['file_checkout'] == $AppUI->user_id) { 
 ?>
-	  <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>">
+	  <a href="?m=files&amp;a=addedit&amp;ci=1&amp;file_id=<?php echo $latest_file['file_id']; ?>">
 	<?php 
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/down.png'), '16', '16', 'checkin', 
 		                 'checkin file');
@@ -360,16 +360,16 @@ foreach ($files as $file_row) {
 		</td>
 		<td width="10%" nowrap="nowrap" align="center">
 		  <?php
-	if ($file['file_folder_name'] != '') {
-		$file_folder_url = (DP_BASE_URL . '/index.php?m=files&tab=' . (count($file_types)+1) 
-		                    . '&folder=' . $file['file_folder_id']);
+	if ($file_row['file_folder_name'] != '') {
+		$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab=' . (count($file_types)+1) 
+		                    . '&amp;folder=' . $file_row['file_folder_id']);
 ?>
 		  <a href="<?php echo $file_folder_url; ?>">
 		  <?php 
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
 		                 '16', '16', 'folder icon', 'show only this folder');
 ?> 
-		  <?php echo  $file['file_folder_name']; ?>
+		  <?php echo  $file_row['file_folder_name']; ?>
 		  </a>
 		  <?php
 	} else {
@@ -378,7 +378,7 @@ foreach ($files as $file_row) {
 ?>
 		</td>
 		<td width="5%" align="center">
-		  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>">
+		  <a href="./index.php?m=tasks&amp;a=view&amp;task_id=<?php echo $latest_file['file_task']; ?>">
 		  <?php 
 echo $latest_file["task_name"];
 ?>
@@ -435,7 +435,7 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 <?php
 				if ($canEdit && $dPconfig['files_show_versions_edit']){
 ?>
-			<a href="./index.php?m=files&a=addedit&file_id=<?php echo $file['file_id']; ?>">
+			<a href="./index.php?m=files&amp;a=addedit&amp;file_id=<?php echo $file['file_id']; ?>">
 			<?php
 					echo dPshowImage((DP_BASE_URL . '/modules/files/images/kedit.png'), '16', '16', 
 				                 'edit file', 'edit file');
@@ -462,8 +462,8 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 			<td width="10%" nowrap="nowrap" align="center">
 			  <?php
 				if ($file['file_folder_name'] != '') {
-					$file_folder_url = (DP_BASE_URL . '/index.php?m=files&tab=' 
-					                    . (count($file_types)+1) . '&folder=' 
+					$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab=' 
+					                    . (count($file_types)+1) . '&amp;folder=' 
 					                    . $file['file_folder_id']);
 ?>
 			  <a href="<?php echo $file_folder_url; ?>">
@@ -480,7 +480,7 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 ?>
 			</td>
 			<td width="5%" align="center">
-			  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['file_task']; ?>">
+			  <a href="./index.php?m=tasks&amp;a=view&amp;task_id=<?php echo $file['file_task']; ?>">
 			  <?php echo $file['task_name']; ?>
 			  </a>
 			</td>

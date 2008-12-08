@@ -40,6 +40,8 @@ class CFile extends CDpObject {
 	var $file_checkout = NULL;
 	var $file_co_reason = NULL;
 	
+	var $_message = NULL;
+	
 	// This "breaks" check-in/upload if helpdesk is not present.
 	// class variable needs to be added "dymanically"
 	//var $file_helpdesk_item = NULL;
@@ -144,10 +146,10 @@ class CFile extends CDpObject {
 		$this->deleteFile();
 		
 		// delete any index entries
-		$q  = new DBQuery;
+		$q = new DBQuery;
 		$q->setDelete('files_index');
 		$q->addQuery('*');
-		$q->addWhere('file_id = ' .$this->file_id);
+		$q->addWhere('file_id = ' . $this->file_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -225,9 +227,9 @@ class CFile extends CDpObject {
 		}
 		
 		
-		$this->_filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
+		$filepath = DP_BASE_DIR.'/files/'.$this->file_project.'/'.$this->file_real_filename;
 		// move it
-		$res = move_uploaded_file($upload['tmp_name'], $this->_filepath);
+		$res = move_uploaded_file($upload['tmp_name'], $filepath);
 		return $res;
 	}
 
@@ -243,14 +245,14 @@ class CFile extends CDpObject {
 			return false;
 		}
 		// buffer the file
-		$this->_filepath = (DP_BASE_DIR . '/files/' . $this->file_project . '/' 
-		                    . $this->file_real_filename);
-		$fp = fopen($this->_filepath, 'rb');
+		$filepath = (DP_BASE_DIR . '/files/' . $this->file_project . '/' 
+		             . $this->file_real_filename);
+		$fp = fopen($filepath, 'rb');
 		$x = fread($fp, $this->file_size);
 		fclose($fp);
 		
 		// parse it
-		$parser = $parser . ' ' . $this->_filepath;
+		$parser = $parser . ' ' . $filepath;
 		$pos = strpos($parser, '/pdf');
 		$x = (($pos !== false) ? `$parser -` : `$parser`);
 		
@@ -313,31 +315,32 @@ class CFile extends CDpObject {
 		
 		//if no project specified than we will not do anything
 		if ($this->file_project != 0) {
-			$this->_project = new CProject();
-			$this->_project->load($this->file_project);
+			$project = new CProject();
+			$project->load($this->file_project);
 			$mail = new Mail;		
 			
 			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject($this->_project->project_name . '::' . $this->file_name, 
+				$mail->Subject($project->project_name . '::' . $this->file_name, 
 				               $locale_char_set);
 			} else { //notify all assigned users			
-				$this->_task = new CTask();
-				$this->_task->load($this->file_task);
-				$mail->Subject($this->_project->project_name . '::' . $this->_task->task_name 
+				$task = new CTask();
+				$task->load($this->file_task);
+				$mail->Subject($project->project_name . '::' . $task->task_name 
 							   . '::' . $this->file_name, $locale_char_set);
 			}
 			
-			$body = $AppUI->_('Project').': '.$this->_project->project_name;
+			$body = $AppUI->_('Project').': '.$project->project_name;
 			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-			          . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id);
+			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $project->project_id);
 			
-			$q  = new DBQuery;
-			if (intval($this->_task->task_id) != 0) {
-				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
+			$q = new DBQuery;
+			$users = array();
+			if (intval($task->task_id) != 0) {
+				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $task->task_name;
 				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id);
+				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $task->task_id);
 				$body .= ("\n" . $AppUI->_('Description') . ':' . "\n" 
-				          . $this->_task->task_description);
+				          . $task->task_description);
 				
 				//preparing users array
 				$q->addTable('tasks', 't');
@@ -357,8 +360,8 @@ class CFile extends CDpObject {
 				$q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
 				$q->addJoin('users', 'a', 'a.user_id = u.user_id');
 				$q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-				$q->addWhere('t.task_id = '.$this->_task->task_id);
-				$this->_users = $q->loadList();
+				$q->addWhere('t.task_id = ' . $task->task_id);
+				$users = $q->loadList();
 			} else {
 				//find project owner and notify him about new or modified file
 				$q->addTable('users', 'u');
@@ -366,8 +369,10 @@ class CFile extends CDpObject {
 				$q->addQuery('u.*');
 				$q->addWhere('p.project_owner = u.user_id');
 				$q->addWhere('p.project_id = '.$this->file_project);
-				$this->_users = $q->loadList();
+				$users = $q->loadList();
 			}
+			$q->clear();
+			
 			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
 			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 			if ($this->_message != 'deleted') {
@@ -382,8 +387,8 @@ class CFile extends CDpObject {
 			$mail->From ('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' 
 			             . $AppUI->user_email . '>');
 			
-			if (intval($this->_task->task_id) != 0) {
-				foreach ($this->_users as $row) {
+			if (intval($task->task_id) != 0) {
+				foreach ($users as $row) {
 					if ($row['assignee_id'] != $AppUI->user_id 
 					    && $mail->ValidEmail($row['assignee_email'])) {
 						//send e-mails
@@ -392,7 +397,7 @@ class CFile extends CDpObject {
 					}
 				}
 			} else { 
-				foreach ($this->_users as $row) {
+				foreach ($users as $row) {
 					if ($row['user_id'] != $AppUI->user_id) {
 						if ($mail->ValidEmail($row['user_email'])) {
 						    //sending mail to project owner (there should be only one) 
@@ -409,38 +414,39 @@ class CFile extends CDpObject {
 		GLOBAL $AppUI, $dPconfig, $locale_char_set;
 		//if no project specified than we will not do anything
 		if ($this->file_project != 0) {
-			$this->_project = new CProject();
-			$this->_project->load($this->file_project);
+			$project = new CProject();
+			$project->load($this->file_project);
 			$mail = new Mail;
 			
 			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name 
+				$mail->Subject($AppUI->_('Project') . ': ' . $project->project_name 
 				               . '::' . $this->file_name, $locale_char_set);
 			} else { //notify all assigned users
-				$this->_task = new CTask();
-				$this->_task->load($this->file_task);
-				$mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' 
-				               . $this->_task->task_name . '::' . $this->file_name, 
+				$task = new CTask();
+				$task->load($this->file_task);
+				$mail->Subject($AppUI->_('Project') . ': ' . $project->project_name . '::' 
+				               . $task->task_name . '::' . $this->file_name, 
 				               $locale_char_set);
 			}
 			
-			$body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
+			$body = $AppUI->_('Project') . ': ' . $project->project_name;
 			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-			          . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id);
+			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $project->project_id);
 			
 			$q = new DBQuery;
-			if (intval($this->_task->task_id) != 0) {
-				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
+			$users = array();
+			if (intval($task->task_id) != 0) {
+				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $task->task_name;
 				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id);
-				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
+				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $task->task_id);
+				$body .= "\n" . $AppUI->_('Description') . ":\n" . $task->task_description;
 				
 				$q->addTable('project_contacts', 'pc');
 				$q->addQuery('c.contact_email as contact_email' 
 				             . ', c.contact_first_name as contact_first_name' 
 				             . ', c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addWhere('pc.project_id = '.$this->_project->project_id);
+				$q->addWhere('pc.project_id = '.$project->project_id);
 				$sql = '(' . $q->prepare() . ')';
 				$q->clear();   
 				
@@ -451,11 +457,11 @@ class CFile extends CDpObject {
 				             . ', c.contact_first_name as contact_first_name' 
 				             . ', c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addWhere('tc.task_id = ' . $this->_task->task_id);
+				$q->addWhere('tc.task_id = ' . $task->task_id);
 				$sql .= '(' . $q->prepare() . ')';
 				$q->clear();
 				
-  				$this->_users = db_loadList($sql);
+  				$users = db_loadList($sql);
 			} else {			
 				
 				$q->addTable('project_contacts', 'pc');
@@ -466,7 +472,7 @@ class CFile extends CDpObject {
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addWhere('pc.project_id = ' . $this->file_project);
 				
-				$this->_users = $q->loadList();
+				$users = $q->loadList();
 				$q->clear();
 			}
 			
@@ -485,7 +491,7 @@ class CFile extends CDpObject {
 			             . $AppUI->user_email . '>');
 			
 			
-			foreach ($this->_users as $row) {
+			foreach ($users as $row) {
 				if ($mail->ValidEmail($row['contact_email'])) {
 					$mail->To($row['contact_email'], true);
 					$mail->Send();

@@ -36,7 +36,10 @@ class CDpObject {
 	 *	@var string Error message
 	 */
 	var $_error = '';
-	
+	/**
+	 *	@var string generic message
+	 */
+	var $_message;
 	/**
 	 * @var object Query Handler
 	 */
