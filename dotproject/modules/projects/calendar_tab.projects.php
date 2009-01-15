@@ -2,7 +2,7 @@
 ## Active Projects View for Calendar
 ## based on Companies: View Projects sub-table by gregorerhardt
 ##
-global $AppUI, $company_id, $pstatus, $dPconfig, $project_types, $priority;
+global $AppUI, $company_id, $pstatus, $dPconfig, $project_types, $priority, $company_id;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $project_types = dPgetSysVal('ProjectStatus');
@@ -55,6 +55,9 @@ $q->addWhere('pr.project_status <> 5');
 $allowed_where = $obj->getAllowedSQL($AppUI->user_id);
 if ($allowed_where) {
 	$q->addWhere(implode(' AND ', $allowed_where));
+}
+if ($company_id) {
+	$q->addWhere('pr.project_company = ' . $company_id);
 }
 $q->addOrder('project_end_date');
 
