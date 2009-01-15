@@ -107,6 +107,7 @@ if (($rows = db_loadList($usersql, NULL))) {
 		                . ' (' . $row['user_username'] . ') </option>');
 	}
 }
+$bufferUser .= '</select>';
 
 /* setting this to filter project_list_data function below
  0 = undefined
@@ -134,16 +135,16 @@ projects_list_data();
 // setup the title block
 $titleBlock = new CTitleBlock('Projects', 'applet3-48.png', $m, ($m . '.' . $a));
 $titleBlock->addCell($AppUI->_('Owner') . ':');
-$titleBlock->addCell($bufferUser, '', '<form action="?m=projects" method="post" name="pickUser">'
-                     , '</form>');
+$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickUser">' . "\n" 
+                      . $bufferUser . "\n" . '</form>' . "\n"));
 $titleBlock->addCell($AppUI->_('Company') . '/' . $AppUI->_('Division') . ':');
-$titleBlock->addCell($buffer, '', '<form action="?m=projects" method="post" name="pickCompany">'
-                     , '</form>');
+$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickCompany">' . "\n" 
+                      . $buffer . "\n" .  '</form>' . "\n"));
 $titleBlock->addCell();
 if ($canAuthor) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' 
-	                     . $AppUI->_('new project') . '">', ''
-	                     ,'<form action="?m=projects&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell(('<form action="?m=projects&amp;a=addedit" method="post">' . "\n" 
+	                      . '<input type="submit" class="button" value="' 
+	                      . $AppUI->_('new project') . '" />'. "\n" . '</form>' . "\n"));
 }
 $titleBlock->show();
 

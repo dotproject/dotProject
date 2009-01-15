@@ -64,7 +64,7 @@ else
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td><table width='100%' cellpadding="3" cellspacing="0" border="0"><tr>
-	<th background="style/<?php echo $uistyle;?>/images/titlegrad.jpg" class="banner" align="left"><strong>
+	<th style="background: url(style/<?php echo $uistyle; ?>/images/titlegrad.jpg;" class="banner" align="left"><strong>
 	  <?php 
 		echo "<a style='color: white' href='{$dPconfig['base_url']}'>$page_title</a>";
 		?>
@@ -94,7 +94,7 @@ else
 		?>
 		</td>
         <td nowrap="nowrap" align="right">
-		<form name="frm_new" method=GET action="./index.php">
+		<form name="frm_new" method="get" action="./index.php">
 		<table cellpadding="0" cellspacing="0">
 		<tr><td>
 <?php
@@ -141,17 +141,17 @@ else
 			<td width="100%"><?php echo $AppUI->_('Welcome').' '.$AppUI->user_first_name.' '.$AppUI->user_last_name; ?></td>
 			<td nowrap="nowrap">
 				<?php echo dPcontextHelp( 'Help' );?> |
-				<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
+				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
 <?php
 	if ($perms->checkModule('tasks', 'access')) {
 ?>
-				<b><a href="./index.php?m=tasks&a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
+				<b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
 <?php
 }
 	if ($perms->checkModule( 'calendar', 'access' )) {
 		$now = new CDate();
 ?>
-				<a href="./index.php?m=calendar&a=day_view&date=<?php echo $now->format( FMT_TIMESTAMP_DATE );?>"><?php echo $AppUI->_('Today');?></a> |
+				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format( FMT_TIMESTAMP_DATE );?>"><?php echo $AppUI->_('Today');?></a> |
 <?php } ?>
 				<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 			</td>

@@ -142,7 +142,7 @@ function findchilddept( &$tarr, $parent, $level=1 ){
 }
 
 function addDeptId($dataset, $parent){
-	Global $dept_ids;
+	global $dept_ids;
 	foreach ($dataset as $data){
 		if($data['dept_parent']==$parent){
 			$dept_ids[] = $data['dept_id'];

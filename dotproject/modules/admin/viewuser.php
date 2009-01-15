@@ -9,7 +9,7 @@ $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 if ($user_id != $AppUI->user_id 
 && (! $perms->checkModuleItem('admin', 'view', $user_id) 
 || ! $perms->checkModuleItem('users', 'view', $user_id)))
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 
 $AppUI->savePlace();
 
@@ -71,18 +71,17 @@ if (!db_loadHash($sql, $user)) {
 	  $titleBlock->addCrumb('?m=admin', 'users list');
 	}
 	if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb('?m=admin&a=addedituser&user_id=' . $user_id, 'edit this user');
-		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
+		$titleBlock->addCrumb('?m=admin&amp;a=addedituser&amp;user_id=' . $user_id, 'edit this user');
+		$titleBlock->addCrumb('?m=system&amp;a=addeditpref&amp;user_id=' . $user_id, 'edit preferences');
 		$titleBlock->addCrumbRight('<a href="#" onclick="popChgPwd();return false">' 
 								   . $AppUI->_('change password') . '</a>');
-		$titleBlock->addCell('<td align="right" width="100%">' 
-		                     . '<input type="button" class=button value="' . $AppUI->_('add user') 
+		$titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user') 
 		                     . '" onClick="javascript:window.location=\'./index.php' 
-		                     . '?m=admin&a=addedituser\';" /></td>');
+		                     . '?m=admin&amp;a=addedituser\';" />');
 	}
 	$titleBlock->show();
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -90,7 +89,7 @@ if (!db_loadHash($sql, $user)) {
 if ($canEdit || $user_id == $AppUI->user_id) {
 ?>
 function popChgPwd() {
-	window.open('./index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user['user_id']; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no');
+	window.open('./index.php?m=public&amp;a=chpwd&amp;dialog=1&amp;user_id=<?php echo $user['user_id']; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no');
 }
 <?php } ?>
 </script>
@@ -116,7 +115,7 @@ function popChgPwd() {
 			<td class="hilite" width="100%">
 				<?php
 				if ($perms->checkModuleItem('companies', 'access', $user['contact_company'])) {
-					echo '<a href="?m=companies&a=view&company_id=' . $user['contact_company'] . '" title="' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '">' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '</a>';
+					echo '<a href="?m=companies&amp;a=view&amp;company_id=' . $user['contact_company'] . '" title="' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '">' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '</a>';
 				} else {
 					echo htmlspecialchars($user['company_name'], ENT_QUOTES);
 				}
@@ -126,7 +125,7 @@ function popChgPwd() {
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Department');?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=departments&a=view&dept_id=<?php echo @$user['contact_department'];?>"><?php echo $user['dept_name'];?></a>
+				<a href="?m=departments&amp;a=view&amp;dept_id=<?php echo @$user['contact_department'];?>"><?php echo $user['dept_name'];?></a>
 			</td>
 		</tr>
 		<tr>
@@ -190,7 +189,7 @@ function popChgPwd() {
 <?php
 	// tabbed information boxes
 	$min_view = true;
-	$tabBox = new CTabBox("?m=admin&a=viewuser&user_id=$user_id", '', $tab);
+	$tabBox = new CTabBox(('?m=admin&amp;a=viewuser&amp;user_id=' . $user_id), '', $tab);
 	$tabBox->loadExtras('admin', 'viewuser'); 
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_log', 'User Log');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_perms', 'Permissions');

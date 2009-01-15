@@ -209,17 +209,17 @@ class CMonthCalendar {
  */
 	 function _drawTitle() {
 		global $AppUI, $m, $a, $locale_char_set;
-		$url = ('index.php?m=' . $m . (($a) ? ('&a=' . $a) : '') 
-				. (isset($_GET['dialog']) ? '&dialog=1' : ''));
+		$url = ('index.php?m=' . $m . (($a) ? ('&amp;a=' . $a) : '') 
+				. (isset($_GET['dialog']) ? '&amp;dialog=1' : ''));
 		
 		$s = ("\n" . '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' 
 			  . $this->styleTitle . '">');
 		$s .= "\n\t<tr>";
 		if ($this->showArrows) {
-			$href = ($url . '&date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) 
-					 . (($this->callback) ? ('&callback=' . $this->callback) : '') 
+			$href = ($url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) 
+					 . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') 
 					 . ((count($this->highlightedDays) > 0) 
-			            ? ('&uts=' . key($this->highlightedDays)) : ''));
+			            ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
 			$s .= "\n\t\t" . '<td align="left">';
 			$s .= ('<a href="' . $href . '">' 
 				   . dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous month')) 
@@ -230,16 +230,16 @@ class CMonthCalendar {
 		
 		$s .= "\n\t" . '<th width="99%" align="center">';
 		if ($this->clickMonth) {
-			$s .= ('<a href="index.php?m=' . $m . '&date=' 
+			$s .= ('<a href="index.php?m=' . $m . '&amp;date=' 
 			       . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">');
 		}
 		$s .= $this->this_month->format("%B %Y") . (($this->clickMonth) ? '</a>' : '');
 		$s .= "</th>";
 		
 		if ($this->showArrows) {
-			$href = ($url . '&date='  .$this->next_month->format(FMT_TIMESTAMP_DATE) 
-					 . (($this->callback) ? ('&callback='.$this->callback) : '') 
-					 . ((count($this->highlightedDays)>0) ? ('&uts='.key($this->highlightedDays)) 
+			$href = ($url . '&amp;date='  .$this->next_month->format(FMT_TIMESTAMP_DATE) 
+					 . (($this->callback) ? ('&amp;callback='.$this->callback) : '') 
+					 . ((count($this->highlightedDays)>0) ? ('&amp;uts='.key($this->highlightedDays)) 
 			            : ''));
 			$s .= "\n\t\t" . '<td align="right">';
 			$s .= ('<a href="' . $href . '">' 
@@ -782,7 +782,7 @@ class CEvent extends CDpObject {
 		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
 		if (! $clash) {
 			$body .= ($AppUI->_('URL') . ":\t" . $dPconfig['base_url'] 
-			          . '/index.php?m=calendar&a=view&event_id=' . $this->event_id . "\n");
+			          . '/index.php?m=calendar&amp;a=view&amp;event_id=' . $this->event_id . "\n");
 		}
 		
 		$body .= $AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . "\n";

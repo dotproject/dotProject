@@ -11,7 +11,7 @@ $canRead = getPermission($m, 'view', $dept_id);
 $canEdit = getPermission($m, 'edit', $dept_id);
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 $AppUI->savePlace();
 
@@ -56,15 +56,16 @@ if ($dept_id > 0) {
 			$titleBlock = new CTitleBlock('View Department', 'users.gif', $m, $m.'.'.$a);
 			if ($canEdit) {
 				$titleBlock->addCell();
-				$titleBlock->addCell(
-					'<input type="submit" class="button" value="'.$AppUI->_('new department').'">', '',
-					'<form action="?m=departments&a=addedit&company_id='.$company_id.'&dept_parent='.$dept_id.'" method="post">', '</form>'
-				);
+				$titleBlock->addCell(('<form action="?m=departments&amp;a=addedit&amp;company_id=' 
+				                      . $company_id.'&amp;dept_parent=' . $dept_id 
+				                      . '" method="post">' 
+				                      . '<input type="submit" class="button" value="' 
+				                      . $AppUI->_('new department') . '" />' . '</form>'));
 			}
 			$titleBlock->addCrumb('?m=companies', 'company list');
-			$titleBlock->addCrumb('?m=companies&a=view&company_id='.$company_id, 'view this company');
+			$titleBlock->addCrumb('?m=companies&amp;a=view&amp;company_id='.$company_id, 'view this company');
 			if ($canEdit) {
-				$titleBlock->addCrumb('?m=departments&a=addedit&dept_id='.$dept_id, 'edit this department');
+				$titleBlock->addCrumb('?m=departments&amp;a=addedit&amp;dept_id='.$dept_id, 'edit this department');
 
 				if ($canDelete) {
 					$titleBlock->addCrumbDelete('delete department', $canDelete, $msg);
@@ -73,7 +74,7 @@ if ($dept_id > 0) {
 			$titleBlock->show();
 		}
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -146,7 +147,7 @@ function delIt() {
 
 	// tabbed information boxes
 	$moddir = DP_BASE_DIR . '/modules/departments/';
-	$tabBox = new CTabBox('?m=' . $m . '&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
+	$tabBox = new CTabBox('?m=' . $m . '&amp;a=' . $a . '&amp;dept_id=' . $dept_id, '', $tab);
 	$tabBox->add($moddir . 'vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
 	$tabBox->loadExtras($m, 'view');		

@@ -51,7 +51,7 @@ echo $uistyle; ?>/main.css" media="all" />
 </head>
 <body class="mainpage"<?php 
 if (!$dialog) { 
-  echo (' background="style/classic/images/bground.gif"'); 
+	echo (' style="background: url(style/classic/images/bground.gif);"'); 
 } ?>>
 <table class="nav" width="100%" cellpadding="0" cellspacing="2">
 <tr>
@@ -65,7 +65,7 @@ echo ($AppUI->_('Current user') . ": $AppUI->user_first_name $AppUI->user_last_n
 	<table cellpadding="1" cellspacing="1" width="150">
 	<tr>
 		<td class="topBtnOff" nowrap bgcolor="#cccccc" align="center">
-			<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id;?>"><?php 
+			<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php 
 echo $AppUI->_('My Info');?></a>
 		</td>
 		<td class="topBtnOff" nowrap bgcolor="#cccccc" align="center">
@@ -77,7 +77,7 @@ echo dPcontextHelp('Help');?>
 	</tr>
 	</table>
 	</td>
-	<form name="frm_new" method=GET action="./index.php">
+	<form name="frm_new" method="get" action="./index.php">
 	<td>
 <?php
 	

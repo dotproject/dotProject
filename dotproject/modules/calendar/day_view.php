@@ -7,6 +7,7 @@ global $tab, $locale_char_set, $date;
 $AppUI->savePlace();
 
 require_once($AppUI->getModuleClass('tasks'));
+require (DP_BASE_DIR.'/functions/projects_func.php');
 
 
 /* Kludge: Backward compatible function to address php5 and php4 date issue */
@@ -66,24 +67,24 @@ $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Day View', 'myevo-appointments.png', $m, "$m.$a");
-$titleBlock->addCrumb(('?m=calendar&date=' . $this_day->format(FMT_TIMESTAMP_DATE)), 'month view');
-$titleBlock->addCrumb(('?m=calendar&a=week_view&date=' . $this_week), 'week view');
+$titleBlock->addCrumb(('?m=calendar&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), 'month view');
+$titleBlock->addCrumb(('?m=calendar&amp;a=week_view&amp;date=' . $this_week), 'week view');
 $titleBlock->addCell(($AppUI->_('Company') . ':'));
 $titleBlock->addCell(arraySelect($companies, 'company_id', 
                                  'onChange="document.pickCompany.submit()" class="text"', 
                                  $company_id), '', 
-                     ('<td><form action="' . $_SERVER['REQUEST_URI'] 
+                     ('<td><form action="' . htmlspecialchars($_SERVER['REQUEST_URI']) 
                       . '" method="post" name="pickCompany">' 
                       . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
                      '</tr></table></form></td>');
 $titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event') 
-                      . '" />'), '', ('<td><form action="?m=calendar&a=addedit&date=' 
+                      . '" />'), '', ('<td><form action="?m=calendar&amp;a=addedit&amp;date=' 
 									  . $this_day->format(FMT_TIMESTAMP_DATE)  . '" method="post">' 
                                       . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
                      '</tr></table></form></td>');
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 function clickDay(idate, fdate) {
 		window.location = './index.php?m=calendar&a=day_view&date='+idate+'&tab=0';
 }
@@ -96,7 +97,7 @@ function clickDay(idate, fdate) {
 			<tr>
 				<td>
 					<a href="<?php 
-echo '?m=calendar&a=day_view&date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>">
+echo '?m=calendar&amp;a=day_view&amp;date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>">
 					<?php 
 echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous day')); ?>
 					</a>
@@ -107,7 +108,7 @@ echo ($AppUI->_($this_day->format('%A')) . ', ' . $this_day->format($df)); ?>
 				</th>
 				<td>
 					<a href="<?php 
-echo ('?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>">
+echo ('?m=calendar&amp;a=day_view&amp;date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>">
 					<?php 
 echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 					</a>
@@ -120,7 +121,7 @@ echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 		<td valign="top">
 			<?php
 // tabbed information boxes
-$tabBox = new CTabBox(('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '', 
+$tabBox = new CTabBox(('?m=calendar&amp;a=day_view&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '', 
 					  $tab);
 $tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_events', 'Events');
 $tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_tasks', 'Tasks');
@@ -131,7 +132,8 @@ $tabBox->show();
 <?php if ($dPconfig['cal_day_view_show_minical']) { ?>
 		<td valign="top" width="175">
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr><td align="center">
+			<tr>
+				<td align="center">
 <?php
 $minical = new CMonthCalendar($this_day);
 $minical->setStyles('minititle', 'minical');
@@ -139,28 +141,29 @@ $minical->showArrows = false;
 $minical->showWeek = false;
 $minical->clickMonth = true;
 $minical->setLinkFunctions('clickDay');
-?>
 
-<?php 
 $minical->setDate($minical->prev_month);
 echo $minical->show(); 
 ?>
-
-<hr size="1" noshade="noshade">
-
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+<?php 
+$minical->setDate($minical->next_month);
+echo $minical->show(); 
+?>
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
 <?php 
 $minical->setDate($minical->next_month);
 echo $minical->show(); 
 ?>
 
-<hr size="1" noshade="noshade">
-
-<?php 
-$minical->setDate($minical->next_month);
-echo $minical->show(); 
-?>
-
-			</td></tr>
+				</td>
+			</tr>
 		</table>
 		</td>
  <?php } ?>

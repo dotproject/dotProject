@@ -18,7 +18,7 @@ else
 	<title><?php echo @dPgetConfig( 'page_title' );?></title>
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
-	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
+	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
 	<?php @$AppUI->loadJS(); ?>
 </head>
 
@@ -26,7 +26,7 @@ else
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td><table width="100%" cellpadding="3" cellspacing="0" border="0"><tr>
-	<th background="style/<?php echo $uistyle;?>/images/titlegrad.jpg" class="banner" align="left"><strong><?php
+	<th style="background: url(style/<?php echo $uistyle;?>/images/titlegrad.jpg;" class="banner" align="left"><strong><?php
 		echo "<a style='color: white' href='{$dPconfig['base_url']}'>$page_title</a>";
 	?></strong></th>
 	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
@@ -54,7 +54,7 @@ else
 		?>
 		</td>
 		<td nowrap="nowrap" align="right">
-		<form name="frm_new" method=GET action="./index.php">
+		<form name="frm_new" method="get" action="./index.php">
 		<table cellpadding="0" cellspacing="0">
 		<tr><td>
 <?php
@@ -101,12 +101,12 @@ else
 			<td width="100%"><?php echo $AppUI->_('Welcome').' '.$AppUI->user_first_name.' '.$AppUI->user_last_name; ?></td>
 			<td nowrap="nowrap">
 				<?php echo dPcontextHelp( 'Help' );?> |
-				<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
+				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
 <?php
 	if ($perms->checkModule('calendar', 'access')) {
 		$now = new CDate();
-?>                              <b><a href="./index.php?m=tasks&a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
-				<a href="./index.php?m=calendar&a=day_view&date=<?php echo $now->format( FMT_TIMESTAMP_DATE );?>"><?php echo $AppUI->_('Today');?></a> |
+?>                              <b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
+				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format( FMT_TIMESTAMP_DATE );?>"><?php echo $AppUI->_('Today');?></a> |
 <?php } ?>
 				<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 			</td>

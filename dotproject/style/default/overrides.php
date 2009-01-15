@@ -65,7 +65,7 @@ class CTabBox extends CTabBox_core {
 				
 				$s .= (($js_tabs) 
 					   ? (' class="' . $class . '"') 
-					   : (' background="./style/' . $uistyle . '/images/tab' . $sel . 'Bg.png"'));
+					   : (' style="background: url(style/' . $uistyle . '/images/tab' . $sel . 'Bg.png);"'));
 				$s .= '>&nbsp;<a href="';
 				
 				if ($this->javascript) {

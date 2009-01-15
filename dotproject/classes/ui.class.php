@@ -122,7 +122,7 @@ class CAppUI {
  */
 	function getSystemClass($name=null) {
 		if ($name) {
-			return DP_BASE_DIR."/classes/$name.class.php";
+			return DP_BASE_DIR . '/classes/' . $name . '.class.php';
 		}
 	}
 
@@ -134,7 +134,7 @@ class CAppUI {
 */
 	function getLibraryClass($name=null) {
 		if ($name) {
-			return DP_BASE_DIR."/lib/$name.php";
+			return DP_BASE_DIR . '/lib/' . $name. '.php';
 		}
 	}
 
@@ -145,7 +145,7 @@ class CAppUI {
  */
 	function getModuleClass($name=null) {
 		if ($name) {
-			return (DP_BASE_DIR . "/modules/$name/$name.class.php");
+			return (DP_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php');
 		}
 	}
 
@@ -178,7 +178,7 @@ class CAppUI {
 		// check if default user's uistyle is installed
 		$uistyle = $this->getPref('UISTYLE');
 		
-		if ($uistyle && !is_dir(DP_BASE_DIR."/style/$uistyle")) {
+		if ($uistyle && !is_dir(DP_BASE_DIR . '/style/' . $uistyle)) {
 			// fall back to host_style if user style is not installed
 			$this->setPref('UISTYLE', dPgetConfig('host_style'));
 		}
@@ -193,9 +193,9 @@ class CAppUI {
 */
 	function readDirs($path) {
 		$dirs = array();
-		$d = dir(DP_BASE_DIR."/$path");
+		$d = dir(DP_BASE_DIR . '/'  . $path);
 		while (false !== ($name = $d->read())) {
-			if (is_dir(DP_BASE_DIR . "/{$path}/{$name}") && $name != '.' && $name != '..' 
+			if (is_dir(DP_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' 
 			    && $name != 'CVS' && $name != '.svn') {
 				$dirs[$name] = $name;
 			}
@@ -215,7 +215,7 @@ class CAppUI {
 		
 		if (is_dir($path) && ($handle = opendir($path))) {
 			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' && preg_match("/$filter/", $file)) { 
+				if ($file != '.' && $file != '..' && preg_match(('/' . $filter . '/'), $file)) { 
 					$files[$file] = $file; 
 				} 
 			}
@@ -236,12 +236,12 @@ class CAppUI {
 		global $AppUI;
 		
 		// define bad characters and their replacement
-		$bad_chars = ";/\\";
+		$bad_chars = ';/\\';
 		$bad_replace = '....'; // Needs the same number of chars as $bad_chars
 		
 		// check whether the filename contained bad characters
 		if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect('m=public&amp;a=access_denied');
 		}
 		else {
 			return $file;
@@ -356,8 +356,8 @@ class CAppUI {
 			$LANGUAGES = array();
 			$langs = $this->readDirs('locales');
 			foreach ($langs as $lang) {
-				if (file_exists(DP_BASE_DIR."/locales/$lang/lang.php")) {
-					include_once DP_BASE_DIR."/locales/$lang/lang.php";
+				if (file_exists(DP_BASE_DIR . '/locales/' . $lang . '/lang.php')) {
+					include_once DP_BASE_DIR . '/locales/' . $lang . '/lang.php';
 				}
 			}
 			@$_SESSION['LANGUAGES'] =& $LANGUAGES;
@@ -508,7 +508,7 @@ class CAppUI {
 		// Fix to handle cookieless sessions
 		if ($session_id != '') {
 			//appending $session_id parameter to $params
-			$params .= (($params) ? '&' : '')  . $session_id;
+			$params .= (($params) ? '&amp;' : '')  . $session_id;
 		}
 		ob_implicit_flush(); // Ensure any buffering is disabled.
 		header('Location: index.php?' . $params);
@@ -569,7 +569,7 @@ class CAppUI {
 			$this->msgNo = 0;
 		}
 		return (($msg) ? ('<table cellspacing="0" cellpadding="1" border="0"><tr>'
-		                  . "<td>$img</td><td class=\"$class\">$msg</td>"
+		                  . '<td>' . $img . '</td><td class="' . $class . '">' . $msg . '</td>'
 		                  . '</tr></table>')
 		        : '');
 	}
@@ -682,7 +682,7 @@ class CAppUI {
 		$q->addWhere("user_id = $user_id AND user_username = '$username'");
 		$sql = $q->prepare();
 		$q->clear();
-		dprint(__FILE__, __LINE__, 7, "Login SQL: $sql");
+		dprint(__FILE__, __LINE__, 7, ('Login SQL: ' . $sql));
 		
 		if(!db_loadObject($sql, $this)) {
 			dprint(__FILE__, __LINE__, 1, 'Failed to load user information');
@@ -718,7 +718,7 @@ class CAppUI {
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
 		$q->addWhere('user_id = ' . $user_id);
-		$q->addWhere("(date_time_out='0000-00-00 00:00:00' OR date_time_out IS NULL) ");
+		$q->addWhere("(date_time_out='0000-00-00 00:00:00' OR date_time_out IS NULL)");
 		$q->addWhere('user_access_log_id = ' . $this->last_insert_id);
 		if ($user_id > 0) {
 			$q->exec();
@@ -733,7 +733,7 @@ class CAppUI {
 		$q  = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
-		$q->addWhere("user_access_log_id = $last_insert_id");
+		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0){
 			$q->exec();
 			$q->clear();
@@ -826,7 +826,7 @@ class CAppUI {
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
 		$q->addWhere('mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> \'public\'');
-		$q->addWhere('mod_type != \'utility\'');
+		$q->addWhere("mod_type != 'utility'");
 		$q->addOrder('mod_ui_order');
 		return ($q->loadList());
 	}
@@ -882,12 +882,14 @@ class CAppUI {
 			}
 		}
 		asort($js_files);
-		while(list(,$js_file_name) = each($js_files)){
-			echo "<script type=\"text/javascript\" src=\"{$base}js/$js_file_name\"></script>\n";
+		while (list(,$js_file_name) = each($js_files)){
+			echo ('<script type="text/javascript" src="' . $base . 'js/' . $js_file_name 
+			      . '"></script>'."\n");
 		}
 		
 		// additionally load overlib
-		echo "<script type=\"text/javascript\" src=\"{$base}lib/overlib/overlib.js\"></script>\n";
+		echo ('<script type="text/javascript" src="' . $base . 'lib/overlib/overlib.js"></script>' 
+		      . "\n");
 		
 		$this->getModuleJS($m, $a, true);
 	}
@@ -902,13 +904,13 @@ class CAppUI {
 			$base .= '/';
 		}
 		if ($load_all || !($file)) {
-			if (file_exists("{$root}modules/$module/$module.module.js"))
+			if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js'))
 				echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
 				      . $module . '.module.js"></script>' . "\n");
 		}
-		if (isset($file) && file_exists("{$root}modules/$module/$file.js")) {
+		if (isset($file) && file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
 			echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
-			      . $file  .'.js"></script>'."\n");
+			      . $file . '.js"></script>' . "\n");
 		}
 	}
 }
@@ -940,7 +942,7 @@ the active tab, and the selected tab **/
 	function CTabBox_core($baseHRef='', $baseInc='', $active=0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
-		$this->baseHRef = ($baseHRef ? "$baseHRef&" : '?');
+		$this->baseHRef = ($baseHRef ? ($baseHRef . '&amp;') : '?');
 		$this->javascript = $javascript;
 		$this->baseInc = $baseInc;
 	}
@@ -1018,29 +1020,29 @@ the active tab, and the selected tab **/
 			}
 			foreach($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
-				$s .= "\n\t<td width=\"1%\" nowrap=\"nowrap\" class=\"tabsp\">";
-				$s .= "\n\t\t<img src=\"./images/shim.gif\" height=\"1\" width=\"1\" alt=\"\" />";
-				$s .= "\n\t</td>";
-				$s .= "\n\t<td id=\"toptab_" . $k . "\" width=\"1%\" nowrap=\"nowrap\"";
+				$s .= "\n\t" . '<td width="1%" nowrap="nowrap" class="tabsp">';
+				$s .= "\n\t\t" . '<img src="./images/shim.gif" height="1" width="1" alt="" />';
+				$s .= "\n\t" . '</td>';
+				$s .= "\n\t" . '<td id="toptab_' . $k . '" width="1%" nowrap="nowrap"';
 				if ($js_tabs) {
-					$s .= " class=\"$class\"";
+					$s .= ' class="' . $class . '"';
 				}
-				$s .= ">";
-				$s .= "\n\t\t<a href=\"";
+				$s .= '>';
+				$s .= "\n\t\t" . '<a href="';
 				if ($this->javascript) {
-					$s .= "javascript:" . $this->javascript . "({$this->active}, $k)";
+					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
 				} else if ($js_tabs) {
 					$s .= 'javascript:show_tab(' . $k . ')';
 				} else {
-					$s .= $this->baseHRef . "tab=$k";
+					$s .= $this->baseHRef . 'tab=' . $k;
 				}
-				$s .= "\">". ($v[2] ? $v[1] : $AppUI->_($v[1])). "</a>";
-				$s .= "\n\t</td>";
+				$s .= '">'. ($v[2] ? $v[1] : $AppUI->_($v[1])). '</a>';
+				$s .= "\n\t" . '</td>';
 			}
-			$s .= "\n\t<td nowrap=\"nowrap\" class=\"tabsp\">&nbsp;</td>";
+			$s .= "\n\t" . '<td nowrap="nowrap" class="tabsp">&nbsp;</td>';
 			$s .= "\n</tr>";
 			$s .= "\n<tr>";
-			$s .= '<td width="100%" colspan="'.(count($this->tabs)*2 + 1).'" class="tabox">';
+			$s .= '<td width="100%" colspan="' . (count($this->tabs)*2 + 1) . '" class="tabox">';
 			echo $s;
 			
 			//Will be null if the previous selection tab is not available in the new window
@@ -1054,8 +1056,8 @@ the active tab, and the selected tab **/
 			}
 			if ($js_tabs) {
 				foreach($this->tabs as $k => $v) {
-					echo '<div class="tab" id="tab_'.$k.'">';
-					require $this->baseInc.$v[0].'.php';
+					echo '<div class="tab" id="tab_' . $k . '">';
+					require $this->baseInc.$v[0] . '.php';
 					echo '</div>';
 				}
 			}
@@ -1214,13 +1216,14 @@ class CTitleBlock_core {
 			                          . 'border="0" alt="'.$AppUI->_('Help').'" />'), 
 			                         $this->helpref));
 			*/
-			$s .= ("\n\t<a href=\"#" . $this->helpref 
-			       . '" onClick="javascript:window.open(\'?m=help&dialog=1&hid=' . $this->helpref 
-			       . "', 'contexthelp', 'width=400,height=400,left=50,top=50,scrollbars=yes," 
-			       . "resizable=yes')" . '" title="' . $AppUI->_('Help') . '">');
+			$s .= ("\n\t" . '<a href="#' . $this->helpref 
+			       . '" onClick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' 
+				   . $this->helpref 
+				   . "', 'contexthelp', 'width=400,height=400,left=50,top=50,scrollbars=yes," 
+			       . 'resizable=yes\')" title="' . $AppUI->_('Help') . '">');
 			$s .= "\n\t\t" . dPshowImage('./images/icons/stock_help-16.png', '16', '16', 
 			                             $AppUI->_('Help'));
-			$s .= "\n\t</a>";
+			$s .= "\n\t" . '</a>';
 			$s .= "\n</td>";
 		}
 		$s .= "\n</tr>";
@@ -1234,17 +1237,17 @@ class CTitleBlock_core {
 				$t .= $AppUI->_($v[0]);
 				$crumbs[] = "<a href=\"$k\">$t</a>";
 			}
-			$s .= "\n<table border=\"0\" cellpadding=\"4\" cellspacing=\"0\" width=\"100%\">";
+			$s .= "\n" . '<table border="0" cellpadding="4" cellspacing="0" width="100%">';
 			$s .= "\n<tr>";
-			$s .= "\n\t<td nowrap=\"nowrap\">";
+			$s .= "\n\t" . '<td nowrap="nowrap">';
 			$s .= "\n\t\t" . '<strong>' . implode(' : ', $crumbs) . '</strong>';
-			$s .= "\n\t</td>";
+			$s .= "\n\t" . '</td>';
 			
 			foreach ($this->cells2 as $c) {
 				$s .= $c[2] ? "\n$c[2]" : '';
-				$s .= "\n\t<td align=\"right\" nowrap=\"nowrap\"" . ($c[0] ? " $c[0]" : '') . '>';
+				$s .= "\n\t" . '<td align="right" nowrap="nowrap"' . ($c[0] ? " $c[0]" : '') . '>';
 				$s .= $c[1] ? "\n\t$c[1]" : '&nbsp;';
-				$s .= "\n\t</td>";
+				$s .= "\n\t" . '</td>';
 				$s .= $c[3] ? "\n\t$c[3]" : '';
 			}
 			$s .= "\n</tr>\n</table>";
