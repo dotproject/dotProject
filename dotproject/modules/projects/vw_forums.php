@@ -50,5 +50,5 @@ $q->clear();
 <input type="hidden" name="m" value="forums" />
 <input type="hidden" name="a" value="addedit" />
 <input type="hidden" name="forum_project" value="<?php echo $project_id; ?>" />
-<input type="submit" value="new forum" class="button" />
+<input type="submit" value="<?php echo $AppUI->_('new forum'); ?>" class="button" />
 </form>

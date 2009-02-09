@@ -222,7 +222,7 @@
 "Template",
 "There are no tasks that fulfill selected filters",
 "This month",
-"Time Chart (completed/on time/ocerdue)",
+"Time Chart (completed/on time/overdue)",
 "to:",
 "to",
 "To",

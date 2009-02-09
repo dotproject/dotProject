@@ -114,7 +114,7 @@ $ontime = round(100 * (1 - (count($tasks['overdue']) / count($all_tasks)) - (cou
 
 <table width="100%" border="1" cellpadding="0" cellspacing="0" class="tbl">
 <tr>
-	<th colspan="3"><?php echo $AppUI->_('Time Chart (completed/on time/ocerdue)'); ?></td>
+	<th colspan="3"><?php echo $AppUI->_('Time Chart (completed/on time/overdue)'); ?></td>
 </tr>
 <tr height="30">
 	<td width="<?php echo round(count($tasks['completed']) / count($all_tasks) * 100); ?>%" style="background: springgreen; text-align: center;"><?php echo $AppUI->_('completed'); ?></td>
