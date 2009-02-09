@@ -206,7 +206,7 @@ class CProject extends CDpObject {
 			// Grab the old parent id
 			$oldParent = (integer) $objTask->task_parent;
 			
-			$deps[$orig] = $objTask->getDependencies ();
+			$deps[$orig] = $objTask->getDependencies();
 			$destTask = $objTask->copy($this->project_id, 0);
 			$nid2op[$destTask->task_id] = $oldParent;
 			$tasks[$orig] = $destTask;

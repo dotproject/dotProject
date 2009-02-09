@@ -191,13 +191,18 @@ function popChgPwd() {
 </table>
 
 <?php
-	// tabbed information boxes
+	// force tabbed information boxes
 	$min_view = true;
+	$oldViewPref = $AppUI->getPref('TABVIEW');
+	$AppUI->setPref('TABVIEW', 1);
+	
 	$tabBox = new CTabBox(('?m=admin&amp;a=viewuser&amp;user_id=' . $user_id), '', $tab);
 	$tabBox->loadExtras('admin', 'viewuser'); 
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_log', 'User Log');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_perms', 'Permissions');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_roles', 'Roles');
 	$tabBox->show();
+	
+	$AppUI->setPref('TABVIEW', $oldViewPref);
 }
 ?>
