@@ -15,8 +15,8 @@ if ($canEdit) {
 }
 
 // check permissions
-if (!$canEdit && $user_id != $AppUI->user_id) {
-    $AppUI->redirect('m=public&a=access_denied');
+if (!$canEdit) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 //$roles
