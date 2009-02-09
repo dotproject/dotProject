@@ -559,10 +559,11 @@ function socketSend($msg, $rcv = FALSE)
 function getHostName()
 {
   // Grab the server address, return a hostname for it.
-  if ($host = gethostbyaddr($_SERVER['SERVER_ADDR']))
+  if ($host = gethostbyaddr($_SERVER['SERVER_ADDR'])) {
     return $host;
-  else
-    return '[' . $_SERVER['SERVER_ADDR'] . ']';
+  } else {
+    return 'localhost';
+  }
 }
 
 /**
