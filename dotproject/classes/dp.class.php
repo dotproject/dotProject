@@ -273,9 +273,10 @@ class CDpObject {
 				return false;
 			}
 			$msg = array();
+			$i = 0;
 			foreach ($joins as $table) {
 				$table_alias = 't' . $i++;
-				$k = $table['idfield'];
+				$k = $table['idfield'] . $table_alias;
 				if ($obj->$k) {
 					$msg[] = $table_alias . '.' . $AppUI->_($table['label']);
 				}
