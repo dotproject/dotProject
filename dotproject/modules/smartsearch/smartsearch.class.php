@@ -129,7 +129,7 @@ class smartsearch  {
 		
 		$q->addOrder($this->table_orderby);
 		
-		$dPObj->setAllowedSQL($AppUI->user_id, &$q);
+		$dPObj->setAllowedSQL($AppUI->user_id, $q);
 		if ($this->table_extra) {
 			$q->addWhere($this->table_extra);
 		}
