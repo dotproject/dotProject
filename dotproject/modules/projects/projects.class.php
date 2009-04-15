@@ -253,11 +253,13 @@ class CProject extends CDpObject {
 							$offsetAdd = (round(($origDate->dateDiff($origStartDate)) * $ratio) 
 							              - $origDate->dateDiff($origStartDate));
 							$destDate->addDays($offsetAdd);
-							if ($newTask->task_duration_type == 1 || true) {
-								$hours_in = $origStartHour->calcDuration($origDate);
-								$offsetAddHours = (round($hours_in * $ratio) - $hours_in);
+							
+							$hours_in = $origStartHour->calcDuration($origDate);
+							$offsetAddHours = (round($hours_in * $ratio) - $hours_in);
+							if ($offsetAddHours % dPgetConfig('daily_working_hours')) {
 								$destDate->addDuration($offsetAddHours);
 							}
+							
 						}
 						$destDate = $destDate->next_working_day();
 						$newTask->$my_date = $destDate->format(FMT_DATETIME_MYSQL);
