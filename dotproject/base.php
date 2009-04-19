@@ -28,7 +28,7 @@ global $baseUrl;
 
 $baseDir = dirname(__FILE__);
 //Make sure directoy seperator is at the end so that paths are well formed
-$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1)) ? DIRECTORY_SEPERATOR : '');
+//$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1 , 1) == 0) ? '' : DIRECTORY_SEPERATOR);
 
 // only rely on env variables if not using a apache handler
 function safe_get_env($name) 
