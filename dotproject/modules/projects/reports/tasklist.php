@@ -244,14 +244,17 @@ if ($log_pdf) {
 		}
 		$pdf->ezText("\n");
 		$pdf->selectFont("$font_dir/Helvetica.afm");
-		$columns = array(	
-			"<b>".safe_utf8_decode($AppUI->_('Task Name'))."</b>",
-			"<b>".safe_utf8_decode($AppUI->_('Task Description'))."</b>",
-			"<b>".safe_utf8_decode($AppUI->_('Assigned To'))."</b>",
-			"<b>".safe_utf8_decode($AppUI->_('Task Start Date'))."</b>",
-			"<b>".safe_utf8_decode($AppUI->_('Task End Date'))."</b>",
-			"<b>".safe_utf8_decode($AppUI->_('Completion'))."</b>"
-		);
+		$columns = array(
+			'<b>'.safe_utf8_decode($AppUI->_('Task Name')).'</b>',
+			'<b>'.safe_utf8_decode($AppUI->_('Task Description')).'</b>',
+			'<b>'.safe_utf8_decode($AppUI->_('Assigned To')).'</b>',
+			'<b>'.safe_utf8_decode($AppUI->_('Task Start Date')).'</b>',
+			'<b>'.safe_utf8_decode($AppUI->_('Task End Date')).'</b>',
+			'<b>'.safe_utf8_decode($AppUI->_('Completion')).'</b>');
+		if ($project_id==0) {
+			$columns_add = array('<b>'.safe_utf8_decode($AppUI->_('Project Name')).'</b>');
+			$columns = array_merge($columns_add, $columns);
+		}
 		$title = null;
 		$options = array(
 			'showLines' => 2,
