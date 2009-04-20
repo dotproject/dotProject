@@ -21,7 +21,7 @@ function getReadableModule() {
 	$perms =& $AppUI->acl();
 
 	$sql = 'SELECT mod_directory FROM modules WHERE mod_active > 0 ORDER BY mod_ui_order';
-	$modules = db_loadColumn( $sql );
+	$modules = db_loadColumn($sql);
 	foreach ($modules as $mod) {
 		if ($perms->checkModule($mod, 'access')) {
 			return $mod;
@@ -85,7 +85,7 @@ function getPermission( $mod, $perm, $item_id = 0) {
 	}
 	// If denied we need to check if we are allowed the task.  This can be done
 	// a lot better in PHPGACL, but is here for compatibility.
-	if ($mod == 'tasks' && ! $result && $item_id > 0) {
+	if ($mod == 'tasks' && ! $result && $item_id) {
 		$sql = "SELECT task_project FROM tasks WHERE task_id = $item_id";
 		$project_id = db_loadResult($sql);
 		$result = getPermission('projects', $perm, $project_id);

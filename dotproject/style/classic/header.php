@@ -64,14 +64,14 @@ echo ($AppUI->_('Current user') . ": $AppUI->user_first_name $AppUI->user_last_n
 	<td nowrap width="33%" align="right">
 	<table cellpadding="1" cellspacing="1" width="150">
 	<tr>
-		<td class="topBtnOff" nowrap bgcolor="#cccccc" align="center">
+		<td class="topBtnOff" nowrap style="background-color: #cccccc" align="center">
 			<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php 
 echo $AppUI->_('My Info');?></a>
 		</td>
-		<td class="topBtnOff" nowrap bgcolor="#cccccc" align="center">
+		<td class="topBtnOff" nowrap style="background-color: #cccccc" align="center">
 			<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 		</td>
-		<td class="topBtnOff" nowrap bgcolor="#cccccc" align="center"><?php 
+		<td class="topBtnOff" nowrap style="background-color: #cccccc" align="center"><?php 
 echo dPcontextHelp('Help');?>
 		</td>
 	</tr>

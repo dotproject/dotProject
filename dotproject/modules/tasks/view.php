@@ -270,14 +270,14 @@ function delIt() {
 			<td colspan="3">
 			<?php
 				$s = '';
-				$s = count($users) == 0 ? '<tr><td bgcolor="#FFFFFF">'.$AppUI->_('none').'</td></tr>' : '';
+				$s = count($users) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach($users as $row) {
 					$s .= '<tr>';
 					$s .= '<td class="hilite">'.dPgetUsernameFromID($row['user_id']).'</td>';
 					$s .= '<td class="hilite"><a href="mailto:'.$row['contact_email'].'">'.$row['contact_email'].'</a></td>';
 					$s .= '</tr>';
 				}
-				echo '<table width="100%" cellspacing="1" bgcolor="black">'.$s.'</table>';
+				echo '<table width="100%" cellspacing="1">'.$s.'</table>';
 			?>
 			</td>
 		</tr>
@@ -299,13 +299,13 @@ function delIt() {
 		<tr>
 			<td colspan="3">
 			<?php 
-				$s = count($taskDep) == 0 ? '<tr><td bgcolor="#FFFFFF">'.$AppUI->_('none').'</td></tr>' : '';
+				$s = count($taskDep) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach($taskDep as $key => $value) {
 					$s .= '<tr><td class="hilite">';
 					$s .= '<a href="./index.php?m=tasks&a=view&task_id='.$key.'">'.$value.'</a>';
 					$s .= '</td></tr>';
 				}
-				echo '<table width="100%" cellspacing="1" bgcolor="black">'.$s.'</table>';
+				echo '<table width="100%" cellspacing="1">'.$s.'</table>';
 			?>
 			</td>
 		</tr>
@@ -325,13 +325,13 @@ function delIt() {
 		<tr>
 			<td colspan="3">
 			<?php
-				$s = count($dependingTasks) == 0 ? '<tr><td bgcolor="#FFFFFF">'.$AppUI->_('none').'</td></tr>' : '';
+				$s = count($dependingTasks) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach($dependingTasks as $key => $value) {
 					$s .= '<tr><td class="hilite">';
 					$s .= '<a href="./index.php?m=tasks&a=view&task_id='.$key.'">'.$value.'</a>';
 					$s .= '</td></tr>';
 				}
-				echo '<table width="100%" cellspacing="1" bgcolor="black">'.$s.'</table>';
+				echo '<table width="100%" cellspacing="1">'.$s.'</table>';
 			?>
 			</td>
 		</tr>
@@ -392,7 +392,7 @@ function delIt() {
 			    <tr>
 			    	<td colspan='3' class="hilite">
 			    		<?php
-			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" bgcolor="black">';
+			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%">';
 			    			echo '<tr><th>'.$AppUI->_('Name').'</font></th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
 			    			foreach($contacts as $contact_id => $contact_data){
 			    				echo '<tr>';
@@ -428,7 +428,7 @@ function delIt() {
 			    <tr>
 			    	<td colspan='3' class="hilite">
 			    		<?php
-			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" bgcolor="black">';
+			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%">';
 			    			echo '<tr><th color="white">'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
 			    			foreach($contacts as $contact_id => $contact_data){
 			    				echo '<tr>';
