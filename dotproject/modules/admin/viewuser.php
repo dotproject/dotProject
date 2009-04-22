@@ -7,8 +7,8 @@ GLOBAL $addPwT,$company_id, $dept_ids, $department, $min_view, $m, $a;
 $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 
 if ($user_id != $AppUI->user_id 
-&& (! $perms->checkModuleItem('admin', 'view', $user_id) 
-|| ! $perms->checkModuleItem('users', 'view', $user_id)))
+&& (! getPermission('admin', 'view', $user_id) 
+|| ! getPermission('users', 'view', $user_id)))
 	$AppUI->redirect('m=public&amp;a=access_denied');
 
 $AppUI->savePlace();
@@ -118,7 +118,7 @@ function popChgPwd() {
 			<td align="right" nowrap><?php echo $AppUI->_('Company');?>:</td>
 			<td class="hilite" width="100%">
 				<?php
-				if ($perms->checkModuleItem('companies', 'access', $user['contact_company'])) {
+				if (getPermission('companies', 'access', $user['contact_company'])) {
 					echo '<a href="?m=companies&amp;a=view&amp;company_id=' . $user['contact_company'] . '" title="' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '">' . htmlspecialchars($user['company_name'], ENT_QUOTES) . '</a>';
 				} else {
 					echo htmlspecialchars($user['company_name'], ENT_QUOTES);

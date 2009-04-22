@@ -7,8 +7,8 @@ if (!defined('DP_BASE_DIR')){
 $contact_id = 1;
 
 $canRead = getPermission('contacts', 'view');
-if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+if (!($canRead)) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 if (1 == 1)
 	 {
@@ -101,7 +101,7 @@ if (1 == 1)
 	header("Content-Disposition: attachment; filename=\"{$dPconfig['company_name']}Contacts.csv\"");
 	print_r($text);
 } else {
-$AppUI->setMsg( "contactIdError", UI_MSG_ERROR );
+$AppUI->setMsg("contactIdError", UI_MSG_ERROR);
 	$AppUI->redirect();
 }
 ?>

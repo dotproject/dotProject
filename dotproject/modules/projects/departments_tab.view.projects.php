@@ -8,7 +8,6 @@ global $projects, $tab, $user_id, $orderdir, $orderby, $dept_ids;
 
 $department = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);
 
-$perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $pstatus =  dPgetSysVal('ProjectStatus');
@@ -167,7 +166,7 @@ $CR = "\n";
 $CT = "\n\t";
 $none = true;
 foreach ($projects as $row) {
-	if (!($perms->checkModuleItem('projects', 'view', $row['project_id']))) {
+	if (!(getPermission('projects', 'view', $row['project_id']))) {
 		continue;
 	}
 	// We dont check the percent_completed == 100 because some projects
@@ -195,7 +194,7 @@ echo ($row['project_color_identifier']); ?>">
 	</td>
 	<td width="30%">
 <?php 
-		if ($perms->checkModuleItem('companies', 'access', $row['project_company'])) {
+		if (getPermission('companies', 'view', $row['project_company'])) {
 ?>
 		<a href="?m=companies&amp;a=view&amp;company_id=<?php 
 echo $row['project_company']; ?>" title="<?php echo htmlspecialchars($row['company_description'], ENT_QUOTES); ?> ">
@@ -204,7 +203,7 @@ echo $row['project_company']; ?>" title="<?php echo htmlspecialchars($row['compa
 		
 		echo htmlspecialchars($row['company_name'], ENT_QUOTES);
 		
-		if ($perms->checkModuleItem('companies', 'access', $row['project_company'])) {
+		if (getPermission('companies', 'view', $row['project_company'])) {
 ?>
 		</a>
 <?php 

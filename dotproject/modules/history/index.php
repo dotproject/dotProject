@@ -103,7 +103,6 @@ function show_history($history) {
 
 
 $q = new DBQuery;
-$perms = & $AppUI->acl();
 $filter = '';
 $page = ((isset($_REQUEST['pg'])) ? (int)$_REQUEST['pg'] : 1);
 $limit = ((isset($_REQUEST['limit'])) ? (int)$_REQUEST['limit'] : 100);
@@ -129,7 +128,7 @@ foreach ($available_modules as $my_mod => $my_mod_data) {
 	$filter_options[$my_mod]['Table_ID_Name'] = $my_mod_data['permissions_item_label'];
 	
 	$filter_module_tables[$my_mod] = $my_mod_table;
-	if ($my_mod_table && !($perms->isUserPermitted($AppUI->user_id, $my_mod))) {
+	if ($my_mod_table && !(getPermission($my_mod, 'view'))) {
 		$denied_tables .= ((($denied_module_list) ? "','" : '') . $my_mod_table);
 	}
 }
@@ -199,7 +198,7 @@ $last_page = (($pages > $max_pages) ? min(($first_page + $max_pages - 1), $pages
 		  <option value=""><?php echo $AppUI->_('Show all'); ?></option>
 <?php
 foreach ($filter_options as $mod => $mod_data) {
-	if ($perms->checkModule($mod, 'access') && $mod_data['Table']) {
+	if (getPermission($mod, 'access') && $mod_data['Table']) {
 		echo ('		  <option value="' . $mod_data['Table'] . '"' 
 		      . (($in_filter == $mod) ? ' selected="selected"' : '') . '>'
 		      . $AppUI->_($mod_data['Name']) . '</option>' . "\n");
@@ -251,7 +250,7 @@ foreach($history as $row) {
 	// TODO: Enable the lines below to activate new permissions.
 	if ($mod_table == 'login' || $mod_table == 'history' 
 		|| !(in_array($mod_table, $filter_module_tables))
-	    || $perms->checkModuleItem($module, 'access', $row['history_item'])) {
+	    || getPermission($module, 'access', $row['history_item'])) {
 ?>
   <tr>	
 	<td><a href="?m=history&a=addedit&history_id=<?php echo ($row['history_id']); ?>">

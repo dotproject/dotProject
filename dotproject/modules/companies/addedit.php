@@ -6,13 +6,12 @@ if (!defined('DP_BASE_DIR')){
 $company_id = intval(dPgetParam($_GET, 'company_id', 0));
 
 // check permissions for this company
-$perms =& $AppUI->acl();
 // If the company exists we need edit permission,
 // If it is a new company we need add permission on the module.
 if ($company_id)
-  $canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
+  $canEdit = getPermission($m, 'edit', $company_id);
 else
-  $canEdit = $perms->checkModule($m, 'add');
+  $canEdit = getPermission($m, 'add');
 
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');

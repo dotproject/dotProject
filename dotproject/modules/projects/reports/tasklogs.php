@@ -6,8 +6,7 @@ if (!defined('DP_BASE_DIR')){
 /**
 * Generates a report of the task logs for given dates
 */
-$perms =& $AppUI->acl();
-if (! $perms->checkModule('tasks', 'view')) {
+if (!(getPermission('task_log', 'view'))) {
 	redirect('m=public&a=access_denied');
 }	
 $do_report = dPgetParam($_GET, "do_report", 0);

@@ -757,10 +757,11 @@ function displayFiles($folder_id) {
 
 /**** Main Program ****/
 
-$canEdit_this_folder = getPermission('file_folders', 'edit', $folder);
+$canAccess_this_folder = getPermission('file_folders', 'access', $folder);
 $canRead_this_folder = getPermission('file_folders', 'view', $folder);
+$canEdit_this_folder = getPermission('file_folders', 'edit', $folder);
 
-if (!$canRead_folders || !$canRead_this_folder) {
+if (!($canAccess_folders || $canAccess_this_folder)) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 

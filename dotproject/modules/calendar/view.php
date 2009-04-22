@@ -6,8 +6,8 @@ if (!defined('DP_BASE_DIR')){
 $event_id = intval(dPgetParam($_GET, 'event_id', 0));
 
 // check permissions for this record
-$perms =& $AppUI->acl();
-$canEdit = $perms->checkModuleItem($m, 'edit', $event_id);
+$canAuthor = getPermission('events', 'add', $event_id);
+$canEdit = getPermission('events', 'edit', $event_id);
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
@@ -42,8 +42,8 @@ $recurs =  array (
 $assigned = $obj->getAssigned();
 
 
-if (($obj->event_owner != $AppUI->user_id) && !($perms->checkModule('admin', 'view'))) {
- $canEdit = false;
+if (($obj->event_owner != $AppUI->user_id) && !(getPermission('admin', 'view'))) {
+	$canEdit = false;
 }
 
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -55,7 +55,7 @@ $event_project = db_LoadResult('SELECT project_name FROM projects where project_
 
 // setup the title block
 $titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, "$m.$a");
-if ($canEdit) {
+if ($canAuthor) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('<form action="?m=calendar&amp;a=addedit" method="post">' 
 	                     . '<input type="submit" class="button" value="' 

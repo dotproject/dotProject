@@ -3,7 +3,6 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$perms =& $AppUI->acl();
 
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 //$date = intval(dPgetParam($_GET, 'date', ''));
@@ -12,7 +11,7 @@ $no_modify = false;
 
 $sort = dPgetParam($_REQUEST, 'sort', 'task_end_date');
 
-if ($perms->checkModule('admin', 'view')){ 
+if (getPermission('admin', 'view')){ 
 	$other_users = true;
 	//lets see if the user wants to see anothers user mytodo
 	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0){ 
@@ -25,7 +24,7 @@ if ($perms->checkModule('admin', 'view')){
 }
 
 // check permissions
-$canEdit = $perms->checkModule($m, 'edit');
+$canEdit = getPermission($m, 'edit');
 
 // if task priority set and items selected, do some work
 $action = dPgetParam($_POST, 'action', 99);
@@ -44,13 +43,13 @@ if ($selected && count($selected)) {
 		
 		if ($action == 'f') {
 			//mark task as completed
-			if ($perms->checkModuleItem('tasks', 'edit', $t->task_id)) {
+			if (getPermission('tasks', 'edit', $t->task_id)) {
 				$t->task_percent_complete = 100;
 				$t->store();
 			}
 			if (isset($children)) {
 				foreach ($children as $child_id) {
-					if ($perms->checkModuleItem('tasks', 'edit', $child_t->task_id)) {
+					if (getPermission('tasks', 'edit', $child_t->task_id)) {
 						$child_t = &new CTask();
 						$child_t->load($child_id);
 						$child_t->task_percent_complete = 100;
@@ -158,7 +157,7 @@ function showchildren($id, $level=1) {
  * show a task - at a sublevel
  */
 function showtask_edit($task, $level=0) {
-	global $AppUI, $perms, $durnTypes, $now, $df;
+	global $AppUI, $durnTypes, $now, $df;
 	
 	$style = '';
 	$start = intval(@$task['task_start_date']) ? new CDate($task['task_start_date']) : null;
@@ -189,7 +188,7 @@ function showtask_edit($task, $level=0) {
 <tr>
 	<td>
 <?php 
-	if ($perms->checkModuleItem('tasks', 'edit', $task['task_id'])) { 
+	if (getPermission('tasks', 'edit', $task['task_id'])) { 
 ?>
 		<a href="./index.php?m=tasks&a=addedit&task_id=<?php echo $task['task_id']; ?>">
 		<img src="./images/icons/pencil.gif" alt="Edit Task" border="0" width="12" height="12">

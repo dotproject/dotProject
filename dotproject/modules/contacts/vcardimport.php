@@ -3,17 +3,17 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$canEdit = getPermission('contacts', 'view');
-if (!$canEdit) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+$canAuthor = getPermission('contacts', 'add');
+if (!($canAuthor)) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // check whether vCard file should be fetched from source or parsed for vCardKeys; criteria: get parameters
-if ( isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && ($_GET['suppressHeaders']=='true')) {	//parse and store vCard file
+if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && ($_GET['suppressHeaders']=='true')) {	//parse and store vCard file
 
 	$vcf = $_FILES['vcf'];
 	// include PEAR vCard class
-	require_once( $AppUI->getLibraryClass( 'PEAR/Contact_Vcard_Parse' ) );
+	require_once($AppUI->getLibraryClass('PEAR/Contact_Vcard_Parse'));
 
 	if (is_uploaded_file($vcf['tmp_name'])) {
 
@@ -58,30 +58,30 @@ if ( isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && ($_GET['suppres
 			$contactValues["contact_id"] = 0;
 
 			// bind array to object
-			if (!$obj->bind( $contactValues )) {
-				$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
+			if (!$obj->bind($contactValues)) {
+				$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 				$AppUI->redirect();
 			}
 
 			// store vCard data for this object
 			if (($msg = $obj->store())) {
-				$AppUI->setMsg( $msg, UI_MSG_ERROR );
+				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 		// one or more vCard imports were successful
-		$AppUI->setMsg( 'vCard(s) imported', UI_MSG_OK, true );
+		$AppUI->setMsg('vCard(s) imported', UI_MSG_OK, true);
 		$AppUI->redirect();
 
 	}
 	else {	// redirect in case of file upload trouble
-		$AppUI->setMsg( "vCardFileUploadError", UI_MSG_ERROR );
+		$AppUI->setMsg("vCardFileUploadError", UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
 }
-elseif ( isset($_GET['dialog']) && ($_GET['dialog']=='0') ){	//file upload formular
+elseif (isset($_GET['dialog']) && ($_GET['dialog']=='0')){	//file upload formular
 
-$titleBlock = new CTitleBlock( 'Import vCard', 'monkeychat-48.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=contacts", "contacts list" );
+$titleBlock = new CTitleBlock('Import vCard', 'monkeychat-48.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=contacts", "contacts list");
 $titleBlock->show();
 
 ?>
@@ -91,7 +91,7 @@ $titleBlock->show();
 	<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
 		<input type="hidden" name="max_file_size" value="109605000" />
 	<tr>
-		<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Fetch vCard(s) File' );?>:</td>
+		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fetch vCard(s) File');?>:</td>
 		<td align="left"><input type="File" class="button" name="vcf" style="width:280px" accept="text/x-vcard"></td>
 	</tr>
 	<tr>
@@ -101,7 +101,7 @@ $titleBlock->show();
 </table>
 
 <?php } else {	// trouble with get parameters
-$AppUI->setMsg( "vCardImportError", UI_MSG_ERROR );
+$AppUI->setMsg("vCardImportError", UI_MSG_ERROR);
 	$AppUI->redirect();
 }
 

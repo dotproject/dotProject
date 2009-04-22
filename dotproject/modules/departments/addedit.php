@@ -9,12 +9,14 @@ $company_id = isset($_GET['company_id']) ? $_GET['company_id'] : 0;
 
 // check permissions for this department
 $canEdit = getPermission($m, 'edit', $dept_id);
-if (!$canEdit) {
+$canAuthor = getPermission($m, 'add', $dept_id);
+if (!(($canEdit && $dept_id) || ($canAuthor && !($dept_id)))) {
+if (!($canEdit)) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }
 
 // pull data for this department
-$q  = new DBQuery;
+$q = new DBQuery;
 $q->addTable('departments','dep');
 $q->addQuery('dep.*, company_name');
 $q->addJoin('companies', 'com', 'com.company_id = dep.dept_company');

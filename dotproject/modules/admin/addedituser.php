@@ -11,7 +11,7 @@ if ($user_id == 0) {
 	$canEdit = $canAuthor;
 }
 if ($canEdit) {
-	$canEdit = $perms->checkModuleItem('users', ($user_id ? 'edit' : 'add'), $user_id);
+	$canEdit = getPermission('users', ($user_id ? 'edit' : 'add'), $user_id);
 }
 
 // check permissions
@@ -22,7 +22,6 @@ if (!$canEdit) {
 //$roles
 // Create the roles class container
 require_once DP_BASE_DIR.'/modules/system/roles/roles.class.php';
-$perms =& $AppUI->acl();
 $crole =& new CRole;
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
@@ -61,7 +60,7 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 // setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
 	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, "$m.$a");
-	if ($perms->checkModule('admin', 'view') && $perms->checkModule('users', 'view'))
+	if (getPermission('admin', 'view') && getPermission('users', 'view'))
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	if ($user_id > 0) {
 		$titleBlock->addCrumb(('?m=admin&a=viewuser&user_id=' . $user_id), 'view this user');

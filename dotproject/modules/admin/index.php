@@ -3,11 +3,10 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-$perms =& $AppUI->acl();
-if (! $perms->checkModule($m, 'view')) {
+if (!(getPermission($m, 'view'))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-if (! $perms->checkModule('users', 'view')) {
+if (!(getPermission('users', 'view'))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
@@ -47,33 +46,17 @@ $q = new DBQuery;
 
 // Pull First Letters
 $let = ":";
-$q->addTable('users','u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(user_username, 1, 1)) AS L');
-$arr = $q->loadList();
-foreach($arr as $L) {
-	$let .= $L['L'];
-}
-$q->clear();
 
 $q->addTable('users','u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(contact_first_name, 1, 1)) AS L');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact');
+$q->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
+$q->addQuery('DISTINCT UPPER(SUBSTRING(u.user_username, 1, 1)) AS L' 
+			 . ', UPPER(SUBSTRING(con.contact_first_name, 1, 1)) AS CF' 
+			 . ', UPPER(SUBSTRING(con.contact_last_name, 1, 1)) AS CL');
 $arr = $q->loadList();
 foreach($arr as $L) {
-	if ($L['L']) {
-		$let .= strpos($let, $L['L']) ? '' : $L['L'];
-	}
-}
-$q->clear();
-
-$q->addTable('users','u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(contact_last_name, 1, 1)) AS L');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-$arr = $q->loadList();
-foreach($arr as $L) {
-	if ($L['L']) {
-		$let .= strpos($let, $L['L']) ? '' : $L['L'];
-	}
+	$let .= strpos($let, $L['L']) ? '' : $L['L'];
+	$let .= strpos($let, $L['CF']) ? '' : $L['CF'];
+	$let .= strpos($let, $L['CL']) ? '' : $L['CL'];
 }
 $q->clear();
 

@@ -3,41 +3,41 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$contact_id = intval( dPgetParam( $_GET, 'contact_id', 0 ) );
-$company_id = intval( dPgetParam( $_REQUEST, 'company_id', 0 ) );
-$company_name = dPgetParam( $_REQUEST, 'company_name', null );
+$contact_id = intval(dPgetParam($_GET, 'contact_id', 0));
+$company_id = intval(dPgetParam($_REQUEST, 'company_id', 0));
+$company_name = dPgetParam($_REQUEST, 'company_name', null);
 
 // check permissions for this record
-$perms =& $AppUI->acl();
-if (! ($canEdit = $perms->checkModuleItem( 'contacts', 'edit', $contact_id )) ) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+$canEdit = getPermission($m, 'edit', $contact_id);
+if (!(($canEdit && $contact_id) || ($canAuthor && !($contact_id))) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // load the record data
 $msg = '';
 $row = new CContact();
 
-$canDelete = $row->canDelete( $msg, $contact_id );
+$canDelete = $row->canDelete($msg, $contact_id);
 if($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
 	$userDeleteProtect=true;
 }
 
-if (!$row->load( $contact_id ) && $contact_id > 0) {
-	$AppUI->setMsg( 'Contact' );
-	$AppUI->setMsg( "invalidID", UI_MSG_ERROR, true );
+if (!$row->load($contact_id) && $contact_id > 0) {
+	$AppUI->setMsg('Contact');
+	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
 	$AppUI->redirect();
 } else if ($row->contact_private && $row->contact_owner != $AppUI->user_id
 	&& $row->contact_owner && $contact_id != 0) {
 // check only owner can edit
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // setup the title block
 $ttl = $contact_id > 0 ? "Edit Contact" : "Add Contact";
-$titleBlock = new CTitleBlock( $ttl, 'monkeychat-48.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=contacts", "contacts list" );
+$titleBlock = new CTitleBlock($ttl, 'monkeychat-48.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=contacts", "contacts list");
 if ($canDelete && $contact_id) {
-	$titleBlock->addCrumbDelete( 'delete contact', $canDelete, $msg );
+	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 
 $titleBlock->show();
@@ -60,10 +60,10 @@ if ($contact_id == 0 && $company_id > 0) {
 function submitIt() {
 	var form = document.changecontact;
 	if (form.contact_last_name.value.length < 1) {
-		alert( "<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS);?>" );
+		alert("<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS);?>");
 		form.contact_last_name.focus();
 	} else if (form.contact_order_by.value.length < 1) {
-		alert( "<?php echo $AppUI->_('contactsOrderBy', UI_OUTPUT_JS);?>" );
+		alert("<?php echo $AppUI->_('contactsOrderBy', UI_OUTPUT_JS);?>");
 		form.contact_order_by.focus();
 	} else {
 		form.submit();
@@ -75,7 +75,7 @@ function popDepartment() {
 	window.open("./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id="+window.company_id, "company", "left=50,top=50,height=250,width=400,resizable");
 }
 
-function setDepartment( key, val ){
+function setDepartment(key, val){
 	var f = document.changecontact;
  	if (val != '') {
     	f.contact_department.value = key;
@@ -88,12 +88,12 @@ function popCompany() {
 	window.open("./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id=<?php echo $company_detail['company_id'];?>", "company", "left=50,top=50,height=250,width=400,resizable");
 }
 
-function setCompany( key, val ){
+function setCompany(key, val){
 	var f = document.changecontact;
  	if (val != '') {
     	f.contact_company.value = key;
 			f.contact_company_name.value = val;
-    	if ( window.company_id != key ){
+    	if (window.company_id != key){
     		f.contact_department.value = "";
 				f.contact_department_name.value = "";
     	}
@@ -106,12 +106,12 @@ function delIt(){
 <?php
 if ($userDeleteProtect) {
 ?>
-	alert( "<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS);?>" );
+	alert("<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS);?>");
 <?php
 } else {
 ?>
 	var form = document.changecontact;
-	if(confirm( "<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>" )) {
+	if(confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
 		form.del.value = "<?php echo $contact_id;?>";
 		form.submit();
 	}
@@ -120,7 +120,7 @@ if ($userDeleteProtect) {
 ?>
 }
 
-function orderByName( x ){
+function orderByName(x){
 	var form = document.changecontact;
 	if (x == "name") {
 		form.contact_order_by.value = form.contact_last_name.value + ", " + form.contact_first_name.value;
@@ -131,7 +131,7 @@ function orderByName( x ){
 
 function companyChange() {
 	var f = document.changecontact;
-	if ( f.contact_company.value != window.company_value ){
+	if (f.contact_company.value != window.company_value){
 		f.contact_department.value = "";
 	} 
 }

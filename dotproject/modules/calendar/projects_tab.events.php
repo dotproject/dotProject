@@ -7,7 +7,6 @@ global $AppUI, $project_id, $deny, $canRead, $canEdit, $dPconfig, $start_date, $
 global $this_day, $event_filter, $event_filter_list;
 require_once $AppUI->getModuleClass('calendar');
 
-$perms =& $AppUI->acl();
 $user_id = $AppUI->user_id;
 $other_users = false;
 $no_modify = false;

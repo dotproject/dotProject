@@ -206,12 +206,11 @@ $m_config = dPgetConfig($m);
 
 // check overall module permissions
 // these can be further modified by the included action files
-$perms =& $AppUI->acl();
-$canAccess = $perms->checkModule($m, 'access');
-$canRead = $perms->checkModule($m, 'view');
-$canEdit = $perms->checkModule($m, 'edit');
-$canAuthor = $perms->checkModule($m, 'add');
-$canDelete = $perms->checkModule($m, 'delete');
+$canAccess = getPermission($m, 'access');
+$canRead = getPermission($m, 'view');
+$canEdit = getPermission($m, 'edit');
+$canAuthor = getPermission($m, 'add');
+$canDelete = getPermission($m, 'delete');
 
 if (!$suppressHeaders) {
 	// output the character set header
@@ -256,7 +255,7 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 	$_SESSION['all_tabs'][$m] = array();
 	$all_tabs =& $_SESSION['all_tabs'][$m];
 	foreach ($AppUI->getActiveModules() as $dir => $module)	{
-		if (!($perms->checkModule($dir, 'access'))) {
+		if (!(getPermission($dir, 'access'))) {
 			continue;
 		}
 		$modules_tabs = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $dir . '/'), 

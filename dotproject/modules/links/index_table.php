@@ -83,7 +83,7 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 	echo "</table>";
 }
 
-GLOBAL $AppUI, $deny1, $canRead, $canEdit;
+GLOBAL $AppUI, $deny1, $canAccess, $canRead, $canEdit;
 
 //require_once( DP_BASE_DIR.'/modules/files/index_table.lib.php');
 
@@ -163,10 +163,13 @@ $task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_pro
 $q->addOrder('project_name, link_name');
 
 //LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
-if ($canRead) 
+if ($canRead) {
 	$links = $q->loadList();
-else 
+} else if ($canAccess){
+	$links = array();
+} else {
 	$AppUI->redirect('m=public&a=access_denied');
+}
 // counts total recs from selection
 $xpg_totalrecs = count($links);
 

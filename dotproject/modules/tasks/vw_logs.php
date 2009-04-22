@@ -5,8 +5,7 @@ if (!defined('DP_BASE_DIR')){
 
 global $AppUI, $task_id, $df, $m;
 
-$perms =& $AppUI->acl();
-if (! $perms->checkModuleItem('task_log', 'view', $task_id)) {
+if (!(getPermission('task_log', 'access'))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
@@ -21,8 +20,9 @@ $taskLogReferenceImage = dPgetSysVal('TaskLogReferenceImage');
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-$canDelete = $perms->checkModuleItem('task_log', 'delete', $task_id);
-$canEdit = $perms->checkModuleItem('task_log', 'edit', $task_id);
+$canView = getPermission('task_log', 'view');
+$canEdit = getPermission('task_log', 'edit');
+$canDelete = getPermission('task_log', 'delete');
 
 if ($canDelete) {
 ?>
@@ -62,7 +62,7 @@ $sql = ('SELECT tl.*, u.user_username, bc.billingcode_name as task_log_costcode'
         . ' LEFT JOIN users AS u ON u.user_id = tl.task_log_creator'
         . ' WHERE task_log_task = ' . $task_id . (($problem) ? ' AND task_log_problem > 0' : '') 
         . ' ORDER BY tl.task_log_date');
-$logs = db_loadList($sql);
+$logs = (($canView) ? db_loadList($sql) : array());
 
 $s = '';
 $hrs = 0;
@@ -74,9 +74,9 @@ foreach ($logs as $row) {
 	$s .= "\n\t<td>";
 	if ($canEdit) {
 		$s .= ("\n\t\t" . '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=' 
-			   . (($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1') 
-			   . '&task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t" 
-			   . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''). "\n\t\t</a>");
+		       . (($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1') 
+		       . '&task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t" 
+		       . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">' . (($task_log_date) ? $task_log_date->format($df) : '-') . '</td>';
@@ -142,7 +142,7 @@ $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= '<td align="right">' . sprintf("%.2f", $hrs) . '</td>';
 $s .= ('<td align="right" colspan="3"><form action="?m=tasks&a=view&tab=1&task_id=' 
        . $task_id . '" method="post">');
-if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
+if (getPermission('tasks', 'edit', $task_id)) {
 	$s .= ('<input type="submit" class="button" value="' . $AppUI->_('new log') 
 	       . '"></form></td>');
 }

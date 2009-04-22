@@ -28,7 +28,7 @@ if (!defined('DP_BASE_DIR')){
 
 $perms =& $AppUI->acl();
 foreach ($users as $row) {
-	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
+	if ($perms->checkLogin($row['user_id']) != $canLogin) {
 		continue;
 	}
 ?>

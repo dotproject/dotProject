@@ -6,7 +6,6 @@ if (!defined('DP_BASE_DIR')){
 global $m, $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_id, $dept_ids, $min_view;
 global $priority, $projects, $tab, $user_id;
 
-$perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $department = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);

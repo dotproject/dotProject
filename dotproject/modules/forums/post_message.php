@@ -160,10 +160,10 @@ if ($message_parent >= 0) {
 		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';">
 	</td>
 	<td align="right"><?php
-$canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
+$canEdit = getPermission('forums', 'edit', $row['message_id']);
 if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
 				 || $AppUI->user_id == $row['message_author'] 
-				 || $perms->checkModule('project', 'edit', $forum_info['project_id']) 
+				 || getPermission('project', 'edit', $forum_info['project_id']) 
 				 || !($forum_info['project_id']))) {
 	echo '<input type="button" value="'.$AppUI->_('submit').'" class=button onclick="submitIt()">';
 }

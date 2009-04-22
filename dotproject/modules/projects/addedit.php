@@ -3,30 +3,29 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
-$project_id = intval( dPgetParam( $_GET, "project_id", 0 ) );
-$company_id = intval( dPgetParam( $_GET, "company_id", 0 ) );
-$company_internal_id = intval( dPgetParam( $_GET, "company_internal_id", 0 ) );
-$contact_id = intval( dPgetParam( $_GET, "contact_id", 0 ) );
+$project_id = intval(dPgetParam($_GET, "project_id", 0));
+$company_id = intval(dPgetParam($_GET, "company_id", 0));
+$company_internal_id = intval(dPgetParam($_GET, "company_internal_id", 0));
+$contact_id = intval(dPgetParam($_GET, "contact_id", 0));
 
-$perms =& $AppUI->acl();
 // check permissions for this record
-$canEdit = $perms->checkModuleItem( $m, 'edit', $project_id );
-$canAuthor = $perms->checkModuleItem( $m, 'add' );
-if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+$canEdit = getPermission($m, 'edit', $project_id);
+$canAuthor = getPermission($m, 'add', $project_id);
+if (!(($canEdit && $project_id) || ($canAuthor && !($project_id)))) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // get a list of permitted companies
-require_once( $AppUI->getModuleClass ('companies' ) );
+require_once($AppUI->getModuleClass ('companies'));
 
 $row = new CCompany();
-$companies = $row->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
-$companies = arrayMerge( array( '0'=>'' ), $companies );
+$companies = $row->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = arrayMerge(array('0'=>''), $companies);
 
 // get internal companies
 // 6 is standard value for internal companies
-$companies_internal = $row->listCompaniesByType( array('6')); 
-$companies_internal = arrayMerge( array( '0'=>'' ), $companies_internal );
+$companies_internal = $row->listCompaniesByType(array('6')); 
+$companies_internal = arrayMerge(array('0'=>''), $companies_internal);
 
 // pull users
 $q  = new DBQuery;
@@ -41,13 +40,13 @@ $users = $q->loadHashList();
 // load the record data
 $row = new CProject();
 
-if (!$row->load( $project_id, false ) && $project_id > 0) {
-$AppUI->setMsg( 'Project' );
-$AppUI->setMsg( "invalidID", UI_MSG_ERROR, true );
-$AppUI->redirect();
-} else if (count( $companies ) < 2 && $project_id == 0) {
-$AppUI->setMsg( "noCompanies", UI_MSG_ERROR, true );
-$AppUI->redirect();
+if (!$row->load($project_id, false) && $project_id > 0) {
+	$AppUI->setMsg('Project');
+	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
+	$AppUI->redirect();
+} else if (count($companies) < 2 && $project_id == 0) {
+	$AppUI->setMsg("noCompanies", UI_MSG_ERROR, true);
+	$AppUI->redirect();
 }
 
 if ($project_id == 0 && $company_id > 0) {
@@ -55,7 +54,7 @@ if ($project_id == 0 && $company_id > 0) {
 }
 
 // add in the existing company if for some reason it is dis-allowed
-if ($project_id && !array_key_exists( $row->project_company, $companies )) {
+if ($project_id && !array_key_exists($row->project_company, $companies)) {
 	$q  = new DBQuery;
 	$q->addTable('companies');
 	$q->addQuery('company_name');
@@ -69,23 +68,23 @@ if ($project_id && !array_key_exists( $row->project_company, $companies )) {
 $criticalTasks = ($project_id > 0) ? $row->getCriticalTasks() : NULL;
 
 // get ProjectPriority from sysvals
-$projectPriority = dPgetSysVal( 'ProjectPriority' );
+$projectPriority = dPgetSysVal('ProjectPriority');
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = new CDate( $row->project_start_date );
+$start_date = new CDate($row->project_start_date);
 
-$end_date = intval( $row->project_end_date ) ? new CDate( $row->project_end_date ) : null;
-$actual_end_date = intval( $criticalTasks[0]['task_end_date'] ) ? new CDate( $criticalTasks[0]['task_end_date'] ) : null;
-$style = (( $actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+$end_date = intval($row->project_end_date) ? new CDate($row->project_end_date) : null;
+$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
+$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
 $ttl = $project_id > 0 ? "Edit Project" : "New Project";
-$titleBlock = new CTitleBlock( $ttl, 'applet3-48.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=projects", "projects list" );
+$titleBlock = new CTitleBlock($ttl, 'applet3-48.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=projects", "projects list");
 if ($project_id != 0)
-$titleBlock->addCrumb( "?m=projects&a=view&project_id=$project_id", "view this project" );
+$titleBlock->addCrumb("?m=projects&a=view&project_id=$project_id", "view this project");
 $titleBlock->show();
 
 //Build display list for departments
@@ -118,7 +117,7 @@ if ($project_id) {
 	$q->addQuery('contact_id');
 	$q->addWhere('project_id = ' . $project_id);
 	$res =& $q->exec();
-	for ( $res; ! $res->EOF; $res->MoveNext())
+	for ($res; ! $res->EOF; $res->MoveNext())
 		$selected_contacts[] = $res->fields['contact_id'];
 	$q->clear();
 }
@@ -156,25 +155,25 @@ if (f.project_short_name.value.length == 0) {
 var calendarField = '';
 var calWin = null;
 
-function popCalendar( field ){
+function popCalendar(field){
 calendarField = field;
-idate = eval( 'document.editFrm.project_' + field + '.value' );
-window.open( 'index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no' );
+idate = eval('document.editFrm.project_' + field + '.value');
+window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
 }
 
 /**
 *	@param string Input date in the format YYYYMMDD
 *	@param string Formatted date
 */
-function setCalendar( idate, fdate ) {
-	fld_date = eval( 'document.editFrm.project_' + calendarField );
-	fld_fdate = eval( 'document.editFrm.' + calendarField );
+function setCalendar(idate, fdate) {
+	fld_date = eval('document.editFrm.project_' + calendarField);
+	fld_fdate = eval('document.editFrm.' + calendarField);
 	fld_date.value = idate;
 	fld_fdate.value = fdate;
 
 	// set end date automatically with start date if start date is after end date
 	if (calendarField == 'start_date') {
-		if( document.editFrm.end_date.value < idate) {
+		if(document.editFrm.end_date.value < idate) {
 			document.editFrm.project_end_date.value = idate;
 			document.editFrm.end_date.value = fdate;
 		}
@@ -198,7 +197,7 @@ function submitIt() {
 	/*
 	** Automatic required fields generated from System Values
 	*/
-	$requiredFields = dPgetSysVal( 'ProjectRequiredFields' );
+	$requiredFields = dPgetSysVal('ProjectRequiredFields');
 	echo dPrequiredFields($requiredFields);
 	?>
 
@@ -267,41 +266,41 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name');?></td>
 			<td width="100%" colspan="2">
-				<input type="text" name="project_name" value="<?php echo dPformSafe( $row->project_name );?>" size="25" maxlength="50" onBlur="setShort();" class="text" /> *
+				<input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onBlur="setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner');?></td>
 			<td colspan="2">
-<?php echo arraySelect( $users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner? $row->project_owner : $AppUI->user_id ) ?>
+<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner? $row->project_owner : $AppUI->user_id) ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company');?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
 <?php
-		echo arraySelect( $companies, 'project_company', 'class="text" size="1"', $row->project_company );
+		echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company);
 ?> *</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Internal Division');?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
 <?php
-		echo arraySelect( $companies_internal, 'project_company_internal', 'class="text" size="1"', $row->project_company_internal );
+		echo arraySelect($companies_internal, 'project_company_internal', 'class="text" size="1"', $row->project_company_internal);
 ?></td>
  		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
-			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date->format( FMT_TIMESTAMP_DATE );?>" />
-				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date->format( $df );?>" class="text" disabled="disabled" />
+			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
+				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
 
-				<a href="#" onClick="popCalendar( 'start_date', 'start_date');">
+				<a href="#" onClick="popCalendar('start_date', 'start_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 				</a>
 			</td>
 			<td rowspan="6" valign="top">
 					<?php
-						if ( $AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+						if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 							echo "<input type='button' class='button' value='".$AppUI->_("Select contacts...")."' onclick='javascript:popContacts();' />";
 						}
 						// Let's check if the actual company has departments registered
@@ -316,8 +315,8 @@ function setDepartment(department_id_string){
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date');?></td>
-			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format( FMT_TIMESTAMP_DATE ) : '';?>" />
-				<input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format( $df ) : '';?>" class="text" disabled="disabled" />
+			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+				<input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 
 				<a href="#" onClick="popCalendar('end_date', 'end_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
@@ -338,7 +337,7 @@ function setDepartment(department_id_string){
 			<td nowrap="nowrap">
                                 <?php if ($project_id > 0) { ?>
                                         <?php echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
-                                        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format( $df ).'</span>' : '-';?>
+                                        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
                                         <?php echo $actual_end_date ? '</a>' : '';?>
                                 <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
 			</td>
@@ -367,8 +366,8 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" colspan="3">
 			<?php
-				require_once($AppUI->getSystemClass( 'CustomFields' ));
-				$custom_fields = New CustomFields( $m, $a, $row->project_id, "edit" );
+				require_once($AppUI->getSystemClass('CustomFields'));
+				$custom_fields = New CustomFields($m, $a, $row->project_id, "edit");
 				$custom_fields->printHTML();
 			?>
 			</td>
@@ -378,15 +377,15 @@ function setDepartment(department_id_string){
 	<td width="50%" valign="top">
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Priority' );?></td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority');?></td>
 			<td nowrap>
-				<?php echo arraySelect( $projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true );?> *
+				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true);?> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name');?></td>
 			<td colspan="3">
-				<input type="text" name="project_short_name" value="<?php echo dPformSafe( @$row->project_short_name ) ;?>" size="10" maxlength="10" class="text" /> *
+				<input type="text" name="project_short_name" value="<?php echo dPformSafe(@$row->project_short_name) ;?>" size="10" maxlength="10" class="text" /> *
 			</td>
 		</tr>
 		<tr>
@@ -404,7 +403,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type');?></td>
 			<td colspan="3">
-				<?php echo arraySelect( $ptype, 'project_type', 'size="1" class="text"', $row->project_type, true );?> *
+				<?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $row->project_type, true);?> *
 			</td>
 		</tr>
 		<tr>
@@ -416,10 +415,10 @@ function setDepartment(department_id_string){
 				</tr>
 				<tr>
 					<td>
-						<?php echo arraySelect( $pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true ); ?>
+						<?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>
 					</td>
 					<td>
-						<strong><?php echo sprintf( "%.1f%%", @$row->project_percent_complete);?></strong>
+						<strong><?php echo sprintf("%.1f%%", @$row->project_percent_complete);?></strong>
 					</td>
 				</tr>
 				</table>
@@ -430,7 +429,7 @@ function setDepartment(department_id_string){
 				<?php echo $AppUI->_('Import tasks from');?>:<br/>
 			</td>
 			<td colspan="3">
-<?php echo projectSelectWithOptGroup( $AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id ); ?>
+<?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
 			</td>
 		</tr>
 		<tr>
@@ -444,7 +443,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td colspan="4">
 				<?php echo $AppUI->_('Description');?><br />
-				<textarea name="project_description" cols="50" rows="10" wrap="virtual" class="textarea"><?php echo dPformSafe( @$row->project_description );?></textarea>
+				<textarea name="project_description" cols="50" rows="10" wrap="virtual" class="textarea"><?php echo dPformSafe(@$row->project_description);?></textarea>
 			</td>
 		</tr>
 		</table>

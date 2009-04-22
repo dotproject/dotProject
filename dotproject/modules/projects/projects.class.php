@@ -87,9 +87,8 @@ class CProject extends CDpObject {
 	function canDelete(&$msg, $oid=null) {
 		// TODO: check if user permissions are considered when deleting a project
 		global $AppUI;
-		$perms =& $AppUI->acl();
 		
-		return $perms->checkModuleItem('projects', 'delete', $oid);
+		return getPermission('projects', 'delete', $oid);
 		
 		// NOTE: I uncommented the dependencies check since it is
 		// very anoying having to delete all tasks before being able

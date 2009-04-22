@@ -4,10 +4,10 @@ if (!defined('DP_BASE_DIR')){
 }
 
 $AppUI->savePlace();
-$perms =& $AppUI->acl();
+
 // retrieve any state parameters
 $user_id = $AppUI->user_id;
-if($perms->checkModule('admin', 'view')){ // Only sysadmins are able to change users
+if(getPermission('admin', 'view')){ // Only sysadmins are able to change users
 	if(dPgetParam($_POST, 'user_id', 0) != 0){ // this means that 
 		$user_id = dPgetParam($_POST, 'user_id', 0);
 		$AppUI->setState('user_id', $_POST['user_id']);
@@ -63,6 +63,7 @@ if(getPermission('admin', 'view')){
 	$titleBlock->addCell();
 	$titleBlock->addCell($AppUI->_('User') . ':');
 	
+	$perms =& $AppUI->acl();
 	$user_list = $perms->getPermittedUsers('tasks');
 	$titleBlock->addCell(arraySelect($user_list, 'user_id', 
 	                                 ('size="1" class="text"' 
@@ -118,7 +119,7 @@ $titleBlock->addCrumb('?m=projects&a=reports', 'reports');
 $titleBlock->show();
 
 // include the re-usable sub view
-	$min_view = false;
-	include(DP_BASE_DIR.'/modules/tasks/tasks.php');
+$min_view = false;
+include(DP_BASE_DIR.'/modules/tasks/tasks.php');
 
 ?>

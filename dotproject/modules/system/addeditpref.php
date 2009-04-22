@@ -22,14 +22,10 @@ ORDER by pref_user
 $prefs = db_loadHashList( $sql );
 
 // get the user name
-if ($user_id)
-	$user = dPgetUsernameFromID($user_id);
-else
-	$user = "Default";
+$user = (($user_id) ? dPgetUsernameFromID($user_id) : 'Default');
 
 $titleBlock = new CTitleBlock( 'Edit User Preferences', 'myevo-weather.png', $m, "$m.$a" );
-$perms =& $AppUI->acl();
-if ($perms->checkModule('system', 'edit')) {
+if (getPermission('system', 'edit')) {
 	$titleBlock->addCrumb( "?m=system", "system admin" );
 	$titleBlock->addCrumb( "?m=system&a=systemconfig", "system configuration" );
 }

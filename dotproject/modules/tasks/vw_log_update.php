@@ -5,15 +5,13 @@ if (!defined('DP_BASE_DIR')){
 
 global $AppUI, $task_id, $obj, $percent, $can_edit_time_information;
 
-$perms =& $AppUI->acl();
-
 // check permissions
-if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
+if (!getPermission('tasks', 'edit', $task_id)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canEdit = $perms->checkModuleItem('task_log', 'edit', $task_id);
-$canAdd = $perms->checkModuleItem('task_log', 'add', $task_id);
+$canEdit = getPermission('task_log', 'edit', $task_id);
+$canAdd = getPermission('task_log', 'add', $task_id);
 
 $task_log_id = intval(dPgetParam($_GET, 'task_log_id', 0));
 $log = new CTaskLog();
@@ -328,7 +326,7 @@ echo (($tp) ? ' checked="checked"' : ''); ?> />
           <label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
           <input type='hidden' name='email_others' id='email_others' value=''>
           <?php
-if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 ?>
           <input type='button' class='button' value='<?php 
 	echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />

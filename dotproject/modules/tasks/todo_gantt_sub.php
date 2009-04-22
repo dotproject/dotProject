@@ -8,8 +8,7 @@ global $m, $a, $date, $min_view, $other_users, $showPinned, $showArcProjs, $show
 global $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
 
 $q = new DBQuery;
-$perms =& $AppUI->acl();
-$canDelete = $perms->checkModuleItem($m, 'delete');
+$canDelete = getPermission($m, 'delete');
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0">
 <form name="form_buttons" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date";?>">

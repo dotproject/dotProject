@@ -5,7 +5,6 @@ if (!defined('DP_BASE_DIR')){
 
 global $m, $a, $addPwOiD, $AppUI, $buffer, $company_id, $min_view, $priority, $projects, $tab;
 
-$perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $pstatus =  dPgetSysVal('ProjectStatus');

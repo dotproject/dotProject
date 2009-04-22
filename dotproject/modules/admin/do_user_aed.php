@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')){
 
 require_once($AppUI->getSystemClass('libmail'));
 include $AppUI->getModuleClass('contacts');
-$del = isset($_REQUEST['del']) ? $_REQUEST['del'] : FALSE;
+$del = dPgetParam($_REQUEST, 'del', false);
 $user_id_aed = intval(dPgetParam($_REQUEST, 'user_id', 0));
 
 $obj = new CUser();
@@ -24,12 +24,11 @@ $isNewUser = !($user_id_aed);
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('User');
-$perms =& $AppUI->acl();
 
 // !User's contact information not deleted - left for history.
 if ($del) {
-	if (! $perms->checkModule('admin', 'delete') 
-	    || !($perms->checkModuleItem('users', 'delete', $user_id_aed))) {
+	if (! getPermission('admin', 'delete') 
+	    || !(getPermission('users', 'delete', $user_id_aed))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 	if (($msg = $obj->delete())) {
@@ -40,7 +39,7 @@ if ($del) {
 	$AppUI->redirect();
 	return;
 } else if ($isNewUser) {
-	if (!($perms->checkModule('admin', 'add') && $perms->checkModule('users', 'add'))) {
+	if (!(getPermission('admin', 'add') && getPermission('users', 'add'))) {
 		$AppUI->redirect('m=admin&a=access_denied');
 	}
 	// check if a user with the param Username already exists
@@ -64,8 +63,7 @@ if ($del) {
 	}
 	
 	$contact->contact_owner = $AppUI->user_id;
-} else if (! $perms->checkModule('admin', 'edit')
-           || ! $perms->checkModuleItem('users', 'edit', $user_id_aed)) {
+} else if (! getPermission('admin', 'edit') || ! getPermission('users', 'edit', $user_id_aed)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

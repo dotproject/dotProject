@@ -29,25 +29,27 @@ $crumbs["?m=forums&a=view_pdf&forum_id=$forum_id&message_id=$message_id&sort=$so
 <?php
 if ($viewtype != 'normal') {
 ?>
-	function toggle(id) {
+function toggle(id) {
 <?php
 	if ($viewtype == 'single') {
 ?>
-                var elems = document.getElementsByTagName("div");
-                for (var i=0; i<elems.length; i++)
-                  if (elems[i].className == 'message')
-                        elems[i].style.display = 'none';
-                document.getElementById(id).style.display = 'block';
+		var elems = document.getElementsByTagName("div");
+		for (var i=0; i<elems.length; i++)
+			if (elems[i].className == 'message') {
+				elems[i].style.display = 'none';
+			}
+		}
+		document.getElementById(id).style.display = 'block';
 
 <?php 
 	} else if ($viewtype=='short') {
 ?>
-                vista = (document.getElementById(id).style.display == 'none') ? 'block' : 'none';
-                document.getElementById(id).style.display = vista;
+	vista = (document.getElementById(id).style.display == 'none') ? 'block' : 'none';
+	document.getElementById(id).style.display = vista;
 <?php
 	}
 ?>
-	}
+}
 <?php 
 }
 // security improvement:
@@ -84,13 +86,17 @@ $thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort
 	<td align="right">
 		<?php $sort = ($sort == 'asc')?'desc':'asc'; ?>
 		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
-	<?php if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
-						   || $AppUI->user_id == $row['message_author'] 
-						   || $perms->checkModule('project', 'edit', $forum_info['project_id']) 
-						   || !($forum_info['project_id']))) { ?>
+	<?php 
+if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
+                 || $AppUI->user_id == $row['message_author'] 
+                 || getPermission('project', 'edit', $forum_info['project_id']) 
+                 || !($forum_info['project_id']))) { 
+?>
 		<input type="button" class=button value="<?php echo $AppUI->_('Post Reply');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />
 		<input type="button" class=button value="<?php echo $AppUI->_('New Topic');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=0&post_message=1';" />
-	<?php } ?>
+	<?php 
+} 
+?>
 	</td>
 </tr>
 </table>
@@ -103,10 +109,10 @@ $thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort
 </form>
 <tr>
 <?php 
-if ($viewtype != 'short')
+if ($viewtype != 'short') {
 	echo '<th nowrap>' .$AppUI->_('Author') . ':</th>';
-echo '
-	<th width="' . (($viewtype=='single')?'60':'100') . '%">' .  $AppUI->_('Message') . ':</th>';
+}
+echo '<th width="' . (($viewtype=='single')?'60':'100') . '%">' .  $AppUI->_('Message') . ':</th>';
 ?>
 </tr>
 
@@ -186,10 +192,10 @@ foreach ($messages as $row) {
 		
 		//the following users are allowed to edit/delete a forum message: 
 		//1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-		$canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
+		$canEdit = getPermission('forums', 'edit', $row['message_id']);
 		if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
 		                 || $AppUI->user_id == $row['message_author'] 
-		                 || $perms->checkModule('admin', 'edit'))) {
+		                 || getPermission('admin', 'edit'))) {
 			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
 			// edit message
 			$s .= ('<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] 
@@ -272,8 +278,9 @@ if ($viewtype == 'single') {
 	<td align="right">
 		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
 		<?php 
-if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] 
-                 || $perms->checkModule('project', 'edit', $forum_info['project_id']) 
+if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
+                 || $AppUI->user_id == $row['message_author'] 
+                 || getPermission('project', 'edit', $forum_info['project_id']) 
                  || !($forum_info['project_id']))) { 
 ?>
 		<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply');?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />

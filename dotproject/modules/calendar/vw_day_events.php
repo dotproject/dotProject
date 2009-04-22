@@ -9,12 +9,11 @@ global $this_day, $first_time, $last_time, $company_id, $event_filter, $event_fi
 $types = dPgetSysVal('EventType');
 $links = array();
 
-$perms =& $AppUI->acl();
 $user_id = $AppUI->user_id;
 $other_users = false;
 $no_modify = false;
 
-if ($perms->checkModule('admin', 'view')) {
+if (getPermission('admin', 'view')) {
 	$other_users = true;
 	if (($show_uid = dPgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
 		$user_id = $show_uid;

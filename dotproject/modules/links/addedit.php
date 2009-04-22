@@ -1,4 +1,4 @@
-<?php /* FILES $Id$ */
+<?php /* LINKS $Id$ */
 if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
@@ -6,10 +6,9 @@ if (!defined('DP_BASE_DIR')){
 $link_id = intval(dPgetParam($_GET, 'link_id', 0));
  
 // check permissions for this record
-$perms =& $AppUI->acl();
-$canEdit = $perms->checkModuleItem($m, 'edit', $link_id);
-if (!$canEdit) {
-	$AppUI->redirect("m=public&a=access_denied");
+$canEdit = getPermission($m, 'edit', $link_id);
+if (!(($canEdit && $link_id) || ($canAuthor && !($link_id))) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // load the companies class to retrieved denied companies
@@ -49,7 +48,7 @@ if (!db_loadObject($q->prepare(), $obj) && $link_id > 0) {
 $ttl = $link_id ? "Edit Link" : "Add Link";
 $titleBlock = new CTitleBlock($ttl, 'folder5.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=$m", "links list");
-$canDelete = $perms->checkModuleItem($m, 'delete', $link_id);
+$canDelete = getPermission($m, 'delete', $link_id);
 if ($canDelete && $link_id > 0) {
 	$titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
 }

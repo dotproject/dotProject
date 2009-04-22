@@ -3,8 +3,7 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-$perms =& $AppUI->acl();
-if (! $perms->checkModule('tasks', 'view')) {
+if (!(getPermission('tasks', 'view'))) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 $proj = dPgetParam($_GET, 'project', 0);

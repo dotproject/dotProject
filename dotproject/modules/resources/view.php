@@ -1,58 +1,56 @@
 <?php
 if (!defined('DP_BASE_DIR')){
-  die('You should not access this file directly.');
+	die('You should not access this file directly.');
 }
 
 $obj =& new CResource;
 $resource_id = dPgetParam($_GET, 'resource_id', 0);
-$perms =& $AppUI->acl();
 
-$canView = $perms->checkModuleItem($m, 'view', $resource_id);
-$canEdit = $perms->checkModuleItem($m, 'edit', $resource_id);
-$canDelete = $perms->checkModuleItem($m, 'delete', $resource_id);
+$canView = getPermission($m, 'view', $resource_id);
+$canEdit = getPermission($m, 'edit', $resource_id);
+$canDelete = getPermission($m, 'delete', $resource_id);
 
 if (! $canView) {
-  $AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 if (! $resource_id) {
-  $AppUI->setMsg("invalid ID", UI_MSG_ERROR);
-  $AppUI->redirect();
+	$AppUI->setMsg("invalid ID", UI_MSG_ERROR);
+	$AppUI->redirect();
 }
 // TODO: tab stuff
 
 $obj =& new CResource;
 
 if (! $obj->load($resource_id)) {
-  $AppUI->setMsg('Resource');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
+	$AppUI->setMsg('Resource');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
 } else {
-  $AppUI->savePlace();
+	$AppUI->savePlace();
 }
 
 $titleBlock =& new CTitleBlock('View Resource', 'helpdesk.png', $m, "$m.$a");
 if ($canAuthor) {
-  $titleBlock->addCell(
-    '<input type="submit" class="button" value="'. $AppUI->_('new resource').'" />', '',
-    '<form action="?m=resources&a=addedit" method="post">', '</form>'
-  );
+	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new resource') 
+	                      . '" />'), '', '<form action="?m=resources&a=addedit" method="post">', 
+	                     '</form>');
 }
 
 $titleBlock->addCrumb('?m=resources', 'resource list');
 if ($canEdit) {
-  $titleBlock->addCrumb("?m=resources&a=addedit&resource_id=$resource_id", "edit this resource");
+	$titleBlock->addCrumb("?m=resources&a=addedit&resource_id=$resource_id", "edit this resource");
 }
 if ($canDelete) {
-  $titleBlock->addCrumbDelete('delete resource', $canDelete, 'no delete permission');
+	$titleBlock->addCrumbDelete('delete resource', $canDelete, 'no delete permission');
 }
 $titleBlock->show();
 
 if ($canDelete) {
 ?>
 <script language="javascript">
-  can_delete = true;
-  delete_msg = "<?php echo $AppUI->_('doDelete').' '.$AppUI->_('Resource').'?';?>";
+	can_delete = true;
+	delete_msg = "<?php echo $AppUI->_('doDelete').' '.$AppUI->_('Resource').'?';?>";
 </script>
 <form name="frmDelete" action="./index.php?m=resources" method="post">
   <input type="hidden" name="dosql" value="do_resource_aed" />

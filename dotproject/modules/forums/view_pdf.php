@@ -6,9 +6,8 @@ $AppUI->savePlace();
 $sort = dPgetParam($_REQUEST, 'sort', 'asc');
 $forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
 $message_id = dPgetParam($_REQUEST, 'message_id', 0);
-$perms =& $AppUI->acl();
 
-if ( ! $perms->checkModuleItem('forums', 'view', $message_id))
+if ( ! getPermission('forums', 'view', $message_id))
 	$AppUI->redirect("m=public&a=access_denied");
 
 $q  = new DBQuery;

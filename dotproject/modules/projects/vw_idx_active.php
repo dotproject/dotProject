@@ -6,13 +6,12 @@ if (!defined('DP_BASE_DIR')) {
 GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
 GLOBAL $priority;
 
-$perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$editProjectsAllowed = $perms->checkModuleItem('projects', 'edit');
+$editProjectsAllowed = getPermission('projects', 'edit');
 foreach ($projects as $row) {
 	$editProjectsAllowed = (($editProjectsAllowed) 
-	                        || $perms->checkModuleItem('projects', 'edit', $row['project_id']));
+	                        || getPermission('projects', 'edit', $row['project_id']));
 }
 
 $base_table_cols = 9;
@@ -95,7 +94,7 @@ $CR = "\n";
 $CT = "\n\t";
 $none = true;
 foreach ($projects as $row) {
-	if (! $perms->checkModuleItem('projects', 'view', $row['project_id'])) {
+	if (! getPermission('projects', 'view', $row['project_id'])) {
 		continue;
 	}
 	// We don't check the percent_completed == 100 because some projects
@@ -120,7 +119,7 @@ echo ($row['project_color_identifier']); ?>">
 	</td>
 	<td width="30%">
 <?php 
-		$allowedProjComp = $perms->checkModuleItem('companies', 'access', $row['project_company']);
+		$allowedProjComp = getPermission('companies', 'access', $row['project_company']);
 		if ($allowedProjComp) {
 ?>
 		<a href="?m=companies&amp;a=view&amp;company_id=<?php 
@@ -204,7 +203,7 @@ echo (htmlspecialchars($row['total_tasks'] . ($row['my_tasks'] ? ' ('.$row['my_t
 ?>
 	<td align="center">
 <?php 
-			if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+			if (getPermission('projects', 'edit', $row['project_id'])) {
 ?>
 		<input type="checkbox" name="project_id[]" value="<?php echo ($row['project_id']); ?>" />
 <?php 

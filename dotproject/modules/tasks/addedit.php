@@ -8,7 +8,6 @@ if (!(defined('DP_BASE_DIR'))){
  */
 
 $task_id = intval(dPgetParam($_REQUEST, 'task_id', 0));
-$perms =& $AppUI->acl();
 
 //load the record data
 $obj = new CTask();
@@ -37,13 +36,13 @@ if (!$task_project) {
 //check permissions
 if ($task_id) {
 	//we are editing an existing task
-	$canEdit = $perms->checkModuleItem($m, 'edit', $task_id);
+	$canEdit = getPermission($m, 'edit', $task_id);
 } else {
 	//do we have access on this project?
-	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
+	$canEdit = getPermission('projects', 'view', $task_project);
 	//And do we have add permission to tasks?
 	if ($canEdit) {
-		$canEdit = $perms->checkModule('tasks', 'add');
+		$canEdit = getPermission('tasks', 'add');
 	}
 }
 
@@ -52,7 +51,7 @@ if (!$canEdit) {
 }
 
 //check permissions for the associated project
-$canReadProject = $perms->checkModuleItem('projects', 'view', $obj->task_project);
+$canReadProject = getPermission('projects', 'view', $obj->task_project);
 
 $durnTypes = dPgetSysVal('TaskDurationType');
 
@@ -66,6 +65,7 @@ $project = new CProject();
 $project->load($task_project);
 
 //Pull all users
+$perms =& $AppUI->acl();
 $users = $perms->getPermittedUsers('tasks');
 
 function getSpaces($amount){

@@ -7,7 +7,6 @@ if (!defined('DP_BASE_DIR')){
 	global $AppUI, $task_id, $obj, $users, $task_access, $department_selection_list;
 	global $task_parent_options, $dPconfig, $projects, $task_project, $can_edit_time_information, $tab;
 
-	$perms =& $AppUI->acl();
 ?>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>"
   method="post"  name="detailFrm">
@@ -43,7 +42,7 @@ if (!defined('DP_BASE_DIR')){
 								<?php $task_types = dPgetSysVal('TaskType'); echo arraySelect($task_types, "task_type",  "class='text'", $obj->task_type, false); ?>
 								<br /><br />
 					<?php
-						if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+						if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'access')) {
 							echo "<input type='button' class='button' value='".$AppUI->_("Select contacts...")."' onclick='javascript:popContacts();' />";
 						}
 						// Let's check if the actual company has departments registered

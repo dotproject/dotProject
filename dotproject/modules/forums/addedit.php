@@ -7,10 +7,9 @@ if (!defined('DP_BASE_DIR')){
 
 $forum_id = intval( dPgetParam( $_GET, 'forum_id', 0 ) );
 $forum_project = intval(dPgetParam($_GET, 'forum_project', 0));
-$perms =& $AppUI->acl();
 
 // check permissions for this record
-$canEdit = $perms->checkModuleItem( $m, 'edit', $forum_id );
+$canEdit = getPermission( $m, 'edit', $forum_id );
 if (!$canEdit || !$canAuthor) {
 	$AppUI->redirect( "m=public&a=access_denied" );
 }

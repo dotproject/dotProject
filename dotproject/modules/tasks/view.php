@@ -3,32 +3,31 @@ if (!defined('DP_BASE_DIR')){
 	die('You should not access this file directly.');
 }
 
+global $task_id;
+
 $task_id = intval(dPgetParam($_GET, 'task_id', 0));
 $task_log_id = intval(dPgetParam($_GET, 'task_log_id', 0));
 $reminded = intval(dPgetParam($_GET, 'reminded', 0));
 
 $obj = new CTask();
+$obj->peek($task_id); //we need to peek at the task's data to determine its access level
 $msg = '';
 
 // check permissions for this record
+$canAccess = getPermission($m, 'access', $task_id);
 $canRead = getPermission($m, 'view', $task_id);
 $canEdit = getPermission($m, 'edit', $task_id);
+
 // check if this record has dependencies to prevent deletion
 $canDelete = $obj->canDelete($msg, $task_id);
 // check permissions for this record (module level)
 $canReadModule = getPermission($m, 'view');
 
-if (!($canRead)) {
+if (!($canRead && $obj->canAccess($AppUI->user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$obj->peek($task_id); //we need to peek at the task's data to determine its access level
-if (!($obj->canAccess($AppUI->user_id))) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
 
 $q =& new DBQuery;
-$perms =& $AppUI->acl();
 
 $q->addTable('tasks');
 $q->leftJoin('users', 'u1', 'u1.user_id = task_owner');
@@ -374,7 +373,7 @@ function delIt() {
 	 		<?php
 		}
 		
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+		if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 			$q->addTable('contacts', 'c');
 			$q->leftJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id');
 			$q->leftJoin('departments', 'd', 'dept_id = contact_department');
@@ -466,20 +465,20 @@ $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
 $tabBox_show = 0;
 if ($obj->task_dynamic != 1) {
 	// tabbed information boxes
-	if ($perms->checkModuleItem('task_log', 'view', $task_id)) {
+	if (getPermission('task_log', 'access')) {
 		$tabBox_show = 1;
 		$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_logs', 'Task Logs');
 		// fixed bug that dP automatically jumped to access denied if user does not
 		// have read-write permissions on task_id and this tab is opened by default (session_vars)
 		// only if user has r-w perms on this task, new or edit log is beign showed
-		if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
+		if (getPermission('tasks', 'edit', $task_id)) {
 			if ($task_log_id == 0) {
-				if ($perms->checkModuleItem('task_log', 'add', $task_id)) {
+				if (getPermission('task_log', 'add')) {
 					$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'New Log');
 				}
-			} elseif ($perms->checkModuleItem('task_log', 'edit', $task_id)) {
+			} elseif (getPermission('task_log', 'edit')) {
 				$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'Edit Log');
-			} elseif ($perms->checkModuleItem('task_log', 'add', $task_id)) {
+			} elseif (getPermission('task_log', 'add')) {
 				$tabBox_show = 1;
 				$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'New Log');
 			}

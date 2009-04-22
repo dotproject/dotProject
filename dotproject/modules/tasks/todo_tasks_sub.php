@@ -8,8 +8,8 @@ global $m, $a, $date, $other_users, $showPinned, $showArcProjs;
 global $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
-$perms =& $AppUI->acl();
-$canDelete = $perms->checkModuleItem($m, 'delete');
+
+$canDelete = getPermission($m, 'delete');
 $q = new DBQuery();
 ?>
 

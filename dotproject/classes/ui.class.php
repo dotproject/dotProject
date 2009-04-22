@@ -241,7 +241,8 @@ class CAppUI {
 		
 		// check whether the filename contained bad characters
 		if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-			$AppUI->redirect('m=public&amp;a=access_denied');
+			$AppUI->redirect('m=public&a=access_denied');
+			return $file;
 		}
 		else {
 			return $file;
@@ -508,7 +509,7 @@ class CAppUI {
 		// Fix to handle cookieless sessions
 		if ($session_id != '') {
 			//appending $session_id parameter to $params
-			$params .= (($params) ? '&amp;' : '')  . $session_id;
+			$params .= (($params) ? '&' : '')  . $session_id;
 		}
 		ob_implicit_flush(); // Ensure any buffering is disabled.
 		header('Location: index.php?' . $params);
@@ -1066,7 +1067,7 @@ the active tab, and the selected tab **/
 	}
 	
 	function loadExtras($module, $file = null) {
-		global $AppUI;
+		global $AppUI, $acl;
 		if (! (isset($_SESSION['all_tabs']) && isset($_SESSION['all_tabs'][$module]))) {
 			return false;
 		}

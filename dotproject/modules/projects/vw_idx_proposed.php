@@ -11,13 +11,12 @@ if ($currentTabId == 500) {
 	$show_all_projects = true;
 }
 
-$perms =& $AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$editProjectsAllowed = $perms->checkModuleItem('projects', 'edit');
+$editProjectsAllowed = getPermission('projects', 'edit');
 foreach ($projects as $row) {
 	$editProjectsAllowed = (($editProjectsAllowed) 
-	                        || $perms->checkModuleItem('projects', 'edit', $row['project_id']));
+	                        || getPermission('projects', 'edit', $row['project_id']));
 }
 
 $base_table_cols = 9;
@@ -114,7 +113,7 @@ $none = true;
 $project_status_filter = $currentTabId;
 
 foreach ($projects as $row) {
-	if (! $perms->checkModuleItem('projects', 'view', $row['project_id'])) {
+	if (! getPermission('projects', 'view', $row['project_id'])) {
 		continue;
 	}
 	if ($show_all_projects || $row['project_status'] == $project_status_filter) {
@@ -137,7 +136,7 @@ echo ($row['project_color_identifier']); ?>">
 	</td>
 	<td width="30%">
 <?php 
-		$allowedProjComp = $perms->checkModuleItem('companies', 'access', $row['project_company']);
+		$allowedProjComp = getPermission('companies', 'access', $row['project_company']);
 		if ($allowedProjComp) {
 ?>
 		<a href="?m=companies&amp;a=view&amp;company_id=<?php 
@@ -231,7 +230,7 @@ echo (($row['project_status'] == 0)
 ?>
 	<td align="center">
 <?php 
-			if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
+			if (getPermission('projects', 'edit', $row['project_id'])) {
 ?>
 		<input type="checkbox" name="project_id[]" value="<?php echo ($row['project_id']); ?>" />
 <?php 

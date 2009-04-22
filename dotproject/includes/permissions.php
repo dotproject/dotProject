@@ -72,23 +72,23 @@ function isAllowed($perm_type, $mod, $item_id = 0) {
 	return $allowed;
 }
 
-function getPermission( $mod, $perm, $item_id = 0) {
+function getPermission($mod, $perm, $item_id = 0) {
 	// First check if the module is readable, i.e. has view permission.
 	$perms =& $GLOBALS['AppUI']->acl();
-	$result = $perms->checkModule($mod, $perm);
-	// If we have access then we need to ensure we are not denied access to the particular
-	// item.
-	if ($result && $item_id) {
-	  if ($perms->checkModuleItemDenied($mod, $perm, $item_id)) {
-		$result = false;
-	  }
-	}
-	// If denied we need to check if we are allowed the task.  This can be done
-	// a lot better in PHPGACL, but is here for compatibility.
-	if ($mod == 'tasks' && ! $result && $item_id) {
-		$sql = "SELECT task_project FROM tasks WHERE task_id = $item_id";
-		$project_id = db_loadResult($sql);
-		$result = getPermission('projects', $perm, $project_id);
+	$result = $perms->checkModuleItem($mod, $perm, $item_id);
+	
+	// We need to check if we are allowed to view in the parent module item.  
+	// This can be done a lot better in PHPGACL, but is here for compatibility.
+	if ($item_id && $perm == 'view') {
+		if ($mod == 'tasks') {
+			$sql = ('SELECT task_project FROM tasks WHERE task_id =' . $item_id);
+			$project_id = db_loadResult($sql);
+			$result = $result && getPermission('projects', $perm, $project_id);
+		} else if ($mod == 'projects') {
+			$sql = ('SELECT project_company FROM projects WHERE project_id =' . $item_id);
+			$company_id = db_loadResult($sql);
+			$result = $result && getPermission('companies', $perm, $company_id);
+		}
 	}
 	return $result;
 }

@@ -22,8 +22,6 @@ if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
 $orderby         = $AppUI->getState( 'ForumIdxOrderBy' ) ? $AppUI->getState( 'ForumIdxOrderBy' ) : 'forum_name';
 $orderdir        = $AppUI->getState( 'ForumIdxOrderDir' ) ? $AppUI->getState( 'ForumIdxOrderDir' ) : 'asc';
 
-$perms =& $AppUI->acl();
-
 $df = $AppUI->getPref( 'SHDATEFORMAT' );
 $tf = $AppUI->getPref( 'TIMEFORMAT' );
 
@@ -134,7 +132,7 @@ foreach ($forums as $row) {
 	}?>
 <tr>
 	<td nowrap="nowrap" align="center">
-	<?php if ( $row["forum_owner"] == $AppUI->user_id || $perms->checkModule('forums', 'add') ) { ?>
+	<?php if ( $row["forum_owner"] == $AppUI->user_id || getPermission('forums', 'add') ) { ?>
 		<a href="?m=forums&a=addedit&forum_id=<?php echo $row["forum_id"];?>" title="<?php echo $AppUI->_('edit');?>">
 		<?php echo dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' );?>
 		</a>

@@ -5,11 +5,9 @@ if (!defined('DP_BASE_DIR')){
 
 $AppUI->savePlace();
 
-if (! $canAccess) {
+if (!($canAccess)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-
-$perms =& $AppUI->acl();
 
 // To configure an aditional filter to use in the search string
 $additional_filter = "";
@@ -154,7 +152,7 @@ $a2z .= "\n</tr>\n<tr><td colspan='28'>$form</td></tr></table>";
 
 $titleBlock = new CTitleBlock( 'Contacts', 'monkeychat-48.png', $m, "$m.$a" );
 $titleBlock->addCell( $a2z );
-if ($canEdit) {
+if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new contact').'">', '',
 		'<form action="?m=contacts&a=addedit" method="post">', '</form>'

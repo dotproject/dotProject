@@ -2267,7 +2267,6 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$now = new CDate();
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-	$perms =& $AppUI->acl();
 	$show_all_assignees = dPgetConfig('show_all_task_assignees', false);
 	
 	if (!isset($done[$a['task_id']]))	{ 
@@ -2330,7 +2329,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	// edit icon
 	$s .= "\n\t<td>";
 	$canEdit = getPermission('tasks', 'edit', $a['task_id']);
-	$canViewLog = $perms->checkModuleItem('task_log', 'view', $a['task_id']);
+	$canViewLog = getPermission('task_log', 'view', $a['task_id']);
 	if ($canEdit) {
 		$s .= ("\n\t\t".'<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '">'
 			   . "\n\t\t\t".'<img src="./images/icons/pencil.gif" alt="' . $AppUI->_('Edit Task') 

@@ -9,15 +9,14 @@ $ci = dPgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $dPconfig['files_ci_preserve_attr'];
 
 // check permissions for this record
-$perms =& $AppUI->acl();
-$canEdit = $perms->checkModuleItem($m, 'edit', $file_id);
+$canEdit = getPermission($m, 'edit', $file_id);
 if (!($canEdit)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 if (file_exists(DP_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
 }
-$canAdmin = $perms->checkModule('system', 'edit');
+$canAdmin = getPermission('system', 'edit');
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];
@@ -48,9 +47,9 @@ if ($file_id > 0) {
 		$AppUI->redirect();
 	}
 	// Check to see if the task or the project is allowed.
-	if (($obj->file_task && !($perms->checkModuleItem('tasks', 'view', $obj->file_task))) 
+	if (($obj->file_task && !(getPermission('tasks', 'view', $obj->file_task))) 
 	    || ($obj->file_project 
-	        && !($perms->checkModuleItem('projects', 'view', $obj->file_project)))) {
+	        && !(getPermission('projects', 'view', $obj->file_project)))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

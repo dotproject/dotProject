@@ -54,9 +54,8 @@ $options = array(
 );
 
 $hasResources = $AppUI->isActiveModule('resources');
-$perms =& $AppUI->acl();
 if ($hasResources)
-	$hasResources = $perms->checkModule('resources', 'view');
+	$hasResources = getPermission('resources', 'view');
 // Build the data to go into the table.
 $pdfdata = array();
 $columns = array();

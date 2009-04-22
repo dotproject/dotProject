@@ -8,7 +8,6 @@ if (!defined('DP_BASE_DIR')) {
 $showEditCheckbox = true;
 // Project status from sysval, defined as a constant
 $project_on_hold_status = 4;
-$perms =& $AppUI->acl();
 
 if (isset($_GET['tab'])) {
 	$AppUI->setState('ToDoTab', $_GET['tab']);
@@ -23,7 +22,7 @@ $user_id = $AppUI->user_id;
 $no_modify = false;
 $other_users = false;
 
-if ($perms->checkModule('admin','view')) {
+if (getPermission('admin','view')) {
 	// let's see if the user has sysadmin access
 	$other_users = true;
 	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) {
@@ -37,7 +36,7 @@ if ($perms->checkModule('admin','view')) {
 }
 
 // check permissions
-$canEdit = $perms->checkModule($m, 'edit');
+$canEdit = getPermission($m, 'edit');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
