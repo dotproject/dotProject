@@ -324,11 +324,13 @@ class CDpObject {
 	 *	@return array
 	 */
 	function getDeniedRecords($uid) {
+		global $AppUI;
+		$perms =& $AppUI->acl();
+		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) 
 		              . '::getDeniedRecords failed, user id = 0');
 		
-		$perms =& $GLOBALS['AppUI']->acl();
 		return $perms->getDeniedItems($this->_tbl, $uid);
 	}
 	
@@ -343,7 +345,9 @@ class CDpObject {
 	 */
 	// returns a list of records exposed to the user
 	function getAllowedRecords($uid, $fields='*', $orderby='', $index=null, $extra=null) {
-		$perms =& $GLOBALS['AppUI']->acl();
+		global $AppUI;
+		$perms =& $AppUI->acl();
+		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny =& $perms->getDeniedItems($this->_tbl, $uid);
@@ -382,7 +386,9 @@ class CDpObject {
 	}
 	
 	function getAllowedSQL($uid, $index = null) {
-		$perms =& $GLOBALS['AppUI']->acl();
+		global $AppUI;
+		$perms =& $AppUI->acl();
+		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny =& $perms->getDeniedItems($this->_tbl, $uid);
@@ -410,7 +416,9 @@ class CDpObject {
 	}
 	
 	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
-		$perms =& $GLOBALS['AppUI']->acl();
+		global $AppUI;
+		$perms =& $AppUI->acl();
+		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny =& $perms->getDeniedItems($this->_tbl, $uid);

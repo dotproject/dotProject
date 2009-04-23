@@ -75,7 +75,6 @@ else
 <?php if (!$dialog) {
 	// top navigation menu
 	$nav = $AppUI->getMenuModules();
-	$perms =& $AppUI->acl();
 ?>
 <tr>
 	<td class="nav" align="left">
@@ -85,7 +84,7 @@ else
 		<?php
 		$links = array();
 		foreach ($nav as $module) {
-			if ($perms->checkModule($module['mod_directory'], 'access')) {
+			if (getPermission($module['mod_directory'], 'access')) {
 				$links[] = '<a href="?m='.$module['mod_directory'].'">'.$AppUI->_($module['mod_ui_name']).'</a>';
 			}
 		}
@@ -106,7 +105,7 @@ else
 	
 	$newItem = array(0=>'- New Item -');
 	foreach ($newItemPermCheck as $mod_check => $mod_check_title) {
-		if ($perms->checkModule($mod_check, 'add')) {
+		if (getPermission($mod_check, 'add')) {
 			$newItem[$mod_check] = $mod_check_title;
 		}
 	}
@@ -143,12 +142,12 @@ else
 				<?php echo dPcontextHelp('Help');?> |
 				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
 <?php
-	if ($perms->checkModule('tasks', 'access')) {
+	if (getPermission('tasks', 'access')) {
 ?>
 				<b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
 <?php
 }
-	if ($perms->checkModule('calendar', 'access')) {
+	if (getPermission('calendar', 'access')) {
 		$now = new CDate();
 ?>
 				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> |

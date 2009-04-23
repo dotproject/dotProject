@@ -43,45 +43,45 @@ dPsessionStart();
 
 // check if session has previously been initialised
 // if no ask for logging and do redirect
-if (!isset( $_SESSION['AppUI'] ) || isset($_GET['logout'])) {
+if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
     $_SESSION['AppUI'] = new CAppUI();
 	$AppUI =& $_SESSION['AppUI'];
-	$AppUI->setConfig( $dPconfig );
+	$AppUI->setConfig($dPconfig);
 	$AppUI->checkStyle();
 	 
-	require_once( $AppUI->getSystemClass( 'dp' ) );
-	require_once( DP_BASE_DIR.'/misc/debug.php' );
+	require_once($AppUI->getSystemClass('dp'));
+	require_once(DP_BASE_DIR.'/misc/debug.php');
 
-	if ($AppUI->doLogin()) $AppUI->loadPrefs( 0 );
+	if ($AppUI->doLogin()) $AppUI->loadPrefs(0);
 	// check if the user is trying to log in
 	if (isset($_REQUEST['login'])) {
-		$username = dPgetParam( $_POST, 'username', '' );
-		$password = dPgetParam( $_POST, 'password', '' );
-		$redirect = dPgetParam( $_REQUEST, 'redirect', '' );
-		$ok = $AppUI->login( $username, $password );
+		$username = dPgetParam($_POST, 'username', '');
+		$password = dPgetParam($_POST, 'password', '');
+		$redirect = dPgetParam($_REQUEST, 'redirect', '');
+		$ok = $AppUI->login($username, $password);
 		if (!$ok) {
 			//display login failed message 
-			$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
-			$AppUI->setMsg( 'Login Failed' );
+			$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $dPconfig['host_style'];
+			$AppUI->setMsg('Login Failed');
 			require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 			session_unset();
 			exit;
 		}
-		header ( 'Location: fileviewer.php?'.$redirect );
+		header ('Location: fileviewer.php?'.$redirect);
 		exit;
 	}	
 
-	$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
+	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $dPconfig['host_style'];
 	// check if we are logged in
 	if ($AppUI->doLogin()) {
 	    $AppUI->setUserLocale();
-		@include_once( DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php' );
-		@include_once( DP_BASE_DIR.'/locales/core.php' );
-		setlocale( LC_TIME, $AppUI->user_locale );
+		@include_once(DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php');
+		@include_once(DP_BASE_DIR.'/locales/core.php');
+		setlocale(LC_TIME, $AppUI->user_locale);
 		
 		$redirect = @$_SERVER['QUERY_STRING'];
-		if (strpos( $redirect, 'logout' ) !== false) $redirect = '';	
-		if (isset( $locale_char_set )) header('Content-type: text/html;charset='.$locale_char_set);
+		if (strpos($redirect, 'logout') !== false) $redirect = '';	
+		if (isset($locale_char_set)) header('Content-type: text/html;charset='.$locale_char_set);
 		require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 		session_unset();
 		session_destroy();
@@ -94,9 +94,9 @@ require_once DP_BASE_DIR.'/includes/permissions.php';
 
 $perms =& $AppUI->acl();
 
-$canRead = $perms->checkModule( 'files' , 'view' );
+$canRead = $perms->checkModule('files' , 'view');
 if (!$canRead) {
-	$AppUI->redirect( 'm=public&a=access_denied' );
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $file_id = isset($_GET['file_id']) ? $_GET['file_id'] : 0;
@@ -112,7 +112,7 @@ if ($file_id) {
 	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');
 	
 	if (count($allowedFiles) && ! array_key_exists($file_id, $allowedFiles)) {
-		$AppUI->redirect( 'm=public&a=access_denied' );
+		$AppUI->redirect('m=public&a=access_denied');
 	}
 
 	$q = new DBQuery;
@@ -124,8 +124,8 @@ if ($file_id) {
 	
 	$sql = $q->prepare();
 
-	if (!db_loadHash( $sql, $file )) {
-		$AppUI->redirect( 'm=public&a=access_denied' );
+	if (!db_loadHash($sql, $file)) {
+		$AppUI->redirect('m=public&a=access_denied');
 	};
 
 	/*
@@ -159,25 +159,25 @@ if ($file_id) {
      */ 
      ob_end_clean();
 	header('MIME-Version: 1.0');
-    header( 'Pragma: ');
-    header( 'Cache-Control: public');
-	header( 'Content-length: '.$file['file_size'] );
-	header( 'Content-type: '.$file['file_type'] );
-	header( 'Content-transfer-encoding: 8bit');
-	header( 'Content-disposition: attachment; filename="'.$file['file_name'].'"' );
+    header('Pragma: ');
+    header('Cache-Control: public');
+	header('Content-length: '.$file['file_size']);
+	header('Content-type: '.$file['file_type']);
+	header('Content-transfer-encoding: 8bit');
+	header('Content-disposition: attachment; filename="'.$file['file_name'].'"');
 
 	// read and output the file in chunks to bypass limiting settings in php.ini
 	$handle = fopen(DP_BASE_DIR . '/files/'.$file['file_project'].'/'.$file['file_real_filename'], 'rb');
 	if ($handle)
 	{
-		while ( !feof($handle) ) {
+		while (!feof($handle)) {
 			print fread($handle, 8192);
 		}
 		fclose($handle);
 	}
 	flush();
 } else {
-	$AppUI->setMsg( 'fileIdError', UI_MSG_ERROR );
+	$AppUI->setMsg('fileIdError', UI_MSG_ERROR);
 	$AppUI->redirect();
 }
 ?>

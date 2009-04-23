@@ -89,7 +89,7 @@ echo dPcontextHelp('Help');?>
 	
 	$newItem = array(0=>'- New Item -');
 	foreach ($newItemPermCheck as $mod_check => $mod_check_title) {
-		if ($perms->checkModule($mod_check, 'add')) {
+		if (getPermission($mod_check, 'add')) {
 			$newItem[$mod_check] = $mod_check_title;
 		}
 	}

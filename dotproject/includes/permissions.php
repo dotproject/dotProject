@@ -73,8 +73,10 @@ function isAllowed($perm_type, $mod, $item_id = 0) {
 }
 
 function getPermission($mod, $perm, $item_id = 0) {
+	global $AppUI;
+	$perms =& $AppUI->acl();
+	
 	// First check if the module is readable, i.e. has view permission.
-	$perms =& $GLOBALS['AppUI']->acl();
 	$result = $perms->checkModuleItem($mod, $perm, $item_id);
 	
 	// We need to check if we are allowed to view in the parent module item.  
