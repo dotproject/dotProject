@@ -64,7 +64,7 @@ class smartsearch  {
 			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) 
 						  . ' (' . count($results) . ')' . '</b></th></tr>' . "\n");
 			foreach ($results as $records) {
-				if (getPermission($this->table_module, 'access', $records[$this->table_key])) {
+				if (getPermission($this->table_module, 'view', $records[$this->table_key])) {
 					$ii = 0;
 					$display_val = '';
 					foreach ($this->display_fields as $fld) {
