@@ -337,6 +337,9 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 * @param [type] $updateNulls
 */
 function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descriptionField = NULL) {
+	global $AppUI;
+	$perms =& $AppUI->acl();
+	
 	$fmtsql = "UPDATE `$table` SET %s WHERE %s";
 	$obj_vars_arr = get_object_vars($object);
 	foreach ($obj_vars_arr as $k => $v) {
@@ -357,7 +360,6 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 		$sql = sprintf($fmtsql, implode(",", $tmp) , $where);
 		$retval = db_exec($sql);
 		if ($retval) {
-			global $perms;
 			$perm_item_id = $perms->get_object_id($table, $obj_vars_arr[$keyName], 'axo');
 			if ($perm_item_id) {
 				if ($descriptionField) {
