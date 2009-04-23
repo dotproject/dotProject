@@ -385,15 +385,16 @@ class CDpObject {
 		return $this->_query->loadHashList($index);
 	}
 	
-	function getAllowedSQL($uid, $index = null) {
+	function getAllowedSQL($uid, $index = null, $alt_mod = null) {
 		global $AppUI;
 		$perms =& $AppUI->acl();
+		$mod = ((isset($alt_mod)) ? $alt_mod : $this->_tbl);
 		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
-		$deny =& $perms->getDeniedItems($this->_tbl, $uid);
-		$allow =& $perms->getAllowedItems($this->_tbl, $uid);
-		if (!($perms->checkModule($this->_tbl, 'view', $uid))) {
+		$deny =& $perms->getDeniedItems($mod, $uid);
+		$allow =& $perms->getAllowedItems($mod, $uid);
+		if (!($perms->checkModule($mod, 'view', $uid))) {
 			if (!(count($allow))) {
 				return array('1=0');	// No access, and no allow overrides, so nothing to show.
 			}
@@ -415,14 +416,15 @@ class CDpObject {
 		return $where;
 	}
 	
-	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	function setAllowedSQL($uid, &$query, $index = null, $key = null, $alt_mod = null) {
 		global $AppUI;
 		$perms =& $AppUI->acl();
+		$mod = ((isset($alt_mod)) ? $alt_mod : $this->_tbl);
 		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
-		$deny =& $perms->getDeniedItems($this->_tbl, $uid);
-		$allow =& $perms->getAllowedItems($this->_tbl, $uid);
+		$deny =& $perms->getDeniedItems($mod, $uid);
+		$allow =& $perms->getAllowedItems($mod, $uid);
 		// Make sure that we add the table otherwise dependencies break
 		if (isset($index)) {
 			if (!($key)) {
@@ -430,7 +432,7 @@ class CDpObject {
 			}
 			$query->leftJoin($this->_tbl, $key, ($key . '.' . $this->_tbl_key . ' = ' . $index));
 		}
-		if (!($perms->checkModule($this->_tbl, 'view', $uid))) {
+		if (!($perms->checkModule($mod, 'view', $uid))) {
 			if (!(count($allow))) {
 				// We need to ensure that we don't just break complex SQLs, but
 				// instead limit to a nonsensical value.  This assumes that the

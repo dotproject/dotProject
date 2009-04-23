@@ -14,9 +14,9 @@ class files_content extends smartsearch
 	var $table_link = 'fileviewer.php?file_id=';
 	var $table_title = 'Files Content';
 	var $table_orderby = 'word_placement';
-	var $follow_up_link = 'fileviewer.php?file_id=';
 	var $search_fields = array('word');
 	var $display_fields = array('word');
+	var $follow_up_link = 'fileviewer.php?file_id=';
 
 	function cfiles_content (){
 		return new files_content();

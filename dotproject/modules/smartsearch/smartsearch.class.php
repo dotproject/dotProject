@@ -25,23 +25,23 @@ class smartsearch  {
 	var $tmppattern = "";
 	var $display_val = "";
 	var $search_options = null;
-//	$search_options['display_all_flds']=="on"		display all fields
-//	$search_options['display_all_flds']==""		display only first 2 fields from display_fields array
-//	$search_opts['keywords']==array() 			array of searched keywords
-//	$search_options['ignore_specchar']=="on"	enable  ignoring special eastern national characters / czech and slovak /
-//	$search_options['ignore_specchar']==""		disable ignoring  special eastern national characters / czech and slovak /
-//	$search_options['ignore_case']==""			match case	
-//	$search_options['ignore_case']=="on"		ignore case 	/default/
-//	$search_options['show_empty']==""			hide modules with empty results	/default/
-//	$search_options['show_empty']=="on"			show modules with empty results	 	
-//	$search_options['all_words']==""			any of the words	/default/
-//	$search_options['all_words']=="on"			match all words	 	
+//	$search_options['keywords']==array() 		array of searched keywords
+//	$search_options['display_all_flds']=="on"	display all fields
+//	$search_options['display_all_flds']==""		display only first 2 fields in display_fields array
+//	$search_options['ignore_specchar']=="on"	ignore "special" characters
+//	$search_options['ignore_specchar']==""		don't ignore "special" characters /default/
+//	$search_options['ignore_case']==""			match case
+//	$search_options['ignore_case']=="on"		ignore case /default/
+//	$search_options['show_empty']==""			hide modules with empty results /default/
+//	$search_options['show_empty']=="on"			show modules with empty results
+//	$search_options['all_words']==""			match any of the words /default/
+//	$search_options['all_words']=="on"			match all words
 
 	function smartsearch(){
 		return null;
 	}
 	
-	function createlink() {
+	function createlink($records) {
 		$tmplink = "";
 		if (isset($this->table_link) && isset($this->table_key)) {
 			$tmplink = ($this->table_link 
@@ -60,8 +60,9 @@ class smartsearch  {
 		$results = $this->_searchResults();
 		if ($results && getPermission($this->table_module, 'access')) {
 			$record_count += count($results);
-			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . count($results) 
-			              . ')' . '</b></th></tr>' . "\n");
+			
+			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) 
+						  . ' (' . count($results) . ')' . '</b></th></tr>' . "\n");
 			foreach ($results as $records) {
 				if (getPermission($this->table_module, 'access', $records[$this->table_key])) {
 					$ii = 0;
@@ -74,19 +75,8 @@ class smartsearch  {
 						$display_val .= ((($display_val) ? ' ' : '') 
 						                 . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $fld)]);
 					}
-					$tmplink = "";
-					if (isset($this->table_link) && isset($this->table_key)) {
-						$tmplink = ($this->table_link 
-						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
-						                                    $this->table_key)]);
-					}
-					if (isset($this->table_link2) && isset($this->table_key2)) {
-						$tmplink = ($this->table_link 
-						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
-						                                    $this->table_key)] . $this->table_link2 
-						            . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', 
-						                                    $this->table_key2)]);
-					}
+					
+					$tmplink = $this->createlink($records); 
 					$outstring .= ('<tr><td>'."\n" . '<a href="' . $tmplink . '">' 
 					               . highlight($display_val, $this->keywords) . '</a>' . "\n" 
 					               . '</td></tr>' . "\n");
@@ -96,7 +86,7 @@ class smartsearch  {
 		else if ($this->search_options['show_empty'] == 'on') {
 			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . count($results) 
 			              . ')' . '</b></th></tr>' . "\n" .'<tr><td>' . $AppUI->_('Empty') 
-			              .'</td></tr>' . "\n");
+			              . '</td></tr>' . "\n");
 		}
 		return $outstring;
 	}
@@ -111,6 +101,7 @@ class smartsearch  {
 	
 	function _searchResults() {
 		global $AppUI, $locale_char_set;
+		
 		$q = new DBQuery;
 		$dPObj = new CDpObject($this->table, $this->table_key);
 		
@@ -128,8 +119,7 @@ class smartsearch  {
 		}
 		
 		$q->addOrder($this->table_orderby);
-		
-		$dPObj->setAllowedSQL($AppUI->user_id, $q);
+		$dPObj->setAllowedSQL($AppUI->user_id, $q, null, null, $this->table_module);
 		if ($this->table_extra) {
 			$q->addWhere($this->table_extra);
 		}

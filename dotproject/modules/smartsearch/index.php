@@ -3,40 +3,32 @@ if (!defined('DP_BASE_DIR')){
   die('You should not access this file directly.');
 }
 
-
 $files = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $m . '/searchobjects'), '\.php$');
-$ssearch = array();
-$ssearch['keywords'] = array();
-
-$ssearch['advanced_search'] = dPgetParam($_POST, 'advancedsearch', '');
-
-$ssearch['mod_selection'] = dPgetParam($_POST, 'modselection', '');
 sort($files);
-foreach ($files as $tmp){
-	$temp = substr($tmp,0,-8);
-	$ssearch['mod_' . $temp] = dPgetParam($_POST, 'mod_' . $temp, '');
-}
 
-$ssearch['all_words'] = dPgetParam($_POST, 'allwords', '');
+$keyword1 = dPgetParam($_POST, 'keyword1', '');
+$keyword2 = dPgetParam($_POST, 'keyword2', '');
+$keyword3 = dPgetParam($_POST, 'keyword3', '');
+$keyword4 = dPgetParam($_POST, 'keyword4', '');
+$all_words = dPgetParam($_POST, 'allwords', '');
+$mod_selection = dPgetParam($_POST, 'modselection', '');
+$advanced_search = dPgetParam($_POST, 'advancedsearch', '');
 
-if($ssearch['advanced_search']=='on') { 
-	$ssearch['ignore_case'] = dPgetParam($_POST, 'ignorecase', '');
-	$ssearch['ignore_specchar'] = dPgetParam($_POST, 'ignorespecchar', '');
-	$ssearch['display_all_flds'] = dPgetParam($_POST, 'displayallflds', '');
-	$ssearch['show_empty'] = dPgetParam($_POST, 'showempty', '');
+if($advanced_search == 'on') { 
+	$ignore_specchar = dPgetParam($_POST, 'ignorespecchar', '');
+	$ignore_case = dPgetParam($_POST, 'ignorecase', '');
+	$display_all_flds = dPgetParam($_POST, 'displayallflds', '');
+	$show_empty = dPgetParam($_POST, 'showempty', '');
 }
 else {
-	$ssearch['ignore_case'] = 'on';
-	$ssearch['ignore_specchar'] = '';
-	$ssearch['display_all_flds'] = '';
-	$ssearch['show_empty'] = '';
+	$ignore_case = 'on';
 }
 
 ?>
 <script language="JavaScript">
 
 	function focusOnSearchBox() {
-		document.forms.frmSearch.keyword.focus();
+		document.forms.frmSearch.keyword1.focus();
 	}
 	function toggleStatus(obj) {
 		if (obj.checked) {
@@ -101,135 +93,165 @@ foreach ($files as $tmp){
 $titleBlock = new CTitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
-	<form name="frmSearch" action="?m=<?php echo $m ;?>"  method="POST">
-			<table cellspacing="5" cellpadding="0" border="0">
-				<tr>
-					<td align="left">
-					<div id="div_advancedsearch1" name="div_advancedsearch1"  style="<?php  echo ($ssearch['advanced_search']== 'on' ? 'visibility:visible':'visibility:hidden'); ?> "> 1. </div></td>
-					<td align="left"><input class="text" size="18" type="text" id="keyword" name="keyword" value="<?php echo @stripslashes($_POST['keyword']); ?>" /></td>
-					<td align="left"><input class="button" type="submit" value="<?php echo $AppUI->_('Search');?>" /></td>
-					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php  echo ($ssearch['all_words']== 'on' ? 'checked="checked"':""); ?> /> <label for="all_words"><?php echo $AppUI->_('All words');?></label></td>
-					<td align="left"><input name="modselection" id="modselection" type="checkbox"  <?php  echo ($ssearch['mod_selection'] == 'on' ? 'checked="checked"':""); ?> onclick="toggleModules(this)" /> <label for="modselection"><?php echo $AppUI->_('Modules selection');?></label></td>
-					<td align="left"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php  echo ($ssearch['advanced_search'] == 'on' ? 'checked="checked"':""); ?> onclick="toggleStatus(this)" /> <label for="advancedsearch"><?php echo $AppUI->_('Advanced search');?></label></td>
-				</tr>
-			</table>
-			<div id="div_advancedsearch" name="div_advancedsearch"  style="<?php echo ($ssearch['advanced_search']== 'on' ? 'display:block':'display:none'); ?> ">
-				<table cellspacing="5" cellpadding="0" border="0">
-					<tr>
-						<td align="left"> 2. </td>
-						<td align="left"><input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo @stripslashes($_POST['keyword2']); ?>" /></td>
-						<td align="left"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo @stripslashes($_POST['keyword3']); ?>" /></td>
-						<td align="left"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo @stripslashes($_POST['keyword4']); ?>" /></td>
-						<td align="left"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php  echo ($ssearch['ignore_specchar']== 'on' ? 'checked="checked"':""); ?> /> <label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></td>
-						<td align="left"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php  echo ($ssearch['ignore_case']== 'on' ? 'checked="checked"':""); ?> /> <label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></td>
-						<td align="left"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php  echo ($ssearch['display_all_flds']== 'on' ? 'checked="checked"':""); ?> /> <label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></td>
-						<td align="left"><input name="showempty" id="showempty" type="checkbox"  <?php  echo ($ssearch['show_empty']== 'on' ? 'checked="checked"':""); ?> /> <label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label></td>
-					</tr>
-				</table>
-			</div>
-			<div id="div_selmodules" name="div_selmodules"  style="<?php echo ($ssearch['mod_selection']== 'on' ? 'display:block':'display:none'); ?> ">
-				<table cellspacing="0" cellpadding="0" border="0">
-				<tr><td><a href="#" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="#" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td></tr>
-						<?php
+<form name="frmSearch" action="?m=<?php echo $m ;?>"  method="POST">
+<table cellspacing="5" cellpadding="0" border="0">
+<tr>
+	<td align="left">
+		<div id="div_advancedsearch1" name="div_advancedsearch1"  style="<?php 
+echo ($advanced_search == 'on' ? 'visibility:visible':'visibility:hidden'); ?> ">
+		 1.
+		</div>
+	</td>
+	<td align="left">
+		<input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php 
+echo stripslashes($keyword1); ?>" />
+	</td>
+	<td align="left">
+		<input class="button" type="submit" value="<?php echo $AppUI->_('Search'); ?>" />
+	</td>
+	<td align="left">
+		<input name="allwords" id="allwords" type="checkbox" value="on"<?php 
+echo (($all_words == 'on') ? ' checked="checked"' : ''); ?> /> 
+		<label for="all_words"><?php echo $AppUI->_('All words');?></label>
+	</td>
+	<td align="left">
+		<input name="modselection" id="modselection" type="checkbox" value="on"<?php 
+echo (($mod_selection == 'on') ? ' checked="checked"' : ''); ?> onclick="toggleModules(this)" />
+		<label for="modselection"><?php 
+echo $AppUI->_('Modules selection');?></label>
+	</td>
+	<td align="left">
+		<input name="advancedsearch" id="advancedsearch" type="checkbox"<?php 
+echo (($advanced_search == 'on') ? ' checked="checked"' : ''); ?> onclick="toggleStatus(this)" />
+		<label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label>
+	</td>
+</tr>
+</table>
+<div id="div_advancedsearch" name="div_advancedsearch"  style="<?php 
+echo ($advanced_search== 'on' ? 'display:block' : 'display:none'); ?> ">
+<table cellspacing="5" cellpadding="0" border="0">
+<tr>
+	<td align="left">
+		<label for="keyword2">2.</label>
+		<input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php 
+echo stripslashes($keyword2); ?>" />
+	</td>
+	<td align="left">
+		<label for="keyword3">3.</label>
+		<input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php 
+echo stripslashes($keyword3); ?>" />
+	</td>
+	<td align="left">
+		<label for="keyword4">4.</label>
+		<input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php 
+echo stripslashes($keyword4); ?>" />
+	</td>
+	<td align="left">
+		<input name="ignorespecchar" id="ignorespecchar" type="checkbox" value="on"<?php 
+echo (($ignore_specchar == 'on') ? ' checked="checked"' : ''); ?> />
+		<label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label>
+	</td>
+	<td align="left">
+		<input name="ignorecase" id="ignorecase" type="checkbox" value="on"<?php 
+echo (($ignore_case == 'on') ? ' checked="checked"' : ''); ?> />
+		<label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label>
+	</td>
+	<td align="left">
+		<input name="displayallflds" id="displayallflds" type="checkbox" value="on"<?php 
+echo (($display_all_flds == 'on') ? ' checked="checked"' : ''); ?> />
+		<label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label>
+	</td>
+	<td align="left">
+		<input name="showempty" id="showempty" type="checkbox" value="on"<?php 
+echo (($show_empty == 'on') ? ' checked="checked"' : ''); ?> />
+		<label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label>
+	</td>
+</tr>
+</table>
+</div>
+<div id="div_selmodules" name="div_selmodules"  style="<?php 
+echo ($mod_selection == 'on' ? 'display:block' : 'display:none'); ?> ">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td>
+		<a href="#" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | 
+		<a href="#" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a>
+	</td>
+</tr>
+<?php
 $objarray = Array();
 foreach ($files as $tmp){
-	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
 	$temp = substr($tmp,0,-8);
+	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
+	
 	$class_obj = new $temp();
-	$objarray[$temp] = $class_obj->table_title;
+	$mod_select[$temp] = dPgetParam($_POST, ('mod_' . $temp), '');
+	
 	if (getPermission($class_obj->table_module, 'access')) {
 ?>							
-				<tr><td align="left"><input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" 
-						<?php 
-							echo ($ssearch["mod_$temp"]=='on') ? 'checked="checked"' :'';
-							echo '><label for="mod_'.$temp.'">'.$AppUI->_($objarray[$temp]).'</label>';
-						?> 
-				</td></tr>
-				<?php 	
+<tr>
+	<td align="left">
+		<input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" value="on"<?php 
+		echo (($mod_select[$temp] == 'on') ? ' checked="checked"' : ''); ?> />
+		<label for="mod_<?php echo $temp; ?>"><?php echo $AppUI->_($class_obj->table_title); ?></label>
+	</td>
+</tr>
+<?php 
 	}
 }
 ?>
-				</table>
-			</div>
-	</form>
+</table>
+</div>
+</form>
+
 <?php
-if (isset($_POST['keyword'])) { 
+if ($keyword1) { 
 	$search = new smartsearch();
-	$search->keyword = addslashes($_POST['keyword']);
-
-	if (isset($_POST['keyword']) && strlen($_POST['keyword']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
-		foreach ($or_keywords as $or_keyword) {
-			$ssearch['keywords'][$or_keyword] = array($or_keyword);
-			$ssearch['keywords'][$or_keyword][1] = 0;
-		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
-	}
+	$search->keyword = addslashes($keyword1);
 	
-	if (isset($_POST['keyword2']) && strlen($_POST['keyword2']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword2']));
-		foreach ($or_keywords as $or_keyword) {
-			$ssearch['keywords'][$or_keyword] = array($or_keyword);
-			$ssearch['keywords'][$or_keyword][1] = 1;
-		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword2']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
-	}
-	
-	if (isset($_POST['keyword3']) && strlen($_POST['keyword3']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword3']));
-		foreach ($or_keywords as $or_keyword) {
-			$ssearch['keywords'][$or_keyword]=Array($or_keyword);
-			$ssearch['keywords'][$or_keyword][1]=2;
-		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword3']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
-	}
-
-	
-	if (isset($_POST['keyword4']) && strlen($_POST['keyword4']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword4']));
-		foreach ($or_keywords as $or_keyword) {
-			$ssearch['keywords'][$or_keyword] = array($or_keyword);
-			$ssearch['keywords'][$or_keyword][1] = 3;
-		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword4']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
+	$keywords = array();
+	for ($x = 1; $x <= 4; $x++) {
+		if (isset(${('keyword' . $x)}) && strlen(${('keyword'.$x)}) > 0) {
+			$or_keywords = preg_split('/[\s,;]+/', addslashes(${('keyword'.$x)}));
+			foreach ($or_keywords as $or_keyword) {
+				$keywords[$or_keyword][0] = $or_keyword;
+				$keywords[$or_keyword][1] = $x -1;
+			}
+		} else {
+			$or_keywords = preg_split('/[\s,;]+/', addslashes(${('keyword'.$x)}));
+			foreach ($or_keywords as $or_keyword) {
+				unset($keywords[$or_keyword]);
+			}
 		}
 	}
 
 ?>
 
-	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<?php
-	sort($files);
-	$reccount = 0;
-	foreach ($files as $tmp){
-		require_once('./modules/' . $m . '/searchobjects/' . $tmp);
-		$temp = substr($tmp, 0, -8);
-		if ($ssearch['mod_selection']=='' || $ssearch['mod_' . $temp] == 'on') {
-			$class_search = new $temp();
-			$class_search->setKeyword($search->keyword);
-			if (method_exists($class_search, 'setAdvanced')) {
-				$class_search->setAdvanced($ssearch);
-			}
-			$results = $class_search->fetchResults($reccount);
-			echo $results;
-		}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<?php
+$reccount = 0;
+foreach ($files as $tmp){
+	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
+	$temp = substr($tmp, 0, -8);
+	
+	$search_opts['all_words'] = $all_words;
+	
+	$search_opts['ignore_specchar'] = $ignore_specchar;
+	$search_opts['ignore_case'] = $ignore_case;
+	$search_opts['display_all_flds'] = $display_all_flds;
+	$search_opts['show_empty'] = $show_empty;
+	
+	$search_opts['keywords'] = $keywords;
+	  
+	if ($mod_selection != 'on' || $mod_select[$temp] == 'on') {
+		$class_search = new $temp();
+		$class_search->setKeyword($search->keyword);
+		$class_search->setAdvanced($search_opts);
+		$results = $class_search->fetchResults($reccount);
+		echo $results;
 	}
-	echo ('<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>');
+}
+echo ('<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>');
 ?>
 </table>
 <?php 
