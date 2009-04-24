@@ -82,7 +82,11 @@ function getPermission($mod, $perm, $item_id = 0) {
 	// We need to check if we are allowed to view in the parent module item.  
 	// This can be done a lot better in PHPGACL, but is here for compatibility.
 	if ($item_id && $perm == 'view') {
-		if ($mod == 'tasks') {
+		if ($mod == 'task_log') {
+			$sql = ('SELECT task_log_task FROM task_log WHERE task_log_id =' . $item_id);
+			$task_id = db_loadResult($sql);
+			$result = $result && getPermission('projects', $perm, $task_id);
+		} else if ($mod == 'tasks') {
 			$sql = ('SELECT task_project FROM tasks WHERE task_id =' . $item_id);
 			$project_id = db_loadResult($sql);
 			$result = $result && getPermission('projects', $perm, $project_id);

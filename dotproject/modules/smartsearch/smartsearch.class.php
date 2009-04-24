@@ -57,14 +57,16 @@ class smartsearch  {
 	function fetchResults(&$record_count){
 		global $AppUI;
 		
+		$outstring = '';
+		$module_count = 0;
+		$outresults = '';
+		
 		$results = $this->_searchResults();
 		if ($results && getPermission($this->table_module, 'access')) {
-			$record_count += count($results);
-			
-			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) 
-						  . ' (' . count($results) . ')' . '</b></th></tr>' . "\n");
 			foreach ($results as $records) {
 				if (getPermission($this->table_module, 'view', $records[$this->table_key])) {
+					$module_count++;
+					$record_count++;
 					$ii = 0;
 					$display_val = '';
 					foreach ($this->display_fields as $fld) {
@@ -77,17 +79,22 @@ class smartsearch  {
 					}
 					
 					$tmplink = $this->createlink($records); 
-					$outstring .= ('<tr><td>'."\n" . '<a href="' . $tmplink . '">' 
+					$outresults .= ('<tr><td>'."\n" . '<a href="' . $tmplink . '">' 
 					               . highlight($display_val, $this->keywords) . '</a>' . "\n" 
 					               . '</td></tr>' . "\n");
 			    }
 			}
+			//Search Results XHTML
+			if ($record_count > 0) {
+				$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) 
+				              . ' (' . $module_count . ')' . '</b></th></tr>' . "\n" . $outresults);
+			} else if ($this->search_options['show_empty'] == 'on') {
+				$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) 
+				              . ' (' . count($results) . ')' . '</b></th></tr>' . "\n" 
+				              .'<tr><td>' . $AppUI->_('Empty') . '</td></tr>' . "\n");
+			}
 		}
-		else if ($this->search_options['show_empty'] == 'on') {
-			$outstring = ('<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . count($results) 
-			              . ')' . '</b></th></tr>' . "\n" .'<tr><td>' . $AppUI->_('Empty') 
-			              . '</td></tr>' . "\n");
-		}
+		
 		return $outstring;
 	}
 	
