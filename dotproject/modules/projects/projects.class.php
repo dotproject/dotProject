@@ -520,7 +520,7 @@ function projects_list_data($user_id=false) {
 	$q->addGroup('t.task_project');
 	$tasks_total = $q->exec();
 	$q->clear();
-
+	
 	// tasks_total contains the total number of tasks for each project.
     
 	// temporary My Tasks

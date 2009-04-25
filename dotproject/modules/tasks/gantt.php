@@ -57,7 +57,7 @@ $caller = defVal(@$_REQUEST['caller'], null);
  * so we have to tweak a little bit, also we do not have a special project available
  */
 if ($caller == 'todo') {
- 	$user_id = defVal(@$_REQUEST['user_id'], 0);
+ 	$user_id = defVal(@$_REQUEST['user_id'], $AppUI->user_id);
  
  	$projects[$project_id]['project_name'] = ($AppUI->_('Todo for') . ' ' 
 	                                          . dPgetUsernameFromID($user_id));
@@ -131,7 +131,7 @@ if ($caller == 'todo') {
 // get any specifically denied tasks
 $task =& new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
-$proTasks = $q->loadHashList('task_id');
+$proTasks_data = $q->loadHashList('task_id');
 $q->clear();
 
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
@@ -143,6 +143,15 @@ $criticalTasks = $project->getCriticalTasks($project_id);
 $actual_end_date = new CDate($criticalTasks[0]['task_end_date']);
 $p_end_date = (($actual_end_date->after($project->project_end_date)) 
                ? $criticalTasks[0]['task_end_date'] : $project->project_end_date);
+
+//filter out tasks denied based on task's access level
+$proTasks = array();
+foreach ($proTasks_data as $data_row) {
+	$task->peek($data_row['task_id']);
+	if ($task->canAccess($AppUI->user_id)) {
+	  $proTasks[] = $data_row;
+	}
+}
 
 foreach ($proTasks as $row) {
 	// calculate or set blank task_end_date if unset
