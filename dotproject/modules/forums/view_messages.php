@@ -1,5 +1,5 @@
 <?php  /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -57,7 +57,7 @@ function toggle(id) {
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt(id){
+function delIt(id) {
 	var form = document.messageForm;
 	if (confirm("<?php echo $AppUI->_('forumsDelete');?>")) {
 		form.del.value = 1;
@@ -211,7 +211,7 @@ foreach ($messages as $row) {
 		}
 		$s .= '</td>';
 		$s .= '</tr>';
-	} else if ($viewtype == 'short'){
+	} else if ($viewtype == 'short') {
 		$s .= "<tr>";
 		
         $s .= '<td valign="top" style="' . $style . '" >';

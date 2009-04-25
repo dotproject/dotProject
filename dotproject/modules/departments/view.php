@@ -1,5 +1,5 @@
 <?php /* DEPARTMENTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -47,7 +47,7 @@ if ($dept_id > 0) {
 			$titleBlock = new CTitleBlock('Invalid Department ID', 'users.gif', $m, $m.'.'.$a);
 			$titleBlock->addCrumb('?m=companies', 'companies list');
 			$titleBlock->show();
-	} elseif ($dept_id <= 0) {
+	} else if ($dept_id <= 0) {
 				echo $AppUI->_('Please choose a Department first!');
 	} else {
 		$company_id = $dept['dept_company'];

@@ -1,5 +1,5 @@
 <?php  // $Id$
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -11,10 +11,10 @@ $no_modify = false;
 
 $sort = dPgetParam($_REQUEST, 'sort', 'task_end_date');
 
-if (getPermission('admin', 'view')){ 
+if (getPermission('admin', 'view')) { 
 	$other_users = true;
 	//lets see if the user wants to see anothers user mytodo
-	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0){ 
+	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { 
 		$user_id = $show_uid;
 		$no_modify = true;
 		$AppUI->setState('user_id', $user_id);
@@ -64,7 +64,7 @@ if ($selected && count($selected)) {
 			/*
 			//delete children
 			if (isset($children)) {
-				foreach($children as $child) {
+				foreach ($children as $child) {
 					$t->load($child);
 					$t->delete();
 				}
@@ -288,7 +288,7 @@ if ($canEdit) {
 	$actions['m'] = $AppUI->_('Move', UI_OUTPUT_JS);
 	$actions['d'] = $AppUI->_('Delete', UI_OUTPUT_JS);
 	$actions['f'] = $AppUI->_('Mark as Finished', UI_OUTPUT_JS);
-	foreach($priorities as $k => $v) {
+	foreach ($priorities as $k => $v) {
 		$actions[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_JS);
 	}
 }
@@ -301,7 +301,7 @@ if ($deny) {
 $sql .= ' ORDER BY p.project_name';
 $projects = db_loadHashList($sql, 'project_id');
 $p[0] = $AppUI->_('[none]');
-foreach($projects as $proj) {
+foreach ($projects as $proj) {
 	$p[$proj[0]] = $proj[1];
 }
 if ($project_id) {
@@ -312,7 +312,7 @@ natsort($p);
 $projects =  $p;
 
 $ts[0] = $AppUI->_('[top task]');
-foreach($tasks as $t) {
+foreach ($tasks as $t) {
 	$ts[$t['task_id']] = $t['task_name'];
 }
 ?>

@@ -1,5 +1,5 @@
 <?php /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -53,10 +53,10 @@ $q->addQuery('DISTINCT UPPER(SUBSTRING(u.user_username, 1, 1)) AS L'
 			 . ', UPPER(SUBSTRING(con.contact_first_name, 1, 1)) AS CF' 
 			 . ', UPPER(SUBSTRING(con.contact_last_name, 1, 1)) AS CL');
 $arr = $q->loadList();
-foreach($arr as $L) {
-	$let .= strpos($let, $L['L']) ? '' : $L['L'];
-	$let .= strpos($let, $L['CF']) ? '' : $L['CF'];
-	$let .= strpos($let, $L['CL']) ? '' : $L['CL'];
+foreach ($arr as $L) {
+	$let .= mb_strpos($let, $L['L']) ? '' : $L['L'];
+	$let .= mb_strpos($let, $L['CF']) ? '' : $L['CF'];
+	$let .= mb_strpos($let, $L['CL']) ? '' : $L['CL'];
 }
 $q->clear();
 
@@ -66,7 +66,7 @@ $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show'). ': </td>';
 $a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = ((strpos($let, $cu) > 0) 
+	$cell = ((mb_strpos($let, $cu) > 0) 
 	         ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' 
 	         : '<font color="#999999">' . $cu . '</font>');
 	$a2z .= "\n\t<td>" . $cell . '</td>';

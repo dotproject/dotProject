@@ -1,5 +1,5 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -82,7 +82,7 @@ function popFile(params) {
 	<?php if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name');?>:</td>
-			<td align="left" class="hilite"><?php echo strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
+			<td align="left" class="hilite"><?php echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type');?>:</td>
@@ -119,7 +119,7 @@ function popFile(params) {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=files';}" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = './index.php?m=files';}" />
 	</td>
 	<td align="right">
 		<input type="submit" class="button" value="<?php echo $AppUI->_('submit');?>" />

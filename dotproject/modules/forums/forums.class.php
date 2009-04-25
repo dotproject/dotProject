@@ -1,5 +1,5 @@
 <?php /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -43,12 +43,12 @@ class CForum extends CDpObject {
 
 	function store() {
 		$msg = $this->check();
-		if($msg) {
+		if ($msg) {
 			return "CForum::store-check failed<br />$msg";
 		}
-		if($this->forum_id) {
+		if ($this->forum_id) {
 			$ret = db_updateObject('forums', $this, 'forum_id', false); // ! Don't update null values
-			if($this->forum_name) {
+			if ($this->forum_name) {
 				// when adding messages, this functon is called without first setting 'forum_name'
 				addHistory('forums', $this->forum_id, 'update', $this->forum_name);
 			}
@@ -57,7 +57,7 @@ class CForum extends CDpObject {
 			$ret = db_insertObject('forums', $this, 'forum_id');
 			addHistory('forums', $this->forum_id, 'add', $this->forum_name);
 		}
-		if(!$ret) {
+		if (!$ret) {
 			return "CForum::store failed <br />" . db_error();
 		} else {
 			return NULL;
@@ -126,11 +126,11 @@ class CForumMessage {
 
 	function store() {
 		$msg = $this->check();
-		if($msg) {
+		if ($msg) {
 			return "CForumMessage::store-check failed<br />$msg";
 		}
 		$q  = new DBQuery;
-		if($this->message_id) {
+		if ($this->message_id) {
 			// First we need to remove any forum visits for this message
 			// otherwise nobody will see that it has changed.
 			$q->setDelete('forum_visits');
@@ -164,7 +164,7 @@ class CForumMessage {
 			return $this->sendWatchMail(false);
 		}
 
-		if(!$ret) {
+		if (!$ret) {
 			return "CForumMessage::store failed <br />" . db_error();
 		} else {
 			return NULL;
@@ -277,7 +277,7 @@ class CForumMessage {
 		$body .= "\n\n".DP_BASE_URL.'/index.php?m=forums&a=viewer&forum_id='.$this->message_forum;
 		$body .= "\n\n$this->message_body";
  
-		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "" );
+		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
 		$mail->From($AppUI->_('forumEmailFrom', UI_OUTPUT_RAW));
 
 		$perms =& $AppUI->acl();

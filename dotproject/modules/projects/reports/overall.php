@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -27,7 +27,7 @@ $fullaccess = ($AppUI->user_type == 1);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
@@ -165,7 +165,7 @@ function showcompany($company, $restricted = false)
 		$task_logs = db_loadHashList($sql);
 
 /*		if (isset($company_billingcodes))
-		foreach($company_billingcodes as $code => $name)
+		foreach ($company_billingcodes as $code => $name)
 		{
 			if (isset($task_logs[$code]))
 			{
@@ -181,7 +181,7 @@ function showcompany($company, $restricted = false)
 			}
 		}
 */
-                foreach($task_logs as $task_log)
+                foreach ($task_logs as $task_log)
                         $project_hours += $task_log;
 		$project_row .= '<td>' . round($project_hours, 2) . '</td></tr>';
 		$pdfproject[]=round($project_hours, 2);
@@ -221,7 +221,7 @@ if (!empty($companies))
 else
 {
 	$sql = "SELECT company_id FROM companies";
-	foreach(db_loadColumn($sql) as $company)
+	foreach (db_loadColumn($sql) as $company)
 		$total += showcompany($company, true);
 }
 
@@ -262,7 +262,7 @@ if ($log_pdf) {
 		$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
 		$pdf->ezText("\n" . safe_utf8_decode($AppUI->_('Overall Report')), 12);
 
-	foreach($allpdfdata as $company => $data)
+	foreach ($allpdfdata as $company => $data)
 	{
 		$title = safe_utf8_decode($company);
 		$options = array(

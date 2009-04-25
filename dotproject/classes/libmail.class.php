@@ -4,7 +4,7 @@
  *    @subpackage utilites
  */
 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
@@ -14,7 +14,7 @@ if (!defined('DP_BASE_DIR')){
  *    implements CC, Bcc, Priority headers
  *    @version    1.3
  *    <ul>
- *    <li>added ReplyTo( $address ) method
+ *    <li>added ReplyTo($address) method
  *    <li>added Receipt() method - to add a mail receipt
  *    <li>added optionnal charset parameter to Body() method. this should fix charset problem on some mail clients
  *    </ul>
@@ -23,16 +23,16 @@ if (!defined('DP_BASE_DIR')){
  *    include "libmail.php";
  *
  *    $m= new Mail; // create the mail
- *    $m->From( "leo@isp.com" );
- *    $m->To( "destination@somewhere.fr" );
- *    $m->Subject( "the subject of the mail" );
+ *    $m->From("leo@isp.com");
+ *    $m->To("destination@somewhere.fr");
+ *    $m->Subject("the subject of the mail");
  *
  *    $message= "Hello world!\nthis is a test of the Mail class\nplease ignore\nThanks.";
- *    $m->Body( $message);    // set the body
- *    $m->Cc( "someone@somewhere.fr");
- *    $m->Bcc( "someoneelse@somewhere.fr");
+ *    $m->Body($message);    // set the body
+ *    $m->Cc("someone@somewhere.fr");
+ *    $m->Bcc("someoneelse@somewhere.fr");
  *    $m->Priority(4) ;    // set the priority to Low
- *    $m->Attach( "/home/leo/toto.gif", "image/gif" ) ;    // attach a file of type image/gif
+ *    $m->Attach("/home/leo/toto.gif", "image/gif") ;    // attach a file of type image/gif
  *    $m->Send();    // send the mail
  *    echo "the mail below has been sent:<br><pre>", $m->Get(), "</pre>";
  *    </code>
@@ -78,7 +78,7 @@ class Mail
      *    message priorities referential
      *    @var array
      */
-    var $priorities = array( '1 (Highest)', '2 (High)', '3 (Normal)', '4 (Low)', '5 (Lowest)' );
+    var $priorities = array('1 (Highest)', '2 (High)', '3 (Normal)', '4 (Low)', '5 (Lowest)');
     /**
      *    character set of message
      *    @var string
@@ -105,8 +105,8 @@ class Mail
  */
 function Mail()
 {
-    $this->autoCheck( TRUE );
-    $this->boundary   = '--' . md5( uniqid('dPboundary') );
+    $this->autoCheck(TRUE);
+    $this->boundary   = '--' . md5(uniqid('dPboundary'));
     // Grab the current mail handling options
     $this->transport  = dPgetConfig('mail_transport', 'php');
     $this->host       = dPgetConfig('mail_host', 'localhost');
@@ -116,7 +116,7 @@ function Mail()
     $this->password   = dPgetConfig('mail_pass');
     $this->defer      = dPgetConfig('mail_defer');
     $this->timeout    = dPgetConfig('mail_timeout', 0);
-    $this->charset    = isset( $GLOBALS['locale_char_set']) ? strtolower($GLOBALS['locale_char_set']) : 'us-ascii';
+    $this->charset    = isset($GLOBALS['locale_char_set']) ? mb_strtolower($GLOBALS['locale_char_set']) : 'us-ascii';
     $this->ctencoding = $this->charset != 'us-ascii' ? '8bit' : '7bit';
     $this->canEncode  = 'us-ascii' != $this->charset;
     $this->hasMbStr   = function_exists('mb_substr');
@@ -126,13 +126,13 @@ function Mail()
 /**
  *    activate or desactivate the email addresses validator
  *
- *    ex: autoCheck( TRUE ) turn the validator on
+ *    ex: autoCheck(TRUE) turn the validator on
  *    by default autoCheck feature is on
  *
  *    @param boolean    $bool set to TRUE to turn on the auto validation
  *    @access public
  */
-function autoCheck( $bool )
+function autoCheck($bool)
 {
         $this->checkAddress = (bool) $bool;
 }
@@ -143,16 +143,16 @@ function autoCheck( $bool )
  *    @param string $subject any monoline string
  *    @param string $charset encoding to be used for Quoted-Printable encoding of the subject 
  */
-function Subject( $subject, $charset='' )
+function Subject($subject, $charset='')
 {
     global $AppUI;
-    if( !empty($charset) ) {
-        $this->charset = strtolower($charset);
+    if (!empty($charset)) {
+        $this->charset = mb_strtolower($charset);
     }
     
     $subject = dPgetConfig('email_prefix').' '.$subject;
-    $subject = strtr( $subject, "\x0B\0\t\r\n\f" , '      ' );
-    $subject = $this->_wordEncode($subject, strlen('Subject: '));
+    $subject = strtr($subject, "\x0B\0\t\r\n\f" , '      ');
+    $subject = $this->_wordEncode($subject, mb_strlen('Subject: '));
 
     $this->xheaders['Subject'] = $subject;
 }
@@ -162,26 +162,26 @@ function Subject( $subject, $charset='' )
  *    set the sender of the mail
  *    @param string $from should be an email address
  */
-function From( $from )
+function From($from)
 {
-    if ( !is_string($from) ) {
+    if (!is_string($from)) {
         return FALSE;
     }
-    $from = strtr( $from, "\x0B\0\t\r\n\f" , '      ' );
-    $this->xheaders['From'] = $this->_addressEncode($from, strlen('From: '));
+    $from = strtr($from, "\x0B\0\t\r\n\f" , '      ');
+    $this->xheaders['From'] = $this->_addressEncode($from, mb_strlen('From: '));
 }
 
 /**
  *    set the Reply-to header
  *    @param string $email should be an email address
  */
-function ReplyTo( $address )
+function ReplyTo($address)
 {
     if (!is_string($address)) {
         return FALSE;
     }
-    $address = strtr( $address, "\x0B\0\t\r\n\f" , '      ' );
-    $this->xheaders['Reply-To'] = $this->_addressEncode($address, strlen('Reply-To: '));
+    $address = strtr($address, "\x0B\0\t\r\n\f" , '      ');
+    $this->xheaders['Reply-To'] = $this->_addressEncode($address, mb_strlen('Reply-To: '));
 }
 
 /**
@@ -203,79 +203,79 @@ function Receipt()
  *    @param string $to email address, accept both a single address or an array of addresses
  *    @param boolean $reset resets the current array
  */
-function To( $to, $reset=FALSE )
+function To($to, $reset=FALSE)
 {
-    if ( is_array($to) ) {
-        $to = array_map( create_function('$s', 'return strtr( $s, "\x0B\0\t\r\n\f" , "      " );'), $to );
+    if (is_array($to)) {
+        $to = array_map(create_function('$s', 'return strtr($s, "\x0B\0\t\r\n\f" , "      ");'), $to);
         $this->ato = $to;
     } else {
-        $to = strtr( $to, "\x0B\0\t\r\n\f" , '      ' );
+        $to = strtr($to, "\x0B\0\t\r\n\f" , '      ');
         if ($this->useRawAddress) {
-           if( preg_match( "/^(.*)\<(.+)\>$/D", $to, $regs ) ) {
+           if (preg_match("/^(.*)\<(.+)\>$/D", $to, $regs)) {
               $to = $regs[2];
            }
         }
         if ($reset) {
-            unset( $this->ato );
+            unset($this->ato);
             $this->ato = array();
         }
         $this->ato[] = $to;
     }
 
-    if( $this->checkAddress == TRUE )
-        $this->CheckAdresses( $this->ato );
+    if ($this->checkAddress == TRUE)
+        $this->CheckAdresses($this->ato);
 }
 
 /**
  *    Cc()
- *    set the CC headers ( carbon copy )
+ *    set the CC headers (carbon copy)
  *    $cc : email address(es), accept both array and string
  */
-function Cc( $cc )
+function Cc($cc)
 {
-    if( is_array($cc) ) {
-        $cc = array_map( create_function('$s', 'return strtr( $s, "\x0B\0\t\r\n\f" , "      " );'), $cc );
+    if (is_array($cc)) {
+        $cc = array_map(create_function('$s', 'return strtr($s, "\x0B\0\t\r\n\f" , "      ");'), $cc);
         $this->acc = $cc;
     } else {
-        $cc = strtr( $cc, "\x0B\0\t\r\n\f" , '      ' );
+        $cc = strtr($cc, "\x0B\0\t\r\n\f" , '      ');
         $this->acc = explode(',', $cc);
     }
 
-    if( $this->checkAddress == TRUE )
-        $this->CheckAdresses( $this->acc );
+    if ($this->checkAddress == TRUE)
+        $this->CheckAdresses($this->acc);
 }
 
 /**
- *    set the Bcc headers ( blank carbon copy ).
+ *    set the Bcc headers (blank carbon copy).
  *    $bcc : email address(es), accept both array and string
  */
-function Bcc( $bcc )
+function Bcc($bcc)
 {
-    if( is_array($bcc) ) {
-        $bcc = array_map( create_function('$s', 'return strtr( $s, "\x0B\0\t\r\n\f" , "      " );'), $bcc );
+    if (is_array($bcc)) {
+        $bcc = array_map(create_function('$s', 'return strtr($s, "\x0B\0\t\r\n\f" , "      ");'), $bcc);
         $this->abcc = $bcc;
     } else {
-        $bcc = strtr( $bcc, "\x0B\0\t\r\n\f" , '      ' );
+        $bcc = strtr($bcc, "\x0B\0\t\r\n\f" , '      ');
         $this->abcc = explode(',', $bcc);
     }
 
-    if( $this->checkAddress == TRUE )
-        $this->CheckAdresses( $this->abcc );
+    if ($this->checkAddress == TRUE)
+        $this->CheckAdresses($this->abcc);
 }
 
 /**
  *        set the body (message) of the mail
  *        define the charset if the message contains extended characters (accents)
  *        default to us-ascii
- *        $mail->Body( "m?l en fran?ais avec des accents", "iso-8859-1" );
+ *        $mail->Body("m?l en fran?ais avec des accents", "iso-8859-1");
  */
-function Body( $body, $charset='' )
+function Body($body, $charset='')
 {
     $this->body = $body;
 
-    if( !empty($charset) ) {
-        $this->charset = strtolower($charset);
-        if( $this->charset != 'us-ascii' )
+    if (!empty($charset)) {
+        $this->charset = mb_strtolower($charset);
+        if ($this->charset != 'us-ascii')
             $this->ctencoding = '8bit';
     }
 }
@@ -283,23 +283,23 @@ function Body( $body, $charset='' )
 /**
  *        set the Organization header
  */
-function Organization( $org )
+function Organization($org)
 {
-    if( '' != trim($org) )
-        $this->xheaders['Organization'] = $this->_wordEncode($org, strlen('Organization: '));
+    if ('' != trim($org))
+        $this->xheaders['Organization'] = $this->_wordEncode($org, mb_strlen('Organization: '));
 }
 
 /**
  *        set the mail priority
- *        $priority : integer taken between 1 (highest) and 5 ( lowest )
+ *        $priority : integer taken between 1 (highest) and 5 (lowest)
  *        ex: $mail->Priority(1) ; => Highest
  */
-function Priority( $priority )
+function Priority($priority)
 {
-    if( ! intval( $priority ) )
+    if (! intval($priority))
         return FALSE;
 
-    if( ! isset( $this->priorities[$priority-1]) )
+    if (! isset($this->priorities[$priority-1]))
         return FALSE;
 
     $this->xheaders['X-Priority'] = $this->priorities[$priority-1];
@@ -315,10 +315,10 @@ function Priority( $priority )
  *    @param string $disposition : instruct the Mailclient to display the file if possible ("inline") 
  *                                   or always as a link ("attachment") possible values are "inline", "attachment"
  */
-function Attach( $filename, $filetype='', $disposition='inline' )
+function Attach($filename, $filetype='', $disposition='inline')
 {
     // TODO : si filetype="", alors chercher dans un tablo de MT connus / extension du fichier
-    if( empty($filetype) )
+    if (empty($filetype))
         $filetype = 'application/x-unknown-content-type';
 
     $this->aattach[] = $filename;
@@ -335,25 +335,25 @@ function BuildMail()
     global $AppUI;
 
     // build the headers
-    if( count($this->ato) > 0 ) {
+    if (count($this->ato) > 0) {
         $this->_addressesEncode($this->ato, 'To');
     }
-    if( count($this->acc) > 0 ) {
+    if (count($this->acc) > 0) {
         $this->_addressesEncode($this->acc, 'CC');
     }
-    if( count($this->abcc) > 0 ) {
+    if (count($this->abcc) > 0) {
         $this->_addressesEncode($this->abcc, 'BCC');
     }
 
-    if( $this->receipt ) {
-        if( isset($this->xheaders['Reply-To'] ) ) {
+    if ($this->receipt) {
+        if (isset($this->xheaders['Reply-To'])) {
             $this->xheaders['Disposition-Notification-To'] = $this->xheaders['Reply-To'];
         } else {
             $this->xheaders['Disposition-Notification-To'] = $this->xheaders['From'];
         }
     }
 
-    if( !empty($this->charset) ) {
+    if (!empty($this->charset)) {
         $this->xheaders['Mime-Version'] = '1.0';
         $this->xheaders['Content-Type'] = "text/plain; charset=$this->charset";
         $this->xheaders['Content-Transfer-Encoding'] = $this->ctencoding;
@@ -367,7 +367,7 @@ function BuildMail()
 
 
     // include attached files
-    if( count( $this->aattach ) > 0 ) {
+    if (count($this->aattach) > 0) {
         $this->_build_attachement();
     } else {
         $sep = "\r\n";
@@ -396,7 +396,7 @@ function Send()
 		}
 		$headers .= "$k: " . trim($v) . "\r\n";
 	}
-	return @mail( $this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers );
+	return @mail($this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers);
     }
 }
 
@@ -448,7 +448,7 @@ function SMTPSend()
         }
     }
     // Determine the mail from address.
-    if ( ! isset($headers['From'])) {
+    if (! isset($headers['From'])) {
         $from = dPgetConfig('admin_user') . '@' . dPgetConfig('site_domain');
     } else {
         // Search for the parts of the email address
@@ -464,7 +464,7 @@ function SMTPSend()
         return FALSE;
     }
     foreach ($this->ato as $to_address) {
-        if (strpos($to_address, '<') !== FALSE) {
+        if (mb_strpos($to_address, '<') !== FALSE) {
             preg_match('/^.*<([^@]+\@[a-z0-9\._-]+)>/i', $to_address, $matches);
             if (isset($matches[1]))
                 $to_address = $matches[1];
@@ -541,7 +541,7 @@ function socketReadPattern($pattern, $timeout = null)
 			$this->last_error = $result;
 			return false;
 		}
-	} while (strpos($msg, '-') === 0);
+	} while (mb_strpos($msg, '-') === 0);
 	return $msg;
 }
 
@@ -600,7 +600,7 @@ function SendQueuedMail($mod, $type, $originator, $owner, &$args)
 		}
 		$headers .= "$k: " . trim($v) . "\r\n";
 	}
-        return @mail( $xheaders['To'], $xheaders['Subject'], $fullBody, $headers );
+        return @mail($xheaders['To'], $xheaders['Subject'], $fullBody, $headers);
     }
 }
 
@@ -626,10 +626,10 @@ function Get()
  *    @return TRUE if email adress is ok
  */
 function ValidEmail($address) {
-   if( preg_match( '/^(.*)\<(.+)\>$/D', $address, $regs ) ) {
+   if (preg_match('/^(.*)\<(.+)\>$/D', $address, $regs)) {
       $address = $regs[2];
    }
-   return (bool) preg_match( '/^[^@ ]+@([-a-zA-Z0-9..]+)$/D', $address);
+   return (bool) preg_match('/^[^@ ]+@([-a-zA-Z0-9..]+)$/D', $address);
 }
 
 /**
@@ -638,9 +638,9 @@ function ValidEmail($address) {
  *    @return if unvalid, output an error message and exit, this may -should- be customized
  */
 
-function CheckAdresses( $aad ) {
-    foreach ( $aad as $ad  ) {
-        if( ! $this->ValidEmail( $ad ) ) {
+function CheckAdresses($aad) {
+    foreach ($aad as $ad ) {
+        if (! $this->ValidEmail($ad)) {
             echo "Class Mail, method Mail : invalid address $ad";
             exit;
         }
@@ -672,21 +672,21 @@ function _build_attachement() {
     $k=0;
 
     // for each attached file, do...
-    for( $i=0, $cnt = count($this->aattach); $i < $cnt; $i++ ) {
+    for ($i=0, $cnt = count($this->aattach); $i < $cnt; $i++) {
         $filename = $this->aattach[$i];
         $basename = basename($filename);
         $ctype = $this->actype[$i];    // content-type
         $disposition = $this->adispo[$i];
 
-        if( ! file_exists( $filename) ) {
+        if (! file_exists($filename)) {
             echo "Class Mail, method attach : file $filename can't be found"; exit;
         }
         $subhdr= "--$this->boundary\r\nContent-type: $ctype;\r\n name=\"$basename\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: $disposition;\r\n  filename=\"$basename\"\r\n";
         $ata[$k++] = $subhdr;
         // non encoded line length
-        $linesz= filesize( $filename)+1;
-        $fp= fopen( $filename, 'rb' );
-        $ata[$k++] = chunk_split(base64_encode(fread( $fp, $linesz)));
+        $linesz= filesize($filename)+1;
+        $fp= fopen($filename, 'rb');
+        $ata[$k++] = chunk_split(base64_encode(fread($fp, $linesz)));
         fclose($fp);
     }
     $this->fullBody .= implode($sep, $ata);
@@ -701,21 +701,21 @@ function _build_attachement() {
  * @param int $offset: an optional offset to be counted for the first line
  * @return string the encoded string
  */
-function _addressEncode( $addr, $offset=0 )
+function _addressEncode($addr, $offset=0)
 {
     if (!$this->canEncode) return $addr;
     
     $matches = NULL;
     $mail = '';
     $txt = '';
-    if ( !preg_match('/^(.*)( ?<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches) ) 
+    if (!preg_match('/^(.*)(?<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches)) 
         return $addr;
     
     $txt  = $matches[1];
     $mail = $matches[2];
     $txt = $this->_wordEncode($txt, $offset);
 
-    if ( $offset + $this->_strlen("$txt$mail") > 76 )
+    if ($offset + $this->_mb_strlen("$txt$mail") > 76)
         return "$txt\r\n $mail";
     else
         return "$txt$mail";
@@ -758,24 +758,24 @@ function _utfToQuotedPrintable($str, $offset=0)
 	$result = array();
 	$x = 0;
 	$s = '';
-	for ($i = 0, $len = strlen($str); $i<$len; $i++) {
+	for ($i = 0, $len = mb_strlen($str); $i<$len; $i++) {
 		$ord = ord($str[$i]);
 		if ($ord > 32 && $ord < 127 && $str[$i] != '?' && $str[$i] != '=') {
 			$s .= $str[$i];
 			$x++;
-		} elseif (($ord & 0xE0) == 0xC0) {
+		} else if (($ord & 0xE0) == 0xC0) {
 			$s .= sprintf('=%02x=%02x', $ord, ord($str[++$i]));
 			$x+=6;
-		} elseif (($ord & 0xF0) == 0xE0) {
+		} else if (($ord & 0xF0) == 0xE0) {
 			$s .= sprintf('=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]));
 			$x += 9;
-		} elseif (($ord & 0xF8) == 0xF0) {
+		} else if (($ord & 0xF8) == 0xF0) {
 			$s .= sprintf('=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
 			$x += 12;
-		} elseif (($ord & 0xFC) == 0xF8) {
+		} else if (($ord & 0xFC) == 0xF8) {
 			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
 			$x += 15;
-		} elseif (($ord & 0xFE) == 0xFC) {
+		} else if (($ord & 0xFE) == 0xFC) {
 			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
 			$x += 18;
 		} else {
@@ -795,43 +795,33 @@ function _utfToQuotedPrintable($str, $offset=0)
 	return $result;
 }
 
-function _addressesEncode(&$aaddr, $hdr)
-{
+function _addressesEncode(&$aaddr, $hdr) {
     $n = count($aaddr);
-    $this->xheaders[$hdr] = $this->_addressEncode($aaddr[0], strlen("$hdr: "));
-    for ($i=1 /*skip first one*/; $i<$n; ++$i ) {
+    $this->xheaders[$hdr] = $this->_addressEncode($aaddr[0], mb_strlen("$hdr: "));
+    for ($i=1 /*skip first one*/; $i<$n; ++$i) {
         $val = $this->_addressEncode($aaddr[$i], 8);
-	$val = trim($val);
-	if ($val) {
-		$this->xheaders[$hdr] .= ",\r\n\t$val" ;
-	}
+		$val = trim($val);
+		if ($val) {
+			$this->xheaders[$hdr] .= ",\r\n\t$val" ;
+		}
     }
 }
 
-function _strpos($str, $start, $offset=0)
-{
-    if ( $this->hasMbStr )
-        return mb_strpos($str, $start, $offset, $this->charset);
-    else
-        return substr($str, $start, $offset);
+function _strpos($str, $start, $offset=0){
+	return (($this->hasMbStr) 
+	        ? mb_strpos($str, $start, $offset, $this->charset) : strpos($str, $start, $offset));
 }
 
-function _substr($str, $start, $len=null)
-{
-    if (NULL===$len)
-        $len = $this->_strlen($str);
-    if ( $this->hasMbStr )
-        return mb_substr($str, $start, $len, $this->charset);
-    else
-        return substr($str, $start, $len);
+function _substr($str, $start, $len=null) {
+    if (NULL===$len) {
+		$len = $this->_strlen($str);
+	}
+	return (($this->hasMbStr) 
+	        ? mb_substr($str, $start, $len, $this->charset) : substr($str, $start, $len));
 }
 
-function _strlen($str)
-{
-    if ( $this->hasMbStr )
-        return mb_strlen($str, $this->charset);
-    else
-        return strlen($str);
+function _strlen($str) {
+	return (($this->hasMbStr) ? mb_strlen($str, $this->charset) : strlen($str));
 }
 
 } // class Mail

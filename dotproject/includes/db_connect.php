@@ -72,7 +72,7 @@ function db_loadResult($sql) {
 function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
 	if ($object != null) {
 		$hash = array();
-		if(!(db_loadHash($sql, $hash))) {
+		if (!(db_loadHash($sql, $hash))) {
 			return false;
 		}
 		bindHashToObject($hash, $object, null, $strip, $bindAll);
@@ -146,7 +146,7 @@ function db_loadList($sql, $maxrows=NULL) {
 	$cnt = 0;
 	while ($hash = db_fetch_assoc($cur)) {
 		$list[] = $hash;
-		if($maxrows && $maxrows == $cnt++) {
+		if ($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
@@ -180,7 +180,7 @@ function db_loadColumn($sql, $maxrows=NULL) {
 			}
 		}
 		$list[] = $row[$row_index];
-		if($maxrows && $maxrows == $cnt++) {
+		if ($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
@@ -211,7 +211,7 @@ function db_loadObjectList($sql, $object, $maxrows = NULL) {
 		}
 		$object->load($row[$row_index]);
 		$list[] = $object;
-		if($maxrows && $maxrows == $cnt++) {
+		if ($maxrows && $maxrows == $cnt++) {
 			break;
 		}
 	}
@@ -259,11 +259,11 @@ function db_insertArray($table, &$hash, $verbose=false) {
 function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 	$fmtsql = "UPDATE $table SET %s WHERE %s";
 	foreach ($hash as $k => $v) {
-		if(is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
+		if (is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
 		}
 
-		if($k == $keyName) { // PK not to be updated
+		if ($k == $keyName) { // PK not to be updated
 			$where = "$keyName='" . db_escape($v) . "'";
 			continue;
 		}
@@ -343,10 +343,10 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 	$fmtsql = "UPDATE `$table` SET %s WHERE %s";
 	$obj_vars_arr = get_object_vars($object);
 	foreach ($obj_vars_arr as $k => $v) {
-		if(is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
+		if (is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
 		}
-		if($k == $keyName) { // PK not to be updated
+		if ($k == $keyName) { // PK not to be updated
 			$where = "$keyName='" . db_escape($v) . "'";
 			continue;
 		}

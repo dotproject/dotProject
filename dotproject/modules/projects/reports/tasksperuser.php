@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -32,7 +32,7 @@ $end_date->setTime(23, 59, 59);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -179,7 +179,7 @@ if ($do_report) {
 		if (!$use_period) {	
 			$sss = $sse = 0; 
 			if ($display_week_hours) {
-				foreach($task_list as $t) {
+				foreach ($task_list as $t) {
 					$sss = ((!($sss) || $t->task_start_date < $sss) ? $t->task_start_date : $sss);
 					$sse = ((!($sse) || $t->task_end_date > $sse) ? $t->task_end_date : $sse);
 				}
@@ -225,7 +225,7 @@ if ($do_report) {
 <?php
 			$wx = (2 + (($project_id == 0) ? 1 : 0) 
 				+ (($display_week_hours) ? weekCells($sss, $sse) : 0));
-			for($w=0; $w < $wx; $w++) {
+			for ($w=0; $w < $wx; $w++) {
 ?>
 			  <td nowrap="nowrap" style="background: #D0D0D0">&nbsp;</td>
 <?php
@@ -234,7 +234,7 @@ if ($do_report) {
 		</tr>
 <?php
 			$actual_date = $start_date;
-			foreach($task_list as $task) {
+			foreach ($task_list as $task) {
 				if ($task->task_id == $task->task_parent 
 					&& isMemberOfTask($task_list, $task_assigned_users, $user_id, $task)) {
 						echo (displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, 
@@ -278,7 +278,7 @@ function isMemberOfTask($list, $Lusers, $user_id, $task) {
 	//check for given task id
 	foreach ($list as $task_id => $my_task) {
 		if ($my_task->task_id == $task->task_id) {
-			foreach($Lusers[$task_id] as $task_user_id => $user_data) {
+			foreach ($Lusers[$task_id] as $task_user_id => $user_data) {
 				if ($task_user_id == $user_id) {
 					return true;
 				}
@@ -302,7 +302,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	global $df;
 	
 	$tmp = "\t\t<tr>\n\t\t\t" . '<td nowrap="nowrap">&nbsp;&nbsp;&nbsp;';
-	for($i=0; $i < $level; $i++) {
+	for ($i=0; $i < $level; $i++) {
 		$tmp .= '&nbsp;&nbsp;&nbsp;';
 	}
 	switch ($level) {
@@ -439,7 +439,7 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 			
 			$green_key_2 = (($green_key_1 == $red_key) ? 0 : $green_key_1);
 			
-			$color_hex = strtoupper('#' .dechex($red_key) . '0' . dechex($green_key_1) 
+			$color_hex = mb_strtoupper('#' .dechex($red_key) . '0' . dechex($green_key_1) 
 			                        . dechex($green_key_2) . 'FF');
 			$row .= '<td nowrap="nowrap" style="background:' . $color_hex . ';" >';
 		}

@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -110,10 +110,10 @@ $r->addJoin('tasks', 't', 't.task_id = f.file_task');
 $r->addJoin('file_folders', 'ff', 'ff.file_folder_id = f.file_folder');
 
 if (count ($allowedProjects)) {
-	$r->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
+	$r->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 }
 if (count ($allowedTasks)) {
-	$r->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0 )');
+	$r->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0)');
 }
 if (count($allowedFolders)) {
 	$r->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
@@ -229,7 +229,7 @@ shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 
 ?>
 <script type="text/JavaScript">
-function expand(id){
+function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";
 }
@@ -327,9 +327,9 @@ foreach ($files as $file_row) {
 <?php 
 	$fnamelen = 32;
 	$filename = $latest_file['file_name'];
-	if (strlen($latest_file['file_name']) > $fnamelen+9) {
-		$ext = substr($filename, strrpos($filename, '.')+1);
-		$filename = substr($filename, 0, $fnamelen);
+	if (mb_strlen($latest_file['file_name']) > $fnamelen+9) {
+		$ext = mb_substr($filename, mb_strrpos($filename, '.')+1);
+		$filename = mb_substr($filename, 0, $fnamelen);
 		$filename .= '[...].' . $ext;
 	}
 	$file_icon = getIcon($file_row['file_type']);
@@ -396,7 +396,7 @@ echo file_size(intval($latest_file["file_size"]));
 		</td>
 		<td nowrap="nowrap">
 		  <?php 
-echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/')+1)); 
+echo $AppUI->_(mb_substr($latest_file['file_type'], mb_strpos($latest_file['file_type'], '/')+1)); 
 ?>
 		</td>
 		<td width="15%" nowrap="nowrap" align="right">
@@ -425,7 +425,7 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 		<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 	  </tr>
 <?php
-		foreach($file_versions as $file) {
+		foreach ($file_versions as $file) {
 			if ($file['file_version_id'] == $latest_file['file_version_id']) {
 				$file_icon = getIcon($file['file_type']);
 				$hdate = new Date($file['file_date']);
@@ -433,7 +433,7 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 		  <tr>
 			<td nowrap="nowrap" width="20">&nbsp;
 <?php
-				if ($canEdit && $dPconfig['files_show_versions_edit']){
+				if ($canEdit && $dPconfig['files_show_versions_edit']) {
 ?>
 			<a href="./index.php?m=files&amp;a=addedit&amp;file_id=<?php echo $file['file_id']; ?>">
 			<?php
@@ -491,7 +491,7 @@ echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'
 			  <?php echo file_size(intval($file['file_size'])); ?>
 			</td>
 			<td nowrap="nowrap">
-			  <?php echo substr($file['file_type'], strpos($file['file_type'], '/')+1) ?>
+			  <?php echo mb_substr($file['file_type'], mb_strpos($file['file_type'], '/')+1) ?>
 			</td>
 			<td width="15%" nowrap="nowrap" align="right">
 			  <?php echo $hdate->format("$df $tf"); ?>

@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -142,7 +142,7 @@ if ($task_sort_item1 != '') {
 		if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' 
 		    || $tasks[$j]['task_end_date'] == '') {
 			if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' 
-			    || $tasks[$j]['task_start_date'] == ''){
+			    || $tasks[$j]['task_start_date'] == '') {
 				//just to be sure start date is "zeroed"
 				$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; 
 				$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
@@ -165,7 +165,7 @@ if (dPgetConfig('direct_edit_assignment')) {
 	</td>
 	<td colspan="3" align="center">
 <?php
-	foreach($priorities as $k => $v) {
+	foreach ($priorities as $k => $v) {
 		$options[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_RAW);
 	}
 	$options['c'] = $AppUI->_('mark as finished', UI_OUTPUT_RAW);

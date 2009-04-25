@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -21,7 +21,7 @@ $end_date->setTime(23, 59, 59);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -84,7 +84,7 @@ function setCalendar(idate, fdate) {
 </form>
 
 <?php
-if($do_report){
+if ($do_report) {
     $projects_filter = '';
     if ($project_id != 0)
 			$projects_filter = " and task_project = $project_id ";
@@ -95,7 +95,7 @@ if($do_report){
             from tasks as t,
                  users as u,
                  projects as p";
-    if($user_id > 0){
+    if ($user_id > 0) {
         $sql         .= ", user_tasks as ut";
         $user_filter  = " and ut.user_id = $user_id
                          and ut.task_id = t.task_id ";
@@ -118,8 +118,8 @@ if($do_report){
     echo "<table class='tbl' width='80%'>";
     echo "<tr><th>".$AppUI->_("Task name")."</th><th>".$AppUI->_("T.Owner")."</th><th>".$AppUI->_("H.Alloc.")."</th><th>".$AppUI->_("Task end date")."</th><th>".$AppUI->_("Last activity date")."</th><th>".$AppUI->_("Done")."?</th></tr>";
     $hrs = $AppUI->_("hrs"); // To avoid calling $AppUI each row
-    foreach($tasks as $task){
-        if($actual_project_id != $task["task_project"]){
+    foreach ($tasks as $task) {
+        if ($actual_project_id != $task["task_project"]) {
             echo "<tr><td colspan='6'><b>".$task["project_name"]."</b></td>";
             $actual_project_id = $task["task_project"];
         }

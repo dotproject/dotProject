@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -31,7 +31,7 @@ $end_date->setTime(23, 59, 59);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -131,7 +131,7 @@ function setCalendar(idate, fdate) {
 if ($do_report) {
 
 	$sql = "SELECT p.project_id, p.project_name, t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator, " 
-		."\n if(bc.billingcode_name is null, '', bc.billingcode_name) as billingcode_name"
+		."\n if (bc.billingcode_name is null, '', bc.billingcode_name) as billingcode_name"
 		."\nFROM task_log AS t"
 		."\nLEFT JOIN billingcode bc ON bc.billingcode_id = t.task_log_costcode "
 		."\nLEFT JOIN users AS u ON user_id = task_log_creator"
@@ -215,13 +215,13 @@ if ($do_report) {
 		<td><?php
       $transbrk = "\n[translation]\n";
 			$descrip = str_replace("\n", "<br />", $log['task_log_description']);
-			$tranpos = strpos($descrip, str_replace("\n", "<br />", $transbrk));
+			$tranpos = mb_strpos($descrip, str_replace("\n", "<br />", $transbrk));
 			if ($tranpos === false) {
 				echo $descrip;
 			} else {
-				$descrip = substr($descrip, 0, $tranpos);
-				$tranpos = strpos($log['task_log_description'], $transbrk);
-				$transla = substr($log['task_log_description'], $tranpos + strlen($transbrk));
+				$descrip = mb_substr($descrip, 0, $tranpos);
+				$tranpos = mb_strpos($log['task_log_description'], $transbrk);
+				$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
 				$transla = trim(str_replace("'", '"', $transla));
 				echo $descrip."<div style='font-weight: bold; text-align: right'><a title='$transla' class='hilite'>[".$AppUI->_("translation")."]</a></div>";
 			}
@@ -312,7 +312,7 @@ if ($do_report) {
 	                                  '',
 	                                  '',
 	                                  '',
-	                                 );
+	                                );
 		$pdf->ezTable($pdfheaderdata,$pdfheaders,$title,$options);
 			 
 	        $options['col_options'] = array(
@@ -320,7 +320,7 @@ if ($do_report) {
 			                        3 => array('width' => 55),
 			                        4 => array('width' => 30),
 			                        5 => array('width' => 30),
-			                       );
+			                      );
 	        $options['showHeadings'] = 0;
 	        $options['showLines'] = 1;
 	        $options['fontSize'] = 8;

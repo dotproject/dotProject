@@ -41,7 +41,7 @@ function dPsessionRead($id) {
 	$q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) as session_idle');
 	$q->addWhere("session_id = '$id'");
 	$qid =& $q->exec();
-	if (! $qid || $qid->EOF ) {
+	if (! $qid || $qid->EOF) {
 		dprint(__FILE__, __LINE__, 11, "Failed to retrieve session $id");
 		$data =  "";
 	} else {
@@ -157,7 +157,7 @@ function dPsessionConvertTime($key) {
 		return 86400;
 	
 	$numpart = (int) dPgetConfig($key);
-	$modifier = substr(dPgetConfig($key), -1);
+	$modifier = mb_substr(dPgetConfig($key), -1);
 	if (! is_numeric($modifier)) {
 		switch ($modifier) {
 			case 'h':
@@ -197,10 +197,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 	// Try and get the correct path to the base URL.
 	preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', dPgetConfig('base_url'), $url_parts);
 	$cookie_dir = $url_parts[4];
-	if (substr($cookie_dir, 0, 1) != '/') {
+	if (mb_substr($cookie_dir, 0, 1) != '/') {
 		$cookie_dir = '/' . $cookie_dir;
 	}
-	if (substr($cookie_dir, -1) != '/') {
+	if (mb_substr($cookie_dir, -1) != '/') {
 		$cookie_dir .= '/';
 	}
 	session_set_cookie_params($max_time, $cookie_dir);

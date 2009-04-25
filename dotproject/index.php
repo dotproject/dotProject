@@ -27,7 +27,7 @@ $loginFromPage = 'index.php';
 require_once 'base.php';
 
 clearstatcache();
-if(is_file(DP_BASE_DIR . '/includes/config.php')) {
+if (is_file(DP_BASE_DIR . '/includes/config.php')) {
 	require_once DP_BASE_DIR . '/includes/config.php';
 
 } else {
@@ -40,7 +40,7 @@ if(is_file(DP_BASE_DIR . '/includes/config.php')) {
 }
 
 if (!(isset($GLOBALS['OS_WIN']))) {
-	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
+	$GLOBALS['OS_WIN'] = (mb_stristr(PHP_OS, 'WIN') !== false);
 }
 
 // tweak for pathname consistence on windows machines
@@ -152,7 +152,7 @@ if ($AppUI->doLogin()) {
 	@include_once('./locales/core.php');
 	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = (($_SERVER['QUERY_STRING']) ? strip_tags($_SERVER['QUERY_STRING']) : '');
-	if (strpos($redirect, 'logout') !== false) {
+	if (mb_strpos($redirect, 'logout') !== false) {
 		$redirect = '';
 	}
 
@@ -241,7 +241,7 @@ if (isset($_REQUEST['dosql'])) {
 // start output proper
 include  (DP_BASE_DIR . '/style/' . $uistyle . '/overrides.php');
 ob_start();
-if(!$suppressHeaders) {
+if (!$suppressHeaders) {
 	require (DP_BASE_DIR . '/style/' . $uistyle . '/header.php');
 }
 
@@ -260,12 +260,12 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 		}
 		$modules_tabs = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $dir . '/'), 
 		                                  ('^' . $m . '_tab.*\.php'));
-		foreach($modules_tabs as $mod_tab) {
+		foreach ($modules_tabs as $mod_tab) {
 			// Get the name as the subextension
 			// cut the module_tab. and the .php parts of the filename 
 			// (begining and end)
 			$nameparts = explode('.', $mod_tab);
-			$filename = substr($mod_tab, 0, -4);
+			$filename = mb_substr($mod_tab, 0, -4);
 			if (count($nameparts) > 3) {
 				$file = $nameparts[1];
 				if (!(isset($all_tabs[$file]))) {

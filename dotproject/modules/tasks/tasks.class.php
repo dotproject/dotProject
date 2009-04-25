@@ -273,7 +273,7 @@ class CTask extends CDpObject
 		$q = new DBQuery;
 		$modified_task = new CTask();
 		
-		if ($fromChildren){
+		if ($fromChildren) {
 			if (version_compare(phpversion(), '5.0.0', '>=')) {
 				$modified_task = $this;
 			} else {
@@ -624,7 +624,7 @@ class CTask extends CDpObject
 		$q->exec();
 		$q->clear();
 		// print_r($this->task_departments);
-		if (!empty($this->task_departments)){
+		if (!empty($this->task_departments)) {
 			$departments = explode(',', $this->task_departments);
 			foreach ($departments as $department) {
 				$q->addTable('task_departments');
@@ -640,7 +640,7 @@ class CTask extends CDpObject
 		$q->addWhere('task_id=' . $this->task_id);
 		$q->exec();
 		$q->clear();
-		if (!empty($this->task_contacts)){
+		if (!empty($this->task_contacts)) {
 			$contacts = explode(',', $this->task_contacts);
 			foreach ($contacts as $contact) {
 				$q->addTable('task_contacts');
@@ -707,7 +707,7 @@ class CTask extends CDpObject
 		}
 		$this->_action = 'deleted';
 		
-		if ($task->task_parent != $task->task_id){
+		if ($task->task_parent != $task->task_id) {
 			//Has parent, run the update sequence, this child will no longer be in the database
 			$this->updateDynamics();
 		}
@@ -1057,7 +1057,7 @@ class CTask extends CDpObject
 		}
 		if (isset($others)) {
 			$others = trim($others, " \r\n\t,"); // get rid of empty elements.
-			if (strlen($others) > 0) {
+			if (mb_strlen($others) > 0) {
 				$q->addTable('contacts', 'c');
 				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
 				$q->addWhere('c.contact_id in (' . $others . ')');
@@ -1169,7 +1169,7 @@ class CTask extends CDpObject
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
 		
 		// Allow for possible passing of user_id 0 to stop user filtering
-		if(!isset($user_id)){
+		if (!isset($user_id)) {
 			$user_id = $AppUI->user_id;
 		}
  
@@ -1522,7 +1522,7 @@ class CTask extends CDpObject
 	 * Function that returns the amount of hours this
 	 * task consumes per user each day
 	 */
-	function getTaskDurationPerDay($use_percent_assigned = false){
+	function getTaskDurationPerDay($use_percent_assigned = false) {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 
 											? dPgetConfig('daily_working_hours') 
 											: $this->task_duration_type);
@@ -1655,7 +1655,7 @@ class CTask extends CDpObject
 		return $overAssignment;
 	}
 	
-	function getAssignedUsers(){
+	function getAssignedUsers() {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
@@ -1675,7 +1675,7 @@ class CTask extends CDpObject
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
-		if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment') ) {
+		if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
 			return array();
 		}
 		$q = new DBQuery;
@@ -1710,7 +1710,7 @@ class CTask extends CDpObject
 					 . ', IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') ' 
 					 . '- SUM(ut.perc_assignment)), up.pref_value) > 0' 
 					 . ', IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment))' 
-					 . ', up.pref_value), 0) AS freeCapacity' );
+					 . ', up.pref_value), 0) AS freeCapacity');
 		if (!empty($users)) { // use userlist if available otherwise pull data for all users
 			$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
 		}
@@ -1803,7 +1803,7 @@ class CTask extends CDpObject
 	 * This function, recursively, updates all tasks status
 	 * to the one passed as parameter
 	 */
-	function updateSubTasksStatus($new_status, $task_id = null){
+	function updateSubTasksStatus($new_status, $task_id = null) {
 		$q = new DBQuery;
 		
 		if (is_null($task_id)) {
@@ -1840,7 +1840,7 @@ class CTask extends CDpObject
 	 * This function recursively updates all tasks project
 	 * to the one passed as parameter
 	 */
-	function updateSubTasksProject($new_project , $task_id = null){
+	function updateSubTasksProject($new_project , $task_id = null) {
 		$q = new DBQuery;
 		
 		if (is_null($task_id)) {
@@ -1872,7 +1872,7 @@ class CTask extends CDpObject
 		}
 	}
 	
-	function canUserEditTimeInformation(){
+	function canUserEditTimeInformation() {
 		global $AppUI;
 		
 		$project = new CProject();
@@ -2033,7 +2033,7 @@ class CTask extends CDpObject
 												  'contact_first_name' => $owner_first_name,
 												  'contact_last_name' => $owner_last_name,
 												  'contact_email' => $owner_email
-												 );
+												);
 			}
 		}
 		$q->clear();
@@ -2151,7 +2151,7 @@ class CTaskLog extends CDpObject
 	}
 }
 
-function openClosedTask($task){
+function openClosedTask($task) {
 	global $tasks_opened;
 	global $tasks_closed;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
@@ -2202,7 +2202,7 @@ function openClosedTaskRecursive($task_id) {
 	}
 }
 
-function closeOpenedTask($task){
+function closeOpenedTask($task) {
 	global $tasks_opened;
 	global $tasks_closed;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
@@ -2234,7 +2234,7 @@ function closeOpenedTask($task){
 	}
 }
 
-function closeOpenedTaskRecursive($task_id){
+function closeOpenedTaskRecursive($task_id) {
 	global $tasks_opened;
 	global $tasks_closed;
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
@@ -2318,7 +2318,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			$end_date = new CDate('0000-00-00 00:00:00');
 		}
 		
-		if ($a['task_percent_complete'] == 100){
+		if ($a['task_percent_complete'] == 100) {
 			$style = 'background-color:#aaddaa; color:#00000';
 		}
 		
@@ -2378,8 +2378,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	}
 	// name link
 	/*
-	$alt = ((strlen($a['task_description']) > 80) 
-			? (substr($a['task_description'], 0, 80) . '...') : $a['task_description']);
+	$alt = ((mb_strlen($a['task_description']) > 80) 
+			? (mb_substr($a['task_description'], 0, 80) . '...') : $a['task_description']);
 	// instead of the statement below
 	$alt = str_replace('"', '&quot;', $alt);
 	$alt = htmlspecialchars($alt);
@@ -2398,7 +2398,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		$s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
 			   . $alt . '>' . '<b>' . $a['task_name'] . '</b></a>' 
 			   . '<img src="./images/icons/milestone.gif" border="0"></td>');
-	} else if ($a['task_dynamic'] == 1){
+	} else if ($a['task_dynamic'] == 1) {
 		if (! ($today_view || $hideOpenCloseLink)) {
 			$s .= ('<a href="index.php' . $query_string 
 				   . (($is_opened) 

@@ -1,17 +1,17 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 // get GETPARAMETER for contact_id
-$contact_id = intval( $_GET['contact_id']);
+$contact_id = intval($_GET['contact_id']);
 
 $canRead = getPermission('contacts', 'view');
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
-if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
+if (isset($_GET['contact_id']) && !($_GET['contact_id']=='')) {
 
 	//pull data for this contact
 	$q  = new DBQuery;
@@ -26,7 +26,7 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 
 
 	// include PEAR vCard class
-	require_once( $AppUI->getLibraryClass( 'PEAR/Contact_Vcard_Build' ) );
+	require_once($AppUI->getLibraryClass('PEAR/Contact_Vcard_Build'));
 
 	// instantiate a builder object
 	// (defaults to version 3.0)
@@ -46,7 +46,7 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 	$vcard->setBirthday($contacts[0]['contact_birthday']);
 
 	// set a note of the contact
-	$contacts[0]['contact_notes'] = str_replace("\r", " ", $contacts[0]['contact_notes'] );
+	$contacts[0]['contact_notes'] = str_replace("\r", " ", $contacts[0]['contact_notes']);
 	$vcard->setNote($contacts[0]['contact_notes']);
 
 	// add an organization
@@ -104,7 +104,7 @@ if ( isset($_GET['contact_id']) && !($_GET['contact_id']=='') ) {
 	header("Content-Disposition: attachment; filename={$contacts[0]['contact_last_name']}{$contacts[0]['contact_first_name']}.vcf");
 	print_r($text);
 } else {
-$AppUI->setMsg( "contactIdError", UI_MSG_ERROR );
+$AppUI->setMsg("contactIdError", UI_MSG_ERROR);
 	$AppUI->redirect();
 }
 ?>

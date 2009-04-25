@@ -3,7 +3,7 @@
 * @package dotproject
 * @subpackage utilites
 */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -76,7 +76,7 @@ class CDate extends Date {
 		$oldHour = $this->getHour();
 		$this->setDate($timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
 		
-		if(($oldHour - $this->getHour()) || !is_int($n)) {
+		if (($oldHour - $this->getHour()) || !is_int($n)) {
 			$timeStamp += ($oldHour - $this->getHour()) * SEC_HOUR;
 			$this->setDate($timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
 		}
@@ -132,7 +132,7 @@ class CDate extends Date {
 		$this->setSecond($s);
 	}
 	
-	function isWorkingDay(){
+	function isWorkingDay() {
 		global $AppUI;
 		
 		$working_days = dPgetConfig("cal_working_days");
@@ -256,7 +256,7 @@ class CDate extends Date {
 			// proceed the last day now
 			
 			// we prefer wed 16:00 over thu 08:00 as end date :)
-			if ($hoursRemaining == 0 && $full_working_day > 0){
+			if ($hoursRemaining == 0 && $full_working_day > 0) {
 				$full_working_days--;
 				($sgn > 0) ? $this->setHour($cal_day_start+$dwh) : $this->setHour($cal_day_end-$dwh);
 			} else {
@@ -317,7 +317,7 @@ class CDate extends Date {
 		$days = abs($e->dateDiff($s));
 		
 		// if it is an intraday difference one is finished very easily
-		if($days == 0) {
+		if ($days == 0) {
 			return min($dwh, abs($e->hour - $s->hour)) * $sgn;
 		}
 		
@@ -345,7 +345,7 @@ class CDate extends Date {
 		return $duration * $sgn;
 	}	
 	
-	function workingDaysInSpan($e){
+	function workingDaysInSpan($e) {
 		global $AppUI;
 		
 		// assume start is before end and set a default signum for the duration	
@@ -361,7 +361,7 @@ class CDate extends Date {
 		$days = $e->dateDiff($this);
 		$start = $this;
 		
-		for ($i = 0 ; $i <= $days ; $i++){
+		for ($i = 0 ; $i <= $days ; $i++) {
 			if ($start->isWorkingDay()) {
 				$wd++;
 			}

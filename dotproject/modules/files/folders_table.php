@@ -14,7 +14,7 @@ $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
 
 $folder = dPgetParam($_GET, 'folder', 0);
-$page = dPgetParam( $_GET, 'page', 1);
+$page = dPgetParam($_GET, 'page', 1);
 
 
 global $canAccess_folders, $canRead_folders, $canEdit_folders;
@@ -139,7 +139,7 @@ function displayFolders($folder_id=0, $level=0) {
 				      . '<input type="hidden" name="file_folder_id" value="' . $folder_id 
 				      . '" />' . "\n"  
 				      . '<input type="hidden" name="redirect" value="' . $current_uri . '" />' 
-				      . "</form>\n" );
+				      . "</form>\n");
 				echo ('<td align="right" width="64" nowrap="nowrap">' . "\n");
 				//edit folder
 				if ($canEdit_this) {
@@ -179,7 +179,7 @@ function displayFolders($folder_id=0, $level=0) {
 			      . (($level || $open_folder) ? 'none' : 'block') . ';">');
 			displayFiles($folder_id);
 			echo '</div>';
-		} elseif ($folder && !($folder_id && $level)) {
+		} else if ($folder && !($folder_id && $level)) {
 			echo $AppUI->_('No Result(s)');
 		}
 	}
@@ -221,10 +221,10 @@ function countFiles($folder_id) {
 		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
 	}
 	if (count($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 	}
 	if (count($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR file_task = 0)');
 	}
 	if ($project_id) {
 		$q->addWhere('f.file_project = '. $project_id);
@@ -286,10 +286,10 @@ function displayFiles($folder_id) {
 	
 	$q->addWhere('f.file_folder = '. $folder_id);
 	if (count ($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 	}
 	if (count ($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0)');
 	}
 	if (count($allowedFolders)) {
 		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
@@ -330,10 +330,10 @@ function displayFiles($folder_id) {
 	
 	$q->addWhere('f.file_folder = '. $folder_id);
 	if (count ($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 	}
 	if (count ($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0)');
 	}
 	if (count($allowedFolders)) {
 		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
@@ -372,10 +372,10 @@ function displayFiles($folder_id) {
 	
 	$q->addWhere('f.file_folder = '. $folder_id);
 	if (count ($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedProjects) . ') OR f.file_project = 0)');
 	}
 	if (count ($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0 )');
+		$q->addWhere('((' . implode(' AND ', $allowedTasks) . ') OR f.file_task = 0)');
 	}
 	if (count($allowedFolders)) {
 		$q->addWhere('((' . implode(' AND ', $allowedFolders) . ') OR f.file_folder = 0)');
@@ -626,7 +626,7 @@ function displayFiles($folder_id) {
 			<th nowrap="nowrap"width="1">&nbsp;</th>
 		  </tr>
 <?php
-			foreach($file_versions as $file) {
+			foreach ($file_versions as $file) {
 				if ($file['file_version_id'] == $row['file_version_id']) {
 					$file_icon = getIcon($file['file_type']);
 					$file_version_date = new Date($file['file_date']);
@@ -774,7 +774,7 @@ if ($folder > 0) {
 
 
 <script type="text/JavaScript">
-function expand(id){
+function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";
 }
@@ -801,7 +801,7 @@ function delCheck(ffid) {
 <?php 
 $trans_del =  $AppUI->_('Are you sure you want to delete this folder?');
 ?>
-	if(confirm('<?php echo $trans_del ; ?>')) {
+	if (confirm('<?php echo $trans_del ; ?>')) {
 		var submit_me = document.getElementById('frm_remove_folder_'+ffid);
 		submit_me.submit();
 	}
@@ -811,7 +811,7 @@ function goCheck() {
 <?php 
 $trans_go =  $AppUI->_('Are you sure you wish to apply the options on the selected files?');
 ?>
-	if(confirm('<?php echo $trans_go ; ?>')) {
+	if (confirm('<?php echo $trans_go ; ?>')) {
 		document.frm_bulk.submit();
 	}
 }

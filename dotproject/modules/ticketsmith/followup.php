@@ -1,25 +1,25 @@
 <?php /* TICKETSMITH $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$ticket = dPgetParam( $_GET, 'ticket', '' );
-$ticket_type = dPgetParam( $_GET, 'ticket_type', '' );
+$ticket = dPgetParam($_GET, 'ticket', '');
+$ticket_type = dPgetParam($_GET, 'ticket_type', '');
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Post Followup', 'gconf-app-icon.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
-$titleBlock->addCrumb( "?m=ticketsmith&a=view&ticket=$ticket", "view this ticket" );
+$titleBlock = new CTitleBlock('Post Followup', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=ticketsmith", "tickets list");
+$titleBlock->addCrumb("?m=ticketsmith&a=view&ticket=$ticket", "view this ticket");
 $titleBlock->show();
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 
-require_once( $AppUI->getSystemClass( 'libmail' ) );
+require_once($AppUI->getSystemClass('libmail'));
 
 /* set title */
 $title = "Post Followup";
@@ -35,10 +35,10 @@ if (!$ticket_parent) {
 }
 
 //echo '<pre>';print_r($_POST);echo '</pre>';die;
-$recipient = dPgetParam( $_POST, 'recipient', '' );
-$subject = dPgetParam( $_POST, 'subject', '' );
-$cc = dPgetParam( $_POST, 'cc', '' );
-$followup = dPgetParam( $_POST, 'followup', '' );
+$recipient = dPgetParam($_POST, 'recipient', '');
+$subject = dPgetParam($_POST, 'subject', '');
+$cc = dPgetParam($_POST, 'cc', '');
+$followup = dPgetParam($_POST, 'followup', '');
 
 if (@$followup) {
 
@@ -60,23 +60,23 @@ if (@$followup) {
 	if (isset($CONFIG['reply_name']) && $CONFIG["reply_name"] != "") {
 		$mail->From($CONFIG["reply_name"] . " <" . $CONFIG["reply_to"] . ">");
 	} else {
-		$mail->From( $author );
-		$mail->ReplyTo( $CONFIG["reply_to"] );
+		$mail->From($author);
+		$mail->ReplyTo($CONFIG["reply_to"]);
 	}
-	$mail->To( $recipient );
+	$mail->To($recipient);
 	if ($cc) {
-		$mail->Cc( $cc );
+		$mail->Cc($cc);
 	}
-	$mail->Subject( "[#$ticket_parent] " . trim( $subject ) );
-	$mail->Body( $followup );
+	$mail->Subject("[#$ticket_parent] " . trim($subject));
+	$mail->Body($followup);
     $mail->Send() || fatal_error("Unable to mail followup.  Quit without recording followup to database.");
 
     /* escape special characters */
-    $author = db_escape( $author );
-    $recipient = db_escape( $recipient );
-    $subject = db_escape( $subject );
-    $followup = db_escape( $followup );
-    $cc = db_escape( $cc );
+    $author = db_escape($author);
+    $recipient = db_escape($recipient);
+    $subject = db_escape($subject);
+    $followup = db_escape($followup);
+    $cc = db_escape($cc);
 
     /* do database insert */
     $query = "INSERT INTO tickets (author, subject, recipient, body, cc, timestamp, type, assignment, parent) ";
@@ -125,7 +125,7 @@ if (@$followup) {
     for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
         print("<tr>\n");
 	// do not translate if heading is "<br />"
-	if ( $fields["headings"][$loop] == "<br />") {
+	if ($fields["headings"][$loop] == "<br />") {
 	}
 	else {
 		$fields["headings"][$loop] = $AppUI->_($fields["headings"][$loop]);

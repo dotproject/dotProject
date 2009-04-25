@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 
 // check permissions
 if (!$canEdit) {
-    $AppUI->redirect( 'm=public&a=access_denied' );
+    $AppUI->redirect('m=public&a=access_denied');
 }
 
 $dPcfg = new CConfig();
@@ -15,15 +15,15 @@ $dPcfg = new CConfig();
 $rs = $dPcfg->loadAll('config_group');
 
 // retrieve any state parameters
-if (isset( $_GET['tab'] )) {
-	$AppUI->setState( 'ConfigIdxTab', $_GET['tab'] );
+if (isset($_GET['tab'])) {
+	$AppUI->setState('ConfigIdxTab', $_GET['tab']);
 }
-$tab = $AppUI->getState( 'ConfigIdxTab' ) !== NULL ? $AppUI->getState( 'ConfigIdxTab' ) : 0;
-$active = intval( !$AppUI->getState( 'ConfigIdxTab' ) );
+$tab = $AppUI->getState('ConfigIdxTab') !== NULL ? $AppUI->getState('ConfigIdxTab') : 0;
+$active = intval(!$AppUI->getState('ConfigIdxTab'));
 
 $titleBlock = new CTitleBlock('System Configuration', 'control-center.png', $m);
-$titleBlock->addCrumb( '?m=system', 'system admin' );
-$titleBlock->addCrumb( '?m=system&a=addeditpref', 'default user preferences' );
+$titleBlock->addCrumb('?m=system', 'system admin');
+$titleBlock->addCrumb('?m=system&a=addeditpref', 'default user preferences');
 $titleBlock->show();
 
 if (is_dir(DP_BASE_DIR.'/install')) {

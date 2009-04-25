@@ -82,7 +82,7 @@ if ($report_type) {
 		$desc_file = str_replace(".php", '.'.$AppUI->user_locale.'.txt', $v);
 
 		// Load the description file for the user locale, default to 'en'
-		if(file_exists($desc_file)) {
+		if (file_exists($desc_file)) {
 			$desc = file(DP_BASE_DIR.'/modules/projects/reports/'.$desc_file);
 		} else {
 			$desc_file_en = str_replace(".php", '.en.txt', $v);

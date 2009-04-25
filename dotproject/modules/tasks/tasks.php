@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -165,7 +165,7 @@ $select = ('distinct tasks.task_id, task_parent, task_name, task_start_date, tas
 		   . 'count(distinct assignees.user_id) as assignee_count, '
 		   . 'co.contact_first_name, co.contact_last_name, ' 
 		   . 'count(distinct files.file_task) as file_count, ' 
-		   . 'if(tlog.task_log_problem IS NULL, 0, tlog.task_log_problem) AS task_log_problem');
+		   . 'if (tlog.task_log_problem IS NULL, 0, tlog.task_log_problem) AS task_log_problem');
 $from = 'tasks';
 $mods = $AppUI->getActiveModules();
 if (!empty($mods['history']) && getPermission('history', 'view')) {
@@ -267,7 +267,7 @@ if ($min_view && isset($_GET['task_status'])) {
 } else if (!($currentTabName)) {
 	// If we aren't tabbed we are in the tasks list.
 	$task_status = intval($AppUI->getState('inactive'));
-} else if (stristr($currentTabName, 'inactive')) {
+} else if (mb_stristr($currentTabName, 'inactive')) {
 	$task_status = '-1';
 }
 
@@ -316,7 +316,7 @@ $tsql = ('SELECT ' . $select . ' FROM (' . $from . ') ' . $join
 
 if ($canAccessTask) {
 	$ptrc = db_exec($tsql);
-	if($ptrc != false) {
+	if ($ptrc != false) {
 		$nums = db_num_rows($ptrc);
 	}
 	echo db_error();
@@ -351,7 +351,7 @@ for ($x=0; $x < $nums; $x++) {
 ?>
 
 <script type="text/JavaScript">
-function toggle_users(id){
+function toggle_users(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "inline" : "none";
 }
@@ -369,7 +369,7 @@ function checkAll(project_id) {
 	for (var i=0;i< f.elements.length;i++) {
 		var e = f.elements[i];
 		// only if it's a checkbox.
-		if(e.type == "checkbox" && e.checked == cFlag && e.name != 'master') {
+		if (e.type == "checkbox" && e.checked == cFlag && e.name != 'master') {
 			e.checked = !e.checked;
 		}
 	}
@@ -389,7 +389,7 @@ function chAssignment(project_id, rmUser, del) {
 	for (var i=0;i< f.elements.length;i++) {
 		var e = f.elements[i];
 		// only if it's a checkbox.
-		if(e.type == "checkbox" && e.checked == true && e.name != 'master') {
+		if (e.type == "checkbox" && e.checked == true && e.name != 'master') {
 			c++;
 			f.htasks.value = f.htasks.value +", "+ e.value;
 		}
@@ -407,7 +407,7 @@ function chAssignment(project_id, rmUser, del) {
 		if (c == 0) {
 			alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
 		} 
-		else if (a == 0 && rmUser == 1){
+		else if (a == 0 && rmUser == 1) {
 			alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
 		} 
 		else if (confirm('<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>')) {
@@ -637,7 +637,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 						$no_children = empty($children_of[$t1['task_id']]);
 						
 						showtask($t1, 0, $is_opened, false, $no_children);
-						if($is_opened && !($no_children)) {
+						if ($is_opened && !($no_children)) {
 							findchild($p['tasks'], $t1['task_id']);
 						}
 					} else if (!(in_array($t1['task_parent'], $tasks_filtered))) { 
@@ -646,7 +646,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 						 * (or similiar filters that don't involve "breaking apart" a task tree 
 						 * even though they might not use this page ever)
 						 */
-						if ((in_array($f, $never_show_with_dots)) ) {
+						if ((in_array($f, $never_show_with_dots))) {
 						  showtask($t1, 1, true, false, true); 
 						} else {
 							//display as close to "tree-like" as possible
@@ -657,7 +657,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 							
 							$my_level = (($task_id && $t1['task_parent'] == $task_id) ? 0 : -1);
 							showtask($t1, $my_level, $is_opened, false, $no_children); // indeterminate depth for child task
-							if($is_opened && !($no_children)) {
+							if ($is_opened && !($no_children)) {
 								findchild($p['tasks'], $t1['task_id']);
 							}
 						}
@@ -670,7 +670,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 			}
 		}
 		
-		if($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
+		if ($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
@@ -712,7 +712,7 @@ $AppUI->savePlace();
   <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
   <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
-	<?php if($min_view) { ?>
+	<?php if ($min_view) { ?>
 	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1'; ?>"><?php 
 echo $AppUI->_('Open'); ?></a> : 
 	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1'; ?>"><?php 

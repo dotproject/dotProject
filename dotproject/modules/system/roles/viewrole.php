@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -35,8 +35,8 @@ if (! is_array($role)) {
 </table>
 
 <?php
-	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id='.$role_id, DP_BASE_DIR . '/modules/system/roles/', $tab );
-	$tabBox->add( 'vw_role_perms', 'Permissions');
+	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id='.$role_id, DP_BASE_DIR . '/modules/system/roles/', $tab);
+	$tabBox->add('vw_role_perms', 'Permissions');
 	$tabBox->show();
 } // End of check for valid role
 ?>

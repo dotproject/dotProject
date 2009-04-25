@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -17,7 +17,7 @@ class users extends smartsearch
 	var $search_fields = array ('user_username', 'user_signature');
 	var $display_fields = array ('user_username', 'user_signature');
 	
-	function cusers (){
+	function cusers () {
 		return new users();
 	}
 }

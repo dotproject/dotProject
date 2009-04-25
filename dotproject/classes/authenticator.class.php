@@ -1,6 +1,6 @@
 <?php
 // $Id$
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -83,7 +83,7 @@ if (!defined('DP_BASE_DIR')){
 			if (! $rs = $q->exec()) {
 				die($AppUI->_('Failed to get user details') . ' - error was ' . $db->ErrorMsg());
 			}
-			if ( $rs->RecordCount() < 1) {
+			if ($rs->RecordCount() < 1) {
 				$q->clear();
 				$this->createsqluser($username, $passwd, $email, $first_name, $last_name);
 			} else {
@@ -131,7 +131,7 @@ if (!defined('DP_BASE_DIR')){
 
 			$q  = new DBQuery;
 			$q->addTable('users');
-			$q->addInsert('user_username',$username );
+			$q->addInsert('user_username',$username);
 			$q->addInsert('user_password', $password);
 			$q->addInsert('user_type', '1');
 			$q->addInsert('user_contact', $c->contact_id);
@@ -215,7 +215,7 @@ if (!defined('DP_BASE_DIR')){
 			GLOBAL $dPconfig;
 			$this->username = $username;
 
-			if (strlen($password) == 0) return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
+			if (mb_strlen($password) == 0) return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 			if ($this->fallback == true)
 			{
 				if (parent::authenticate($username, $password)) return true;	
@@ -334,7 +334,7 @@ if (!defined('DP_BASE_DIR')){
 
 			$q  = new DBQuery;
 			$q->addTable('users');
-			$q->addInsert('user_username',$username );
+			$q->addInsert('user_username',$username);
 			$q->addInsert('user_password', $hash_pass);
 			$q->addInsert('user_type', '1');
 			$q->addInsert('user_contact', $c->contact_id);

@@ -1,5 +1,5 @@
 <?php /* CONTACTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -18,7 +18,7 @@ $msg = '';
 $row = new CContact();
 
 $canDelete = $row->canDelete($msg, $contact_id);
-if($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
+if ($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
 	$userDeleteProtect=true;
 }
 
@@ -75,7 +75,7 @@ function popDepartment() {
 	window.open("./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id="+window.company_id, "company", "left=50,top=50,height=250,width=400,resizable");
 }
 
-function setDepartment(key, val){
+function setDepartment(key, val) {
 	var f = document.changecontact;
  	if (val != '') {
     	f.contact_department.value = key;
@@ -88,12 +88,12 @@ function popCompany() {
 	window.open("./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id=<?php echo $company_detail['company_id'];?>", "company", "left=50,top=50,height=250,width=400,resizable");
 }
 
-function setCompany(key, val){
+function setCompany(key, val) {
 	var f = document.changecontact;
  	if (val != '') {
     	f.contact_company.value = key;
 			f.contact_company_name.value = val;
-    	if (window.company_id != key){
+    	if (window.company_id != key) {
     		f.contact_department.value = "";
 				f.contact_department_name.value = "";
     	}
@@ -102,7 +102,7 @@ function setCompany(key, val){
     }
 }
 
-function delIt(){
+function delIt() {
 <?php
 if ($userDeleteProtect) {
 ?>
@@ -111,7 +111,7 @@ if ($userDeleteProtect) {
 } else {
 ?>
 	var form = document.changecontact;
-	if(confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
+	if (confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
 		form.del.value = "<?php echo $contact_id;?>";
 		form.submit();
 	}
@@ -120,7 +120,7 @@ if ($userDeleteProtect) {
 ?>
 }
 
-function orderByName(x){
+function orderByName(x) {
 	var form = document.changecontact;
 	if (x == "name") {
 		form.contact_order_by.value = form.contact_last_name.value + ", " + form.contact_first_name.value;
@@ -131,7 +131,7 @@ function orderByName(x){
 
 function companyChange() {
 	var f = document.changecontact;
-	if (f.contact_company.value != window.company_value){
+	if (f.contact_company.value != window.company_value) {
 		f.contact_department.value = "";
 	} 
 }
@@ -160,7 +160,7 @@ function companyChange() {
 		<tr>
 			<td align="right">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name');?>:</td>
 			<td>
-				<input type="text" class="text" size=25 name="contact_last_name" value="<?php echo @$row->contact_last_name;?>" maxlength="50" <?php if($contact_id==0){?> onBlur="orderByName('name')"<?php }?> />
+				<input type="text" class="text" size=25 name="contact_last_name" value="<?php echo @$row->contact_last_name;?>" maxlength="50" <?php if ($contact_id==0) {?> onBlur="orderByName('name')"<?php }?> />
 				<a href="#" onClick="orderByName('name')">[<?php echo $AppUI->_('use in display');?>]</a>
 			</td>
 		</tr>
@@ -315,7 +315,7 @@ function companyChange() {
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Birthday');?>:</td>
 			<td nowrap>
-				<input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10);?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd');?>)
+				<input type="text" class="text" name="contact_birthday" value="<?php echo @mb_substr($row->contact_birthday, 0, 10);?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd');?>)
 			</td>
 		</tr>
 		</table>

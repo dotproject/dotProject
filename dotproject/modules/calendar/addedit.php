@@ -1,5 +1,5 @@
 <?php /* CALENDAR $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -162,25 +162,25 @@ $t->setTime(0,0,0);
 $check = (24 * 60) / $inc;
 $addMins = $inc * 60;
 for ($minutes=0; $minutes < $check; $minutes++) {
-	$times[$t->format('%H%M%S')] = $t->format($AppUI->getPref('TIMEFORMAT') );
+	$times[$t->format('%H%M%S')] = $t->format($AppUI->getPref('TIMEFORMAT'));
 	$t->addSeconds($addMins);
 }
 ?>
 
 <script language="javascript">
-function submitIt(){
+function submitIt() {
 	var form = document.editFrm;
 	if (form.event_title.value.length < 1) {
 		alert('<?php echo $AppUI->_('Please enter a valid event title',  UI_OUTPUT_JS); ?>');
 		form.event_title.focus();
 		return;
 	}
-	if (form.event_start_date.value.length < 1){
+	if (form.event_start_date.value.length < 1) {
 		alert('<?php echo $AppUI->_("Please enter a start date", UI_OUTPUT_JS); ?>');
 		form.event_start_date.focus();
 		return;
 	}
-	if (form.event_end_date.value.length < 1){
+	if (form.event_end_date.value.length < 1) {
 		alert('<?php echo $AppUI->_("Please enter an end date", UI_OUTPUT_JS); ?>');
 		form.event_end_date.focus();
 		return;
@@ -207,7 +207,7 @@ function submitIt(){
 
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.event_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240,scrollbars=no,status=no');
@@ -225,7 +225,7 @@ function setCalendar(idate, fdate) {
 
 	// set end date automatically with start date if start date is after end date
 	if (calendarField == 'start_date') {
-		if(document.editFrm.event_end_date.value < idate) {
+		if (document.editFrm.event_end_date.value < idate) {
 			document.editFrm.event_end_date.value = idate;
 			document.editFrm.end_date.value = fdate;
 		}

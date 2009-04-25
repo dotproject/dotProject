@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -26,9 +26,9 @@ $rc = mysql_query($tsql);
 
 
 if (mysql_errno()) {
-	$AppUI->setMsg( mysql_error() );
+	$AppUI->setMsg(mysql_error());
 } else {
-	$AppUI->setMsg( "Ticket added" );
+	$AppUI->setMsg("Ticket added");
 	
 	$ticket = mysql_insert_id();
 	//Emailing notifications.
@@ -84,10 +84,10 @@ if (mysql_errno()) {
 	$message .= "</html>\n";
 	$message .= "\n--$boundary--\n";
 
-	$ticketNotification = dPgetSysVal( 'TicketNotify' );
+	$ticketNotification = dPgetSysVal('TicketNotify');
 	if (count($ticketNotification) > 0) {
 		mail($ticketNotification[$priority], $AppUI->_('Trouble ticket')." #$ticket ", $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
 	}
 }
-$AppUI->redirect( "m=ticketsmith" );
+$AppUI->redirect("m=ticketsmith");
 ?>

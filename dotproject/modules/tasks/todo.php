@@ -193,7 +193,7 @@ if ($m == 'tasks' && $a == 'todo') {
 	$tabBox->add('tasks/todo_gantt_sub', 'My Gantt');
 	// Wouldn't it be better to user $tabBox->loadExtras('tasks', 'todo'); and then
 	// add tasks_tab.todo.my_open_requests.php in helpdesk?  
-	if ($AppUI->isActiveModule('helpdesk')){ 
+	if ($AppUI->isActiveModule('helpdesk')) { 
 		$tabBox->add('helpdesk/vw_idx_my', 'My Open Requests');
 	}
 	$tabBox->show();

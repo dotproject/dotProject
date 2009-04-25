@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -13,11 +13,11 @@ global $user_id, $dPconfig;
 $showLabels = dPgetParam($_GET, 'showLabels', 0);
 $showWork = dPgetParam($_GET, 'showWork', 0);
 $sortByName = dPgetParam($_GET, 'sortByName', 0);
-$showPinned = dPgetParam( $_REQUEST, 'showPinned', false );
-$showArcProjs = dPgetParam( $_REQUEST, 'showArcProjs', false );
-$showHoldProjs = dPgetParam( $_REQUEST, 'showHoldProjs', false );
-$showDynTasks = dPgetParam( $_REQUEST, 'showDynTasks', false );
-$showLowTasks = dPgetParam( $_REQUEST, 'showLowTasks', true);
+$showPinned = dPgetParam($_REQUEST, 'showPinned', false);
+$showArcProjs = dPgetParam($_REQUEST, 'showArcProjs', false);
+$showHoldProjs = dPgetParam($_REQUEST, 'showHoldProjs', false);
+$showDynTasks = dPgetParam($_REQUEST, 'showDynTasks', false);
+$showLowTasks = dPgetParam($_REQUEST, 'showLowTasks', true);
 
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
@@ -57,7 +57,7 @@ $caller = defVal(@$_REQUEST['caller'], null);
  * so we have to tweak a little bit, also we do not have a special project available
  */
 if ($caller == 'todo') {
- 	$user_id = defVal( @$_REQUEST['user_id'], 0 );
+ 	$user_id = defVal(@$_REQUEST['user_id'], 0);
  
  	$projects[$project_id]['project_name'] = ($AppUI->_('Todo for') . ' ' 
 	                                          . dPgetUsernameFromID($user_id));
@@ -151,7 +151,7 @@ foreach ($proTasks as $row) {
 			$start_date_unix_time = (db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY 
 									 * convert2days($row['task_duration'], 
 													$row['task_duration_type']));
-			$row['task_end_date'] = substr(db_unix2dateTime($start_date_unix_time), 1, -1);
+			$row['task_end_date'] = mb_substr(db_unix2dateTime($start_date_unix_time), 1, -1);
 		} else {
 			$row['task_end_date'] = $p_end_date;
 		}
@@ -247,7 +247,7 @@ $graph->scale->tableTitle->Show(true);
 // if diff(end_date,start_date) > 240 days it shows only
 //month number
 //-----------------------------------------
-if ($start_date && $end_date){
+if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
 	$graph->SetDateRange($start_date, $end_date);
@@ -255,22 +255,22 @@ if ($start_date && $end_date){
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for($i = 0; $i < count(@$gantt_arr); $i++){
+	for ($i = 0; $i < count(@$gantt_arr); $i++) {
 		$a = $gantt_arr[$i][0];
-		$start = substr($a['task_start_date'], 0, 10);
-		$end = substr($a['task_end_date'], 0, 10);
+		$start = mb_substr($a['task_start_date'], 0, 10);
+		$end = mb_substr($a['task_end_date'], 0, 10);
 		
 		$d_start->Date($start);
 		$d_end->Date($end);
 		
-		if ($i == 0){
+		if ($i == 0) {
 			$min_d_start = $d_start;
 			$max_d_end = $d_end;
 		} else {
 			if (Date::compare($min_d_start,$d_start) > 0) {
 				$min_d_start = $d_start;
 			}
-			if (Date::compare($max_d_end,$d_end) < 0){
+			if (Date::compare($max_d_end,$d_end) < 0) {
 				$max_d_end = $d_end;
 			}
 		}
@@ -306,7 +306,7 @@ function findgchild(&$tarr, $parent, $level=0) {
 	$n = count($tarr);
 	for ($x=0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent 
-		    && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']){
+		    && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
 			showgtask($tarr[$x], $level);
 			findgchild($tarr, $tarr[$x]['task_id'], $level);
 		}
@@ -341,7 +341,7 @@ foreach ($projects as $p) {
 $hide_task_groups = false;
 
 if ($hide_task_groups) {
-	for($i = 0; $i < count($gantt_arr); $i ++) {
+	for ($i = 0; $i < count($gantt_arr); $i ++) {
 		// remove task groups
 		if ($i != count($gantt_arr)-1 && $gantt_arr[$i + 1][1] > $gantt_arr[$i][1]) {
 			// it's not a leaf => remove
@@ -352,7 +352,7 @@ if ($hide_task_groups) {
 }
 
 $row = 0;
-for($i = 0; $i < count(@$gantt_arr); $i ++) {
+for ($i = 0; $i < count(@$gantt_arr); $i ++) {
 	$a = $gantt_arr[$i][0];
 	$level = $gantt_arr[$i][1];
 	if ($hide_task_groups) { 
@@ -362,7 +362,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 	if ($locale_char_set=='utf-8' && function_exists('utf8_decode')) {
 		$name = utf8_decode($name);
 	}
-	$name = ((strlen($name) > 34) ? (substr($name, 0, 33) . '.') : $name);
+	$name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 33) . '.') : $name);
 	$name = (str_repeat(' ', $level) . $name);
 	
 	if ($caller == 'todo') {
@@ -375,8 +375,8 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 				$pname = utf8_decode($pname);
 			}
 		} else {
-			$pname = ((strlen($pname) > 14) 
-			          ? (substr($pname, 0, 5) . '...' . substr($pname, -5, 5)) : $pname);
+			$pname = ((mb_strlen($pname) > 14) 
+			          ? (mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5)) : $pname);
 		}
 	}
 	//using new jpGraph determines using Date object instead of string
@@ -397,7 +397,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 	$flags	= (($a['task_milestone']) ? 'm' : '');
 	
 	$cap = '';
-	if (!$start || $start == '0000-00-00'){
+	if (!$start || $start == '0000-00-00') {
 		$start = ((!$end) ? date('Y-m-d') : $end);
 		$cap .= '(no start date)';
 	}
@@ -424,7 +424,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 			}
 		}
 		$q->clear();
-		$caption = substr($caption, 0, (strlen($caption) - 1));
+		$caption = mb_substr($caption, 0, (mb_strlen($caption) - 1));
 	}
 	
 	if ($flags == 'm') {
@@ -491,7 +491,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++) {
 		$bar->progress->Set(min(($progress/100),1));
 		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		
-		if ($a['task_dynamic'] == 1){
+		if ($a['task_dynamic'] == 1) {
 			$bar->title->SetFont(FF_CUSTOM,FS_BOLD, 8);
 			$bar->rightMark->Show();
 			$bar->rightMark->SetType(MARK_RIGHTTRIANGLE);

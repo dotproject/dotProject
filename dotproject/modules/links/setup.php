@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -25,7 +25,7 @@ $config['mod_config'] = false;                   // show 'configure' link in vie
 
 
 if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+	echo dPshowModuleConfig($config);
 }
 
 // TODO: To be completed later as needed.
@@ -50,21 +50,21 @@ class CSetupLinks {
   	$q = new DBQuery();
   	$q->createTable('links');
   	$q->createDefinition("(
-`link_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-`link_url` varchar( 255 ) NOT NULL default '',
-`link_project` int( 11 ) NOT NULL default '0',
-`link_task` int( 11 ) NOT NULL default '0',
-`link_name` varchar( 255 ) NOT NULL default '',
-`link_parent` int( 11 ) default '0',
+`link_id` int(11) NOT NULL AUTO_INCREMENT ,
+`link_url` varchar(255) NOT NULL default '',
+`link_project` int(11) NOT NULL default '0',
+`link_task` int(11) NOT NULL default '0',
+`link_name` varchar(255) NOT NULL default '',
+`link_parent` int(11) default '0',
 `link_description` text,
-`link_owner` int( 11 ) default '0',
+`link_owner` int(11) default '0',
 `link_date` datetime default NULL ,
-`link_icon` varchar( 20 ) default 'obj/',
-`link_category` int( 11 ) NOT NULL default '0',
-PRIMARY KEY ( `link_id` ) ,
-KEY `idx_link_task` ( `link_task` ) ,
-KEY `idx_link_project` ( `link_project` ) ,
-KEY `idx_link_parent` ( `link_parent` ) 
+`link_icon` varchar(20) default 'obj/',
+`link_category` int(11) NOT NULL default '0',
+PRIMARY KEY (`link_id`) ,
+KEY `idx_link_task` (`link_task`) ,
+KEY `idx_link_project` (`link_project`) ,
+KEY `idx_link_parent` (`link_parent`) 
 ) TYPE = MYISAM ");
 
 	$q->exec($sql);

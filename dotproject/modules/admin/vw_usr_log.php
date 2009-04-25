@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -9,7 +9,7 @@ var calendarField = '';
 var calWin = null;
 
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.frmDate.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
@@ -22,8 +22,8 @@ function setCalendar(idate, fdate) {
 	fld_fdate.value = fdate;
 }
 
-function checkDate(){
-           if (document.frmDate.log_start_date.value == "" || document.frmDate.log_end_date.value== ""){
+function checkDate() {
+           if (document.frmDate.log_start_date.value == "" || document.frmDate.log_end_date.value== "") {
                 alert("<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>");
                 return false;
            } 
@@ -38,7 +38,7 @@ $end_date = intval($date_reg) ? new CDate(dPgetParam($_POST, "log_end_date", dat
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
-if ($a = dPgetParam($_REQUEST, "a", "") == ""){
+if ($a = dPgetParam($_REQUEST, "a", "") == "") {
     $a = "&tab={$currentTabId}&showdetails=1";
 } else {
     $user_id = intval(dPgetParam($_REQUEST, "user_id", 0));
@@ -95,7 +95,7 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {
 	$q->addQuery('ual.*, u.*, c.*');
 	$q->addWhere('ual.user_id = u.user_id');
 	$q->addWhere('user_contact = contact_id ');
-	if($user_id != 0) { $q->addWhere("ual.user_id='$user_id'"); }
+	if ($user_id != 0) { $q->addWhere("ual.user_id='$user_id'"); }
 	$q->addWhere("ual.date_time_in >='$start_date'");
 	$q->addWhere("ual.date_time_out <='$end_date'");
 	$q->addGroup('ual.date_time_last_action DESC');
@@ -109,7 +109,7 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {
 	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN');?></th>
 	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT');?></th>
 </tr>
-<?php foreach ($logs as $detail){?>
+<?php foreach ($logs as $detail) {?>
 	<tr>
 		<td align="center"><?php echo $detail["contact_first_name"];?></td>
 		<td align="center"><?php echo $detail["contact_last_name"];?></td>

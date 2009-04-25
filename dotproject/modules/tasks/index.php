@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -7,11 +7,11 @@ $AppUI->savePlace();
 
 // retrieve any state parameters
 $user_id = $AppUI->user_id;
-if(getPermission('admin', 'view')){ // Only sysadmins are able to change users
-	if(dPgetParam($_POST, 'user_id', 0) != 0){ // this means that 
+if (getPermission('admin', 'view')) { // Only sysadmins are able to change users
+	if (dPgetParam($_POST, 'user_id', 0) != 0) { // this means that 
 		$user_id = dPgetParam($_POST, 'user_id', 0);
 		$AppUI->setState('user_id', $_POST['user_id']);
-	} else if ($AppUI->getState('user_id')){
+	} else if ($AppUI->getState('user_id')) {
 		$user_id = $AppUI->getState('user_id');
 	} else {
 		$AppUI->setState('user_id', $user_id);
@@ -37,7 +37,7 @@ $project_id = $AppUI->getState('TaskIdxProject') ? $AppUI->getState('TaskIdxProj
 require_once($AppUI->getModuleClass('companies'));
 $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$filters2 = arrayMerge( array('all' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
+$filters2 = arrayMerge(array('all' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Tasks', 'applet-48.png', $m, "$m.$a");
@@ -59,7 +59,7 @@ $titleBlock->addCell(('<input type="text" class="text" SIZE="20" name="searchtex
                       . $AppUI->_('Search in name and description fields') . '"/>-->'), '',
                      '<form action="?m=tasks" method="post" id="searchfilter">', '</form>');
 // Let's see if this user has admin privileges
-if(getPermission('admin', 'view')){
+if (getPermission('admin', 'view')) {
 	$titleBlock->addCell();
 	$titleBlock->addCell($AppUI->_('User') . ':');
 	

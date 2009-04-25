@@ -175,7 +175,7 @@ if ($do_report) {
 			
 			if ($coarseness == 1) {
 				userUsageDays();
-			} elseif ($coarseness == 7) {
+			} else if ($coarseness == 7) {
 				userUsageWeeks();
 			}
 			
@@ -183,7 +183,7 @@ if ($do_report) {
 	
 		if ($coarseness == 1) {
 			showDays();
-		} elseif ($coarseness == 7) {
+		} else if ($coarseness == 7) {
 			showWeeks();
 		}
 		?>

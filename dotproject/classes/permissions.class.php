@@ -133,7 +133,7 @@ class dPacl extends gacl_api {
 		//Check if the details have changed.
 		list ($osec, $val, $oord, $oname, $ohid) = $this->get_object_data($id, 'aro');
 		if ($oname != $username) {
-			$res = $this->edit_object( $id, 'user', $username, $login, 1, 0, 'aro');
+			$res = $this->edit_object($id, 'user', $username, $login, 1, 0, 'aro');
 			if (!($res)) {
 				dprint(__FILE__, __LINE__, 0, 'Failed to change user permission object');
 			}
@@ -423,7 +423,7 @@ class dPacl extends gacl_api {
 		$this->debug_text(('get_group_children(): Group_ID: ' . $group_id . ' Group Type: ' 
 						   . $group_type . ' Recurse: ' . $recurse));
 		
-		switch (strtolower(trim($group_type))) {
+		switch (mb_strtolower(trim($group_type))) {
 			case 'axo':
 				$group_type = 'axo';
 				$table = $this->_db_table_prefix .'axo_groups';
@@ -445,7 +445,7 @@ class dPacl extends gacl_api {
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addOrder('g1.value');
 	
-		switch (strtoupper($recurse)) {
+		switch (mb_strtoupper($recurse)) {
 			case 'RECURSE':
 				$q->addJoin($table, 'g2', 'g2.lft<g1.lft AND g2.rgt>g1.rgt');
 				$q->addWhere('g2.id='. $group_id);
@@ -574,7 +574,7 @@ class dPacl extends gacl_api {
 	
 	function get_group_map($id, $group_type = 'ARO') {
 		$this->debug_text('get_group_map(): Assigned ID: ' . $id . ' Group Type: ' . $group_type);
-		$grp_type_mod = strtolower(trim($group_type));
+		$grp_type_mod = mb_strtolower(trim($group_type));
 		switch ($grp_type_mod) {
 			case 'axo':
 				$group_type = $grp_type_mod;
@@ -614,7 +614,7 @@ class dPacl extends gacl_api {
 	\*======================================================================*/
 	function get_object_full($value = null , $section_value = null, $return_hidden = 1, 
 	                         $object_type = null) {
-		$obj_type_mod = strtolower(trim($object_type));
+		$obj_type_mod = mb_strtolower(trim($object_type));
 		switch($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -665,7 +665,7 @@ class dPacl extends gacl_api {
 	\*======================================================================*/
 	function get_objects_full($section_value = null, $return_hidden = 1, $object_type = null, 
 	                          $limit_clause = null) {
-		$obj_type_mod = strtolower(trim($object_type));
+		$obj_type_mod = mb_strtolower(trim($object_type));
 		switch ($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -718,7 +718,7 @@ class dPacl extends gacl_api {
 	
 	function get_object_sections($section_value = null, $return_hidden = 1, $object_type = null, 
 	                             $limit_clause = null) {
-		$obj_type_mod = strtolower(trim($object_type));
+		$obj_type_mod = mb_strtolower(trim($object_type));
 		switch ($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -776,8 +776,8 @@ class dPacl extends gacl_api {
 			return false;
 		}
 		
-		$mod_type = substr($_POST['permission_module'],0,4);
-		$mod_id = substr($_POST['permission_module'],4);
+		$mod_type = mb_substr($_POST['permission_module'],0,4);
+		$mod_id = mb_substr($_POST['permission_module'],4);
 		$mod_group = null;
 		$mod_mod = null;
 		if ($mod_type == 'grp,') {

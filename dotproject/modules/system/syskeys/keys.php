@@ -1,15 +1,15 @@
 <?php /* SYSKEYS $Id$*/
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 $sql = "SELECT * FROM syskeys ORDER BY syskey_name";
-$keys = db_loadList( $sql );
+$keys = db_loadList($sql);
 
-$syskey_id = isset( $_GET['syskey_id'] ) ? $_GET['syskey_id'] : 0;
+$syskey_id = isset($_GET['syskey_id']) ? $_GET['syskey_id'] : 0;
 
-$titleBlock = new CTitleBlock( 'System Lookup Keys', 'myevo-weather.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=system", "System Admin" );
+$titleBlock = new CTitleBlock('System Lookup Keys', 'myevo-weather.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=system", "System Admin");
 $titleBlock->show();
 ?>
 <script language="javascript">
@@ -20,7 +20,7 @@ $titleBlock->show();
 if ($canEdit) {
 ?>
 function delIt(id) {
-	if (confirm( 'Are you sure you want to delete this?' )) {
+	if (confirm('Are you sure you want to delete this?')) {
 		f = document.sysKeyFrm;
 		f.del.value = 1;
 		f.syskey_id.value = id;
@@ -73,7 +73,7 @@ function showRow($id=0, $name='', $label='') {
 // do the modules that are installed on the system
 $s = '';
 foreach ($keys as $row) {
-	echo showRow( $row['syskey_id'], $row['syskey_name'], $row['syskey_label'] );
+	echo showRow($row['syskey_id'], $row['syskey_name'], $row['syskey_label']);
 }
 // add in the new key row:
 if ($syskey_id == 0) {

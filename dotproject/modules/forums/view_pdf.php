@@ -7,7 +7,7 @@ $sort = dPgetParam($_REQUEST, 'sort', 'asc');
 $forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
 $message_id = dPgetParam($_REQUEST, 'message_id', 0);
 
-if ( ! getPermission('forums', 'view', $message_id))
+if (! getPermission('forums', 'view', $message_id))
 	$AppUI->redirect("m=public&a=access_denied");
 
 $q  = new DBQuery;
@@ -44,7 +44,7 @@ foreach ($messages as $row) {
 	$q->addWhere('users.user_id = '.$row["message_editor"]);
 	$editor = $q->loadList();
 
-	$date = intval( $row["message_date"] ) ? new CDate( $row["message_date"] ) : null;
+	$date = intval($row["message_date"]) ? new CDate($row["message_date"]) : null;
 
 	$pdfdata[] = array($row['message_date'],
 		$row['contact_first_name'] . ' ' . $row['contact_last_name'],
@@ -54,12 +54,12 @@ foreach ($messages as $row) {
 
 $font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 $temp_dir = DP_BASE_DIR.'/files/temp';
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 $pdf = &new Cezpdf($paper='A4',$orientation='portrait');
-$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
-$pdf->ezText('Project: ' . $forum['project_name']. '   Forum: '.$forum['forum_name'] );
+$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+$pdf->selectFont("$font_dir/Helvetica.afm");
+$pdf->ezText('Project: ' . $forum['project_name']. '   Forum: '.$forum['forum_name']);
 $pdf->ezText('Topic: ' . $topic);
 $pdf->ezText('');
                 $options = array(
@@ -71,9 +71,9 @@ $pdf->ezText('');
                         'xPos' => 50,
                         'xOrientation' => 'right',
                         'width'=>'500'
-                );
+               );
 
-$pdf->ezTable( $pdfdata, $pdfhead, NULL, $options );
+$pdf->ezTable($pdfdata, $pdfhead, NULL, $options);
 
 $pdf->ezStream();
 ?>

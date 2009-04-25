@@ -1,11 +1,11 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 	$table_name = dPgetParam($_GET, "table_name", "companies");
 
-	switch($table_name){
+	switch($table_name) {
 		case "companies":
 			$id_field          = "company_id";
 			$name_field        = "company_name";
@@ -32,7 +32,7 @@ if (!defined('DP_BASE_DIR')){
 ?>
 
 <?php
-	if(dPgetParam($_POST, $id_field, 0) != 0){
+	if (dPgetParam($_POST, $id_field, 0) != 0) {
 		$q  = new DBQuery;
 		$q->addTable($table_name);
 		$q->addQuery('*');
@@ -43,9 +43,9 @@ if (!defined('DP_BASE_DIR')){
 		$data_update_script = "";
 		$update_address     = isset($_POST["overwrite_address"]);
 			
-		if($table_name == "companies"){
+		if ($table_name == "companies") {
 			$update_fields = array();
-			if($update_address){
+			if ($update_address) {
 				$update_fields = array("company_address1" => "contact_address1",
 				                       "company_address2" => "contact_address2",
 				                       "company_city"     => "contact_city",
@@ -56,9 +56,9 @@ if (!defined('DP_BASE_DIR')){
 				                       "company_fax"   => "contact_fax");
 			}
 			$data_update_script = "opener.setCompany('".$_POST[$id_field]."', '" . db_escape($r_data[$name_field]) . "');\n";
-		} else if($table_name == "departments"){
+		} else if ($table_name == "departments") {
 			$update_fields = array("dept_id"     => "contact_department");
-			if($update_address){
+			if ($update_address) {
 				$update_fields = array("dept_address1" => "contact_address1",
 				                       "dept_address2" => "contact_address2",
 				                       "dept_city"     => "contact_city",
@@ -72,7 +72,7 @@ if (!defined('DP_BASE_DIR')){
 	
 		// Let's figure out which fields are going to
 		// be updated
-		foreach ($update_fields as $record_field => $contact_field){
+		foreach ($update_fields as $record_field => $contact_field) {
 			$data_update_script .= "opener.document.changecontact.$contact_field.value = '".$r_data[$record_field]."';\n";
 		}
 		?>
@@ -89,18 +89,18 @@ if (!defined('DP_BASE_DIR')){
 			<tr>
 				<td colspan="2">
 			<?php
-				echo $AppUI->_( 'Select' ).' '.$AppUI->_( $selection_string ).':<br />';
-				echo arraySelect( $company_list, $id_field, ' size="10"', $company_id );
+				echo $AppUI->_('Select').' '.$AppUI->_($selection_string).':<br />';
+				echo arraySelect($company_list, $id_field, ' size="10"', $company_id);
 			?>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="button" class="button" value="<?php echo $AppUI->_( 'cancel' );?>" onclick="window.close()" />
+					<input type="button" class="button" value="<?php echo $AppUI->_('cancel');?>" onclick="window.close()" />
 				</td>
 				<td align="right">
 					<input type="checkbox" name="overwrite_address" id="overwrite_address" /> <label for="overwrite_address"><?php echo $AppUI->_("Overwrite contact address information"); ?></label>
-					<input type="submit" class="button" value="<?php echo $AppUI->_( 'Select', UI_CASE_LOWER );?>" />
+					<input type="submit" class="button" value="<?php echo $AppUI->_('Select', UI_CASE_LOWER);?>" />
 				</td>
 			</tr>
 			</table>

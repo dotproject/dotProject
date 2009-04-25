@@ -35,7 +35,7 @@ function safe_get_env($name)
 {
 	if (isset($_SERVER[$name])) {
 		return $_SERVER[$name];
-	} elseif (strpos(php_sapi_name(), 'apache') === false) {
+	} else if (mb_strpos(php_sapi_name(), 'apache') === false) {
 		getenv($name);
 	} else {
 		return '';
@@ -43,7 +43,7 @@ function safe_get_env($name)
 }
 
 // automatically define the base url
-$baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= safe_get_env('HTTP_HOST');
 $pathInfo = safe_get_env('PATH_INFO');
 if (@$pathInfo) {

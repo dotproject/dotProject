@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -157,7 +157,7 @@ $graph->scale->tableTitle->Show(true);
 // if diff(end_date,start_date) > 240 days it shows only
 //month number
 //-----------------------------------------
-if ($start_date && $end_date){
+if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
 	$graph->SetDateRange($start_date, $end_date);
@@ -165,21 +165,21 @@ if ($start_date && $end_date){
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for($i = 0, $xi = count(@$projects); $i < $xi; $i++){
-		$start = substr($p['project_start_date'], 0, 10);
-		$end = substr($p['project_end_date'], 0, 10);
+	for ($i = 0, $xi = count(@$projects); $i < $xi; $i++) {
+		$start = mb_substr($p['project_start_date'], 0, 10);
+		$end = mb_substr($p['project_end_date'], 0, 10);
 		
 		$d_start->Date($start);
 		$d_end->Date($end);
 		
-		if ($i == 0){
+		if ($i == 0) {
 			$min_d_start = $d_start;
 			$max_d_end = $d_end;
 		} else {
-			if (Date::compare($min_d_start,$d_start)>0){
+			if (Date::compare($min_d_start,$d_start)>0) {
 				$min_d_start = $d_start;
 			}
-			if (Date::compare($max_d_end,$d_end)<0){
+			if (Date::compare($max_d_end,$d_end)<0) {
 				$max_d_end = $d_end;
 			}
 		}
@@ -189,10 +189,10 @@ if ($start_date && $end_date){
 // check day_diff and modify Headers
 $day_diff = $max_d_end->dateDiff($min_d_start);
 
-if ($day_diff > 240){
+if ($day_diff > 240) {
 	//more than 240 days
 	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
-} else if ($day_diff > 90){
+} else if ($day_diff > 90) {
 	//more than 90 days and less of 241
 	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
 	$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
@@ -209,14 +209,14 @@ if (!is_array($projects) || sizeof($projects) == 0) {
 }
 
 if (is_array($projects)) {
-	foreach($projects as $p) {
+	foreach ($projects as $p) {
 		if ($locale_char_set=='utf-8' && function_exists('utf8_decode')) {
-			$name = ((strlen(utf8_decode($p['project_name'])) > 25) 
-			         ? (substr(utf8_decode($p['project_name']), 0, 22) . '...') 
+			$name = ((mb_strlen(utf8_decode($p['project_name'])) > 25) 
+			         ? (mb_substr(utf8_decode($p['project_name']), 0, 22) . '...') 
 			         : utf8_decode($p['project_name']));
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_deocde
-			$name = ((strlen($p['project_name']) > 25) ? (substr($p['project_name'], 0, 22).'...') 
+			$name = ((mb_strlen($p['project_name']) > 25) ? (mb_substr($p['project_name'], 0, 22).'...') 
 			         : $p['project_name']) ;
 		}
 		
@@ -237,19 +237,19 @@ if (is_array($projects)) {
 		$progress = $p['project_percent_complete'] + 0;
 		
 		$caption = '';
-		if(!($start) || $start == '0000-00-00 00:00:00'){
+		if (!($start) || $start == '0000-00-00 00:00:00') {
 			$start = ((!($end)) ? date('Y-m-d') : $end);
 			$caption .= $AppUI->_('(no start date)');
 		}
 		
-		if(!($end)) {
+		if (!($end)) {
 			$end = $start;
 			$caption .= (' ' . $AppUI->_('(no end date)'));
 		} else {
 			$cap = '';
 		}
 		
-        if ($showLabels){
+        if ($showLabels) {
 			$caption .= ($AppUI->_($projectStatus[$p['project_status']]) . ', ');
 			$caption .= (($p['project_status'] <> 7) ? $AppUI->_('active') : $AppUI->_('archived'));
         }
@@ -296,10 +296,10 @@ if (is_array($projects)) {
 			             . ', t.task_milestone, t.task_dynamic');
 			$q->addJoin('projects', 'p', 'p.project_id = t.task_project');
 			$q->addWhere('p.project_id = '. $p['project_id']);
-			$q->addOrder((($sortTasksByName) ? 't.task_name' : 't.task_end_date ASC' ));
+			$q->addOrder((($sortTasksByName) ? 't.task_name' : 't.task_end_date ASC'));
 			$tasks = $q->loadList();
 			$q->clear();
-			foreach($tasks as $t) {
+			foreach ($tasks as $t) {
 				if ($t['task_end_date'] == null) {
 					$t['task_end_date'] = $t['task_start_date'];
 				}
@@ -312,7 +312,7 @@ if (is_array($projects)) {
 				$tEndObj = new CDate($tEnd);
  				
 				if ($t['task_milestone'] != 1) {
-					$bar2 = new GanttBar($row++, array((substr(' --' . $t['task_name'], 0, 20) 
+					$bar2 = new GanttBar($row++, array((mb_substr(' --' . $t['task_name'], 0, 20) 
 					                                   . '...'), $tStartObj->format($df), 
 					                                   $tEndObj->format($df), ' '), 
 					                     $tStart, $tEnd, ' ', (($t['task_dynamic'] == 1) 
@@ -341,7 +341,7 @@ if (is_array($projects)) {
 				$workers = $q->loadList();
 				$q->clear();
 				$workersName = '';
-				foreach($workers as $w) {	
+				foreach ($workers as $w) {	
 					$workersName .= (' ' . $w['user_username']);
 					
 					$bar3 = new GanttBar($row++, 

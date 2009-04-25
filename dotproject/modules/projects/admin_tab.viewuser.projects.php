@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -10,7 +10,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 $pstatus =  dPgetSysVal('ProjectStatus');
 
-if (isset( $_POST['proFilter'])) {
+if (isset($_POST['proFilter'])) {
 	$AppUI->setState('UsrProjectIdxFilter',  $_POST['proFilter']);
 }
 $proFilter = (($AppUI->getState('UsrProjectIdxFilter') !== NULL) 

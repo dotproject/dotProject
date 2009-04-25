@@ -1,6 +1,6 @@
 <?php /* FILES $Id$ */
 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -8,20 +8,20 @@ $AppUI->savePlace();
 
 // "File" filters info
 $AppUI->setState('FileIdxTab', dPgetParam($_GET, 'tab'));
-$tab = $AppUI->getState( 'FileIdxTab', 0 );
-$active = intval(!$AppUI->getState( 'FileIdxTab' ));
+$tab = $AppUI->getState('FileIdxTab', 0);
+$active = intval(!$AppUI->getState('FileIdxTab'));
 
 // to pass to "new file" button
 $folder = dPgetParam($_GET, 'folder', 0);
 
 
 // "Project" filters info
-require_once ($AppUI->getModuleClass( 'projects' ));
+require_once ($AppUI->getModuleClass('projects'));
 // retrieve any state parameters
 if (isset($_REQUEST['project_id'])) {
 	$AppUI->setState('FileIdxProject', $_REQUEST['project_id']);
 }
-$project_id = $AppUI->getState( 'FileIdxProject', 0 );
+$project_id = $AppUI->getState('FileIdxProject', 0);
 
 /*
  * get "Allowed" projects for filter list 
@@ -31,8 +31,8 @@ $project = new CProject();
 $extra = array('from' => 'files',
                'where' => 'project_id = file_project');
 $projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 
-                                        'project_name', null, $extra );
-$projects = arrayMerge( array( '0'=>$AppUI->_('All', UI_OUTPUT_RAW) ), $projects );
+                                        'project_name', null, $extra);
+$projects = arrayMerge(array('0'=>$AppUI->_('All', UI_OUTPUT_RAW)), $projects);
 
 // get SQL for allowed projects/tasks and folders
 $task = new CTask();
@@ -47,11 +47,11 @@ $canAccess_folders = getPermission('file_folders', 'access');
 
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Files', 'folder5.png', $m, $m . '.' . $a );
-$titleBlock->addCell($AppUI->_('Filter') . ':' );
+$titleBlock = new CTitleBlock('Files', 'folder5.png', $m, $m . '.' . $a);
+$titleBlock->addCell($AppUI->_('Filter') . ':');
 $titleBlock->addCell(arraySelect($projects, 'project_id', 
                                  'onChange="document.pickProject.submit()" size="1" class="text"', 
-                                 $project_id ), 
+                                 $project_id), 
                      '', '<form name="pickProject" action="?m=files" method="post">', '</form>');
 
 /*
@@ -76,16 +76,16 @@ $file_types = dPgetSysVal('FileType');
 
 $fts = $file_types;
 
-if ( $tab != -1 ) {
+if ($tab != -1) {
 	array_unshift($file_types, 'All Files');
 }
 
 
-$tabBox = new CTabBox( '?m=files', DP_BASE_DIR . '/modules/files/', $tab );
+$tabBox = new CTabBox('?m=files', DP_BASE_DIR . '/modules/files/', $tab);
 $tabbed = $tabBox->isTabbed();
 $i = 0;
-foreach($file_types as $file_type) {
-	$tabBox->add('index_table', $file_type );
+foreach ($file_types as $file_type) {
+	$tabBox->add('index_table', $file_type);
 	++$i;
 }
 if ($canAccess_folders) {

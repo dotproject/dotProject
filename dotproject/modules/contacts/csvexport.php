@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -71,7 +71,7 @@ if (1 == 1)
 		settype($row['contact_mobile'], 'string');
 		$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",",''.$row['contact_mobile']);
 		// Fields 51- 60
-		if($row['contact_type'] != "")
+		if ($row['contact_type'] != "")
 		   $categories = "dotProject; ".$row['contact_type'];
 	  else
 		   $categories = "dotProject;";

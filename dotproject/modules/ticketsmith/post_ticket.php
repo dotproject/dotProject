@@ -1,5 +1,5 @@
 <?php /* TICKETSMITH $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -8,14 +8,14 @@ if (!defined('DP_BASE_DIR')){
 ##
 
 if (!$canEdit && !$canAuthor) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
-require_once( $AppUI->getModuleClass ('companies' ) );
-require_once( $AppUI->getModuleClass ('projects' ) );
+require_once($AppUI->getModuleClass ('companies'));
+require_once($AppUI->getModuleClass ('projects'));
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Submit Trouble Ticket', 'gconf-app-icon.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
+$titleBlock = new CTitleBlock('Submit Trouble Ticket', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=ticketsmith", "tickets list");
 $titleBlock->show();
 
 ?>
@@ -39,7 +39,7 @@ function submitIt() {
 	if (msg.length < 1) {
 		f.submit();
 	} else {
-		alert( "<?php echo $AppUI->_('ticketsmithValidDetail', UI_OUTPUT_JS); ?>:" + msg );
+		alert("<?php echo $AppUI->_('ticketsmithValidDetail', UI_OUTPUT_JS); ?>:" + msg);
 	}
 }
 </script>
@@ -82,9 +82,9 @@ function submitIt() {
 	<td>
 	  <?php 
 		$objCompany = new CCompany();
-		$companies = $objCompany->getAllowedRecords( $AppUI->user_id, 'company_id,company_name', 'company_name' );
-		$companies = arrayMerge( array( '0'=>'' ), $companies );
-		echo arraySelect( $companies, 'ticket_company', 'class="text" size="1"', null );
+		$companies = $objCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+		$companies = arrayMerge(array('0'=>''), $companies);
+		echo arraySelect($companies, 'ticket_company', 'class="text" size="1"', null);
 	  ?></td>
 </tr>
 <tr>
@@ -93,23 +93,23 @@ function submitIt() {
 	  <?php 
 		// Retrieve projects that the user can access
 		$objProject = new CProject();
-		$allowedProjects = $objProject->getAllowedRecords( $AppUI->user_id, 'project_id,project_name', 'project_name' );
+		$allowedProjects = $objProject->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name');
 		
 		$q  = new DBQuery;
 		$q->addTable('projects', 'p');
 		$q->addTable('tasks', 't');
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addWhere('t.task_project = p.project_id');
-		if ( count($allowedProjects) > 0 ) {
+		if (count($allowedProjects) > 0) {
 			$q->addWhere('(p.project_id IN (' .
 			implode (',', array_keys($allowedProjects)) . '))');
 		}
 		$q->addOrder('p.project_name');
 		
 		$importList = $q->loadHashList ();
-		$importList = arrayMerge( array( '0'=> $AppUI->_('') ), $importList);
+		$importList = arrayMerge(array('0'=> $AppUI->_('')), $importList);
 	
-		echo arraySelect( $importList, 'ticket_project', 'size="1" class="text"', null);
+		echo arraySelect($importList, 'ticket_project', 'size="1" class="text"', null);
 	?></td>
 </tr>
 <TR>

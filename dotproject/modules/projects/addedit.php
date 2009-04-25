@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -99,7 +99,7 @@ if ($project_id) {
 }
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if($department_selection_list!="" || $project_id){
+if ($department_selection_list!="" || $project_id) {
   $department_selection_list = ($AppUI->_("Departments")."<br />\n"
 								."<select name=\"dept_ids[]\" class=\"text\">\n"
 								."<option value=\"0\"></option>\n"
@@ -121,7 +121,7 @@ if ($project_id) {
 		$selected_contacts[] = $res->fields['contact_id'];
 	$q->clear();
 }
-if ($project_id == 0 && $contact_id > 0){
+if ($project_id == 0 && $contact_id > 0) {
 	$selected_contacts[] = "$contact_id";
 }
 ?>
@@ -155,7 +155,7 @@ if (f.project_short_name.value.length == 0) {
 var calendarField = '';
 var calWin = null;
 
-function popCalendar(field){
+function popCalendar(field) {
 calendarField = field;
 idate = eval('document.editFrm.project_' + field + '.value');
 window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
@@ -173,7 +173,7 @@ function setCalendar(idate, fdate) {
 
 	// set end date automatically with start date if start date is after end date
 	if (calendarField == 'start_date') {
-		if(document.editFrm.end_date.value < idate) {
+		if (document.editFrm.end_date.value < idate) {
 			document.editFrm.project_end_date.value = idate;
 			document.editFrm.end_date.value = fdate;
 		}
@@ -214,8 +214,8 @@ function popContacts() {
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
-function setContacts(contact_id_string){
-	if(!contact_id_string){
+function setContacts(contact_id_string) {
+	if (!contact_id_string) {
 		contact_id_string = "";
 	}
 	document.editFrm.project_contacts.value = contact_id_string;
@@ -236,8 +236,8 @@ function popDepartment() {
 //	window.open('./index.php?m=public&a=selector&dialog=1&call_back=setDepartment&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
-function setDepartment(department_id_string){
-	if(!department_id_string){
+function setDepartment(department_id_string) {
+	if (!department_id_string) {
 		department_id_string = "";
 	}
 	document.editFrm.project_departments.value = department_id_string;
@@ -254,7 +254,7 @@ function setDepartment(department_id_string){
 	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
 	</td>
 	<td align="right">
 		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt();" />
@@ -304,7 +304,7 @@ function setDepartment(department_id_string){
 							echo "<input type='button' class='button' value='".$AppUI->_("Select contacts...")."' onclick='javascript:popContacts();' />";
 						}
 						// Let's check if the actual company has departments registered
-						if($department_selection_list != ""){
+						if ($department_selection_list != "") {
 							?>
 								<br />
 								<?php echo $department_selection_list; ?>
@@ -451,7 +451,7 @@ function setDepartment(department_id_string){
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
 	</td>
 	<td align="right">
 		<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt();" />
@@ -462,11 +462,11 @@ function setDepartment(department_id_string){
 * <?php echo $AppUI->_('requiredField');?>
 
 <?php
-function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent=0, $spaces = 0){
+function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent=0, $spaces = 0) {
 	global $departments_count;
 	$parsed = '';
 
-	if($departments_count < 6) $departments_count++;
+	if ($departments_count < 6) $departments_count++;
 	
 	$q  = new DBQuery;
 	$q->addTable('departments');
@@ -476,7 +476,7 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 
 	$depts_list = $q->loadHashList("dept_id");
 
-	foreach($depts_list as $dept_id => $dept_info){
+	foreach ($depts_list as $dept_id => $dept_info) {
 		$selected = in_array($dept_id, $checked_array) ? " selected=\"selected\"" : "";
 
 		$parsed .= "<option value=\"{$dept_id}\"{$selected}>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";

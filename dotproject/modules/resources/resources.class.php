@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -38,7 +38,7 @@ class CResource extends CDpObject {
       $typelist[0] = array (
 	'resource_type_id' => 0,
 	'resource_type_name' => 'All Resources'
-      );
+     );
       while ($row = db_fetch_assoc($res)) {
 	  $typelist[] = $row;
       }

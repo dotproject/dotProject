@@ -1,12 +1,12 @@
 <?php
 /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 // reply-to address for staff followups
 // i.e. the address the gateway receives
-if ( ! isset($dPconfig['site_domain'])) {
+if (! isset($dPconfig['site_domain'])) {
   $dPconfig['site_domain'] = "dotproject.net";
 }
 
@@ -34,12 +34,12 @@ $CONFIG["warning_color"] = "#ff0000";
 $CONFIG["warning_age"] = "0.5"; // in hours
 
 // priority names (low to high)
-$CONFIG["priority_names"] = array_map(array($AppUI,'_'), (array)dPgetSysVal( 'TicketPriority' ));
+$CONFIG["priority_names"] = array_map(array($AppUI,'_'), (array)dPgetSysVal('TicketPriority'));
 
 // priority colors (low to high)
 $CONFIG["priority_colors"] = array("#006600","#000000","#ff0000","#ff0000","#ff0000");
 
-$CONFIG["type_names"] = dPgetSysVal( 'TicketStatus' );
+$CONFIG["type_names"] = dPgetSysVal('TicketStatus');
 // number of tickets to see at once
 $CONFIG["view_rows"] = 40;
 

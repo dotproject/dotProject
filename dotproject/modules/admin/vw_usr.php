@@ -1,5 +1,5 @@
 <?php /* ADMIN  $Id$ */ 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -40,7 +40,7 @@ foreach ($users as $row) {
 		<tr>
 			<td>
 				<a href="./index.php?m=admin&a=addedituser&user_id=<?php echo $row['user_id'];?>" title="<?php echo $AppUI->_('edit');?>">
-					<?php echo dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' ); ?>
+					<?php echo dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''); ?>
 				</a>
 			</td>
 			<td>
@@ -57,7 +57,7 @@ foreach ($users as $row) {
 		}
 ?>
 				<a href="javascript:delMe(<?php echo $row['user_id'];?>, '<?php echo $user_display;?>')" title="<?php echo $AppUI->_('delete');?>">
-					<?php echo dPshowImage( './images/icons/stock_delete-16.png', 16, 16, '' ); ?>
+					<?php echo dPshowImage('./images/icons/stock_delete-16.png', 16, 16, ''); ?>
 				</a>
 			</td>
 		</tr>
@@ -65,7 +65,7 @@ foreach ($users as $row) {
 <?php } ?>
 	</td>
 	<?php 
-		if (dPgetParam($_REQUEST, 'tab', 0) == 0){ ?>
+		if (dPgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td>
 	       <?php 
 			$q = new DBQuery;
@@ -73,7 +73,7 @@ foreach ($users as $row) {
 			$q->addQuery('user_access_log_id,' 
 			             . ' (unix_timestamp(now()) - unix_timestamp(date_time_in))/3600 as hours,' 
 			             . ' (unix_timestamp(now()) - unix_timestamp(date_time_last_action))/3600' 
-			             . ' as idle, if(isnull(date_time_out)' 
+			             . ' as idle, if (isnull(date_time_out)' 
 			             . " or date_time_out ='0000-00-00 00:00:00','1','0') as online");
 			$q->addWhere('user_id =' . $row['user_id']);
 			$q->addOrder('user_access_log_id DESC');
@@ -82,9 +82,9 @@ foreach ($users as $row) {
 	           
 			if ($user_logs) {
 				foreach ($user_logs as $row_log) {
-					if ($row_log["online"] == '1'){
+					if ($row_log["online"] == '1') {
 						echo ('<span style="color: green">' . $row_log['hours'] . ' ' 
-						      . $AppUI->_('hrs.'). '( ' . $row_log['idle'] . ' ' 
+						      . $AppUI->_('hrs.'). '(' . $row_log['idle'] . ' ' 
 						      .  $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' 
 						      . $AppUI->_('Online'));  
 					} else {

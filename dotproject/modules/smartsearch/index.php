@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -14,7 +14,7 @@ $all_words = dPgetParam($_POST, 'allwords', '');
 $mod_selection = dPgetParam($_POST, 'modselection', '');
 $advanced_search = dPgetParam($_POST, 'advancedsearch', '');
 
-if($advanced_search == 'on') { 
+if ($advanced_search == 'on') { 
 	$ignore_specchar = dPgetParam($_POST, 'ignorespecchar', '');
 	$ignore_case = dPgetParam($_POST, 'ignorecase', '');
 	$display_all_flds = dPgetParam($_POST, 'displayallflds', '');
@@ -65,8 +65,8 @@ else {
 	function selModAll() {
 		<?php
 $objarray = Array();
-foreach ($files as $tmp){
-	$temp = substr($tmp,0,-8);
+foreach ($files as $tmp) {
+	$temp = mb_substr($tmp,0,-8);
 ?>							
 		document.frmSearch.mod_<?php echo $temp ?>.checked=true;
 <?php
@@ -77,8 +77,8 @@ foreach ($files as $tmp){
 	function deselModAll() {
 		<?php
 $objarray = Array();
-foreach ($files as $tmp){
-	$temp = substr($tmp,0,-8);
+foreach ($files as $tmp) {
+	$temp = mb_substr($tmp,0,-8);
 ?>							
 		document.frmSearch.mod_<?php echo $temp ?>.checked=false;
 <?php
@@ -180,8 +180,8 @@ echo ($mod_selection == 'on' ? 'display:block' : 'display:none'); ?> ">
 </tr>
 <?php
 $objarray = Array();
-foreach ($files as $tmp){
-	$temp = substr($tmp,0,-8);
+foreach ($files as $tmp) {
+	$temp = mb_substr($tmp,0,-8);
 	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
 	
 	$class_obj = new $temp();
@@ -211,7 +211,7 @@ if ($keyword1) {
 	
 	$keywords = array();
 	for ($x = 1; $x <= 4; $x++) {
-		if (isset(${('keyword' . $x)}) && strlen(${('keyword'.$x)}) > 0) {
+		if (isset(${('keyword' . $x)}) && mb_strlen(${('keyword'.$x)}) > 0) {
 			$or_keywords = preg_split('/[\s,;]+/', addslashes(${('keyword'.$x)}));
 			foreach ($or_keywords as $or_keyword) {
 				$keywords[$or_keyword][0] = $or_keyword;
@@ -230,9 +230,9 @@ if ($keyword1) {
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <?php
 $reccount = 0;
-foreach ($files as $tmp){
+foreach ($files as $tmp) {
 	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
-	$temp = substr($tmp, 0, -8);
+	$temp = mb_substr($tmp, 0, -8);
 	
 	$search_opts['all_words'] = $all_words;
 	

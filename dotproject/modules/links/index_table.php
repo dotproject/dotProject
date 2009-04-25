@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -49,7 +49,7 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 		echo "<tr><td colspan=\"3\" align=\"center\">";
 		echo " [ ";
 	
-		for($n = $page > 16 ? $page-16 : 1; $n <= $xpg_total_pages; $n++) {
+		for ($n = $page > 16 ? $page-16 : 1; $n <= $xpg_total_pages; $n++) {
 			if ($n == $page) {
 				echo "<b>$n</b></a>";
 			} else {
@@ -85,7 +85,7 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 
 GLOBAL $AppUI, $deny1, $canAccess, $canRead, $canEdit;
 
-//require_once( DP_BASE_DIR.'/modules/files/index_table.lib.php');
+//require_once(DP_BASE_DIR.'/modules/files/index_table.lib.php');
 
 // ****************************************************************************
 // Page numbering variables
@@ -106,13 +106,13 @@ GLOBAL $AppUI, $deny1, $canAccess, $canRead, $canEdit;
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
 
-$tab = $AppUI->getState( 'LinkIdxTab' ) !== NULL ? $AppUI->getState( 'LinkIdxTab' ) : 0;
-$page = dPgetParam( $_GET, "page", 1);
-$search = dPgetParam( $_REQUEST, 'search', '');
+$tab = $AppUI->getState('LinkIdxTab') !== NULL ? $AppUI->getState('LinkIdxTab') : 0;
+$page = dPgetParam($_GET, "page", 1);
+$search = dPgetParam($_REQUEST, 'search', '');
 
 global $project_id, $task_id, $showProject;
 if (!isset($project_id))
-        $project_id = dPgetParam( $_REQUEST, 'project_id', 0);
+        $project_id = dPgetParam($_REQUEST, 'project_id', 0);
 if (!isset($showProject))
         $showProject = true;
 
@@ -120,8 +120,8 @@ $xpg_pagesize = 30;
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
-include_once( $AppUI->getModuleClass( 'projects' ) );
-include_once( $AppUI->getModuleClass( 'tasks' ) );
+include_once($AppUI->getModuleClass('projects'));
+include_once($AppUI->getModuleClass('tasks'));
 
 $project = new CProject();
 $task = new CTask();
@@ -165,7 +165,7 @@ $q->addOrder('project_name, link_name');
 //LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
 if ($canRead) {
 	$links = $q->loadList();
-} else if ($canAccess){
+} else if ($canAccess) {
 	$links = array();
 } else {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -182,20 +182,20 @@ shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Link Name' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Description' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Category' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Task Name' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Owner' );?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_( 'Date' );?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Link Name');?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Description');?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Category');?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Task Name');?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Owner');?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Date');?></th>
 </tr>
 <?php
 $fp=-1;
 
 $id = 0;
-for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i < $xpg_totalrecs; $i++){
+for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i < $xpg_totalrecs; $i++) {
 	$row = $links[$i];
-	$link_date = new CDate( $row['link_date'] );
+	$link_date = new CDate($row['link_date']);
 
 	if ($fp != $row["link_project"]) {
 		if (!$row["project_name"]) {
@@ -205,7 +205,7 @@ for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i
 		if ($showProject) {
 			$s = '<tr>';
 			$s .= '<td colspan="10" style="background-color:#'.$row["project_color_identifier"].'" style="border: outset 2px #eeeeee">';
-			$s .= '<font color="' . bestColor( $row["project_color_identifier"] ) . '">';
+			$s .= '<font color="' . bestColor($row["project_color_identifier"]) . '">';
 			if ($row['project_id'] > 0)
 				$s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '">'	. $row["project_name"] . '</a>';
 			else
@@ -221,7 +221,7 @@ for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i
 	<td nowrap="nowrap" width="20">
 	<?php if ($canEdit) {
 		echo "\n".'<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row["link_id"] . '">';
-		echo dPshowImage( './images/icons/stock_edit-16.png', '16', '16' );
+		echo dPshowImage('./images/icons/stock_edit-16.png', '16', '16');
 		echo "\n</a>";
 	}
 	?>
@@ -233,7 +233,7 @@ for ($i = ($page - 1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i < $pmax && $i
         <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']];?></td> 
 	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row["task_id"];?>"><?php echo $row["task_name"];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row["contact_first_name"].' '.$row["contact_last_name"];?></td>
-	<td width="15%" nowrap="nowrap" align="right"><?php echo $link_date->format( "$df $tf" );?></td>
+	<td width="15%" nowrap="nowrap" align="right"><?php echo $link_date->format("$df $tf");?></td>
 </tr>
 <?php }?>
 </table>

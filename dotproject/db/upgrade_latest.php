@@ -43,30 +43,30 @@ function dPupgrade($from_version, $to_version, $last_updated)
 	switch ($last_updated) {
 		case '00000000':
 			$sql = 'SELECT project_id, project_departments, project_contacts FROM projects';
-			$projects = db_loadList( $sql );
+			$projects = db_loadList($sql);
 
 			//split out related departments and store them seperatly.
 			$sql = 'DELETE FROM project_departments';
-			db_exec( $sql );
+			db_exec($sql);
 			//split out related contacts and store them seperatly.
 			$sql = 'DELETE FROM project_contacts';
-			db_exec( $sql );
+			db_exec($sql);
 
-			foreach ($projects as $project){
+			foreach ($projects as $project) {
                 $p_id = (($project['project_id'])?$project['project_id']:'0');
 				$departments = explode(',',$project['project_departments']);
-				foreach($departments as $department){
+				foreach ($departments as $department) {
 					$sql = 'INSERT INTO project_departments (project_id, department_id) values ('.$p_id.', '.$department.')';
                     if ($p_id && $department) {
-                        db_exec( $sql );
+                        db_exec($sql);
                     }
 				}
 
 				$contacts = explode(',',$project['project_contacts']);
-				foreach($contacts as $contact){
+				foreach ($contacts as $contact) {
 					$sql = 'INSERT INTO project_contacts (project_id, contact_id) values ('.$p_id.', '.$contact.')';
                     if ($p_id && $contact) {
-                        db_exec( $sql );
+                        db_exec($sql);
                     }
 				}
 			}
@@ -76,35 +76,35 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			 **/
 
 			$sql = 'SELECT task_id, task_departments, task_contacts FROM tasks';
-			$tasks = db_loadList( $sql );
+			$tasks = db_loadList($sql);
 
 			//split out related departments and store them seperatly.
 			$sql = 'DELETE FROM task_departments';
-			db_exec( $sql );
+			db_exec($sql);
 			//split out related contacts and store them seperatly.
 			$sql = 'DELETE FROM task_contacts';
-			db_exec( $sql );
+			db_exec($sql);
 
-			foreach ($tasks as $task){
+			foreach ($tasks as $task) {
 				$departments = explode(',',$task['task_departments']);
-				foreach($departments as $department){
+				foreach ($departments as $department) {
 					if ($department) {
 						$sql = 'INSERT INTO task_departments (task_id, department_id) values ('.$task['task_id'].', '.$department.')';
-						db_exec( $sql );
+						db_exec($sql);
 					}
 				}
 
 				$contacts = explode(',',$task['task_contacts']);
-				foreach($contacts as $contact){
+				foreach ($contacts as $contact) {
 					if ($contact) {
 						$sql = 'INSERT INTO task_contacts (task_id, contact_id) values ('.$task['task_id'].', '.$contact.')';
-						db_exec( $sql );
+						db_exec($sql);
 					}
 				}
 			}
             
             $sql = 'ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1';
-            db_exec( $sql );
+            db_exec($sql);
             
 			if (strcmp($from_version, '2') < 0) {
 				include DP_BASE_DIR.'/db/upgrade_contacts.php';

@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -18,7 +18,7 @@ class files_content extends smartsearch
 	var $display_fields = array('word');
 	var $follow_up_link = 'fileviewer.php?file_id=';
 
-	function cfiles_content (){
+	function cfiles_content () {
 		return new files_content();
 	}
 }

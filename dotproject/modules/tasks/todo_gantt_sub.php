@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -27,7 +27,7 @@ $canDelete = getPermission($m, 'delete');
 ?>
 		<select name="show_user_todo" onchange="document.form_buttons.submit()">
 		<?php
-		if ($rows = db_loadList( $usersql, NULL )) {
+		if ($rows = db_loadList($usersql, NULL)) {
 			foreach ($rows as $row) {
 				$selected = (($user_id == $row['user_id']) ? ' selected="selected"' : '');
 				echo ('<option value="' . $row['user_id'] . '"' . $selected . '>' 

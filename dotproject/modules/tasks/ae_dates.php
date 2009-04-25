@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -18,7 +18,7 @@ for ($current = $start; $current <= $end; $current++) {
 	
 	$current_key = (($current < 10) ? '0' : '') . $current;
 	
-	if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')){
+	if (mb_stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
 		//User time format in 12hr
 		$hours[$current_key] = (($current > 12) ? $current-12 : $current);
 	} else {
@@ -91,7 +91,7 @@ if ($can_edit_time_information) {
 							   (($start_date) 
 								? ($start_date->getMinute() - ($start_date->getMinute() % $inc)) 
 								: '00')) . '</td>');
-	if (stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
+	if (mb_stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
 		echo ('<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' 
 			  . (($start_date) ? $start_date->getAMPM() : (($start > 11) ? 'pm' : 'am')) 
 			  . '" disabled="disabled" class="text" size="2" /></td>');
@@ -122,7 +122,7 @@ if ($can_edit_time_information) {
 							  (($end_date) 
 							   ? ($end_date->getMinute() - ($end_date->getMinute() % $inc)) 
 							   : '00')) . '</td>');
-	if (stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
+	if (mb_stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
 		echo ('<td><input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' 
 			  . (($end_date) ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) 
 			  . '" disabled="disabled" class="text" size="2" /></td>');

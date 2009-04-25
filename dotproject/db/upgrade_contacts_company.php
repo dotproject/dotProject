@@ -12,10 +12,10 @@ if (!defined('DP_BASE_DIR')) {
 */
 
 dPmsg('Fetching companies list');
-foreach(db_loadList('SELECT * FROM contacts') as $contact) {
+foreach (db_loadList('SELECT * FROM contacts') as $contact) {
     $contact_company = $contact['contact_company'];
-    if (is_numeric($contact_company)){
-        if(!checkCompanyId($contact_company)){
+    if (is_numeric($contact_company)) {
+        if (!checkCompanyId($contact_company)) {
             dPmsg('Error found in contact_company in the contact '.getContactGeneralInformation($contact));
         }
     } else if ($contact_company != "") {
@@ -27,7 +27,7 @@ foreach(db_loadList('SELECT * FROM contacts') as $contact) {
             $company_id = insertCompany($contact_company);
         }
         
-        if($company_id){
+        if ($company_id) {
             updateContactCompany($contact, $company_id);
             dPmsg("Contact's company updated - ".getContactGeneralInformation($contact)." - ($company_id) $contact_company");
         } else {

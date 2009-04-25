@@ -1,5 +1,5 @@
 <?php /* SYSTEM $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -11,7 +11,7 @@ $obj->_billingcode_id = isset($_POST['billingcode_id']) ? $_POST['billingcode_id
 
 
 // prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg( 'Billing Codes' );
+$AppUI->setMsg('Billing Codes');
 if ($del) {
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -30,7 +30,7 @@ if ($del) {
 	
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else{
+	} else {
 		$AppUI->setMsg('updated', UI_MSG_OK, true);
 	}
 }

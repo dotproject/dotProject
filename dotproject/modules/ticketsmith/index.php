@@ -1,14 +1,14 @@
 <?php  /* TICKETSMITH $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 if (!$canAccess) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Trouble Ticket Management', 'gconf-app-icon.png', $m, "$m.$a" );
+$titleBlock = new CTitleBlock('Trouble Ticket Management', 'gconf-app-icon.png', $m, "$m.$a");
 if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new ticket').'">', '',
@@ -25,14 +25,14 @@ $direction = $CONFIG["message_order"];
 $offset = 0;
 $limit = $CONFIG["view_rows"];
 
-$type = dPgetParam( $_GET, 'type', '' );
-$column = dPgetParam( $_GET, 'column', $column);
-$direction = dPgetParam( $_GET, 'direction', $direction);
-$offset = dPgetParam( $_GET, 'offset', $offset);
-$action = dPgetParam( $_REQUEST, 'action', null );
+$type = dPgetParam($_GET, 'type', '');
+$column = dPgetParam($_GET, 'column', $column);
+$direction = dPgetParam($_GET, 'direction', $direction);
+$offset = dPgetParam($_GET, 'offset', $offset);
+$action = dPgetParam($_REQUEST, 'action', null);
 
-if($type == ''){
-	if($AppUI->getState("ticket_type")){
+if ($type == '') {
+	if ($AppUI->getState("ticket_type")) {
 		$type = $AppUI->getState("ticket_type");
 	} else {
 		$type = "Open";
@@ -79,10 +79,10 @@ if ($dPconfig['link_tickets_kludge']) {
 }
 												
 /* set up defaults for viewing */
-if($type == "my"){
+if ($type == "my") {
 	$title = "My Tickets";
 }
-else{
+else {
 	$title = "$type Tickets";
 }
 
@@ -106,7 +106,7 @@ else {
 
 <table class="tbl" width="100%">
 <tr>
-	<td colspan="<?php echo count( $fields["headings"] );?>" align="center">
+	<td colspan="<?php echo count($fields["headings"]);?>" align="center">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 		<tr>
 			<td width="33%"></td>
@@ -136,7 +136,7 @@ $query = "SELECT $select_fields FROM tickets WHERE ";
 if ($type == "My") {
     $query .= "type = 'Open' AND (assignment = '$AppUI->user_id' OR assignment = '0') AND ";
 }
-elseif ($type != "All") {
+else if ($type != "All") {
     $query .= "type = '$type' AND ";
 }
 $query .= "parent = '0' ORDER BY " . urlencode($column) . " $direction LIMIT $offset, $limit";
@@ -173,7 +173,7 @@ if ($parent_count) {
             print("<td  bgcolor=white align=" . $fields["aligns"][$loop] . ">\n");
 
 	    	//translate some information, some not
-	    	if ($fields["headings"][$loop] == "Status"){
+	    	if ($fields["headings"][$loop] == "Status") {
 			print($AppUI->_(format_field($row[$fields["columns"][$loop]], $fields["types"][$loop], $row[$fields["columns"][0]])) . "\n");
 		}
 		else {
@@ -188,7 +188,7 @@ else {
     print("<tr height=25>\n");
     print("<td align=center colspan=" . count($fields["headings"]) . ">\n");
     print($AppUI->_('There are no')." ");
-    print($type == "All" ? "" : strtolower($AppUI->_($type)) . " ");
+    print($type == "All" ? "" : mb_strtolower($AppUI->_($type)) . " ");
     print($AppUI->_('tickets').".\n");
     print("</td>\n");
     print("</tr>\n");

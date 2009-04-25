@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -87,12 +87,12 @@ foreach ($logs as $row) {
 	       . '</td>');
 	*/
 	$reference_image = '-';
-	if($row['task_log_reference'] > 0){
+	if ($row['task_log_reference'] > 0) {
 		if (isset($taskLogReferenceImage[$row['task_log_reference']])) {
 			$reference_image = dPshowImage($taskLogReferenceImage[$row['task_log_reference']], 16, 
 			                               16, $taskLogReference[$row['task_log_reference']], 
 										   $taskLogReference[$row['task_log_reference']]);
-		} else if (isset($taskLogReference[$row['task_log_reference']])){
+		} else if (isset($taskLogReference[$row['task_log_reference']])) {
 			$reference_image = $taskLogReference[$row['task_log_reference']];
 		}
 	}
@@ -105,7 +105,7 @@ foreach ($logs as $row) {
 	$s .= '<td width="100">' . $row['user_username'] . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
 	$minutes = (int) (($row['task_log_hours'] - ((int) $row['task_log_hours'])) * 60);
-	$minutes = ((strlen($minutes) == 1) ? ('0' . $minutes) : $minutes);
+	$minutes = ((mb_strlen($minutes) == 1) ? ('0' . $minutes) : $minutes);
 	$s .= (int) $row['task_log_hours'] . ':' . $minutes . ')</td>';
 	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td>';
 	$s .= '<td><a name="tasklog' . @$row['task_log_id'] . '"></a>';
@@ -113,13 +113,13 @@ foreach ($logs as $row) {
 // dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
 	$descrip = str_replace("\n", '<br />', $row['task_log_description']);
-	$tranpos = strpos($descrip, str_replace("\n", '<br />', $transbrk));
+	$tranpos = mb_strpos($descrip, str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
 		$s .= $descrip;
 	} else {
-		$descrip = substr($descrip, 0, $tranpos);
-		$tranpos = strpos($row['task_log_description'], $transbrk);
-		$transla = substr($row['task_log_description'], $tranpos + strlen($transbrk));
+		$descrip = mb_substr($descrip, 0, $tranpos);
+		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
+		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
 		$transla = trim(str_replace("'", '"', $transla));
 		$s .= ($descrip.'<div style="font-weight: bold; text-align: right"><a title="' . $transla 
 		       . '" class="hilite">["' . $AppUI->_('translation') . '"]</a></div>');

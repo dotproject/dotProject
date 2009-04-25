@@ -1,5 +1,5 @@
 <?php /* COMPANIES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -32,7 +32,7 @@ if (!($rows = $q->loadList())) {
 } else {
 	$s .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Owner') . '</th></tr>';
 	
-	foreach ($rows as $row){
+	foreach ($rows as $row) {
 		$s .= '<tr><td>';
 		$s .= ('<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '">' 
 		       . $row['project_name'].'</a>');

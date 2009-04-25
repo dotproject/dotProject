@@ -17,7 +17,7 @@ require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
 
 $db = NewADOConnection(dPgetConfig('dbtype'));
 
-function db_connect( $host='localhost', $dbname, $user='root', $passwd='', $persist=false ) {
+function db_connect($host='localhost', $dbname, $user='root', $passwd='', $persist=false) {
 	global $db, $ADODB_FETCH_MODE;
 	
 	$ret_val = (($persist) ? $db->PConnect($host, $user, $passwd, $dbname) 
@@ -53,20 +53,20 @@ function db_insert_id() {
 	return $db->Insert_ID();
 }
 
-function db_exec( $sql ) {
+function db_exec($sql) {
 	global $db;
 	
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
-	$qid = $db->Execute( $sql );
+	$qid = $db->Execute($sql);
 	dprint(__FILE__, __LINE__, 10, $sql);
 	if ($msg = db_error()) {
 		global $AppUI;
 		dprint(__FILE__, __LINE__, 0, "Error executing: <pre>$sql</pre> ($msg)");
 		// Useless statement, but it is being executed only on error, 
 		// and it stops infinite loop.
-		$db->Execute( $sql );
+		$db->Execute($sql);
 		if (!(db_error())) {
 			echo '<script language="JavaScript"> location.reload(); </script>';
 		}
@@ -77,17 +77,17 @@ function db_exec( $sql ) {
 	return $qid;
 }
 
-function db_free_result($cur ) {
+function db_free_result($cur) {
 	// TODO
 	// mysql_free_result($cur);
 	// Maybe it's done my Adodb
-	if(!(is_object($cur))) {
+	if (!(is_object($cur))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_free_result.');
 	}
 	$cur->Close();
 }
 
-function db_num_rows( $qid ) {
+function db_num_rows($qid) {
 	if (!(is_object($qid))) {
 	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_num_rows.');
 	}
@@ -95,21 +95,21 @@ function db_num_rows( $qid ) {
 	//return $db->Affected_Rows();
 }
 
-function db_fetch_row( &$qid ) {
+function db_fetch_row(&$qid) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_row.');
 	}
 	return $qid->FetchRow();
 }
 
-function db_fetch_assoc( &$qid ) {
+function db_fetch_assoc(&$qid) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_assoc.');
 	}
 	return $qid->FetchRow();
 }
 
-function db_fetch_array( &$qid  ) {
+function db_fetch_array(&$qid ) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_array.');
 	}
@@ -124,28 +124,28 @@ function db_fetch_array( &$qid  ) {
 	return $result;
 }
 
-function db_fetch_object( $qid  ) {
+function db_fetch_object($qid ) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_object.');
 	}
 	return $qid->FetchNextObject(false);
 }
 
-function db_escape( $str ) {
+function db_escape($str) {
 	global $db;
-	return substr($db->qstr( $str ), 1, -1);
+	return mb_substr($db->qstr($str), 1, -1);
 }
 
 function db_version() {
 	return 'ADODB';
 }
 
-function db_unix2dateTime( $time ) {
+function db_unix2dateTime($time) {
 	global $db;
 	return $db->DBDate($time);
 }
 
-function db_dateTime2unix( $time ) {
+function db_dateTime2unix($time) {
 	global $db;
 	return $db->UnixDate($time);
 	

@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -8,32 +8,32 @@ if (!defined('DP_BASE_DIR')){
 if ($project_id != 0)
 {
 	$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
-	$pname = db_loadResult( $sql );
+	$pname = db_loadResult($sql);
 }
 else
 	$pname = $AppUI->_('All Projects');
 
 $font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 $pdf =& new Cezpdf($paper='A4',$orientation='landscape');
-$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
+$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+$pdf->selectFont("$font_dir/Helvetica.afm");
 
-$pdf->ezText( safe_utf8_decode(dPgetConfig( 'company_name' )), 12 );
+$pdf->ezText(safe_utf8_decode(dPgetConfig('company_name')), 12);
 
 $date = new CDate();
-$pdf->ezText( "\n" . $date->format( $df ) , 8 );
+$pdf->ezText("\n" . $date->format($df) , 8);
 $next_week = new CDate($date);
 $next_week->addSpan(new Date_Span(array(7,0,0,0)));
 
-$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-$pdf->ezText( "\n" . safe_utf8_decode($AppUI->_('Project Upcoming Task Report')), 12 );
-$pdf->ezText( "$pname", 15 );
-$pdf->ezText( safe_utf8_decode($AppUI->_('Tasks Due to be Completed By')) . " " . $next_week->format($df) , 10);
-$pdf->ezText( "\n" );
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
+$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
+$pdf->ezText("\n" . safe_utf8_decode($AppUI->_('Project Upcoming Task Report')), 12);
+$pdf->ezText("$pname", 15);
+$pdf->ezText(safe_utf8_decode($AppUI->_('Tasks Due to be Completed By')) . " " . $next_week->format($df) , 10);
+$pdf->ezText("\n");
+$pdf->selectFont("$font_dir/Helvetica.afm");
 $title = null;
 $options = array(
 	'showLines' => 2,
@@ -142,7 +142,7 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = $end_date->format($df);
 }
 
-$pdf->ezTable( $pdfdata, $columns, $title, $options );
+$pdf->ezTable($pdfdata, $columns, $title, $options);
 
 $pdf->ezStream();
 ?>

@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -38,7 +38,7 @@ function resource_postsave()
     foreach ($reslist as $res) {
       if ($res) {
 				list ($resource, $perc) = explode('=', $res);
-				$value[] = array( $task_id, $resource, $perc );
+				$value[] = array($task_id, $resource, $perc);
       }
     }
 		// first delete any elements already there, then replace with this
@@ -49,7 +49,7 @@ function resource_postsave()
 		$q->exec(); 
 		$q->clear();
     if (count($value)) {
-			foreach($value as $v)
+			foreach ($value as $v)
 			{
 				$q->addTable('resource_tasks');
 				$q->addInsert('task_id,resource_id,percent_allocated', $v, true);

@@ -1,5 +1,5 @@
 <?php /* DEPARTMENTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -33,8 +33,8 @@ $AppUI->savePlace();
 
 //if $department contains the $company_prefix string that it's requesting a company 
 //and not a department. So, clear the $department variable, and populate the $company_id variable.
-if (!(strpos($department, $company_prefix)===false)){
-	$company_id = substr($department,strlen($company_prefix));
+if (!(mb_strpos($department, $company_prefix)===false)) {
+	$company_id = mb_substr($department,mb_strlen($company_prefix));
 	$AppUI->setState('DeptIdxCompany', $company_id);
 	unset($department);
 }
@@ -70,7 +70,7 @@ foreach ($rows as $row) {
 			            . $row['company_name'] . '</option>' . "\n");
 			$company=$row['company_id'];
 		}
-		if ($row['dept_parent']!=null){
+		if ($row['dept_parent']!=null) {
 			showchilddept($row);
 			findchilddept($rows, $row['dept_id']);
 		}

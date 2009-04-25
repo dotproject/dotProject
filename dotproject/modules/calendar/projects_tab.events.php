@@ -33,8 +33,8 @@ $types = dPgetSysVal('EventType');
 	</tr>
 <?php
 foreach ($events as $row) {
-	$start = new CDate( $row['event_start_date'] );
-	$end = new CDate( $row['event_end_date'] );
+	$start = new CDate($row['event_start_date']);
+	$end = new CDate($row['event_end_date']);
 ?>
 	<tr>
 		<td width="25%" nowrap="nowrap">
@@ -43,7 +43,7 @@ echo $start->format($df . ' ' . $tf); ?> - <?php echo $end->format($df . ' ' . $
 		</td>
 		<td width="10%" nowrap="nowrap">
 			<?php 
-echo dPshowImage(dPfindImage(('event' . $row['event_type'] . '.png'), 'calendar' ), 16, 16, ''); ?>
+echo dPshowImage(dPfindImage(('event' . $row['event_type'] . '.png'), 'calendar'), 16, 16, ''); ?>
 			<b><?php echo $AppUI->_($types[$row['event_type']]); ?></b>
 		<td>
 			<a href="?m=calendar&a=view&event_id=<?php 

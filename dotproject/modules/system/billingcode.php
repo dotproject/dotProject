@@ -1,5 +1,5 @@
 <?php /* SYSTEM $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -38,7 +38,7 @@ $titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">
 <!--
-function submitIt(){
+function submitIt() {
 	var form = document.changecode;
 	form.submit();
 }
@@ -83,7 +83,7 @@ function delIt2(id) {
 
 <?php
 
-foreach($billingcodes as $code) {
+foreach ($billingcodes as $code) {
 	$code_id = $code['billingcode_id'];
 	$code_name = htmlspecialchars($code['billingcode_name']);
 	$code_value = htmlspecialchars($code['billingcode_value']);

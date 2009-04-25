@@ -2,7 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
-$dialog = dPgetParam( $_GET, 'dialog', 0 );
+$dialog = dPgetParam($_GET, 'dialog', 0);
 if ($dialog)
 	$page_title = '';
 else
@@ -14,8 +14,8 @@ else
 <head>
 	<meta name="Description" content="dotProject Default Style" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset( $locale_char_set ) ? $locale_char_set : 'UTF-8';?>" />
-	<title><?php echo @dPgetConfig( 'page_title' );?></title>
+	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
+	<title><?php echo @dPgetConfig('page_title');?></title>
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
@@ -48,7 +48,7 @@ else
 				$links[] = '<a href="?m='.$module['mod_directory'].'">'.$AppUI->_($module['mod_ui_name']).'</a>';
 			}
 		}
-		echo implode( ' | ', $links );
+		echo implode(' | ', $links);
 		echo "\n";
 		?>
 		</td>
@@ -70,18 +70,18 @@ else
 		}
 	}
 
-	echo arraySelect( $newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if(mod) f.submit();"', '', true);
+	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
 
 	echo "        <input type=\"hidden\" name=\"a\" value=\"addedit\" />\n";
 
 //build URI string
-	if (isset( $company_id )) {
+	if (isset($company_id)) {
 		echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 	}
-	if (isset( $task_id )) {
+	if (isset($task_id)) {
 		echo '<input type="hidden" name="task_parent" value="'.$task_id.'" />';
 	}
-	if (isset( $file_id )) {
+	if (isset($file_id)) {
 		echo '<input type="hidden" name="file_id" value="'.$file_id.'" />';
 	}
 ?>
@@ -99,13 +99,13 @@ else
 		<tr>
 			<td width="100%"><?php echo $AppUI->_('Welcome').' '.$AppUI->user_first_name.' '.$AppUI->user_last_name; ?></td>
 			<td nowrap="nowrap">
-				<?php echo dPcontextHelp( 'Help' );?> |
+				<?php echo dPcontextHelp('Help');?> |
 				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id;?>"><?php echo $AppUI->_('My Info');?></a> |
 <?php
 	if (getPermission('calendar', 'access')) {
 		$now = new CDate();
 ?>                              <b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
-				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format( FMT_TIMESTAMP_DATE );?>"><?php echo $AppUI->_('Today');?></a> |
+				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> |
 <?php } ?>
 				<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 			</td>

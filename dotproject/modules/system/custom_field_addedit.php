@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -8,16 +8,16 @@ if (!defined('DP_BASE_DIR')){
 	 *
 	 */
 
-	require_once($AppUI->getSystemClass( 'CustomFields' ));
+	require_once($AppUI->getSystemClass('CustomFields'));
 		
 	$titleBlock = new CTitleBlock('Custom Fields - Add/Edit', "", "admin", "admin.custom_field_addedit");
-	$titleBlock->addCrumb( "?m=system", 'system admin' );
-	$titleBlock->addCrumb( "?m=system&a=custom_field_editor", 'custom fields' );
+	$titleBlock->addCrumb("?m=system", 'system admin');
+	$titleBlock->addCrumb("?m=system&a=custom_field_editor", 'custom fields');
 	$titleBlock->show();
 
-	$field_id = dpGetParam( $_POST, "field_id", NULL ) != NULL ? dpGetParam( $_POST, "field_id", NULL) : dpGetParam( $_GET, "field_id", 0);
-	$delete_field = dpGetParam( $_GET, "delete", 0 );
-	$module = dpGetParam($_GET, "module", NULL ) == NULL ? dpGetParam($_POST, "module", NULL) : dpGetParam($_GET, "module", NULL);
+	$field_id = dpGetParam($_POST, "field_id", NULL) != NULL ? dpGetParam($_POST, "field_id", NULL) : dpGetParam($_GET, "field_id", 0);
+	$delete_field = dpGetParam($_GET, "delete", 0);
+	$module = dpGetParam($_GET, "module", NULL) == NULL ? dpGetParam($_POST, "module", NULL) : dpGetParam($_GET, "module", NULL);
 
 	$select_newitem = dpGetParam($_POST, "select_newitem", NULL);
 	$select_items = dpGetParam($_POST, "select_items", Array());
@@ -33,7 +33,7 @@ if (!defined('DP_BASE_DIR')){
 	{
 		$new_selectitems = Array();
 
-		foreach($select_items as $itm)
+		foreach ($select_items as $itm)
 		{
 			if ($itm != $select_delitem) $new_selectitems[] = $itm;			
 		}
@@ -49,11 +49,11 @@ if (!defined('DP_BASE_DIR')){
 
 		if ($delete_field)
 		{
-			$custom_fields->deleteField( $field_id );
+			$custom_fields->deleteField($field_id);
 			$AppUI->redirect();
 		}
 
-		$cf =& $custom_fields->fieldWithId( $field_id );
+		$cf =& $custom_fields->fieldWithId($field_id);
 
 		if (is_object($cf))
 		{
@@ -65,7 +65,7 @@ if (!defined('DP_BASE_DIR')){
 
 			if ($field_htmltype == "select")
 			{
-				$select_options = New CustomOptionList( $field_id );
+				$select_options = New CustomOptionList($field_id);
 				$select_options->load();
 				$select_items = $select_options->getOptions();
 			}
@@ -83,10 +83,10 @@ if (!defined('DP_BASE_DIR')){
 	{
 		$edit_title = $AppUI->_("New Custom Field In");
 
-		$field_name = dpGetParam( $_POST, "field_name", NULL );
-		$field_description = dpGetParam( $_POST, "field_description", NULL );
-		$field_htmltype = dpGetParam( $_POST, "field_htmltype", "textinput");
-		$field_extratags = dpGetParam( $_POST, "field_extratags", NULL );
+		$field_name = dpGetParam($_POST, "field_name", NULL);
+		$field_description = dpGetParam($_POST, "field_description", NULL);
+		$field_htmltype = dpGetParam($_POST, "field_htmltype", "textinput");
+		$field_extratags = dpGetParam($_POST, "field_extratags", NULL);
 	}
 
 	$html_types = Array(
@@ -148,7 +148,7 @@ if (!defined('DP_BASE_DIR')){
 		frm.submit();
 	}
 
-	function deleteItem( itmname )
+	function deleteItem(itmname)
 	{
 		del = document.getElementById('delete_item');
 		del.value = itmname;
@@ -187,7 +187,7 @@ if (!defined('DP_BASE_DIR')){
 	<tr><td>
 		<?php echo $AppUI->_('Field Display Type')?>:
 		</td><td>
-		<?php echo arraySelect( $html_types, 'field_htmltype', 'id="htmltype" onChange="javascript:showAttribs()"', $field_htmltype); ?>
+		<?php echo arraySelect($html_types, 'field_htmltype', 'id="htmltype" onChange="javascript:showAttribs()"', $field_htmltype); ?>
 	</td></tr>
 	<tr><td colspan="2">
 		<hr />
@@ -208,7 +208,7 @@ if (!defined('DP_BASE_DIR')){
 			<input type="hidden" name="delete_item" value="0" id="delete_item" />
 			<table>
 			<?php
-				foreach( $select_items as $itm)
+				foreach ($select_items as $itm)
 				{
 					$itmhtml = htmlspecialchars($itm);
 					echo "<tr><td>";

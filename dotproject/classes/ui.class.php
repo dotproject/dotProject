@@ -240,7 +240,7 @@ class CAppUI {
 		$bad_replace = '....'; // Needs the same number of chars as $bad_chars
 		
 		// check whether the filename contained bad characters
-		if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
+		if (mb_strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
 			$AppUI->redirect('m=public&a=access_denied');
 			return $file;
 		}
@@ -287,7 +287,7 @@ class CAppUI {
 		} else {
 			// Need to try and find the language the user is using, find the first one
 			// that has this as the language part
-			if (strlen($loc) > 2) {
+			if (mb_strlen($loc) > 2) {
 				list ($l, $c) = explode('_', $loc);
 				$loc = $this->findLanguage($l, $c);
 			} else {
@@ -304,7 +304,7 @@ class CAppUI {
 			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
 		}
 		else {
-			$user_lang = ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? $default_language 
+			$user_lang = ((mb_strtoupper(mb_substr(PHP_OS, 0, 3)) == 'WIN') ? $default_language 
 						  : ($loc . '.' . $lcs));
 		}
 		
@@ -312,6 +312,7 @@ class CAppUI {
 			$this->user_locale = $base_locale;
 			$this->user_lang = $user_lang;
 			$locale_char_set = $lcs;
+			mb_internal_encoding($locale_char_set);
 		} else {
 			return $user_lang;
 		}
@@ -319,9 +320,9 @@ class CAppUI {
 	
 	function findLanguage($language, $country = false) {
 		$LANGUAGES = $this->loadLanguages();
-		$language = strtolower($language);
+		$language = mb_strtolower($language);
 		if ($country) {
-			$country = strtoupper($country);
+			$country = mb_strtoupper($country);
 			// Try constructing the code again
 			$code = $language . '_' . $country;
 			if (isset($LANGUAGES[$code])) {
@@ -407,10 +408,10 @@ class CAppUI {
 		}
 		switch ($flags & UI_CASE_MASK) {
 			case UI_CASE_UPPER:
-				$str = strtoupper($str);
+				$str = mb_strtoupper($str);
 				break;
 			case UI_CASE_LOWER:
-				$str = strtolower($str);
+				$str = mb_strtolower($str);
 				break;
 			case UI_CASE_UPPERFIRST:
 				$str = ucwords($str);
@@ -685,7 +686,7 @@ class CAppUI {
 		$q->clear();
 		dprint(__FILE__, __LINE__, 7, ('Login SQL: ' . $sql));
 		
-		if(!db_loadObject($sql, $this)) {
+		if (!db_loadObject($sql, $this)) {
 			dprint(__FILE__, __LINE__, 1, 'Failed to load user information');
 			return false;
 		}
@@ -700,7 +701,7 @@ class CAppUI {
 /**
 *@Function for regiser log in dotprojet table "user_access_log"
 */
-	function registerLogin(){
+	function registerLogin() {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addInsert('user_id', $this->user_id);
@@ -714,7 +715,7 @@ class CAppUI {
 /**
 *@Function for register log out in dotproject table "user_acces_log"
 */
-	function registerLogout($user_id){
+	function registerLogout($user_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
@@ -730,12 +731,12 @@ class CAppUI {
 /**
 *@Function for update table user_acces_log in field date_time_lost_action
 */
-	function updateLastAction($last_insert_id){
+	function updateLastAction($last_insert_id) {
 		$q  = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
-		if ($last_insert_id > 0){
+		if ($last_insert_id > 0) {
 			$q->exec();
 			$q->clear();
 		}
@@ -864,12 +865,12 @@ class CAppUI {
 			return;
 		}
 		$root = DP_BASE_DIR;
-		if (substr($root, -1) != '/') {
+		if (mb_substr($root, -1) != '/') {
 			$root .= '/';
 		}
 		
 		$base = dPgetConfig('base_url');
-		if (substr($base, -1) != '/') {
+		if (mb_substr($base, -1) != '/') {
 			$base .= '/';
 		}
 		
@@ -878,12 +879,12 @@ class CAppUI {
 		
 		$js_files = array();
 		while (($entry = $jsdir->read()) !== false) {
-			if (substr($entry, -3) == '.js'){
+			if (mb_substr($entry, -3) == '.js') {
 				$js_files[] = $entry;
 			}
 		}
 		asort($js_files);
-		while (list(,$js_file_name) = each($js_files)){
+		while (list(,$js_file_name) = each($js_files)) {
 			echo ('<script type="text/javascript" src="' . $base . 'js/' . $js_file_name 
 			      . '"></script>'."\n");
 		}
@@ -897,11 +898,11 @@ class CAppUI {
 	
 	function getModuleJS($module, $file=null, $load_all = false) {
 		$root = DP_BASE_DIR;
-		if (substr($root, -1) != '/') {
+		if (mb_substr($root, -1) != '/') {
 			$root .= '/';
 		}
 		$base = DP_BASE_URL;
-		if (substr($base, -1) != '/') {
+		if (mb_substr($base, -1) != '/') {
 			$base .= '/';
 		}
 		if ($load_all || !($file)) {
@@ -1019,7 +1020,7 @@ the active tab, and the selected tab **/
 				// Breaks classic view.
 				// $this->active = 0;
 			}
-			foreach($this->tabs as $k => $v) {
+			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$s .= "\n\t" . '<td width="1%" nowrap="nowrap" class="tabsp">';
 				$s .= "\n\t\t" . '<img src="./images/shim.gif" height="1" width="1" alt="" />';
@@ -1056,7 +1057,7 @@ the active tab, and the selected tab **/
 				}
 			}
 			if ($js_tabs) {
-				foreach($this->tabs as $k => $v) {
+				foreach ($this->tabs as $k => $v) {
 					echo '<div class="tab" id="tab_' . $k . '">';
 					require $this->baseInc.$v[0] . '.php';
 					echo '</div>';
@@ -1213,9 +1214,9 @@ class CTitleBlock_core {
 		if ($this->showhelp) {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
 			/*
-			$s .= ($CT . contextHelp(('<img src="./images/obj/help.gif" width="14" height="16" ' 
-			                          . 'border="0" alt="'.$AppUI->_('Help').'" />'), 
-			                         $this->helpref));
+			$s .= ($CT . dPcontextHelp(('<img src="./images/obj/help.gif" width="14" height="16" ' 
+			                            . 'border="0" alt="'.$AppUI->_('Help').'" />'), 
+			                           $this->helpref));
 			*/
 			$s .= ("\n\t" . '<a href="#' . $this->helpref 
 			       . '" onClick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' 

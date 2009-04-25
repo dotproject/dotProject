@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -109,7 +109,7 @@ if ($sub_form) {
 	}
 	$end_date = null;
 	if ($obj->task_end_date) {
-		if (strpos($obj->task_end_date, '2400') !== false) {
+		if (mb_strpos($obj->task_end_date, '2400') !== false) {
 		  $obj->task_end_date = str_replace('2400', '2359', $obj->task_end_date);
 		}
 		$end_date = new CDate($obj->task_end_date);

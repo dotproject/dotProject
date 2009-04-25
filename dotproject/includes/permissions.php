@@ -10,11 +10,11 @@ if (!defined('DP_BASE_DIR')) {
 
 // Permission flags used in the DB
 
-define( 'PERM_DENY', '0' );
-define( 'PERM_EDIT', '-1' );
-define( 'PERM_READ', '1' );
+define('PERM_DENY', '0');
+define('PERM_EDIT', '-1');
+define('PERM_READ', '1');
 
-define( 'PERM_ALL', '-1' );
+define('PERM_ALL', '-1');
 
 function getReadableModule() {
 	global $AppUI;
@@ -35,13 +35,13 @@ function getReadableModule() {
  * This function is used to check permissions.
  */
 function checkFlag($flag, $perm_type, $old_flag) {
-	if($old_flag) {
+	if ($old_flag) {
 		return (
 				($flag == PERM_DENY) ||	// permission denied
 				($perm_type == PERM_EDIT && $flag == PERM_READ)	// we ask for editing, but are only allowed to read
 				) ? 0 : 1;
 	} else {
-		if($perm_type == PERM_READ) {
+		if ($perm_type == PERM_READ) {
 			return ($flag != PERM_DENY)?1:0;
 		} else {
 			// => $perm_type == PERM_EDIT
@@ -102,11 +102,11 @@ function getPermission($mod, $perm, $item_id = 0) {
 
 // TODO: getDeny* should be depricated as its usage is counter-intuitive and/or assuming
 // Simply using getPermission function is clearer
-function getDenyRead( $mod, $item_id = 0 ) {
+function getDenyRead($mod, $item_id = 0) {
  	return ! getPermission($mod, 'view', $item_id);
 }
 
-function getDenyEdit( $mod, $item_id=0 ) {
+function getDenyEdit($mod, $item_id=0) {
  	return ! getPermission($mod, 'edit', $item_id);
 }
 
@@ -114,7 +114,7 @@ function getDenyEdit( $mod, $item_id=0 ) {
  * Return a join statement and a where clause filtering
  * all items which for which no explicit read permission is granted.
  */
-function winnow( $mod, $key, &$where, $alias = 'perm' ) {
+function winnow($mod, $key, &$where, $alias = 'perm') {
 	die ('The function winnow() is deprecated.  Check to see that the
 	module/code has been updated to the latest permissions handling<br>');
 }

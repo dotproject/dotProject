@@ -8,7 +8,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-require_once( $AppUI->getSystemClass( 'libmail' ) );
+require_once($AppUI->getSystemClass('libmail'));
 
 //
 // New password code based oncode from Mambo Open Source Core
@@ -21,15 +21,15 @@ function sendNewPass() {
  $_sitename = dPgetConfig('company_name');
 
  // ensure no malicous sql gets past
- $checkusername = trim( dPgetParam( $_POST, 'checkusername', '') );
- $checkusername = db_escape( $checkusername );
- $confirmEmail = trim( dPgetParam( $_POST, 'checkemail', '') );
- $confirmEmail = strtolower( db_escape( $confirmEmail ) );
+ $checkusername = trim(dPgetParam($_POST, 'checkusername', ''));
+ $checkusername = db_escape($checkusername);
+ $confirmEmail = trim(dPgetParam($_POST, 'checkemail', ''));
+ $confirmEmail = mb_strtolower(db_escape($confirmEmail));
 
  $query = 'SELECT user_id FROM users LEFT JOIN contacts ON user_contact = contact_id'
    . " WHERE user_username='$checkusername' AND LOWER(contact_email)='$confirmEmail'";
  if (!($user_id = db_loadResult($query)) || !$checkusername || !$confirmEmail) {
-  $AppUI->setMsg( 'Invalid username or email.', UI_MSG_ERROR );
+  $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
   $AppUI->redirect();
  }
  
@@ -41,31 +41,31 @@ function sendNewPass() {
  $subject = "$_sitename :: ".$AppUI->_('sendpass4', UI_OUTPUT_RAW)." - $checkusername";
  
  $m= new Mail; // create the mail
- $m->From( "dotProject@" . dPgetConfig('site_domain') );
- $m->To( $confirmEmail );
- $m->Subject( $subject );
- $m->Body( $message, isset( $GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "" );	// set the body
+ $m->From("dotProject@" . dPgetConfig('site_domain'));
+ $m->To($confirmEmail);
+ $m->Subject($subject);
+ $m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");	// set the body
  $m->Send();	// send the mail
 
- $newpass = md5( $newpass );
+ $newpass = md5($newpass);
  $sql = "UPDATE users SET user_password='$newpass' WHERE user_id='$user_id'";
- $cur = db_exec( $sql );
+ $cur = db_exec($sql);
  if (!$cur) {
   die('SQL error' . $database->stderr(true));
  } else {
-  $AppUI->setMsg( 'New User Password created and emailed to you' );
+  $AppUI->setMsg('New User Password created and emailed to you');
   $AppUI->redirect();
  }
 }
 
-function makePass(){
+function makePass() {
  $makepass='';
  $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
  srand((double)microtime()*1000000);
  $i = 0;
  while ($i <= 7) {
   $num = rand() % 33;
-  $tmp = substr($salt, $num, 1);
+  $tmp = mb_substr($salt, $num, 1);
   $makepass = $makepass . $tmp;
   $i++;
  }

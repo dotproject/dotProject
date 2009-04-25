@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -33,28 +33,28 @@ if (!defined('DP_BASE_DIR')){
 	$q->addQuery("user_id, concat(contact_first_name,' ',contact_last_name)");
 	$q->addJoin('contacts', 'con', 'user_contact = contact_id');
 	$q->addOrder('contact_first_name, contact_last_name');
-	$users = arrayMerge( array( '-1' => $AppUI->_('All Users') ), $q->loadHashList() );
+	$users = arrayMerge(array('-1' => $AppUI->_('All Users')), $q->loadHashList());
 
-	$cost_code = dPgetParam( $_GET, 'cost_code', '0' );
+	$cost_code = dPgetParam($_GET, 'cost_code', '0');
 	
-	if (isset( $_GET['user_id'] )) {
-		$AppUI->setState( 'ProjectsTaskLogsUserFilter', $_GET['user_id'] );
+	if (isset($_GET['user_id'])) {
+		$AppUI->setState('ProjectsTaskLogsUserFilter', $_GET['user_id']);
 	}
-	$user_id = $AppUI->getState( 'ProjectsTaskLogsUserFilter' ) ? $AppUI->getState( 'ProjectsTaskLogsUserFilter' ) : $AppUI->user_id;
+	$user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : $AppUI->user_id;
 
-	if (isset( $_GET['hide_inactive'] )) {
-		$AppUI->setState( 'ProjectsTaskLogsHideArchived', true );
+	if (isset($_GET['hide_inactive'])) {
+		$AppUI->setState('ProjectsTaskLogsHideArchived', true);
 	} else {
-		$AppUI->setState( 'ProjectsTaskLogsHideArchived', false );
+		$AppUI->setState('ProjectsTaskLogsHideArchived', false);
 	}
-	$hide_inactive = $AppUI->getState( 'ProjectsTaskLogsHideArchived' );
+	$hide_inactive = $AppUI->getState('ProjectsTaskLogsHideArchived');
 
-	if (isset( $_GET['hide_complete'] )) {
-		$AppUI->setState( 'ProjectsTaskLogsHideComplete', true );
+	if (isset($_GET['hide_complete'])) {
+		$AppUI->setState('ProjectsTaskLogsHideComplete', true);
 	} else {
-		$AppUI->setState( 'ProjectsTaskLogsHideComplete', false );
+		$AppUI->setState('ProjectsTaskLogsHideComplete', false);
 	}
-	$hide_complete = $AppUI->getState( 'ProjectsTaskLogsHideComplete' );
+	$hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
 	
 ?>
 <script language="JavaScript">
@@ -65,7 +65,7 @@ if (!defined('DP_BASE_DIR')){
 if ($canEdit) {
 ?>
 function delIt2(id) {
-	if (confirm( "<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS).' '.$AppUI->_('Task Log', UI_OUTPUT_JS).'?';?>" )) {
+	if (confirm("<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS).' '.$AppUI->_('Task Log', UI_OUTPUT_JS).'?';?>")) {
 		document.frmDelete2.task_log_id.value = id;
 		document.frmDelete2.submit();
 	}
@@ -79,11 +79,11 @@ function delIt2(id) {
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive?'checked="checked"':''?> onchange="document.frmFilter.submit()"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive')?></label></td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete?'checked="checked"':''?> onchange="document.frmFilter.submit()"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete')?></label></td>
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter')?></td>
-	<td width="1%"><?php echo arraySelect( $users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"',
-                          $user_id )?></td>
+	<td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"',
+                          $user_id)?></td>
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter')?></td>
-	<td width="1%"><?php echo arraySelect( $task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"',
-                          $cost_code )?></td>
+	<td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"',
+                          $cost_code)?></td>
 </tr>
 <input type="hidden" name="m" value="projects"/>
 <input type="hidden" name="a" value="view"/>
@@ -137,34 +137,34 @@ $logs = $q->loadList();
 $s = '';
 $hrs = 0;
 foreach ($logs as $row) {
-	$task_log_date = intval( $row['task_log_date'] ) ? new CDate( $row['task_log_date'] ) : null;
+	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
-	if (getPermission('tasks', 'edit', $row['task_id']) ) {
+	if (getPermission('tasks', 'edit', $row['task_id'])) {
 		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=".$row['task_id']."&tab=1&task_log_id=".@$row['task_log_id']."\">"
-			. "\n\t\t\t". dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' )
+			. "\n\t\t\t". dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '')
 			. "\n\t\t</a>";
 	}
 	$s .= "\n\t</td>";
-	$s .= '<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format( $df ) : '-').'</td>';
+	$s .= '<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>';
 	$s .= '<td width="30%"><a href="?m=tasks&a=view&task_id='.$row['task_id'].'&tab=0">'.@$row["task_log_name"].'</a></td>';
 	$s .= '<td width="100">'.$row["user_username"].'</td>';
-	$s .= '<td width="100" align="right">'.sprintf( "%.2f", $row["task_log_hours"] ) . '</td>';
+	$s .= '<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>';
 	$s .= '<td width="100">'.$row["task_log_costcode"].'</td>';
 	$s .= '<td>';
 
 // dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-	$descrip = str_replace( "\n", "<br />", $row['task_log_description'] );
-	$tranpos = strpos( $descrip, str_replace( "\n", "<br />", $transbrk ) );
-	if ( $tranpos === false) $s .= $descrip;
+	$descrip = str_replace("\n", "<br />", $row['task_log_description']);
+	$tranpos = mb_strpos($descrip, str_replace("\n", "<br />", $transbrk));
+	if ($tranpos === false) $s .= $descrip;
 	else
 	{
-		$descrip = substr( $descrip, 0, $tranpos );
-		$tranpos = strpos( $row['task_log_description'], $transbrk );
-		$transla = substr( $row['task_log_description'], $tranpos + strlen( $transbrk ) );
-		$transla = trim( str_replace( "'", '"', $transla ) );
+		$descrip = mb_substr($descrip, 0, $tranpos);
+		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
+		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
+		$transla = trim(str_replace("'", '"', $transla));
 		$s .= $descrip."<div style='font-weight: bold; text-align: right'><a title='$transla' class='hilite'>[".$AppUI->_("translation")."]</a></div>";
 	}
 // end auto-translation code
@@ -173,7 +173,7 @@ foreach ($logs as $row) {
 	$s .= "\n\t<td>";
 	if ($canDelete) {
 		$s .= "\n\t\t<a href=\"javascript:delIt2({$row['task_log_id']});\" title=\"".$AppUI->_('delete log')."\">"
-			. "\n\t\t\t". dPshowImage( './images/icons/stock_delete-16.png', 16, 16, '' )
+			. "\n\t\t\t". dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
 			. "\n\t\t</a>";
 	}
 	$s .= "\n\t</td>";
@@ -182,7 +182,7 @@ foreach ($logs as $row) {
 }
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="3" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
-$s .= '<td align="right">' . sprintf( "%.2f", $hrs ) . '</td>';
+$s .= '<td align="right">' . sprintf("%.2f", $hrs) . '</td>';
 $s .= '</tr>';
 echo $s;
 ?>

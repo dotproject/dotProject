@@ -268,7 +268,7 @@ class CMonthCalendar {
 		setlocale(LC_ALL, $AppUI->user_lang);
 		
 		$s = (($this->showWeek) ? ("\n\t\t" . '<th>&nbsp;</th>') : '');
-		foreach($wk as $day) {
+		foreach ($wk as $day) {
 			$s .= ("\n\t\t" . '<th width="14%">' . $AppUI->_($day) . '</th>');
 		}
 		
@@ -311,10 +311,10 @@ class CMonthCalendar {
 			
 			foreach ($week as $day) {
 				$this_day = new CDate($day);
-				$y = intval(substr($day, 0, 4));
-				$m = intval(substr($day, 4, 2));
-				$d = intval(substr($day, 6, 2));
-				$dow = intval(substr($day, 8, 1));
+				$y = intval(mb_substr($day, 0, 4));
+				$m = intval(mb_substr($day, 4, 2));
+				$d = intval(mb_substr($day, 6, 2));
+				$dow = intval(mb_substr($day, 8, 1));
 				
 				if ($m != $this_month) {
 					$class = 'empty';
@@ -325,9 +325,9 @@ class CMonthCalendar {
 				} else {
 					$class = 'day';
 				}
-				$day = substr($day, 0, 8);
+				$day = mb_substr($day, 0, 8);
 				$html .= "\n\t" . '<td class="' . $class . '"';
-				if($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
+				if ($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
 					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
 				}
 				$html .= (' onclick="' . $this->dayFunc . "('" . $day . "','" 
@@ -341,7 +341,7 @@ class CMonthCalendar {
 					$html .=  $d . (($this->dayFunc) ? '</a>' : '');
 					
 				    if ($this->showEvents) {
-						$html .= $this->_drawEvents(substr($day, 0, 8));
+						$html .= $this->_drawEvents(mb_substr($day, 0, 8));
 					}
 				}
 				$html .= "</td>";
@@ -646,7 +646,7 @@ class CEvent extends CDpObject {
 																	   $ia['event_recurs'], 
 																	   $ia['event_times_recuring'], 
 																	   $j);
-				} elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j==0) {
+				} else if ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j==0) {
 					// Weekly or Monthly View and Hourly Recurrent Events: show one time and add string 'hourly'
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, 
 																	   $ia['event_start_date'], 
@@ -656,7 +656,7 @@ class CEvent extends CDpObject {
 																	   $j);
 					$eventListRec[$i]['event_title'] = ($ia['event_title'] . ' (' 
 					                                    . $AppUI->_('Hourly') . ')');
-				} elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
+				} else if ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
 					//Weekly and Monthly View and higher recurrence mode 
 					//show all events of recurrence > 1
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, 

@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -10,7 +10,7 @@ if (!defined('DP_BASE_DIR')){
  * save REDACI� since the accent takes two characters, so lets unaccent them, other languages 
  * should add to the replacements array too...
 */
-function cleanText($text){
+function cleanText($text) {
 	//This text file is not utf, its iso so we have to decode/encode
 	$text = utf8_decode($text);
 	$trade = array('�'=>'a','�'=>'a','�'=>'a',
@@ -55,9 +55,9 @@ if ($obj->task_log_date) {
 	$date = new CDate($obj->task_log_date);
 	$obj->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 }
-$dot = strpos($obj->task_log_hours, ':');
+$dot = mb_strpos($obj->task_log_hours, ':');
 if ($dot > 0) {
-	$log_duration_minutes = sprintf('%.3f', substr($obj->task_log_hours, $dot + 1)/60.0);
+	$log_duration_minutes = sprintf('%.3f', mb_substr($obj->task_log_hours, $dot + 1)/60.0);
 	$obj->task_log_hours = floor($obj->task_log_hours) + $log_duration_minutes;
 }
 $obj->task_log_hours = round($obj->task_log_hours, 3);
@@ -87,14 +87,14 @@ $task->check();
 $task_end_date = new CDate($task->task_end_date);
 $task->task_percent_complete = dPgetParam($_POST, 'task_percent_complete', null);
 
-if(dPgetParam($_POST, 'task_end_date', '') != ''){
+if (dPgetParam($_POST, 'task_end_date', '') != '') {
 	$new_date = new CDate($_POST['task_end_date']);
 	$new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
 	$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
 }
 
 if ($task->task_percent_complete >= 100 && (!($task->task_end_date) 
-                                            || $task->task_end_date == '0000-00-00 00:00:00')){
+                                            || $task->task_end_date == '0000-00-00 00:00:00')) {
 	$task->task_end_date = $obj->task_log_date;
 }
 

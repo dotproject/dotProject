@@ -1,5 +1,5 @@
 <?php /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly');
 }
 
@@ -14,18 +14,18 @@ $valid_ordering = array(
 );
 
 // retrieve any state parameters
-if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
-    $orderdir = $AppUI->getState( 'ForumIdxOrderDir' ) ? ($AppUI->getState( 'ForumIdxOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';
-	$AppUI->setState( 'ForumIdxOrderBy', $_GET['orderby'] );
-    $AppUI->setState( 'ForumIdxOrderDir', $orderdir);
+if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
+    $orderdir = $AppUI->getState('ForumIdxOrderDir') ? ($AppUI->getState('ForumIdxOrderDir')== 'asc' ? 'desc' : 'asc') : 'desc';
+	$AppUI->setState('ForumIdxOrderBy', $_GET['orderby']);
+    $AppUI->setState('ForumIdxOrderDir', $orderdir);
 }
-$orderby         = $AppUI->getState( 'ForumIdxOrderBy' ) ? $AppUI->getState( 'ForumIdxOrderBy' ) : 'forum_name';
-$orderdir        = $AppUI->getState( 'ForumIdxOrderDir' ) ? $AppUI->getState( 'ForumIdxOrderDir' ) : 'asc';
+$orderby         = $AppUI->getState('ForumIdxOrderBy') ? $AppUI->getState('ForumIdxOrderBy') : 'forum_name';
+$orderdir        = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrderDir') : 'asc';
 
-$df = $AppUI->getPref( 'SHDATEFORMAT' );
-$tf = $AppUI->getPref( 'TIMEFORMAT' );
+$df = $AppUI->getPref('SHDATEFORMAT');
+$tf = $AppUI->getPref('TIMEFORMAT');
 
-$f = dPgetParam( $_POST, 'f', 0 );
+$f = dPgetParam($_POST, 'f', 0);
 
 
 $forum =& new CForum;
@@ -42,7 +42,7 @@ $q->addTable('projects', 'p');
 $q->addTable('users', 'u');
 $q->addQuery("forum_id, forum_project, forum_description, forum_owner, forum_name");
 $q->addQuery("forum_moderated, forum_create_date, forum_last_date");
-$q->addQuery("sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies");
+$q->addQuery("sum(if (c.message_parent=-1,1,0)) as forum_topics, sum(if (c.message_parent>0,1,0)) as forum_replies");
 $q->addQuery("user_username, project_name, project_color_identifier");
 $q->addQuery("SUBSTRING(l.message_body,1,$max_msg_length) message_body");
 $q->addQuery("LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id");
@@ -84,9 +84,9 @@ $q->addOrder("$orderby $orderdir");
 $forums = $q->loadList();
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Forums', 'support.png', $m, "$m.$a" );
+$titleBlock = new CTitleBlock('Forums', 'support.png', $m, "$m.$a");
 $titleBlock->addCell(
-	arraySelect( $filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f , true ), '',
+	arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f , true), '',
 	'<form name="forum_filter" action="?m=forums" method="post">', '</form>'
 );
 
@@ -103,25 +103,25 @@ $titleBlock->show();
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f;?>" method="post">
 <tr>
 	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap" width="25"><a href="?m=forums&orderby=watch_user" class="hdr"><?php echo $AppUI->_( 'Watch' );?></a></th>
-	<th nowrap="nowrap"><a href="?m=forums&orderby=forum_name" class="hdr"><?php echo $AppUI->_( 'Forum Name' );?></a></th>
-	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_topics" class="hdr"><?php echo $AppUI->_( 'Topics' );?></a></th>
-	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_replies" class="hdr"><?php echo $AppUI->_( 'Replies' );?></a></th>
-	<th nowrap="nowrap" width="200"><a href="?m=forums&orderby=forum_last_date" class="hdr"><?php echo $AppUI->_( 'Last Post Info' );?></a></th>
+	<th nowrap="nowrap" width="25"><a href="?m=forums&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch');?></a></th>
+	<th nowrap="nowrap"><a href="?m=forums&orderby=forum_name" class="hdr"><?php echo $AppUI->_('Forum Name');?></a></th>
+	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_topics" class="hdr"><?php echo $AppUI->_('Topics');?></a></th>
+	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_replies" class="hdr"><?php echo $AppUI->_('Replies');?></a></th>
+	<th nowrap="nowrap" width="200"><a href="?m=forums&orderby=forum_last_date" class="hdr"><?php echo $AppUI->_('Last Post Info');?></a></th>
 </tr>
 <?php
 $p ="";
 $now = new CDate();
 foreach ($forums as $row) {
-	$message_date = intval( $row['forum_last_date'] ) ? new CDate( $row['forum_last_date'] ) : null;
+	$message_date = intval($row['forum_last_date']) ? new CDate($row['forum_last_date']) : null;
 
-	if($p != $row["forum_project"]) {
-		$create_date = intval( $row['forum_create_date'] ) ? new CDate( $row['forum_create_date'] ) : null;
+	if ($p != $row["forum_project"]) {
+		$create_date = intval($row['forum_create_date']) ? new CDate($row['forum_create_date']) : null;
 ?>
 <tr>
 	<td colspan="6" style="background-color:#<?php echo $row["project_color_identifier"];?>">
 		<a href="?m=projects&a=view&project_id=<?php echo $row["forum_project"];?>">
-			<font color=<?php echo bestColor( $row["project_color_identifier"] );?>>
+			<font color=<?php echo bestColor($row["project_color_identifier"]);?>>
 			<strong><?php echo $row["project_name"];?></strong>
 			</font>
 		</a>
@@ -132,12 +132,12 @@ foreach ($forums as $row) {
 	}?>
 <tr>
 	<td nowrap="nowrap" align="center">
-	<?php if ( $row["forum_owner"] == $AppUI->user_id || getPermission('forums', 'add') ) { ?>
+	<?php if ($row["forum_owner"] == $AppUI->user_id || getPermission('forums', 'add')) { ?>
 		<a href="?m=forums&a=addedit&forum_id=<?php echo $row["forum_id"];?>" title="<?php echo $AppUI->_('edit');?>">
-		<?php echo dPshowImage( './images/icons/stock_edit-16.png', 16, 16, '' );?>
+		<?php echo dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '');?>
 		</a>
 	<?php } 
-		if ( $row['visit_count'] != $row['message_count'] ) {
+		if ($row['visit_count'] != $row['message_count']) {
 			echo "&nbsp;" . dPshowImage('./images/icons/stock_new_small.png',false,false, "You have unread messages in this forum");
 		}
 	?>
@@ -152,8 +152,8 @@ foreach ($forums as $row) {
 			<a href="?m=forums&a=viewer&forum_id=<?php echo $row["forum_id"];?>"><?php echo $row["forum_name"];?></a>
 		</span>
 		<br /><?php echo $row["forum_description"];?>
-		<br /><font color="#777777"><?php echo $AppUI->_( 'Owner' ).' '.$row["user_username"];?>,
-		<?php echo $AppUI->_( 'Started' ).' '.$create_date->format( $df );?>
+		<br /><font color="#777777"><?php echo $AppUI->_('Owner').' '.$row["user_username"];?>,
+		<?php echo $AppUI->_('Started').' '.$create_date->format($df);?>
 		</font>
 	</td>
 	<td nowrap="nowrap" align="center"><?php echo $row["forum_topics"];?></td>
@@ -161,13 +161,13 @@ foreach ($forums as $row) {
 	<td width="225">
 <?php
 	if ($message_date !== null) {
-		echo $message_date->format( "$df $tf" );
+		echo $message_date->format("$df $tf");
 
 		$last = new Date_Span();
-		$last->setFromDateDiff( $now, $message_date );
+		$last->setFromDateDiff($now, $message_date);
 
 		echo '<br /><font color=#999966>(' . $AppUI->_('Last post').' ';
-		printf( "%.1f", $last->format( "%d" ) );
+		printf("%.1f", $last->format("%d"));
 		echo ' '.$AppUI->_('days ago') . ') </font>';
 
 		$id = $row['message_parent'] < 0 ? $row['message_id'] : $row['message_parent'];
@@ -194,7 +194,7 @@ foreach ($forums as $row) {
 </tr>
 <tr>
 	<td align="left">
-		<input type="submit" class="button" value="<?php echo $AppUI->_( 'update watches' );?>" />
+		<input type="submit" class="button" value="<?php echo $AppUI->_('update watches');?>" />
 	</td>
 </tr>
 </form>

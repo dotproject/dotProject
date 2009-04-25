@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -18,7 +18,7 @@ class tickets extends smartsearch
 	var $display_fields = array('author', 'recipient', 'subject', 'type', 'cc', 'body', 
 	                            'signature');
 
-	function ctickets (){
+	function ctickets () {
 		return new tickets();
 	}
 }

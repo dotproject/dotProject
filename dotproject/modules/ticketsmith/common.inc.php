@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -93,7 +93,7 @@ function column2array ($query) {
 
 /* create read-only output of list values */
 function chooseSelectedValue ($name, $options, $selected) {
-	while(list($key, $val) = each($options)) {
+	while (list($key, $val) = each($options)) {
 			if ($key == $selected) {
 				$output = "$val\n";
 			}
@@ -108,7 +108,7 @@ function create_selectbox ($name, $options, $selected) {
 	$output= "";
 	$output .= "<select name=\"$name\" onChange=\"document.ticketform.submit()\" class=\"text\">\n";
 
-	while(list($key, $val) = each($options)) {
+	while (list($key, $val) = each($options)) {
 		$output .= "<option value=\"$key\"";
 
 		if ($key == $selected) {
@@ -151,23 +151,23 @@ function get_time_ago ($timestamp) {
         }
         $output = "second";
     }
-    elseif ($elapsed_seconds < 3600) { // minutes ago
+    else if ($elapsed_seconds < 3600) { // minutes ago
         $interval = round($elapsed_seconds / 60);
         $output = "minute";
     }
-    elseif ($elapsed_seconds < 86400) { // hours ago
+    else if ($elapsed_seconds < 86400) { // hours ago
         $interval = round($elapsed_seconds / 3600);
         $output = "hour";
     }
-    elseif ($elapsed_seconds < 604800) { // days ago
+    else if ($elapsed_seconds < 604800) { // days ago
         $interval = round($elapsed_seconds / 86400);
         $output = "day";
     }
-    elseif ($elapsed_seconds < 2419200) { // weeks ago
+    else if ($elapsed_seconds < 2419200) { // weeks ago
         $interval = round($elapsed_seconds / 604800);
         $output = "week";
     }
-    elseif ($elapsed_seconds < 29030400) { // months ago
+    else if ($elapsed_seconds < 29030400) { // months ago
         $interval = round($elapsed_seconds / 2419200);
         $output = " month";
     }
@@ -239,30 +239,30 @@ function smart_wrap ($text, $width) {
 function word_wrap ($string, $cols = 78, $quote_old = false, $prefix = ">", $nice_prefix = "> ") {
 
 if (preg_match("/^.*\r\n/", $string)) {
-	$t_lines = split( "\r\n", $string);
+	$t_lines = mb_split("\r\n", $string);
 } else if (preg_match("/^.*\n/", $string)) {
-	$t_lines = split( "\n", $string);
+	$t_lines = mb_split("\n", $string);
 } else {
-	$t_lines = split( "\r", $string);
+	$t_lines = mb_split("\r", $string);
 }
 
 $outlines = "";
 $leftover = "";
 
 // Loop through each line of message
-while(list(, $thisline) = each($t_lines)) {
+while (list(, $thisline) = each($t_lines)) {
 	// Process Leftover
-	if (strlen($leftover) > 0) {
+	if (mb_strlen($leftover) > 0) {
 		$counter = 0;
 
 		// Subtract all prefixes from the beginning of this line.
-		while (substr($thisline, 0, strlen($prefix)) == $prefix) {
+		while (mb_substr($thisline, 0, mb_strlen($prefix)) == $prefix) {
 			$counter++;
 			
-			if (substr($thisline, 0, strlen($nice_prefix)) == $nice_prefix) {
-				$thisline = substr($thisline, strlen($nice_prefix));
+			if (mb_substr($thisline, 0, mb_strlen($nice_prefix)) == $nice_prefix) {
+				$thisline = mb_substr($thisline, mb_strlen($nice_prefix));
 			} else {
-				$thisline = substr($thisline, strlen($prefix));
+				$thisline = mb_substr($thisline, mb_strlen($prefix));
 			}
 		}
 		
@@ -275,25 +275,25 @@ while(list(, $thisline) = each($t_lines)) {
 		}
 	}
 
-	if(strlen($thisline) + strlen($nice_prefix) > $cols) {
-		$newline = "";
-		$t_l_lines = split(" ", $thisline);
+	if (mb_strlen($thisline) + mb_strlen($nice_prefix) > $cols) {
+		$newline = '';
+		$t_l_lines = mb_split(' ', $thisline);
 		// This line is too big.  Break it up into words and add them one by one.
-		while(list(, $thisword) = each($t_l_lines)) {
+		while (list(, $thisword) = each($t_l_lines)) {
 			// Process words that are longer than $cols
-			while((strlen($thisword) + strlen($nice_prefix)) > $cols) {
+			while ((mb_strlen($thisword) + mb_strlen($nice_prefix)) > $cols) {
 				$cur_pos = 0;
 				$outlines .= $nice_prefix;
-				for($num=0; $num < $cols-1; $num++) {
+				for ($num=0; $num < $cols-1; $num++) {
 					$outlines .= $thisword[$num];
 					$cur_pos++;
 				}
 				$outlines .= "\n";
-				$thisword = substr($thisword, $cur_pos, (strlen($thisword)-$cur_pos));
+				$thisword = mb_substr($thisword, $cur_pos, (mb_strlen($thisword)-$cur_pos));
 			}
 
 			// Check that the line is within $cols.  If not, don't add the word; start a new line.
-			if((strlen($newline) + strlen($thisword) + strlen($nice_prefix) + 1) > $cols) {
+			if ((mb_strlen($newline) + mb_strlen($thisword) + mb_strlen($nice_prefix) + 1) > $cols) {
 				if ($quote_old) $outlines .= $nice_prefix.$newline."\n";
 				else $outlines .= $newline."\n";
 				$newline = $thisword." ";
@@ -310,7 +310,7 @@ while(list(, $thisline) = each($t_lines)) {
 	}
 	
 	// If we're processing the last line and there's leftover text, add a blank line to hold the leftover
-	if (key($t_lines) == count($t_lines) - 1 && strlen($leftover) > 0) {
+	if (key($t_lines) == count($t_lines) - 1 && mb_strlen($leftover) > 0) {
 		$t_lines[] = "";
 	}
 }
@@ -490,7 +490,7 @@ function format_field ($value, $type, $ticket = NULL) {
 			$q->addQuery('companies.*');
 			$q->addWhere('companies.company_id = '.$value);
 			$sql = $q->prepare();
-			if (!db_loadObject( $sql, $obj )) {
+			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
 			}
 			$output = '<a href="index.php?m=companies&a=view&company_id='.$value.'">'.$obj->company_name.'</a>';
@@ -501,7 +501,7 @@ function format_field ($value, $type, $ticket = NULL) {
 			$q->addQuery('projects.*');
 			$q->addWhere('projects.project_id = '.$value);
 			$sql = $q->prepare();
-			if (!db_loadObject( $sql, $obj )) {
+			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
 			}
 			$output = '<a href="index.php?m=projects&a=view&project_id='.$value.'">'.$obj->project_name.'</a>';

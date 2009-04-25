@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -36,8 +36,8 @@ $department = $AppUI->getState('UsrProjIdxDepartment') !== NULL ? $AppUI->getSta
 
 //if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the 
 // $department variable, and populate the $company_id variable.
-if(!(strpos($department, $company_prefix)===false)){
-	$company_id = substr($department,strlen($company_prefix));
+if (!(mb_strpos($department, $company_prefix)===false)) {
+	$company_id = mb_substr($department,mb_strlen($company_prefix));
 	$AppUI->setState('UsrProjIdxCompany', $company_id);
 	unset($department);
 }

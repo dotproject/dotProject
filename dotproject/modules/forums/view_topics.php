@@ -1,5 +1,5 @@
 <?php /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -13,13 +13,13 @@ $valid_ordering = array(
 );
 
 // retrieve any state parameters
-if (isset( $_GET['orderby'] ) && in_array($_GET['orderby'], $valid_ordering)) {
-    $orderdir = $AppUI->getState( 'ForumVwOrderDir' ) ? ($AppUI->getState( 'ForumVwOrderDir' )== 'asc' ? 'desc' : 'asc' ) : 'desc';
-	$AppUI->setState( 'ForumVwOrderBy', $_GET['orderby'] );
-    $AppUI->setState( 'ForumVwOrderDir', $orderdir);
+if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
+    $orderdir = $AppUI->getState('ForumVwOrderDir') ? ($AppUI->getState('ForumVwOrderDir')== 'asc' ? 'desc' : 'asc') : 'desc';
+	$AppUI->setState('ForumVwOrderBy', $_GET['orderby']);
+    $AppUI->setState('ForumVwOrderDir', $orderdir);
 }
-$orderby         = $AppUI->getState( 'ForumVwOrderBy' ) ? $AppUI->getState( 'ForumVwOrderBy' ) : 'latest_reply';
-$orderdir        = $AppUI->getState( 'ForumVwOrderDir' ) ? $AppUI->getState( 'ForumVwOrderDir' ) : 'desc';
+$orderby         = $AppUI->getState('ForumVwOrderBy') ? $AppUI->getState('ForumVwOrderBy') : 'latest_reply';
+$orderdir        = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrderDir') : 'desc';
 
 //Pull All Messages
 $q  = new DBQuery;
@@ -54,10 +54,10 @@ $crumbs["?m=forums"] = "forums list";
 ?>
 <table width="100%" cellspacing="1" cellpadding="2" border="0">
 <tr>
-	<td><?php echo breadCrumbs( $crumbs );?></td>
+	<td><?php echo breadCrumbs($crumbs);?></td>
 	<td align="right">
 	<?php if ($canEdit) { ?>
-		<input type="button" class=button style="width:120;" value="<?php echo $AppUI->_( 'start a new topic' );?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&post_message=1';">
+		<input type="button" class=button style="width:120;" value="<?php echo $AppUI->_('start a new topic');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&post_message=1';">
 	<?php } ?>
 	</td>
 </tr>
@@ -78,7 +78,7 @@ $crumbs["?m=forums"] = "forums list";
 $now = new CDate();
 
 foreach ($topics as $row) {
-	$last = intval( $row["latest_reply"] ) ? new CDate( $row["latest_reply"] ) : null;
+	$last = intval($row["latest_reply"]) ? new CDate($row["latest_reply"]) : null;
 	
 //JBF limit displayed messages to first-in-thread
 	if ($row["message_parent"] < 0) { ?>
@@ -100,12 +100,12 @@ foreach ($topics as $row) {
 	<td align="center" width="10%"><?php echo  $row["replies"];?></td>
 	<td bgcolor="#dddddd" width="150" nowrap="nowrap">
 <?php if ($row["latest_reply"]) {
-		echo $last->format( "$df $tf" ).'<br /><font color=#999966>(';
+		echo $last->format("$df $tf").'<br /><font color=#999966>(';
 
 		$span = new Date_Span();
-		$span->setFromDateDiff( $now, $last );
+		$span->setFromDateDiff($now, $last);
 
-		printf( "%.1f", $span->format( "%d" ) );
+		printf("%.1f", $span->format("%d"));
 		echo ' '.$AppUI->_('days ago');
 
 		echo ')</font>';
@@ -129,7 +129,7 @@ foreach ($topics as $row) {
 </tr>
 <tr>
 	<td align="left">
-		<input type="submit" class="button" value="<?php echo $AppUI->_( 'update watches' );?>" />
+		<input type="submit" class="button" value="<?php echo $AppUI->_('update watches');?>" />
 	</td>
 </tr>
 </form>

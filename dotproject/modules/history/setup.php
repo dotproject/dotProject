@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -24,13 +24,13 @@ $config['mod_ui_icon'] = '';
 $config['mod_description'] = 'A module for tracking changes';
 
 if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+	echo dPshowModuleConfig($config);
 }
 
 class CSetupHistory {   
 
 	function install() {
-		$sql = ' ( 
+		$sql = ' (
 			history_id int(10) unsigned NOT NULL auto_increment,
 			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
 			history_user int(10) NOT NULL default \'0\',
@@ -42,8 +42,8 @@ class CSetupHistory {
 			history_changes text,
 			history_description text,
 			PRIMARY KEY  (history_id),
-			INDEX `index_history_module` ( `history_table` , `history_item` ),
-		  INDEX `index_history_item` ( `history_item` ) 
+			INDEX `index_history_module` (`history_table` , `history_item`),
+		  INDEX `index_history_item` (`history_item`) 
 			) TYPE=MyISAM';
 		$q = new DBQuery;
 		$q->createTable('history');

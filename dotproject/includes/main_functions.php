@@ -15,9 +15,9 @@ define('SECONDS_PER_DAY', 60 * 60 * 24);
 function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 // cross-over color = x
 	$x = 128;
-	$r = hexdec(substr($bg, 0, 2));
-	$g = hexdec(substr($bg, 2, 2));
-	$b = hexdec(substr($bg, 4, 2));
+	$r = hexdec(mb_substr($bg, 0, 2));
+	$g = hexdec(mb_substr($bg, 2, 2));
+	$b = hexdec(mb_substr($bg, 4, 2));
 
 	return (($r < $x && $g < $x 
 	         || $r < $x && $b < $x 
@@ -157,13 +157,10 @@ function breadCrumbs(&$arr) {
 	}
 	return implode(' <strong>:</strong> ', $crumbs);
 }
-##
-## generate link for context help -- old version
-##
-function contextHelp($title, $link='') {
-	return dPcontextHelp($title, $link);
-}
 
+##
+## generate link for context help
+##
 function dPcontextHelp($title, $link='') {
 	global $AppUI;
 	return ('<a href="#' . $link . '" onClick="' 
@@ -307,7 +304,7 @@ function dPgetCleanParam(&$arr, $name, $def=null) {
 	$search .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$search .= '1234567890!@#$%^&*()';
 	$search .= '~`";:?+/={}[]-_|\'\\';
-	for ($i = 0; $i < strlen($search); $i++) {
+	for ($i = 0; $i < mb_strlen($search); $i++) {
 		// ;? matches the ;, which is optional
 		// 0{0,7} matches any padded zeros, which are optional and go up to 8 chars
 		// &#x0040 @ search for the hex values
@@ -351,7 +348,7 @@ function dPgetCleanParam(&$arr, $name, $def=null) {
 		$val_before = $val;
 		for ($i = 0; $i < sizeof($ra); $i++) {
 			 $pattern = '/';
-			 for ($j = 0; $j < strlen($ra[$i]); $j++) {
+			 for ($j = 0; $j < mb_strlen($ra[$i]); $j++) {
 				if ($j > 0) {
 					$pattern .= '(';
 					$pattern .= '(&#[x|X]0{0,8}([9][a][b]);?)?';
@@ -362,7 +359,7 @@ function dPgetCleanParam(&$arr, $name, $def=null) {
 			}
 			$pattern .= '/i';
 			// add in <> to nerf the tag
-			$replacement = substr($ra[$i], 0, 2).'<x>'.substr($ra[$i], 2);
+			$replacement = mb_substr($ra[$i], 0, 2).'<x>'.mb_substr($ra[$i], 2);
 			// filter out the hex tags
 			$val = ((in_array($arr[$name],$ra)) 
 			        ? preg_replace($pattern, $replacement, $val) : $val);
@@ -521,7 +518,7 @@ function dPgetMicroDiff() {
 function dPformSafe($txt, $deslash=false) {
 	global $locale_char_set;
 	
-	if (!$locale_char_set){
+	if (!$locale_char_set) {
 		$locale_char_set = 'utf-8';
 	}
 	
@@ -709,11 +706,11 @@ function findTabModules($module, $file = null) {
  * @param char $title
  * @desc Show an estructure (array/object) formatted
 */
-function showFVar(&$var, $title = ""){
+function showFVar(&$var, $title = "") {
 	echo '<h1>' . $title . '</h1><pre>' . print_r($var, true) . '</pre>';
 }
 
-function getUsersArray(){
+function getUsersArray() {
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
@@ -731,7 +728,7 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
 		            . ((!($default_user_id)) ? 'selected="selected"' : '') . '>' 
 		            . $AppUI->_($first_option) . '</option>');
 	}
-	foreach (getUsersArray() as $user_id => $user){
+	foreach (getUsersArray() as $user_id => $user) {
 		$selected = $user_id == $default_user_id ? ' selected="selected"' : '';
 		$parsed .= ('<option value="' . $user_id . '"' . $selected . '>' 
 		            . $user['contact_first_name'] . ' '.$user['contact_last_name'] . '</option>');
@@ -860,11 +857,11 @@ function dPrequiredFields($requiredFields) {
 			 * As this cannot be guaranteed since these fields are grabbed from a user-specifiable 
 			 * System Value it's IMHO more safe to disable the focus for MSIE.
 			 */
-			$r = strstr($rf, '.');
+			$r = mb_strstr($rf, '.');
 			$buffer .= ("\t" 
 			            . 'if ((foc==false) && (navigator.userAgent.indexOf(\'MSIE\')== -1)) {' 
 			            ."\n");
-			$buffer.= "\t\t" . 'f.' . substr($r, 1, strpos($r,'.',1) - 1) . '.focus();' . "\n";
+			$buffer.= "\t\t" . 'f.' . mb_substr($r, 1, mb_strpos($r,'.',1) - 1) . '.focus();' . "\n";
 			$buffer.= "\t\t" . 'foc=true;' . "\n";
 			$buffer.= "\t}\n";
 			$buffer.= "}\n";
@@ -889,7 +886,7 @@ function dPgetBytes($str) {
 	$val = $str;
 	if (preg_match('/^([0-9]+)([kmg])?$/i', $str, $match)) {
 		if (!empty($match[2])) {
-			switch(strtolower($match[2])) {
+			switch(mb_strtolower($match[2])) {
 				case 'k':
 					$val = $match[1] * 1024;
 					break;
@@ -930,13 +927,13 @@ function dPcheckMem($min = 0, $revert = false) {
  * This is still a bit of a pig and is worse if there is nothing to find.
  */
 function seems_utf8($Str) {
- for ($i=0, $len = strlen($Str); $i<$len; $i++) {
+ for ($i=0, $len = mb_strlen($Str); $i<$len; $i++) {
   if (($ord = ord($Str[$i])) < 0x80) continue; # 0bbbbbbb
-  elseif (($ord & 0xE0) == 0xC0) $n=1; # 110bbbbb
-  elseif (($ord & 0xF0) == 0xE0) $n=2; # 1110bbbb
-  elseif (($ord & 0xF8) == 0xF0) $n=3; # 11110bbb
-  elseif (($ord & 0xFC) == 0xF8) $n=4; # 111110bb
-  elseif (($ord & 0xFE) == 0xFC) $n=5; # 1111110b
+  else if (($ord & 0xE0) == 0xC0) $n=1; # 110bbbbb
+  else if (($ord & 0xF0) == 0xE0) $n=2; # 1110bbbb
+  else if (($ord & 0xF8) == 0xF0) $n=3; # 11110bbb
+  else if (($ord & 0xFC) == 0xF8) $n=4; # 111110bb
+  else if (($ord & 0xFE) == 0xFC) $n=5; # 1111110b
   else return false; # Does not match any model
   for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
    if ((++$i == $len) || ((ord($Str[$i]) & 0xC0) != 0x80))

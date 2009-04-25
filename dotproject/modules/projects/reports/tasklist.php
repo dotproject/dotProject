@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -28,7 +28,7 @@ if ($period)
   $ts = $today->format(FMT_TIMESTAMP_DATE);
         if (strtok($period, " ") == $AppUI->_("Next"))
                 $sign = +1;
-        else //if(...)
+        else //if (...)
                 $sign = -1;
 
         $day_word = strtok(" ");
@@ -68,7 +68,7 @@ $end_date->setTime(23, 59, 59);
 
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.list_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -148,7 +148,7 @@ if ($do_report) {
 	$q->addTable('projects', 'b');
 	$q->addQuery('a.*, b.project_name');
 	$q->addWhere('a.task_project = b.project_id');
-	if ($project_id != 0){ 
+	if ($project_id != 0) { 
 		$q->addWhere('task_project ='.$project_id);
 	}
 	if (!$log_all) {
@@ -188,7 +188,7 @@ if ($do_report) {
 	);
 	if ($project_id==0) { array_unshift($columns, "<b>".$AppUI->_('Project Name')."</b>");}		
 
-	while ($Tasks = db_fetch_assoc($Task_List)){
+	while ($Tasks = db_fetch_assoc($Task_List)) {
 		$Tasks['start_date'] = intval($Tasks['task_start_date']) ? new CDate($Tasks['task_start_date']) : ' ';
 		$Tasks['end_date'] = intval($Tasks['task_end_date']) ? new CDate($Tasks['task_end_date']) : ' ';
 		$task_id = $Tasks['task_id'];
@@ -240,7 +240,7 @@ if ($log_pdf) {
 		if ($log_all) {
 			$pdf->ezText("All task entries", 9);
 		} else {		
-			if($end_date != ' ') {$pdf->ezText("Task entries from ".$start_date->format($df).' to '.$end_date->format($df), 9);} else {$pdf->ezText("Task entries from ".$start_date->format($df),9);}
+			if ($end_date != ' ') {$pdf->ezText("Task entries from ".$start_date->format($df).' to '.$end_date->format($df), 9);} else {$pdf->ezText("Task entries from ".$start_date->format($df),9);}
 		}
 		$pdf->ezText("\n");
 		$pdf->selectFont("$font_dir/Helvetica.afm");

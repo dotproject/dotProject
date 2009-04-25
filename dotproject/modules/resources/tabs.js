@@ -29,9 +29,9 @@ function addResource(form)
 
 	//Pull selected resources and add them to list
 	for (fl; fl > -1; fl--) {
-		if (form.resources.options[fl].selected && users.indexOf( "," + form.resources.options[fl].value + "," ) == -1) {
+		if (form.resources.options[fl].selected && users.indexOf("," + form.resources.options[fl].value + ",") == -1) {
 			t = form.assigned.length
-			opt = new Option( form.resources.options[fl].text+" ["+perc+"%]", form.resources.options[fl].value);
+			opt = new Option(form.resources.options[fl].text+" ["+perc+"%]", form.resources.options[fl].value);
 			form.hresource_assign.value += form.resources.options[fl].value+"="+perc+";";
 			form.assigned.options[t] = opt
 		}

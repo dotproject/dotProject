@@ -1,5 +1,5 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -175,7 +175,7 @@ function setTask(key, val) {
 	<?php if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name');?>:</td>
-			<td align="left" class="hilite"><?php echo strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
+			<td align="left" class="hilite"><?php echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
 			<td>
 				<a href="./fileviewer.php?file_id=<?php echo $obj->file_id;?>"><?php echo $AppUI->_('download');?></a>
 			</td>
@@ -232,7 +232,7 @@ function setTask(key, val) {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace();?>'; }" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php echo $AppUI->getPlace();?>'; }" />
 	</td>
 	<td align="right">
 		<input type="button" class="button" value="<?php echo $AppUI->_('submit');?>" onclick="submitIt()" />
@@ -282,12 +282,12 @@ function file_show_attr()
       
       if ($ci) 
       {
-        $the_value = (strlen($obj->file_version) > 0 ? $obj->file_version+0.01 : "1");
+        $the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version+0.01 : "1");
         $str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
       }
       else
       {
-        $the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : "1");
+        $the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version : "1");
         $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" ' .
                     'value="' . $the_value . '" />';
       }
@@ -334,7 +334,7 @@ function file_show_attr()
             $str_out .= "<tr>" .
                			    '<td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
             $str_out .= '<td align="left">' .
-            projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project ) .
+            projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project) .
                      		'</td></tr>';
             
             // ---------------------------------------------------------------------------------

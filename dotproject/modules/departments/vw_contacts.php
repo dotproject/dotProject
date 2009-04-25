@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -19,7 +19,7 @@ if (!defined('DP_BASE_DIR')){
 	$q->addOrder('contact_first_name');
 	$contacts = $q->loadHashList("contact_id");
 	
-	foreach($contacts as $contact_id => $contact_data){
+	foreach ($contacts as $contact_id => $contact_data) {
 		echo "<tr><td>".$contact_data["contact_first_name"]." ".$contact_data["contact_last_name"]."</td>";
 		echo "<td>".$contact_data["contact_email"]."</td>";
 		echo "<td>".$contact_data["contact_phone"]."</td></tr>";

@@ -1,5 +1,5 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -60,7 +60,7 @@ $tabBox = new CTabBox('?m=links', DP_BASE_DIR.'/modules/links/', $tab);
 
 $i = 0;
 
-foreach($link_types as $link_type) {
+foreach ($link_types as $link_type) {
 	$tabBox->add('index_table', $link_type);
 	++$i;
 }

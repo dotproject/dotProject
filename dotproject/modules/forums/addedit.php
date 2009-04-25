@@ -1,23 +1,23 @@
 <?php /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 // Add / Edit forum
 
-$forum_id = intval( dPgetParam( $_GET, 'forum_id', 0 ) );
+$forum_id = intval(dPgetParam($_GET, 'forum_id', 0));
 $forum_project = intval(dPgetParam($_GET, 'forum_project', 0));
 
 // check permissions for this record
-$canEdit = getPermission( $m, 'edit', $forum_id );
+$canEdit = getPermission($m, 'edit', $forum_id);
 if (!$canEdit || !$canAuthor) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 // load the companies class to retrieved denied projects
-require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once($AppUI->getModuleClass('projects'));
 
-$forum_id = intval( dPgetParam( $_GET, 'forum_id', 0 ) );
+$forum_id = intval(dPgetParam($_GET, 'forum_id', 0));
 
 //Pull forum information
 $q =& new DBQuery;
@@ -25,9 +25,9 @@ $q->addTable('forums');
 $q->addWhere("forums.forum_id = $forum_id");
 $res = $q->exec();
 echo db_error();
-$forum_info = db_fetch_assoc( $res );
+$forum_info = db_fetch_assoc($res);
 
-$status = isset( $forum_info["forum_status"] ) ? $forum_info["forum_status"] : -1;
+$status = isset($forum_info["forum_status"]) ? $forum_info["forum_status"] : -1;
 
 
 // get any project records denied from viewing
@@ -42,7 +42,7 @@ $q->addOrder('project_name');
 $projObj->setAllowedSQL($AppUI->user_id, $q);
 if (isset($company_id))
 	$q->addWhere("project_company = $company_id");
-$projects = array( '0' => '' ) + $q->loadHashList();
+$projects = array('0' => '') + $q->loadHashList();
 echo db_error();
 
 if (!in_array($forum_project, array_keys($projects))) {
@@ -51,29 +51,29 @@ if (!in_array($forum_project, array_keys($projects))) {
 
 $perms =& $AppUI->acl();
 $permittedUsers =& $perms->getPermittedUsers();
-$users = array( '0' => '' ) + $permittedUsers;
+$users = array('0' => '') + $permittedUsers;
 // setup the title block
 $ttl = $forum_id > 0 ? "Edit Forum" : "Add Forum";
-$titleBlock = new CTitleBlock( $ttl, 'support.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=forums", "forums list" );
+$titleBlock = new CTitleBlock($ttl, 'support.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=forums", "forums list");
 if ($canDelete) {
 	$titleBlock->addCrumbRight(
-		'<a href="javascript:delIt()"><img align="absmiddle" src="' . dPfindImage( 'stock_delete-16.png', $m ) . '" width="16" height="16" alt="" border="0" />&nbsp;' . $AppUI->_('delete forum')
+		'<a href="javascript:delIt()"><img align="absmiddle" src="' . dPfindImage('stock_delete-16.png', $m) . '" width="16" height="16" alt="" border="0" />&nbsp;' . $AppUI->_('delete forum')
 			. '</a>'
 	);
 }
 $titleBlock->show();
 ?>
 <script language="javascript">
-function submitIt(){
+function submitIt() {
 	var form = document.changeforum;
-	if(form.forum_name.value.search(/^\s*$/) >= 0 ) {
+	if (form.forum_name.value.search(/^\s*$/) >= 0) {
 		alert("<?php echo $AppUI->_('forumName', UI_OUTPUT_JS);?>");
 		form.forum_name.focus();
-	} else if(form.forum_project.selectedIndex < 1) {
+	} else if (form.forum_project.selectedIndex < 1) {
 		alert("<?php echo $AppUI->_('forumSelectProject', UI_OUTPUT_JS);?>");
 		form.forum_project.focus();
-	} else if(form.forum_owner.selectedIndex < 1) {
+	} else if (form.forum_owner.selectedIndex < 1) {
 		alert("<?php echo $AppUI->_('forumSelectOwner', UI_OUTPUT_JS);?>");
 		form.forum_owner.focus();
 	} else {
@@ -81,9 +81,9 @@ function submitIt(){
 	}
 }
 
-function delIt(){
+function delIt() {
 	var form = document.changeforum;
-	if (confirm( "<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS);?>" )) {
+	if (confirm("<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS);?>")) {
 		form.del.value="<?php echo $forum_id;?>";
 		form.submit();
 	}
@@ -100,7 +100,7 @@ function delIt(){
 <tr height="20">
 	<th valign="top" colspan="3">
 		<strong><?php
-		echo $AppUI->_( $forum_id ? 'Edit' : 'Add' ).' '.$AppUI->_( 'Forum' );
+		echo $AppUI->_($forum_id ? 'Edit' : 'Add').' '.$AppUI->_('Forum');
 		?></strong>
 	</th>
 </tr>
@@ -118,7 +118,7 @@ function delIt(){
 			<td align="right"><?php echo $AppUI->_('Related Project');?></td>
 			<td>
 		<?php
-			echo arraySelect( $projects, 'forum_project', 'size="1" class="text"', ($forum_info['forum_project'] != '' ? $forum_info['forum_project'] : $forum_project) );
+			echo arraySelect($projects, 'forum_project', 'size="1" class="text"', ($forum_info['forum_project'] != '' ? $forum_info['forum_project'] : $forum_project));
 		?>
 			</td>
 		</tr>
@@ -126,7 +126,7 @@ function delIt(){
 			<td align="right"><?php echo $AppUI->_('Owner');?>:</td>
 			<td>
 		<?php
-			echo arraySelect( $users, 'forum_owner', 'size="1" class="text"', $forum_info['forum_owner'] ? $forum_info['forum_owner'] : $AppUI->user_id );
+			echo arraySelect($users, 'forum_owner', 'size="1" class="text"', $forum_info['forum_owner'] ? $forum_info['forum_owner'] : $AppUI->user_id);
 		?>
 			</td>
 		</tr>
@@ -134,7 +134,7 @@ function delIt(){
 			<td align="right" nowrap><?php echo $AppUI->_('Moderator');?>:</td>
 			<td>
 		<?php
-			echo arraySelect( $users, 'forum_moderated', 'size="1" class="text"', $forum_info['forum_moderated'] );
+			echo arraySelect($users, 'forum_moderated', 'size="1" class="text"', $forum_info['forum_moderated']);
 		?>
 			</td>
 		</tr>

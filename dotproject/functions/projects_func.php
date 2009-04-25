@@ -1,14 +1,14 @@
 <?php /* FUNCTIONS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 // project statii
-$pstatus = dPgetSysVal( 'ProjectStatus' );
-$ptype = dPgetSysVal( 'ProjectType' );
+$pstatus = dPgetSysVal('ProjectStatus');
+$ptype = dPgetSysVal('ProjectType');
 
-$ppriority_name = dPgetSysVal( 'ProjectPriority' );
-$ppriority_color = dPgetSysVal( 'ProjectPriorityColor' );
+$ppriority_name = dPgetSysVal('ProjectPriority');
+$ppriority_color = dPgetSysVal('ProjectPriorityColor');
 
 $priority = array();
 foreach ($ppriority_name as $key => $val) {

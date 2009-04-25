@@ -1,5 +1,5 @@
 <?php /* SYSTEM $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -19,11 +19,11 @@ foreach ($_POST['dPcfg'] as $name => $value) {
 	$obj->config_id = $_POST['dPcfgId'][$name];
 
 	// prepare (and translate) the module name ready for the suffix
-	$AppUI->setMsg( 'System Configuration' );
+	$AppUI->setMsg('System Configuration');
 	if (($msg = $obj->store())) {
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
+		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$AppUI->setMsg( 'updated', UI_MSG_OK, true );
+		$AppUI->setMsg('updated', UI_MSG_OK, true);
 	}
 }
 $AppUI->redirect();

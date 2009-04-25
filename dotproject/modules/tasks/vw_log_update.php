@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -124,7 +124,7 @@ echo $AppUI->_('minutes elapsed'); ?>)";
 	}
 	
 	function timerStart() {
-		if (!timerID){ // this means that it needs to be started
+		if (!timerID) { // this means that it needs to be started
 			timerSet();
 			document.editFrm.timerStartStopButton.value = "<?php echo $AppUI->_('Stop'); ?>";
 			UpdateTimer();
@@ -154,7 +154,7 @@ echo $AppUI->_('minutes elapsed'); ?>)";
 	<?php
 if ($obj->canUserEditTimeInformation()) {
 ?>
-	function popCalendar(field){
+	function popCalendar(field) {
 		calendarField = field;
 		idate = eval('document.editFrm.task_' + field + '.value');
 		window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=251, height=220, scrollbars=no, status=no');

@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -18,7 +18,7 @@ $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 if (count($companies) > 0) {
     $companyList = '0';
-    foreach($companies as $k => $v) {
+    foreach ($companies as $k => $v) {
     	$companyList .= ', '.$k;
     }
     $q->addWhere('user_company in (' . $companyList . ')'); 

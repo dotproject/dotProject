@@ -61,7 +61,7 @@ function dPcheckExistingDB($conf) {
 	// basic tables of project and task are missing, we are doing an
 	// install.
 	$table_list = $ado->MetaTables('TABLE');
-	if (count($table_list) < 10 ) {
+	if (count($table_list) < 10) {
 		// There are now more than 60 tables in a standard dP
 		// install, but this will at least cover the basics.
 		return false;
@@ -104,9 +104,9 @@ function dPcheckExistingDB($conf) {
 	// If one exists and is populated (the version information is seeded by the sql file)
 	// but the other either doesn't exist or is unpopulated, then it is an install as
 	// the SQL file has been loaded manually.
-	if (($qid = @$ado->Execute($q1) ) && ($q1Data = @$qid->fetchRow() ) && ! empty($q1Data[0]) ) {
+	if (($qid = @$ado->Execute($q1)) && ($q1Data = @$qid->fetchRow()) && ! empty($q1Data[0])) {
 		@$qid->Close();
-		if ( ! ($qid2 = @$ado->Execute($q2) ) || ! ($q2Data = @$qid2->fetchRow() ) || empty($q2Data[0]) ) {
+		if (! ($qid2 = @$ado->Execute($q2)) || ! ($q2Data = @$qid2->fetchRow()) || empty($q2Data[0])) {
 			return false;
 		}
 		@$qid2->Close();

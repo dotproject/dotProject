@@ -11,7 +11,7 @@
  * Copyright 2005, the dotProject team.
  */
 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -125,7 +125,7 @@ class EventQueue {
 			include_once $AppUI->getModuleClass($fields['queue_module']);
 
 		$args = unserialize($fields['queue_data']);
-		if (strpos($fields['queue_callback'], '::') !== false) {
+		if (mb_strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);
 			if (!class_exists($class)) {
 				dprint(__FILE__, __LINE__, 2, "Cannot process event: Class $class does not exist");

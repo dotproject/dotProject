@@ -1,11 +1,11 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once( $AppUI->getSystemClass( 'dp' ) );
-require_once( $AppUI->getModuleClass( 'tasks' ) );
-require_once( $AppUI->getModuleClass( 'projects' ) );
+require_once($AppUI->getSystemClass('dp'));
+require_once($AppUI->getModuleClass('tasks'));
+require_once($AppUI->getModuleClass('projects'));
 /**
 * Link Class
 */
@@ -24,16 +24,16 @@ class CLink extends CDpObject {
 
 	
 	function CLink() {
-		$this->CDpObject( 'links', 'link_id' );
+		$this->CDpObject('links', 'link_id');
 	}
 
 	function check() {
 	// ensure the integrity of some variables
-		$this->link_id = intval( $this->link_id );
-		$this->link_parent = intval( $this->link_parent );
-                $this->link_category = intval( $this->link_category );
-		$this->link_task = intval( $this->link_task );
-		$this->link_project = intval( $this->link_project );
+		$this->link_id = intval($this->link_id);
+		$this->link_parent = intval($this->link_parent);
+                $this->link_category = intval($this->link_category);
+		$this->link_task = intval($this->link_task);
+		$this->link_project = intval($this->link_project);
 
 		return NULL; // object is ok
 	}

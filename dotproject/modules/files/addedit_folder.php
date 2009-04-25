@@ -1,5 +1,5 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -54,7 +54,7 @@ function submitIt() {
 		msg += "\n<?php echo $AppUI->_('Folder Name'); ?>";
 		f.file_folder_name.focus();
 	}
-	if(msg.length > 0) {
+	if (msg.length > 0) {
 		alert('<?php echo $AppUI->_('Please type'); ?>:' + msg);
 	} else {
 		f.submit();
@@ -102,7 +102,7 @@ function delIt() {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')) {location.href = '?<?php echo $referrer; ?>';}" />
 	</td>
 	<td align="right">
 		<input type="button" class="button" value="<?php echo $AppUI->_('submit');?>" onclick="submitIt()" />

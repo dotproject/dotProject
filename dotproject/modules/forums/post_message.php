@@ -1,5 +1,5 @@
 <?php /* FORUMS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -73,7 +73,7 @@ if ($message_parent > -1) {
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function submitIt(){
+function submitIt() {
 	var form = document.changeforum;
 	if (form.message_title.value.search(/^\s*$/) >= 0) {
 		alert("<?php echo $AppUI->_('forumSubject', UI_OUTPUT_JS);?>");
@@ -86,7 +86,7 @@ function submitIt(){
 	}
 }
 
-function delIt(){
+function delIt() {
 	var form = document.changeforum;
 	if (confirm("<?php echo $AppUI->_('forumDeletePost', UI_OUTPUT_JS);?>")) {
 		form.del.value="<?php echo $message_id;?>";
@@ -94,7 +94,7 @@ function delIt(){
 	}
 }
 <?php } ?>
-function orderByName(x){
+function orderByName(x) {
 	var form = document.changeforum;
 	if (x == "name") {
 		form.forum_order_by.value = form.forum_last_name.value + ", " + form.forum_name.value;

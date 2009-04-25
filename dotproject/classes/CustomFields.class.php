@@ -1,6 +1,6 @@
 <?php
 // $Id$
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -369,8 +369,8 @@ class CustomFieldWeblink extends CustomField
 
 class CustomFieldFilelink extends CustomField {
 
-	function CustomFieldFilelink ( $field_id, $field_name, $field_order, $field_description, $field_extratags )	{
-		$this->CustomField( $field_id, $field_name, $field_order, $field_description, $field_extratags );
+	function CustomFieldFilelink ($field_id, $field_name, $field_order, $field_description, $field_extratags)	{
+		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags);
 		$this->field_htmltype = 'file';
 	}
 
@@ -411,7 +411,7 @@ class CustomFieldFilelink extends CustomField {
 		
 		// instantiate the file object and eventually load exsiting file data
 		$obj = new CFile();
-		if ($_POST[$this->field_name.'_id']){
+		if ($_POST[$this->field_name.'_id']) {
 			$obj->load($_POST[$this->field_name.'_id']);
 
 			// create an old object for the case that
@@ -500,7 +500,7 @@ class CustomFields
 		//$q->addOrder('field_order DESC');
 		$rows = $q->loadList();						
 		if ($rows != NULL) {
-			foreach($rows as $row) {
+			foreach ($rows as $row) {
 				switch ($row['field_htmltype']) {
 					case 'checkbox':
 						$new_method = 'CustomFieldCheckbox';
@@ -735,7 +735,7 @@ class CustomOptionList
 		$newoptions = array_diff($this->options, $dboptions);
 		$deleteoptions = array_diff($dboptions, $this->options);
 		//insert the new options
-		foreach($newoptions as $opt) {
+		foreach ($newoptions as $opt) {
 			$optid = $db->GenID('custom_fields_option_id', 1);
 			
 			$q = new DBQuery;
@@ -750,7 +750,7 @@ class CustomOptionList
 			$q->clear();
 		}
 		//delete the deleted options
-		foreach($deleteoptions as $opt => $value) {
+		foreach ($deleteoptions as $opt => $value) {
 			$q = new DBQuery;
 			$q->setDelete('custom_fields_lists');
 			$q->addWhere('list_option_id = ' . $opt);

@@ -1,5 +1,5 @@
 <?php /* CONTACTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -59,9 +59,9 @@ $titleBlock->show();
         <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id;?>" />
 </form>
 <script language="JavaScript">
-function delIt(){
+function delIt() {
         var form = document.changecontact;
-        if(confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
+        if (confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
                 form.del.value = "<?php echo $contact_id;?>";
                 form.submit();
         }
@@ -183,7 +183,7 @@ function delIt(){
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Birthday');?>:</td>
-			<td nowrap><?php echo @substr($row->contact_birthday, 0, 10);?></td>
+			<td nowrap><?php echo @mb_substr($row->contact_birthday, 0, 10);?></td>
 		</tr>
 		</table>
 	</td>

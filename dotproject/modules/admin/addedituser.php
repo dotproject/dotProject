@@ -71,7 +71,7 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 	$titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">
-function submitIt(){
+function submitIt() {
     var form = document.editFrm;
    if (form.user_username.value.length < <?php echo dPgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo dPgetConfig('admin_username'); ?>') {
         alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS)  ;?>"  + <?php echo dPgetConfig('username_min_len'); ?>);
@@ -109,7 +109,7 @@ function submitIt(){
         } else if (parseInt(dar[2],10) < 1 || parseInt(dar[2],10) > 31) {
             alert("<?php echo $AppUI->_('adminInvalidDay', UI_OUTPUT_JS).' '.$AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS);?>");
             form.contact_birthday.focus();
-        } else if(parseInt(dar[0],10) < 1900 || parseInt(dar[0],10) > 2020) {
+        } else if (parseInt(dar[0],10) < 1900 || parseInt(dar[0],10) > 2020) {
             alert("<?php echo $AppUI->_('adminInvalidYear', UI_OUTPUT_JS).' '.$AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS);?>");
             form.contact_birthday.focus();
         } else {
@@ -157,7 +157,7 @@ function setDept(key, val) {
     <td align="right" width="230">* <?php echo $AppUI->_('Login Name');?>:</td>
     <td>
 <?php
-	if (@$user['user_username']){
+	if (@$user['user_username']) {
 		echo ('<input type="hidden" class="text" name="user_username" value="' 
 		      . $user['user_username'] . '" />');
 		echo '<strong>' . $user['user_username'] . '</strong>';

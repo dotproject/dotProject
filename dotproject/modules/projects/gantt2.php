@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -16,7 +16,7 @@ $projectStatus = dPgetSysVal('ProjectStatus');
 $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
 
-if ($proFilter == '-2'){
+if ($proFilter == '-2') {
         $filter1[] = ' project_status != 3';
 } else if ($proFilter != '-1') {
         $filter1[] = ' project_status = ' . $proFilter;
@@ -103,7 +103,7 @@ $graph2->scale->tableTitle->Show(true);
 // if diff(end_date,start_date) > 240 days it shows only
 //month number
 //-----------------------------------------
-if ($start_date && $end_date){
+if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
 	$graph2->SetDateRange($start_date, $end_date);
@@ -111,9 +111,9 @@ if ($start_date && $end_date){
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for($i = 0, $xi = count(@$taskMinMax); $i < $xi; $i++){
-		$start = substr($taskMinMax['task_min_date'], 0, 10);
-		$end = substr($taskMinMax['task_max_date'], 0, 10);
+	for ($i = 0, $xi = count(@$taskMinMax); $i < $xi; $i++) {
+		$start = mb_substr($taskMinMax['task_min_date'], 0, 10);
+		$end = mb_substr($taskMinMax['task_max_date'], 0, 10);
 		
 		$d_start->Date($start);
 		$d_end->Date($end);
@@ -122,10 +122,10 @@ if ($start_date && $end_date){
 			$min_d_start = $d_start;
 			$max_d_end = $d_end;
 		} else {
-			if (Date::compare($min_d_start, $d_start) > 0){
+			if (Date::compare($min_d_start, $d_start) > 0) {
 				$min_d_start = $d_start;
 			}
-			if (Date::compare($max_d_end, $d_end) < 0){
+			if (Date::compare($max_d_end, $d_end) < 0) {
 				$max_d_end = $d_end;
 			}
 		}
@@ -135,10 +135,10 @@ if ($start_date && $end_date){
 // check day_diff and modify Headers
 $day_diff = $max_d_end->dateDiff($min_d_start);
 
-if ($day_diff > 240){
+if ($day_diff > 240) {
 	//more than 240 days
 	$graph2->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
-} else if ($day_diff > 90){
+} else if ($day_diff > 90) {
 	//more than 90 days and less of 241
 	$graph2->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
 	$graph2->scale->week->SetStyle(WEEKSTYLE_WNBR);
@@ -171,13 +171,13 @@ if (is_array($tasks)) {
 		}
 		
 		if ($locale_char_set=='utf-8' && function_exists('utf_decode')) {
-			$name = ((strlen(utf8_decode($t['task_name'])) > 25) 
-			         ? (substr(utf8_decode($t['task_name']), 0, 22) . '...') 
+			$name = ((mb_strlen(utf8_decode($t['task_name'])) > 25) 
+			         ? (mb_substr(utf8_decode($t['task_name']), 0, 22) . '...') 
 			         : utf8_decode($t['task_name']));
 			$nameUser = $t['user_name'];
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_deocde
-			$name = ((strlen($t['task_name']) > 25) ? (substr($t['task_name'], 0, 22) . '...') 
+			$name = ((mb_strlen($t['task_name']) > 25) ? (mb_substr($t['task_name'], 0, 22) . '...') 
 			         : $t['task_name']);
 			$nameUser = $t['user_name'];
 		}
@@ -199,19 +199,19 @@ if (is_array($tasks)) {
 		//$progress = $p['project_percent_complete'];
 		
 		$caption = '';
-		if(!($start) || $start == '0000-00-00 00:00:00'){
+		if (!($start) || $start == '0000-00-00 00:00:00') {
 			$start = !$end ? date('Y-m-d') : $end;
 			$caption .= $AppUI->_('(no start date)');
 		}
 		
-		if(!($end)) {
+		if (!($end)) {
 			$end = $start;
 			$caption .= $AppUI->_('(no end date)');
 		} else {
 			$cap = '';
 		}
 		
-		if ($showLabels){
+		if ($showLabels) {
 			$caption .= ($t['project_name'] . ' (' . $t['perc_assignment'] . '%)');
 			/*
 			$caption .= (($p['project_status']) != 7 ? $AppUI->_('active') : $AppUI->_('inactive'));
@@ -234,7 +234,7 @@ if (is_array($tasks)) {
 			$bar->caption = new TextProperty($caption);
 			$bar->caption->Align('left','center');
 		} else {
-			$bar  = new MileStone ($row++, $name, $start, (substr($start, 0, 10)));
+			$bar  = new MileStone ($row++, $name, $start, (mb_substr($start, 0, 10)));
 			$bar->title->SetColor('#CC0000');
 		}
 		

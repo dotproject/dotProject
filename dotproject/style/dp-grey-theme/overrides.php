@@ -10,17 +10,17 @@ class CTitleBlock extends CTitleBlock_core {
 ##  This overrides the show function of the CTabBox_core function
 ##
 class CTabBox extends CTabBox_core {
-	function show( $extra='', $js_tabs = false ) {
+	function show($extra='', $js_tabs = false) {
 		GLOBAL $AppUI, $dPconfig, $currentTabId, $currentTabName;
-		$uistyle = $AppUI->getPref( 'UISTYLE' ) ? $AppUI->getPref( 'UISTYLE' ) : $dPconfig['host_style'];
+		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $dPconfig['host_style'];
 		if (! $uistyle) {
 			$uistyle = 'default';
 		}
-		reset( $this->tabs );
+		reset($this->tabs);
 		$s = '';
 		
 		// tabbed / flat view options
-		if (@$AppUI->getPref( 'TABVIEW' ) == 0) {
+		if (@$AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
 			$s .= "<tr>\n";
 			$s .= '<td nowrap="nowrap">' . "\n";
@@ -37,7 +37,7 @@ class CTabBox extends CTabBox_core {
 			}
 		}
 
-		if ($this->active < 0 || @$AppUI->getPref( 'TABVIEW' ) == 2 ) {
+		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
 		// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
 			foreach ($this->tabs as $k => $v) {
@@ -54,11 +54,11 @@ class CTabBox extends CTabBox_core {
 			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">' . "\n";
 			$s .= '<tr><td>' . "\n" .'<table border="0" cellpadding="0" cellspacing="0"><tr>' . "\n";
 			
-			if ( count($this->tabs)-1 < $this->active ) {
+			if (count($this->tabs)-1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
 //				$this->active = 0;
 			}
-			foreach( $this->tabs as $k => $v ) {
+			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
 				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>' . "\n";
@@ -87,7 +87,7 @@ class CTabBox extends CTabBox_core {
 			$s .= '<tr><td width="100%" colspan="'.(count($this->tabs)*4 + 1).'" class="tabox">';
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
-			if ( $this->tabs[$this->active][0] != "" ) {
+			if ($this->tabs[$this->active][0] != "") {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
 				if (!$js_tabs)
@@ -95,7 +95,7 @@ class CTabBox extends CTabBox_core {
 			}
 			if ($js_tabs)
 			{
-				foreach( $this->tabs as $k => $v ) 
+				foreach ($this->tabs as $k => $v) 
 				{
 					echo '<div class="tab" id="tab_'.$k.'">';
 					$currentTabId = $k;

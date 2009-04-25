@@ -167,7 +167,7 @@ class DBQuery {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
 			$values = ((is_array($value)) ? $value : explode(',', $value));
 			
-			for($i = 0, $fc=count($fields); $i < $fc; $i++) {
+			for ($i = 0, $fc=count($fields); $i < $fc; $i++) {
 				$this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
 			}
 		} else if (!$func) {
@@ -191,7 +191,7 @@ class DBQuery {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
 			$values = ((is_array($value)) ? $value : explode(',', $value));
 
-			for($i = 0, $fc=count($fields); $i < $fc; $i++) {
+			for ($i = 0, $fc=count($fields); $i < $fc; $i++) {
 				$this->addMap('update_list', $values[$i], $fields[$i]);
 			}
 		} else {
@@ -317,7 +317,7 @@ class DBQuery {
 		$var = array ('table' => $table,
 		              'alias' => $alias,
 		              'condition' => $join,
-		              'type' => $type );
+		              'type' => $type);
 		
 		$this->addClause('join', $var, false);
 	}
@@ -446,7 +446,7 @@ class DBQuery {
 		$q .= ' FROM ';
 		if (isset($this->table_list)) {
 			if (is_array($this->table_list)) {
-				$q .= '( ';	// Required for MySQL 5 compatability.
+				$q .= '(';	// Required for MySQL 5 compatability.
 				$intable = false;
 				foreach ($this->table_list as $table_id => $table) {
 					if ($intable) {
@@ -459,7 +459,7 @@ class DBQuery {
 						$q .= " as $table_id";
 					}
 				}
-				$q .= ' )'; // MySQL 5 compat.
+				$q .= ')'; // MySQL 5 compat.
 			} else {
 				$q .= $this->_table_prefix . $this->table_list;
 			}
@@ -491,7 +491,7 @@ class DBQuery {
 		
 		$q .= ' SET ';
 		$sets = '';
-		foreach( $this->update_list as $field => $value) {
+		foreach ($this->update_list as $field => $value) {
 		  $sets .= (($sets) ? ', ' : '') . "`$field` = " . $this->quote($value);
 		}
 		$q .= $sets;
@@ -516,7 +516,7 @@ class DBQuery {
 		
 		$fieldlist = '';
 		$valuelist = '';
-		foreach( $this->value_list as $field => $value) {
+		foreach ($this->value_list as $field => $value) {
 			$fieldlist .= (($fieldlist) ? ',' : '') . '`' . trim($field) . '`';
 			$valuelist .= (($valuelist) ? ',' : '') . $value;
 		}
@@ -542,7 +542,7 @@ class DBQuery {
 		$fieldlist = '';
 		$valuelist = '';
 		
-		foreach( $this->value_list as $field => $value) {
+		foreach ($this->value_list as $field => $value) {
 			$fieldlist .= (($fieldlist) ? ',' : '') . '`' . trim($field) . '`';
 			$valuelist .= (($valuelist) ? ',' : '') . $value;
 		}
@@ -722,17 +722,17 @@ class DBQuery {
 		return $result;
 	}
 
-	function loadObject( &$object, $bindAll=false , $strip = true) {
+	function loadObject(&$object, $bindAll=false , $strip = true) {
 		if (! $this->exec(ADODB_FETCH_NUM)) {
 			die ($this->_db->ErrorMsg());
 		}
 		if ($object != null) {
 			$hash = $this->fetchRow();
 			$this->clear();
-			if( !$hash ) {
+			if (!$hash) {
 				return false;
 			}
-			$this->bindHashToObject( $hash, $object, null, $strip, $bindAll );
+			$this->bindHashToObject($hash, $object, null, $strip, $bindAll);
 			return true;
 		} else if ($object = $this->_query_id->FetchNextObject(false)) {
 			$this->clear();
@@ -798,7 +798,7 @@ class DBQuery {
 				$started = false;
 				$result = ' WHERE ' . implode(' AND ', $where_clause);
 			}
-		} else if (strlen($where_clause) > 0) {
+		} else if (mb_strlen($where_clause) > 0) {
 			$result = " where $where_clause";
 		}
 		return $result;
@@ -820,7 +820,7 @@ class DBQuery {
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
-		} else if (strlen($order_clause) > 0) {
+		} else if (mb_strlen($order_clause) > 0) {
 			$result = " ORDER BY $order_clause";	
 		}
 		return $result;
@@ -837,7 +837,7 @@ class DBQuery {
 		if (is_array($group_clause)) {
 			$started = false;
 			$result = ' GROUP BY ' . implode(',', $group_clause);
-		} else if (strlen($group_clause) > 0) {
+		} else if (mb_strlen($group_clause) > 0) {
 			$result = " GROUP BY $group_clause";
 		}
 		return $result;
@@ -852,7 +852,7 @@ class DBQuery {
 		}
 		if (is_array($join_clause)) {
 			foreach ($join_clause as $join) {
-				$result .= (' ' . strtoupper($join['type']) . ' JOIN `' 
+				$result .= (' ' . mb_strtoupper($join['type']) . ' JOIN `' 
 				            . $this->_table_prefix . $join['table'] . '`');
 				if ($join['alias']) {
 					$result .= ' AS ' . $join['alias'];

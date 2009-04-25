@@ -1,5 +1,5 @@
 <?php /* COMPANIES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -27,7 +27,7 @@ if (!($rows = $q->loadList())) {
 </tr>
 <?php
 $s = '';
-foreach ($rows as $row){
+foreach ($rows as $row) {
 	$s .= '<tr><td>';
 	$s .= ('<a href="./index.php?m=admin&a=viewuser&user_id=' . $row['user_id'] . '">' 
 	       . $row['user_username'] . '</a>');

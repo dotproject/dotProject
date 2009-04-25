@@ -1,14 +1,14 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 
 require_once DP_BASE_DIR . '/modules/ticketsmith/config.inc.php';
-require_once $AppUI->getSystemClass( 'query');
+require_once $AppUI->getSystemClass('query');
 $font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 $temp_dir = DP_BASE_DIR.'/files/temp';
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 $type = dPgetParam($_GET, 'type', '');
 $column = dPgetParam($_GET, 'column', 'timestamp');
@@ -47,21 +47,21 @@ if ($err = db_error()) {
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $pdf =& new Cezpdf($paper='A4',$orientation='landscape');
-$pdf->ezSetCmMargins( 1, 2, 1.5, 1.5 );
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
+$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+$pdf->selectFont("$font_dir/Helvetica.afm");
 
-$pdf->ezText( dPgetConfig( 'company_name' ), 12 );
+$pdf->ezText(dPgetConfig('company_name'), 12);
 
 $date = new CDate();
-$pdf->ezText( "\n" . $date->format( $df) , 8 );
+$pdf->ezText("\n" . $date->format($df) , 8);
 $next_week = new CDate($date);
 $next_week->addSpan(new Date_Span(array(7,0,0,0)));
 
-$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-$pdf->ezText( "\n" . $AppUI->_("$type Ticket Report"), 12 );
-$pdf->ezText( "$pname", 15 );
-$pdf->ezText( "\n" );
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
+$pdf->selectFont("$font_dir/Helvetica-Bold.afm");
+$pdf->ezText("\n" . $AppUI->_("$type Ticket Report"), 12);
+$pdf->ezText("$pname", 15);
+$pdf->ezText("\n");
+$pdf->selectFont("$font_dir/Helvetica.afm");
 $title = "$type Tickets";
 $options = array(
 	'showLines' => 2,
@@ -109,6 +109,6 @@ foreach ($ticketlist as $ticket) {
 	$row[] = $ticket['contact_firt_name'] . ' ' . $ticket['contact_last_name'];
 }
 
-$pdf->ezTable( $pdfdata, $columns, $title, $options );
+$pdf->ezTable($pdfdata, $columns, $title, $options);
 $pdf->ezStream();
 ?>

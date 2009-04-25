@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -19,7 +19,7 @@ if (!$contact->bind($_POST)) {
 	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-$obj->user_username = strtolower($obj->user_username);
+$obj->user_username = mb_strtolower($obj->user_username);
 $isNewUser = !($user_id_aed);
 
 // prepare (and translate) the module name ready for the suffix
@@ -101,10 +101,10 @@ function userExistence($userName) {
 	}
 }
 
-function notifyNewUser($address, $username, $logname, $logpwd){
+function notifyNewUser($address, $username, $logname, $logpwd) {
 	global $AppUI, $dPconfig;
 	$mail = new Mail;
-	if($mail->ValidEmail($address)){
+	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {

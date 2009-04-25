@@ -1,5 +1,5 @@
 <?php //$Id$
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -15,7 +15,7 @@ $user_id = @$_POST['user_id'];
 
 // prepare the percentage of assignment per user as required by CTask::updateAssigned()
 $hperc_assign_ar = array();
-if (isset($hassign)){
+if (isset($hassign)) {
 	$tarr = explode(',', $hassign);
 	foreach ($tarr as $uid) {
 		if (intval($uid) > 0) {
@@ -26,7 +26,7 @@ if (isset($hassign)){
 
 // prepare a list of tasks to process
 $htasks_ar = array();
-if (isset($htasks)){
+if (isset($htasks)) {
 	$tarr = explode(',', $htasks);
 	foreach ($tarr as $tid) {
 		if (intval($tid) > 0) {
@@ -36,7 +36,7 @@ if (isset($htasks)){
 }
 
 $sizeof = sizeof($htasks_ar);
-for($i=0; $i <= $sizeof; $i++) {
+for ($i=0; $i <= $sizeof; $i++) {
 	
 	$_POST['task_id'] = $htasks_ar[$i];
 	
@@ -49,7 +49,7 @@ for($i=0; $i <= $sizeof; $i++) {
 			$AppUI->redirect();
 		}
 		
-		if ($rm && $del){
+		if ($rm && $del) {
 			$overAssignment = $obj->updateAssigned($hassign , $hperc_assign_ar, true, true);
 			if ($overAssignment) {
 				$AppUI->setMsg('Some Users could not be unassigned from Task', UI_MSG_ERROR);
@@ -58,7 +58,7 @@ for($i=0; $i <= $sizeof; $i++) {
 				// $AppUI->setMsg('User(s) unassigned from Task', UI_MSG_OK);
 				// $AppUI->redirect();
 			}
-		} else if (($rm || $del) ) {
+		} else if (($rm || $del)) {
 			if (($msg = $obj->removeAssigned($user_id))) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 				

@@ -1,19 +1,19 @@
 <?php /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
-if(empty($search_pattern)) $search_pattern = "";
-if(empty($search_field)) $search_field = "";
-if(empty($search_depth)) $search_depth = "";
-if(empty($sort_column)) $sort_column = "";
+if (empty($search_pattern)) $search_pattern = "";
+if (empty($search_field)) $search_field = "";
+if (empty($search_depth)) $search_depth = "";
+if (empty($sort_column)) $sort_column = "";
 /* set title */
 $title = "Search Tickets";
 
@@ -42,7 +42,7 @@ print("</td>\n");
 print("</tr>\n");
 
 /* pattern select */
-$search_pattern = dPformSafe( $search_pattern, true );
+$search_pattern = dPformSafe($search_pattern, true);
 print("<tr>\n");
 print("<td align=\"right\"><strong>".$AppUI->_('Pattern')."</strong></td>\n");
 print("<td><input type=\"text\" name=\"search_pattern\" value=\"$search_pattern\"></td>\n");
@@ -116,7 +116,7 @@ if ($search_pattern) {
     if ($search_depth == "Child") {
         $query .= " AND parent != 0";
     }
-    elseif ($search_depth != "All") {
+    else if ($search_depth != "All") {
         $query .= " AND type = '$search_depth'";
     }
     $query .= " ORDER BY $sort_column $sort_direction";

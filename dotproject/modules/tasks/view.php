@@ -1,5 +1,5 @@
 <?php /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -123,7 +123,7 @@ $task_types = dPgetSysVal('TaskType');
 <script language="JavaScript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.task_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -155,7 +155,7 @@ function updateTask() {
 	} else if (isNaN(parseInt(f.task_percent_complete.value+0))) {
 		alert("<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS);?>");
 		f.task_percent_complete.focus();
-	} else if(f.task_percent_complete.value  < 0 || f.task_percent_complete.value > 100) {
+	} else if (f.task_percent_complete.value  < 0 || f.task_percent_complete.value > 100) {
 		alert("<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS);?>");
 		f.task_percent_complete.focus();
 	} else {
@@ -223,7 +223,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone');?>:</td>
-			<td class="hilite" width="300"><?php if($obj->task_milestone){echo $AppUI->_('Yes');}else{echo $AppUI->_('No');}?></td>
+			<td class="hilite" width="300"><?php if ($obj->task_milestone) {echo $AppUI->_('Yes');}else {echo $AppUI->_('No');}?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress');?>:</td>
@@ -270,7 +270,7 @@ function delIt() {
 			<?php
 				$s = '';
 				$s = count($users) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
-				foreach($users as $row) {
+				foreach ($users as $row) {
 					$s .= '<tr>';
 					$s .= '<td class="hilite">'.dPgetUsernameFromID($row['user_id']).'</td>';
 					$s .= '<td class="hilite"><a href="mailto:'.$row['contact_email'].'">'.$row['contact_email'].'</a></td>';
@@ -299,7 +299,7 @@ function delIt() {
 			<td colspan="3">
 			<?php 
 				$s = count($taskDep) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
-				foreach($taskDep as $key => $value) {
+				foreach ($taskDep as $key => $value) {
 					$s .= '<tr><td class="hilite">';
 					$s .= '<a href="./index.php?m=tasks&a=view&task_id='.$key.'">'.$value.'</a>';
 					$s .= '</td></tr>';
@@ -325,7 +325,7 @@ function delIt() {
 			<td colspan="3">
 			<?php
 				$s = count($dependingTasks) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
-				foreach($dependingTasks as $key => $value) {
+				foreach ($dependingTasks as $key => $value) {
 					$s .= '<tr><td class="hilite">';
 					$s .= '<a href="./index.php?m=tasks&a=view&task_id='.$key.'">'.$value.'</a>';
 					$s .= '</td></tr>';
@@ -360,10 +360,10 @@ function delIt() {
 		    <tr>
 		    	<td colspan='3' class="hilite">
 		    		<?php
-		    			foreach($depts as $dept_id => $dept_info){
+		    			foreach ($depts as $dept_id => $dept_info) {
 		    				echo '<div>'.$dept_info['dept_name'];
-		    				if($dept_info['dept_phone'] != ''){
-		    					echo '( '.$dept_info['dept_phone'].' )';
+		    				if ($dept_info['dept_phone'] != '') {
+		    					echo '('.$dept_info['dept_phone'].')';
 		    				}
 		    				echo '</div>';
 		    			}
@@ -383,7 +383,7 @@ function delIt() {
 			$q->addWhere("(contact_owner = '$AppUI->user_id' or contact_private = '0')");
 			$contacts = $q->loadHashList('contact_id');
 			$q->clear();
-			if(count($contacts)>0){
+			if (count($contacts)>0) {
 				?>
 			    <tr>
 			    	<td><strong><?php echo $AppUI->_('Task Contacts'); ?></strong></td>
@@ -393,7 +393,7 @@ function delIt() {
 			    		<?php
 			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%">';
 			    			echo '<tr><th>'.$AppUI->_('Name').'</font></th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
-			    			foreach($contacts as $contact_id => $contact_data){
+			    			foreach ($contacts as $contact_id => $contact_data) {
 			    				echo '<tr>';
 			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
 			    				echo '<td class="hilite"><a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a></td>';
@@ -419,7 +419,7 @@ function delIt() {
 			$q->addWhere("(contact_owner = '$AppUI->user_id' or contact_private = '0')");
 			$contacts = $q->loadHashList('contact_id');
 			$q->clear();
-			if(count($contacts)>0){
+			if (count($contacts)>0) {
 				?>
 			    <tr>
 			    	<td><strong><?php echo $AppUI->_('Project Contacts'); ?></strong></td>
@@ -429,7 +429,7 @@ function delIt() {
 			    		<?php
 			    			echo '<table cellspacing="1" cellpadding="2" border="0" width="100%">';
 			    			echo '<tr><th color="white">'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
-			    			foreach($contacts as $contact_id => $contact_data){
+			    			foreach ($contacts as $contact_id => $contact_data) {
 			    				echo '<tr>';
 			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
 			    				echo '<td class="hilite"><a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a></td>';
@@ -476,9 +476,9 @@ if ($obj->task_dynamic != 1) {
 				if (getPermission('task_log', 'add')) {
 					$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'New Log');
 				}
-			} elseif (getPermission('task_log', 'edit')) {
+			} else if (getPermission('task_log', 'edit')) {
 				$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'Edit Log');
-			} elseif (getPermission('task_log', 'add')) {
+			} else if (getPermission('task_log', 'add')) {
 				$tabBox_show = 1;
 				$tabBox->add(DP_BASE_DIR.'/modules/tasks/vw_log_update', 'New Log');
 			}

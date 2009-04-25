@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -30,7 +30,7 @@ class projects extends smartsearch
 	                         array('table' => 'contacts', 'alias' => 'con', 
 	                               'join' => 'pc.contact_id = con.contact_id'));
 	
-	function cprojects (){
+	function cprojects () {
 		return new projects();
 	}
 }

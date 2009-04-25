@@ -43,7 +43,7 @@ if (isset($_REQUEST['clash_action'])) {
 	$_SESSION['add_event_mail'] = isset($_POST['mail_invited']) ? $_POST['mail_invited'] : 'off';
 	
 	echo '<table width="100%" class="std"><tr><td><b>' . $AppUI->_('clashEvent') . '</b></tr></tr>';
-	foreach($clash as $user) {
+	foreach ($clash as $user) {
 		echo '<tr><td>' . $user . "</td></tr>\n";
 	}
 	echo "</table>\n";
@@ -106,7 +106,7 @@ function clash_suggest() {
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.event_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');

@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -91,7 +91,7 @@ if ($canDelete) {
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo str_replace( chr(10), "<br />", $obj->resource_note);?>&nbsp;
+				<?php echo str_replace(chr(10), "<br />", $obj->resource_note);?>&nbsp;
 			</td>
 		</tr>
 		

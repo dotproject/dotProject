@@ -52,8 +52,8 @@ class CProject extends CDpObject {
 		// ensure changes of state in checkboxes is captured
 		$this->project_private = intval($this->project_private);
 		// Make sure project_short_name is the right size (issue with encoded characters)
-		if (strlen($this->project_short_name) > 10) {
-			$this->project_short_name = substr($this->project_short_name, 0, 10);
+		if (mb_strlen($this->project_short_name) > 10) {
+			$this->project_short_name = mb_substr($this->project_short_name, 0, 10);
 		}
 		// Make sure empty dates are nulled.  Cannot save an empty date.
 		if (empty($this->project_end_date)) {
@@ -213,11 +213,11 @@ class CProject extends CDpObject {
 		}
 		
 		// Build new dependencies array
-		foreach($deps as $odkey => $od) {
+		foreach ($deps as $odkey => $od) {
 			$ndt = '';
 			$ndkey = $taskXref[$odkey];
 			$odep = explode(',', $od);
-			foreach($odep as $odt) {
+			foreach ($odep as $odt) {
 				$ndt = $ndt . $taskXref[$odt] . ',';
 			}
 			$ndt = rtrim($ndt, ',');
@@ -295,7 +295,7 @@ class CProject extends CDpObject {
 		$buffer = ((count($aCpies)) 
 		           ? ('(project_company IN (' . implode(',', array_keys($aCpies)) . '))') 
 		           : '1 = 0');
-		$extra['where'] = ((($extra['where'] != '' ) ? ($extra['where'] . ' AND ') : '') 
+		$extra['where'] = ((($extra['where'] != '') ? ($extra['where'] . ' AND ') : '') 
 		                   . $buffer);
 
 		return parent::getAllowedRecords ($uid, $fields, $orderby, $index, $extra);
@@ -396,11 +396,11 @@ class CProject extends CDpObject {
 		$this->dPTrimAll();
         
 		$msg = $this->check();
-		if($msg) {
+		if ($msg) {
 			return get_class($this) . '::store-check failed - ' . $msg;
 		}
 		
-		if($this->project_id) {
+		if ($this->project_id) {
 			$ret = db_updateObject('projects', $this, 'project_id', false);
 			addHistory('projects', $this->project_id, 'update', $this->project_name, 
 			           $this->project_id);
@@ -434,7 +434,7 @@ class CProject extends CDpObject {
 		$q->clear();
 		if ($this->project_contacts) {
 			$contacts = explode(',',$this->project_contacts);
-			foreach($contacts as $contact) {
+			foreach ($contacts as $contact) {
 				if ($contact) {
 					$q->addTable('project_contacts');
 					$q->addInsert('project_id', $this->project_id);
@@ -613,7 +613,7 @@ function projects_list_data($user_id=false) {
 	             . ', p.project_end_date, p.project_color_identifier, p.project_company' 
 	             . ', p.project_status, p.project_priority, com.company_name' 
 	             . ', com.company_description, tc.critical_task, tc.project_actual_end_date' 
-	             . ', if(tp.task_log_problem IS NULL, 0, tp.task_log_problem) AS task_log_problem' 
+	             . ', if (tp.task_log_problem IS NULL, 0, tp.task_log_problem) AS task_log_problem' 
 				 . ', tt.total_tasks, tsy.my_tasks, ts.project_percent_complete' 
 				 . ', ts.project_duration, u.user_username');
 	$q->addJoin('companies', 'com', 'p.project_company = com.company_id');
@@ -671,7 +671,7 @@ function projects_list_data($user_id=false) {
 	$obj_company = new CCompany();
 	$companies = $obj_company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 
 	                                             'company_name');
-	if(count($companies) == 0) { 
+	if (count($companies) == 0) { 
 		$companies = array(0);
 	}
 	
@@ -694,7 +694,7 @@ function projects_list_data($user_id=false) {
 	$company = '';
 	foreach ($rows as $row) {
 		if ($row['dept_parent'] == 0) {
-			if($company != $row['company_id']) {
+			if ($company != $row['company_id']) {
 				$buffer .= ('<option value="' . $company_prefix . $row['company_id'] 
 							. '" style="font-weight:bold;"' 
 							. (($company_id == $row['company_id']) ? 'selected="selected"' : '') 

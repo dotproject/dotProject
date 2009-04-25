@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -81,15 +81,15 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 	<td valign="top" align="center">
 		<table cellspacing="0" cellpadding="2" border="0">
 			<tr>
-				<td><?php echo $AppUI->_( 'Resources' );?>:</td>
-				<td><?php echo $AppUI->_( 'Assigned to Task' );?>:</td>
+				<td><?php echo $AppUI->_('Resources');?>:</td>
+				<td><?php echo $AppUI->_('Assigned to Task');?>:</td>
 			</tr>
 			<tr>
 				<td>
-					<?php echo arraySelect( $all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null ); ?>
+					<?php echo arraySelect($all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 				</td>
 				<td>
-					<?php echo arraySelect( $resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null ); ?>
+					<?php echo arraySelect($resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 				</td>
 			<tr>
 				<td colspan="2" align="center">
@@ -100,7 +100,7 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 							<select name="resource_assignment" class="text">
 							<?php 
 								for ($i = 5; $i <= 100; $i+=5) {
-									echo "<option ".(($i==100)? "selected=\"true\"" : "" )." value=\"".$i."\">".$i."%</option>";
+									echo "<option ".(($i==100)? "selected=\"true\"" : "")." value=\"".$i."\">".$i."%</option>";
 								}
 							?>
 							</select>
@@ -113,7 +113,7 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 			</tr>
 <!-- 			<tr>
 				<td colspan=3 align="center">
-					<input type="checkbox" name="task_notify" value="1" <?php //if($obj->task_notify!="0") echo "checked"?> /> <?php //echo $AppUI->_( 'notifyChange' );?>
+					<input type="checkbox" name="task_notify" value="1" <?php //if ($obj->task_notify!="0") echo "checked"?> /> <?php //echo $AppUI->_('notifyChange');?>
 				</td>
 			</tr> -->
 		</table>

@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -99,7 +99,7 @@ class SResource {
 		  $q->addTable('resources');
 		  $q->addField('resource_key', "varchar(64) not null default ''");
 		  $q->exec();
-		  if ( db_error()) {
+		  if (db_error()) {
 			return false;
 		  }
 		  // FALLTHROUGH

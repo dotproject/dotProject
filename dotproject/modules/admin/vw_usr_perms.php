@@ -1,5 +1,5 @@
 <?php /* ADMIN $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -22,7 +22,7 @@ $q->clear();
 $pseudo_module_pgo_list = array('File Folders' => array('mod_id' => -1, 
                                                         'mod_name' => 'file_folders', 
                                                         'permissions_item_table' => 'file_folders')
-                                );
+                               );
 
 //combine modules and 'pseudo-modules'
 $pgo_list = arrayMerge($module_pgo_list, $pseudo_module_pgo_list);
@@ -54,7 +54,7 @@ $perm_list = $perms->getPermissionList();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function editPerm( id, gon, it, vl, nm ) {
+function editPerm(id, gon, it, vl, nm) {
 /*
 	id = Permission_id
 	gon =permission_grant_on
@@ -62,7 +62,7 @@ function editPerm( id, gon, it, vl, nm ) {
 	vl =permission_value
 	nm = text representation of permission_value
 */
-//alert( 'id='+id+'\ngon='+gon+'\nit='+it+'\nvalue='+vl+'\nnm='+nm);
+//alert('id='+id+'\ngon='+gon+'\nit='+it+'\nvalue='+vl+'\nnm='+nm);
 	var f = document.frmPerms;
 
 	f.sqlaction2.value = "<?php echo $AppUI->_('edit'); ?>";
@@ -70,7 +70,7 @@ function editPerm( id, gon, it, vl, nm ) {
 	f.permission_id.value = id;
 	f.permission_item.value = it;
 	f.permission_item_name.value = nm;
-	for(var i=0, n=f.permission_grant_on.options.length; i < n; i++) {
+	for (var i=0, n=f.permission_grant_on.options.length; i < n; i++) {
 		if (f.permission_module.options[i].value == gon) {
 			f.permission_module.selectedIndex = i;
 			break;
@@ -80,7 +80,7 @@ function editPerm( id, gon, it, vl, nm ) {
 	f.permission_item_name.value = nm;
 }
 
-function clearIt(){
+function clearIt() {
 	var f = document.frmPerms;
 	f.sqlaction2.value = "<?php echo $AppUI->_('add'); ?>";
 	f.permission_id.value = 0;
@@ -88,7 +88,7 @@ function clearIt(){
 }
 
 function delIt(id) {
-	if (confirm( 'Are you sure you want to delete this permission?' )) {
+	if (confirm('Are you sure you want to delete this permission?')) {
 		var f = document.frmPerms;
 		f.del.value = 1;
 		f.permission_id.value = id;
@@ -98,7 +98,7 @@ function delIt(id) {
 
 var tables = new Array;
 <?php
-	foreach ($pgos as $key => $value){
+	foreach ($pgos as $key => $value) {
 		// Find the module id in the modules array
 		echo "tables['$key'] = '$value';\n";
 	}
@@ -109,7 +109,7 @@ function popPermItem() {
 	var pgo = f.permission_module.selectedIndex;
 
 	if (!(pgo in tables)) {
-		alert( '<?php echo $AppUI->_('No list associated with this Module.', UI_OUTPUT_JS); ?>' );
+		alert('<?php echo $AppUI->_('No list associated with this Module.', UI_OUTPUT_JS); ?>');
 		return;
 	}
 	f.permission_table.value = tables[pgo];
@@ -117,7 +117,7 @@ function popPermItem() {
 }
 
 // Callback function for the generic selector
-function setPermItem( key, val ) {
+function setPermItem(key, val) {
 	var f = document.frmPerms;
 	if (val != '') {
 		f.permission_item.value = key;
@@ -145,7 +145,7 @@ function setPermItem( key, val ) {
 </tr>
 
 <?php
-foreach ($user_acls as $acl){
+foreach ($user_acls as $acl) {
 	$buf = '';
 	$permission = $perms->get_acl($acl);
 
@@ -203,11 +203,11 @@ foreach ($user_acls as $acl){
 		$buf .= "</td>";
 
 		// Allow or deny
-		$buf .= "<td>" . $AppUI->_( $permission['allow'] ? 'allow' : 'deny' ) . "</td>";
+		$buf .= "<td>" . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . "</td>";
 		$buf .= '<td nowrap>';
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"".$AppUI->_('delete')."\">"
-				. dPshowImage( './images/icons/stock_delete-16.png', 16, 16, '' )
+				. dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
 				. "</a>";
 		}
 		$buf .= '</td>';

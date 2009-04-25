@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -19,7 +19,7 @@ class tasks extends smartsearch
 	var $display_fields = array('task_name', 'task_description', 'task_related_url', 
 	                            'task_departments', 'task_contacts', 'task_custom');
 
-	function ctasks (){
+	function ctasks () {
 		return new tasks();
 	}
 }

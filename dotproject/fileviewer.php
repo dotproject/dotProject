@@ -80,7 +80,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 		setlocale(LC_TIME, $AppUI->user_locale);
 		
 		$redirect = @$_SERVER['QUERY_STRING'];
-		if (strpos($redirect, 'logout') !== false) $redirect = '';	
+		if (mb_strpos($redirect, 'logout') !== false) $redirect = '';	
 		if (isset($locale_char_set)) header('Content-type: text/html;charset='.$locale_char_set);
 		require DP_BASE_DIR.'/style/'.$uistyle.'/login.php';
 		session_unset();

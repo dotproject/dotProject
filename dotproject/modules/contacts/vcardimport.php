@@ -1,5 +1,5 @@
 <?php /* CONTACTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -78,7 +78,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && ($_GET['suppress
 		$AppUI->redirect();
 	}
 }
-elseif (isset($_GET['dialog']) && ($_GET['dialog']=='0')){	//file upload formular
+else if (isset($_GET['dialog']) && ($_GET['dialog']=='0')) {	//file upload formular
 
 $titleBlock = new CTitleBlock('Import vCard', 'monkeychat-48.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=contacts", "contacts list");

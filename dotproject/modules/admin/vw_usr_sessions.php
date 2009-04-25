@@ -1,5 +1,5 @@
 <?php /* ADMIN  $Id$ */ 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -45,12 +45,12 @@ if ($_POST['out_user_id'] && $_POST['out_name'] && $canEdit && $canDelete) {
             $AppUI->redirect('logout=-1');
         } else {
             addHistory('login', $boot_user_id, 'logout', $details);
-            dPsessionDestroy( $boot_user_session, $boot_user_log_id);
+            dPsessionDestroy($boot_user_session, $boot_user_log_id);
         }
         
         if ($boot_query_row) {
             $boot_query_row = $r->fetchRow();
-            if($boot_query_row) {
+            if ($boot_query_row) {
                 $boot_user_session = $boot_query_row['session_id'];
                 $boot_user_log_id = $boot_query_row['user_access_log_id'];
             } else {
@@ -62,7 +62,7 @@ if ($_POST['out_user_id'] && $_POST['out_name'] && $canEdit && $canDelete) {
     
     $msg = ($boot_user_name . ' logged out by ' 
 			. $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
-    $AppUI->setMsg( $msg, UI_MSG_OK );
+    $AppUI->setMsg($msg, UI_MSG_OK);
     $AppUI->redirect('m=admin&tab=3');
 }
 

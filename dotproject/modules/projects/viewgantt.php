@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -33,7 +33,7 @@ if ($showAllGantt!='0') {
 	$showAllGantt='1';
 }
 
-if (isset( $_POST['proFilter'])) {
+if (isset($_POST['proFilter'])) {
 	$AppUI->setState('ProjectIdxFilter',  $_POST['proFilter']);
 }
 $proFilter = (($AppUI->getState('ProjectIdxFilter') !== NULL) 
@@ -82,7 +82,7 @@ if (!@$min_view) {
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');

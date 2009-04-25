@@ -1,23 +1,23 @@
 <?php /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$ticket = dPgetParam( $_GET, 'ticket', '' );
-$ticket_type = dPgetParam( $_GET, 'ticket_type', '' );
+$ticket = dPgetParam($_GET, 'ticket', '');
+$ticket_type = dPgetParam($_GET, 'ticket_type', '');
 
-$type_toggle = dPgetParam( $_POST, 'type_toggle', '' );
-$priority_toggle = dPgetParam( $_POST, 'priority_toggle', '' );
-$assignment_toggle = dPgetParam( $_POST, 'assignment_toggle', '' );
+$type_toggle = dPgetParam($_POST, 'type_toggle', '');
+$priority_toggle = dPgetParam($_POST, 'priority_toggle', '');
+$assignment_toggle = dPgetParam($_POST, 'assignment_toggle', '');
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'View Ticket', 'gconf-app-icon.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
-$titleBlock->addCrumb( "?m=ticketsmith&type=My", "my tickets" );
+$titleBlock = new CTitleBlock('View Ticket', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=ticketsmith", "tickets list");
+$titleBlock->addCrumb("?m=ticketsmith&type=My", "my tickets");
 $titleBlock->show();
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
@@ -34,7 +34,7 @@ if ($ticket_type == "Staff Followup" || $ticket_type == "Client Followup") {
                     "types"    => array("email", "original_author", "normal", "elapsed_date", "email", "body"));
 
 }
-elseif ($ticket_type == "Staff Comment") {
+else if ($ticket_type == "Staff Comment") {
 
     $title = $AppUI->_($ticket_type)." ".$AppUI->_('to Ticket')." #$ticket_parent";
 
@@ -58,10 +58,10 @@ else {
 }
 
 /* perform updates */
-$orig_assignment = dPgetParam( $_POST, 'orig_assignment', '' );
-$author = dPgetParam( $_POST, 'author', '' );
-$priority = dPgetParam( $_POST, 'priority', '' );
-$subject = dPgetParam( $_POST, 'subject', '' );
+$orig_assignment = dPgetParam($_POST, 'orig_assignment', '');
+$author = dPgetParam($_POST, 'author', '');
+$priority = dPgetParam($_POST, 'priority', '');
+$subject = dPgetParam($_POST, 'subject', '');
 
 if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
     do_query("UPDATE tickets SET type = '$type_toggle', priority = '$priority_toggle', assignment = '$assignment_toggle' WHERE ticket = '$ticket'");
@@ -127,12 +127,12 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "</html>\n";
 	$message .= "\n--$boundary--\n";
 
-	$ticketNotification = dPgetSysVal( 'TicketNotify' );
+	$ticketNotification = dPgetSysVal('TicketNotify');
 	if (count($ticketNotification) > 0) {
 		mail($ticketNotification[$priority], $AppUI->_('Trouble ticket')." #$ticket ", $message, "From: " . $CONFIG['reply_to'] . "\nContent-type: multipart/alternative; boundary=\"$boundary\"\nMime-Version: 1.0");
 	}
 
-	if(@$assignment_toggle != @$orig_assignment)
+	if (@$assignment_toggle != @$orig_assignment)
 	{
 		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
 
@@ -223,7 +223,7 @@ print("<input type=\"hidden\" name=\"subject\" value='" . $ticket_info["subject"
 /* output ticket */
 for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
     print("<tr>\n");
-    if ( $fields["headings"][$loop] !== "<br />") {
+    if ($fields["headings"][$loop] !== "<br />") {
 	$fields["headings"][$loop] = $AppUI->_($fields["headings"][$loop]);
     }
     print("<td align=\"right\">" . $fields["headings"][$loop] . "</td>");

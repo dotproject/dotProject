@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -90,7 +90,7 @@ if (!db_loadObject($sql, $obj)) {
 //now milestones are summed up, too, for consistence with the tasks duration sum
 //the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
 //more info on http://www.mysql.com/doc/en/Problems_with_float.html
-if($hasTasks) {
+if ($hasTasks) {
     $q->addTable('task_log');
     $q->addTable('tasks');
     $q->addQuery('ROUND(SUM(task_log_hours),2)');
@@ -379,9 +379,9 @@ if (count($depts) > 0) {
 		<tr>
 			<td colspan='3' class="hilite">
 				<?php
-	foreach($depts as $dept_id => $dept_info){
+	foreach ($depts as $dept_id => $dept_info) {
 		echo ('<div>' . $dept_info['dept_name']);
-		if($dept_info['dept_phone'] != ''){
+		if ($dept_info['dept_phone'] != '') {
 			echo ('(' . $dept_info['dept_phone'] . ')');
 		}
 		echo '</div>';

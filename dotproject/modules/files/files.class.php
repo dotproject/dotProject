@@ -1,5 +1,5 @@
 <?php /* FILES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -253,23 +253,23 @@ class CFile extends CDpObject {
 		
 		// parse it
 		$parser = $parser . ' ' . $filepath;
-		$pos = strpos($parser, '/pdf');
+		$pos = mb_strpos($parser, '/pdf');
 		$x = (($pos !== false) ? `$parser -` : `$parser`);
 		
 		// if nothing, return
-		if (strlen($x) < 1) {
+		if (mb_strlen($x) < 1) {
 			return 0;
 		}
 		// remove punctuation and parse the strings
 		$x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
-		$warr = split('[[:space:]]', $x);
+		$warr = mb_split('[[:space:]]', $x);
 		
 		$wordarr = array();
 		$nwords = count($warr);
 		for ($x=0; $x < $nwords; $x++) {
 			$newword = $warr[$x];
 			if (!ereg('[[:punct:]]', $newword) && !ereg('[[:digit:]]', $newword) 
-			    && strlen(trim($newword)) > 2) {
+			    && mb_strlen(trim($newword)) > 2) {
 				$wordarr[] = array('word' => $newword, 'wordplace' => $x);
 			}
 		}
@@ -626,10 +626,10 @@ class CFileFolder extends CDpObject {
 
 function file_size($size) {
   
-	$size_measurments = array( 0 => 'B', 1 => 'KiB', 2 => 'MiB', 3 => 'GiB', 4 => 'TiB');
+	$size_measurments = array(0 => 'B', 1 => 'KiB', 2 => 'MiB', 3 => 'GiB', 4 => 'TiB');
 	$size_length = sizeof($size_measurments) - 1;
 	
-	for ($i = 0; $i < $size_length; $i++ ) {
+	for ($i = 0; $i < $size_length; $i++) {
 		if ($size < pow(2, (10 * ($i + 1)))) {
 			break;
 		}
@@ -662,7 +662,7 @@ function getIcon($file_type) {
 	if (is_file(DP_BASE_DIR . '/modules/files/images/icons/' . $icon . '.png')) {
 		$result = 'icons/' . $icon . '.png';
 	} else {
-		$mime = split('/', $file_type);
+		$mime = mb_split('/', $file_type);
 		switch ($mime[0]) {
 		case 'audio' : 
 			$result = 'icons/wav.png';
@@ -678,7 +678,7 @@ function getIcon($file_type) {
 			break;
 		}
 		if ($mime[0] == 'application') {
-			switch($mime[1]){
+			switch($mime[1]) {
 			case 'vnd.ms-excel' : 
 				$result = 'icons/spreadsheet.png';
             	break;
@@ -694,7 +694,7 @@ function getIcon($file_type) {
 		}
 	}
 	
-	if ($result == ''){
+	if ($result == '') {
 		switch ($obj->$file_category) {
 		default: // no idea what's going on
 			$result = 'icons/unknown.png';

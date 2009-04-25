@@ -1,5 +1,5 @@
 <?php /* COMPANIES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -40,7 +40,7 @@ function showchilddept_comp(&$a, $level=0) {
 }
 
 // function renamed to avoid naming clash
-function findchilddept_comp(&$tarr, $parent, $level=0){
+function findchilddept_comp(&$tarr, $parent, $level=0) {
 	$level = $level+1;
 	$n = count($tarr);
 	for ($x=0; $x < $n; $x++) {

@@ -1,5 +1,5 @@
 <?php /* PROJECTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -28,7 +28,7 @@ if ($obj->project_actual_end_date) {
 }
 
 // let's check if there are some assigned departments to project
-if(!dPgetParam($_POST, "project_departments", 0)){
+if (!dPgetParam($_POST, "project_departments", 0)) {
 	$obj->project_departments = implode(",", dPgetParam($_POST, "dept_ids", array()));
 }
 

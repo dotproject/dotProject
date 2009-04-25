@@ -1,5 +1,5 @@
 <?php /* COMPANIES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -37,7 +37,7 @@ $deny = $obj->getDeniedRecords($AppUI->user_id);
 
 // Company search by Kist
 $search_string = dPgetParam($_REQUEST, 'search_string', '');
-if($search_string != ''){
+if ($search_string != '') {
 	$search_string = (($search_string == '-1') ? '' : $search_string);
 	$AppUI->setState('search_string', $search_string);
 } else {
@@ -97,7 +97,7 @@ if ($tabbed = $tabBox->isTabbed()) {
 	}
 }
 $type_filter = array();
-foreach($types as $type => $type_name){
+foreach ($types as $type => $type_name) {
 	$type_filter[] = $type;
 	$tabBox->add('vw_companies', $type_name);
 }

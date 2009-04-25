@@ -1,5 +1,5 @@
 <?php /* STYLE/CLASSIC $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
@@ -94,7 +94,7 @@ echo dPcontextHelp('Help');?>
 		}
 	}
 	
-	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if(mod) f.submit();"', '', true);
+	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
 	echo '</td><input type="hidden" name="a" value="addedit" />';
 
 //build URI string

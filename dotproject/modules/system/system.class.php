@@ -1,5 +1,5 @@
 <?php /* SYSTEM $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -44,7 +44,7 @@ class CPreferences {
 			$this->get_defaults();
 		}
 		$msg = $this->check();
-		if($msg) {
+		if ($msg) {
 			return ('CPreference::store-check failed<br />' . $msg);
 		}
 		if (($msg = $this->delete())) {

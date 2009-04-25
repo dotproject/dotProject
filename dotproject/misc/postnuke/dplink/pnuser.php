@@ -39,7 +39,7 @@ function dplink_user_main()
 	$check = md5($parm);
 	$cparm = gzcompress($parm);
 	$bparm = urlencode(base64_encode($cparm));
-	if ( $window ) {
+	if ($window) {
 		$url .= '/index.php?login=pn&userdata='.$bparm.'&check='.$check;
 		header('Location: '.$url);
 	} else {

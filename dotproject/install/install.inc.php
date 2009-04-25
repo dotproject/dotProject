@@ -10,7 +10,7 @@ if (!defined('DP_BASE_DIR')) {
 
 // Defines required by setMsg, these are different to those used by the real CAppUI.
 
-define( 'UI_MSG_OK', '');
+define('UI_MSG_OK', '');
 define('UI_MSG_ALERT', 'Warning: ');
 define('UI_MSG_WARNING', 'Warning: ');
 define('UI_MSG_ERROR', 'ERROR: ');
@@ -38,8 +38,8 @@ function InstallDefVal($var, $def) {
 /**
 * Utility function to return a value from a named array or a specified default
 */
-function dPInstallGetParam( &$arr, $name, $def=null ) {
- return isset( $arr[$name] ) ? $arr[$name] : $def;
+function dPInstallGetParam(&$arr, $name, $def=null) {
+ return isset($arr[$name]) ? $arr[$name] : $def;
 }
 
 /**
@@ -52,7 +52,7 @@ function InstallGetVersion($mode, $db) {
   'last_code_update' => '',
   'code_version' => '1.0.2',
   'db_version' => '1'
- );
+);
  $res = $db->Execute('SELECT * FROM dpversion LIMIT 1');
  if ($res && $res->RecordCount() > 0) {
    $row = $res->FetchRow();
@@ -108,26 +108,26 @@ function InstallSplitSql($sql, $last_update) {
 
  $in_string = false;
 
- for($i=0; $i<strlen($sql)-1; $i++) {
-  if($sql[$i] == ";" && !$in_string) {
+ for ($i=0; $i<mb_strlen($sql)-1; $i++) {
+  if ($sql[$i] == ";" && !$in_string) {
    $ret[] = substr($sql, 0, $i);
    $sql = substr($sql, $i + 1);
    $i = 0;
   }
 
-  if($in_string && ($sql[$i] == $in_string) && $buffer[1] != "\\") {
+  if ($in_string && ($sql[$i] == $in_string) && $buffer[1] != "\\") {
    $in_string = false;
   }
-  elseif(!$in_string && ($sql[$i] == '"' || $sql[$i] == "'") && (!isset($buffer[0]) || $buffer[0] != "\\")) {
+  else if (!$in_string && ($sql[$i] == '"' || $sql[$i] == "'") && (!isset($buffer[0]) || $buffer[0] != "\\")) {
    $in_string = $sql[$i];
   }
-  if(isset($buffer[1])) {
+  if (isset($buffer[1])) {
    $buffer[0] = $buffer[1];
   }
   $buffer[1] = $sql[$i];
  }
 
- if(!empty($sql)) {
+ if (!empty($sql)) {
   $ret[] = $sql;
  }
  return($ret);
@@ -156,7 +156,7 @@ function InstallLoadSQL($sqlfile, $last_update = null)
 
  for ($i=0; $i<$piece_count; $i++) {
   $pieces[$i] = trim($pieces[$i]);
-  if(!empty($pieces[$i]) && $pieces[$i] != "#") {
+  if (!empty($pieces[$i]) && $pieces[$i] != "#") {
    if (!$result = $db->Execute($pieces[$i])) {
     $errors++;
     $dbErr = true;

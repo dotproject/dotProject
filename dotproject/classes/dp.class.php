@@ -6,7 +6,7 @@
  *	@version $Revision$
  */
 
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -428,7 +428,7 @@ class CDpObject {
 		// Make sure that we add the table otherwise dependencies break
 		if (isset($index)) {
 			if (!($key)) {
-				$key = substr($this->_tbl, 0, 2);
+				$key = mb_substr($this->_tbl, 0, 2);
 			}
 			$query->leftJoin($this->_tbl, $key, ($key . '.' . $this->_tbl_key . ' = ' . $index));
 		}

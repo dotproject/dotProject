@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -80,7 +80,7 @@ function setContactIDs (method,querystring)
 
 <?php
 
-if($contacts_submited == 1) {
+if ($contacts_submited == 1) {
 	$call_back_string = ((!(is_null($call_back))) 
 	                     ? "window.opener.$call_back('$selected_contacts_id');" : '');
 echo $call_back_string 
@@ -106,7 +106,7 @@ function remove_invalid($arr) {
 $contacts_id = remove_invalid(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
 
-require_once( $AppUI->getModuleClass( 'companies' ) );
+require_once($AppUI->getModuleClass('companies'));
 $oCpy = new CCompany ();
 $aCpies = $oCpy->getAllowedRecords ($AppUI->user_id, 'company_id, company_name', 'company_name');
 $aCpies_esc = array();
@@ -116,23 +116,23 @@ foreach ($aCpies as $key => $company) {
 
 $q = new DBQuery;
 
-if (strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id){
+if (mb_strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id) {
 	$q->addTable('contacts');
 	$q->addQuery('DISTINCT contact_company');
 	$q->addWhere('contact_id IN (' . $selected_contacts_id . ')');
 	$where = implode(',', $q->loadColumn());
 	$q->clear();
-	if (substr($where, 0, 1) == ',' && $where != ',') { 
+	if (mb_substr($where, 0, 1) == ',' && $where != ',') { 
 		$where = '0'.$where; 
 	} else if ($where == ',') {
 		$where = '0';
 	}
 	$where = (($where)?('contact_company IN('.$where.')'):'');
-} else if ( ! $company_id ) {
+} else if (! $company_id) {
 	//  Contacts from all allowed companies
 	$where = ("contact_company = ''"
 	          ." OR (contact_company IN ('".implode('\',\'' , array_values($aCpies_esc)) ."'))"
-	          ." OR ( contact_company IN ('".implode('\',\'', array_keys($aCpies_esc)) ."'))") ;
+	          ." OR (contact_company IN ('".implode('\',\'', array_keys($aCpies_esc)) ."'))") ;
 	$company_name = $AppUI->_('Allowed Companies');
 } else {
 	// Contacts for this company only
@@ -146,7 +146,7 @@ if (strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id){
 		$company_name = db_loadResult($sql);
 	*/
 	$company_name_sql = db_escape($company_name);
-	$where = " ( contact_company = '$company_name_sql' or contact_company = '$company_id' )";
+	$where = " (contact_company = '$company_name_sql' or contact_company = '$company_id')";
 }
 
 // This should now work on company ID, but we need to be able to handle both
@@ -183,23 +183,23 @@ echo arraySelect($companies_names, 'company_id',
 
 <br />
 <h4><a href="#" onClick="window.location.href=setContactIDs('GET','dialog=1<?php 
-echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : '' ); ?>&show_all=1');">
+echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : ''); ?>&show_all=1');">
 <?php echo $AppUI->_('View all allowed companies'); ?>
 </a></h4>
 <hr />
 <h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
 <?php	
-foreach($contacts as $contact_id => $contact_data){
+foreach ($contacts as $contact_id => $contact_data) {
 	$contact_company = (($contact_data['company_name']) 
 	                    ? $contact_data['company_name'] : $contact_data['contact_company']);
-	if($contact_company  && $contact_company != $pointer_company){
+	if ($contact_company  && $contact_company != $pointer_company) {
 		echo '<h4>'.$contact_company.'</h4>';
 		$pointer_company = $contact_company;
 	}
 	
 	$contact_department = (($contact_data['dept_name']) 
 	                       ? $contact_data['dept_name'] : $contact_data['contact_department']);
-	if($contact_department && $contact_department != $pointer_department){
+	if ($contact_department && $contact_department != $pointer_department) {
 		echo '<h5>'.$contact_department.'</h5>';
 		$pointer_department = $contact_department;
 	}

@@ -1,5 +1,5 @@
 <?php /* $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -12,10 +12,10 @@ if (!($canAccess)) {
 // To configure an aditional filter to use in the search string
 $additional_filter = "";
 // retrieve any state parameters
-if (isset( $_GET['where'] )) {
-	$AppUI->setState( 'ContIdxWhere', $_GET['where'] );
+if (isset($_GET['where'])) {
+	$AppUI->setState('ContIdxWhere', $_GET['where']);
 }
-if (isset( $_GET["search_string"] )){
+if (isset($_GET["search_string"])) {
 	$AppUI->setState ('ContIdxWhere', "%".$_GET['search_string']);
 				// Added the first % in order to find instrings also
 	$additional_filter = "OR contact_first_name like '%{$_GET['search_string']}%'
@@ -24,7 +24,7 @@ if (isset( $_GET["search_string"] )){
 						  OR contact_notes      like '%{$_GET['search_string']}%'
 						  OR contact_email      like '%{$_GET['search_string']}%'";
 }
-$where = $AppUI->getState( 'ContIdxWhere' ) ? $AppUI->getState( 'ContIdxWhere' ) : '%';
+$where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
 
 $orderby = 'contact_order_by';
 
@@ -39,7 +39,7 @@ foreach ($search_map as $search_name)
 	$q->addWhere("contact_private=0 OR (contact_private=1 AND contact_owner=$AppUI->user_id)
 								OR contact_owner IS NULL OR contact_owner = 0");
 	$arr = $q->loadList();
-	foreach( $arr as $L )
+	foreach ($arr as $L)
 		$let .= $L['L'];
 }
 
@@ -63,9 +63,9 @@ $q->addQuery($showfields);
 $q->addQuery('contact_first_name, contact_last_name, contact_phone');
 $q->addTable('contacts', 'a');
 $q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
-foreach($search_map as $search_name)
+foreach ($search_map as $search_name)
         $where_filter .=" OR $search_name LIKE '$where%'";
-$where_filter = substr($where_filter, 4);
+$where_filter = mb_substr($where_filter, 4);
 $q->addWhere("($where_filter $additional_filter)");
 $q->addWhere("
 	(contact_private=0
@@ -74,7 +74,7 @@ $q->addWhere("
 	)");
 if (count($allowedCompanies)) {
 	$comp_where = implode(' AND ', $allowedCompanies);
-	$q->addWhere( '( (' . $comp_where . ') OR contact_company = 0 )' );
+	$q->addWhere('((' . $comp_where . ') OR contact_company = 0)');
 }
 $q->addOrder('contact_order_by');
 
@@ -84,22 +84,22 @@ $carrHeight = 4;
 
 $sql = $q->prepare();
 $q->clear();
-$res = db_exec( $sql );
+$res = db_exec($sql);
 if ($res)
-	$rn = db_num_rows( $res );
+	$rn = db_num_rows($res);
 else {
 	echo db_error();
 	$rn = 0;
 }
 
-$t = floor( $rn / $carrWidth );
+$t = floor($rn / $carrWidth);
 $r = ($rn % $carrWidth);
 
 if ($rn < ($carrWidth * $carrHeight)) {
 	for ($y=0; $y < $carrWidth; $y++) {
 		$x = 0;
-		//if($y<$r)	$x = -1;
-		while (($x<$carrHeight) && ($row = db_fetch_assoc( $res ))){
+		//if ($y<$r)	$x = -1;
+		while (($x<$carrHeight) && ($row = db_fetch_assoc($res))) {
 			$carr[$y][] = $row;
 			$x++;
 		}
@@ -107,21 +107,21 @@ if ($rn < ($carrWidth * $carrHeight)) {
 } else {
 	for ($y=0; $y < $carrWidth; $y++) {
 		$x = 0;
-		if($y<$r)	$x = -1;
-		while(($x<$t) && ($row = db_fetch_assoc( $res ))){
+		if ($y<$r)	$x = -1;
+		while (($x<$t) && ($row = db_fetch_assoc($res))) {
 			$carr[$y][] = $row;
 			$x++;
 		}
 	}
 }
 
-$tdw = floor( 100 / $carrWidth );
+$tdw = floor(100 / $carrWidth);
 
 /**
 * Contact search form
 */
  // Let's remove the first '%' that we previously added to ContIdxWhere
-$default_search_string = dPformSafe(substr($AppUI->getState( 'ContIdxWhere' ), 1, strlen($AppUI->getState( 'ContIdxWhere' ))), true);
+$default_search_string = dPformSafe(mb_substr($AppUI->getState('ContIdxWhere'), 1, mb_strlen($AppUI->getState('ContIdxWhere'))), true);
 
 $form = "<form action='./index.php' method='get'>".$AppUI->_('Search for').'
            <input type="text" name="search_string" value="'.$default_search_string.'" />
@@ -136,8 +136,8 @@ $a2z .= "\n<tr>";
 $a2z .= "<td width='100%' align='right'>" . $AppUI->_('Show'). ": </td>";
 $a2z .= '<td><a href="./index.php?m=contacts&where=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
-	$cu = chr( $c );
-	$cell = strpos($let, "$cu") > 0 ?
+	$cu = chr($c);
+	$cell = mb_strpos($let, "$cu") > 0 ?
 		"<a href=\"?m=contacts&where=$cu\">$cu</a>" :
 		"<font color=\"#999999\">$cu</font>";
 	$a2z .= "\n\t<td>$cell</td>";
@@ -150,8 +150,8 @@ $a2z .= "\n</tr>\n<tr><td colspan='28'>$form</td></tr></table>";
 // what purpose is the next line for? Commented out by gregorerhardt, Bug #892912
 // $contact_id = $carr[$z][$x]["contact_id"];
 
-$titleBlock = new CTitleBlock( 'Contacts', 'monkeychat-48.png', $m, "$m.$a" );
-$titleBlock->addCell( $a2z );
+$titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, "$m.$a");
+$titleBlock->addCell($a2z);
 if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new contact').'">', '',
@@ -169,7 +169,7 @@ $titleBlock->show();
 ?>
 <script language="javascript">
 // Callback function for the generic selector
-function goProject( key, val ) {
+function goProject(key, val) {
 	var f = document.modProjects;
 	if (val != '') {
 		f.project_id.value = key;
@@ -219,12 +219,12 @@ $q->addWhere("project_contacts like \"" .$carr[$z][$x]["contact_id"]
 		<tr>
 			<td class="hilite">
 			<?php
-				reset( $showfields );
-				while (list( $key, $val ) = each( $showfields )) {
-					if (strlen( $carr[$z][$x][$key] ) > 0) {
-						if($val == "contact_email") {
+				reset($showfields);
+				while (list($key, $val) = each($showfields)) {
+					if (mb_strlen($carr[$z][$x][$key]) > 0) {
+						if ($val == "contact_email") {
 						  echo "<A HREF='mailto:{$carr[$z][$x][$key]}' class='mailto'>{$carr[$z][$x][$key]}</a>\n";
-                        } elseif($val == "contact_company" && is_numeric($carr[$z][$x][$key])) {
+                        } else if ($val == "contact_company" && is_numeric($carr[$z][$x][$key])) {
 						} else {
 						  echo  $carr[$z][$x][$key]. "<br />";
 						}

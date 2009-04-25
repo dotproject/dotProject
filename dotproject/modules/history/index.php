@@ -1,5 +1,5 @@
 <?php /* HISTORY $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -11,7 +11,7 @@ if (!defined('DP_BASE_DIR')){
 ## 
 
 $AppUI->savePlace();
-$titleBlock = new CTitleBlock( 'History', 'stock_book_blue_48.png', $m, "$m.$a" );
+$titleBlock = new CTitleBlock('History', 'stock_book_blue_48.png', $m, "$m.$a");
 $titleBlock->show();
 
 function show_history($history) {
@@ -239,7 +239,7 @@ echo $AppUI->_('Add history'); ?>" onclick="window.location='?m=history&a=addedi
 	<th nowrap="nowrap"><?php echo $AppUI->_('User'); ?>&nbsp;&nbsp;</th>
   </tr>
 <?php
-foreach($history as $row) {
+foreach ($history as $row) {
 	$mod_table = $row['history_table'];
 	$module = (($mod_table == 'task_log') ? 'tasks' : $filter_module_tables[$mod_table]);
 	
@@ -255,7 +255,7 @@ foreach($history as $row) {
   <tr>	
 	<td><a href="?m=history&a=addedit&history_id=<?php echo ($row['history_id']); ?>">
 	  <img src="./images/icons/pencil.gif" alt="<?php 
-echo $AppUI->_( 'Edit History' ) ?>" border="0" width="12" height="12">
+echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12">
 	</a></td>
 	<td align="center"><?php echo ($hd->format($df) . ' ' . $hd->format($tf)); ?></td>
 	<td><?php echo show_history($row); ?></td>

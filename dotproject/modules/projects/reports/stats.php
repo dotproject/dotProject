@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -53,7 +53,7 @@ $tasks['inprogress'] = array();
 $tasks['completed'] = array();
 $tasks['pending'] = array();
 $tasks['overdue'] = array();
-foreach($all_tasks as $task)
+foreach ($all_tasks as $task)
 {
 	if ($task['task_percent_complete'] == 100)
 		$tasks['completed'][] = & $task;
@@ -69,7 +69,7 @@ foreach($all_tasks as $task)
 
 	if (isset($users_per_task[$task['task_id']]))
 	{
-		foreach($users_per_task[$task['task_id']] as $user)
+		foreach ($users_per_task[$task['task_id']] as $user)
 		{
 			if ($task['task_percent_complete'] == 100)
 				$users[$user]['completed'][] = & $task;
@@ -196,7 +196,7 @@ $ontime = round(100 * (1 - (count($tasks['overdue']) / count($all_tasks)) - (cou
 	<th><?php echo $AppUI->_('Total Tasks'); ?></th>
 	<th><?php echo $AppUI->_('Hours worked'); ?></th>
 </tr>
-<?php foreach($users as $user => $stats) {?>
+<?php foreach ($users as $user => $stats) {?>
 <tr>
 	<td><?php echo $stats['name']; ?></td>
 	<td><?php echo count($stats['pending']); ?></td>

@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -209,7 +209,7 @@ echo $AppUI->_('next');?>" border="0">
 <?php } ?>
 	</td>
 </tr>
-<?php if($a == 'todo') { ?>
+<?php if ($a == 'todo') { ?>
 <input type="hidden" name="show_form" value="1" />
 <tr>
 	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">

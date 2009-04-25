@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -15,7 +15,7 @@ $config['mod_ui_icon'] = 'kfind.png';
 $config['mod_description'] = 'A module to search keywords and find the needle in the haystack';
 
 if (@$a == 'setup') {
-	echo dPshowModuleConfig( $config );
+	echo dPshowModuleConfig($config);
 }
 
 class SSearchNS {   

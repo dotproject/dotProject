@@ -1,5 +1,5 @@
 <?php /* CALENDAR $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -30,8 +30,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		$link['alt'] = ($row['project_name'] . ":\n" . $row['task_name']);
 		
 		// the link text
-		if (strlen($row['task_name']) > $strMaxLen) {
-			$row['task_name'] = (substr($row['task_name'], 0, $strMaxLen) . '...');
+		if (mb_strlen($row['task_name']) > $strMaxLen) {
+			$row['task_name'] = (mb_substr($row['task_name'], 0, $strMaxLen) . '...');
 		}
 		$link['text'] = ($row['task_name']);
 		$link['style'] = ('color:' . bestColor($row['color']) 

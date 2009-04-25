@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -23,7 +23,7 @@ require_once ($AppUI->getModuleClass('tasks'));
 $proj = new CProject();
 // filtering by companies
 $projects = $proj->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name');
-$projFilter = arrayMerge( array('all' => $AppUI->_('All Projects')), $projects);
+$projFilter = arrayMerge(array('all' => $AppUI->_('All Projects')), $projects);
 
 $durnTypes = dPgetSysVal('TaskDurationType');
 $taskPriority = dPgetSysVal('TaskPriority');
@@ -42,7 +42,7 @@ $end_date->setTime(23, 59, 59);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -67,10 +67,10 @@ if ($canEdit) {
 function checkAll(user_id) {
 	var f = eval("document.assFrm" + user_id);
 	var cFlag = f.master.checked ? false : true;
-	for (var i=0; i< f.elements.length; i++){
+	for (var i=0; i< f.elements.length; i++) {
 		var e = f.elements[i];
 		// only if it's a checkbox.
-		if(e.type == "checkbox" && e.checked == cFlag && e.name != "master") {
+		if (e.type == "checkbox" && e.checked == cFlag && e.name != "master") {
 			e.checked = !e.checked;
 		}
 	}
@@ -89,7 +89,7 @@ function chAssignment(user_id, rmUser, del) {
 	for (var i=0; i< f.elements.length; i++) {
 		var e = f.elements[i];
 		// only if it's a checkbox.
-		if(e.type == "checkbox" && e.checked == true && e.name != "master") {
+		if (e.type == "checkbox" && e.checked == true && e.name != "master") {
 			c++;
 			f.htasks.value = f.htasks.value + "," + e.value;
 		}
@@ -134,7 +134,7 @@ function chPriority(user_id) {
 	for (var i=0; i< f.elements.length; i++) {
 		var e = f.elements[i];
 		// only if it's a checkbox.
-		if(e.type == "checkbox" && e.checked == true && e.name != "master") {
+		if (e.type == "checkbox" && e.checked == true && e.name != "master") {
 			c++;
 			f.htasks.value = f.htasks.value +","+ e.value;
 		}
@@ -239,7 +239,7 @@ if ($do_report) {
 	
 	$sql->addTable('tasks', 't');
 	$sql->innerJoin('projects', 'p', 'p.project_id = t.task_project');
-	if ($log_userfilter !=0 ) {
+	if ($log_userfilter !=0) {
 		$sql->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 	}
 	$sql->addQuery('t.*');
@@ -252,10 +252,10 @@ if ($do_report) {
 	if ($project_id != 'all') {
 		$sql->addWhere('t.task_project = \''. $project_id . '\'');
 	}
-		if($company_id != 'all'){
+		if ($company_id != 'all') {
 		$sql->addWhere("p.project_company='$company_id'");
 	}
-	if ($log_userfilter !=0 ) {
+	if ($log_userfilter !=0) {
 		$sql->addWhere('ut.user_id = ' . $log_userfilter);
 	}
 	
@@ -278,7 +278,7 @@ if ($do_report) {
 	$task_assigned_users = array();
 	$user_assigned_tasks = array();
 	
-	foreach ($task_list_hash as $task_id => $task_data){
+	foreach ($task_list_hash as $task_id => $task_data) {
 		$task = new CTask();
 		$task->bind($task_data);
 		$task_users = $task->getAssignedUsers();
@@ -306,7 +306,7 @@ if ($do_report) {
 		if (!$use_period) {	
 			$sss = $sse = 0; 
 			if ($display_week_hours) {
-				foreach($task_list as $t) {
+				foreach ($task_list as $t) {
 					$sss = ((!($sss) || $t->task_start_date < $sss) ? $t->task_start_date : $sss);
 					$sse = ((!($sse) || $t->task_end_date > $sse) ? $t->task_end_date : $sse);
 				}
@@ -335,11 +335,11 @@ if ($do_report) {
 			<th nowrap="nowrap"><?php echo $AppUI->_('Possible Assignees'); ?></th>
 		</tr>
 <?php 
-		foreach($user_list as $user_id => $user_data){
+		foreach ($user_list as $user_id => $user_data) {
 			
 			// count tasks per user;
 			$z=0;
-			foreach($task_list as $task) {
+			foreach ($task_list as $task) {
 				if (isMemberOfTask($task_list, $user_id, $task)) {
 					$z++;
 				}
@@ -366,7 +366,7 @@ if ($do_report) {
 			</td>
 <?php 
 			$wx = (weekCells($display_week_hours, $sss, $sse));
-			for($w=0; $w <=$wx; $w++) {
+			for ($w=0; $w <=$wx; $w++) {
 ?>
 			<td style="background: #D0D0D0;">&nbsp;</td>
 <?php
@@ -419,7 +419,7 @@ if ($do_report) {
 			$actual_date = $start_date;
 			
 			$zi = 0;
-			foreach($task_list as $task) {
+			foreach ($task_list as $task) {
 				if ($task->task_id == $task->task_parent) {
 					if (isMemberOfTask($task_list, $user_id, $task)) {
 						$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, 
@@ -471,7 +471,7 @@ if ($do_report) {
 			</td>
 <?php 
 			$wx = (weekCells($display_week_hours,$sss,$sse));
-			for($w=0; $w <=$wx; $w++) {
+			for ($w=0; $w <=$wx; $w++) {
 				echo("\t\t\t" . '<td style="background: #D0D0D0;">&nbsp;</td>' . "\n");
 			}
 ?>
@@ -514,7 +514,7 @@ if ($do_report) {
 			$actual_date = $start_date;
 			
 			$zi = 0;
-			foreach($orphTasks as $task) {
+			foreach ($orphTasks as $task) {
 				$tmptasks.=displayTask($orphTasks,$task,0,$display_week_hours,$sss,$sse, $user_id);
 				// do we need to get the children?
 				//$tmptasks.=doChildren($orphTasks,$task->task_id,$user_id,1,$max_levels,$display_week_hours,$sss,$sse);
@@ -580,7 +580,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	$tmp .= '</td>';
 	
 	$tmp .= '<td nowrap="nowrap">';
-	for($i=0; $i<$level; $i++) {
+	for ($i=0; $i<$level; $i++) {
 		$tmp .= '&nbsp;&nbsp;&nbsp;';
 	}
 	if ($task->task_milestone == true) { 
@@ -643,7 +643,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	$tmp .= $us;
 	$tmp .= '</td>';
 	// create the list of possible assignees
-	if ($zi == 1){
+	if ($zi == 1) {
 		//	selectbox may not have a size smaller than 2, use 5 here as minimum
 		$zz = (($z < 5) ? 5 : ($z  *1.5));
 		$zz = ((sizeof($users) >= 7) ? ($zz *2) : $zz);
@@ -780,7 +780,7 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 			
 			$green_key_2 = (($green_key_1 == $red_key) ? 0 : $green_key_1);
 			
-			$color_hex = strtoupper('#' .dechex($red_key) . '0' . dechex($green_key_1) 
+			$color_hex = mb_strtoupper('#' .dechex($red_key) . '0' . dechex($green_key_1) 
 			                        . dechex($green_key_2) . 'FF');
 			$row .= '<td nowrap="nowrap" style="background:' . $color_hex . ';" >';
 		}

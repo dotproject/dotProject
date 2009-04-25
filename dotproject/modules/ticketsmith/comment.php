@@ -1,19 +1,19 @@
 <?php /* TICKETSMITH $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
 if (!$canEdit) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$ticket = dPgetParam( $_GET, 'ticket', '' );
-$ticket_type = dPgetParam( $_GET, 'ticket_type', '' );
+$ticket = dPgetParam($_GET, 'ticket', '');
+$ticket_type = dPgetParam($_GET, 'ticket_type', '');
 
 // setup the title block
-$titleBlock = new CTitleBlock( 'Post Comment', 'gconf-app-icon.png', $m, "$m.$a" );
-$titleBlock->addCrumb( "?m=ticketsmith", "tickets list" );
-$titleBlock->addCrumb( "?m=ticketsmith&a=view&ticket=$ticket", "view this ticket" );
+$titleBlock = new CTitleBlock('Post Comment', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock->addCrumb("?m=ticketsmith", "tickets list");
+$titleBlock->addCrumb("?m=ticketsmith&a=view&ticket=$ticket", "view this ticket");
 $titleBlock->show();
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
@@ -27,17 +27,17 @@ if (!$ticket_parent) {
     $ticket_parent = $ticket;
 }
 
-$author_name = dPgetParam( $_POST, 'author_name', '' );
-$author_email = dPgetParam( $_POST, 'author_email', '' );
-$comment = dPgetParam( $_POST, 'comment', '' );
-$body = dPgetParam( $_POST, 'body', '' );
+$author_name = dPgetParam($_POST, 'author_name', '');
+$author_email = dPgetParam($_POST, 'author_email', '');
+$comment = dPgetParam($_POST, 'comment', '');
+$body = dPgetParam($_POST, 'body', '');
 
 if (@$comment) {
 
     /* prepare fields */
     list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
-    $subject = db_escape( query2result("SELECT subject FROM tickets WHERE ticket = '$ticket_parent'") );
-    $comment = db_escape( $comment );
+    $subject = db_escape(query2result("SELECT subject FROM tickets WHERE ticket = '$ticket_parent'"));
+    $comment = db_escape($comment);
     $author = $author_name . " <" . $author_email . ">";
     $timestamp = time();
     $body = escape_string($body);

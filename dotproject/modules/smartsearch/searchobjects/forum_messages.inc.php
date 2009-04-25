@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -17,7 +17,7 @@ class forum_messages extends smartsearch
 	var $search_fields = array ('message_title', 'message_body');
 	var $display_fields = array ('message_title', 'message_body');
 
-	function cforum_messages (){
+	function cforum_messages () {
 		return new forum_messages();
 	}
 }

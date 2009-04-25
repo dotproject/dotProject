@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -8,7 +8,7 @@ $AppUI->savePlace();
 $canEdit = getPermission($m, 'edit');
 $canRead = getPermission($m, 'view');
 if (!$canRead) {
-	$AppUI->redirect( "m=public&a=access_denied" );
+	$AppUI->redirect("m=public&a=access_denied");
 }
 
 $sql_table = "contacts";
@@ -37,39 +37,39 @@ $sql_ldap_mapping = array(
 	);
 
 $titleBlock = new CTitleBlock("Import Contacts from LDAP Directory", "", "admin", "");
-$titleBlock->addCrumb( "?m=system", "system admin" );
+$titleBlock->addCrumb("?m=system", "system admin");
 $titleBlock->show();
 
 
-if (isset( $_POST['server'] )) {
-	$AppUI->setState( 'LDAPServer', $_POST['server'] );
+if (isset($_POST['server'])) {
+	$AppUI->setState('LDAPServer', $_POST['server']);
 }
-$server = $AppUI->getState( 'LDAPServer', '' );
+$server = $AppUI->getState('LDAPServer', '');
 //$server = "KMP00";
 
-if (isset( $_POST['bind_name'] )) {
-	$AppUI->setState( 'LDAPBindName', $_POST['bind_name'] );
+if (isset($_POST['bind_name'])) {
+	$AppUI->setState('LDAPBindName', $_POST['bind_name']);
 }
-$bind_name = $AppUI->getState( 'LDAPBindName', '' );
+$bind_name = $AppUI->getState('LDAPBindName', '');
 //$bind_name = "dcordes";
 
 $bind_password = dPgetParam($_POST,'bind_password', '');
 
-if (isset( $_POST['port'] )) {
-	$AppUI->setState( 'LDAPPort', $_POST['port'] );
+if (isset($_POST['port'])) {
+	$AppUI->setState('LDAPPort', $_POST['port']);
 }
-$port = $AppUI->getState( 'LDAPPort', '389' );
+$port = $AppUI->getState('LDAPPort', '389');
 
-if (isset( $_POST['dn'] )) {
-	$AppUI->setState( 'LDAPDN', $_POST['dn'] );
+if (isset($_POST['dn'])) {
+	$AppUI->setState('LDAPDN', $_POST['dn']);
 }
-$dn = $AppUI->getState( 'LDAPDN', '' );
+$dn = $AppUI->getState('LDAPDN', '');
 //$dn = "OU=USA,O=MINEBEA";
 
-if (isset( $_POST['filter'] )) {
-	$AppUI->setState( 'LDAPFilter', $_POST['filter'] );
+if (isset($_POST['filter'])) {
+	$AppUI->setState('LDAPFilter', $_POST['filter']);
 }
-$filter = $AppUI->getState( 'LDAPFilter',  '(objectclass=Person)');
+$filter = $AppUI->getState('LDAPFilter',  '(objectclass=Person)');
 //$filter = "(objectclass=dominoPerson)"; 
 
 $import = dPgetParam($_POST,'import');
@@ -124,19 +124,19 @@ $proto = $AppUI->getState('LDAPProto', '3');
 <pre>
 <?php
 echo "<b>";
-if(isset($test)){
+if (isset($test)) {
 	echo $test;
 }
-if(isset($import)){
+if (isset($import)) {
 	echo $import;
 }
 echo "</b>\n<hr>";
-if(isset($test) || isset($import)){
+if (isset($test) || isset($import)) {
 
 	$ds = @ldap_connect($server, $port);
 
-	if(!$ds) {
-	    if(function_exists("ldap_error")) {
+	if (!$ds) {
+	    if (function_exists("ldap_error")) {
 		print ldap_error($ds)."\n"; 
 	    } else {
 		print "<span style='color:red;font-weight:bold;'>ldap_connect failed.</span>\n";
@@ -147,9 +147,9 @@ if(isset($test) || isset($import)){
 
 	ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $proto);
 
-	if(!@ldap_bind($ds,$bind_name,$bind_password)) {
+	if (!@ldap_bind($ds,$bind_name,$bind_password)) {
 	    print "<span style='color:red;font-weight:bold;'>ldap_bind failed.</span>\n";
-	    if(function_exists("ldap_error")) {
+	    if (function_exists("ldap_error")) {
 		print ldap_error($ds)."\n"; 
 	    }
 	} else {
@@ -166,7 +166,7 @@ print "expression: ".$filter."<br>";
 
 	$sr = @ldap_search($ds,$dn,$filter,$return_types);
 	
-	if($sr){
+	if ($sr) {
 		print "Search completed Sucessfully.\n";
 	} else {
 		print "Search Error: [".ldap_errno($ds)."] ".ldap_error($ds)."\n";
@@ -179,20 +179,20 @@ print "expression: ".$filter."<br>";
 
 //	print "Result Count:".(ldap_count_entries($ds,$sr))."\n";
 	$info = ldap_get_entries($ds, $sr);
-	if(!$info["count"]){
+	if (!$info["count"]) {
 		print "No users were found.\n";
 	} else {
 		print "Total Users Found:".$info["count"]."\n<hr>";
 ?>
 <table border="0" cellpadding="1" cellspacing="0" width="98%" class="std">
 <?php
-		if(isset($test)){
+		if (isset($test)) {
 			foreach ($sql_ldap_mapping as $ldap => $sql) {
 				print "<th>".$sql."</th>";
 			}
 		} else {
-			$contacts = db_loadList( "SELECT contact_id, contact_first_name, contact_last_name FROM $sql_table" );
-			foreach($contacts as $contact){
+			$contacts = db_loadList("SELECT contact_id, contact_first_name, contact_last_name FROM $sql_table");
+			foreach ($contacts as $contact) {
 				$contact_list[$contact['contact_first_name']." ".$contact['contact_last_name']] = $contact['contact_id'];
 			}
 			unset($contacts);
@@ -203,19 +203,19 @@ print "expression: ".$filter."<br>";
 			print "<tr>\n";
 			foreach ($sql_ldap_mapping as $ldap_name => $sql_name) {
 				unset($val);
-				if(isset($info[$i][$ldap_name][0])){
+				if (isset($info[$i][$ldap_name][0])) {
 					$val = clean_value($info[$i][$ldap_name][0]);
 				} 
-				if(isset($val)){
+				if (isset($val)) {
 					//if an email address is not specified in Domino you get a crazy value for this field that looks like FOO/BAR%NAME@domain.com  This'll filter those values out.
-					if(isset($test) && $sql_name=="contact_email" && substr_count($val,"%")>0){
+					if (isset($test) && $sql_name=="contact_email" && mb_substr_count($val,"%")>0) {
 					?>
 						<td><span style="color:#880000;"><?php echo $AppUI->_('bad email address')?></span></td>
 					<?php
 						continue;
 					}
 					$pairs[$sql_name] = $val;
-					if(isset($test)){
+					if (isset($test)) {
 					?>
 						<td><?php echo $val?></td>
 					<?php
@@ -227,13 +227,13 @@ print "expression: ".$filter."<br>";
 				}
 			}
 
-			if(isset($import)){
+			if (isset($import)) {
 				$pairs["contact_order_by"] = $pairs["contact_last_name"]." ".$pairs["contact_first_name"];
 				//Check to see if this value already exists.
-				if(isset($contact_list[$pairs["contact_first_name"]." ".$pairs["contact_last_name"]])){
+				if (isset($contact_list[$pairs["contact_first_name"]." ".$pairs["contact_last_name"]])) {
 					//if it does, remove the old one.
 					$pairs["contact_id"] = $contact_list[$pairs["contact_first_name"]." ".$pairs["contact_last_name"]];
-					db_updateArray( $sql_table, $pairs, "contact_id");
+					db_updateArray($sql_table, $pairs, "contact_id");
 					echo "<td><span style=\"color:#880000;\">There is a duplicate record for ".$pairs["contact_first_name"]." ".$pairs["contact_last_name"].", the record has been updated.</span></td>\n";
 				} else {
 					echo "<td>Adding ".$pairs["contact_first_name"]." ".$pairs["contact_last_name"].".</td>\n";
@@ -243,7 +243,7 @@ print "expression: ".$filter."<br>";
 			print "</tr>\n";
 
 	/*
-			for ($ii=0; $ii<$info[$i]["count"]; $ii++){
+			for ($ii=0; $ii<$info[$i]["count"]; $ii++) {
 				$data = $info[$i][$ii];
 				for ($iii=0; $iii<$info[$i][$data]["count"]; $iii++) {
 					echo $data.":&nbsp;&nbsp;".$info[$i][$data][$iii]."\n";
@@ -257,7 +257,7 @@ echo "</table>";
 	ldap_close($ds);
 }
 
-function clean_value($str){
+function clean_value($str) {
 	$bad_values = array("'");
 	return str_replace($bad_values,"",$str);
 }

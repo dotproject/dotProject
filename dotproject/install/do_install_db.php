@@ -6,7 +6,7 @@ if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade') {
 }
 ######################################################################################################################
 
-$baseUrl = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : getenv('HTTP_HOST');
 $baseUrl .= isset($_SERVER['SCRIPT_NAME']) ? dirname(dirname($_SERVER['SCRIPT_NAME'])) : dirname(dirname(getenv('SCRIPT_NAME')));
 
@@ -19,14 +19,14 @@ $cFileMsg = 'Not Created';
 $dbErr = false;
 $cFileErr = false;
 
-$dbtype = trim( dPInstallGetParam( $_POST, 'dbtype', 'mysql' ) );
-$dbhost = trim( dPInstallGetParam( $_POST, 'dbhost', '' ) );
-$dbname = trim( dPInstallGetParam( $_POST, 'dbname', '' ) );
-$dbuser = trim( dPInstallGetParam( $_POST, 'dbuser', '' ) );
-$dbpass = trim( dPInstallGetParam( $_POST, 'dbpass', '' ) );
-$dbdrop = dPInstallGetParam( $_POST, 'dbdrop', false );
-$mode = dPInstallGetParam( $_POST, 'mode', 'upgrade' );
-$dbpersist = dPInstallGetParam( $_POST, 'dbpersist', false );
+$dbtype = trim(dPInstallGetParam($_POST, 'dbtype', 'mysql'));
+$dbhost = trim(dPInstallGetParam($_POST, 'dbhost', ''));
+$dbname = trim(dPInstallGetParam($_POST, 'dbname', ''));
+$dbuser = trim(dPInstallGetParam($_POST, 'dbuser', ''));
+$dbpass = trim(dPInstallGetParam($_POST, 'dbpass', ''));
+$dbdrop = dPInstallGetParam($_POST, 'dbdrop', false);
+$mode = dPInstallGetParam($_POST, 'mode', 'upgrade');
+$dbpersist = dPInstallGetParam($_POST, 'dbpersist', false);
 $dobackup = isset($_POST['dobackup']);
 $do_db = isset($_POST['do_db']);
 $do_db_cfg = isset($_POST['do_db_cfg']);
@@ -64,12 +64,12 @@ $versionPath = array(
 global $lastDBUpdate;
 $lastDBUpdate = '';
 
-require_once( DP_BASE_DIR.'/lib/adodb/adodb.inc.php' );
+require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
 @include_once DP_BASE_DIR.'/includes/version.php';
 
 $db = NewADOConnection($dbtype);
 
-if(!empty($db)) {
+if (!empty($db)) {
   $dbc = $db->Connect($dbhost,$dbuser,$dbpass);
   if ($dbc)
     $existing_db = $db->SelectDB($dbname);
@@ -83,12 +83,12 @@ $current_version = $dp_version_major . '.' . $dp_version_minor;
 $current_version .= isset($dp_version_patch) ? ('.'.$dp_version_patch) : '';
 $current_version .= isset($dp_version_prepatch) ? ('-'.$dp_version_prepatch) : '';
 
-if ($dobackup){
+if ($dobackup) {
 
- if( $dbc ) {
-  require_once( DP_BASE_DIR.'/lib/adodb/adodb-xmlschema.inc.php' );
+ if ($dbc) {
+  require_once(DP_BASE_DIR.'/lib/adodb/adodb-xmlschema.inc.php');
 
-  $schema = new adoSchema( $db );
+  $schema = new adoSchema($db);
 
   $sql = $schema->ExtractSchema(true);
 
@@ -246,10 +246,10 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  $config .= '?>';
  $config = trim($config);
 
-if ($do_cfg || $do_db_cfg){
- if ( (is_writable('../includes/config.php')  || ! is_file('../includes/config.php') ) && ($fp = fopen('../includes/config.php', 'w'))) {
-  fputs( $fp, $config, strlen( $config ) );
-  fclose( $fp );
+if ($do_cfg || $do_db_cfg) {
+ if ((is_writable('../includes/config.php')  || ! is_file('../includes/config.php')) && ($fp = fopen('../includes/config.php', 'w'))) {
+  fputs($fp, $config, mb_strlen($config));
+  fclose($fp);
   $cFileMsg = 'Config file written successfully'."\n";
  } else {
   $cFileErr = true;
@@ -273,7 +273,7 @@ if ($do_cfg || $do_db_cfg){
             <td class="title">Config File Creation Feedback:</td>
      <td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
   </tr>
-<?php if(($do_cfg || $do_db_cfg) && $cFileErr){ ?>
+<?php if (($do_cfg || $do_db_cfg) && $cFileErr) { ?>
  <tr>
      <td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand. Delete all empty lines and empty spaces after '?>' and save. This file should be readable by the webserver.</td>
   </tr>

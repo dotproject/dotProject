@@ -1,5 +1,5 @@
 <?php /* TASKS $Id$ */
-if (!(defined('DP_BASE_DIR'))){
+if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
@@ -68,18 +68,18 @@ $project->load($task_project);
 $perms =& $AppUI->acl();
 $users = $perms->getPermittedUsers('tasks');
 
-function getSpaces($amount){
+function getSpaces($amount) {
 	return (($amount == 0) ? '' : str_repeat('&nbsp;', $amount));
 }
 
-function constructTaskTree($task_data, $depth = 0){
+function constructTaskTree($task_data, $depth = 0) {
 	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
 
 	$selected = (($task_data['task_id'] == $task_parent) ? ' selected="selected"' : '');
-	$task_data['task_name'] = ((strlen($task_data[1]) > 45) 
-	                           ? (substr($task_data['task_name'],0, 45) . '...') 
+	$task_data['task_name'] = ((mb_strlen($task_data[1]) > 45) 
+	                           ? (mb_substr($task_data['task_name'],0, 45) . '...') 
 	                           : $task_data['task_name']);
 	
 	$task_parent_options .= ('<option value="' . $task_data['task_id'] . '"' . $selected . '>' 
@@ -174,7 +174,7 @@ $selected_departments = (($obj->task_departments != '') ? explode(',', $obj->tas
                          : array());
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if($department_selection_list != ''){
+if ($department_selection_list != '') {
 	$department_selection_list = ('<select name="dept_ids[]" class="text">' . "\n" 
 	                              . '<option value="0"></option>' . "\n" 
 	                              . $department_selection_list . "\n" . '</select>');
@@ -198,9 +198,9 @@ function getDepartmentSelectionList($company_id, $checked_array = array(),
 	$depts_list = db_loadHashList($sql, 'dept_id');
 	$q->clear();
 	
-	foreach($depts_list as $dept_id => $dept_info){
-		if (strlen($dept_info['dept_name']) > 30) {
-			$dept_info['dept_name'] = (substr($dept_info['dept_name'], 0, 28) . '...');
+	foreach ($depts_list as $dept_id => $dept_info) {
+		if (mb_strlen($dept_info['dept_name']) > 30) {
+			$dept_info['dept_name'] = (mb_substr($dept_info['dept_name'], 0, 28) . '...');
 		}
 		$selected = (in_array($dept_id, $checked_array) ? ' selected="selected"' : '');
 		$parsed .= ('<option value="' . $dept_id . '"' . $selected . '>' 
@@ -314,8 +314,8 @@ echo (($obj->task_milestone) ? ' checked="checked"' : ''); ?> />
 		<tr>
 			<td>
 				<input class="button" type="button" name="cancel" value="<?php 
-echo $AppUI->_('cancel'); ?>" onClick="if(confirm('<?php 
-echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php 
+echo $AppUI->_('cancel'); ?>" onClick="if (confirm('<?php 
+echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
 echo $AppUI->getPlace(); ?>';}" />
 			</td>
 			<td>
@@ -352,8 +352,8 @@ $tabBox->show('', true);
 		<tr>
 			<td>
 				<input class="button" type="button" name="cancel2" value="<?php 
-echo $AppUI->_('cancel'); ?>" onClick="if(confirm('<?php 
-echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php 
+echo $AppUI->_('cancel'); ?>" onClick="if (confirm('<?php 
+echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
 echo $AppUI->getPlace(); ?>';}" />
 			</td>
 			<td>

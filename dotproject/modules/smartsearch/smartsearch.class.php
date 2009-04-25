@@ -1,5 +1,5 @@
 <?php /* SMARTSEARCH$Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -37,7 +37,7 @@ class smartsearch  {
 //	$search_options['all_words']==""			match any of the words /default/
 //	$search_options['all_words']=="on"			match all words
 
-	function smartsearch(){
+	function smartsearch() {
 		return null;
 	}
 	
@@ -54,7 +54,7 @@ class smartsearch  {
 		}
 		return $tmplink;
 	}
-	function fetchResults(&$record_count){
+	function fetchResults(&$record_count) {
 		global $AppUI;
 		
 		$outstring = '';
@@ -98,10 +98,10 @@ class smartsearch  {
 		return $outstring;
 	}
 	
-	function setKeyword($keyw){
+	function setKeyword($keyw) {
 		$this->keyword = $keyw;
 	}
-	function setAdvanced($search_opts){
+	function setAdvanced($search_opts) {
 		$this->search_options = $search_opts;
 		$this->keywords = $search_opts['keywords'];
 	}
@@ -113,7 +113,7 @@ class smartsearch  {
 		$dPObj = new CDpObject($this->table, $this->table_key);
 		
 		$q->addTable($this->table, $this->table_alias);
-		foreach($this->table_joins as $join){
+		foreach ($this->table_joins as $join) {
 			$q->addJoin($join['table'],$join['alias'],$join['join']);
 		}
 		
@@ -175,23 +175,23 @@ function highlight($text, $keyval) {
 	$keys = ((!(is_array($keyval))) ? array($keyval) : $keyval);
 	
 	foreach ($keys as $key) {
-		if (strlen($key[0])>0) {
+		if (mb_strlen($key[0])>0) {
 			 $key[0] = stripslashes($key[0]);
 			if (isset($ssearch['ignore_specchar']) && $ssearch['ignore_specchar'] == 'on') {
 				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
 				$txt = $rep_func(recode2regexp_utf8($key[0]), 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
-								 $txt );
-			} elseif (!(isset($ssearch['ignore_specchar'])) || $ssearch['ignore_specchar'] == '') {
+								 $txt);
+			} else if (!(isset($ssearch['ignore_specchar'])) || $ssearch['ignore_specchar'] == '') {
 				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
 				$txt = $rep_func($key[0], 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
-								 $txt );
+								 $txt);
 			} else {
 				$rep_func = 'eregi_replace';
 				$txt = $rep_func(sql_regcase($key[0]), 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
-								 $txt );
+								 $txt);
 			}
 		}
 	}
@@ -200,7 +200,7 @@ function highlight($text, $keyval) {
 
 function recode2regexp_utf8($input) {
       $result="";
-      for($i=0, $ln=strlen($input); $i<$ln; ++$i)
+      for ($i=0, $ln=mb_strlen($input); $i<$ln; ++$i)
       switch($input[$i]) {
           case 'A':
           case 'a':

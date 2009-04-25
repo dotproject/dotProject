@@ -1,5 +1,5 @@
 <?php /* CONTACTS $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')){
  *	@version $Revision$
 */
 
-require_once( $AppUI->getSystemClass ('dp' ) );
+require_once($AppUI->getSystemClass ('dp'));
 
 /**
 * Contacts class
@@ -53,7 +53,7 @@ class CContact extends CDpObject{
 	var $contact_private = NULL;
 
 	function CContact() {
-		$this->CDpObject( 'contacts', 'contact_id' );
+		$this->CDpObject('contacts', 'contact_id');
 	}
 
 	function check() {
@@ -61,12 +61,12 @@ class CContact extends CDpObject{
 			return 'contact id is NULL';
 		}
 	// ensure changes of state in checkboxes is captured
-		$this->contact_private = intval( $this->contact_private );
-		$this->contact_owner = intval( $this->contact_owner );
+		$this->contact_private = intval($this->contact_private);
+		$this->contact_owner = intval($this->contact_owner);
 		return NULL; // object is ok
 	}
 	
-	function canDelete( &$msg, $oid=null, $joins=null ) {
+	function canDelete(&$msg, $oid=null, $joins=null) {
 		global $AppUI;
 		if ($oid) {
 			// Check to see if there is a user
@@ -94,18 +94,18 @@ class CContact extends CDpObject{
 		return true;
 	}
 
-	function getCompanyID(){
+	function getCompanyID() {
 		$q  = new DBQuery;
 		$q->addTable('companies');
 		$q->addQuery('company_id');
 		$q->addWhere('company_name = '.$this->contact_company);
 		$sql = $q->prepare();
 		$q->clear();
-		$company_id = db_loadResult( $sql );
+		$company_id = db_loadResult($sql);
 		return $company_id;
 	}
 
-	function getCompanyName(){
+	function getCompanyName() {
 		$sql = "select company_name from companies where company_id = '" . $this->contact_company . "'";
 		$q  = new DBQuery;
 		$q->addTable('companies');
@@ -113,7 +113,7 @@ class CContact extends CDpObject{
 		$q->addWhere('company_id = '.$this->contact_company);
 		$sql = $q->prepare();
 		$q->clear();
-		$company_name = db_loadResult( $sql );
+		$company_name = db_loadResult($sql);
 		return $company_name;
  	}
 

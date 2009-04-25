@@ -1,5 +1,5 @@
 <?php /* SYSTEM $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')){
 $user_id = dPgetParam($_GET, 'user_id', '0');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
-  $AppUI->redirect("m=public&a=access_denied" );
+  $AppUI->redirect("m=public&a=access_denied");
 }
 
 // load the preferences
@@ -19,20 +19,20 @@ FROM user_preferences
 WHERE pref_user in (0, $user_id)
 ORDER by pref_user
 ";
-$prefs = db_loadHashList( $sql );
+$prefs = db_loadHashList($sql);
 
 // get the user name
 $user = (($user_id) ? dPgetUsernameFromID($user_id) : 'Default');
 
-$titleBlock = new CTitleBlock( 'Edit User Preferences', 'myevo-weather.png', $m, "$m.$a" );
+$titleBlock = new CTitleBlock('Edit User Preferences', 'myevo-weather.png', $m, "$m.$a");
 if (getPermission('system', 'edit')) {
-	$titleBlock->addCrumb( "?m=system", "system admin" );
-	$titleBlock->addCrumb( "?m=system&a=systemconfig", "system configuration" );
+	$titleBlock->addCrumb("?m=system", "system admin");
+	$titleBlock->addCrumb("?m=system&a=systemconfig", "system configuration");
 }
 $titleBlock->show();
 ?>
 <script language="javascript">
-function submitIt(){
+function submitIt() {
 	var form = document.changeuser;
 	// Collate the checked states of the task log stuff
 	var defs = document.getElementById('task_log_email_defaults');
@@ -68,12 +68,12 @@ function submitIt(){
 <?php
 	// read the installed languages
 	$LANGUAGES = $AppUI->loadLanguages();
-	$temp = $AppUI->setWarning( false );
+	$temp = $AppUI->setWarning(false);
 	$langlist = array();
 	foreach ($LANGUAGES as $lang => $langinfo)
 		$langlist[$lang] = $langinfo[1];
-	echo arraySelect( $langlist, 'pref_name[LOCALE]', 'class=text size=1', @$prefs['LOCALE'], true );
-	$AppUI->setWarning( $temp );
+	echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', @$prefs['LOCALE'], true);
+	$AppUI->setWarning($temp);
 ?>
 	</td>
 </tr>
@@ -82,8 +82,8 @@ function submitIt(){
 	<td align="right"><?php echo $AppUI->_('Tabbed Box View');?>:</td>
 	<td>
 <?php
-	$tabview = array( 'either', 'tabbed', 'flat' );
-	echo arraySelect( $tabview, 'pref_name[TABVIEW]', 'class=text size=1', @$prefs['TABVIEW'], true );
+	$tabview = array('either', 'tabbed', 'flat');
+	echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', @$prefs['TABVIEW'], true);
 ?>
 	</td>
 </tr>
@@ -96,13 +96,13 @@ function submitIt(){
 	$ex = new CDate();
 
 	$dates = array();
-	$f = "%d/%m/%Y"; $dates[$f]	= $ex->format( $f );
-	$f = "%d/%b/%Y"; $dates[$f]	= $ex->format( $f );
-	$f = "%m/%d/%Y"; $dates[$f]	= $ex->format( $f );
-	$f = "%b/%d/%Y"; $dates[$f]	= $ex->format( $f );
-	$f = "%d.%m.%Y"; $dates[$f]	= $ex->format( $f );
-        $f = "%Y/%b/%d"; $dates[$f]     = $ex->format( $f ); 
-	echo arraySelect( $dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', @$prefs['SHDATEFORMAT'], false );
+	$f = "%d/%m/%Y"; $dates[$f]	= $ex->format($f);
+	$f = "%d/%b/%Y"; $dates[$f]	= $ex->format($f);
+	$f = "%m/%d/%Y"; $dates[$f]	= $ex->format($f);
+	$f = "%b/%d/%Y"; $dates[$f]	= $ex->format($f);
+	$f = "%d.%m.%Y"; $dates[$f]	= $ex->format($f);
+        $f = "%Y/%b/%d"; $dates[$f]     = $ex->format($f); 
+	echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', @$prefs['SHDATEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -113,10 +113,10 @@ function submitIt(){
 <?php
 	// exmample date
 	$times = array();
-	$f = "%I:%M %p"; $times[$f]	= $ex->format( $f );
-	$f = "%H:%M"; $times[$f]	= $ex->format( $f ).' (24)';
-	$f = "%H:%M:%S"; $times[$f]	= $ex->format( $f ).' (24)';
-	echo arraySelect( $times, 'pref_name[TIMEFORMAT]', 'class=text size=1', @$prefs['TIMEFORMAT'], false );
+	$f = "%I:%M %p"; $times[$f]	= $ex->format($f);
+	$f = "%H:%M"; $times[$f]	= $ex->format($f).' (24)';
+	$f = "%H:%M:%S"; $times[$f]	= $ex->format($f).' (24)';
+	echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', @$prefs['TIMEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -128,14 +128,14 @@ function submitIt(){
 	$currencies = array();
 	$currEx = 1234567.89;
 
-	if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
+	if (mb_strtoupper(mb_substr(PHP_OS, 0, 3)) == 'WIN')
 		$is_win = true;
 	else
 		$is_win = false;
 	foreach (array_keys($LANGUAGES) as $lang) {
 		$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 	}
-	echo arraySelect( $currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', @$prefs['CURRENCYFORM'], false );
+	echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', @$prefs['CURRENCYFORM'], false);
 ?>
 	</td>
 </tr>
@@ -145,10 +145,10 @@ function submitIt(){
 	<td>
 <?php
         $uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'default';
-	$styles = $AppUI->readDirs( 'style' );
-	$temp = $AppUI->setWarning( false );
-	echo arraySelect( $styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true , true);
-	$AppUI->setWarning( $temp );
+	$styles = $AppUI->readDirs('style');
+	$temp = $AppUI->setWarning(false);
+	echo arraySelect($styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true , true);
+	$AppUI->setWarning($temp);
 ?>
 	</td>
 </tr>
@@ -161,7 +161,7 @@ function submitIt(){
         for ($i = 5; $i <= 200; $i+=5) {
                 $taskAssMax[$i] = $i.'%';
         }
-	echo arraySelect( $taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $tam, false );
+	echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $tam, false);
 
 ?>
 	</td>
@@ -171,7 +171,7 @@ function submitIt(){
 	<td>
 <?php
 	require_once $AppUI->getModuleClass('calendar');
-	echo arraySelect( $event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', @$prefs['EVENTFILTER'], true);
+	echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', @$prefs['EVENTFILTER'], true);
 ?>
 	</td>
 </tr>
@@ -179,12 +179,12 @@ function submitIt(){
 	<td align="right"><?php echo $AppUI->_('Task Notification Method');?>:</td>
 	<td>
 <?php
-	$notify_filter = array( 
+	$notify_filter = array(
 		0 => 'Do not include task/event owner',
 		1 => 'Include task/event owner'
 	);
  
-	echo arraySelect( $notify_filter, 'pref_name[MAILALL]', 'class=text size=1', @$prefs['MAILALL'], true);
+	echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', @$prefs['MAILALL'], true);
 
 ?>
 	</td>
@@ -230,7 +230,7 @@ function submitIt(){
 	<?php
 		$record_method['0'] = $AppUI->_('None');
 		$record_method['1'] = $AppUI->_('Append to Log');
-		echo arraySelect( $record_method, 'pref_name[TASKLOGNOTE]', 'class=text size=1', @$prefs['TASKLOGNOTE'], false );
+		echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class=text size=1', @$prefs['TASKLOGNOTE'], false);
 	?>
 	</td>
 </tr>

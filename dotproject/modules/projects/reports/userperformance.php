@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
@@ -22,7 +22,7 @@ $end_date->setTime(23, 59, 59);
 <script language="javascript">
 var calendarField = '';
 
-function popCalendar(field){
+function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
 	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
@@ -79,7 +79,7 @@ function setCalendar(idate, fdate) {
 </form>
 
 <?php
-if($do_report){
+if ($do_report) {
 	
 	// Let's figure out which users we have
 	$sql = "SELECT  u.user_id,
@@ -102,10 +102,10 @@ if($do_report){
 	        WHERE t.task_id = ut.task_id
 				  AND t.task_milestone    ='0'";
 	
-	if($project_id != 0)
+	if ($project_id != 0)
 		$sql .= " AND t.task_project='$project_id'\n";
 		
-	if(!$log_all){
+	if (!$log_all) {
 		$sql .= " AND t.task_start_date >= \"".$start_date->format(FMT_DATETIME_MYSQL)."\"
 		          AND t.task_start_date <= \"".$end_date->format(FMT_DATETIME_MYSQL)."\"";
 	}
@@ -126,13 +126,13 @@ if($do_report){
 	</tr>
 
 <?php
-	if(count($user_list)){
+	if (count($user_list)) {
 		$percentage_sum = $hours_allocated_sum = $hours_worked_sum = 0;
 		$sum_total_hours_allocated = $sum_total_hours_worked = 0;
 		$sum_hours_allocated_complete = $sum_hours_worked_complete = 0;
 	
 //TODO: Split times for which more than one users were working...	
-		foreach($user_list as $user_id => $user){
+		foreach ($user_list as $user_id => $user) {
 			$sql = "SELECT task_id
 			        FROM user_tasks
 			        where user_id = $user_id";
@@ -141,8 +141,8 @@ if($do_report){
 			$total_hours_allocated = $total_hours_worked = 0;
 			$hours_allocated_complete = $hours_worked_complete = 0;
 			
-			foreach($tasks_id as $task_id){
-				if(isset($task_list[$task_id])){
+			foreach ($tasks_id as $task_id) {
+				if (isset($task_list[$task_id])) {
 					// Now let's figure out how many time did the user spent in this task
 					$sql = "SELECT sum(task_log_hours)
 		        			FROM task_log
@@ -175,10 +175,10 @@ if($do_report){
 			$sum_hours_allocated_complete += $hours_allocated_complete;
 			$sum_hours_worked_complete    += $hours_worked_complete;
 			
-			if($total_hours_allocated > 0 || $total_hours_worked > 0){
+			if ($total_hours_allocated > 0 || $total_hours_worked > 0) {
 				$percentage = 0;
 				$percentage_e = 0;
-				if($total_hours_worked>0){
+				if ($total_hours_worked>0) {
 					$percentage = ($total_hours_worked/$total_hours_allocated)*100;
 					if ($hours_worked_complete > 0)
 						$percentage_e = ($hours_allocated_complete/$hours_worked_complete)*100;
@@ -196,7 +196,7 @@ if($do_report){
 		}
 		$sum_percentage = 0;
                 $sum_efficiency = 0;
-		if($sum_total_hours_worked > 0){
+		if ($sum_total_hours_worked > 0) {
 			$sum_percentage = ($sum_total_hours_worked/$sum_total_hours_allocated)*100;
 			if ($sum_hours_worked_complete > 0)
 				$sum_efficiency = ($sum_hours_allocated_complete/$sum_hours_worked_complete)*100;

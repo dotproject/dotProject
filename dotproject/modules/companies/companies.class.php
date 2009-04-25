@@ -1,5 +1,5 @@
 <?php /* COMPANIES $Id$ */
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')){
  *	@version $Revision$
 */
 
-require_once( $AppUI->getSystemClass ('dp' ) );
+require_once($AppUI->getSystemClass ('dp'));
 
 /**
  *	Companies Class
@@ -44,7 +44,7 @@ class CCompany extends CDpObject {
 	var $company_custom = null;
 
 	function CCompany() {
-		$this->CDpObject( 'companies', 'company_id' );
+		$this->CDpObject('companies', 'company_id');
 	}
     
 // overload check
@@ -52,18 +52,18 @@ class CCompany extends CDpObject {
 		if ($this->company_id === NULL) {
 			return 'company id is NULL';
 		}
-		$this->company_id = intval( $this->company_id );
+		$this->company_id = intval($this->company_id);
 
 		return NULL; // object is ok
 	}
 
 // overload canDelete
-	function canDelete( &$msg, $oid=null ) {
-		$tables[] = array( 'label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company' );
-		$tables[] = array( 'label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company' );
-		$tables[] = array( 'label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company' );
+	function canDelete(&$msg, $oid=null) {
+		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
+		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
+		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
 	// call the parent class method to assign the oid
-		return CDpObject::canDelete( $msg, $oid, $tables );
+		return CDpObject::canDelete($msg, $oid, $tables);
 	}
 
 	/*
@@ -72,7 +72,7 @@ class CCompany extends CDpObject {
 	** @return	array 	HashList
 	*/
 
-	function listCompaniesByType ( $type ) {
+	function listCompaniesByType ($type) {
 		global $AppUI;
 		$q = new DBQuery;
 		$q->addQuery('company_id, company_name');

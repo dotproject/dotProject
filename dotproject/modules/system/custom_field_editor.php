@@ -1,5 +1,5 @@
 <?php
-if (!defined('DP_BASE_DIR')){
+if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
@@ -10,17 +10,17 @@ if (!defined('DP_BASE_DIR')){
 
 	$AppUI->savePlace();
 
-	require_once($AppUI->getSystemClass( 'CustomFields' ));
+	require_once($AppUI->getSystemClass('CustomFields'));
 
 	$titleBlock = new CTitleBlock('Custom field editor', "customfields.png", "admin", "admin.custom_field_editor");
-	$titleBlock->addCrumb( "?m=system", "system admin" );
+	$titleBlock->addCrumb("?m=system", "system admin");
 
-	$edit_field_id = dpGetParam( $_POST, "field_id", NULL );
+	$edit_field_id = dpGetParam($_POST, "field_id", NULL);
 
 	$titleBlock->show();
 
 	$sql = "SELECT * FROM modules WHERE mod_name IN ('Companies', 'Projects', 'Tasks', 'Calendar') ORDER BY mod_ui_order";
-	$modules = db_loadList( $sql );
+	$modules = db_loadList($sql);
 
 	echo "<table cellpadding=\"2\">";
 
@@ -34,8 +34,8 @@ if (!defined('DP_BASE_DIR')){
 		echo "<a href=\"?m=system&a=custom_field_addedit&module=".$module["mod_name"]."\"><img src='./images/icons/stock_new.png' align='center' width='16' height='16' border='0'>".$AppUI->_('Add a new Custom Field to this Module')."</a><br /><br />";
 		echo "</td></tr>";
 
-		$sql = "SELECT * FROM custom_fields_struct WHERE field_module = '".strtolower($module["mod_name"])."'";
-		$custom_fields = db_loadList( $sql );
+		$sql = "SELECT * FROM custom_fields_struct WHERE field_module = '".mb_strtolower($module["mod_name"])."'";
+		$custom_fields = db_loadList($sql);
 
 		foreach ($custom_fields as $f)
 		{
