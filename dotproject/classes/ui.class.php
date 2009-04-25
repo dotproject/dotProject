@@ -312,7 +312,7 @@ class CAppUI {
 			$this->user_locale = $base_locale;
 			$this->user_lang = $user_lang;
 			$locale_char_set = $lcs;
-			mb_internal_encoding($locale_char_set);
+			//mb_internal_encoding($locale_char_set);
 		} else {
 			return $user_lang;
 		}
