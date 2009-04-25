@@ -1,29 +1,6 @@
 <?php
-/*
-* Description:	Functions for generating PDF reports
-*
-* Author:		Wayne Munro, R&OS Ltd, http://www.ros.co.nz/pdf
-*
-* Updated by:	Paul A. Harouff, P.E. <pharouff@jvpengineers.com>
-*
-* Date:			2003/08/09
-*
-* License:		GPL
-*
-* CHANGE LOG
-*
-* version 009.1
-* - In function ezTable, changed $options['options'] to $options['col_options'] and
-*     corrected lines where incorrectly referenced as $options['cols']. Corrected
-*     documentation where incorrectly stated to pass column names in array.
-*     ezTable assumes column names are 0, 1, 2 ... for maxWidth calculations.
-*
-*
-* TO DO LIST
-*
-*
-*/
-require_once( $AppUI->getLibraryClass( 'ezpdf/class.pdf') );
+
+include_once('class.pdf.php');
 
 class Cezpdf extends Cpdf {
 //==============================================================================
@@ -652,7 +629,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   //    wide, then it will stretch the table to fit, if it is wider then each cell will be made
   //    proportionalty smaller, and the content may have to wrap.
   // 'maxWidth'=> <number> similar to 'width', but will only make table smaller than it wants to be
-  // 'col_options' => array( array('justification'=>'left','width'=>100,'link'=>linkDataName), array(...), ...)
+  // 'options' => array(<colname>=>array('justification'=>'left','width'=>100,'link'=>linkDataName),<colname>=>....)
   //             allow the setting of other paramaters for the individual columns
   // 'minRowSpace'=> the minimum space between the bottom of each row and the bottom margin, in which a new row will be started
   //                  if it is less, then a new page would be started, default=-100
@@ -689,7 +666,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   $defaults = array(
     'shaded'=>1,'showLines'=>1,'shadeCol'=>array(0.8,0.8,0.8),'shadeCol2'=>array(0.7,0.7,0.7),'fontSize'=>10,'titleFontSize'=>12
     ,'titleGap'=>5,'lineCol'=>array(0,0,0),'gap'=>5,'xPos'=>'centre','xOrientation'=>'centre'
-    ,'showHeadings'=>1,'textCol'=>array(0,0,0),'width'=>0,'maxWidth'=>0,'col_options'=>array(),'minRowSpace'=>-100,'rowGap'=>2,'colGap'=>5
+    ,'showHeadings'=>1,'textCol'=>array(0,0,0),'width'=>0,'maxWidth'=>0,'cols'=>array(),'minRowSpace'=>-100,'rowGap'=>2,'colGap'=>5
     ,'innerLineThickness'=>1,'outerLineThickness'=>1,'splitRows'=>0,'protectRows'=>1
     );
 
@@ -739,10 +716,10 @@ function ezTable(&$data,$cols='',$title='',$options=''){
     $pos[$colName]=$t;
     // if the column width has been specified then set that here, also total the
     // width avaliable for adjustment
-    if (isset($options['col_options'][$colName]) && isset($options['col_options'][$colName]['width']) && $options['col_options'][$colName]['width']>0){
-      $t=$t+$options['col_options'][$colName]['width'];
-      $maxWidth[$colName] = $options['col_options'][$colName]['width']-$options['gap'];
-      $setWidth += $options['col_options'][$colName]['width'];
+    if (isset($options['cols'][$colName]) && isset($options['cols'][$colName]['width']) && $options['cols'][$colName]['width']>0){
+      $t=$t+$options['cols'][$colName]['width'];
+      $maxWidth[$colName] = $options['cols'][$colName]['width']-$options['gap'];
+      $setWidth += $options['cols'][$colName]['width'];
     } else {
       $t=$t+$w+$options['gap'];
       $adjustmentWidth += $w;
@@ -766,7 +743,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
     $presentWidth=0;
     $last='';
     foreach($pos as $colName=>$p){
-      if (!isset($options['col_options'][$last]) || !isset($options['col_options'][$last]['width']) || $options['col_options'][$last]['width']<=0){
+      if (!isset($options['cols'][$last]) || !isset($options['cols'][$last]['width']) || $options['cols'][$last]['width']<=0){
         if (strlen($last)){
           $cols0[$last]=$p-$xq -$options['gap'];
           $presentWidth += ($p-$xq - $options['gap']);
@@ -825,7 +802,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
     $xq=0;
     foreach($pos as $colName=>$p){
       $pos[$colName]=$xq;
-      if (!isset($options['col_options'][$colName]) || !isset($options['col_options'][$colName]['width']) || $options['col_options'][$colName]['width']<=0){
+      if (!isset($options['cols'][$colName]) || !isset($options['cols'][$colName]['width']) || $options['cols'][$colName]['width']<=0){
         if (isset($cols0[$colName])){
           $xq += $cols0[$colName] + $options['gap'];
           $maxWidth[$colName]=$cols0[$colName];
@@ -1061,12 +1038,12 @@ function ezTable(&$data,$cols='',$title='',$options=''){
         $this->ezSetY($y+$height);
         $colNewPage=0;
         if (isset($row[$colName])){
-          if (isset($options['col_options'][$colName]) && isset($options['col_options'][$colName]['link']) && strlen($options['col_options'][$colName]['link'])){
+          if (isset($options['cols'][$colName]) && isset($options['cols'][$colName]['link']) && strlen($options['cols'][$colName]['link'])){
             
             $lines = explode("\n",$row[$colName]);
-            if (isset($row[$options['col_options'][$colName]['link']]) && strlen($row[$options['col_options'][$colName]['link']])){
+            if (isset($row[$options['cols'][$colName]['link']]) && strlen($row[$options['cols'][$colName]['link']])){
               foreach($lines as $k=>$v){
-                $lines[$k]='<c:alink:'.$row[$options['col_options'][$colName]['link']].'>'.$v.'</c:alink>';
+                $lines[$k]='<c:alink:'.$row[$options['cols'][$colName]['link']].'>'.$v.'</c:alink>';
               }
             }
           } else {
@@ -1098,8 +1075,8 @@ function ezTable(&$data,$cols='',$title='',$options=''){
               }
               $line='';
             } else {
-              if (isset($options['col_options'][$colName]) && isset($options['col_options'][$colName]['justification']) ){
-                $just = $options['col_options'][$colName]['justification'];
+              if (isset($options['cols'][$colName]) && isset($options['cols'][$colName]['justification']) ){
+                $just = $options['cols'][$colName]['justification'];
               } else {
                 $just='left';
               }
