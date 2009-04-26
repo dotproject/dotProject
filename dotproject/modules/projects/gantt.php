@@ -129,7 +129,7 @@ if ($start_date && $end_date) {
 	$graph->SetDateRange($start_date, $end_date);
 }
 
-//$graph->scale->actinfo->SetFont(FF_CUSTOM);
+$graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 $graph->scale->actinfo->vgrid->SetColor('gray');
 $graph->scale->actinfo->SetColor('darkgray');
 $graph->scale->actinfo->SetColTitles(array($AppUI->_('Project name', UI_OUTPUT_RAW), 
@@ -204,6 +204,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
 	$d = new CDate();
 	$bar = new GanttBar($row++, array(' '.$AppUI->_('No projects found'),  ' ', ' ', ' '), 
 	                    $d->getDate(), $d->getDate(), ' ', 0.6);
+	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 	$bar->title->SetColor('red');
 	$graph->Add($bar);
 }
@@ -273,6 +274,7 @@ if (is_array($projects)) {
 		//adding captions
 		$bar->caption = new TextProperty($caption);
 		$bar->caption->Align('left','center');
+		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		
         // gray out templates, completes, on ice, on hold
         if ($p['project_status'] != '3' || $p['project_status'] == '7') {
@@ -367,6 +369,7 @@ unset($projects);
 
 $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
+$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
 $graph->Add($vline);
 $graph->Stroke();
 ?>

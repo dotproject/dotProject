@@ -77,7 +77,7 @@ if ($start_date && $end_date) {
 	$graph2->SetDateRange($start_date, $end_date);
 }
 
-//$graph2->scale->actinfo->SetFont(FF_CUSTOM);
+$graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 $graph2->scale->actinfo->vgrid->SetColor('gray');
 $graph2->scale->actinfo->SetColor('darkgray');
 $graph2->scale->actinfo->SetColTitles(array($AppUI->_('User Name', UI_OUTPUT_RAW), 
@@ -150,7 +150,8 @@ if (!is_array($tasks) || sizeof($tasks) == 0) {
 	$d = new CDate();
 	$bar = new GanttBar($row++, array(' '.$AppUI->_('No tasks found'),  ' ', ' ', ' '), 
 	                    $d->getDate(), $d->getDate(), ' ', 0.6);
-	$bar->title->SetCOlor('red');
+	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+	$bar->title->SetColor('red');
 	$graph2->Add($bar);
 }
 
@@ -162,6 +163,7 @@ if (is_array($tasks)) {
 		if ($nameUser != $t['user_name']) {
 			$row++;
 			$barTmp = new GanttBar($row++, array($t['user_name'], '', '',' '), '0', '0;' , 0.6);
+			$barTmp->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 			$barTmp->title->SetColor('#' . $t['project_color_identifier']);
 			$barTmp->SetFillColor('#' . $t['project_color_identifier']);
 			if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
@@ -224,6 +226,7 @@ if (is_array($tasks)) {
 			$bar = new GanttBar($row++, 
 			                    array($name, $startdate->format($df), $enddate->format($df), ' '), 
 			                    $start, $actual_end, $cap, ($t['task_dynamic'] == 1 ? 0.1 : 0.6));
+			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 				$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
 			}
@@ -233,8 +236,10 @@ if (is_array($tasks)) {
 			//adding captions
 			$bar->caption = new TextProperty($caption);
 			$bar->caption->Align('left','center');
+			$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		} else {
-			$bar  = new MileStone ($row++, $name, $start, (mb_substr($start, 0, 10)));
+			$bar = new MileStone ($row++, $name, $start, (mb_substr($start, 0, 10)));
+			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 			$bar->title->SetColor('#CC0000');
 		}
 		
@@ -246,6 +251,7 @@ if (is_array($tasks)) {
 
 $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
+$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
 $graph->Add($vline);
 $graph2->Stroke();
 ?>
