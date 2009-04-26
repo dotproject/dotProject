@@ -708,7 +708,7 @@ function _addressEncode($addr, $offset=0)
     $matches = NULL;
     $mail = '';
     $txt = '';
-    if (!preg_match('/^(.*)(?<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches)) 
+    if (!@preg_match('/^(.*)(\?<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches)) 
         return $addr;
     
     $txt  = $matches[1];

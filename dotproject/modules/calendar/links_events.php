@@ -13,14 +13,17 @@ if (!defined('DP_BASE_DIR')) {
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
 function getEventLinks($startPeriod, $endPeriod, &$links, $strMaxLen) {
-	global $event_filter;
+  global $AppUI, $event_filter;
 	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
 
 	// assemble the links for the events
 	foreach ($events as $row) {
 		$start = new CDate($row['event_start_date']);
 		$end = new CDate($row['event_end_date']);
+		
 		$date = $start;
+		$date->setTime(0, 0, 0);
+		
 		$cwd = explode(',', $GLOBALS['dPconfig']['cal_working_days']);
 
 		for ($i=0, $x=$end->dateDiff($start); $i <= $x; $i++) {
@@ -33,8 +36,17 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $strMaxLen) {
 				$link['text'] = (dPshowImage(dPfindImage(('event' . $row['event_type'] . '.png'), 
 														 'calendar'), 16, 16)
 				                 . htmlspecialchars($row['event_title']));
+			
+			
+				if ($i == 0) {
+					$link['alt'] .= (' [' . $AppUI->_('START') . ']');
+				} 
+				if ($i == $x) {
+					$link['alt'] .= (' [' . $AppUI->_('END') . ']');
+				}
 				$links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
 			}
+			
 			$date = $date->getNextDay();
 		}
 	}

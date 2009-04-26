@@ -9,7 +9,7 @@ $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : f
 // check permissions
 $canAuthor = getPermission('events', 'add', $event_id);
 $canEdit = getPermission('events', 'edit', $event_id);
-if (!(($canEdit && $event_id) || ($canAuthor && !($event_id))) {
+if (!(($canEdit && $event_id) || ($canAuthor && !($event_id)))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

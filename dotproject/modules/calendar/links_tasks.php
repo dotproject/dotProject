@@ -54,7 +54,9 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 			}
 			$links[$start->format(FMT_TIMESTAMP_DATE)][] = $temp;
 		}
-		if ($end && $end->after($startPeriod) && $end->before($endPeriod) && $start->before($end)) {
+		if ($end && $start->before($end) 
+			&& ($end->after($startPeriod) || $end->equals($startPeriod)) 
+			|| ($end->before($endPeriod) || $end->equals($endPeriod))) {
 			$temp = $link;
 			$temp['alt'] = ("FINISH\n" . $link['alt']);
 			if ($a != 'day_view') {

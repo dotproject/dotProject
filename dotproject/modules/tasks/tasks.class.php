@@ -1194,12 +1194,14 @@ class CTask extends CDpObject
 		             . ', t.task_duration, t.task_duration_type' 
 		             . ', p.project_color_identifier AS color, p.project_name');
 		$q->addWhere('task_status > -1' 
-					 . " AND (task_start_date <= '{$db_end}' AND (task_end_date >= '{$db_start}'" 
-					 . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL))");
+		             . " AND ((task_start_date <= '{$db_end}'" 
+		             . " AND (task_end_date >= '{$db_start}'" 
+		             . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL)" 
+		             . " OR task_start_date BETWEEN '$db_start' AND '$db_end'))");
 		if ($user_id) {
 			$q->addWhere("ut.user_id = '$user_id'");
 		}
-
+		
 		if ($company_id) {
 			$q->addWhere('p.project_company = ' . $company_id);
 		}

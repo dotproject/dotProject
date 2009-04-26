@@ -529,8 +529,7 @@ class CEvent extends CDpObject {
 			}
 		}
 		
-		if ($start_date->compare ($start_date, $eventStart) <= 0 &&
-			$end_date->compare ($end_date, $eventEnd) >= 0) {
+		if ($eventStart->before($end_date) && $eventEnd->after($start_date)){
 			// add temporarily moved Event Start and End dates to returnArray
 			$transferredEvent = array($eventStart, $eventEnd);
 		}
@@ -609,11 +608,10 @@ class CEvent extends CDpObject {
 			}
 			
 			if ($query_set == 'q') { // assemble query for non-recursive events
-				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
-				$$query_set->addWhere("(event_start_date <= '" . $db_end 
-									  . "' AND event_end_date >= '" . $db_start 
-									  . "' OR event_start_date BETWEEN '$db_start' AND '$db_end')");
+				$$query_set->addWhere('(event_recurs <= 0)');
+				$$query_set->addWhere("(event_start_date <= '$db_end'" 
+									  . " AND event_end_date >= '$db_start')");
 				$eventList = $$query_set->loadList();
 			} else if ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
