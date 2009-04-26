@@ -17,7 +17,8 @@ $this_month = new CDate($date);
 
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : dPgetConfig('host_style');
 ?>
-<a href="javascript: void(0);" onClick="clickDay('', '');">clear date</a>
+<a href="javascript: void(0);" onClick="clickDay('', '');"><?php 
+echo $AppUI->_('clear date'); ?></a>
 <?php
 $cal = new CMonthCalendar($this_month);
 $cal->setStyles('poptitle', 'popcal');
@@ -50,9 +51,11 @@ echo $cal->show();
 <?php
 	for ($i=0; $i < 12; $i++) {
 		$this_month->setMonth($i+1);
-		echo "\n\t<td width=\"8%\">"
-			."<a href=\"index.php?m=public&a=calendar&dialog=1&callback=$callback&date=".$this_month->format(FMT_TIMESTAMP_DATE)."&uts=$prev_date\" class=\"\">".mb_substr($this_month->format("%b"), 0, 1)."</a>"
-			."</td>";
+		echo ("\n\t" . '<td width="8%">' 
+		      . '<a href="index.php?m=public&a=calendar&dialog=1&callback=' . $callback 
+		      . '&date=' . $this_month->format(FMT_TIMESTAMP_DATE) . '&uts=' . $prev_date 
+		      . '" class="">' . mb_substr($AppUI->_($this_month->format("%B")), 0, 1) 
+		      . '</a></td>');
 	}
 ?>
 	</tr>

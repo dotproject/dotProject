@@ -233,7 +233,8 @@ class CMonthCalendar {
 			$s .= ('<a href="index.php?m=' . $m . '&amp;date=' 
 			       . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">');
 		}
-		$s .= $this->this_month->format("%B %Y") . (($this->clickMonth) ? '</a>' : '');
+		$s .= ($AppUI->_($this->this_month->format("%B")) . $this->this_month->format(" %Y") 
+		       . (($this->clickMonth) ? '</a>' : ''));
 		$s .= "</th>";
 		
 		if ($this->showArrows) {
