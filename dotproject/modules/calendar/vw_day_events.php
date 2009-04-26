@@ -32,11 +32,22 @@ foreach ($events as $row) {
 	$start_date = new CDate($row['event_start_date']);
 	$end_date = new CDate($row['event_end_date']);
 	
+	//Adjust display start hour (as necessary)
 	if ($start_hour > $start_date->format('%H')) {
 		$start_hour = $start_date->format('%H');
 	}
+	if ($start_hour >  $end_date->format('%H') 
+	    && $end_date->format('%Y%m%d') == $this_day->format('%Y%m%d')) {
+		$start_hour = $end_date->format('%H');
+	}
+	
+	//Adjust display end hour (as necessary)
 	if ($end_hour < $end_date->format('%H')) {
 		$end_hour = $end_date->format('%H');
+	}
+	if ($end_hour < $start_date->format('%H') 
+	    && $end_date->format('%Y%m%d') == $this_day->format('%Y%m%d')) {
+		$end_hour = $start_date->format('%H') + 1;
 	}
 }
 
@@ -52,6 +63,7 @@ if ($start === null) $start = 8;
 if ($end === null) $end = 17;
 if ($inc === null) $inc = 15;
 
+//display adjusted events
 $this_day->setTime($start, 0, 0);
 $events2 = array();
 foreach ($events as $row) {
@@ -63,6 +75,44 @@ foreach ($events as $row) {
 		$events2[$start_date->format('%H%M%S')][] = $row;
 	}
 	
+}
+
+
+// calculate colums per each time row
+$this_day->setTime($start, 0, 0);
+$disp_columns = array();
+for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
+	$disp_columns[$i] = 0;
+}
+for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
+	$timeStamp = $this_day->format('%H%M%S');
+	if (@$events2[$timeStamp]) {
+		$count = count($events2[$timeStamp]);
+		for ($j = 0; $j < $count; $j++) {
+			$row = $events2[$timeStamp][$j];
+			
+			$et = new CDate($row['event_end_date']);
+			$et_date = new CDate($row['event_end_date']);
+			$et_date->setTime(0, 0, 0);
+			
+			if ($et_date->after($this_day)) { 
+				$rows = $n - $i;
+			} else {
+				$rows = (($et->getHour()*60 + $et->getMinute()) 
+				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
+			}
+			
+			for ($k=$i; $k < ($i + $rows); $k++) {
+				$disp_columns[$k]++;
+			}
+		}
+	}
+	$this_day->addSeconds(60*$inc);
+}
+//calculate maximum concurrent events
+$disp_max_cols = 1; //need at least one blank column to follow time
+foreach($disp_columns as $col_count) {
+	$disp_max_cols = (($col_count > $disp_max_cols) ? $col_count : $disp_max_cols);
 }
 
 $html  = '<Form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickFilter">';
@@ -92,7 +142,8 @@ if ($other_users) {
 }
 $html .= '</form>';
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-$rows = 0;
+
+$this_day->setTime($start, 0, 0);
 for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 	$html .= "\n<tr>";
 	
@@ -105,7 +156,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 		$count = count($events2[$timeStamp]);
 		for ($j = 0; $j < $count; $j++) {
 			$row = $events2[$timeStamp][$j];
-
+			
 			$et = new CDate($row['event_end_date']);
 			$et_date = new CDate($row['event_end_date']);
 			$et_date->setTime(0, 0, 0);
@@ -116,7 +167,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 				$rows = (($et->getHour()*60 + $et->getMinute()) 
 				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
 			}
-
+			
 			$href = "?m=calendar&a=view&event_id=".$row['event_id'];
 			$alt = $row['event_description'];
 
@@ -137,12 +188,12 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 			$html .= (($href) ? "\n\t\t</a>" : '');
 			$html .= "\n\t</td>";
 		}
-	} else {
-		if (--$rows <= 0) {
-			$html .= "\n\t<td></td>";
-		}
 	}
-
+	
+	for ($j = 0; $j < ($disp_max_cols - $disp_columns[$i]); $j++) {
+		$html .= "\n\t" . '<td></td>';
+	}
+	
 	$html .= "\n</tr>";
 
 	$this_day->addSeconds(60*$inc);
