@@ -2090,7 +2090,7 @@ class CTask extends CDpObject
 				$mail->To($contact['contact_email']);
 			}
 		}
-		$mail->From($owner_email);
+		$mail->From ('"' . $owner_first_name . ' ' . $owner_last_name . '" <' . $owner_email . '>');
 		$mail->Subject($subject, $locale_char_set);
 		$mail->Body($body, $locale_char_set);
 		return $mail->Send();

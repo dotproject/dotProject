@@ -27,10 +27,9 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
  * as they are not necessary.  ALL UPDATE CODE needs to be in upgrade_latest.php.
  * The individual SQL files are still required, however.
  */
-function dPupgrade($from_version, $to_version, $last_updated)
-{
+function dPupgrade($from_version, $to_version, $last_updated) {
 
-	$latest_update = '20080805'; // Set to the latest upgrade date.
+	$latest_update = '20090427'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
@@ -155,6 +154,8 @@ function dPupgrade($from_version, $to_version, $last_updated)
 			$perms->add_group_object($all_mods, 'app', 'file_folders', 'axo');
 			$perms->add_group_object($nonadmin, 'app', 'file_folders', 'axo');
 
+		case '20090427':
+			
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;
