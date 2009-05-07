@@ -23,6 +23,7 @@ function show_history($history) {
 	$q->addTable('modules', 'm');
 	$q->addQuery('m.*');
 	$q->addWhere("m.`permissions_item_table` LIKE '" . $table . "'");
+	$q-exec();
 	$module_result = $q->fetchRow();
 	$q->clear();
 	
@@ -92,8 +93,8 @@ function show_history($history) {
 	
 	$link = ((!empty($link)) 
 	         ? ('<a href="?m=' . $module . $link . $id . $in_page_anchor . '">' 
-	            . $history['history_description'] . '</a>') 
-	         : $history['history_description']);
+	            . stripslashes($history['history_description']) . '</a>') 
+	         : stripslashes($history['history_description']));
 	
 	$msg .= ($AppUI->_('item') . ' "' . $link . '" ' . $AppUI->_('in') . ' "' 
 	         . $AppUI->_($table) . '" ' . $AppUI->_('table'));

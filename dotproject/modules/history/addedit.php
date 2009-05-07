@@ -60,17 +60,16 @@ $q->addWhere('history_id ='.$history_id);
 $sql = $q->prepare();
 $q->clear();
 db_loadHash($sql, $history);
+
+$title = (($history_id) ? 'Edit History' : 'Add History');
+$titleBlock = new CTitleBlock($title, 'stock_book_blue_48.png', $m, "$m.$a");
+$titleBlock->show();
 ?>
 
 <form name="AddEdit" method="post">				
-<table width="100%" border="0" cellpadding="0" cellspacing="1">
+<div>
 <input name="action" type="hidden" value="<?php echo $history_id ? "update" : "add"  ?>">
-<tr>
-	<td><img src="./images/icons/tasks.gif" alt="" border="0"></td>
-	<td align="left" nowrap="nowrap" width="100%"><h1><?php echo $AppUI->_($history_id ? 'Edit history' : 'New history');?></h1></td>
-</tr>
-</table>
-
+</div>
 <table border="0" cellpadding="4" cellspacing="0" width="98%">
 <tr>
 	<td width="50%" align="right">
