@@ -547,7 +547,7 @@ class CEvent extends CDpObject {
 	 * @return array A list of events
 	 */
 	function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, 
-	                            $project_id = 0) {
+	                            $project_id = 0, $users = null) {
 		global $AppUI;
 		
 		// the event times are stored as unix time stamps, just to be different
@@ -679,13 +679,30 @@ class CEvent extends CDpObject {
 			}
 		}
 		
+		//if set, only retrieve events for specified users
+		if (isset($users)) {
+			$eventList_tmp = array();
+			
+			$events_query  = new DBQuery;
+			$events_query->addTable('user_events', 'ue');
+			$events_query->addQuery('DISTINCT ue.event_id');
+			$events_query->addWhere('ue.user_id IN (' . implode(',', $users) . ')');
+			$users_events = $events_query->loadColumn();
+			
+			foreach ($eventList as $list_key => $list_record) {
+				if (in_array($list_record['event_id'], $users_events)) {
+					$eventList_tmp[] = $eventList[$list_key];
+				}
+			}
+			$eventList = $eventList_tmp;
+		}
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
 	
 	
 	function &getAssigned() {
-		$q  = new DBQuery;
+		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
@@ -743,7 +760,7 @@ class CEvent extends CDpObject {
 	  		return;
 		}
 		
-		$q  = new DBQuery;
+		$q = new DBQuery;
 		$q->addTable('users','u');
 		$q->addTable('contacts','con');
 		$q->addQuery('user_id, contact_first_name,contact_last_name, contact_email');
@@ -827,34 +844,43 @@ class CEvent extends CDpObject {
 	
 	function checkClash($userlist = null) {
 		global $AppUI;
-		if (! isset($userlist)) {
+		require_once($AppUI->getModuleClass('projects'));
+		
+		if (!(isset($userlist))) {
 			return false;
 		}
+		
 		$users = explode(',', $userlist);
-		
-		// Now, remove the owner from the list, as we will always clash on this.
-		$key = array_search($AppUI->user_id, $users);
-		if (isset($key) && $key !== false) {// Need both for change in php 4.2.0
-			unset($users[$key]);
-		}
-		
-		if (! count($users)) {
+		if (!(count($users))) {
 			return false;
 		}
+		$users = array_unique($users);
 		
-		$start_date =& new CDate($this->event_start_date);
-		$end_date =& new CDate($this->event_end_date);
+		$start_date = new CDate($this->event_start_date);
+		$end_date = new CDate($this->event_end_date);
 		
-		// Now build a query to find matching events.
-		$q  = new DBQuery;
+		$concurrent_events = array();
+		$concurrent_events = $this->getEventsForPeriod($start_date, $end_date);
+		if ($concurrent_events) {
+			foreach ($concurrent_events as $event_rec) {
+				$events[] = $event_rec['event_id'];
+			}
+		} else {
+			$events = array();
+		}
+		$events = array_unique($events);
+		
+		// Now build a query to find clashing events based on events fetched for time period 
+		// (the ones we're allowed to see anyway) and the users assigned to this event.
+		$q = new DBQuery;
 		$q->addTable('events', 'e');
-		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
+		$q->addQuery('ue.user_id, e.event_id');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere("event_start_date <= '" . $end_date->format(FMT_DATETIME_MYSQL) . "'");
-		$q->addWhere("event_end_date >= '" . $start_date->format(FMT_DATETIME_MYSQL) . "'");
-		$q->addWhere("(e.event_owner IN (" . implode(',', $users) 
-					 . ") OR ue.user_id IN (" . implode(',', $users) ."))");
-		$q->addWhere('e.event_id != ' . $this->event_id);
+		$q->addWhere('ue.user_id IN (' . implode(',', $users) .')');
+		$q->addWhere('ue.event_id IN  (' . implode(',', $events) . ')');
+		if (isset($this->event_id)) {
+			$q->addWhere('e.event_id != ' . $this->event_id);
+		}
 		
 		$result = $q->exec();
 		if (! $result) {
@@ -863,7 +889,6 @@ class CEvent extends CDpObject {
 		
 		$clashes = array();
 		while ($row = db_fetch_assoc($result)) {
-			array_push($clashes, $row['event_owner']);
 			if ($row['user_id']) {
 				array_push($clashes, $row['user_id']);
 			}
@@ -873,11 +898,10 @@ class CEvent extends CDpObject {
 		
 		if (count($clash)) {  
 			$q->addTable('users','u');
-			$q->addTable('contacts','con');
-			$q->addQuery('user_id');
-			$q->addQuery('CONCAT_WS(" ",contact_first_name,contact_last_name)');
+			$q->addJoin('contacts','con', 'con.contact_id = u.user_contact');
+			$q->addQuery('u.user_id, CONCAT_WS(" ", con.contact_first_name, con.contact_last_name)' 
+			             . ' AS user_name');
 			$q->addWhere("user_id in (" . implode(",", $clash) . ")");
-			$q->addWhere('user_contact = contact_id');
 			return $q->loadHashList();
 		} else {
 			return false;
@@ -887,26 +911,49 @@ class CEvent extends CDpObject {
 	
 	function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null) {
 		global $AppUI;
+		require_once($AppUI->getModuleClass('projects'));
 		
-		if (! isset($users)) {
-			return false;
-		}
-		if (! count($users)) {
+		if (!(isset($users) && count($users))) {
 			return false;
 		}
 		
-		// Now build a query to find matching events. 
-		$q  = new DBQuery;
+		$first_datetime_start = new CDate($start_date . $start_time);
+		
+		$current_date_start = new CDate($start_date . $start_time);
+		$current_date_end = new CDate($start_date . $end_time);
+		$last_datetime = new CDate($end_date . $end_time);
+		
+		$events[] = 0;
+		while (!($current_date_end->after($last_datetime))) {
+			$datetime_start = new CDate($current_date . $start_time);
+			$datetime_end = new CDate($current_date . $end_time);
+			
+			$concurrent_events = $this->getEventsForPeriod($current_date_start, $current_date_end, 
+														   'all', null, 0, $users);
+			if (count($concurrent_events)) {
+				foreach ($concurrent_events as $event_rec) {
+					$events[] = $event_rec['event_id'];
+				}
+			}
+			
+			$current_date_start->addDays(1);
+			$current_date_end->addDays(1);
+		}
+		$events = array_unique($events);
+		
+		// Now fetch data for clashing events based on time period and the users assigned to this 
+		// event (the ones we're allowed to see anyway).
+		$q = new DBQuery;
 		$q->addTable('events', 'e');
-		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id' 
-		             . ', e.event_start_date, e.event_end_date');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere("event_start_date >= '$start_date'" 
-					 . " AND event_end_date <= '$end_date'" 
-					 . " AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= '$start_time'" 
-					 . " AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= '$end_time'" 
-					 . ' AND (e.event_owner IN (' . implode(',', $users) . ')' 
-					 . ' OR ue.user_id IN (' . implode(',', $users) .'))');
+		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, ' 
+		             . 'e.event_start_date, e.event_end_date');
+		$q->addWhere('ue.user_id IN (' . implode(',', $users) .')');
+		$q->addWhere('e.event_id IN  (' . implode(',', $events) . ')');
+		if (isset($this->event_id)) {
+			$q->addWhere('e.event_id != ' . $this->event_id);
+		}
+		
 		$result = $q->exec();
 		if (! $result) {
 			return false;

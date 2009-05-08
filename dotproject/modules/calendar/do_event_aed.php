@@ -30,11 +30,11 @@ if (!$del && $start_date->compare ($start_date, $end_date) >= 0) {
 }
 
 // prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg('Event');
 $do_redirect = true;
 require_once $AppUI->getSystemClass('CustomFields');
 
 if ($del) {
+	$AppUI->setMsg('Event');
 	if (!$obj->canDelete($msg)) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
@@ -42,7 +42,7 @@ if ($del) {
 	if (($msg = $obj->delete())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$AppUI->setMsg("deleted", UI_MSG_OK, true);
+		$AppUI->setMsg('deleted', UI_MSG_OK, true);
 	}
 	$AppUI->redirect('m=calendar');
 } else {
@@ -56,20 +56,23 @@ if ($del) {
 	  $GLOBALS['a'] = "clash";
 	  $do_redirect = false;
 	} else {
-	  if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	  } else {
+		$AppUI->setMsg('Event');
+	    if (($msg = $obj->store())) {
+			$AppUI->setMsg('Event');
+			$AppUI->setMsg($msg, UI_MSG_ERROR);
+		} else {
 		$custom_fields = New CustomFields('calendar', 'addedit', $obj->event_id, "edit");
-		$custom_fields->bind($_POST);
-		$sql = $custom_fields->store($obj->event_id); // Store Custom Fields
-		
-		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
-		if (isset($_POST['event_assigned']))
-		      $obj->updateAssigned(explode(',', $_POST['event_assigned']));
-		if (isset($_POST['mail_invited'])) {
-		      $obj->notify(@$_POST['event_assigned'], $isNotNew);
+			$custom_fields->bind($_POST);
+			$sql = $custom_fields->store($obj->event_id); // Store Custom Fields
+			
+			$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
+			if (isset($_POST['event_assigned'])) {
+		    	$obj->updateAssigned(explode(',', $_POST['event_assigned']));
+			}
+			if (isset($_POST['mail_invited'])) {
+		    	$obj->notify($_POST['event_assigned'], $isNotNew);
+			}
 		}
-	  }
 	}
 }
 if ($do_redirect)
