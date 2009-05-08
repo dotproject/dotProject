@@ -9,7 +9,7 @@ $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 if ($user_id != $AppUI->user_id 
 && (! getPermission('admin', 'view', $user_id) 
 || ! getPermission('users', 'view', $user_id)))
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 
 $AppUI->savePlace();
 
@@ -93,7 +93,7 @@ if (!db_loadHash($sql, $user)) {
 if ($canEdit || $user_id == $AppUI->user_id) {
 ?>
 function popChgPwd() {
-	window.open('./index.php?m=public&amp;a=chpwd&amp;dialog=1&amp;user_id=<?php echo $user['user_id']; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no');
+	window.open('./index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user['user_id']; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no');
 }
 <?php } ?>
 </script>
