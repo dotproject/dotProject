@@ -258,7 +258,7 @@ function clash_process() {
 	
 	$slots = array();
 	$curr_date = new CDate($start_date);
-	$curr_date->setTime();
+	$curr_date->setTime(0, 0, 0);
 	$inc = intval(dPgetConfig('cal_day_increment')) ? intval(dPgetConfig('cal_day_increment')) : 30;
 	for ($i = 0; $i <= ($end_day - $first_day); $i++) {
 		if ($curr_date->isWorkingDay()) {
@@ -285,32 +285,22 @@ function clash_process() {
 				}
 				
 				if (!($is_committed)) {
-					$my_start_date = new CDate($curr_date);
-					$my_start_date->addSeconds($j * 60);
-					$start_hour = ($j / 60) % 24;
-					$start_min = $j % 60;
-					
-					$my_end_date = new CDate($curr_date);
-					$my_end_date->addSeconds(($j + $_POST['duration']) * 60);
-					$end_hour = (($j + $_POST['duration']) / 60) % 24;
-					$end_min = ($j + $_POST['duration']) % 60;
-					
-					$obj->event_start_date = $my_start_date->format('%Y-%m-%d %H:%I:%S');
-					$obj->event_end_date = $my_end_date->format('%Y-%m-%d %H:%I:%S');
+					$obj->event_start_date = $slot_start_date->format('%Y-%m-%d %T');
+					$obj->event_end_date = $slot_end_date->format('%Y-%m-%d %T');
 					
 					$_SESSION['add_event_post'] = get_object_vars($obj);
 					$AppUI->setMsg('First available time slot', UI_MSG_OK);
 					$_SESSION['event_is_clash'] = true;
 					$_GET['event_id'] = $obj->event_id;
-				
-					//$do_include = DP_BASE_DIR.'/modules/calendar/addedit.php';
-					echo ('<pre>' . print_r($_SESSION['add_event_post'], true)  . '</pre>');
+					
+					$do_include = DP_BASE_DIR.'/modules/calendar/addedit.php';
 					return;
 				}
 				
 			}
 		}
 		$curr_date->addSpan($oneday);
+		$curr_date->setTime(0, 0, 0);
 	}
 	
 	// If we get here we have found no available slots

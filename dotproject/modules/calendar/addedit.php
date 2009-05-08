@@ -97,8 +97,8 @@ $all_projects = '(' . $AppUI->_('All', UI_OUTPUT_RAW) . ')';
 $projects = arrayMerge(array(0 => $all_projects), $q->loadHashList());
 
 if ($event_id || $is_clash) {
-	$start_date = intval($obj->event_start_date) ? new CDate($obj->event_start_date) : null;
-	$end_date = intval($obj->event_end_date) ? new CDate($obj->event_end_date) : $start_date;
+	$start_date = ($obj->event_start_date) ? new CDate($obj->event_start_date) : null;
+	$end_date = ($obj->event_end_date) ? new CDate($obj->event_end_date) : $start_date;
 } else {
 	$start_date = new CDate($date);
 	$start_date->setTime(8,0,0);
