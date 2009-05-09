@@ -93,15 +93,17 @@ function clash_suggest() {
 	                               $m, "$m.$a");
 	$titleBlock->show();
 	$calurl = DP_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+	
+	$inc = intval(dPgetConfig('cal_day_increment')) ? intval(dPgetConfig('cal_day_increment')) : 30;
 	$times = array();
 	$t = new CDate();
 	$t->setTime(0,0,0);
-	if (!defined('LOCALE_TIME_FORMAT')) {
-		define('LOCALE_TIME_FORMAT', '%I:%M %p');
-	}
-	for ($m=0; $m < 60; $m++) {
-		$times[$t->format("%H%M%S")] = $t->format(LOCALE_TIME_FORMAT);
-		$t->addSeconds(1800);
+	//$m clashes with global $m (module)
+	$check = (24 * 60) / $inc;
+	$addMins = $inc * 60;
+	for ($minutes=0; $minutes < $check; $minutes++) {
+		$times[$t->format('%H%M%S')] = $t->format($AppUI->getPref('TIMEFORMAT'));
+		$t->addSeconds($addMins);
 	}
 ?>
 <script language="javascript">
@@ -215,27 +217,15 @@ function clash_process() {
 	
 	
 	// First find any events in the range requested.
-	$event_list = $obj->getEventsInWindow($_POST['event_start_date'], $_POST['event_end_date'], 
-	                                      $_POST['start_time'], $_POST['end_time'], $users);
-	
 	$start_date = new CDate($_POST['event_start_date'] . $_POST['start_time']);
 	$end_date = new CDate($_POST['event_start_date'] . $_POST['start_time']);
 	$end_date->addSeconds($_POST['duration'] * 60);
 	$final_date = new CDate($_POST['event_end_date'] . $_POST['end_time']);
 	
-	if (!($event_list && count($event_list))) {
-		// First available date/time is OK, seed addEdit with the details.
-		$obj->event_start_date = $start_date->format(FMT_DATETIME_MYSQL);
-		$obj->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
-		$_SESSION['add_event_post'] = get_object_vars($obj);
-		$AppUI->setMsg('No clashes in suggested timespan', UI_MSG_OK);
-		$_SESSION['event_is_clash'] = true;
-		$_GET['event_id'] = $obj->event_id;
-		$do_include = DP_BASE_DIR . '/modules/calendar/addedit.php';
-		return;
-	}
+	$original_event_start = $obj->event_start_date;
+	$original_event_end = $obj->event_end_date;
 	
-	
+	$user_list = implode(',', $users);
 	
 	// Now we grab the events, in date order, and compare against the
 	// required start and end times.
@@ -270,29 +260,14 @@ function clash_process() {
 				$slot_end_date = new CDate($slot_start_date);
 				$slot_end_date->addSeconds($_POST['duration'] * 60);
 				
-				// Now process the events list
-				foreach ($event_list as $event) {
-					$sdate = new CDate($event['event_start_date']);
-					$edate = new CDate($event['event_end_date']);
-					$sday = $sdate->format('%E');
-					$day_offset = $sday - $first_day;
-					
-					$start_mins = ($sdate->getHour() * 60) + $sdate->getMinute();
-					$end_mins = ($edate->getHour() * 60) + $edate->getMinute();
-					if (!($sdate->after($slot_end_date) || $edate->before($slot_start_date))) {
-						$is_committed = true;
-					}
-				}
+				$obj->event_start_date = $slot_start_date->format('%Y-%m-%d %T');
+				$obj->event_end_date = $slot_end_date->format('%Y-%m-%d %T');
 				
-				if (!($is_committed)) {
-					$obj->event_start_date = $slot_start_date->format('%Y-%m-%d %T');
-					$obj->event_end_date = $slot_end_date->format('%Y-%m-%d %T');
-					
+				if (!($clash = $obj->checkClash($user_list))) {
 					$_SESSION['add_event_post'] = get_object_vars($obj);
 					$AppUI->setMsg('First available time slot', UI_MSG_OK);
 					$_SESSION['event_is_clash'] = true;
 					$_GET['event_id'] = $obj->event_id;
-					
 					$do_include = DP_BASE_DIR.'/modules/calendar/addedit.php';
 					return;
 				}
@@ -304,6 +279,8 @@ function clash_process() {
 	}
 	
 	// If we get here we have found no available slots
+	$obj->event_start_date = $original_event_start;
+	$obj->event_end_date = $original_event_end;
 	clear_clash();
 	$AppUI->setMsg('No times match your parameters', UI_MSG_ALERT);
 	$AppUI->redirect();

@@ -154,7 +154,7 @@ $remind = array ('900' => '15 mins',
                  '86400' => '1 day',
                  '172800' => '2 days');
 
-// build array of times in 30 minute increments
+// build array of times in preference specified minute increments (default 30)
 $times = array();
 $t = new CDate();
 $t->setTime(0,0,0);

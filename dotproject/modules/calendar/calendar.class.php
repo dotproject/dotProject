@@ -547,7 +547,7 @@ class CEvent extends CDpObject {
 	 * @return array A list of events
 	 */
 	function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, 
-	                            $project_id = 0, $users = null) {
+	                            $project_id = 0) {
 		global $AppUI;
 		
 		// the event times are stored as unix time stamps, just to be different
@@ -577,18 +577,18 @@ class CEvent extends CDpObject {
 		foreach ($queries as $query_set) {
 			$$query_set  = new DBQuery;
 			$$query_set->addTable('events', 'e');
-			$$query_set->addQuery('e.*');
+			$$query_set->addQuery('DISTINCT e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 			
 			$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
 			if (($AppUI->getState('CalIdxCompany'))) {
-				$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+				$$query_set->addWhere('p.project_company = ' . $AppUI->getState('CalIdxCompany'));
 			}
 			
 			if (count($allowedProjects)) {
 				$$query_set->addWhere('((' . implode(' AND ',  $allowedProjects) . ') ' 
-				                      . (($AppUI->getState('CalIdxCompany')) ? '' 
-				                         : (($project_id) ? '' : ' OR event_project = 0 ')) . ')');
+				                      . (($AppUI->getState('CalIdxCompany') || $project_id) ? '' 
+				                         : ' OR event_project = 0 ') . ')');
 			}
 			
 			switch ($filter) {
@@ -600,10 +600,10 @@ class CEvent extends CDpObject {
 										  . $user_id.')');
 					break;
 				case 'own':
-					$$query_set->addWhere('event_owner =' . $user_id);
+					$$query_set->addWhere('e.event_owner =' . $user_id);
 					break;
 				case 'all':
-					$$query_set->addWhere('(event_private=0 OR event_owner=' . $user_id . ')');
+					$$query_set->addWhere('(e.event_private=0 OR e.event_owner=' . $user_id . ')');
 					break;
 			}
 			
@@ -618,7 +618,6 @@ class CEvent extends CDpObject {
 				$eventListRec = $$query_set->loadList();
 			}
 		}
-        
 		
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)
 		setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
@@ -626,36 +625,31 @@ class CEvent extends CDpObject {
 											$end_date->getYear(), $start_date->getDay(), 
 											$start_date->getMonth(), $start_date->getYear());
 		setlocale(LC_ALL, $AppUI->user_lang);
-		
-		// AJD: Should this be going off the end of the array?  I don't think so.
-		// If it should then a comment to that effect would be nice.
-		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
-		for ($i=0, $sz=sizeof($eventListRec); $i < $sz;  $i++) {
-            //note from merlinyoda: j=0 is original event according to getRecurrentEventforPeriod
-            // Since the event is *recurring* x times, the condition should be j <= x, not j < x.
-            // This way the original and all recurrances are covered.
-			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
-            for ($j=0, $end= intval($eventListRec[$i]['event_times_recuring']); $j<$end; $j++) {
-				$ia = $eventListRec[$i];
-				if ($periodLength == 1) { 
-					// Daily View: show all
+		foreach ($eventListRec as $key => $ia){
+           	$end = intval($ia['event_times_recuring']);
+           	for ($j=0; $j < $end; $j++) {
+				$recEventDate = array();
+				
+				if ($periodLength <= 1) { 
+					// Daily View or clash check: show all
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, 
 																	   $ia['event_start_date'], 
 																	   $ia['event_end_date'], 
 																	   $ia['event_recurs'], 
 																	   $ia['event_times_recuring'], 
 																	   $j);
-				} else if ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j==0) {
-					// Weekly or Monthly View and Hourly Recurrent Events: show one time and add string 'hourly'
+				} else if ($ia['event_recurs'] == 1 && $j==0) {
+					// Weekly or Monthly View and Hourly Recurrent Events
+					//show one time and add string 'hourly'
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, 
 																	   $ia['event_start_date'], 
 																	   $ia['event_end_date'], 
 																	   $ia['event_recurs'], 
 																	   $ia['event_times_recuring'], 
 																	   $j);
-					$eventListRec[$i]['event_title'] = ($ia['event_title'] . ' (' 
-					                                    . $AppUI->_('Hourly') . ')');
-				} else if ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
+					$eventListRec[$key]['event_title'] = ($ia['event_title'] . ' (' 
+														  . $AppUI->_('Hourly') . ')');
+				} else if ($ia['event_recurs'] > 1) {
 					//Weekly and Monthly View and higher recurrence mode 
 					//show all events of recurrence > 1
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, 
@@ -667,35 +661,18 @@ class CEvent extends CDpObject {
 				}
 				
 				//add values to the eventsArray if check for recurrent event was positive
-				if (sizeof($recEventDate) > 0) {
-					$eList[0] = $eventListRec[$i];
-					$eList[0]['event_start_date'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
-					$eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
-					$eventList = array_merge($eventList,$eList);
+				if (!(empty($recEventDate))) {
+					$display_start = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
+					$display_end = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
+					
+					$eventListRec[$key]['event_start_date'] = $display_start;
+					$eventListRec[$key]['event_end_date'] = $display_end;
+					
+					$eventList = array_merge($eventList,array($eventListRec[$key]));
 				}
-				//clear array of positive recurrent events should the next loop of 
-				//recEventDate is empty in order to avoid double display
-				$recEventDate = array();
 			}
 		}
 		
-		//if set, only retrieve events for specified users
-		if (isset($users)) {
-			$eventList_tmp = array();
-			
-			$events_query  = new DBQuery;
-			$events_query->addTable('user_events', 'ue');
-			$events_query->addQuery('DISTINCT ue.event_id');
-			$events_query->addWhere('ue.user_id IN (' . implode(',', $users) . ')');
-			$users_events = $events_query->loadColumn();
-			
-			foreach ($eventList as $list_key => $list_record) {
-				if (in_array($list_record['event_id'], $users_events)) {
-					$eventList_tmp[] = $eventList[$list_key];
-				}
-			}
-			$eventList = $eventList_tmp;
-		}
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
@@ -861,40 +838,27 @@ class CEvent extends CDpObject {
 		
 		$concurrent_events = array();
 		$concurrent_events = $this->getEventsForPeriod($start_date, $end_date);
-		if ($concurrent_events) {
-			foreach ($concurrent_events as $event_rec) {
-				$events[] = $event_rec['event_id'];
-			}
-		} else {
-			$events = array();
+		if (!(count($concurrent_events))) {
+			return false;
+		}
+		
+		$events = array();
+		foreach ($concurrent_events as $event_rec) {
+			$events[] = $event_rec['event_id'];
 		}
 		$events = array_unique($events);
 		
 		// Now build a query to find clashing events based on events fetched for time period 
 		// (the ones we're allowed to see anyway) and the users assigned to this event.
 		$q = new DBQuery;
-		$q->addTable('events', 'e');
-		$q->addQuery('ue.user_id, e.event_id');
-		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere('ue.user_id IN (' . implode(',', $users) .')');
+		$q->addTable('user_events', 'ue');
+		$q->addQuery('ue.user_id');
 		$q->addWhere('ue.event_id IN  (' . implode(',', $events) . ')');
-		if (isset($this->event_id)) {
-			$q->addWhere('e.event_id != ' . $this->event_id);
-		}
 		
-		$result = $q->exec();
-		if (! $result) {
-			return false;
-		}
-		
-		$clashes = array();
-		while ($row = db_fetch_assoc($result)) {
-			if ($row['user_id']) {
-				array_push($clashes, $row['user_id']);
-			}
-		}
-		$clash = array_unique($clashes);
+		$clashes = $q->loadColumn();
 		$q->clear();
+		
+		$clash = array_unique($clashes);
 		
 		if (count($clash)) {  
 			$q->addTable('users','u');
@@ -909,64 +873,6 @@ class CEvent extends CDpObject {
 		
 	}
 	
-	function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null) {
-		global $AppUI;
-		require_once($AppUI->getModuleClass('projects'));
-		
-		if (!(isset($users) && count($users))) {
-			return false;
-		}
-		
-		$first_datetime_start = new CDate($start_date . $start_time);
-		
-		$current_date_start = new CDate($start_date . $start_time);
-		$current_date_end = new CDate($start_date . $end_time);
-		$last_datetime = new CDate($end_date . $end_time);
-		
-		$events[] = 0;
-		while (!($current_date_end->after($last_datetime))) {
-			$datetime_start = new CDate($current_date . $start_time);
-			$datetime_end = new CDate($current_date . $end_time);
-			
-			$concurrent_events = $this->getEventsForPeriod($current_date_start, $current_date_end, 
-														   'all', null, 0, $users);
-			if (count($concurrent_events)) {
-				foreach ($concurrent_events as $event_rec) {
-					$events[] = $event_rec['event_id'];
-				}
-			}
-			
-			$current_date_start->addDays(1);
-			$current_date_end->addDays(1);
-		}
-		$events = array_unique($events);
-		
-		// Now fetch data for clashing events based on time period and the users assigned to this 
-		// event (the ones we're allowed to see anyway).
-		$q = new DBQuery;
-		$q->addTable('events', 'e');
-		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, ' 
-		             . 'e.event_start_date, e.event_end_date');
-		$q->addWhere('ue.user_id IN (' . implode(',', $users) .')');
-		$q->addWhere('e.event_id IN  (' . implode(',', $events) . ')');
-		if (isset($this->event_id)) {
-			$q->addWhere('e.event_id != ' . $this->event_id);
-		}
-		
-		$result = $q->exec();
-		if (! $result) {
-			return false;
-		}
-		
-		$eventlist = array();
-		while ($row = db_fetch_assoc($result)) {
-			$eventlist[] = $row;
-		}
-		$q->clear();
-		
-		return $eventlist;
-	}
 }
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
