@@ -575,7 +575,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 		$tmp .= (($task->userPriority < 0) 
 		         ? ('-' . -$task->userPriority) 
 		         : ('+' . $task->userPriority));
-		$tmp .= '".gif" width="13" height="16">';
+		$tmp .= '.gif" width="13" height="16">';
 	}
 	$tmp .= '</td>';
 	
@@ -598,7 +598,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 		$tmp .= (($task->task_priority < 0) 
 		         ? ('-' . -$task->task_priority) 
 		         : ('+' . $task->task_priority));
-		$tmp .= '".gif" width="13" height="16">)';
+		$tmp .= '.gif" width="13" height="16">)';
 	}
 	$tmp .= '</td>';
 	
