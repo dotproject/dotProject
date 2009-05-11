@@ -321,7 +321,7 @@ if ($do_report) {
 		<tr>
 			<th nowrap="nowrap"></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('P'); ?></th>
-			<th nowrap="nowrap"><?php echo $AppUI->_('Yask'); ?></th>
+			<th nowrap="nowrap"><?php echo $AppUI->_('Task'); ?></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('Project'); ?></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('Start'); ?></th>
