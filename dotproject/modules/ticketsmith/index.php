@@ -25,7 +25,7 @@ $direction = $CONFIG["message_order"];
 $offset = 0;
 $limit = $CONFIG["view_rows"];
 
-$type = dPgetParam($_GET, 'type', '');
+$type = dPgetCleanParam($_GET, 'type', '');
 $column = dPgetParam($_GET, 'column', $column);
 $direction = dPgetParam($_GET, 'direction', $direction);
 $offset = dPgetParam($_GET, 'offset', $offset);
@@ -38,7 +38,7 @@ if ($type == '') {
 		$type = "Open";
 	}
 } else {
-	$AppUI->setState("ticket_type", $_GET["type"]);
+	$AppUI->setState("ticket_type", $type);
 }
 
 
@@ -81,8 +81,7 @@ if ($dPconfig['link_tickets_kludge']) {
 /* set up defaults for viewing */
 if ($type == "my") {
 	$title = "My Tickets";
-}
-else {
+} else {
 	$title = "$type Tickets";
 }
 
