@@ -838,7 +838,7 @@ function _addressesEncode(&$aaddr, $hdr) {
 		$val = $this->_addressEncode($aaddr[$i], 8);
 		$val = trim($val);
 		if ($val) {
-			$this->xheaders[$hdr] .= (",\r\n\t" . $val);
+			$this->xheaders[$hdr] .= (",\r\n" . $val);
 		}
 	}
 }
