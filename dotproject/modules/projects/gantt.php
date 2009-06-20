@@ -136,7 +136,7 @@ $graph->scale->actinfo->SetColTitles(array($AppUI->_('Project name', UI_OUTPUT_R
                                            $AppUI->_('Start Date', UI_OUTPUT_RAW), 
                                            $AppUI->_('Finish', UI_OUTPUT_RAW), 
                                            $AppUI->_('Actual End', UI_OUTPUT_RAW)), 
-                                     array(160,10, 70,70));
+                                     array(160, 70, 70, 70));
 
 
 $tableTitle = (($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter]);

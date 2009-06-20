@@ -83,7 +83,7 @@ $graph2->scale->actinfo->SetColor('darkgray');
 $graph2->scale->actinfo->SetColTitles(array($AppUI->_('User Name', UI_OUTPUT_RAW), 
                                             $AppUI->_('Start Date', UI_OUTPUT_RAW), 
                                             $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_(' ')), 
-                                      array(160,10, 70,70));
+                                      array(160, 70, 70, 70));
 
 $tableTitle = (($proFilter == '-1') ? $AppUI->_('All Tasks By Users') : $projectStatus[$proFilter]);
 $graph2->scale->tableTitle->Set($tableTitle);

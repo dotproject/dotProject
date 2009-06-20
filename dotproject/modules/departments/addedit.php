@@ -11,7 +11,6 @@ $company_id = isset($_GET['company_id']) ? $_GET['company_id'] : 0;
 $canEdit = getPermission($m, 'edit', $dept_id);
 $canAuthor = getPermission($m, 'add', $dept_id);
 if (!(($canEdit && $dept_id) || ($canAuthor && !($dept_id)))) {
-if (!($canEdit)) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
