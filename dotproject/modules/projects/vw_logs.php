@@ -142,9 +142,10 @@ foreach ($logs as $row) {
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
 	if (getPermission('tasks', 'edit', $row['task_id'])) {
-		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=".$row['task_id']."&tab=1&task_log_id=".@$row['task_log_id']."\">"
-			. "\n\t\t\t". dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '')
-			. "\n\t\t</a>";
+		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] 
+		       . "&amp;tab=1&amp;task_log_id=" . @$row['task_log_id'] . '">' 
+			   . "\n\t\t\t" . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '') 
+			   . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>';
@@ -172,9 +173,9 @@ foreach ($logs as $row) {
 	$s .= '</td>';
 	$s .= "\n\t<td>";
 	if ($canDelete) {
-		$s .= "\n\t\t<a href=\"javascript:delIt2({$row['task_log_id']});\" title=\"".$AppUI->_('delete log')."\">"
-			. "\n\t\t\t". dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
-			. "\n\t\t</a>";
+		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' 
+			   . $AppUI->_('delete log') . '">' . "\n\t\t\t" 
+		       . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
 	$s .= '</tr>';

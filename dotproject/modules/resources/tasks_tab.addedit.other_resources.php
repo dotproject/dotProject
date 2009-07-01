@@ -21,7 +21,7 @@ $resource_max = array();
 
 while ($row = db_fetch_assoc($res)) {
 	$type = $row['resource_type'];
-	$all_resources[$row['resource_id']] = $resource_types[$row['resource_type']] . ": " . $row['resource_name'];
+	$all_resources[$row['resource_id']] = $resource_types[$row['resource_type']] . ': ' . $row['resource_name'];
 	$resource_max[$row['resource_id']] = $row['resource_max_allocation'];
 }
 $q->clear();
@@ -31,18 +31,18 @@ $q->clear();
 
 $resources = array();
 if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
-	$initResAssignment = "";
+	$initResAssignment = '';
 	foreach (explode(';', $_SESSION['tasks_subform']['hresource_assign']) as $perc) {
 		if ($perc) {
 			list ($rid, $perc) = explode('=', $perc);
 			$assigned_resources[$rid] = $perc;
 			$initResAssignment .= "$rid=$perc;";
-			$resources[$rid] = $all_resources[$rid] . " [" . $perc . "%]";
+			$resources[$rid] = $all_resources[$rid] . ' [' . $perc . '%]';
 		}
 	}
 } else if ($task_id == 0) {
 } else {
-	$initResAssignment = "";
+	$initResAssignment = '';
 	// Pull resources on this task
 	$q =& new DBQuery;
 	$q->addTable('resource_tasks');
@@ -51,8 +51,8 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 	$sql = $q->prepareSelect();
 	$assigned_res = $q->exec();
 	while ($row = db_fetch_assoc($assigned_res)) {
-		$initResAssignment .= $row['resource_id']."=".$row['percent_allocated'].";";
-		$resources[$row['resource_id']] = $all_resources[$row['resource_id']] . " [" . $row['percent_allocated'] . "%]";
+		$initResAssignment .= $row['resource_id'].'='.$row['percent_allocated'].';';
+		$resources[$row['resource_id']] = $all_resources[$row['resource_id']] . ' [' . $row['percent_allocated'] . '%]';
 }
 	$q->clear();
 }
@@ -65,7 +65,9 @@ echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
 for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 	//array[task_is] = end_date, end_hour, end_minutes
-	echo "projTasksWithEndDates[".$keys[$i]."]=new Array(\"".$projTasksWithEndDates[$keys[$i]][1]."\", \"".$projTasksWithEndDates[$keys[$i]][2]."\", \"".$projTasksWithEndDates[$keys[$i]][3]."\");\n";
+	echo ('projTasksWithEndDates[' . $keys[$i] . ']=new Array("' 
+	      . $projTasksWithEndDates[$keys[$i]][1] . '", "' . $projTasksWithEndDates[$keys[$i]][2] 
+	      . '", "' . $projTasksWithEndDates[$keys[$i]][3] . '");' . "\n");
 }
 ?>
 </script>
@@ -99,10 +101,11 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 						<td>
 							<select name="resource_assignment" class="text">
 							<?php 
-								for ($i = 5; $i <= 100; $i+=5) {
-									echo "<option ".(($i==100)? "selected=\"true\"" : "")." value=\"".$i."\">".$i."%</option>";
-								}
-							?>
+for ($i = 5; $i <= 100; $i+=5) {
+	echo ("<option ".(($i==100)? 'selected="true"' : '') . ' value="' . $i . '">' . $i 
+	      . '%</option>');
+}
+?>
 							</select>
 						</td>				
 						<td align="left"><input type="button" class="button" value="&lt;" onClick="removeResource(document.otherFrm)" /></td>					

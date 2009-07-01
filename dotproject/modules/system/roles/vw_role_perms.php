@@ -31,7 +31,7 @@ $pgo_list = arrayMerge($module_pgo_list, $pseudo_module_pgo_list);
 $modules = array();
 $offset = 0;
 foreach ($module_list as $module) {
-	$modules[ $module['type'] . "," . $module['id']] = $module['name'];
+	$modules[ $module['type'] . ',' . $module['id']] = $module['name'];
 	if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
 		$pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
 	} 
@@ -48,7 +48,7 @@ $perm_list = $perms->getPermissionList();
 
 ?>
 
-<script language="javascript">
+<script language="Javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -131,7 +131,9 @@ function setPermItem(key, val) {
 	}
 }
 
-<?php } ?>
+<?php 
+} 
+?>
 </script>
 
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -184,14 +186,14 @@ foreach ($role_acls as $acl) {
 				}
 			}
 		}
-		$buf .= implode("<br />", $modlist);
-		$buf .= "</td><td>";
-		$buf .= implode("<br />", $itemlist);
-		$buf .= "</td>";
+		$buf .= implode('<br />', $modlist);
+		$buf .= '</td><td>';
+		$buf .= implode('<br />', $itemlist);
+		$buf .= '</td>';
 		// Item information TODO:  need to figure this one out.
-	// 	$buf .= "<td></td>";
+		//$buf .= '<td></td>';
 		// Type information.
-		$buf .= "<td>";
+		$buf .= '<td>';
 		$perm_type = array();
 		if (is_array($permission['aco'])) {
 			foreach ($permission['aco'] as $key => $section) {
@@ -201,16 +203,16 @@ foreach ($role_acls as $acl) {
 				}
 			}
 		}
-		$buf .= implode("<br />", $perm_type);
-		$buf .= "</td>";
-
+		$buf .= implode('<br />', $perm_type);
+		$buf .= '</td>';
+		
 		// Allow or deny
-		$buf .= "<td>" . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . "</td>";
+		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap>';
 		if ($canDelete) {
-			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"".$AppUI->_('delete')."\">"
-				. dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
-				. "</a>";
+			$buf .= ('<a href="javascript:delIt(' . $acl . ');" title="' . $AppUI->_('delete') 
+					 . '">' . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '') 
+					 . '</a>');
 		}
 		$buf .= '</td>';
 		
@@ -224,8 +226,8 @@ foreach ($role_acls as $acl) {
 
 <?php if ($canEdit) {?>
 
-<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
-<form name="frmPerms" method="post" action="?m=system&u=roles">
+<form name="frmPerms" method="post" action="?m=system&amp;u=roles">
+<div class="hidden">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
 	<input type="hidden" name="role_id" value="<?php echo $role_id;?>" />
@@ -233,6 +235,8 @@ foreach ($role_acls as $acl) {
 	<input type="hidden" name="permission_item" value="0" />
 	<input type="hidden" name="permission_table" value="" />
 	<input type="hidden" name="permission_name" value="" />
+</div>
+<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
 <tr>
 	<th colspan="2"><?php echo $AppUI->_('Add Permissions');?></th>
 </tr>
@@ -243,8 +247,8 @@ foreach ($role_acls as $acl) {
 <tr>
 	<td nowrap align="right"><?php echo $AppUI->_('Item');?>:</td>
 	<td>
-		<input type="text" name="permission_item_name" class="text" size="30" value="all" disabled>
-		<input type="button" name="" class="text" value="..." onclick="popPermItem();">
+		<input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
+		<input type="button" name="permission_item_sel_button" class="text" value="..." onclick="popPermItem();" />
 	</td>
 </tr>
 <tr>
@@ -260,9 +264,11 @@ foreach ($role_acls as $acl) {
 	foreach ($perm_list as $perm_id => $perm_name) {
 ?>
 <tr>
-	<td nowrap="nowrap" align="right"><label for="permission_type_<?php echo $perm_id; ?>"><?php echo $AppUI->_($perm_name);?>:</label></td>
+	<td nowrap="nowrap" align="right"><label for="permission_type_<?php echo $perm_id; ?>"><?php 
+		echo $AppUI->_($perm_name);?>:</label></td>
 	<td>
-	  <input type="checkbox" name="permission_type[]" id="permission_type_<?php echo $perm_id; ?>" value="<?php echo $perm_id;?>" />
+	  <input type="checkbox" name="permission_type[]" id="permission_type_<?php 
+		echo $perm_id; ?>" value="<?php echo $perm_id;?>" />
 	</td>
 </tr>
 <?php
@@ -270,22 +276,19 @@ foreach ($role_acls as $acl) {
 ?>
 <tr>
 	<td>
-		<input type="reset" value="<?php echo $AppUI->_('clear');?>" class="button" name="sqlaction" onClick="clearIt();">
+		<input type="reset" value="<?php 
+echo $AppUI->_('clear');?>" class="button" name="sqlaction" onClick="clearIt();" />
 	</td>
 	<td align="right">
-		<input type="submit" value="<?php echo $AppUI->_('add');?>" class="button" name="sqlaction2">
+		<input type="submit" value="<?php 
+echo $AppUI->_('add');?>" class="button" name="sqlaction2" />
 	</td>
 </tr>
-</form>
 </table>
-<?php } ?>
-
+</form>
+<?php 
+} 
+?>
 </td>
-
 </tr>
-
-
-
-</tr>
-
 </table>

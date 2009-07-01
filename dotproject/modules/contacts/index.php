@@ -131,18 +131,18 @@ $form = "<form action='./index.php' method='get'>".$AppUI->_('Search for').'
 		 </form>';
 // En of contact search form
 
-$a2z = "\n<table cellpadding=\"2\" cellspacing=\"1\" border=\"0\">";
+$a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= "\n<tr>";
-$a2z .= "<td width='100%' align='right'>" . $AppUI->_('Show'). ": </td>";
-$a2z .= '<td><a href="./index.php?m=contacts&where=0">' . $AppUI->_('All') . '</a></td>';
+$a2z .= '<td width="100%" align="right">' . $AppUI->_('Show'). ': </td>';
+$a2z .= '<td><a href="./index.php?m=contacts&amp;where=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = mb_strpos($let, "$cu") > 0 ?
-		"<a href=\"?m=contacts&where=$cu\">$cu</a>" :
-		"<font color=\"#999999\">$cu</font>";
+	$cell = ((mb_strpos($let, "$cu") > 0) 
+			 ? ('<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>') 
+			 : ('<font color="#999999">' . $cu . '</font>'));
 	$a2z .= "\n\t<td>$cell</td>";
 }
-$a2z .= "\n</tr>\n<tr><td colspan='28'>$form</td></tr></table>";
+$a2z .= "\n</tr>\n<tr>" . '<td colspan="28">' . $form . '</td></tr></table>';
 
 
 // setup the title block
@@ -202,17 +202,19 @@ function goProject(key, val) {
 $q  = new DBQuery;
 $q->addTable('projects');
 $q->addQuery('count(*)');
-$q->addWhere("project_contacts like \"" .$carr[$z][$x]["contact_id"]
-	.",%\" or project_contacts like \"%," .$carr[$z][$x]["contact_id"] 
-	.",%\" or project_contacts like \"%," .$carr[$z][$x]["contact_id"]
-	."\" or project_contacts like \"" .$carr[$z][$x]["contact_id"] ."\"");
+$q->addWhere('project_contacts LIKE "' . $carr[$z][$x]['contact_id'] 
+             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id'] 
+             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id'] 
+             .'" OR project_contacts LIKE "' . $carr[$z][$x]['contact_id'] .'"');
 	
  $res = $q->exec();
  $projects_contact = db_fetch_row($res);
  $q->clear();
  if ($projects_contact[0]>0)
-   echo "				&nbsp;<a href=\"\" onClick=\"	window.open('./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=" .$carr[$z][$x]["contact_id"] ."', 'selector', 'left=50,top=50,height=250,width=400,resizable')
-;return false;\">".$AppUI->_('Projects')."</a>";
+	echo ('				&nbsp;<a href=""' 
+		  . " onClick=\"window.open('./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=" . $carr[$z][$x]['contact_id'] 
+		  . "', 'selector', 'left=50,top=50,height=250,width=400,resizable\);return false;\">" 
+		  . $AppUI->_('Projects') . '</a>');
 ?>
 			</td>
 		</tr>

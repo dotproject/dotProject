@@ -40,7 +40,10 @@ echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
 for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 	//array[task_is] = end_date, end_hour, end_minutes
-	echo "projTasksWithEndDates[".$keys[$i]."]=new Array(\"".$projTasksWithEndDates[$keys[$i]][1]."\", \"".$projTasksWithEndDates[$keys[$i]][2]."\", \"".$projTasksWithEndDates[$keys[$i]][3]."\");\n";
+	echo ('projTasksWithEndDates[' . $keys[$i] . ']=new Array("' 
+	      . $projTasksWithEndDates[$keys[$i]][1] . '", "' 
+	      . $projTasksWithEndDates[$keys[$i]][2] . '", "' 
+	      . $projTasksWithEndDates[$keys[$i]][3] ."\");\n");
 }
 ?>
 </script>
@@ -76,7 +79,8 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 							<select name="percentage_assignment" class="text">
 							<?php 
 								for ($i = 5; $i <= 100; $i+=5) {
-									echo "<option ".(($i==100)? "selected=\"true\"" : "")." value=\"".$i."\">".$i."%</option>";
+									echo ('<option ' . (($i==100) ? 'selected="true"' : '') 
+									      . ' value="' . $i . '">' . $i . '%</option>');
 								}
 							?>
 							</select>

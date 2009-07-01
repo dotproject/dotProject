@@ -3,18 +3,18 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$do_report 		    = dPgetParam($_POST, "do_report", 0);
-$log_start_date 	= dPgetParam($_POST, "log_start_date", 0);
-$log_end_date 	    = dPgetParam($_POST, "log_end_date", 0);
-$log_all		    = dPgetParam($_POST["log_all"], 0);
-$group_by_unit      = dPgetParam($_POST["group_by_unit"],"day");
+$do_report = dPgetParam($_POST, 'do_report', 0);
+$log_start_date = dPgetParam($_POST, 'log_start_date', 0);
+$log_end_date = dPgetParam($_POST, 'log_end_date', 0);
+$log_all = dPgetParam($_POST['log_all'], 0);
+$group_by_unit = dPgetParam($_POST['group_by_unit'],'day');
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
 $end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span("14,0,0,0"));
+	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 ?>
@@ -66,7 +66,7 @@ function setCalendar(idate, fdate) {
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo "checked" ?> />
+		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked'; ?> />
 		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 
@@ -82,14 +82,11 @@ function setCalendar(idate, fdate) {
 if ($do_report) {
 	
 	// Let's figure out which users we have
-	$sql = "SELECT  u.user_id,
-	 				u.user_username, 
-					contact_first_name, 
-					contact_last_name
-	        FROM users AS u
-                LEFT JOIN contacts ON u.user_contact = contact_id";
+	$sql = ('SELECT u.user_id, u.user_username, contact_first_name, contact_last_name' 
+			. ' FROM users AS u' 
+			. ' LEFT JOIN contacts ON u.user_contact = contact_id');
 	
-	$user_list = db_loadHashList($sql, "user_id");
+	$user_list = db_loadHashList($sql, 'user_id');
 	
 	// Now which tasks will we need and the real allocated hours (estimated time / number of users)
 	// Also we will use tasks with duration_type = 1 (hours) and those that are not marked
@@ -97,22 +94,22 @@ if ($do_report) {
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$working_hours = $dPconfig['daily_working_hours'];
 
-	$sql = "SELECT t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ".$working_hours.", t.task_duration_type)/count(ut.task_id),2) as hours_allocated
-	        FROM tasks as t, user_tasks as ut
-	        WHERE t.task_id = ut.task_id
-				  AND t.task_milestone    ='0'";
+	$sql = ('SELECT t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ' 
+			. $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated' 
+			. ' FROM tasks as t, user_tasks as ut' 
+			. " WHERE t.task_id = ut.task_id AND t.task_milestone = '0'");
 	
-	if ($project_id != 0)
-		$sql .= " AND t.task_project='$project_id'\n";
-		
+	if ($project_id != 0) {
+		$sql .= " AND t.task_project='$project_id'";
+	}
 	if (!$log_all) {
-		$sql .= " AND t.task_start_date >= \"".$start_date->format(FMT_DATETIME_MYSQL)."\"
-		          AND t.task_start_date <= \"".$end_date->format(FMT_DATETIME_MYSQL)."\"";
+		$sql .= (' AND t.task_start_date >= "' . $start_date->format(FMT_DATETIME_MYSQL) 
+		         . '" AND t.task_start_date <= "' . $end_date->format(FMT_DATETIME_MYSQL) . '"');
 	}
 	
-	$sql .= "GROUP BY t.task_id";
+	$sql .= ' GROUP BY t.task_id';
 	
-	$task_list = db_loadHashList($sql, "task_id");
+	$task_list = db_loadHashList($sql, 'task_id');
 	//echo $sql;
 ?>
 
@@ -133,9 +130,7 @@ if ($do_report) {
 	
 //TODO: Split times for which more than one users were working...	
 		foreach ($user_list as $user_id => $user) {
-			$sql = "SELECT task_id
-			        FROM user_tasks
-			        where user_id = $user_id";
+			$sql = 'SELECT task_id FROM user_tasks WHERE user_id = ' . $user_id;
 			$tasks_id = db_loadColumn($sql);
 
 			$total_hours_allocated = $total_hours_worked = 0;
@@ -144,27 +139,22 @@ if ($do_report) {
 			foreach ($tasks_id as $task_id) {
 				if (isset($task_list[$task_id])) {
 					// Now let's figure out how many time did the user spent in this task
-					$sql = "SELECT sum(task_log_hours)
-		        			FROM task_log
-		        			WHERE task_log_task        = $task_id
-					              AND task_log_creator = $user_id";
+					$sql = ('SELECT sum(task_log_hours) FROM task_log' 
+					        ." WHERE task_log_task = $task_id AND task_log_creator = $user_id");
 					$hours_worked = round(db_loadResult($sql),2);
 					
-
-                                        $sql = "SELECT task_percent_complete
-                                                FROM tasks
-                                                WHERE task_id = $task_id";
-                       //                 echo $sql;
-                                        $percent = db_loadColumn($sql);
-                                        $complete = ($percent[0] == 100);
-                                        
-                                        if ($complete)
-                                        {
-                                                $hours_allocated_complete += $task_list[$task_id]["hours_allocated"];
-                                                $hours_worked_complete += $hours_worked;
-                                        }
-
-					$total_hours_allocated += $task_list[$task_id]["hours_allocated"];
+					
+					$sql = "SELECT task_percent_complete FROM tasks WHERE task_id = $task_id";
+					//echo $sql;
+					$percent = db_loadColumn($sql);
+					$complete = ($percent[0] == 100);
+                    
+					if ($complete) {
+						$hours_allocated_complete += $task_list[$task_id]['hours_allocated'];
+						$hours_worked_complete += $hours_worked;
+					}
+					
+					$total_hours_allocated += $task_list[$task_id]['hours_allocated'];
 					$total_hours_worked    += $hours_worked;
 				}
 			}
@@ -185,7 +175,7 @@ if ($do_report) {
 				}
 				?>
 				<tr>
-					<td><?php echo "(".$user["user_username"].") </td><td> ".$user["contact_first_name"]." ".$user["contact_last_name"]; ?></td>
+					<td><?php echo '('.$user['user_username'].') </td><td> '.$user['contact_first_name'].' '.$user['contact_last_name']; ?></td>
 					<td align='right'><?php echo $total_hours_allocated; ?> </td>
 					<td align='right'><?php echo $total_hours_worked; ?> </td>
 					<td align='right'><?php echo number_format($percentage, 0); ?>% </td>

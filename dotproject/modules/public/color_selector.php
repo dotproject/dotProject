@@ -46,7 +46,7 @@ $callback = isset($_GET['callback']) ? $_GET['callback'] : 0;
 				<option value="0">- - <?php echo $AppUI->_('Preset');?> - -</option>
 <?php
 				foreach ($colors as $key=>$value) {
-					echo "<option value=\"$value\">$key</option>\n";
+					echo '<option value="' . $value . '">' . $key . "</option>\n";
 				}
 ?>
 			</select>

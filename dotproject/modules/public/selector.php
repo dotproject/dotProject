@@ -189,7 +189,8 @@ if (!$ok) {
 			if (count($list) > 1) {
 		//		echo arraySelect($list, 'list', ' size="8"', 0);
 				foreach ($list as $key => $val) {
-					echo "<li><a href=\"javascript:setClose('$key','".addslashes($val)."');\">$val</a></li>\n";
+					echo ('<li><a href="javascript:setClose(\'' . $key . "','" . addslashes($val) 
+					      . '\');">' . $val . "</a></li>\n");
 				}
 			} else {
 				echo $AppUI->_("no$table");

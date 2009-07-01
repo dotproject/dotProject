@@ -15,11 +15,11 @@ $tab = $AppUI->getState('RoleVwTab') !== NULL ? $AppUI->getState('RoleVwTab') : 
 
 if (! is_array($role)) {
 	$titleBlock = new CTitleBlock('Invalid Role', 'main-settings.png', $m, "$m.$a");
-	$titleBlock->addCrumb("?m=system&u=roles", "role list");
+	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
 	$titleBlcok->show();
 } else {
 	$titleBlock = new CTitleBlock('View Role', 'main-settings.png', $m, "$m.$a");
-	$titleBlock->addCrumb("?m=system&u=roles", "role list");
+	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
 	$titleBlock->show();
 	// Now onto the display of the user.
 ?>
@@ -30,7 +30,7 @@ if (! is_array($role)) {
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Description');?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($role["name"]);?></td>
+			<td class="hilite" width="100%"><?php echo $AppUI->_($role['name']);?></td>
 		</tr>
 </table>
 

@@ -131,7 +131,7 @@ echo $AppUI->_('Internet Address');?></a></th>
 <?php 
 foreach ($rows as $row) { 
 	echo ("  <tr>\n");
-	echo ("    <td align=\"center\" nowrap=\"nowrap\">\n") ;
+	echo ('    <td align="center" nowrap="nowrap">' . "\n") ;
 	if ($canEdit && $canDelete) {
 		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_session')
 		      .'" onclick="logoutSession(\'' . $row['session_id'] . "', '" 
@@ -139,7 +139,7 @@ foreach ($rows as $row) {
 		      . ($row['contact_first_name'] . ' ' . $row['contact_last_name']) . '\');" />' . "\n");
 	}
 	echo ("    </td>\n");
-	echo ("    <td align=\"center\" nowrap=\"nowrap\">\n") ;
+	echo ('    <td align="center" nowrap="nowrap">' . "\n") ;
 	if ($canEdit && $canDelete && $logoutUserFlag) {
 		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_user') 
 		      .'" onclick="logoutUser(\'' . $row['u_user_id']  ."', '" 

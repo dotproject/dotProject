@@ -206,9 +206,9 @@ foreach ($user_acls as $acl) {
 		$buf .= "<td>" . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . "</td>";
 		$buf .= '<td nowrap>';
 		if ($canDelete) {
-			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"".$AppUI->_('delete')."\">"
-				. dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
-				. "</a>";
+			$buf .= ('<a href="javascript:delIt(' . $acl . ');" title="' . $AppUI->_('delete') 
+			         . '">' . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '') 
+			         . '</a>');
 		}
 		$buf .= '</td>';
 		

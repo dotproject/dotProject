@@ -942,6 +942,9 @@ the active tab, and the selected tab **/
 *	Must support 2 arguments, currently active tab, new tab to activate.
 */
 	function CTabBox_core($baseHRef='', $baseInc='', $active=0, $javascript = null) {
+		$baseHRef = str_replace('&amp;', '&', $baseHRef);
+		$baseHRef = str_replace('&', '&amp;', $baseHRef);
+		
 		$this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? ($baseHRef . '&amp;') : '?');
@@ -1164,6 +1167,8 @@ class CTitleBlock_core {
 * Cells are added from left to right.
 */
 	function addCrumb($link, $label, $icon='') {
+		$link = str_replace('&amp;', '&', $link);
+		$link = str_replace('&', '&amp;', $link);
 		$this->crumbs[$link] = array($label, $icon);
 	}
 /**
@@ -1237,7 +1242,7 @@ class CTitleBlock_core {
 				$t = (($v[1]) ? ('<img src="' . dPfindImage($v[1], $this->module) 
 				                 . '" border="" alt="" />&nbsp;') : '');
 				$t .= $AppUI->_($v[0]);
-				$crumbs[] = "<a href=\"$k\">$t</a>";
+				$crumbs[] = ('<a href="'. $k .'">' . $t . '</a>');
 			}
 			$s .= "\n" . '<table border="0" cellpadding="4" cellspacing="0" width="100%">';
 			$s .= "\n<tr>";

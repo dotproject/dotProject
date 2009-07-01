@@ -59,9 +59,8 @@ foreach ($user_roles as $row) {
 
 	$buf .= '<td nowrap>';
 	if ($canEdit) {
-		$buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"".$AppUI->_('delete')."\">"
-			. dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '')
-			. "</a>";
+		$buf .= ('<a href="javascript:delIt(' . $row['id'] . ');" title="' . $AppUI->_('delete') 
+				 . '">'. dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '') . '</a>');
 	}
 	$buf .= '</td>';
 	

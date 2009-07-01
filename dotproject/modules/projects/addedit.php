@@ -99,14 +99,16 @@ if ($project_id) {
 }
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if ($department_selection_list!="" || $project_id) {
-  $department_selection_list = ($AppUI->_("Departments")."<br />\n"
-								."<select name=\"dept_ids[]\" class=\"text\">\n"
-								."<option value=\"0\"></option>\n"
-								."{$department_selection_list}\n"
-								."</select>");
+if ($department_selection_list!='' || $project_id) {
+	$department_selection_list = ($AppUI->_('Departments')."<br />\n"
+	                              . '<select name="dept_ids[]" class="text">' . "\n"
+	                              . '<option value="0"></option>' . "\n"
+	                              . $department_selection_list . "\n" .'</select>');
 } else {
-  $department_selection_list = "<input type=\"button\" class=\"button\" value=\"".$AppUI->_("Select department...")."\" onclick=\"javascript:popDepartment();\" /><input type=\"hidden\" name=\"project_departments\"";
+	$department_selection_list = ('<input type="button" class="button" value="'
+	                              . $AppUI->_('Select department...') 
+	                              . '" onclick="javascript:popDepartment();" />' 
+	                              . '<input type="hidden" name="project_departments"');
 }
 
 // Get contacts list
@@ -122,7 +124,7 @@ if ($project_id) {
 	$q->clear();
 }
 if ($project_id == 0 && $contact_id > 0) {
-	$selected_contacts[] = "$contact_id";
+	$selected_contacts[] = $contact_id;
 }
 ?>
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo DP_BASE_URL;?>/lib/calendar/calendar-dp.css" title="blue" />
@@ -477,9 +479,10 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	$depts_list = $q->loadHashList("dept_id");
 
 	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? " selected=\"selected\"" : "";
+		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
 
-		$parsed .= "<option value=\"{$dept_id}\"{$selected}>".str_repeat("&nbsp;", $spaces).$dept_info["dept_name"]."</option>";
+		$parsed .= ('<option value="' . $dept_id . '"' . $selected . '>' 
+		            . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>');
 		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces+5);
 	}
 	

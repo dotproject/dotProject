@@ -167,8 +167,12 @@ if ($do_report) {
 	$q->addOrder('project_start_date', 'task_project', 'task_parent', 'task_start_date');
 	$Task_List = $q->exec();
 
-	echo "<table cellspacing=\"1\" cellpadding=\"4\" border=\"0\" class=\"tbl\">";
-	if ($project_id==0) { echo "<tr><th>Project Name</th><th>Task Name</th>";} else {echo "<tr><th>Task Name</th>";}
+	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl">';
+	if ($project_id==0) { 
+		echo "<tr><th>Project Name</th><th>Task Name</th>";
+	} else {
+		echo "<tr><th>Task Name</th>";
+	}
 	echo "<th width=400>Task Description</th>";
 	echo "<th>Assigned To</th>";
 	echo "<th>Task Start Date</th>";
@@ -310,7 +314,7 @@ function show_task_as_html($depth, $task)
 	($task['start_date'] != ' ') ? $str .= $task['start_date']->format($df)."</td>" : $str .= ' '."</td>";			
 	$str .= "<td>";		
 	($task['end_date'] != ' ') ? $str .= $task['end_date']->format($df)."</td>" : $str .= ' '."</td>";
-	$str .= "<td align=\"center\">".$task['task_percent_complete']."%</td>";
+	$str .= '<td align="center">'.$task['task_percent_complete']."%</td>";
 	$str .= "</tr>";
 	echo $str;
 }
