@@ -7,7 +7,7 @@ $link_id = intval(dPgetParam($_GET, 'link_id', 0));
  
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $link_id);
-if (!(($canEdit && $link_id) || ($canAuthor && !($link_id))) {
+if (!(($canEdit && $link_id) || ($canAuthor && !($link_id)))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
