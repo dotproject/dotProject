@@ -847,8 +847,8 @@ class CTask extends CDpObject
 		$projname = htmlspecialchars_decode(db_loadResult($sql));
 		$mail = new Mail;
 		
-		$mail->Subject($projname . '::' . $this->task_name . ' ' 
-					   . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+		$mail->Subject(($projname . '::' . $this->task_name . ' ' 
+		                . $AppUI->_($this->_action, UI_OUTPUT_RAW)), $locale_char_set);
 		
 		// c = creator
 		// a = assignee
@@ -916,8 +916,8 @@ class CTask extends CDpObject
 		
 		$mail = new Mail;
 		
-		$mail->Subject($projname . '::' . $this->task_name . ' '  
-				.$AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+		$mail->Subject(($projname . '::' . $this->task_name . ' '  
+		                . $AppUI->_($this->_action, UI_OUTPUT_RAW)), $locale_char_set);
 		
 		// c = creator
 		// a = assignee

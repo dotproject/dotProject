@@ -194,9 +194,10 @@ selector.style.height = (wh - count - 5) + "px";
 if (count($list) > 1) {
 //	echo arraySelect($list, 'list', ' size="8"', 0);
 	foreach ($list as $key => $val) {
-		echo ('<li><a href="javascript:setClose(\'' . $key . "','" 
-		      . str_replace("&#039;", '&apos;', htmlspecialchars($val, ENT_QUOTES, false)) 
-		      . '\');">' . $val . "</a></li>\n");
+		echo ('<li><a href="' . dPformSafe(("javascript:setClose('" 
+		                                    . dPformSafe($key, false, false, true) . "','" 
+		                                    . dPformSafe($val, false, false, true) . "');"), 
+		                                   false, true) . '">' . dPformSafe($val) . "</a></li>\n");
 	}
 } else {
 	echo $AppUI->_("no$table");

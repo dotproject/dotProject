@@ -515,26 +515,36 @@ function dPgetMicroDiff() {
 /**
 * Make text safe to output into double-quote enclosed attirbutes of an HTML tag
 */
-function dPformSafe($txt, $deslash=false) {
+function dPformSafe($txt, $deslash=false, $isURI=false, $isJSVars=false) {
 	global $locale_char_set;
 	
 	if (!$locale_char_set) {
 		$locale_char_set = 'utf-8';
 	}
 	
-	if (is_object($txt)) {
-		foreach (get_object_vars($txt) as $k => $v) {
+	if (is_object($txt) || is_array($txt)) {
+		$txt_arr = ((is_object($txt)) ? get_object_vars($txt) : $txt);
+		foreach ($txt_arr as $k => $v) {
 			$value = (($deslash) ? stripslashes($v) : $v);
-			$obj->$k = htmlspecialchars($value, ENT_COMPAT, $locale_char_set);
+			$value = (($isURI) ? str_replace(" ", "%20", $value) : $value);
+			$value = (($isJSVars) 
+			          ? str_replace("'", "\\'", str_replace('"', '\"', $value)) 
+			          : str_replace('&#039;', '&apos;', 
+			                        htmlspecialchars($value, ENT_QUOTES, $locale_char_set)));
+			if (is_object($txt)) {
+				$txt->$k = $value;
+			} else {
+				$txt[$k] = $value;
+			}
 		}
-	} else if (is_array($txt)) {
-		foreach ($txt as $k => $v) {
-			$value = (($deslash) ? stripslashes($v) : $v);
-			$txt[$k] = htmlspecialchars($value, ENT_COMPAT, $locale_char_set);
-		}
+		
 	} else {
-		$value = (($deslash) ? stripslashes($txt) : $txt);
-		$txt = htmlspecialchars($value, ENT_COMPAT, $locale_char_set);
+		$txt = (($deslash) ? stripslashes($txt) : $txt);
+		$txt = (($isURI) ? str_replace(" ", "%20", $txt) : $txt);
+		$txt = (($isJSVars) 
+		        ? str_replace("'", "\\'", str_replace('"', '\"', $txt)) 
+		        : str_replace('&#039;', '&apos;', 
+		                      htmlspecialchars($txt, ENT_QUOTES, $locale_char_set)));
 	}
 	return $txt;
 }
