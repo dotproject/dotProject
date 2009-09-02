@@ -456,6 +456,7 @@ $query_string = ('?m=projects&a=view&project_id=' . $project_id);
 //Note that we now control these based upon module requirements.
 $canAccessTask = getPermission('tasks', 'access');
 $canAccessTaskLog = getPermission('task_log', 'access');
+$showEditCheckbox = false;
 
 if ($canAccessTask) {
 	$tabBox->add(DP_BASE_DIR.'/modules/tasks/tasks', 'Tasks');
