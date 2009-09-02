@@ -8,6 +8,11 @@ GLOBAL $task_sort_item1, $task_sort_type1, $task_sort_order1;
 GLOBAL $task_sort_item2, $task_sort_type2, $task_sort_order2;
 GLOBAL $user_id, $dPconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
 global $tasks_opened, $tasks_closed;
+
+if (!(isset($showEditCheckbox))) {
+	$showEditCheckbox = $dPconfig['direct_edit_assignment'];
+}
+
 /*
  tasks.php
  
@@ -360,7 +365,7 @@ function toggle_users(id) {
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($dPconfig['direct_edit_assignment']) {
+if ($showEditCheckbox) {
 ?>
 function checkAll(project_id) {
 	var f = eval('document.assFrm' + project_id);
@@ -507,7 +512,7 @@ echo (($project_id) ? 'expand.gif' : 'collapse.gif');
 echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only this project')); ?>">
   </a>
   </td>
-  <td colspan="<?php echo $dPconfig['direct_edit_assignment'] ? $cols-4 : $cols-1; ?>">
+  <td colspan="<?php echo $showEditCheckbox ? $cols-4 : $cols-1; ?>">
   <table width="100%" border="0">
   <tr>
 	<!-- patch 2.12.04 display company name next to project name -->
@@ -539,7 +544,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 					}
 				}
 			}
-			if ($dPconfig['direct_edit_assignment'] && ($hasEditableTask)) {
+			if ($showEditCheckbox && ($hasEditableTask)) {
 				// get Users with all Allocation info (e.g. their freeCapacity)
 				$tempoTask = new CTask();
 				$userAlloc = $tempoTask->getAllocation('user_id');
