@@ -85,7 +85,7 @@ function getPermission($mod, $perm, $item_id = 0) {
 		if ($mod == 'task_log') {
 			$sql = ('SELECT task_log_task FROM task_log WHERE task_log_id =' . $item_id);
 			$task_id = db_loadResult($sql);
-			$result = $result && getPermission('projects', $perm, $task_id);
+			$result = $result && getPermission('tasks', $perm, $task_id);
 		} else if ($mod == 'tasks') {
 			$sql = ('SELECT task_project FROM tasks WHERE task_id =' . $item_id);
 			$project_id = db_loadResult($sql);

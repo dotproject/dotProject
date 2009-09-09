@@ -8,6 +8,8 @@ $message_id = isset($_GET['message_id']) ? $_GET['message_id'] : 0;
 $message_parent = isset($_GET['message_parent']) ? $_GET['message_parent'] : -1;
 $forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
 
+$canEdit = getPermission('forums', 'edit', $forum_id);
+
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
 foreach ($_GET as $k => $v) {
@@ -19,11 +21,10 @@ $back_url = implode('&', $back_url_params);
 
 //Pull forum information
 $q = new DBQuery;
-$q->addTable('forums');
-$q->addTable('projects');
-$q->addQuery('forum_name, forum_owner, forum_moderated, project_name, project_id');
-$q->addWhere("forums.forum_id = $forum_id");
-$q->addWhere('forums.forum_project = projects.project_id');
+$q->addTable('forums', 'f');
+$q->leftJoin('projects', 'p', 'f.forum_project = p.project_id');
+$q->addQuery('f.forum_name, f.forum_owner, f.forum_moderated, p.project_name, p.project_id');
+$q->addWhere("f.forum_id = $forum_id");
 $res = $q->exec();
 $forum_info = $q->fetchRow();
 $q->clear();
@@ -31,10 +32,10 @@ echo db_error();
 
 //pull message information
 $q = new DBQuery;
-$q->addTable('forum_messages');
-$q->addQuery('forum_messages.*, user_username');
-$q->addJoin('users', 'u', 'message_author = u.user_id');
-$q->addWhere('message_id = '. ($message_id ? $message_id : $message_parent));
+$q->addTable('forum_messages', 'fm');
+$q->addJoin('users', 'u', 'fm.message_author = u.user_id');
+$q->addQuery('fm.*, u.user_username');
+$q->addWhere('fm.message_id = '. ($message_id ? $message_id : $message_parent));
 $res = $q->exec();
 echo db_error();
 $message_info = $q->fetchRow();
@@ -42,9 +43,9 @@ $q->clear();
 
 //pull message information from last response 
 if ($message_parent != -1) {
-	$q->addTable('forum_messages');
-	$q->addWhere('message_parent = '. ($message_id ? $message_id : $message_parent));
-	$q->addOrder('message_id DESC'); // fetch last message first
+	$q->addTable('forum_messages', 'fm');
+	$q->addWhere('fm.message_parent = '. ($message_id ? $message_id : $message_parent));
+	$q->addOrder('fm.message_id DESC'); // fetch last message first
 	$q->setLimit(1);
 	$res = $q->exec();
     echo db_error();
@@ -116,7 +117,6 @@ function orderByName(x) {
 <!-- <form name="changeforum" action="?m=forums&a=viewposts&forum_id=<?php echo $forum_id;?>" method="post"> -->
 
 <form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id;?>" method="post">
-	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id;?>" />
 	<input type="hidden" name="message_parent" value="<?php echo $message_parent;?>" />
@@ -160,12 +160,15 @@ if ($message_parent >= 0) {
 		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';">
 	</td>
 	<td align="right"><?php
-$canEdit = getPermission('forums', 'edit', $row['message_id']);
-if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
-				 || $AppUI->user_id == $row['message_author'] 
-				 || getPermission('project', 'edit', $forum_info['project_id']) 
-				 || !($forum_info['project_id']))) {
-	echo '<input type="button" value="'.$AppUI->_('submit').'" class=button onclick="submitIt()">';
+if ($canEdit && ($forum_info['forum_owner'] == $AppUI->user_id 
+                 || $forum_info['forum_moderated'] == $AppUI->user_id 
+                 || (getPermission('projects', 'edit', $forum_info['project_id']) 
+                     && !($forum_info['project_id'])) 
+                 || $message_info['message_author'] == $AppUI->user_id 
+                 || !($message_id))) {
+	echo '<input type="hidden" name="dosql" value="do_post_aed" />';
+	echo ('<input type="button" value="' . $AppUI->_('submit') 
+	      . '" class=button onclick="submitIt()">');
 }
 ?></td>
 </tr>

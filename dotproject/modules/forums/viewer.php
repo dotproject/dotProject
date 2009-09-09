@@ -22,17 +22,15 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
 $q  = new DBQuery;
-$q->addTable('forums');
-$q->addTable('projects', 'p');
-$q->addTable('users', 'u');
-$q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
-	forum_create_date, forum_last_date, forum_message_count, forum_moderated,
-	user_username, contact_first_name, contact_last_name,
-	project_name, project_color_identifier');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-$q->addWhere("user_id = forum_owner");
+$q->addTable('forums', 'f');
+$q->leftJoin('projects', 'p', 'f.forum_project = p.project_id');
+$q->leftJoin('users', 'u', 'u.user_id = f.forum_owner');
+$q->leftJoin('contacts', 'con', 'con.contact_id = u.user_contact');
+$q->addQuery('f.forum_id, f.forum_project, f.forum_description, f.forum_owner, f.forum_name,' 
+			 . ' f.forum_create_date, f.forum_last_date, f.forum_message_count, f.forum_moderated,' 
+			 . ' u.user_username, con.contact_first_name, con.contact_last_name, p.project_name,' 
+			 . ' p.project_color_identifier');
 $q->addWhere("forum_id = $forum_id");
-$q->addWhere("forum_project = project_id");
 $q->exec(ADODB_FETCH_ASSOC);
 $forum = $q->fetchRow();
 $forum_name = $forum["forum_name"];
