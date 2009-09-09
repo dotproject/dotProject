@@ -9,7 +9,7 @@ $company_name = dPgetParam($_REQUEST, 'company_name', null);
 
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $contact_id);
-if (!(($canEdit && $contact_id) || ($canAuthor && !($contact_id))) {
+if (!(($canEdit && $contact_id) || ($canAuthor && !($contact_id)))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
