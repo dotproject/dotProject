@@ -23,7 +23,7 @@ function show_history($history) {
 	$q->addTable('modules', 'm');
 	$q->addQuery('m.*');
 	$q->addWhere("m.`permissions_item_table` LIKE '" . $table . "'");
-	$q-exec();
+	$q->exec();
 	$module_result = $q->fetchRow();
 	$q->clear();
 	
