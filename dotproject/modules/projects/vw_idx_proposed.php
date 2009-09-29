@@ -221,7 +221,7 @@ echo (htmlspecialchars($row['total_tasks'] . ($row['my_tasks'] ? ' ('.$row['my_t
 	<td align="center" nowrap="nowrap">
 		<?php 
 echo (($row['project_status'] == 0) 
-      ? $AppUI->_('Not Defined') : $project_types[$row['project_status']]);
+      ? $AppUI->_('Not Defined') : $AppUI->_($project_types[$row['project_status']]));
 ?>
 	</td>
 <?php 
