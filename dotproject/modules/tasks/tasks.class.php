@@ -141,24 +141,94 @@ class CTask extends CDpObject
 		// Set to false for recursive updateDynamic calls etc.
 		$addedit = false;
 		
+		// Has a parent
+		if ($this->task_id && $this->task_id != $this->task_parent) {
+			
+			$this_children = $this->getChildren();
+			$this_child_deps = array();
+			foreach ($this_children as $child) {
+				$child_dep_str = $this->staticGetDependencies($child);
+				$this_child_deps = array_unique(array_merge($this_child_deps, 
+				                                            explode(',', $child_dep_str)));
+			}
+			
+			$current_task = $this;
+			$parents_children = array();
+			//itrative walk through parent tasks
+			while ($current_task->task_id != $current_task->task_parent) {
+				$current_parent = new CTask();
+				$current_parent->load($current_task->task_parent);
+				$parents_children = array_unique(array_merge($parents_children, 
+				                                             $current_parent->getChildren()));
+				
+				// Task parent (of any level) cannot be a child of task or its children
+				// extra precaution against any UI bugs allowing otherwise
+				if (in_array($current_parent->task_id, $parents_children)) {
+					return (($this->task_id == $current_parent->task_parent) 
+					        ? 'BadParent_CircularParent' 
+					        : array('BadParent_CircularGrandParent', 
+					                ('(' . $current_parent->task_id . ')')));
+				}
+				//Task's children cannot have a parent (of any level) as a dependency
+				if (in_array($current_parent->task_id, $this_child_deps)) {
+					return 'BadParent_ChildDepOnParent';
+				}
+				
+				//Task cannot have a parent (of any level) as a dependency
+				if (in_array($current_parent->task_id, $this_dependencies)) {
+					return (($current_task == $this) ? 'BadDep_CannotDependOnParent' 
+					        : array('BadDep_CircularGrandParent', 
+					                ('(' . $current_parent->task_id . ')')));
+				}
+				
+				$parents_dependents = explode(',', $current_parent->dependentTasks());
+				$this_intersect = array_intersect($this_dependencies, $parents_dependents);
+				//Any tasks dependent on a dynamic parent task cannot be dependencies of task
+				if (array_sum($this_intersect)) {
+					$ids = '(' . implode(',', $intersect) . ')';
+					return array('BadDep_CircularDepOnParentDependent', $ids);
+				}
+				
+				$current_task = $current_parent;
+			}
+		} // parent
+		
 		// Have deps
 		if (array_sum($this_dependencies)) {
 			if ($this->task_dynamic == 1) {
 				return 'BadDep_DynNoDep';
 			}
 			
-			$this_dependents = $this->task_id ? explode(',', $this->dependentTasks()) : array();
+			$this_dependents = (($this->task_id) ? explode(',', $this->dependentTasks()) : array());
+			// Treat parent task, like a dependent
+			if ($this->task_id != $this->task_parent) {
+				array_push($this_dependents, $this->task_parent);
+				$dep_string = $this->dependentTasks($this->task_parent);
+				$this_dependents = array_unique(array_merge($this_dependents, 
+				                                            explode(',', $dep_string)));
+			}
+			
 			$more_dependents = array();
-			// If the dependents' have parents add them to list of dependents
+			// Treat dependents' parents them like dependents too and pull parent dependents
 			foreach ($this_dependents as $dependent) {
 				$dependent_task = new CTask();
 				$dependent_task->load($dependent);
 				if ($dependent_task->task_id != $dependent_task->task_parent) {
-					$more_dependents = explode(',', 
-					                           $this->dependentTasks($dependent_task->task_parent));
+					$current_task = $dependent_task;
+					while ($current_task->task_id != $current_task->task_parent) {
+						$current_parent_id = $current_task->task_parent;
+						array_push($more_dependents, $current_parent_id);
+						$dep_string = $this->dependentTasks($dependent_task->task_parent);
+						$more_dependents = array_unique(array_merge($more_dependents, 
+						                                            explode(',', $dep_string)));
+						
+						$current_task = new CTask();
+						$current_task->load($current_parent_id);
+					}
 				}
 			}
-			$this_dependents = array_merge($this_dependents, $more_dependents);
+			
+			$this_dependents = array_unique(array_merge($this_dependents, $more_dependents));
 			
 			// Task dependencies can not be dependent on this task
 			$intersect = array_intersect($this_dependencies, $this_dependents);
@@ -167,50 +237,6 @@ class CTask extends CDpObject
 				return array('BadDep_CircularDep', $ids);
 			}
 		}
-		
-		// Has a parent
-		if ($this->task_id && $this->task_id != $this->task_parent) {
-			$this_children = $this->getChildren();
-			$this_parent = new CTask();
-			$this_parent->load($this->task_parent);
-			$parents_dependents = explode(',', $this_parent->dependentTasks());
-			
-			if (in_array($this_parent->task_id, $this_dependencies)) {
-				return 'BadDep_CannotDependOnParent';
-			}
-			// Task parent cannot be child of this task
-			if (in_array($this_parent->task_id, $this_children)) {
-				return 'BadParent_CircularParent';
-			}
-			
-			if ($this_parent->task_parent != $this_parent->task_id) {
-				// ... or parent's parent, cannot be child of this task. Could go on ...
-				if (in_array($this_parent->task_parent, $this_children)) {
-					return array('BadParent_CircularGrandParent'
-								 , '(' . $this_parent->task_parent . ')');
-				}
-				// parent's parent cannot be one of this task's dependencies
-				if (in_array($this_parent->task_parent, $this_dependencies)) {
-					return array('BadDep_CircularGrandParent'
-								 , '(' . $this_parent->task_parent . ')');
-				}
-			} // grand parent
-			
-			if ($this_parent->task_dynamic == 1) {
-				$intersect = array_intersect($this_dependencies, $parents_dependents);
-				if (array_sum($intersect)) {
-					$ids = '(' . implode(',', $intersect) . ')';
-					return array('BadDep_CircularDepOnParentDependent', $ids);
-				}
-			}
-			if ($this->task_dynamic == 1) {
-				// then task's children can not be dependent on parent
-				$intersect = array_intersect($this_children, $parents_dependents);
-				if (array_sum($intersect)) {
-					return 'BadParent_ChildDepOnParent';
-				}
-			}
-		} // parent
 		
 		//Is dynamic and no child
 		if (dPgetConfig('check_task_empty_dynamic') && $this->task_dynamic == 1) {
@@ -806,7 +832,7 @@ class CTask extends CDpObject
 	 **/
 	function getDependencies() {
 		// Call the static method for this object
-		$result = $this->staticGetDependencies ($this->task_id);
+		$result = $this->staticGetDependencies($this->task_id);
 		return $result;
 	} // end of getDependencies ()
 	
@@ -1329,20 +1355,22 @@ class CTask extends CDpObject
 	 **/
 	function dependentTasks ($taskId = false, $isDep = false, $recurse = true) {
 		$q = new DBQuery;
-		static $aDeps = false;
+		global $aDeps;
 		// Initialize the dependencies array
-		if (($taskId == false) && ($isDep == false)) {
+		if ($isDep == false) {
 			$aDeps = array();
 		}
-		// retrieve dependents tasks
+		
 		if (!$taskId) {
 			$taskId = $this->task_id;
 		}
 		if (empty($taskId)) {
 			return '';
 		}
+		
+		// retrieve dependent tasks
 		$q->addTable('task_dependencies', 'td');
-		$q->innerJoin('tasks', 't', 'td.dependencies_task_id = t.task_id');
+		$q->innerJoin('tasks', 't', 'td.dependencies_task_id = t.task_id'); // only "real" task ids
 		$q->addQuery('dependencies_task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . $taskId);
 		$sql = $q->prepare();
@@ -1354,10 +1382,9 @@ class CTask extends CDpObject
 		if ($recurse) {
 			// recurse to find sub dependents
 			foreach ($aBuf as $depId) {
-				// work around for infinite loop
-				if (!in_array($depId, $aDeps)) {
+				if (!in_array($depId, $aDeps)) { //make sure we haven't done a call with this id yet
 					$aDeps[] = $depId;
-					$this->dependentTasks ($depId, true);
+					$this->dependentTasks($depId, true);
 				}
 			}
 			
