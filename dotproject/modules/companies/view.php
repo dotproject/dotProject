@@ -131,6 +131,7 @@ echo ($obj->contact_first_name .' ' . $obj->contact_last_name); ?></td>
 		<tr valign=top>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite">
+<?php if (!empty($obj->company_country)) { ?>
 				<span style="float: right"><a href='http://maps.google.com/maps?q=<?php 
 echo @$obj->company_address1; ?>+<?php echo @$obj->company_address2; ?>+<?php 
 echo @$obj->company_city; ?>+<?php echo @$obj->company_state; ?>+<?php 
@@ -138,7 +139,7 @@ echo @$obj->company_zip; ?>+<?php echo @$obj->company_country; ?>' target='_blan
 				<?php 
 echo dPshowImage('./images/googlemaps.gif', 55, 22, 'Find It on Google');
 ?>
-
+<?php } ?>
 				</a></span>
 				<?php
 echo (@$obj->company_address1 
