@@ -50,14 +50,14 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 } else {
 	 if ($user_id == 0)
         $user['contact_id'] = 0;
-// pull companies
+	// pull companies
 	$q = new DBQuery;
 	$q->addTable('companies');
 	$q->addQuery('company_id, company_name');
 	$q->addOrder('company_name');
 	$companies = arrayMerge(array(0 => ''), $q->loadHashList());
 
-// setup the title block
+	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
 	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, "$m.$a");
 	if (getPermission('admin', 'view') && getPermission('users', 'view'))
@@ -161,10 +161,10 @@ function setDept(key, val) {
 		echo ('<input type="hidden" class="text" name="user_username" value="' 
 		      . $user['user_username'] . '" />');
 		echo '<strong>' . $user['user_username'] . '</strong>';
-    } else {
-        echo ('<input type="text" class="text" name="user_username" value="' 
+	} else {
+		echo ('<input type="text" class="text" name="user_username" value="' 
 		      . $user['user_username'] . '" maxlength="255" size="40" />');
-    }
+	}
 ?>
 	</td></tr>
 <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
@@ -172,9 +172,7 @@ function setDept(key, val) {
 <tr>
     <td align="right"> <?php echo $AppUI->_('User Type');?>:</td>
     <td>
-<?php
-    echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
-?>
+<?php echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true); ?>
     </td>
 </tr>
 <?php } // End of security
@@ -206,8 +204,8 @@ echo $user['contact_last_name'];?>" maxlength="50" /></td>
 <tr>
     <td align="right"> <?php echo $AppUI->_('Company');?>:</td>
     <td>
-<?php
-    echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
+<?php 
+echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
 ?>
     </td>
 </tr>
@@ -234,8 +232,10 @@ echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 echo @$user['user_signature'];?></textarea></td>
 </tr>
 <tr>
-	<td align="right"><a href="?m=contacts&a=addedit&contact_id=<?php 
-echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a></td>
+	<td align="right"><?php if ($user['user_contact']) { ?>
+		<a href="?m=contacts&a=addedit&contact_id=<?php 
+echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a>
+	<?php } ?></td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
