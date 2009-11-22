@@ -123,8 +123,9 @@ switch ($table) {
 				$last_parent = 0;
 				$level = 0;
 			}
-			$query_result[$task['task_id']] = (($level ? str_repeat('&nbsp;&nbsp;', $level) : '') 
-			                                   . $task['project_name'].' - '.$task['task_name']);
+			$query_result[$task['task_id']] = ($task['project_name'] . ' - ' 
+			                                   . $task['task_name']);
+			$html_disp_offset[$task['task_id']] = str_repeat('&nbsp;&nbsp;', $level);
 		}
 		break;
 	case 'users':
@@ -152,8 +153,8 @@ if (!$ok) {
 		echo "<br />ok = $ok \n";
 	}
 } else {
-	$list = arrayMerge(array(0=>$AppUI->_('[none]')), 
-	                   (($query_result) ? $query_result : $q->loadHashList()));
+	$list = arrayMerge(array(0 => $AppUI->_('[none]')), 
+	                   ((!(empty($query_result))) ? $query_result : $q->loadHashList()));
 	echo db_error();
 ?>
 <script language="javascript">
@@ -192,15 +193,14 @@ selector.style.height = (wh - count - 5) + "px";
 		<ul style="padding-left:0px">
 		<?php
 if (count($list) > 1) {
-//	echo arraySelect($list, 'list', ' size="8"', 0);
 	foreach ($list as $key => $val) {
-		echo ('<li><a href="' . dPformSafe(("javascript:setClose('" 
-		                                    . dPformSafe($key, false, false, true) . "','" 
-		                                    . dPformSafe($val, false, false, true) . "');"), 
-		                                   false, true) . '">' . dPformSafe($val) . "</a></li>\n");
+		echo ('<li>' . $html_disp_offset[$key] . '<a href="' . "javascript:setClose('" 
+		      . dPformSafe($key, false, false, true) . "','" 
+		      . dPformSafe($val, false, false, true) . "');" . '">' . dPformSafe($val) 
+		      . "</a></li>\n");
 	}
 } else {
-	echo $AppUI->_("no$table");
+	echo $AppUI->_("no $table");
 }
 ?>
 		</ul>
