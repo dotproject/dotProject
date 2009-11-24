@@ -1,1093 +1,1075 @@
-------------------------------------------------------------------------
-r5530 | ajdonnison | 2007-11-15 18:59:09 +1100 (Thu, 15 Nov 2007) | 2 lines
+commit 132e55b2c977e20b0cc28dc9c23ca595858a75a6
+Author: merlinyoda <merlinyoda>
+Date:   Thu Jul 31 13:33:56 2008 +0000
 
-#2241 - Fix broken html.
+    Fix for Mantis Report #2467:
+    Altered billing code query to only fetch billing codes for associated company
+    and non-company-associated codes. Some details were "loat in translation" from
+    a static SQL query string to using the DBQuery functions.
 
-------------------------------------------------------------------------
-r5531 | ajdonnison | 2007-11-16 17:19:40 +1100 (Fri, 16 Nov 2007) | 2 lines
 
-Fix the broken orphan handling which was duplicating tasks at the end of the display.  This probably isn't necessary any more as you can no longer assign someone who can't see other tasks in the project.
+commit 5cd09d97a2cad94ebea89579ae713f9615481289
+Author: ajdonnison <ajdonnison>
+Date:   Mon Aug 4 08:17:49 2008 +0000
 
-------------------------------------------------------------------------
-r5532 | ajdonnison | 2007-11-16 23:00:14 +1100 (Fri, 16 Nov 2007) | 2 lines
+    Fix multiple edit handling in tasks list when over allocation is not checked.
 
-Fix bug where Subject header is duplicated in output.
 
-------------------------------------------------------------------------
-r5533 | ajdonnison | 2007-11-16 23:13:12 +1100 (Fri, 16 Nov 2007) | 2 lines
+commit 9c54d34c04040de6d89a85bf980dfe5eac115b05
+Author: ajdonnison <ajdonnison>
+Date:   Tue Aug 5 09:32:29 2008 +0000
 
-#2245 - Fix headers used in php mail function.  Original version would clobber Reply-To headers, munging email.
+    Fix problems with permissions that were upgraded but never installed.
 
-------------------------------------------------------------------------
-r5535 | ajdonnison | 2007-11-18 10:09:01 +1100 (Sun, 18 Nov 2007) | 2 lines
 
-#2247 - Make sure events tab for projects only shows events for that project and not events unbound to projects.
+commit 5cc7e3851b6acbeef8fca011804ad70f88d90d85
+Author: ajdonnison <ajdonnison>
+Date:   Wed Aug 6 07:32:41 2008 +0000
 
-------------------------------------------------------------------------
-r5536 | ajdonnison | 2007-11-19 08:57:31 +1100 (Mon, 19 Nov 2007) | 2 lines
+    Slight variation of suggested fix in post 38557 on the forums.
 
-#2248 - Fix Debian bug in downloading files.
 
-------------------------------------------------------------------------
-r5537 | ajdonnison | 2007-11-21 20:36:54 +1100 (Wed, 21 Nov 2007) | 2 lines
+commit ba8550b9fcf3c1590ab7ac47f649d97e8fd4a173
+Author: ajdonnison <ajdonnison>
+Date:   Wed Aug 6 07:39:21 2008 +0000
 
-#2249 - Fix quoted printable encoding of headers.  Don't bother trying to compensate for an arbitrary line length as it is not a mandatory part of the standard.
+    Remove DISTINCT from within a max() method.
 
-------------------------------------------------------------------------
-r5538 | ajdonnison | 2007-11-22 21:26:23 +1100 (Thu, 22 Nov 2007) | 2 lines
 
-#2220 - Fix dependecies across import using patch from mckinnej
+commit 83cdfe6eaf9f92aa1a1d5ed7b189eb5f089e0cf5
+Author: ajdonnison <ajdonnison>
+Date:   Mon Aug 11 09:19:07 2008 +0000
 
-------------------------------------------------------------------------
-r5539 | ajdonnison | 2007-11-22 21:51:44 +1100 (Thu, 22 Nov 2007) | 2 lines
+    As per post #38656, fixed MySQL version-specific issue.
 
-#2251 - Fix broken URL in file update notification email with workaround from TheBAFH
 
-------------------------------------------------------------------------
-r5540 | cyberhorse | 2007-11-25 14:47:06 +1100 (Sun, 25 Nov 2007) | 2 lines
+commit f44ccceacbd12e266743dc298cf884cb82b2a1d2
+Author: merlinyoda <merlinyoda>
+Date:   Tue Aug 19 13:41:21 2008 +0000
 
-FEATURE improved module upgrade messages
+    Fix for Mantis Report #2482:
+    Input to function dPgetUsername should not be compared to user_id.
+    Function dPgetUsernameFromID is for getting this information from the user ID.
+    Adjusted such uses of dPgetUsername to use dPgetUsernameFromID instead.
 
-------------------------------------------------------------------------
-r5541 | ajdonnison | 2007-11-26 09:31:12 +1100 (Mon, 26 Nov 2007) | 2 lines
 
-#2254 - Patch from beni_gf to fix invalid permissions in forums.
+commit 8c81cfe0e3df1f3cb3126a7b5641650509125ebf
+Author: merlinyoda <merlinyoda>
+Date:   Tue Aug 19 16:24:53 2008 +0000
 
-------------------------------------------------------------------------
-r5542 | ajdonnison | 2007-11-26 20:00:05 +1100 (Mon, 26 Nov 2007) | 2 lines
+    Fix for Mantis Report #2483 (and #2485):
+    Clean up any past remants of temp tables.
 
-#2250 - Fix user preferences so that default are just that.
 
-------------------------------------------------------------------------
-r5543 | merlinyoda | 2007-11-27 06:37:16 +1100 (Tue, 27 Nov 2007) | 4 lines
+commit 3e50cc03d636756f57233acd39b3f10800dc3ad2
+Author: merlinyoda <merlinyoda>
+Date:   Wed Aug 20 16:20:22 2008 +0000
 
-Cleaned up some display output that was not using the _() translation function.
-Hopefully this helps with Mantis Report #2258
+    Fix for Mantis Report #2474:
+    Try to honor local charset when switching locale to "en_AU" for translation purposes.
 
 
-------------------------------------------------------------------------
-r5544 | merlinyoda | 2007-11-27 12:04:12 +1100 (Tue, 27 Nov 2007) | 5 lines
+commit 49645d18691e8a1053b2d25ee5b3489683470f58
+Author: merlinyoda <merlinyoda>
+Date:   Thu Aug 21 15:37:31 2008 +0000
 
+    Fix for Mantis Report 2474:
+    Temporaryily change LC_ALL instead of _LC_TIME to get strftime() to work properly.
+    Also needed to use 'utf8' instead of 'UTF8'.
 
-Changes to clean up calandar view. 
-Also fixes made to errors that snuck in when working on Mantis Report #2258
 
+commit d260c81bbdfc12f8d2428f9e3a255df16b25c491
+Author: merlinyoda <merlinyoda>
+Date:   Tue Aug 26 16:39:44 2008 +0000
 
-------------------------------------------------------------------------
-r5545 | ajdonnison | 2007-11-28 08:46:18 +1100 (Wed, 28 Nov 2007) | 2 lines
+    Fix for Mantis Report #2492:
+    Gantt form action now generated more dynamically
+    instead of using assumed string of necessary GET variables.
+    
+    ... also a little cleanup in one file
 
-#2253 - Don't bother doing db lookups on tasks when opening/closing all.
 
-------------------------------------------------------------------------
-r5546 | merlinyoda | 2007-11-29 10:54:52 +1100 (Thu, 29 Nov 2007) | 5 lines
+commit d231b6a34cdc4af44d1a0424e34663354cc4a93b
+Author: merlinyoda <merlinyoda>
+Date:   Wed Aug 27 14:55:39 2008 +0000
 
+    Fix for Mantis Report #2480:
+    Modified library function to be more compact
+    and less concerned with directory seperators.
 
-Tweaks towards fixing Mantis Report #2261. 
-Some changes made here should probably be reflected in trunk.
 
+commit ed5b19a2b16e1434465085bb489da24112d71211
+Author: merlinyoda <merlinyoda>
+Date:   Wed Aug 27 23:52:05 2008 +0000
 
-------------------------------------------------------------------------
-r5547 | merlinyoda | 2007-11-29 12:18:07 +1100 (Thu, 29 Nov 2007) | 3 lines
+    Fix for error caused by last submission.
 
-More file module clean-up.
 
+commit bf5145e637483a82c9474d9833bd9748c2b7a1a9
+Author: merlinyoda <merlinyoda>
+Date:   Thu Aug 28 01:32:32 2008 +0000
 
-------------------------------------------------------------------------
-r5548 | ajdonnison | 2007-11-29 12:22:46 +1100 (Thu, 29 Nov 2007) | 2 lines
+    Properly fixed Mantis Report #2301 again.
 
-Update mime type and files to ensure they aren't corrupted by SVN.
 
-------------------------------------------------------------------------
-r5549 | merlinyoda | 2007-11-30 02:28:02 +1100 (Fri, 30 Nov 2007) | 5 lines
+commit ad2e2479f8c0830c40f757722a222934942445fb
+Author: merlinyoda <merlinyoda>
+Date:   Fri Aug 29 22:45:39 2008 +0000
 
+    Patching residual GET-based XSS/SSS security holes.
+    
+    Modules scanned:
+    admin, calendar
+    
+    Modules remaining:
+    companies, contacts, departments, files, forums, help, history, install, links,
+     projects, public, resources, smartsearch, system, tasks,
+     and base system files (i.e. index.php)
+    
+    ... also some code format clean-up along the way
 
-Fixed issue mentioned on Maintenance List: some html was getting "translated". 
-Seems I got a little overzealous with translation when fixing Mantis Report #2258 :-)
 
+commit 050fd6e6c92785499fd81757560561a84a552e0d
+Author: merlinyoda <merlinyoda>
+Date:   Fri Aug 29 23:50:32 2008 +0000
 
-------------------------------------------------------------------------
-r5550 | ajdonnison | 2007-12-02 09:47:30 +1100 (Sun, 02 Dec 2007) | 2 lines
+    Fix for Mantis Report #2474
+    
+    Had to tweak PEAR Date library file as month and week names
+    were being forced to ISO-8859-1 character set reguardless of
+    locale's charset.
 
-Still corrupting, looks like they had an svn:eol-style property set.
 
-------------------------------------------------------------------------
-r5551 | ajdonnison | 2007-12-05 09:24:16 +1100 (Wed, 05 Dec 2007) | 2 lines
+commit 59cfce7fb7a32a92c713778efafce8a96b5742cd
+Author: merlinyoda <merlinyoda>
+Date:   Wed Sep 3 15:29:23 2008 +0000
 
-Removed blank line that was causing gantts to fail.
+    Fix button label in session management tab.
 
-------------------------------------------------------------------------
-r5552 | merlinyoda | 2007-12-06 12:13:45 +1100 (Thu, 06 Dec 2007) | 5 lines
 
+commit f794f3169e3a009bf01effdde495e63ac3d4bec7
+Author: merlinyoda <merlinyoda>
+Date:   Wed Sep 3 23:49:25 2008 +0000
 
-Fix for Manits Bug Report #2264
-Also some clean-up on files I was checking through while hunting bug.
+    Patching residual GET-based XSS/SSS security holes.
+    
+    Modules scanned:
+    companies
+    
+    Modules remaining:
+    contacts, departments, files, forums, help, history, install, links,
+     projects, public, resources, smartsearch, system, tasks,
+     and base system files (i.e. index.php)
+    
+    ... also some code format clean-up along the way
+     and minor reformatting of address display on company view page.
 
 
-------------------------------------------------------------------------
-r5553 | ajdonnison | 2007-12-07 09:49:51 +1100 (Fri, 07 Dec 2007) | 2 lines
+commit f8aa0d6ec3ca30a3eab947003f9abab35b19d514
+Author: ajdonnison <ajdonnison>
+Date:   Mon Sep 8 10:33:19 2008 +0000
 
-Fix for permissions related problem relating to http://forums.dotproject.net/showthread.php?t=7735
+    Remove redundant DISTINCT.
 
-------------------------------------------------------------------------
-r5554 | cyberhorse | 2007-12-07 14:16:09 +1100 (Fri, 07 Dec 2007) | 1 line
 
-When task dates' checks are disabled, make sure there is some date submitted (0000-00-00). Otherwise, there is a fatal error.
-------------------------------------------------------------------------
-r5556 | cyberhorse | 2007-12-07 15:06:41 +1100 (Fri, 07 Dec 2007) | 1 line
+commit f01c40601c1c04582645ef815e285f5f5a165ee1
+Author: merlinyoda <merlinyoda>
+Date:   Mon Sep 8 21:07:49 2008 +0000
 
-#2187 - A better fix, covering also cases where the end project dates are not set ... and a few other exceptional conditions
-------------------------------------------------------------------------
-r5557 | merlinyoda | 2007-12-08 11:25:04 +1100 (Sat, 08 Dec 2007) | 7 lines
+    Clean up and "fix" for issues noted in Mantis Report #2499
 
 
-Modifications to fix Mantis Report #2258.
-Quick locale flip to 'en_AU' before Date_Calc function calls.
-Locale is changed immedaitely to user's locale setting after call is complete
-Prevents strftime calls in some Date_Calc functions from translating information before we can.
+commit 36ab24f53c8667fce7bbdd0e9d2358fdcc5a4555
+Author: merlinyoda <merlinyoda>
+Date:   Wed Sep 17 20:11:25 2008 +0000
 
+    Fix for Mantis Report #2507
+    Wrong name was being displayed.
 
-------------------------------------------------------------------------
-r5559 | ajdonnison | 2007-12-10 08:22:12 +1100 (Mon, 10 Dec 2007) | 2 lines
 
-#2271 - Fix problem with forgot password redirect error.
+commit d708c232d3d6270361b8be8cbcb603625f7fab4a
+Author: merlinyoda <merlinyoda>
+Date:   Thu Sep 18 00:42:32 2008 +0000
 
-------------------------------------------------------------------------
-r5577 | ajdonnison | 2007-12-17 22:00:06 +1100 (Mon, 17 Dec 2007) | 2 lines
+    Fix for Mantis Report #2508:
+    re-arranged code to allow for "empty" result set (equivalent to owner ids of 0).
 
-#2249 - Encode UTF8 characters into quoted printable making sure they encode on a single line.
 
-------------------------------------------------------------------------
-r5579 | ajdonnison | 2007-12-18 08:07:27 +1100 (Tue, 18 Dec 2007) | 2 lines
+commit 9d4aef656093e17109611e4ade6841b942b73e6e
+Author: merlinyoda <merlinyoda>
+Date:   Tue Sep 30 19:55:06 2008 +0000
 
-Minor fix to handle = and ? in headers.
+    Fix for Mantis Report #2510:
+    Swapped else if blocks to avoid "empty haystack" warnings.
 
-------------------------------------------------------------------------
-r5580 | ajdonnison | 2007-12-18 08:11:46 +1100 (Tue, 18 Dec 2007) | 2 lines
 
-No longer uses imap_8bit, no need to check for it.
+commit 88e3718f361137496d9eb20bba3cdd2f358d4477
+Author: merlinyoda <merlinyoda>
+Date:   Wed Oct 1 00:52:08 2008 +0000
 
-------------------------------------------------------------------------
-r5585 | merlinyoda | 2007-12-20 10:38:33 +1100 (Thu, 20 Dec 2007) | 1 line
+    Fixed minor issue where logging out of a given session set
+    the logout time on every user_access_log record for a given user
+    where the logout time was currently unset (0000-00-00 00:00:00 or null)
+    instead of just the user_access_log record asociated with that session.
+    
+    Also some formatting clean up
+    and conditional statement reduction
+    ex: from (!$a || ($a && !$b)) to ((!$a || $a) && (!$a || !$b) to !($a && $b)
 
-Merged branches/stable_2_experimental changes r5563:5584 into branches/stable_2.
-------------------------------------------------------------------------
-r5587 | ajdonnison | 2007-12-20 20:56:21 +1100 (Thu, 20 Dec 2007) | 2 lines
 
-Performance improvements:  a) don't re-read the task from the db just to see if it is dynamic and b) use key lookups on arrays, they are faster.
+commit 299c40d8e7e4336d4bab482513b824382c559c60
+Author: merlinyoda <merlinyoda>
+Date:   Mon Oct 6 21:33:08 2008 +0000
 
-------------------------------------------------------------------------
-r5588 | ajdonnison | 2007-12-20 22:06:21 +1100 (Thu, 20 Dec 2007) | 2 lines
+    Fix for Mantis Report 2517:
+    Had to force-set object properties associated with checkboxes to false
+    if state went from checked to unchecked.
+    Checkbox names do not show as keys in the $_POST array if unchecked.
 
-Minor performance improvements throughout, cleanup of some collateral damage from branch merge.
 
-------------------------------------------------------------------------
-r5589 | cyberhorse | 2007-12-22 10:03:48 +1100 (Sat, 22 Dec 2007) | 1 line
+commit 7704d9a0cc480451055f0a9616987987073a0fc1
+Author: merlinyoda <merlinyoda>
+Date:   Mon Oct 6 21:58:09 2008 +0000
 
-#2284 - Fixed XHTML validity issue
-------------------------------------------------------------------------
-r5590 | cyberhorse | 2007-12-22 10:14:27 +1100 (Sat, 22 Dec 2007) | 1 line
+    Fix for Mantis report #2516:
+    Added missing trailing quotation mark from form's action attribute.
+    Set value of "All" in owner filter to -1 so filter would work properly.
 
-#2277 Suggested fix applied for missing report description files
-------------------------------------------------------------------------
-r5592 | TheIdeaMan | 2007-12-23 07:52:28 +1100 (Sun, 23 Dec 2007) | 1 line
 
-#2287 - project listing speed improvements
-------------------------------------------------------------------------
-r5593 | TheIdeaMan | 2007-12-23 15:06:45 +1100 (Sun, 23 Dec 2007) | 1 line
+commit bdd2701e09c39374572d3235ba65429fba2e16e4
+Author: merlinyoda <merlinyoda>
+Date:   Tue Oct 7 00:21:43 2008 +0000
 
-removing unnecessary count queries
-------------------------------------------------------------------------
-r5594 | merlinyoda | 2008-01-01 07:51:46 +1100 (Tue, 01 Jan 2008) | 3 lines
+    Fix for Mantis Report #2519:
+    Added missing files and updated affected files
+    to properly identify module image.
 
-Clean-up and attempt to fix Mantis Bug Report #2273
+ create mode 100644 dotproject/images/helpdesk.png
+ create mode 100644 dotproject/modules/resources/images/helpdesk.png
 
+commit 0b2267a4e2d9da02ffc2590666b1a31ffe9c240d
+Author: merlinyoda <merlinyoda>
+Date:   Tue Oct 7 00:32:05 2008 +0000
 
-------------------------------------------------------------------------
-r5595 | merlinyoda | 2008-01-01 08:14:58 +1100 (Tue, 01 Jan 2008) | 3 lines
+    Usability fix related to Mantis Report #2519:
+    Tweaked "classic" style so that both the image and text name
+    of a module are clickable as a link.
 
-Fix for Mantis Report #2290
 
+commit c2f5c32f5eda7314fd04749e524200f10f4aa6d3
+Author: merlinyoda <merlinyoda>
+Date:   Wed Oct 15 22:53:02 2008 +0000
 
-------------------------------------------------------------------------
-r5596 | merlinyoda | 2008-01-01 09:12:03 +1100 (Tue, 01 Jan 2008) | 4 lines
+    Fix related to Mantis Report 2497:
+    Declared use of global variable in function
+    where it was being used but not declared.
 
-Fixed bug that was causing "All" tab under Projects not to display properly.
-It seems the "magic number" 500 was being used as a project_status value.
 
+commit 96c6a18b9e1cb7ccf1220f819eba7d3facbd6d48
+Author: merlinyoda <merlinyoda>
+Date:   Fri Nov 7 18:39:54 2008 +0000
 
-------------------------------------------------------------------------
-r5597 | merlinyoda | 2008-01-01 09:37:27 +1100 (Tue, 01 Jan 2008) | 4 lines
+    Possible "fix" for Mantis Report #2528:
+    
+    Improved query syntax based on input to dpSessionDestroy function.
 
-Fixed bug involving unhandeled case where method is called without 
-passing an id value and object is not "loaded" prior to calling.
 
+commit cd877d1fe24adea3aace30f8bdacc39d2530a63a
+Author: merlinyoda <merlinyoda>
+Date:   Fri Nov 7 20:12:33 2008 +0000
 
-------------------------------------------------------------------------
-r5598 | ajdonnison | 2008-01-02 18:58:33 +1100 (Wed, 02 Jan 2008) | 2 lines
+    Fix for Mantis Report #2532:
+    Altered PEAR Date function dateDiff() to actually return the mathmatical
+    difference of two dates (i.e. date1 - date2) as opposed to a count of days
+    seperating date1 and date2.
+    
+    This is how most practically every other difference function is implemented.
+    I have no idea why those responsible for that function thought it was a good
+    idea to only return the absolute value.
 
-#2294 - selections only remember newest checked selection.
 
-------------------------------------------------------------------------
-r5599 | gregorerhardt | 2008-01-08 23:57:22 +1100 (Tue, 08 Jan 2008) | 1 line
+commit f3f8c9c383d0b9d1b232fb3554dce961e010c45e
+Author: merlinyoda <merlinyoda>
+Date:   Sat Nov 8 00:15:45 2008 +0000
 
-new custom field type for files which are automatically uploaded
-------------------------------------------------------------------------
-r5600 | merlinyoda | 2008-01-09 00:50:25 +1100 (Wed, 09 Jan 2008) | 4 lines
+    Applied feature requested in Mantis Report #2534:
+    Imported task's dates and durrations can now be scaled up/down based
+    on the ratio between the destination project's length in days
+    and the source project's length in days.
 
-Changed check for access permission to check add permission.
-Basically a copy/paste error I overlooked.
 
+commit fa4f5a93283ef8f10d86fe709c8ceb83b55ccdf7
+Author: merlinyoda <merlinyoda>
+Date:   Sat Nov 8 02:05:23 2008 +0000
 
-------------------------------------------------------------------------
-r5602 | ajdonnison | 2008-01-10 19:14:24 +1100 (Thu, 10 Jan 2008) | 3 lines
+    Improvements to feature added from Mantis Report #2534:
+    Compacted code and fixed date calculations to reflect hours as well as days.
+    Also fixed some CDate class functions in date.class.php
+    to properly use the new dateDiff() function.
 
-Enable the tasks list report to display similar to normal task lists
-using a tree structure.
 
-------------------------------------------------------------------------
-r5603 | ajdonnison | 2008-01-10 21:59:14 +1100 (Thu, 10 Jan 2008) | 2 lines
+commit 2f29745949b721c0dc72173f8021c99eff27f720
+Author: merlinyoda <merlinyoda>
+Date:   Mon Nov 10 15:25:06 2008 +0000
 
-#2303 - Fix for permissions problem in projects listing
+    Fix for Mantis Report #2536:
+    Used htmlspecialchars() to properly escape any special characters that
+    are "printed" on the Events tab of the Day view of the Calendar module.
+    
+    Also fixed other calendar views with similiar problem...
 
-------------------------------------------------------------------------
-r5604 | merlinyoda | 2008-01-15 02:24:10 +1100 (Tue, 15 Jan 2008) | 4 lines
 
-Code to disallow direct file access was commented out for some reason since 4 July 2007. 
-I'm guessing they were put in place to test a bug fix and were just never removed.
+commit def357adbc0cec3799f466bb1bb7136c1213fe27
+Author: merlinyoda <merlinyoda>
+Date:   Mon Nov 10 18:19:33 2008 +0000
 
+    Further fixes similiar to those for Mantis Report #2536 ...
 
-------------------------------------------------------------------------
-r5605 | merlinyoda | 2008-01-15 06:26:38 +1100 (Tue, 15 Jan 2008) | 3 lines
 
-Patched SQL Injection Bug found by Ivan by means of daily google searchings.
+commit edd2478429e3eac75d81d5563d7026d2d4d3ba68
+Author: merlinyoda <merlinyoda>
+Date:   Mon Nov 10 23:32:39 2008 +0000
 
+    Fixes for small bugs created durring addition of feature
+    to scale imported tasks
 
-------------------------------------------------------------------------
-r5606 | gregorerhardt | 2008-01-16 09:56:09 +1100 (Wed, 16 Jan 2008) | 1 line
 
-Adding Internal Company Field to Projects View and AddEdit
-------------------------------------------------------------------------
-r5607 | gregorerhardt | 2008-01-17 21:30:52 +1100 (Thu, 17 Jan 2008) | 1 line
+commit 7475e68fdb1b6f3cfd94154b85c6e0b9a2816280
+Author: merlinyoda <merlinyoda>
+Date:   Thu Nov 20 23:23:35 2008 +0000
 
-Internal Company denominator renamed to Internal Division
-------------------------------------------------------------------------
-r5608 | ajdonnison | 2008-01-18 23:46:28 +1100 (Fri, 18 Jan 2008) | 2 lines
+    Some tweaks to gantt.php files as suggested in Mantis Report #2541.
+    Using $AppUI->user_lang[0] instead of $AppUI->user_lang[2]
+    Also fixed some small syntax errors in project module's viewgantt.php.
 
-Added Greg's changes.
 
-------------------------------------------------------------------------
-r5609 | cyberhorse | 2008-01-25 15:07:16 +1100 (Fri, 25 Jan 2008) | 1 line
+commit e143637f129f0a130d3903ee39420e2e85db5779
+Author: ajdonnison <ajdonnison>
+Date:   Fri Nov 21 11:08:10 2008 +0000
 
-#2299 - Fixed counter in tabs (same as number of major files inside)
-------------------------------------------------------------------------
-r5610 | cyberhorse | 2008-01-25 15:26:41 +1100 (Fri, 25 Jan 2008) | 1 line
+    Fix problem where queuescanner fails to send emails out.
 
-#2297 - fixed. Had to do with folder permissions
-------------------------------------------------------------------------
-r5612 | ajdonnison | 2008-02-05 19:23:30 +1100 (Tue, 05 Feb 2008) | 2 lines
 
-#2281 - Later versions of PHP bitch when using references to $this.
+commit a124add3a4cc052cf69c8a7b2de2292d9b70e838
+Author: merlinyoda <merlinyoda>
+Date:   Mon Nov 24 20:39:45 2008 +0000
 
-------------------------------------------------------------------------
-r5613 | ajdonnison | 2008-02-09 11:05:14 +1100 (Sat, 09 Feb 2008) | 2 lines
+    Fix for Mantis Report #2542:
+    Fixed typo in link's href property. Removed unnecessary double-quote character.
+    Also separated out HTML markup strings from standard text data to avoid
+    accidentally using htmlspecialchar() on HTML markup.
 
-Fix problem where fields for single project still include project name and push all fields one to the right.
 
-------------------------------------------------------------------------
-r5621 | TheIdeaMan | 2008-02-13 06:20:59 +1100 (Wed, 13 Feb 2008) | 1 line
+commit 3e1892cafc94d5573634635cfceebda195cfa015
+Author: merlinyoda <merlinyoda>
+Date:   Mon Dec 8 15:39:05 2008 +0000
 
-readDirs now ignores .svn files
-------------------------------------------------------------------------
-r5622 | ajdonnison | 2008-02-14 22:39:20 +1100 (Thu, 14 Feb 2008) | 2 lines
+    Fix for issue mentioned in Help Forum posting
+    URL: http://forums.dotproject.net/showthread.php?t=9022
+    
+    Also a few XHTML improvements and other misc clean-up.
 
-#2330 - Fix email sending on some SMTP servers.
 
-------------------------------------------------------------------------
-r5623 | ajdonnison | 2008-02-17 13:55:54 +1100 (Sun, 17 Feb 2008) | 2 lines
+commit e676ef3851c275bf40ab2c976cccf708e450470d
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Jan 15 02:11:13 2009 +0000
 
-Fix problem on some versions of MySQL which return an ambiguous company_id.
+    Fix for Mantis Report #2527
+    Made Project listing Tabs more onsistant with each other.
+    
+    Also did some HTML cleanup ... though not qute up to XHTML standards.
+    Just did enough cleanup so as to validate effected pages.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5841 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5624 | ajdonnison | 2008-02-17 14:14:12 +1100 (Sun, 17 Feb 2008) | 2 lines
 
-Use brackets (even though not required) so that php 4 will parse the clone as a function and not return an error.
+commit 69a7db5ba53fb3ccdb9317417e4feb108e287259
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Jan 15 02:32:43 2009 +0000
 
-------------------------------------------------------------------------
-r5625 | ajdonnison | 2008-02-17 20:47:57 +1100 (Sun, 17 Feb 2008) | 2 lines
+    Fixing Project tab in calendar day view
+    so that listing is tied to Company filter.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5842 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-#2296 - Make display of permissions more consistent.
 
-------------------------------------------------------------------------
-r5626 | ajdonnison | 2008-02-19 08:57:27 +1100 (Tue, 19 Feb 2008) | 2 lines
+commit cb983cca29a27bdc46505335c7e7763f19b6d94a
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Feb 9 14:59:42 2009 +0000
 
-Fix issue with Reply-To headers in queued email.
+    Fix for Mantis Report #2562:
+    The base canDelete function was not properly checking if there were existing
+    objects as specified by the "joins" array parameter.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5847 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5627 | merlinyoda | 2008-02-19 11:56:40 +1100 (Tue, 19 Feb 2008) | 3 lines
 
-Applying change noted in Mantis report #0002326.
+commit b45dc344b699048eb3deb0107037a7b2970b0a86
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Feb 9 17:19:52 2009 +0000
 
+    Applied suggestion in Mantis Report #2552:
+    
+    Any "false" values returned by gethostbyaddr($_SERVER['SERVER_ADDR'])
+    in getHostName() now cause 'localhost' to be returned by function
+    instead of something invalid like '[]'.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5848 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5628 | merlinyoda | 2008-02-27 10:17:31 +1100 (Wed, 27 Feb 2008) | 3 lines
 
-Fix for Mantis Report #2318. 
-$newTask variable was not being re-initialized for each newly imported/updated task.
+commit b830dba99a890122bba8ee4427d0f4c6d2960b60
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Feb 9 20:25:52 2009 +0000
 
-------------------------------------------------------------------------
-r5629 | TheIdeaMan | 2008-03-01 03:26:48 +1100 (Sat, 01 Mar 2008) | 1 line
+    Fix for Mantis Report #2572:
+    Text of button reffered to in report now goes through translation method.
+    
+    Also fixed some other small translation issues (mainly spelling).
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5849 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-minor forum module display and project relation improvements
-------------------------------------------------------------------------
-r5630 | TheIdeaMan | 2008-03-01 03:29:49 +1100 (Sat, 01 Mar 2008) | 1 line
 
-active project listing tab for calendar day_view; loadExtras added to calendar day_view
-------------------------------------------------------------------------
-r5631 | ajdonnison | 2008-03-04 18:31:09 +1100 (Tue, 04 Mar 2008) | 2 lines
+commit c0c67a6830af884a668bbe9fbb66cf1bd2cc89b9
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Feb 9 21:34:17 2009 +0000
 
-Fix potential SQL injection bug.
+    "Fix" for Mantis Report #2571:
+    Users shouldn't get access to "edit this user" page just because they are
+    validly logged in as that given user. This can undermine task "access" settings
+    since they can change the company/department they are affiliated with on this
+    page. These changes should instead be user administrative tasks and not in the
+    hands of the users themselves.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5850 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5632 | cyberhorse | 2008-03-06 11:25:09 +1100 (Thu, 06 Mar 2008) | 1 line
 
-Keep assigned users when importing from template project 
-------------------------------------------------------------------------
-r5633 | cyberhorse | 2008-03-12 22:14:40 +1100 (Wed, 12 Mar 2008) | 1 line
+commit 6c3609b6466431f4dfbf95670d4bd57da5d45ce1
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Feb 9 22:44:26 2009 +0000
 
-Record IP of users that change passwords
-------------------------------------------------------------------------
-r5634 | cyberhorse | 2008-03-12 22:17:26 +1100 (Wed, 12 Mar 2008) | 1 line
+    "Fix" for Mantis Report #2522:
+    Forcing tabbed view on viewuser.php page.
+    Not as elegant a solution as actually fixing the base JavaScript error issue,
+    but this page is too cluttered when viewed in flat view anyway.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5851 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-#2344 - Fixed history module issue with plural forms in english language
-------------------------------------------------------------------------
-r5639 | merlinyoda | 2008-03-20 05:25:58 +1100 (Thu, 20 Mar 2008) | 6 lines
 
-Fix for Mantis Report #2353
+commit bfc4f44b5fe4ed4cf47c3a31a47ba39e77f0fbeb
+Author: ajdonnison <ajdonnison@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Mar 2 11:18:39 2009 +0000
 
-Needed to clear out socket before sending authentication information.
-Some "chatty" mail servers would throw off the code for SMTP authentication.
+    Remove call time pass-by-reference.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5852 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5640 | merlinyoda | 2008-03-20 10:39:55 +1100 (Thu, 20 Mar 2008) | 5 lines
+commit c07cf93fed80f3ac45b57994567ed58cde70a0c1
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Apr 15 18:01:26 2009 +0000
 
-Fix for bug related to Mantis Report #2346
-(a count was incorrect but not in the way the reporter describes it)
+    Adding strings "Events" and "Links" to projects module of base English translation locale.
+    Also random fix that would appear not to have gotten checked in previously.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5855 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Also fixed some other file and folder module view-related errors.
 
-------------------------------------------------------------------------
-r5641 | merlinyoda | 2008-03-20 11:17:54 +1100 (Thu, 20 Mar 2008) | 4 lines
+commit 059ce95db5957e9a151b74b1ea57b1091f77131e
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Apr 15 19:24:47 2009 +0000
 
-More tweaks to file listings. Fixes fixes residual issues 
-noted in Mantis Report #2343 
+    Fix for Mantis Report #2596:
+    
+    Permissions checks were on the wrong module. Some format clean-up as well.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5856 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5642 | merlinyoda | 2008-03-20 11:21:38 +1100 (Thu, 20 Mar 2008) | 2 lines
+commit 5dfad5459fed24c80ed611431f86c965c75851df
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Apr 15 19:38:43 2009 +0000
 
-Forgot to drop temporary table used for listing.
+    Misc cleanup for files related to last bugfix.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5857 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5643 | merlinyoda | 2008-03-21 02:04:43 +1100 (Fri, 21 Mar 2008) | 5 lines
 
-Fix for Mantis Report #2329. Data being returned was different than expected.
-Added parameters to call to getAllowedRecords() and massaged results 
-into useable format.
+commit 00703924ae353298ab50f4887a095580be552556
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 19 01:01:20 2009 +0000
 
+    Fix for Mantis Report #2504.
+    Modified JavaScript Method to pass along all selected ID values between pages
+    as opposed to just those currelny visible due to filtering.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5858 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5644 | merlinyoda | 2008-03-21 11:32:25 +1100 (Fri, 21 Mar 2008) | 5 lines
 
-Attempt at Fix for Mantis Report #2311
+commit 3af87a2d8d66ab50c8c57db3ca7f0dee1b54ecf7
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 19 01:34:52 2009 +0000
 
-Also "resurected" other vw_idx_* views which didn't 
-seem to be getting referenced properly.
+    Fix for Mantis Report #2551:
+    Making sure a directory seperator is at the end of $baseDir.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5859 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5645 | merlinyoda | 2008-03-22 11:03:31 +1100 (Sat, 22 Mar 2008) | 11 lines
 
-Added functionality to "fix" problem of users trying 
-to set tasks as dynamic when task has no children. 
-The system will now throw an error if a user tries to 
-set a childless task as dynamic in the same way it 
-would throw an error if there was a dependancy error
-(in some ways it *is* a dependancy error).
+commit dc7f162de4edda73418716a2e22b99717b48bbfd
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 19 01:50:50 2009 +0000
 
-Also cleaned up some formatting in do_task_aed.php 
-while pondering the best place for this check.
+    Fix on fix for Mantis Report #2551.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5860 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5647 | merlinyoda | 2008-03-27 00:23:26 +1100 (Thu, 27 Mar 2008) | 6 lines
+commit f80c2498e32dc579a0514750e47edeff47b94223
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 19 04:27:44 2009 +0000
 
-Tweak to new code in check() in task class. 
-It seems that PHP had a problem with returning 
-a result from a self-referenced class function 
-and using it as the argument of a global function.
+    Fix for Mantis Report #2574:
+    Column Heading "Project Name" needed to be added to PDF of "Task List" Report.
+    Otherwise headings were off by one column and last column wouldn't display.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5861 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5648 | merlinyoda | 2008-03-27 08:25:34 +1100 (Thu, 27 Mar 2008) | 2 lines
+commit 5d5afab884f2f92c9f43aa5f46039e280ca7e80c
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Apr 20 01:17:53 2009 +0000
 
-Fix for Mantis Report #2361. colum index needed to be more explicitly specified.
+    Fix for Mantis Report #2581:
+    cleaned up "dp-grey" theme mostly as suggested. Also removed some proprietary
+    and depricated bgcolor properties and used sed to update others to use the
+    style property and specify the "background-color" directive instead.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5862 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5649 | merlinyoda | 2008-03-29 04:06:54 +1100 (Sat, 29 Mar 2008) | 10 lines
 
-Replaced check against function call to checkModuleItem() 
-with check against variable containing the return value 
-of the same call to checkModuleItem().
+commit e39caef2768707dc2208b259a17cfadd326850cf
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Apr 22 04:55:37 2009 +0000
 
-This call is now done once and it's return value stored 
-before the foreach loop it is used within rather than 
-it being called for each interation.
+    Fix for Mantis Report #2579:
+    Used "centralized" getPermission() method defined in includes/permissions.php
+    and adjusted some 'view' permissions to 'access' permissions, specifically in
+    'vw_task_log.php' which task view uses and was unecessarily denying view
+    access to task view.
+    
+    Also did some wide-spread clean-up (mainly by use of 'sed' on command line)
+    to favor getPermission() method use over checkModule() and checkModuleItem()
+    in included files (i.e. files included through main index.php) and removed
+    any remaining unnecessary "$perms" permission object variables.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5865 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Also some minor formatting clean-up.
 
-------------------------------------------------------------------------
-r5654 | merlinyoda | 2008-04-05 11:40:08 +1100 (Sat, 05 Apr 2008) | 10 lines
+commit 43228752727b7a134b2926c96ef0f0ed10cd6ddb
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Apr 23 15:48:12 2009 +0000
 
-Task sorting by project/priority per Mantis Report #2311
-Also modified behavior of array_csort() in tasks.class.php 
-to behave in a less dynamic but more stable fashion.
-Previous implementation of said function (improperly?) assumed
-that flag values did not evaluate as strings and thus 
-may not have been sorting properly in all cases.
+    Fixed bug created by purging of "$perms" variables where getPermission() usage
+    was more desireable by design. Added and initialized a "$perms" access
+    control list object in the affected function.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5867 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Also did some minor format cleaning.
 
+commit 72f355cb18334568df507387a901c57c07e2257f
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Apr 23 16:07:00 2009 +0000
 
-------------------------------------------------------------------------
-r5655 | ajdonnison | 2008-04-05 13:44:01 +1100 (Sat, 05 Apr 2008) | 2 lines
+    Last cleanup (hopefully) of unnecessary "$perms" variables.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5868 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Simplify the logic so we don't have two separate functions that do pretty much the same thing.
 
-------------------------------------------------------------------------
-r5656 | ajdonnison | 2008-04-05 16:00:25 +1100 (Sat, 05 Apr 2008) | 2 lines
+commit c987d344187f6fb59a44fa7e25062d90197a7e08
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Apr 23 20:24:06 2009 +0000
 
-#2323 - Make sure MySQL modes don't cause us grief.
+    Fix for Mantis Report #2615:
+    
+    Both getAllowedSQL() and and setAllowedSQL in classes/dp.class.php needed
+    to be extended so that an alternate permissions module name could be
+    specified instead of assuming that the calling object's table name and
+    permission module name were the same and that access could be chaeck using
+    the table name. This assumption fails in the smartsearch module as it does
+    not extend the class in classes/dp.class.php and the defined table is not
+    synonymous with the module which permissions should be checked against. The
+    smartsearch module now makes use of this extended functionality to correct
+    the problem.
+    
+    Also did some clean-up of the smartsearch module to make it more maintainable.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5869 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5657 | ajdonnison | 2008-04-05 16:14:10 +1100 (Sat, 05 Apr 2008) | 2 lines
 
-Remove debug left behind.
+commit e47450aca3c65a71773637ceba192e82ab1d8d03
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Apr 23 23:45:55 2009 +0000
 
-------------------------------------------------------------------------
-r5658 | ajdonnison | 2008-04-05 16:43:07 +1100 (Sat, 05 Apr 2008) | 3 lines
+    Fixing issue noted in my comments on Mantis Report #2505:
+    While prermissions are enforced when following links given by the smartsearch
+    module, too many results appear giving the illusion of access. Issue resolved
+    by checking "view" instead of "access" permissions on the item level.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5870 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-#2305 - Now respects company/project restrictions so you can't
-see tasks from projects you don't have view access to.
 
-------------------------------------------------------------------------
-r5659 | cyberhorse | 2008-04-07 06:08:05 +1000 (Mon, 07 Apr 2008) | 1 line
+commit c9387eb205aa05d923547a20ec05247e3edbfa1d
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri Apr 24 00:30:00 2009 +0000
 
-Ignore Eclipse project files
-------------------------------------------------------------------------
-r5669 | ajdonnison | 2008-04-13 15:03:30 +1000 (Sun, 13 Apr 2008) | 2 lines
+    Further improvements on smartsearch and permissions:
+    Results counts in smartsearch module accurately reflect counts based on items
+    displayed as opposed to records retrieved (which we may not have view
+    permissions on).
+    
+    Also added permission check so that for tasks logs to be "viewable" the
+    associated task must also be viewable. This falls in line with our permissions
+    hierarchy (Company -> Project -> Task -> Task Log).
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5871 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Fixed warning error with no folders.
 
-------------------------------------------------------------------------
-r5670 | ajdonnison | 2008-04-13 15:41:29 +1000 (Sun, 13 Apr 2008) | 2 lines
+commit 1f0fe1f73ebaf255c2e4b121d49c26aaed8dd29e
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat Apr 25 00:09:56 2009 +0000
 
-Attempt to fix problem with Gmail - assuming it is because it doesn't handle the RFC correctly and requires TAB instead of whitespace.
+    Cleaned up coding style in several files (e.g. make sure there is a space
+    between 'if' keyword and opening paren) and substituted multibyte compatible
+    string functions in non-third party codebase (i.e. PHP files not in lib
+    directory) in place of less compatible string functions (e.g. mb_strlen()
+    function in place of strlen() function)
+    
+    Most of both done with the help of grep command and carefully targeted use
+    of the sed command.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5872 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5671 | ajdonnison | 2008-04-13 15:42:03 +1000 (Sun, 13 Apr 2008) | 2 lines
 
-#2378 - Fix vCard input.
+commit b0cae33c3ab4461ecc34126f0d5d198ae38a5e59
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat Apr 25 00:30:00 2009 +0000
 
-------------------------------------------------------------------------
-r5673 | merlinyoda | 2008-04-16 05:36:53 +1000 (Wed, 16 Apr 2008) | 3 lines
+    Upgraded ezpdf library to 009e.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5873 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Revising fix for Mantis Report #2269. 
-Made check optional. Toggled by new system config variable.
 
-------------------------------------------------------------------------
-r5674 | merlinyoda | 2008-04-16 07:56:22 +1000 (Wed, 16 Apr 2008) | 9 lines
+commit 78325571aecb3cc669f574719e5edf2a5d8dce83
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat Apr 25 13:04:46 2009 +0000
 
-Fix for Mantis Report #2348. 
-All level of a task's "Child Tasks" tree now 
-display as opposed the first level.
+    Fix for Mantis Report #2557:
+    Code in modules/projects/reports.php was checking for translation file in
+    wrong directory. Used full path in check instead and translation file is now
+    found and used properly.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5874 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Also some minor format clean-up and removed obsolete 
-use of '=&' assignment operator in conjunction with 
-the 'new' operator (i.e. $t =& new Task();). 
+ mode change 100755 => 100644 dotproject/locales/en/styles.inc
 
+commit ef54fa548236156847223d809ebd1e548e779df2
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat Apr 25 14:43:53 2009 +0000
 
-------------------------------------------------------------------------
-r5675 | merlinyoda | 2008-04-16 11:54:04 +1000 (Wed, 16 Apr 2008) | 3 lines
+    Fix for Mantis Report #2591:
+    Filtered through query results to check that retrieved tasks can be accessed
+    by the user before appearing on Tasks Gantt chart.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5875 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Fixes for Mantis Report #2300 and #2301
-Some additional files to be added.
 
-------------------------------------------------------------------------
-r5676 | merlinyoda | 2008-04-16 11:56:40 +1000 (Wed, 16 Apr 2008) | 2 lines
+commit 76a5709ff1adfe2c14a347798fb85fb80b2b9a12
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 26 01:49:00 2009 +0000
 
-New file to resolve Mantis Report #2300
+    Miscellaneous improvements in translation (mainly for pop-up callendar).
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5876 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5681 | merlinyoda | 2008-04-19 09:45:55 +1000 (Sat, 19 Apr 2008) | 6 lines
 
-Fix for Mantis Report #2371 and also some major clean up to 
-"Task per User" related pages as well 
-as some suplemental clean-up (i.e. removing depricated 
-functions from main_functions.php, Gantt-related page touch-up, etc.)
+commit b634d1004f8608907ace47b700edb64a438c03e2
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 26 03:07:32 2009 +0000
 
+    Fixes for localization/font issues based on diffs in Mantis Report #2614 and
+    similiar existing code in modules/tasks/gantt.php.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5877 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5682 | merlinyoda | 2008-04-19 10:00:37 +1000 (Sat, 19 Apr 2008) | 4 lines
 
-Adding first name of contact back in getAssignedUsers() 
-function's output for use in display.
+commit a394bbc80f5280534aeba45897afc976874e0d9c
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 26 22:19:37 2009 +0000
 
+    Fix for Mantis Report #2578:
+    Events now display properly on all levels (month, week, and day views). Events
+    will now dispaly in the day view if that day (or a part of it) falls within
+    the event's start and end dates.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5878 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5685 | merlinyoda | 2008-04-29 09:14:00 +1000 (Tue, 29 Apr 2008) | 6 lines
 
-Fix for Mantis Bug Report #2377:
-Projects now sort by status "numerically" 
-(based on order of status in the status list)
-instead "alphabetically" (based on status title)
+commit a8cfa566a4fb6a9ddef0dd926299a3e39fd5edb8
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sun Apr 26 22:21:07 2009 +0000
 
+    Changed display logic in modules/calendar/vw_day_events.php to pre-determine
+    the number of concurrent events per row as well as the greates number of
+    required columns to accurately determine the number of blank table columns
+    needed to generate the display of events for the "Events" tab of "Day View".
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5879 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5686 | merlinyoda | 2008-04-29 09:48:20 +1000 (Tue, 29 Apr 2008) | 5 lines
 
-Fix for Mantis Report #2382:
-Removed all traces of ambiguous column names 
-as well as potentially ambiguous column names.
+commit bed4c161407adfedf91f7e76a1cf111a9f46a70d
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon Apr 27 21:22:40 2009 +0000
 
+    Fixes for Mantis Reports #2486 and #2545:
+    
+    SMTPSend() in classes/libmail.class.php now tries to connect first using the
+    ESMTP keyword "EHLO" and then falls back to older SMTP "HELO".
+    
+    Also, since ESMTP functions are potentially available, capability to apply TLS
+    to a connection has been added should it be desired or required. Use of TLS is
+    toggled by a new config value. If TLS is selected, the fallback to "HELO" is
+    not done as the keyword "STARTTLS" is only available under ESMTP.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5880 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5687 | merlinyoda | 2008-04-29 10:21:22 +1000 (Tue, 29 Apr 2008) | 4 lines
 
-Fix for Mantis Report #2385:
-Joined in necessary tables to satisfy permission 
-checks against necessary IDs
+commit 5ef43a4d21eb23c4f912eabad566af77492254ef
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu May 7 17:10:40 2009 +0000
 
-------------------------------------------------------------------------
-r5688 | merlinyoda | 2008-04-29 10:39:22 +1000 (Tue, 29 Apr 2008) | 6 lines
+    Various fixes and tweaks in history module.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5881 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Fix for Mantis Report #2384:
-Replaced call to permission object function 
-using undefined permission object with general 
-permission check function used elsewhere in code
 
+commit 0e19fdc545971edca1529b888291b44c2f4194bc
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri May 8 04:51:10 2009 +0000
 
-------------------------------------------------------------------------
-r5689 | merlinyoda | 2008-04-30 04:21:18 +1000 (Wed, 30 Apr 2008) | 4 lines
+    Fixes toward Mantis Report #2471:
+    Updated and streamlined code to make use of existing functions that accomlish
+    the same or similiar tasks as previous code (and do so correctly hopefully).
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5882 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Possibly a fix for Mantis Report #2376 
-... or fix was made previously 
-... either way it *seems* to have disappeared :-)
 
-------------------------------------------------------------------------
-r5690 | merlinyoda | 2008-04-30 10:50:20 +1000 (Wed, 30 Apr 2008) | 3 lines
+commit dae81b965727d1d354fec7eed2577b86c15a1c45
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri May 8 04:52:34 2009 +0000
 
-Fix for Mantis Report #2295:
-Search results now honor permissions.
+    Fixed Mantis Report #2471:
+    Clash detected and "suggestion" page now correctly finds earliest available
+    slot as specified per user date and time inputs.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5883 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5691 | merlinyoda | 2008-05-01 07:34:23 +1000 (Thu, 01 May 2008) | 4 lines
 
-Fix for Mantis Report #2373:
-The status type array hadn't been fetched into the variable referencing it.
-... also somce minor "cleanup" on a few files I stumbled across in the process
+commit 7f6b95f7d564049e36cdb3c7a23252f768726383
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri May 8 20:41:34 2009 +0000
 
-------------------------------------------------------------------------
-r5692 | merlinyoda | 2008-05-01 08:52:52 +1000 (Thu, 01 May 2008) | 4 lines
+    Tweaks on "View User" page. Some amperstands were "escaped" with "&amp;" and
+    technically should not have been escaped.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5884 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Submitting some clean-up changes. 
-May have, by coincidence, fixed Mantis Report #2375 
-in or previous to this submission.
 
-------------------------------------------------------------------------
-r5693 | merlinyoda | 2008-05-01 11:00:15 +1000 (Thu, 01 May 2008) | 7 lines
+commit bf8ffb41e760b6dad0ff59621f3d12a96c2e0856
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat May 9 21:54:21 2009 +0000
 
-Fix (hopefully) for Mantis Report #2383:
-Added code to copy dependancies to copy() function. Added code to deepCopy() 
-function to update a parent tasks' dependancies so that any dependancies 
-to old child tasks (only one level down) are now dependancies on the 
-child tasks' copies
+    Better fix for Mantis Report #2471:
+    Last fix wasn't detecting clashes for recurrent events.
+    Recurrent event clashes are now properly detected.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5885 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5694 | merlinyoda | 2008-05-02 07:24:34 +1000 (Fri, 02 May 2008) | 5 lines
+commit 806c8700069b0c81dc7e8d3007e6b4746802863f
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon May 11 13:59:20 2009 +0000
 
-Fix for problem noted in but unrelated to Mantis Report #2375:
-Neglected to change leftJoin() call to innerJoin() call.
+    Fix for Mantis Report #2620:
+    Small tweaks to get images to display properly. A couple stray quotation marks
+    were gumming up the works.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5886 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-... also some indentation/spacing clean up in an unrelated file
 
-------------------------------------------------------------------------
-r5695 | merlinyoda | 2008-05-02 07:36:50 +1000 (Fri, 02 May 2008) | 4 lines
+commit 7ea403b452f203b2a3b87112e055854556a5a044
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Mon May 11 14:05:59 2009 +0000
 
-Fixed small "work in progress" error
-... never submit changes for small fixes when working on a larger issue :-)
+    Fix for Mantis Report #2619:
+    Fixed typo of "Yask" to "Task".
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5887 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
-------------------------------------------------------------------------
-r5696 | merlinyoda | 2008-05-02 07:43:37 +1000 (Fri, 02 May 2008) | 2 lines
+commit 977efb201c816982a7805abe1e8c85e75bb898c8
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu May 14 13:14:59 2009 +0000
 
-More fixes for fixes...
+    Fix for Mantis Report #2622
+    Base link for TabBox was not properly constructed.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5888 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5697 | merlinyoda | 2008-05-02 09:07:50 +1000 (Fri, 02 May 2008) | 3 lines
 
-Fix for Mantis Report# 2375:
-Added code to limit results returned for generating links.
+commit 11d689e1f83c45bf73a4a76c24fb3c491a6abd47
+Author: cyberhorse <cyberhorse@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri May 15 12:10:55 2009 +0000
 
-------------------------------------------------------------------------
-r5698 | merlinyoda | 2008-05-06 01:11:35 +1000 (Tue, 06 May 2008) | 3 lines
+    Fixing security issue
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5889 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Fix for Mantis Report #2396
-... check-in weirdness
 
-------------------------------------------------------------------------
-r5699 | merlinyoda | 2008-05-06 04:55:11 +1000 (Tue, 06 May 2008) | 3 lines
+commit c24612ce0dc458d827e24db7bae7e7fec2820637
+Author: cyberhorse <cyberhorse@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Fri May 15 12:18:00 2009 +0000
 
-Fix towards Mantis Report #2395
-... also some formatting cleanup.
+    XSS vulnerability fixed
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5890 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5700 | merlinyoda | 2008-05-06 05:46:29 +1000 (Tue, 06 May 2008) | 2 lines
 
-"Fix" for Mantis Report 2356.
+commit 58013de65dd048f839ea4f966343ad3521262b4b
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Sat May 23 21:08:38 2009 +0000
 
-------------------------------------------------------------------------
-r5701 | merlinyoda | 2008-05-07 02:52:34 +1000 (Wed, 07 May 2008) | 3 lines
+    Fix for Mantis Report #2540 and Mantis Report #2589:
+    Root cause of both would seem to be the same. When generating an e-mail, an
+    extra tab character was introduced into the header where it was not needed
+    and would cause problems when supplying addresses from an array causing either
+    mails to display improperly or not reach an intended destination at all due to
+    a "malformed address".
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5891 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-Fix for remaining isues on Mantis Report #2264
-Needed permission checking on project status counts.
 
-------------------------------------------------------------------------
-r5702 | merlinyoda | 2008-05-07 08:28:35 +1000 (Wed, 07 May 2008) | 3 lines
+commit d48ce2e459b653d25c342f11e650931aa0afa645
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Jun 20 16:56:06 2009 -0400
 
-Fix for Mantis Report 2374:
-Swaped "per project" report buttons for breadcrumb to reports on index page.
+    Small fixes for simple display and syntax bugs.
 
-------------------------------------------------------------------------
-r5703 | merlinyoda | 2008-05-08 07:43:18 +1000 (Thu, 08 May 2008) | 3 lines
 
-More fixes towards Mantis Report #2383.
+commit 5eb017abd39a5177b2ced990592ef6d3e21ebb0d
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Jul 1 21:51:45 2009 +0000
 
+    Fix for Mantis Report #2639 and other code clean-up:
+    
+    Cleaned up a chunk of the code to avoid using the \" escape character.
+    Also applied some other code cleanup such as favoring single quote usage
+    over double quote usage.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5893 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5705 | merlinyoda | 2008-05-14 05:26:24 +1000 (Wed, 14 May 2008) | 4 lines
 
-Clean-up in base permissions class. 
-Minor formatting clean-up in modules/tasks/tasks.class.php.
+commit f3d06dba75aebc32fb773efc43313b5a0a4f76a3
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Thu Jul 9 14:16:59 2009 +0000
 
+    Fixed syntax error in modules/links/addedit.php
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5894 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-------------------------------------------------------------------------
-r5706 | merlinyoda | 2008-05-14 06:13:27 +1000 (Wed, 14 May 2008) | 2 lines
 
-Formatting and clean-up
+commit ecadfa7ab8cb9f5220c71b290f00b5595861d832
+Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
+Date:   Wed Aug 12 13:03:26 2009 +0000
 
-------------------------------------------------------------------------
-r5707 | merlinyoda | 2008-05-14 07:13:16 +1000 (Wed, 14 May 2008) | 2 lines
+    Fix for Mantis Report #2858
+    String was not properly escaped for use in link property.
+    
+    git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5904 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
-More cleaning and fix from cleaning.
 
-------------------------------------------------------------------------
-r5708 | merlinyoda | 2008-05-14 08:55:58 +1000 (Wed, 14 May 2008) | 4 lines
+commit 0665f325f29a3085e2129745068167efae93b8e7
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Wed Aug 12 19:04:57 2009 -0400
 
-Fix for Mantis Report #2320:
-Verify that descriptions on module items are properly escaped.
-... also some formatting clean-up
+    Fix for Mantis Report #2663
+    Needed to pass Task's name through dPformSafe first before writing to page.
+    Also expanded dPformSafe to handle some "edge cases" like JavaScript literals
+    and URIs.
+    Tweaked previous fix to take advangage of new dPformSafe functionality.
 
-------------------------------------------------------------------------
-r5709 | merlinyoda | 2008-05-17 03:29:36 +1000 (Sat, 17 May 2008) | 3 lines
 
-Formatting and code improvements made while investigating 
-Mantis Report # 2406
+commit 9fef7b99f9c5dcf56c2ca192986fb1b411bb6650
+Author: TheIdeaMan <theideaman@users.sourceforge.net>
+Date:   Fri Aug 28 15:31:10 2009 -0400
 
-------------------------------------------------------------------------
-r5710 | merlinyoda | 2008-05-17 08:50:43 +1000 (Sat, 17 May 2008) | 7 lines
+    added git ignore to hide Mac and Eclipse related files
 
-Fix for Mantis Report #2388:
-Added code to check through user's roles for item-level permissions
-in getDeniedItems() and getAllowedItems() functions in dP's permission class.
+ create mode 100644 .gitignore
 
-... makes me wonder how long these methods were functionally broken like this 
-and how may permissions bugs I just fixed and/or caused :-)
+commit b0a236e32b20164f05767b6941df6d932f1fb80d
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Wed Sep 2 09:35:35 2009 -0400
 
-------------------------------------------------------------------------
-r5711 | merlinyoda | 2008-05-17 09:31:00 +1000 (Sat, 17 May 2008) | 2 lines
+    Fixed minor CSS error in header.php for default style.
 
-Removed call to invalid function dPRealPath().
 
-------------------------------------------------------------------------
-r5712 | merlinyoda | 2008-05-20 03:48:31 +1000 (Tue, 20 May 2008) | 7 lines
+commit 1829c0d9d4048b4b7f54dbab58c8b559a8fd43e6
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Wed Sep 2 11:07:45 2009 -0400
 
-Fixed issues related to Mantis Report #2331:
+    Slight tweak to properly default value of $showEditCheckbox
+    for modules/tasks/tasks.php
 
-Offest added to imported tasks goes by days instead of 
-time to avoid the mess of Daylight Saving Time.
 
-Non-imported tasks are left untouched by the import modification process.
+commit fd634449f2ee64651874036a8df761d4529b7dfa
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Wed Sep 2 12:29:16 2009 -0400
 
-------------------------------------------------------------------------
-r5713 | merlinyoda | 2008-05-21 01:12:16 +1000 (Wed, 21 May 2008) | 4 lines
+    Hide edit checkboxes on Tasks tab in project view page.
 
-Fix for Mantis Report #2387:
-The durration on milestone tasks is forced to 0 whenever check() is called.
 
+commit 2a3c8ff48e19e6d18e41ed3013ae53478c551f60
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Tue Sep 8 17:33:39 2009 -0400
 
-------------------------------------------------------------------------
-r5714 | merlinyoda | 2008-05-21 10:47:24 +1000 (Wed, 21 May 2008) | 7 lines
+    Fix for Mantis Report #2662:
+    Fixed syntax error in style/dp-grey-theme/header.php
+    Also some minor format cleanup.
 
-Fix for Mantis Report #2402:
-Gantt chart object for Milestone tasks now displays properly.
-The object will always appear in the middle of the day 
-of the task's start date reguardless of the time value.
 
-... also a lot of incidental clean up.
+commit bec20e29e909abc65d5f8e2145c047d23f169ee8
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Tue Sep 8 20:54:10 2009 -0400
 
-------------------------------------------------------------------------
-r5715 | merlinyoda | 2008-05-27 23:03:24 +1000 (Tue, 27 May 2008) | 3 lines
+    Fixes related to Mantis Report #2668:
+    Fixed logic/symantics for permission checks.
 
-Fix for Mantis Report #2416:
-Fixed typo.
 
-------------------------------------------------------------------------
-r5716 | merlinyoda | 2008-05-28 09:50:04 +1000 (Wed, 28 May 2008) | 3 lines
+commit 9b0dbe2ad0abe81e638b966c2868798554d7f2da
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Tue Sep 8 21:11:09 2009 -0400
 
-Fix for Mantis Report #2302:
-Item level permission names now update when related module item name updates.
+    Fix for Mantis Report #2669:
+    Fixed syntax error in modules/contacts/addedit.php.
 
-------------------------------------------------------------------------
-r5717 | ajdonnison | 2008-05-28 19:04:08 +1000 (Wed, 28 May 2008) | 2 lines
 
-Forum post # 37513 - Handle special chars in database name.
+commit 75ee6580e6b50e6c190d6f3e6c4742d4559b296c
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Sep 19 18:28:48 2009 -0400
 
-------------------------------------------------------------------------
-r5718 | theideaman | 2008-05-29 01:22:54 +1000 (Thu, 29 May 2008) | 1 line
+    Fix for Mantis Report #2676:
+    
+    Fixed syntatical error.
 
-display project name when selecting task to allow or deny
-------------------------------------------------------------------------
-r5719 | merlinyoda | 2008-05-29 23:40:26 +1000 (Thu, 29 May 2008) | 3 lines
 
-Fix for Mantis Report #2418:
-Removed echo statement used for debugging.
+commit 6e69689b3d41f64c8c125f2a0484021745d28123
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Sep 19 21:46:41 2009 -0400
 
-------------------------------------------------------------------------
-r5721 | ajdonnison | 2008-05-30 21:49:09 +1000 (Fri, 30 May 2008) | 2 lines
+    Fix for Manits Report # 2641:
+    
+    Header row titles were being translated but needed UI_OUTPUT_RAW flag passed
+    so that escape sequences (like &amp;) didn't appear as-is in resulting pdf.
 
-From A.Schaeffer (post #37559) on the forums, slightly tweaked.
 
-------------------------------------------------------------------------
-r5722 | ajdonnison | 2008-05-31 12:25:52 +1000 (Sat, 31 May 2008) | 2 lines
+commit d72c5c2811bdd76b08e89479bd1714f16f957fd0
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Tue Sep 29 16:26:58 2009 -0400
 
-Fix for problem reported to Secunia Research (before it was reported to us), and related problem with permissions not being applied to pages actually doing the work.
+    Fix for Mantis Report #2681:
+    
+    Values for "Status" column project listings weren't getting run through the
+    UI translation function.
 
-------------------------------------------------------------------------
-r5723 | ajdonnison | 2008-05-31 12:40:15 +1000 (Sat, 31 May 2008) | 2 lines
 
-Check permissions before we do anything with users.
+commit 8f38fdf018d4ca0c9af63d00cf9591c660b9f0ac
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Tue Oct 6 20:35:34 2009 -0400
 
-------------------------------------------------------------------------
-r5724 | theideaman | 2008-06-03 02:01:37 +1000 (Tue, 03 Jun 2008) | 1 line
+    Fixes and improvements detecting circular dependency and parenting
+    when checking tasks.
 
-fixing per-task permission loop-holes; fixed company view link from user info screen
-------------------------------------------------------------------------
-r5725 | merlinyoda | 2008-06-03 02:20:34 +1000 (Tue, 03 Jun 2008) | 4 lines
 
-"Fix" for Mantis Report #2422:
-Removed newline at end of style/default/overrides.php
+commit f3e35e21aebe881f731c822b06669b2df6b8f7d9
+Author: Ivan Peevski <cyberhorse@ch-PC.(none)>
+Date:   Thu Oct 8 23:05:56 2009 +1030
 
+    Removed google maps icon when there is no address (No country specified)
 
-------------------------------------------------------------------------
-r5726 | merlinyoda | 2008-06-03 10:44:18 +1000 (Tue, 03 Jun 2008) | 3 lines
 
-Fix for Mantis Report #2403 as well as several permissions improvements.
-Especially improvements towards history view.
+commit 6df9d88d4e4d0044b4660d2e264c740672a6cd59
+Author: TheIdeaMan <theideaman@users.sourceforge.net>
+Date:   Thu Oct 8 09:49:14 2009 -0400
 
-------------------------------------------------------------------------
-r5727 | merlinyoda | 2008-06-05 08:44:25 +1000 (Thu, 05 Jun 2008) | 8 lines
+    added Emulate=IE7 to keep IE8 in order
 
-Fix (hopefully) for Mantis Report 2401:
-More liberal use of the store() call in move() and deepMove() functions.
 
-... also some "clean up" in various files while investigating
-... also added "permissions name" class variable for base dP class to be used
-in place of the "table name" for permissions checks (defaults to "table name"
-if not specified (as the name of the module is usually the same as the table)
+commit adf626f35f7f750538a21e67c659c68a7cb645dd
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Mon Nov 2 01:27:37 2009 -0500
 
-------------------------------------------------------------------------
-r5728 | merlinyoda | 2008-06-06 09:59:32 +1000 (Fri, 06 Jun 2008) | 4 lines
+    Revert "added Emulate=IE7 to keep IE8 in order"
+    
+    This reverts commit 6df9d88d4e4d0044b4660d2e264c740672a6cd59.
 
-Fix for Mantis Report 2427:
-JavaScript function used improper method for testing 
-whether checkbox was check or not.
 
-------------------------------------------------------------------------
-r5730 | merlinyoda | 2008-06-07 04:44:57 +1000 (Sat, 07 Jun 2008) | 3 lines
+commit 934385ed391c1e7a3ff3a7d9bcaeeb1dc3c9ae62
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 18:52:38 2009 -0500
 
-Fix for Mantis Report 2428:
-"sort by" link function makes use of $_GET array instead of assuming values.
+    Minor usage/UI improvement.
+    Hide "edit contact info" link when adding a new user.
 
-------------------------------------------------------------------------
-r5731 | merlinyoda | 2008-06-07 09:02:31 +1000 (Sat, 07 Jun 2008) | 4 lines
 
-Fix for Mantis Report #2430:
-Force empty task start/end date post field values to '000000000000' 
-to keep PEAR warmings from displaying.
+commit 1e57f494e0755568a277d5199d296083214930f0
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 20:19:34 2009 -0500
 
-------------------------------------------------------------------------
-r5732 | merlinyoda | 2008-06-09 23:47:11 +1000 (Mon, 09 Jun 2008) | 3 lines
+    Minor UI improvement.
+    Keep instances of "&nbsp;" offset characters from being re-escaped
+    in public task selector dialog.
 
-Fix for Mantis Report #2431:
-Updated README with appropriate URLs.
 
-------------------------------------------------------------------------
-r5734 | merlinyoda | 2008-06-11 03:24:00 +1000 (Wed, 11 Jun 2008) | 3 lines
+commit f87728e820461d95845ce9f549bf54c73d420cb7
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 22:32:56 2009 -0500
 
-Fixed some small quirks with task access levels noted in forums
-Forum thread URL: http://forums.dotproject.net/showthread.php?p=37712
+    Revert "Revert "added Emulate=IE7 to keep IE8 in order""
+    
+    This reverts commit adf626f35f7f750538a21e67c659c68a7cb645dd.
+    Reinstating commit 6df9d88d4e4d0044b4660d2e264c740672a6cd59.
 
-------------------------------------------------------------------------
-r5736 | ajdonnison | 2008-06-16 19:19:49 +1000 (Mon, 16 Jun 2008) | 2 lines
 
-Fix typo
+commit faf9d503637871c51ddd111a6b23fbde42d75a59
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 18:52:38 2009 -0500
 
-------------------------------------------------------------------------
-r5737 | ajdonnison | 2008-06-16 19:38:56 +1000 (Mon, 16 Jun 2008) | 1 line
+    Minor usage/UI improvement.
+    Hide "edit contact info" link when adding a new user.
 
-Simplify options table to make layout cleaner
-------------------------------------------------------------------------
-r5738 | ajdonnison | 2008-06-16 19:55:13 +1000 (Mon, 16 Jun 2008) | 2 lines
 
-Fix selection of user details.
+commit cf88f7d7afed39f004644b7691d73cd433eee2b4
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 20:19:34 2009 -0500
 
-------------------------------------------------------------------------
-r5739 | ajdonnison | 2008-06-16 22:09:35 +1000 (Mon, 16 Jun 2008) | 2 lines
+    Minor UI improvement.
+    Keep instances of "&nbsp;" offset characters from being re-escaped
+    in public task selector dialog.
 
-Fix problem with MySQL 5.1 where CREATOR is now a reserved word.
 
-------------------------------------------------------------------------
-r5740 | ajdonnison | 2008-06-16 22:14:44 +1000 (Mon, 16 Jun 2008) | 2 lines
+commit 22aa0897bc099a846b7b859437ac935082f041c1
+Author: MerlinYoda <merlinyoda@dotproject.net>
+Date:   Sat Nov 21 23:30:56 2009 -0500
 
-Reverted change, looking at the error message incorrectly.
+    Patch level increment of version number.
 
-------------------------------------------------------------------------
-r5741 | merlinyoda | 2008-06-18 00:34:01 +1000 (Wed, 18 Jun 2008) | 4 lines
-
-Applied changes noted in Mantis Report #2435.
-Task Access types are now (in order of "increasing" restriction): 
-Public, Privileged, Participant, Protected, and Private
-
-------------------------------------------------------------------------
-r5742 | merlinyoda | 2008-06-18 00:38:19 +1000 (Wed, 18 Jun 2008) | 2 lines
-
-Fixed typo.
-
-------------------------------------------------------------------------
-r5744 | merlinyoda | 2008-06-20 02:35:16 +1000 (Fri, 20 Jun 2008) | 2 lines
-
-Fixed minor symantic error. Needed double qhotes when single quotes where used.
-
-------------------------------------------------------------------------
-r5749 | ajdonnison | 2008-06-27 10:15:16 +1000 (Fri, 27 Jun 2008) | 2 lines
-
-Make sure that the carefully prepared bind password is the one used in the bind.
-
-------------------------------------------------------------------------
-r5751 | ajdonnison | 2008-06-29 18:04:18 +1000 (Sun, 29 Jun 2008) | 3 lines
-
-Add validation code to ensure we don't get empty(ish) lines in the headers.
-There is a vague possibility this is causing the Sender in To field error.
-
-------------------------------------------------------------------------
-r5752 | ajdonnison | 2008-06-29 20:00:25 +1000 (Sun, 29 Jun 2008) | 2 lines
-
-Fixed clash email to use the correct field for identifying recipients.
-
-------------------------------------------------------------------------
-r5760 | merlinyoda | 2008-07-02 03:39:08 +1000 (Wed, 02 Jul 2008) | 6 lines
-
-Removing "admin" permission override.
-Having view permissions on admin module should not override task permissions.
-
-... also some formatting clean-up.
-
-
-------------------------------------------------------------------------
-r5761 | merlinyoda | 2008-07-02 04:52:45 +1000 (Wed, 02 Jul 2008) | 3 lines
-
-Updated fix for Mantis Report 2435:
-Needed to load task data from database record into object.
-
-------------------------------------------------------------------------
-r5762 | ajdonnison | 2008-07-02 20:20:46 +1000 (Wed, 02 Jul 2008) | 4 lines
-
-Add GACL Caching options to the system configs so people don't have to
-manually edit files.
-Cache Month and Weekday lookups.
-
-------------------------------------------------------------------------
-r5763 | ajdonnison | 2008-07-03 19:37:28 +1000 (Thu, 03 Jul 2008) | 2 lines
-
-#2442 Fix handling of multiple custom fields, thanks to phpgus.
-
-------------------------------------------------------------------------
-r5764 | merlinyoda | 2008-07-09 07:46:12 +1000 (Wed, 09 Jul 2008) | 6 lines
-
-Fix for Mantis Report 2447:
-Can't use class variables in PEAR's Date_Calc class 
-because it is always called statically. Replaced class variables 
-with distinct global variables. 
-... Not the "best" solution, but the "best for now" solution.
-
-------------------------------------------------------------------------
-r5766 | merlinyoda | 2008-07-10 05:54:52 +1000 (Thu, 10 Jul 2008) | 8 lines
-
-Implemented fix for task module gantt chart provided in Mantis Report #2444
-Also fixed issue with project gantt not submitting the "project type" filter 
-because sort() was used to organize the array used to generate the drop-down 
-select which broke all previously establiished key/value pairs. Used a sorting 
-method that preserves key/value pairs instead.
-
-... Also some "clean-up" in related files.
-
-------------------------------------------------------------------------
-r5767 | merlinyoda | 2008-07-10 06:14:59 +1000 (Thu, 10 Jul 2008) | 4 lines
-
-Fix for Mantis Report #2437
-File tabs now display record-for-record "physical" file count 
-instead of count of vesion ids of "logical" files.
-
-------------------------------------------------------------------------
-r5768 | merlinyoda | 2008-07-15 03:12:24 +1000 (Tue, 15 Jul 2008) | 3 lines
-
-Fix for Mantis Bug Report #2452:
-Typo in script tag. Also made tag more XHTML compliant.
-
-------------------------------------------------------------------------
-r5769 | ajdonnison | 2008-07-15 18:19:08 +1000 (Tue, 15 Jul 2008) | 3 lines
-
-#2450 - make sure the drop table is actually executed
-
-
-------------------------------------------------------------------------
-r5770 | ajdonnison | 2008-07-15 18:26:46 +1000 (Tue, 15 Jul 2008) | 2 lines
-
-dropTemp doesn't actually execute unless you call exec.
-
-------------------------------------------------------------------------
-r5771 | merlinyoda | 2008-07-16 00:41:58 +1000 (Wed, 16 Jul 2008) | 5 lines
-
-Fixes against Mantis Report #2455:
-Made file tab views more consistant. If the user has access rights to the 
-folder module, the folder view will be displayed; otherwise, the standard 
-file index view will be displayed if they have view access to the files module.
-
-------------------------------------------------------------------------
-r5772 | merlinyoda | 2008-07-16 02:56:58 +1000 (Wed, 16 Jul 2008) | 3 lines
-
-Fix for Bug causing Mantis Report 2454:
-The getNextVersionID() function wasn't returning the correct values.
-
-------------------------------------------------------------------------
-r5773 | merlinyoda | 2008-07-22 01:04:07 +1000 (Tue, 22 Jul 2008) | 5 lines
-
-Fixes for Matnis Report #2453:
-Fixed a couple XHTML complance issues. Many issues remain. 
-Some issues could likely be fixed easily in functions that generate HTML.
-Other issues would have to be fixed on a mode tedious page by page basis.
-
-------------------------------------------------------------------------
-r5774 | merlinyoda | 2008-07-22 02:21:24 +1000 (Tue, 22 Jul 2008) | 4 lines
-
-Making dPshowImage more XHTML compliant by setting image tag's 
-alt atribute value to be the same as the src attribute in cases 
-where a value for the alt attribute hasn't been specified.
-
-------------------------------------------------------------------------
-r5775 | merlinyoda | 2008-07-22 06:19:48 +1000 (Tue, 22 Jul 2008) | 4 lines
-
-Fix for Mantis Report #2458:
-Company/Project drop-down results filtered by different means 
-with respect to allowed projects/companies.
-
-------------------------------------------------------------------------
-r5776 | merlinyoda | 2008-07-22 23:36:04 +1000 (Tue, 22 Jul 2008) | 6 lines
-
-Fix for Mantis Report #2459:
-Needed to specify table alias in setAllowedSQL to disambiguate column in query.
-Also made minor improvement in setAllowedSQL in project.class.php to make use 
-of the key supplied. It is now also appended it to the index parameter of 
-setAllowedSQL which is called through the company class.
-
-------------------------------------------------------------------------
-r5777 | merlinyoda | 2008-07-23 07:15:15 +1000 (Wed, 23 Jul 2008) | 2 lines
-
-Tweak to previous improvement to fix introduced bug.
-
-------------------------------------------------------------------------
-r5778 | ajdonnison | 2008-07-23 18:04:29 +1000 (Wed, 23 Jul 2008) | 2 lines
-
-Don't waste time calculating allocations if we are not checking the over allocation.
-
-------------------------------------------------------------------------
-r5780 | merlinyoda | 2008-07-24 03:16:31 +1000 (Thu, 24 Jul 2008) | 8 lines
-
-Fix for Mantis Report #2455:
-Task notify method was not using 'MAILALL' preference as intended.
-'MAILALL' was being used to include/exclude the user making the task change 
-from being notified as opposed to being used to include the task owner in the 
-notification list (if the owner was not already notified otherwise). 
-The task class notify() function now behaves more like its calendar class 
-counterpart.
-
-------------------------------------------------------------------------
-r5781 | ajdonnison | 2008-07-24 20:49:36 +1000 (Thu, 24 Jul 2008) | 2 lines
-
-#2457 - Fix passing in of gantt options.
-
-------------------------------------------------------------------------
-r5782 | merlinyoda | 2008-07-25 07:02:34 +1000 (Fri, 25 Jul 2008) | 4 lines
-
-Fixes for Mantis Report #2437:
-Consitantly count by file_id instead of file_version_id.
-Removed invalid addGroup() call using file_version_id on total file count.
-
-------------------------------------------------------------------------
-r5783 | ajdonnison | 2008-07-25 21:49:46 +1000 (Fri, 25 Jul 2008) | 2 lines
-
-Pinch SMTP protocol code from Zend to try and improve reliability.
-
-------------------------------------------------------------------------
-r5784 | ajdonnison | 2008-07-26 13:56:57 +1000 (Sat, 26 Jul 2008) | 2 lines
-
-#2461 - Get over the fact that ezPDF only understands latin1, while all of our data should be in utf8.
-
-------------------------------------------------------------------------
-r5785 | ajdonnison | 2008-07-26 15:19:39 +1000 (Sat, 26 Jul 2008) | 2 lines
-
-#2358 - Update error messages to correctly return last message from server.
-
-------------------------------------------------------------------------
-r5786 | ajdonnison | 2008-07-28 19:27:47 +1000 (Mon, 28 Jul 2008) | 3 lines
-
-Remove total line count from the tabs as it is confusing.
-Fix the total record counts within the tab so it uses the data that is presented.
-
-------------------------------------------------------------------------
-r5787 | ajdonnison | 2008-07-28 19:58:00 +1000 (Mon, 28 Jul 2008) | 2 lines
-
-Preparing for release. Set version numbering correctly.
-
-------------------------------------------------------------------------
-r5788 | ajdonnison | 2008-07-28 20:05:48 +1000 (Mon, 28 Jul 2008) | 2 lines
-
-Final upgrade logic.
-
-------------------------------------------------------------------------
-r5789 | ajdonnison | 2008-07-29 20:24:02 +1000 (Tue, 29 Jul 2008) | 2 lines
-
-#2465 - Patch from phpgus to fix problems with HTML special chars in custom fields.
-
-------------------------------------------------------------------------
