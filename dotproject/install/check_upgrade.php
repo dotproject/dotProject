@@ -40,6 +40,7 @@ The full text of the GPL is in the COPYING file.
 $baseDir = dirname(dirname(__FILE__));
 define('DP_BASE_DIR', $baseDir);
 
+require_once DP_BASE_DIR . '/includes/dP_compat.php';
 require_once 'install.inc.php';
 require_once DP_BASE_DIR.'/lib/adodb/adodb.inc.php';
 

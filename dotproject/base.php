@@ -29,6 +29,10 @@ global $baseUrl;
 $baseDir = dirname(__FILE__);
 //Make sure directoy seperator is at the end so that paths are well formed
 //$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1 , 1) == 0) ? '' : DIRECTORY_SEPERATOR);
+// Define to deprecate the global baseDir
+define('DP_BASE_DIR', $baseDir);
+
+require_once ($baseDir . '/includes/dP_compat.php');
 
 // only rely on env variables if not using a apache handler
 function safe_get_env($name) 
@@ -53,8 +57,8 @@ if (@$pathInfo) {
 }
 
 $baseUrl = preg_replace('#/$#D', '', $baseUrl);
-// Defines to deprecate the global baseUrl/baseDir
-define('DP_BASE_DIR', $baseDir);
+
+// Define to deprecate the global baseUrl
 define('DP_BASE_URL', $baseUrl);
 
 // required includes for start-up

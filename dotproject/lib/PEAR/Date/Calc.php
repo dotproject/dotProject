@@ -5,6 +5,9 @@
 // begin on Sunday.
 define('DATE_CALC_BEGIN_WEEKDAY', 1);
 
+//dotProject custom mb_* compatibility functions for custom calls to mb_convert_encoding()
+require_once ($baseDir . '/includes/dP_compat.php');
+
 /**
  * Date_Calc is a calendar class used to calculate and
  * manipulate calendar dates and retrieve dates in a calendar
