@@ -13,15 +13,18 @@ if (!defined('DP_BASE_DIR')) {
  */
 
 $config = array();
-$config['mod_name'] = 'Links';               // name the module
-$config['mod_version'] = '1.0';               // add a version number
-$config['mod_directory'] = 'links';          // tell dotProject where to find this module
-$config['mod_setup_class'] = 'CSetupLinks';  // the name of the PHP setup class (used below)
-$config['mod_type'] = 'user';                   // 'core' for modules distributed with dP by standard, 'user' for additional modules from dotmods
-$config['mod_ui_name'] = 'Links';            // the name that is shown in the main menu of the User Interface
-$config['mod_ui_icon'] = 'folder5.png';     // name of a related icon
-$config['mod_description'] = 'Links related to tasks';     // some description of the module
-$config['mod_config'] = false;                   // show 'configure' link in viewmods
+$config['mod_name'] = 'Links'; // name the module
+$config['mod_version'] = '1.0'; // add a version number
+$config['mod_directory'] = 'links'; // tell dotProject where to find this module
+$config['mod_setup_class'] = 'CSetupLinks'; // the name of the PHP setup class (used below)
+$config['mod_type'] = 'user'; //'core' for standard dP modules, 'user' for additional modules from dotmods
+$config['mod_ui_name'] = 'Links'; // the name that is shown in the main menu of the User Interface
+$config['mod_ui_icon'] = 'folder5.png'; // name of a related icon
+$config['mod_description'] = 'Links related to tasks'; // some description of the module
+$config['mod_config'] = false; // show 'configure' link in viewmods
+$config['permissions_item_table'] = 'links'; // tell dotProject the database table name
+$config['permissions_item_field'] = 'link_id'; // identify table's primary key (for permissions)
+$config['permissions_item_label'] = 'link_name'; // identify "title" field in table
 
 
 if (@$a == 'setup') {

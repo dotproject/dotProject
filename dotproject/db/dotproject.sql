@@ -7,12 +7,6 @@
 # a new installation of dotProject.
 #
 
-#
-# TODO
-#
-# * replace "task_owner" with "task_creator"
-#
-
 CREATE TABLE `companies` (
   `company_id` INT(10) NOT NULL auto_increment,
   `company_module` INT(10) NOT NULL default 0,
@@ -259,7 +253,6 @@ CREATE TABLE `projects` (
   `project_demo_url` varchar(255) default NULL,
   `project_start_date` datetime default NULL,
   `project_end_date` datetime default NULL,
-  `project_actual_end_date` datetime default NULL,
   `project_status` int(11) default '0',
   `project_percent_complete` tinyint(4) default '0',
   `project_color_identifier` varchar(6) default 'eeeeee',
@@ -499,14 +492,14 @@ CREATE TABLE `modules` (
 INSERT INTO `modules` VALUES("1", "Companies", "companies", "1.0.0", "", "core", "1", "Companies", "handshake.png", "1", "1", "", "companies", "company_id", "company_name");
 INSERT INTO `modules` VALUES("2", "Projects", "projects", "1.0.0", "", "core", "1", "Projects", "applet3-48.png", "2", "1", "", "projects", "project_id", "project_name");
 INSERT INTO `modules` VALUES("3", "Tasks", "tasks", "1.0.0", "", "core", "1", "Tasks", "applet-48.png", "3", "1", "", "tasks", "task_id", "task_name");
-INSERT INTO `modules` VALUES("4", "Calendar", "calendar", "1.0.0", "", "core", "1", "Calendar", "myevo-appointments.png", "4", "1", "", "", "", "");
+INSERT INTO `modules` VALUES("4", "Calendar", "calendar", "1.0.0", "", "core", "1", "Calendar", "myevo-appointments.png", "4", "1", "", "events", "event_id", "event_title");
 INSERT INTO `modules` VALUES("5", "Files", "files", "1.0.0", "", "core", "1", "Files", "folder5.png", "5", "1", "", "files", "file_id", "file_name");
-INSERT INTO `modules` VALUES("6", "Contacts", "contacts", "1.0.0", "", "core", "1", "Contacts", "monkeychat-48.png", "6", "1", "", "", "", "");
+INSERT INTO `modules` VALUES("6", "Contacts", "contacts", "1.0.0", "", "core", "1", "Contacts", "monkeychat-48.png", "6", "1", "", "contacts", "contact_id", "contact_title");
 INSERT INTO `modules` VALUES("7", "Forums", "forums", "1.0.0", "", "core", "1", "Forums", "support.png", "7", "1", "", "forums", "forum_id", "forum_name");
 INSERT INTO `modules` VALUES("8", "Tickets", "ticketsmith", "1.0.0", "", "core", "1", "Tickets", "ticketsmith.gif", "8", "1", "", "", "", "");
 INSERT INTO `modules` VALUES("9", "User Administration", "admin", "1.0.0", "", "core", "1", "User Admin", "helix-setup-users.png", "9", "1", "", "users", "user_id", "user_username");
 INSERT INTO `modules` VALUES("10", "System Administration", "system", "1.0.0", "", "core", "1", "System Admin", "48_my_computer.png", "10", "1", "", "", "", "");
-INSERT INTO `modules` VALUES("11", "Departments", "departments", "1.0.0", "", "core", "1", "Departments", "users.gif", "11", "0", "", "", "", "");
+INSERT INTO `modules` VALUES("11", "Departments", "departments", "1.0.0", "", "core", "1", "Departments", "users.gif", "11", "0", "", "departments", "dept_id", "dept_name");
 INSERT INTO `modules` VALUES("12", "Help", "help", "1.0.0", "", "core", "1", "Help", "dp.gif", "12", "0", "", "", "", "");
 INSERT INTO `modules` VALUES("13", "Public", "public", "1.0.0", "", "core", "1", "Public", "users.gif", "13", "0", "", "", "", "");
 
@@ -523,7 +516,7 @@ CREATE TABLE `syskeys` (
   `syskey_sep1` char(2) default '\n',
   `syskey_sep2` char(2) NOT NULL default '|',
   PRIMARY KEY  (`syskey_id`),
-  UNIQUE KEY `idx_syskey_name` (`syskey_id`)
+  UNIQUE KEY `idx_syskey_name` (`syskey_name`)
 ) TYPE=MyISAM;
 
 #
@@ -537,6 +530,7 @@ CREATE TABLE `sysvals` (
   `sysval_title` varchar(48) NOT NULL default '',
   `sysval_value` text NOT NULL,
   PRIMARY KEY  (`sysval_id`)
+  UNIQUE KEY `idx_sysval_title` (`sysval_title`)
 ) TYPE=MyISAM;
 
 #
@@ -700,9 +694,10 @@ INSERT INTO `config` VALUES (0, 'parser_application/msword', '/usr/bin/strings',
 INSERT INTO `config` VALUES (0, 'parser_text/html', '/usr/bin/strings', '', 'text');
 INSERT INTO `config` VALUES (0, 'parser_application/pdf', '/usr/bin/pdftotext', '', 'text');
 
+# 20050222
+# moved new config variables by cyberhorse from config-php to a new table
 INSERT INTO `config` VALUES (0, 'files_ci_preserve_attr', 'true', '', 'checkbox');
 INSERT INTO `config` VALUES (0, 'files_show_versions_edit', 'false', '', 'checkbox');
-INSERT INTO `config` VALUES (0, 'reset_memory_limit', '32M', '', 'text');
 
 # 20050302
 # ldap system config variables
@@ -752,6 +747,9 @@ INSERT INTO config_list (`config_id`, `config_list_name`)
 	FROM config
 	WHERE config_name = 'session_handling';
 
+# 20050405 - temporarily reset the memory limit for gantt charts
+INSERT INTO `config` VALUES (0, 'reset_memory_limit', '32M', '', 'text');
+
 # 20050303
 # New mail handling options
 INSERT INTO `config` VALUES (0, 'mail_transport', 'php', 'mail', 'select');
@@ -762,10 +760,6 @@ INSERT INTO `config` VALUES (0, 'mail_user', '', 'mail', 'text');
 INSERT INTO `config` VALUES (0, 'mail_pass', '', 'mail', 'password');
 INSERT INTO `config` VALUES (0, 'mail_defer', 'false', 'mail', 'checkbox');
 INSERT INTO `config` VALUES (0, 'mail_timeout', '30', 'mail', 'text');
-INSERT INTO `config` VALUES (0, 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
-INSERT INTO `config` VALUES (0, 'task_reminder_days_before', '1', 'task_reminder', 'text');
-INSERT INTO `config` VALUES (0, 'task_reminder_repeat', '100', 'task_reminder', 'text');
-
 
 INSERT INTO config_list (`config_id`, `config_list_name`)
   SELECT config_id, 'php'
@@ -781,6 +775,12 @@ INSERT INTO config_list (`config_id`, `config_list_name`)
 # Queue scanning on garbage collection
 INSERT INTO config VALUES (NULL, 'session_gc_scan_queue', 'false', 'session', 'checkbox');
 
+# 20060321
+# Backport of task reminders.
+INSERT INTO `config` VALUES (0, 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
+INSERT INTO `config` VALUES (0, 'task_reminder_days_before', '1', 'task_reminder', 'text');
+INSERT INTO `config` VALUES (0, 'task_reminder_repeat', '100', 'task_reminder', 'text');
+
 # 20080702
 # GACL Caching options
 INSERT INTO config VALUES 
@@ -788,6 +788,11 @@ INSERT INTO config VALUES
 (NULL, 'gacl_expire', 'true', 'gacl', 'checkbox'),
 (NULL, 'gacl_cache_dir', '/tmp', 'gacl', 'text'),
 (NULL, 'gacl_timeout', '600', 'gacl', 'text');
+
+# 20090427
+# adding config value to toggle use of TLS in SMTP connections
+INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`)
+VALUES (0, 'mail_smtp_tls', 'false', 'mail', 'checkbox');
 
 # 20050302
 # new custom fields
@@ -1208,7 +1213,7 @@ CREATE TABLE dpversion (
 	last_code_update date not null default '0000-00-00'
 );
 
-INSERT INTO dpversion VALUES ('2.1.2', 2, '2008-07-28', '2008-07-28');
+INSERT INTO dpversion VALUES ('2.1.3', 2, '2009-04-27', '2009-04-27');
 
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication
@@ -1229,3 +1234,4 @@ CREATE TABLE `file_folders` (
 	`file_folder_description` text,
 	PRIMARY KEY  (`file_folder_id`)
 ) TYPE=MyISAM;
+
