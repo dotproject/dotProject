@@ -1,6 +1,6 @@
 <?php /* INCLUDES $Id$ */
 ##
-## Global General Purpose Functions
+## Global Compatibility Functions
 ##
 if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
@@ -9,12 +9,13 @@ if (!(defined('DP_BASE_DIR'))) {
 //Checking for mb_* type functions ...
 if (!function_exists('mb_internal_encoding')) {
 	function mb_internal_encoding($encoding = null) {
-		return (($encoding != null) ? true : 'UTF-8');
+		return (($encoding === null) ? 'UTF-8' :true);
 	}
 }
 
 if (!function_exists('mb_convert_encoding')) {
-	function mb_convert_encoding($str, $to_encoding, $from_encoding = mb_internal_encoding()) {
+	function mb_convert_encoding($str, $to_encoding, $from_encoding = null) {
+		$from_encoding = (($from_encoding === null) ? mb_internal_encoding() : $from_encoding);
 		return $str;
 	}
 }
@@ -26,49 +27,57 @@ if (!function_exists('mb_split')) {
 }
 
 if (!function_exists('mb_stripos')) {
-	function mb_stripos($haystack, $needle, $offset = 0, $encoding = mb_internal_encoding()) {
+	function mb_stripos($haystack, $needle, $offset = 0, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return stripos($haystack, $needle, $offset);
 	}
 }
 
 if (!function_exists('mb_stristr')) {
-	function mb_stristr($haystack, $needle, $part = false, $encoding = mb_internal_encoding()) {
+	function mb_stristr($haystack, $needle, $part = false, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return stristr($haystack, $needle, $part);
 	}
 }
 
 if (!function_exists('mb_strlen')) {
-	function mb_strlen($str, $encoding = mb_internal_encoding()) {
+	function mb_strlen($str, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return strlen($str);
 	}
 }
 
 if (!function_exists('mb_strpos')) {
-	function mb_strpos($haystack, $needle, $offset = 0, $encoding = mb_internal_encoding()) {
+	function mb_strpos($haystack, $needle, $offset = 0, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return strpos($haystack, $needle, $offset);
 	}
 }
 
 if (!function_exists('mb_strstr')) {
-	function mb_strstr($haystack, $needle, $part = false, $encoding = mb_internal_encoding()) {
+	function mb_strstr($haystack, $needle, $part = false, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return strstr($haystack, $needle, $part);
 	}
 }
 
 if (!function_exists('mb_strtolower')) {
-	function mb_strtolower($str, $encoding = mb_internal_encoding()) {
+	function mb_strtolower($str, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return strtolower($str);
 	}
 }
 
 if (!function_exists('mb_strtoupper')) {
-	function mb_strtoupper($str, $encoding = mb_internal_encoding()) {
+	function mb_strtoupper($str, $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return strtoupper($str);
 	}
 }
 
 if (!function_exists('mb_substr')) {
-	function mb_substr($str, $start, $length = "undefined", $encoding = mb_internal_encoding()) {
+	function mb_substr($str, $start, $length = "undefined", $encoding = null) {
+		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
 		return (($length == "undefined") ? substr($str, $start) : substr($str, $start, $length));
 	}
 }
