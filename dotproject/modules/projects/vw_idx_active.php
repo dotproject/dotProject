@@ -37,6 +37,7 @@ if ($added_cols) {
 	<th nowrap="nowrap">
 		<a href="?m=projects&amp;orderby=project_color_identifier" class="hdr">
 		<?php echo $AppUI->_('Color');?>
+		(<a href="?m=projects&amp;orderby=project_percent_complete" class="hdr">%</a>)
 		</a>
 	</th>
 	<th nowrap="nowrap">

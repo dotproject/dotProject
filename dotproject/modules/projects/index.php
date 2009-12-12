@@ -73,7 +73,8 @@ $valid_ordering = array(
 	'project_start_date',
 	'project_actual_end_date',
 	'task_log_problem DESC,project_priority',
-	'project_status'
+	'project_status',
+	'project_percent_complete'
 );
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
