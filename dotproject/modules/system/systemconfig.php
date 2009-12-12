@@ -62,8 +62,9 @@ foreach ($rs as $c) {
 			$value = 'true';
 			// allow to fallthrough
 		default:
-			if (! $value)
+			if (!($value)) {
 				$value = $c['config_value'];
+			}
 			$entry = '<input class="button" type="'.$c['config_type'].'" name="dPcfg['.$c['config_name'].']" value="'.$value.'" '.$tooltip.' '. $extra.'/>';
 			break;
 	}

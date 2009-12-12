@@ -162,7 +162,7 @@ class CModule extends CDpObject {
 		}
         
 		if ($new_ui_order) { //make sure we aren't going "up" to 0
-			$q  = new DBQuery;
+			$q = new DBQuery;
 			if ($other_new) { //make sure value was set.
 				$q->addTable('modules');
 				$q->addUpdate('mod_ui_order', ''.$other_new);
@@ -196,9 +196,44 @@ class CModule extends CDpObject {
 * Configuration class
 */
 class CConfig extends CDpObject {
+	var $config_name = NULL;
+	var $config_value = NULL;
 	
 	function CConfig() {
 		$this->CDpObject('config', 'config_id');
+	}
+	
+	function check() {
+		//Sanitize user input
+		switch ($this->config_name) {
+			case 'daily_working_hours':
+				$this->config_value = ((($this->config_value % 24) <= 0) ? 24 
+				                       : ($this->config_value % 24));
+				break;
+			case 'cal_day_start':
+			case 'cal_day_end':
+				$this->config_value = ((($this->config_value % 24) < 0) ? 0 
+				                       : ($this->config_value % 24));
+				break;
+			case 'cal_day_increment':
+				$this->config_value = ((($this->config_value % 60) <= 0) ? 60 
+				                       : ($this->config_value % 60));
+				break;
+			case 'cal_working_days':
+				$this->config_value = trim($this->config_value, ' ,');
+				$clean_list = explode(',', $this->config_value);
+				$valid_values = array(0, 1, 2, 3, 4, 5, 6);
+				$this->config_value = implode(',', array_intersect($clean_list, $valid_values));
+				break;
+			default:
+				break;
+		}
+		return NULL; // object is ok
+	}
+	
+	function store() {
+		$msg = $this->check();
+		return (($msg) ? $msg : parent::store());
 	}
 	
 	function getChildren($id) {

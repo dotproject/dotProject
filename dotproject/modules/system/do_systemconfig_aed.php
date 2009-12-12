@@ -7,8 +7,12 @@ $obj = new CConfig();
 
 // set all checkboxes to false
 // overwrite the true/enabled/checked checkboxes later
-$sql = "UPDATE config SET config_value='false' WHERE config_type='checkbox'";
-$rs = db_loadResult($sql);
+$q = new DBQuery;
+$q->addTable('config');
+$q->addUpdate('config_value', 'false');
+$q->addWhere("config_type='checkbox'");
+$q->exec();
+$q->clear();
 
 foreach ($_POST['dPcfg'] as $name => $value) {
 	$obj->config_name = $name;
