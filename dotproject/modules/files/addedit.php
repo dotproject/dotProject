@@ -215,13 +215,12 @@ function setTask(key, val) {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File');?>:</td>
 			<td align="left"><input type="File" class="button" name="formfile" style="width:270px"></td>
 		</tr>
-                <?php if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
-                ?>
+		<?php if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left"><input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" /><label for="final_ci"><?php echo $AppUI->_('Final Version'); ?></label></td>		
 		</tr>
-                <?php } ?>
+		<?php } ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left"><input type="checkbox" name="notify" id="notify" checked="checked" /><label for="notify"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label></td>		
@@ -242,117 +241,100 @@ function setTask(key, val) {
 </table>
 
 <?php 
-function file_show_attr()
-{
+function file_show_attr() {
 	global $AppUI, $obj, $ci, $canAdmin, $projects,
 	$file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
-
-
-      if ($ci) 
-      {
-        $str_out = "<tr>" .
-                   '<td align="right" nowrap="nowrap">' .
-                   $AppUI->_('Minor Revision') . 
-                   "</td>" .
-                   "<td>" .
-                   '<input type="Radio" name="revision_type" value="minor" checked>' .
-                   "</td>" .
-                   '<tr>' .
-                   '<td align="right" nowrap="nowrap">' .
-                   $AppUI->_('Major Revision') . 
-                   "</td>" .
-                   "<td>" .
-                   '<input type="Radio" name="revision_type" value="major" >' .
-                   "</td>";
-      }
-      else
-      {
-        $str_out = "<tr>" .
-                   '<td align="right" nowrap="nowrap">' .
-                   $AppUI->_('Version') . ":</td>";
-      }
+	
+	
+	if ($ci) {
+		$str_out = ('<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision') 
+					. '</td><td>' 
+		            . '<input type="Radio" name="revision_type" value="minor" checked="checked">' 
+		            . '</td></tr>' 
+		            . '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Major Revision') 
+		            . '</td><td>' . '<input type="Radio" name="revision_type" value="major" >' 
+		            . '</td></tr>');
+	} else {
+		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Version') . ':</td>';
+	}
+	
+	$str_out .= '<td align="left">';
       
-      $str_out .= '<td align="left">';
-      
-      if ($ci || ($canAdmin && $obj->file_checkout == 'final')) 
-      {
-        $str_out .= '<input type="hidden" name="file_checkout" value="" />' .
-      				      '<input type="hidden" name="file_co_reason" value="" />';
-      }
-      
-      if ($ci) 
-      {
-        $the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version+0.01 : "1");
-        $str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
-      }
-      else
-      {
-        $the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version : "1");
-        $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" ' .
-                    'value="' . $the_value . '" />';
-      }
-      
-      $str_out .= '</td>';
-                
-      
-      $select_disabled=' ';  
-      $onclick_task=' onclick="popTask()" ';
-      if ($ci && $preserve)
-      {
-        $select_disabled=' disabled ';  
+	if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) {
+		$str_out .= ('<input type="hidden" name="file_checkout" value="" />' 
+		             . '<input type="hidden" name="file_co_reason" value="" />');
+	}
+	
+	if ($ci) {
+		$the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version+0.01 : "1");
+		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
+	} else {
+		$the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version : "1");
+		$str_out .= ('<input type="text" name="file_version" maxlength="10" size="5" ' 
+		             . 'value="' . $the_value . '" />');
+	}
+    
+	$str_out .= '</td>';
+    
+    
+	$select_disabled=' ';  
+	$onclick_task=' onclick="popTask()" ';
+	if ($ci && $preserve) {
+		$select_disabled=' disabled ';  
         $onclick_task=' ';
         // need because when a html is disabled, it's value it's not sent in submit
         $str_out .= '<input type="hidden" name="file_project" value="' .  $file_project . '" />';
-        $str_out .= '<input type="hidden" name="file_category" value="' .  $obj->file_category . '" />'; 
-      }
-      
-      
-      // Category
-      $str_out .= "<tr>" .
-                 '<td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-      $str_out .= '<td align="left">' .
-                  arraySelect(dPgetSysVal("FileType"), 'file_category', 
-                              '' . $select_disabled, $obj->file_category, true) . '<td>';
+        $str_out .= ('<input type="hidden" name="file_category" value="' .  $obj->file_category 
+		             . '" />');
+	}
+	
+    
+	// Category
+	$str_out .= ('<tr>' . '<td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>');
+	$str_out .= ('<td align="left">' 
+	             . arraySelect(dPgetSysVal('FileType'), 'file_category', (string) $select_disabled, 
+	                           $obj->file_category, true) . '<td>');
                               
-                              
-      // ---------------------------------------------------------------------------------
-      
-      if ($file_helpdesk_item) {
-            $hd_item = new CHelpDeskItem();
-            $hd_item->load($file_helpdesk_item);
-            //Helpdesk Item
-            $str_out .= "<tr>" .
-               			    '<td align="right" nowrap="nowrap">' . $AppUI->_('Helpdesk Item') . ':</td>';
-            $str_out .= '<td align="left"><strong>' . $hd_item->item_id . ' - ' . $hd_item->item_title . '</strong></td></tr>';
-            // Project
-            $str_out .= '<input type="hidden" name="file_project" value="' .  $file_project . '" />';
+	//TODO: export helpdesk code if possible...
+	if ($file_helpdesk_item) {
+		$hd_item = new CHelpDeskItem();
+		$hd_item->load($file_helpdesk_item);
+		//Helpdesk Item
+		$str_out .= ('<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Helpdesk Item') 
+		             . ':</td>');
+		$str_out .= ('<td align="left"><b>' 
+		             . $hd_item->item_id . ' - ' . $hd_item->item_title . '</b></td></tr>');
+		// Project
+		$str_out .= '<input type="hidden" name="file_project" value="' .  $file_project . '" />';
+        
+		// Task 
+		$str_out .= '<input type="hidden" name="file_task" value="0" />';
+	} else {
+		// Project
+		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
+		$str_out .= ('<td align="left">' 
+		             . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 
+		                                         ('size="1" class="text" style="width:270px"' 
+		                                          . $select_disabled), $file_project) 
+		             . '</td></tr>');
             
-            // Task 
-            $str_out .= '<input type="hidden" name="file_task" value="0" />';
-      } else {
-            // Project
-            $str_out .= "<tr>" .
-               			    '<td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
-            $str_out .= '<td align="left">' .
-            projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project) .
-                     		'</td></tr>';
-            
-            // ---------------------------------------------------------------------------------
-            
-            // Task 
-            $str_out .= "<tr>" .
-                        '<td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td>'.
-            			      '<td align="left" colspan="2" valign="top">' .
-            				    '<input type="hidden" name="file_task" value="' .  $file_task . '" />' .
-            				    '<input type="text" class="text" name="task_name" value="' . $task_name. '" size="40" disabled />' .
-            				    '<input type="button" class="button" value="' . $AppUI->_('select task') . '..."' .
-            				     $onclick_task . '/>' .	'</td></tr>';
-      }
-      
-      
-      return ($str_out);
+		
+		// Task 
+		$str_out .= ('<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td>' 
+		             . '<td align="left" colspan="2" valign="top">' 
+		             . '<input type="hidden" name="file_task" value="' . $file_task . '" />' 
+		             . '<input type="text" class="text" name="task_name" value="' . $task_name 
+		             . '" size="40" disabled />' 
+		             . '<input type="button" class="button" value="' . $AppUI->_('select task') 
+		             . '..."' . $onclick_task . '/>' . '</td></tr>');
+	}
+	
+    
+	return ($str_out);
 }
 
+
+//TODO: export helpdesk code if possible...
 function getHelpdeskFolder() {
 	$q = new DBQuery();
 	$q->addTable('file_folders', 'ff');
