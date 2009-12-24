@@ -34,9 +34,10 @@ if (!($rows = $q->loadList())) {
 	
 	foreach ($rows as $row) {
 		$s .= '<tr><td>';
-		$s .= ('<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '">' 
-		       . $row['project_name'].'</a>');
-		$s .= '<td>' . $row['contact_first_name'] . '&nbsp;' . $row['contact_last_name'] . '</td>';
+		$s .= ('<a href="?m=projects&a=view&project_id=' . dPformSafe($row['project_id']) . '">' 
+		       . htmlspecialchars($row['project_name']) . '</a>');
+		$s .= ('<td>' . htmlspecialchars($row['contact_first_name']) . '&nbsp;' 
+		       . htmlspecialchars($row['contact_last_name']) . '</td>');
 		$s .= '</tr>';
 	}
 }

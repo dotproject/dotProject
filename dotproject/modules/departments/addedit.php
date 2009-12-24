@@ -4,8 +4,8 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 // Add / Edit Company
-$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : 0;
-$company_id = isset($_GET['company_id']) ? $_GET['company_id'] : 0;
+$dept_id = intval(dPgetParam($_GET, 'dept_id', 0));
+$company_id = intval(dPgetParam($_GET, 'company_id', 0));
 
 // check permissions for this department
 $canEdit = getPermission($m, 'edit', $dept_id);

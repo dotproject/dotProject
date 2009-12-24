@@ -59,8 +59,8 @@ if ($canEdit) {
 	                     '</form>');
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new project') 
 	                      . '" />'), '', 
-	                     ('<form action="?m=projects&a=addedit&company_id=' . $company_id 
-	                      . '" method="post">'), '</form>');
+	                     ('<form action="?m=projects&a=addedit&company_id=' 
+	                      . dPformSafe($company_id) . '" method="post">'), '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {
@@ -95,7 +95,7 @@ function delIt() {
 <form name="frmDelete" action="./index.php?m=companies" method="post">
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
+	<input type="hidden" name="company_id" value="<?php echo dPformSafe($company_id); ?>" />
 </form>
 <?php } ?>
 
@@ -105,56 +105,62 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->company_name; ?></td>
+			<td class="hilite" width="100%"><?php echo htmlspecialchars($obj->company_name); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td class="hilite" width="100%"><?php 
-echo ($obj->contact_first_name .' ' . $obj->contact_last_name); ?></td>
+echo (htmlspecialchars($obj->contact_first_name) . '&nbsp;' 
+      . (htmlspecialchars($obj->contact_last_name)); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->company_email; ?></td>
+			<td class="hilite" width="100%"><?php 
+echo htmlspecialchars($obj->company_email); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite"><?php echo @$obj->company_phone1; ?></td>
+			<td class="hilite"><?php echo htmlspecialchars(@$obj->company_phone1); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
-			<td class="hilite"><?php echo @$obj->company_phone2; ?></td>
+			<td class="hilite"><?php echo htmlspecialchars(@$obj->company_phone2); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td class="hilite"><?php echo @$obj->company_fax; ?></td>
+			<td class="hilite"><?php echo htmlspecialchars(@$obj->company_fax); ?></td>
 		</tr>
 		<tr valign=top>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite">
 <?php if (!empty($obj->company_country)) { ?>
-				<span style="float: right"><a href='http://maps.google.com/maps?q=<?php 
-echo @$obj->company_address1; ?>+<?php echo @$obj->company_address2; ?>+<?php 
-echo @$obj->company_city; ?>+<?php echo @$obj->company_state; ?>+<?php 
-echo @$obj->company_zip; ?>+<?php echo @$obj->company_country; ?>' target='_blank'>
+				<span style="float: right"><a href="http://maps.google.com/maps?q=<?php 
+echo dPformSafe(@$obj->company_address1, false, true); ?>+<?php 
+echo dPformSafe(@$obj->company_address2, false, true); ?>+<?php 
+echo dPformSafe(@$obj->company_city, false, true); ?>+<?php 
+echo dPformSafe(@$obj->company_state, false, true); ?>+<?php 
+echo dPformSafe(@$obj->company_zip, false, true); ?>+<?php 
+echo dPformSafe(@$obj->company_country, false, true); ?>" target="_blank">
 				<?php 
 echo dPshowImage('./images/googlemaps.gif', 55, 22, 'Find It on Google');
 ?>
 <?php } ?>
 				</a></span>
 				<?php
-echo (@$obj->company_address1 
-      . (($obj->company_address2) ? '<br />' : '') . $obj->company_address2
-      . (($obj->company_city) ? '<br />' : '') . $obj->company_city 
-      . (($obj->company_state) ? ', ' : '') . $obj->company_state
-      . (($obj->company_zip) ? ' ' : '') . $obj->company_zip);
+echo (htmlspecialchars(@$obj->company_address1) 
+      . (($obj->company_address2) ? '<br />' : '') . htmlspecialchars($obj->company_address2) 
+      . (($obj->company_city) ? '<br />' : '') . htmlspecialchars($obj->company_city) 
+      . (($obj->company_state) ? ', ' : '') . htmlspecialchars($obj->company_state) 
+      . (($obj->company_zip) ? ' ' : '') . htmlspecialchars($obj->company_zip));
 ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
 			<td class="hilite">
-				<a href="http://<?php echo @$obj->company_primary_url; ?>" target="Company"><?php 
-echo @$obj->company_primary_url; ?></a>
+				<a href="http://<?php 
+echo dPformSafe(@$obj->company_primary_url, false, true); ?>" target="Company"><?php 
+echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 			</td>
 		</tr>
 		<tr>
@@ -169,7 +175,8 @@ echo @$obj->company_primary_url; ?></a>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo str_replace(chr(10), '<br />', $obj->company_description); ?>&nbsp;
+				<?php 
+echo str_replace(chr(10), '<br />', htmlspecialchars($obj->company_description)); ?>&nbsp;
 			</td>
 		</tr>
 		

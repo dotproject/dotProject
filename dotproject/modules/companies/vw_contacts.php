@@ -35,11 +35,13 @@ if (!($rows = $q->loadList())) {
 		$dept_detail = $contact->getDepartmentDetails();
 		
 		$s .= '<tr><td>';
-		$s .= ('<a href="./index.php?m=contacts&a=view&contact_id=' . $row['contact_id'] . '">' 
-		       . $row['contact_last_name'] . ', ' . $row['contact_first_name'] .'</a>');
-		$s .= ('<td><a href="mailto:' . $row['contact_email'] . '">' . $row['contact_email'] 
-		       . '</a></td>');
-		$s .= '<td>' . $dept_detail['dept_name'] . '</td>';
+		$s .= ('<a href="./index.php?m=contacts&a=view&contact_id=' 
+		       . dPformSafe($row['contact_id']) . '">' 
+		       . htmlspecialchars($row['contact_last_name'] . ', ' . $row['contact_first_name']) 
+		       .'</a>');
+		$s .= ('<td><a href="mailto:' . dPformSafe($row['contact_email'], false, true) . '">' 
+		       . htmlspecialchars($row['contact_email']) . '</a></td>');
+		$s .= '<td>' . htmlspecialchars($dept_detail['dept_name']) . '</td>';
 		$s .= '</tr>';
 	}
 }
@@ -47,7 +49,7 @@ if (!($rows = $q->loadList())) {
 $s .= '<tr><td colspan="3" align="right" valign="top" style="background-color:#ffffff">';
 $s .= ('<input type="button" class=button value="' . $AppUI->_('new contact') 
 	   . '" onClick="javascript:window.location=\'./index.php?m=contacts&a=addedit&company_id=' 
-	   . $company_id.'&company_name=' . $obj->company_name . '\'">');
+	   . dPformSafe($company_id) . '&company_name=' . dPformSafe($obj->company_name) . '\'">');
 $s .= '</td></tr>';
 echo $s;
 	

@@ -99,6 +99,8 @@ class CMonthCalendar {
  * @param [type] $date
  */
 	 function setDate($date=null) {
+		global $AppUI, $locale_char_set;
+		
 		$this->this_month = new CDate($date);
 		
 		$d = $this->this_month->getDay();
@@ -262,7 +264,7 @@ class CMonthCalendar {
 * @return string Returns table a row with the day names
 */
 	function _drawDays() {
-		global $AppUI;
+		global $AppUI, $locale_char_set;
 		
 		setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
 		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
@@ -283,7 +285,7 @@ class CMonthCalendar {
  *
  */
 	 function _drawMain() {
-		GLOBAL $AppUI;
+		global $AppUI, $locale_char_set;
 		$today = new CDate();
 		$today = $today->format('%Y%m%d%w');
 		

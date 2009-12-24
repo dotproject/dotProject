@@ -1607,8 +1607,7 @@ class Date_Calc
     *
     * @returns array An array of week day names
     */
-    function getWeekDays()
-    {
+    function getWeekDays() { // dotProject-modified function
 	global $Date_Calc_weekdays;
     global $locale_char_set;
 	if (!(isset($Date_Calc_weekdays))) {

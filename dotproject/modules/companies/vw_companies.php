@@ -72,24 +72,24 @@ echo $AppUI->_('Archived Projects'); ?></a>
 </tr>
 <?php
 $s = '';
-$CR = "\n"; // Why is this needed as a variable?
 
 $none = true;
 foreach ($rows as $row) {
 	$none = false;
-	$s .= $CR . '<tr>';
-	$s .= $CR . '<td>&nbsp;</td>';
-	$s .= ($CR . '<td><a href="./index.php?m=companies&a=view&company_id=' . $row['company_id'] 
-	       . '" title="' . $row['company_description'].'">' . $row['company_name'] .'</a></td>');
-	$s .= $CR . '<td width="125" align="center" nowrap="nowrap">' . $row['countp'] . '</td>';
-	$s .= $CR . '<td width="125" align="center" nowrap="nowrap">' . @$row['inactive'] . '</td>';
-	$s .= ($CR . '<td width="125" align="center" nowrap="nowrap">' 
+	$s .= "\n" . '<tr>';
+	$s .= "\n" . '<td>&nbsp;</td>';
+	$s .= ("\n" . '<td><a href="./index.php?m=companies&a=view&company_id=' 
+	       . dPformSafe($row['company_id']) . '" title="' . dPformSafe($row['company_description']) 
+	       .'">' . htmlspecialchars($row['company_name']) .'</a></td>');
+	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' . $row['countp'] . '</td>');
+	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' . @$row['inactive'] . '</td>');
+	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' 
 	       . $AppUI->_($types[@$row['company_type']]) . '</td>');
-	$s .= $CR . '</tr>';
+	$s .= "\n" . '</tr>';
 }
 echo $s . "\n";
 if ($none) {
-	echo $CR . '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
+	echo "\n" . '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
 }
 ?>
 </table>

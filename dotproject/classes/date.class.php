@@ -38,6 +38,17 @@ define('SEC_DAY',	  86400);
 class CDate extends Date {
 
 /**
+* extend PEAR Date's format() meet to translation needs
+*/
+	function format($format) {
+		setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
+		$output = parent::format($format);
+		setlocale(LC_ALL, $AppUI->user_lang);
+		return $output;
+	}
+
+
+/**
 * Overloaded compare method
 *
 * The convertTZ calls are time intensive calls.	 When a compare call is

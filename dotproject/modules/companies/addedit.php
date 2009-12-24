@@ -8,10 +8,11 @@ $company_id = intval(dPgetParam($_GET, 'company_id', 0));
 // check permissions for this company
 // If the company exists we need edit permission,
 // If it is a new company we need add permission on the module.
-if ($company_id)
+if ($company_id) {
   $canEdit = getPermission($m, 'edit', $company_id);
-else
+} else {
   $canEdit = getPermission($m, 'add');
+}
 
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -21,7 +22,7 @@ if (!$canEdit) {
 $types = dPgetSysVal('CompanyType');
 
 // load the record data
-$q  = new DBQuery;
+$q = new DBQuery;
 $q->addTable('companies');
 $q->addQuery('companies.*');
 $q->addQuery('con.contact_first_name');
@@ -34,13 +35,13 @@ $q->clear();
 
 $obj = null;
 if (!db_loadObject($sql, $obj) && $company_id > 0) {
-	// $AppUI->setMsg('	$qid =& $q->exec(); Company'); // What is this for?
+	//$AppUI->setMsg('$qid =& $q->exec(); Company'); // What is this for?
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 
 // collect all the users for the company owner list
-$q  = new DBQuery;
+$q = new DBQuery;
 $q->addTable('users','u');
 $q->addTable('contacts','con');
 $q->addQuery('user_id');
@@ -81,7 +82,7 @@ function testURL(x) {
 
 <form name="changeclient" action="?m=companies" method="post">
 	<input type="hidden" name="dosql" value="do_company_aed" />
-	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
+	<input type="hidden" name="company_id" value="<?php echo dPformSafe($company_id); ?>" />
 <table cellspacing="1" cellpadding="1" border="0" width='100%' class="std">
 
 
@@ -190,7 +191,7 @@ echo arraySelect($types, 'company_type', 'size="1" class="text"', @$obj->company
 		<td align="right" valign=top><?php echo $AppUI->_('Description'); ?>:</td>
 		<td align="left">
 			<textarea cols="70" rows="10" class="textarea" name="company_description"><?php 
-echo @$obj->company_description; ?></textarea>
+echo htmlspecialchars(@$obj->company_description); ?></textarea>
 		</td>
 	</tr>
 </table>

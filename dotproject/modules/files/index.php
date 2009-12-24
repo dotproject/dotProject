@@ -12,7 +12,7 @@ $tab = $AppUI->getState('FileIdxTab', 0);
 $active = intval(!$AppUI->getState('FileIdxTab'));
 
 // to pass to "new file" button
-$folder = dPgetParam($_GET, 'folder', 0);
+$folder = intval(dPgetParam($_GET, 'folder', 0));
 
 
 // "Project" filters info

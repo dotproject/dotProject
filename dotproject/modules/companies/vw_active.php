@@ -56,14 +56,15 @@ if (!($rows = $q->loadList())) {
 		
 		$s .= '</td>';
 		$s .= '<td width="100%">';
-		$s .= ('<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '">' 
-		       . $row['project_name'] . '</a></td>');
-		$s .= ('<td nowrap="nowrap">' . $row['contact_first_name'] . '&nbsp;' 
-		       . $row['contact_last_name'] . '</td>');
+		$s .= ('<a href="?m=projects&a=view&project_id=' . dPformSafe($row['project_id']) . '">' 
+		       . htmlspecialchars($row['project_name']) . '</a></td>');
+		$s .= ('<td nowrap="nowrap">' . htmlspecialchars($row['contact_first_name'] . '&nbsp;' 
+		       . htmlspecialchars($row['contact_last_name'] . '</td>');
 		$s .= '<td nowrap="nowrap">' . $start_date->format($df) . '</td>';
 		$s .= '<td nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td>';
-		$s .= ('<td nowrap="nowrap" align="right">' . $dPconfig['currency_symbol'] 
-		       . $row['project_target_budget'] . '</td>');
+		$s .= ('<td nowrap="nowrap" align="right">' 
+		       . htmlspecialchars($dPconfig['currency_symbol'] . $row['project_target_budget']) 
+		       . '</td>');
 		$s .= '</tr>';
 	}
 }

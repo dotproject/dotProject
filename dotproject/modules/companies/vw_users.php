@@ -30,8 +30,9 @@ $s = '';
 foreach ($rows as $row) {
 	$s .= '<tr><td>';
 	$s .= ('<a href="./index.php?m=admin&a=viewuser&user_id=' . $row['user_id'] . '">' 
-	       . $row['user_username'] . '</a>');
-	$s .= '<td>' . $row['contact_last_name'] . ', ' . $row['contact_first_name'] . '</td>'; 
+	       . htmlspecialchars($row['user_username']) . '</a>');
+	$s .= ('<td>' . htmlspecialchars($row['contact_last_name'] . ', ' . $row['contact_first_name']) 
+	       . '</td>'); 
 	$s .= '</tr>';
 }
 echo $s;
