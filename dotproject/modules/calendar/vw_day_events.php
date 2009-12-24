@@ -115,7 +115,7 @@ foreach($disp_columns as $col_count) {
 	$disp_max_cols = (($col_count > $disp_max_cols) ? $col_count : $disp_max_cols);
 }
 
-$html  = '<Form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickFilter">';
+$html  = '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickFilter">';
 $html .= ($AppUI->_('Event Filter') . ":" 
           . arraySelect($event_filter_list, 'event_filter', 
                         'onChange="document.pickFilter.submit()" class="text"', 
@@ -141,6 +141,10 @@ if ($other_users) {
 	
 }
 $html .= '</form>';
+
+$cal = new CMonthCalendar();
+$html .= $cal->_drawBirthdays($this_day->format('%Y%m%d'));
+
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
 
 $this_day->setTime($start, 0, 0);

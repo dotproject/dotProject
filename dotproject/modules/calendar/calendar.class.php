@@ -340,10 +340,14 @@ class CMonthCalendar {
 						$html .= ('<a href="javascript:' 
 								  .  $this->dayFunc . "('" . $day . "','" . $this_day->format($df) 
 						          . "')" . '" class="' . $class . '">');
-				    }
+					}
 					$html .=  $d . (($this->dayFunc) ? '</a>' : '');
-					
-				    if ($this->showEvents) {
+
+					if ($this->showWeek) {
+						$html .= $this->_drawBirthdays($day);
+		      }
+      
+					if ($this->showEvents) {
 						$html .= $this->_drawEvents(mb_substr($day, 0, 8));
 					}
 				}
@@ -402,6 +406,33 @@ class CMonthCalendar {
 			$s .= "</div>\n";
 		}
 		return $s;
+	}
+	
+	public function _drawBirthdays($day) {
+		$html = '';
+		
+		$m = intval(mb_substr($day, 4, 2));
+		$d = intval(mb_substr($day, 6, 2));
+		
+		$q = new DBQuery;
+		$q->addTable('contacts', 'con');
+		$q->addQuery('contact_birthday, contact_last_name, contact_first_name, contact_id');
+		if (strlen($d) == 1) {
+			$d = '0'.$d;
+		}
+		$q->addWhere("contact_birthday LIKE '%$m-$d'");
+		$rows = $q->loadList();
+		
+		if ($rows) {
+			$html .= '<div class="event">';
+			foreach ($rows as $row) {
+				$html .= dPshowImage( dPfindImage( 'birthday.png', 'calendar' ), 16, 16, '' );
+				$html .= ' <a href="index.php?m=contacts&a=view&contact_id='.$row['contact_id'].'">' . $row["contact_first_name"].' '.$row["contact_last_name"] . '</a>';
+			}
+			$html .= '</div>';
+		}
+		
+		return $html;
 	}
 }
 

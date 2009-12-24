@@ -146,7 +146,7 @@ for ($i=0; $i < 7; $i++) {
 	$s .= (($dayStamp == $today) ? '</span>' : '');
 	$s .= "\t\t\t" . '</a></td></tr>' ."\n";
 	
-	$s .= "\t\t\t" . '<tr><td>' . $cal_week->_drawEvents($dayStamp) . '</td></tr>' ."\n";
+	$s .= "\t\t\t" . '<tr><td>' . $cal_week->_drawBirthdays($dayStamp) . $cal_week->_drawEvents($dayStamp) . '</td></tr>' ."\n";
 	
 	$s .= "\t\t</table>\n";
 	
