@@ -113,8 +113,8 @@ function displayFolders($folder_id=0, $level=0) {
 		                     . '&folder=' . $folder_id . '"') : '') . ' name="ff' . $folder_id 
 		          . '">') : '') . "\n");
 		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 
-		                  'folder icon', 'show only this folder') . $row['file_folder_name']
-		      . "\n");
+		                  'folder icon', $AppUI->_('show only this folder')) 
+		      . $row['file_folder_name'] . "\n");
 		echo ((($m=='files') ? '</a>' : ''). "\n");
 		
 		if ($file_count > 0) {
@@ -153,20 +153,23 @@ function displayFolders($folder_id=0, $level=0) {
 					echo ('<a href="./index.php?m=files&a=addedit_folder&file_folder_parent=' 
 					      . $folder_id . '&folder=0">' 
 					      . dPshowImage(DP_BASE_URL . '/modules/files/images/edit_add.png', '16',
-					                    '16', 'new folder', 'add a new subfolder') . '</a>');
+					                    '16', 'new folder', $AppUI->_('add a new subfolder')) 
+					      . '</a>');
 				}
 				if ($canDelete_this) {
 					//remove folder
 					echo ('<a href="#" onclick="delCheck('  . "'" . $folder_id . "'" 
 					      . ')">' .dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', 
-					                           '16', '16', 'delete icon', 'delete this folder') 
+					                           '16', '16', 'delete icon', 
+					                           $AppUI->_('delete this folder')) 
 					      . '</a>');
 				}
 				//add file to folder
 				echo ('<a href="./index.php?m=files&a=addedit&folder=' . $folder_id 
 				      . '&project_id=' . $project_id . '&file_id=0">' 
 				      . dPshowImage(DP_BASE_URL . '/modules/files/images/folder_new.png', '16', 
-				                    '16', 'new file', 'add new file to this folder') . '</a>');
+				                    '16', 'new file', $AppUI->_('add new file to this folder')) 
+				      . '</a>');
 				echo ("</td>\n");
 				echo ("</tr></table>\n");
 			}
@@ -710,10 +713,12 @@ function displayFiles($folder_id) {
 						if ($canDelete) {
 ?>
 			  <a href="#" 
-			   onclick="if (confirm('Are you sure you want to delete this file?')) {document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
+			   onclick="if (confirm('<?php 
+							echo $AppUI->_('Are you sure you want to delete this file?'); 
+?>')) {document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
 <?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', 
-							                  '16', '16', 'delete file', 'delete file'));
+							                  '16', '16', 'delete file', $AppUI->_('delete file')));
 ?>
 			  </a>
 <?php 
@@ -892,7 +897,7 @@ if ($folder) {
 	echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder=0">' 
 	      . "\n");
 	echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/home.png', '22', '22', 
-	                             'folder icon', 'back to root folder') . "\n");
+	                             'folder icon', $AppUI->_('back to root folder')) . "\n");
 	echo ("\t\t\t" . '</a>' . "\n");
 ?>
 <?php 
@@ -903,16 +908,16 @@ if ($folder) {
 		echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder=' 
 		      . $cfObj->file_folder_parent . '">' . "\n");
 		echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/back.png', '22', '22', 
-		                             'folder icon', 'back to parent folder') . "\n");
+		                             'folder icon', $AppUI->_('back to parent folder')) . "\n");
 		echo ("\t\t\t" . '</a>' . "\n");
 	}
 	
 	if ($canEdit_this_folder) {
 		echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=addedit_folder&tab=' . $tab 
-		      . '&folder=' . $cfObj->file_folder_parent . '" title="edit the ' 
-		      . $cfObj->file_folder_name . ' folder">' . "\n");
+		      . '&folder=' . $cfObj->file_folder_id . '" title="' . $AppUI->_('edit folder') 
+		      . ': '. $cfObj->file_folder_name . '">' . "\n");
 		echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', 
-		                             '22', '22', 'folder icon', 'edit folder') . "\n");
+		                             '22', '22', 'folder icon', $AppUI->_('edit folder')) . "\n");
 		echo ("\t\t\t" . '</a>' . "\n");
 	}
 ?>
