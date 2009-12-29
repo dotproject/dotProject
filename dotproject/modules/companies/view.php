@@ -111,7 +111,7 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td class="hilite" width="100%"><?php 
 echo (htmlspecialchars($obj->contact_first_name) . '&nbsp;' 
-      . (htmlspecialchars($obj->contact_last_name)); ?></td>
+      . htmlspecialchars($obj->contact_last_name)); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
