@@ -95,7 +95,7 @@ self.close();
 function remove_invalid($arr) {
 	$result = array();
 	foreach ($arr as $val) {
-		if (! empty($val) && trim($val) !== '' && is_numeric($val)) {
+		if (!(empty($val)) && trim($val) !== '' && is_numeric($val)) {
 			$result[] = $val;
 		}
 	}	
@@ -151,20 +151,32 @@ if (mb_strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id) {
 
 // This should now work on company ID, but we need to be able to handle both
 $q->addTable('contacts', 'a');
-$q->leftJoin('companies', 'b', 'company_id = contact_company');
-$q->leftJoin('departments', 'c', 'dept_id = contact_department');
-$q->addQuery('contact_id, contact_first_name, contact_last_name,' 
-             . ' contact_company, contact_department');
-$q->addQuery('company_name');
-$q->addQuery('dept_name');
+$q->leftJoin('companies', 'b', 'b.company_id = a.contact_company');
+$q->leftJoin('departments', 'c', 'c.dept_id = a.contact_department');
+$q->leftJoin('users', 'u', 'u.user_contact=a.contact_id');
+$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name,' 
+             . ' a.contact_company, a.contact_department');
+$q->addQuery('b.company_name');
+$q->addQuery('c.dept_name');
+$q->addQuery('u.user_id');
 if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where);
 }
-$q->addWhere("(contact_owner = '".$AppUI->user_id."' OR contact_private = '0')");
+$q->addWhere('(contact_owner = ' . $AppUI->user_id . ' OR contact_private = 0)');
 //May need to review this order.
-$q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); 
+$q->addOrder('company_name, contact_company, dept_name, contact_department' 
+             . ', contact_last_name');
 
 $contacts = $q->loadHashList('contact_id');
+
+global $task_id, $project_id;
+$perms =& $AppUI->acl();
+foreach ($contacts as $key => $row) {
+	if ($row['user_id'] && !($perms->checkLogin($row['user_id']))) {
+		$contacts[$key]['contact_extra'] .=  ' (' . $AppUI->_('Inactive') . ')';
+	}
+}
+
 ?>
 
 <form action="index.php?m=public&a=contact_selector&dialog=1<?php 
@@ -176,9 +188,8 @@ $pointer_department = '';
 $pointer_company    = '';
 $companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
 echo arraySelect($companies_names, 'company_id', 
-				 'onchange="document.frmContactSelect.contacts_submited.value=0; '
-				 .'setContactIDs(); document.frmContactSelect.submit();"', 
-				 0);
+                 ('onchange="document.frmContactSelect.contacts_submited.value=0; ' 
+                  . 'setContactIDs(); document.frmContactSelect.submit();"'), 0);
 ?>
 
 <br />
@@ -209,7 +220,9 @@ foreach ($contacts as $contact_id => $contact_data) {
 	echo ('<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' 
 	      . $contact_id . '" ' . $checked . ' />');
 	echo ('<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' 
-	      . $contact_data['contact_last_name'] . '</label>');
+	      . $contact_data['contact_last_name'] 
+	      . (($contact_data['contact_extra']) ? ($contact_data['contact_extra']) : '') 
+	      . '</label>');
 	echo ('<br />');
 	}
 ?>

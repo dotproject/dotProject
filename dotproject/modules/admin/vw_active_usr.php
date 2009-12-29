@@ -39,5 +39,5 @@ $q->addOrder($orderby);
 $users = $q->loadList();
 $canLogin = true;
 
-require DP_BASE_DIR.'/modules/admin/vw_usr.php';
+require DP_BASE_DIR . '/modules/admin/vw_usr.php';
 ?>

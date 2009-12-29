@@ -3,10 +3,10 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$project_id = intval(dPgetParam($_GET, "project_id", 0));
-$company_id = intval(dPgetParam($_GET, "company_id", 0));
-$company_internal_id = intval(dPgetParam($_GET, "company_internal_id", 0));
-$contact_id = intval(dPgetParam($_GET, "contact_id", 0));
+$project_id = intval(dPgetParam($_GET, 'project_id', 0));
+$company_id = intval(dPgetParam($_GET, 'company_id', 0));
+$company_internal_id = intval(dPgetParam($_GET, 'company_internal_id', 0));
+$contact_id = intval(dPgetParam($_GET, 'contact_id', 0));
 
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $project_id);
@@ -28,7 +28,7 @@ $companies_internal = $row->listCompaniesByType(array('6'));
 $companies_internal = arrayMerge(array('0'=>''), $companies_internal);
 
 // pull users
-$q  = new DBQuery;
+$q = new DBQuery;
 $q->addTable('users','u');
 $q->addTable('contacts','con');
 $q->addQuery('user_id');
@@ -213,7 +213,8 @@ function submitIt() {
 var selected_contacts_id = "<?php echo implode(',', $selected_contacts); ?>";
 
 function popContacts() {
-	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 
+	            'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setContacts(contact_id_string) {
