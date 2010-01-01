@@ -519,7 +519,7 @@ function dPgetMicroDiff() {
 define ('DP_FORM_DESLASH', 1);
 define ('DP_FORM_URI', 2);
 define ('DP_FORM_JSVARS', 4);
-function dPformSafe($txt,$flag_bits = 1) {
+function dPformSafe($txt, $flag_bits = 0) {
 	global $AppUI, $locale_char_set;
 	
 	if (!$locale_char_set) {
@@ -538,7 +538,8 @@ function dPformSafe($txt,$flag_bits = 1) {
 			$value = (($isURI) ? $AppUI->___($value, UI_OUTPUT_URI) : $value);
 			
 			if (!($isURI)) {
-				$value = (($isJSVars) ? $AppUI->___($value, UI_OUTPUT_JS) : $AppUI->___($value));
+				$value = (($isJSVars) ? $AppUI->___($value, UI_OUTPUT_JS) : $value);
+				$value = ((!($deslash)) ? htmlspecialchars($value) : $AppUI->___($value));
 			}
 			
 			if (is_object($txt)) {
@@ -554,6 +555,7 @@ function dPformSafe($txt,$flag_bits = 1) {
 		
 		if (!($isURI)) {
 			$txt = (($isJSVars) ? $AppUI->___($txt, UI_OUTPUT_JS) : $AppUI->___($txt));
+			$txt = ((!($deslash)) ? htmlspecialchars($txt) : $AppUI->___($txt));
 		}
 		
 		/*

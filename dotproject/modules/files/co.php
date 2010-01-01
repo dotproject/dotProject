@@ -6,9 +6,9 @@ if (!defined('DP_BASE_DIR')) {
 $file_id = intval(dPgetParam($_GET, 'file_id', 0));
 
 // check permissions for this record
-$canEdit = getPermission($m, "edit", $file_id);
+$canEdit = getPermission($m, 'edit', $file_id);
 if (!$canEdit) {
-	$AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect('m=public&a=access_denied');
 }
 $canAdmin = getPermission('system', 'edit');
 
@@ -103,12 +103,12 @@ function popFile(params) {
 				<textarea name="file_co_reason" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_co_reason;?></textarea>
 			</td>
 		</tr>
-
+		
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left"><input type="checkbox" name="notify" id="notify" checked="checked" /><label for="notify"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label></td>		
 		</tr>
-
+		
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left"><input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" /><label for="notify_contacts"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></label></td>		

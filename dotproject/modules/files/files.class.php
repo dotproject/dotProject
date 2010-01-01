@@ -314,61 +314,52 @@ class CFile extends CDpObject {
 		}
 		
 		//if no project specified than we will not do anything
-		if ($this->file_project != 0) {
+		if (intval($this->file_project) != 0) {
 			$project = new CProject();
 			$project->load($this->file_project);
 			$mail = new Mail;		
 			
-			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject($project->project_name . '::' . $this->file_name, 
-				               $locale_char_set);
-			} else { //notify all assigned users			
+			if (intval($this->file_task) != 0) {
+				//notify all assigned users
 				$task = new CTask();
 				$task->load($this->file_task);
-				$mail->Subject($project->project_name . '::' . $task->task_name 
-							   . '::' . $this->file_name, $locale_char_set);
+				$mail->Subject($project->project_name . '::' . $task->task_name . '::' 
+				               . $this->file_name, $locale_char_set);
+			} else {
+				//notify project owner
+				$mail->Subject($project->project_name . '::' . $this->file_name, $locale_char_set);
 			}
 			
 			$body = $AppUI->_('Project').': '.$project->project_name;
-			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $project->project_id);
+			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
+			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
 			
 			$q = new DBQuery;
 			$users = array();
-			if (intval($task->task_id) != 0) {
-				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $task->task_name;
-				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $task->task_id);
-				$body .= ("\n" . $AppUI->_('Description') . ':' . "\n" 
-				          . $task->task_description);
+			if (intval($this->file_task) != 0) {
+				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
+				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
+				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $this->file_task);
+				$body .= ("\n" . $AppUI->_('Description') . ': ' . "\n" . $task->task_description);
 				
 				//preparing users array
 				$q->addTable('tasks', 't');
-				$q->addQuery('t.task_id, cc.contact_email as creator_email' 
-				             . ', cc.contact_first_name as creator_first_name' 
-			             	. ', cc.contact_last_name as creator_last_name' 
-				             . ', oc.contact_email as owner_email' 
-				             . ', oc.contact_first_name as owner_first_name' 
-				             . ', oc.contact_last_name as owner_last_name' 
-				             . ', a.user_id as assignee_id, ac.contact_email as assignee_email' 
-				             . ', ac.contact_first_name as assignee_first_name' 
-				             . ', ac.contact_last_name as assignee_last_name');
 				$q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-				$q->addJoin('users', 'o', 'o.user_id = t.task_owner');
-				$q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
-				$q->addJoin('users', 'c', 'c.user_id = t.task_creator');
-				$q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
 				$q->addJoin('users', 'a', 'a.user_id = u.user_id');
 				$q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-				$q->addWhere('t.task_id = ' . $task->task_id);
+				$q->addQuery('a.user_id as assignee_id, ac.contact_email as assignee_email' 
+				             . ', ac.contact_first_name as assignee_first_name' 
+				             . ', ac.contact_last_name as assignee_last_name');
+				$q->addWhere('t.task_id = ' . $this->file_task);
 				$users = $q->loadList();
 			} else {
 				//find project owner and notify him about new or modified file
 				$q->addTable('users', 'u');
-				$q->addTable('projects', 'p');
-				$q->addQuery('u.*');
-				$q->addWhere('p.project_owner = u.user_id');
-				$q->addWhere('p.project_id = '.$this->file_project);
+				$q->addJoin('contacts', 'uc', 'uc.contact_id = u.user_contact');
+				$q->addQuery('u.user_id as owner_id, uc.contact_first_name as owner_first_name' 
+				             . ', uc.contact_last_name as owner_last_name' 
+				             . ', uc.contact_email as owner_email');
+				$q->addWhere('u.user_id = ' . $project->project_owner);
 				$users = $q->loadList();
 			}
 			$q->clear();
@@ -376,7 +367,7 @@ class CFile extends CDpObject {
 			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
 			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 			if ($this->_message != 'deleted') {
-				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 				          . '/fileviewer.php?file_id=' . $this->file_id);
 				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;	
 			}
@@ -387,7 +378,7 @@ class CFile extends CDpObject {
 			$mail->From ('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' 
 			             . $AppUI->user_email . '>');
 			
-			if (intval($task->task_id) != 0) {
+			if (intval($this->file_task) != 0) {
 				foreach ($users as $row) {
 					if ($row['assignee_id'] != $AppUI->user_id 
 					    && $mail->ValidEmail($row['assignee_email'])) {
@@ -398,10 +389,10 @@ class CFile extends CDpObject {
 				}
 			} else { 
 				foreach ($users as $row) {
-					if ($row['user_id'] != $AppUI->user_id) {
-						if ($mail->ValidEmail($row['user_email'])) {
+					if ($row['owner_id'] != $AppUI->user_id) {
+						if ($mail->ValidEmail($row['owner_email'])) {
 						    //sending mail to project owner (there should be only one) 
-							$mail->To($row['user_email'], true);
+							$mail->To($row['owner_email'], true);
 							$mail->Send();
 						}
 					}
@@ -409,7 +400,7 @@ class CFile extends CDpObject {
 			}
 		}
 	}
-
+	
 	function notifyContacts() {
 		GLOBAL $AppUI, $dPconfig, $locale_char_set;
 		//if no project specified than we will not do anything
@@ -418,60 +409,55 @@ class CFile extends CDpObject {
 			$project->load($this->file_project);
 			$mail = new Mail;
 			
-			if ($this->file_task == 0) { //notify all developers
-				$mail->Subject($AppUI->_('Project') . ': ' . $project->project_name 
-				               . '::' . $this->file_name, $locale_char_set);
-			} else { //notify all assigned users
+			if (intval($this->file_task) != 0) {
+				//notify task contacts
 				$task = new CTask();
 				$task->load($this->file_task);
-				$mail->Subject($AppUI->_('Project') . ': ' . $project->project_name . '::' 
-				               . $task->task_name . '::' . $this->file_name, 
-				               $locale_char_set);
+				$mail->Subject($project->project_name . '::' . $task->task_name . '::' 
+				               . $this->file_name, $locale_char_set);
+			} else {
+				//notify project contacts
+				$mail->Subject($project->project_name . '::' . $this->file_name, $locale_char_set);
 			}
 			
 			$body = $AppUI->_('Project') . ': ' . $project->project_name;
-			$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $project->project_id);
+			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
+			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
 			
 			$q = new DBQuery;
 			$users = array();
-			if (intval($task->task_id) != 0) {
-				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $task->task_name;
-				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $task->task_id);
+			if (intval($this->file_task) != 0) {
+				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
+				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
+				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $this->file_task);
 				$body .= "\n" . $AppUI->_('Description') . ":\n" . $task->task_description;
 				
 				$q->addTable('project_contacts', 'pc');
+				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addQuery('c.contact_email as contact_email' 
 				             . ', c.contact_first_name as contact_first_name' 
 				             . ', c.contact_last_name as contact_last_name');
-				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addWhere('pc.project_id = '.$project->project_id);
-				$sql = '(' . $q->prepare() . ')';
+				$q->addWhere('pc.project_id = ' . $this->file_project);
+				$pc_users = $q->loadList();
 				$q->clear();   
 				
-				$sql .= ' UNION ';
-				
 				$q->addTable('task_contacts', 'tc');
+				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
 				$q->addQuery('c.contact_email as contact_email' 
 				             . ', c.contact_first_name as contact_first_name' 
 				             . ', c.contact_last_name as contact_last_name');
-				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addWhere('tc.task_id = ' . $task->task_id);
-				$sql .= '(' . $q->prepare() . ')';
+				$q->addWhere('tc.task_id = ' . $this->file_task);
+				$tc_users = $q->loadList();
 				$q->clear();
 				
-  				$users = db_loadList($sql);
-			} else {			
-				
+  				$users = array_merge($pc_users, $tc_users);
+			} else {
 				$q->addTable('project_contacts', 'pc');
-				$q->addQuery('pc.project_id, pc.contact_id');
+				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addQuery('c.contact_email as contact_email' 
 				             . ', c.contact_first_name as contact_first_name' 
 				             . ', c.contact_last_name as contact_last_name');
-				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
 				$q->addWhere('pc.project_id = ' . $this->file_project);
-				
 				$users = $q->loadList();
 				$q->clear();
 			}
@@ -479,7 +465,7 @@ class CFile extends CDpObject {
 			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
 			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 			if ($this->_message != 'deleted') {
-				$body .= ("\n" . $AppUI->_('URL') . ':     ' . DP_BASE_URL 
+				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 				          . '/fileviewer.php?file_id=' . $this->file_id);
 				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;	
 			}

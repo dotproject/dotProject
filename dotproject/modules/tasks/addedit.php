@@ -73,7 +73,7 @@ function getSpaces($amount) {
 }
 
 function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
+	global $AppUI, $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
 
@@ -83,7 +83,7 @@ function constructTaskTree($task_data, $depth = 0) {
 	                           : $task_data['task_name']);
 	
 	$task_parent_options .= ('<option value="' . $task_data['task_id'] . '"' . $selected . '>' 
-	                         . getSpaces($depth * 3) . dPFormSafe($task_data['task_name']) 
+	                         . getSpaces($depth * 3) . $AppUI->___($task_data['task_name']) 
 							 . '</option>');
 	
 	if (isset($parents[$task_data['task_id']])) {
@@ -266,7 +266,7 @@ echo @$project->project_name; ?></strong>
 	<td>
 		<?php echo $AppUI->_('Task Name'); ?> *
 		<br /><input type="text" class="text" name="task_name" value="<?php 
-echo dPformSafe($obj->task_name); ?>" size="40" maxlength="255" />
+echo $AppUI->___($obj->task_name); ?>" size="40" maxlength="255" />
 	</td>
 	<td>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">

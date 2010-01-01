@@ -7,15 +7,12 @@ if (!defined('DP_BASE_DIR')) {
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
 $coReason = dPgetParam($_POST, 'file_co_reason', '');
 
-$obj = new CFile();
-if ($file_id) { 
-	$obj->_message = 'updated';
-	$oldObj = new CFile();
-	$oldObj->load($file_id);
 
-} else {
-	$obj->_message = 'added';
-}
+$not = dPgetParam($_POST, 'notify', '0');
+$notcont = dPgetParam($_POST, 'notify_contacts', '0');
+
+$obj = new CFile();
+$obj->_message = (($file_id) ? 'updated' : 'added');
 $obj->file_category = intval(dPgetParam($_POST, 'file_category', 0));
 
 if (!$obj->bind($_POST)) {
@@ -29,6 +26,15 @@ if (!ini_get('safe_mode')) {
 ignore_user_abort(1);
 
 $obj->checkout($AppUI->user_id, $file_id, $coReason);
+
+//Notification
+$obj->load($file_id);
+if ($not) {
+	$obj->notify();
+}
+if ($notcont) {
+	$obj->notifyContacts();
+}
 
 // We now have to display the required page
 // Destroy the post stuff, and allow the page to display index.php again.
