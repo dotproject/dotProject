@@ -135,12 +135,12 @@ echo htmlspecialchars($obj->company_email); ?></td>
 			<td class="hilite">
 <?php if (!empty($obj->company_country)) { ?>
 				<span style="float: right"><a href="http://maps.google.com/maps?q=<?php 
-echo dPformSafe(@$obj->company_address1, false, true); ?>+<?php 
-echo dPformSafe(@$obj->company_address2, false, true); ?>+<?php 
-echo dPformSafe(@$obj->company_city, false, true); ?>+<?php 
-echo dPformSafe(@$obj->company_state, false, true); ?>+<?php 
-echo dPformSafe(@$obj->company_zip, false, true); ?>+<?php 
-echo dPformSafe(@$obj->company_country, false, true); ?>" target="_blank">
+echo dPformSafe(@$obj->company_address1, DP_FORM_URI); ?>+<?php 
+echo dPformSafe(@$obj->company_address2, DP_FORM_URI); ?>+<?php 
+echo dPformSafe(@$obj->company_city, DP_FORM_URI); ?>+<?php 
+echo dPformSafe(@$obj->company_state, DP_FORM_URI); ?>+<?php 
+echo dPformSafe(@$obj->company_zip, DP_FORM_URI); ?>+<?php 
+echo dPformSafe(@$obj->company_country, DP_FORM_URI); ?>" target="_blank">
 				<?php 
 echo dPshowImage('./images/googlemaps.gif', 55, 22, 'Find It on Google');
 ?>
@@ -159,7 +159,7 @@ echo (htmlspecialchars(@$obj->company_address1)
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
 			<td class="hilite">
 				<a href="http://<?php 
-echo dPformSafe(@$obj->company_primary_url, false, true); ?>" target="Company"><?php 
+echo dPformSafe(@$obj->company_primary_url, DP_FORM_URI); ?>" target="Company"><?php 
 echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 			</td>
 		</tr>

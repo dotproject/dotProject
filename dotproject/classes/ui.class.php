@@ -18,15 +18,16 @@ define('UI_MSG_ERROR', 4);
 // global variable holding the translation array
 $GLOBALS['translate'] = array();
 
-define('UI_CASE_MASK', 0x0F);
-define('UI_CASE_UPPER', 1);
-define('UI_CASE_LOWER', 2);
-define('UI_CASE_UPPERFIRST', 3);
+define ('UI_CASE_MASK', 0x0F);
+define ('UI_CASE_UPPER', 1);
+define ('UI_CASE_LOWER', 2);
+define ('UI_CASE_UPPERFIRST', 3);
 
 define ('UI_OUTPUT_MASK', 0xF0);
 define ('UI_OUTPUT_HTML', 0);
 define ('UI_OUTPUT_JS', 0x10);
 define ('UI_OUTPUT_RAW', 0x20);
+define ('UI_OUTPUT_URI', 0x30);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
@@ -367,20 +368,22 @@ class CAppUI {
 		return $LANGUAGES;
 	}
 	
-/**
-* Translate string to the local language [same form as the gettext abbreviation]
-*
-* This is the order of precedence:
-* <ul>
-* <li>If the key exists in the lang array, return the value of the key
-* <li>If no key exists and the base lang is the same as the local lang, just return the string
-* <li>If this is not the base lang, then return string with a red star appended to show
-* that a translation is required.
-* </ul>
-* @param string The string to translate
-* @param int Option flags, can be case handling or'd with output styles
-* @return string
-*/
+	/**
+	 * Translate string to the local language [same form as the gettext abbreviation]
+	 *
+	 * This is the order of precedence:
+	 * <ul>
+	 * <li>If the key exists in the lang array, return the value of the key
+	 * <li>If no key exists and the base lang is the same as the local lang, just return the string
+	 * <li>If this is not the base lang, then return string with a red star appended to show
+	 * that a translation is required.
+	 * </ul>
+	 * @param string The string to translate
+	 * @param int Option flags, can be case handling or'd with output styles
+	 * @return string
+	 */
+	
+	//Translation function to handle arrays or single string variables
 	function _($str, $flags= 0) {
 		if (is_array($str)) {
 			$translated = array();
@@ -393,6 +396,7 @@ class CAppUI {
 		}
 	}
 	
+	//Main translation function
 	function __($str, $flags = 0) {
 		$str = trim($str);
 		if (empty($str)) {
@@ -406,6 +410,13 @@ class CAppUI {
 		                                           && in_array($str, @$GLOBALS['translate']))) {
 			$str .= dPgetConfig('locale_alert');
 		}
+		
+		return $this->___($str, $flags);
+	}
+	
+	//Output formatting function
+	function ___($str, $flags = 0) {
+		
 		switch ($flags & UI_CASE_MASK) {
 			case UI_CASE_UPPER:
 				$str = mb_strtoupper($str);
@@ -436,11 +447,14 @@ class CAppUI {
 		}
 		
 		switch ($flags & UI_OUTPUT_MASK) {
+			case UI_OUTPUT_URI:
+				$str = str_replace(' ', '%20', $str);
 			case UI_OUTPUT_HTML:
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = str_replace('&#039;', '&apos;', $str);
 				break;
 			case UI_OUTPUT_JS:
-				$str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
+				$str = addslashes(stripslashes($str));
 				break;
 			case UI_OUTPUT_RAW: 
 				$str = stripslashes($str);
@@ -448,6 +462,7 @@ class CAppUI {
 		}
 		return $str;
 	}
+	
 /**
 * Set the display of warning for untranslated strings
 * @param string
@@ -885,8 +900,8 @@ class CAppUI {
 		}
 		asort($js_files);
 		while (list(,$js_file_name) = each($js_files)) {
-			echo ('<script type="text/javascript" src="' . $base . 'js/' . $js_file_name 
-			      . '"></script>'."\n");
+			echo ('<script type="text/javascript" src="' . $base . 'js/' 
+				  . $this->___($js_file_name) . '"></script>'."\n");
 		}
 		
 		// additionally load overlib
@@ -905,45 +920,52 @@ class CAppUI {
 		if (mb_substr($base, -1) != '/') {
 			$base .= '/';
 		}
+		$module = $this->___($module);
+		
 		if ($load_all || !($file)) {
-			if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js'))
+			if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js')) {
 				echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
 				      . $module . '.module.js"></script>' . "\n");
+			}
 		}
-		if (isset($file) && file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
-			echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
-			      . $file . '.js"></script>' . "\n");
+		if (isset($file)) {
+			$file = $this->___($file);
+			if (file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
+				echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
+				      . $file . '.js"></script>' . "\n");
+			}
 		}
 	}
 }
+
 
 /**
 * Tabbed box abstract class
 */
 class CTabBox_core {
-/** @var array */
+	/** @var array */
 	var $tabs = null;
-/** @var int The active tab */
+	/** @var int The active tab */
 	var $active = null;
-/** @var string The base URL query string to prefix tab links */
+	/** @var string The base URL query string to prefix tab links */
 	var $baseHRef = null;
-/** @var string The base path to prefix the include file */
+	/** @var string The base path to prefix the include file */
 	var $baseInc;
-/** @var string A javascript function that accepts two arguments,
-the active tab, and the selected tab **/
+	/** @var string A javascript function that accepts two arguments,
+	 the active tab, and the selected tab **/
 	var $javascript = null;
 
-/**
-* Constructor
-* @param string The base URL query string to prefix tab links
-* @param string The base path to prefix the include file
-* @param int The active tab
-* @param string Optional javascript method to be used to execute tabs.
-*	Must support 2 arguments, currently active tab, new tab to activate.
-*/
+	/**
+	 * Constructor
+	 * @param string The base URL query string to prefix tab links
+	 * @param string The base path to prefix the include file
+	 * @param int The active tab
+	 * @param string Optional javascript method to be used to execute tabs.
+	 *	Must support 2 arguments, currently active tab, new tab to activate.
+	 */
 	function CTabBox_core($baseHRef='', $baseInc='', $active=0, $javascript = null) {
 		$baseHRef = str_replace('&amp;', '&', $baseHRef);
-		$baseHRef = str_replace('&', '&amp;', $baseHRef);
+		$baseHRef = htmlspecialchars($baseHRef);
 		
 		$this->tabs = array();
 		$this->active = $active;
@@ -951,18 +973,20 @@ the active tab, and the selected tab **/
 		$this->javascript = $javascript;
 		$this->baseInc = $baseInc;
 	}
-/**
-* Gets the name of a tab
-* @return string
-*/
+	
+	/**
+	 * Gets the name of a tab
+	 * @return string
+	 */
 	function getTabName($idx) {
 		return $this->tabs[$idx][1];
 	}
-/**
-* Adds a tab to the object
-* @param string File to include
-* @param The display title/name of the tab
-*/
+	
+	/**
+	 * Adds a tab to the object
+	 * @param string File to include
+	 * @param The display title/name of the tab
+	 */
 	function add($file, $title, $translated = false, $key= NULL) {
 		$t = array($file, $title, $translated);
 		if (isset($key)) {
@@ -977,13 +1001,11 @@ the active tab, and the selected tab **/
 		return (($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) ? false : true);
 	}
 	
-/**
-* Displays the tabbed box
-*
-* This function may be overridden
-*
-* @param string Can't remember whether this was useful
-*/
+	/**
+	 * Displays the tabbed box
+	 * This function may be overridden
+	 * @param string Can't remember whether this was useful
+	 */
 	function show($extra='', $js_tabs = false) {
 		GLOBAL $AppUI, $currentTabId, $currentTabName;
 		reset($this->tabs);
@@ -992,9 +1014,9 @@ the active tab, and the selected tab **/
 		if (@$AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			$s .= '<tr><td nowrap="nowrap">';
-			$s .= ('<a href="'.$this->baseHRef.'tab=0">' . $AppUI->_('tabbed') . '</a> : ');
-			$s .= ('<a href="'.$this->baseHRef.'tab=-1">' . $AppUI->_('flat') . '</a>');
-			$s .= ('</td>' . $extra . '</tr></table>');
+			$s .= ('<a href="' . $this->baseHRef . 'tab=0">' . $AppUI->_('tabbed') . '</a> : ');
+			$s .= ('<a href="' . $this->baseHRef . 'tab=-1">' . $AppUI->_('flat') . '</a>');
+			$s .= ('</td>' . $AppUI->___($extra) . '</tr></table>');
 			echo $s;
 		} else if ($extra) {
 			echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' 
@@ -1007,7 +1029,8 @@ the active tab, and the selected tab **/
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>'.($v[2] ? $v[1] : $AppUI->_($v[1])).'</strong></td></tr>';
+				echo ('<tr><td><strong>' . ($v[2] ? $AppUI->___($v[1]) : $AppUI->_($v[1])) 
+					  . '</strong></td></tr>');
 				echo '<tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
@@ -1016,7 +1039,7 @@ the active tab, and the selected tab **/
 			}
 			echo '</table>';
 		} else {
-		// tabbed view
+			// tabbed view
 			$s = '<table width="100%" border="0" cellpadding="3" cellspacing="0">'."\n".'<tr>';
 			if (count($this->tabs)-1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
@@ -1077,7 +1100,8 @@ the active tab, and the selected tab **/
 		}
 		
 		if ($file) {
-			if (isset($_SESSION['all_tabs'][$module][$file]) && is_array($_SESSION['all_tabs'][$module][$file])) {
+			if (isset($_SESSION['all_tabs'][$module][$file]) 
+			    && is_array($_SESSION['all_tabs'][$module][$file])) {
 				$tab_array =& $_SESSION['all_tabs'][$module][$file];
 			} else {
 				return false;
@@ -1122,27 +1146,30 @@ the active tab, and the selected tab **/
 	}
 }
 
+
 /**
 * Title box abstract class
 */
 class CTitleBlock_core {
-/** @var string The main title of the page */
+	/** @var string The main title of the page */
 	var $title='';
-/** @var string The name of the icon used to the left of the title */
+	/** @var string The name of the icon used to the left of the title */
 	var $icon='';
-/** @var string The name of the module that this title block is displaying in */
+	/** @var string The name of the module that this title block is displaying in */
 	var $module='';
-/** @var array An array of the table 'cells' to the right of the title block and for bread-crumbs */
+	/** @var array An array of the table 'cells' to the right of the title block 
+	 and for bread-crumbs */
 	var $cells=null;
-/** @var string The reference for the context help system */
+	/** @var string The reference for the context help system */
 	var $helpref='';
-/**
-* The constructor
-*
-* Assigns the title, icon, module and help reference.  If the user does not
-* have permission to view the help module, then the context help icon is
-* not displayed.
-*/
+	
+	/**
+	 * The constructor
+	 *
+	 * Assigns the title, icon, module and help reference.  If the user does not
+	 * have permission to view the help module, then the context help icon is
+	 * not displayed.
+	 */
 	function CTitleBlock_core($title, $icon='', $module='', $helpref='') {
 		$this->title = $title;
 		$this->icon = $icon;
@@ -1153,75 +1180,78 @@ class CTitleBlock_core {
 		$this->crumbs = array();
 		$this->showhelp = getPermission('help', 'view');
 	}
-/**
-* Adds a table 'cell' beside the Title string
-*
-* Cells are added from left to right.
-*/
+	/**
+	 * Adds a table 'cell' beside the Title string
+	 *
+	 * Cells are added from left to right.
+	 */
 	function addCell($data='', $attribs='', $prefix='', $suffix='') {
 		$this->cells1[] = array($attribs, $data, $prefix, $suffix);
 	}
-/**
-* Adds a table 'cell' to left-aligned bread-crumbs
-*
-* Cells are added from left to right.
-*/
+	/**
+	 * Adds a table 'cell' to left-aligned bread-crumbs
+	 *
+	 * Cells are added from left to right.
+	 */
 	function addCrumb($link, $label, $icon='') {
 		$link = str_replace('&amp;', '&', $link);
-		$link = str_replace('&', '&amp;', $link);
+		$link = htmlspecialchars($link);
 		$this->crumbs[$link] = array($label, $icon);
 	}
-/**
-* Adds a table 'cell' to the right-aligned bread-crumbs
-*
-* Cells are added from left to right.
-*/
+	/**
+	 * Adds a table 'cell' to the right-aligned bread-crumbs
+	 *
+	 * Cells are added from left to right.
+	 */
 	function addCrumbRight($data='', $attribs='', $prefix='', $suffix='') {
 		$this->cells2[] = array($attribs, $data, $prefix, $suffix);
 	}
-/**
-* Creates a standarised, right-aligned delete bread-crumb and icon.
-*/
+	/**
+	 * Creates a standarised, right-aligned delete bread-crumb and icon.
+	 */
 	function addCrumbDelete($title, $canDelete='', $msg='') {
 		global $AppUI;
 		$this->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"><tr><td>'
-		                     . '<a href="javascript:delIt()" title="'.($canDelete?'':$msg).'">'
+		                     . '<a href="javascript:delIt()" title="' 
+		                     . $AppUI->_($canDelete ? '' : $msg).'">'
 		                     . dPshowImage('./images/icons/' 
 		                                   . (($canDelete) ? 'stock_delete-16.png' 
 		                                      : 'stock_trash_full-16.png'), '16', '16', '')
 		                     . '</a></td><td>&nbsp;'
-		                     . '<a href="javascript:delIt()" title="' . (($canDelete) ? '' : $msg) 
+		                     . '<a href="javascript:delIt()" title="' 
+		                     . $AppUI->_(($canDelete) ? '' : $msg) 
 		                     . '">' . $AppUI->_($title) . '</a></td></tr></table>');
 	}
-/**
-* The drawing function
-*/
+	/**
+	 * The drawing function
+	 */
 	function show() {
 		global $AppUI;
 		$CR = "\n";
 		$CT = "\n\t";
-		$s = $CR . '<table width="100%" border="0" cellpadding="1" cellspacing="1">';
-		$s .= $CR . '<tr>';
+		$s = "\n" . '<table width="100%" border="0" cellpadding="1" cellspacing="1">';
+		$s .= "\n" . '<tr>';
 		if ($this->icon) {
-			$s .= $CR . '<td width="42">';
+			$s .= "\n" . '<td width="42">';
 			$s .= dPshowImage(dPFindImage($this->icon, $this->module));
 			$s .= '</td>';
 		}
-		$s .= ($CR . '<td align="left" width="100%" nowrap="nowrap"><h1>' 
+		$s .= ("\n" . '<td align="left" width="100%" nowrap="nowrap"><h1>' 
 		       . $AppUI->_($this->title) . '</h1></td>');
 		foreach ($this->cells1 as $c) {
-			$s .= $c[2] ? $CR . $c[2] : '';
-			$s .= $CR . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
-			$s .= $c[1] ? $CT . $c[1] : '&nbsp;';
-			$s .= $CR . '</td>';
-			$s .= $c[3] ? $CR . $c[3] : '';
+			$s .= $c[2] ? "\n" . $c[2] : '';
+			$s .= "\n" . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
+			$s .= $c[1] ? "\n\t" . $c[1] : '&nbsp;';
+			$s .= "\n" . '</td>';
+			$s .= $c[3] ? "\n" . $c[3] : '';
 		}
 		if ($this->showhelp) {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
 			/*
-			$s .= ($CT . dPcontextHelp(('<img src="./images/obj/help.gif" width="14" height="16" ' 
-			                            . 'border="0" alt="'.$AppUI->_('Help').'" />'), 
-			                           $this->helpref));
+			$s .= ("\n\t" 
+				   . dPcontextHelp(('<img src="./images/obj/help.gif" width="14" height="16" ' 
+			                        . 'border="0" alt="'.$AppUI->_('Help').'" />'), 
+			                       $this->helpref));
 			*/
 			$s .= ("\n\t" . '<a href="#' . $this->helpref 
 			       . '" onClick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' 

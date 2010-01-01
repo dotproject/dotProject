@@ -46,9 +46,9 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 			$v=str_replace('&#369;','�',$v);
 			$v=str_replace('&#337;','�',$v);
 		}
-		$s .= ("\n\t" . '<option value="' . $k . '"' 
+		$s .= ("\n\t" . '<option value="' . $AppUI->___($k) . '"' 
 		       . (($k == $selected && !$did_selected) ? ' selected="selected"' : '') . ">" 
-		       . $v . '</option>');
+		       . $AppUI->___($v) . '</option>');
 		if ($k == $selected) {
 			$did_selected = 1;
 		}
@@ -123,13 +123,13 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	$current_company = '';
 	foreach ($projects as $p) {
 		if ($p['company_name'] != $current_company) {
-			$current_company = $p['company_name'];
+			$current_company = $AppUI->___($p['company_name']);
 			$s .= ("\n" . '<optgroup label="' . $current_company . '" >' . $current_company 
 			       . '</optgroup>');
 		}
 		$s .= ("\n\t" . '<option value="' . $p['project_id'] . '"' 
 		       . ($selected == $p['project_id'] ? ' selected="selected"' : '') 
-			   . '>&nbsp;&nbsp;&nbsp;' . $p['project_name'] . '</option>');
+			   . '>&nbsp;&nbsp;&nbsp;' . $AppUI->___($p['project_name']) . '</option>');
 		}
 	$s .= "\n</select>\n";
 	return $s;
@@ -153,7 +153,7 @@ function breadCrumbs(&$arr) {
 	GLOBAL $AppUI;
 	$crumbs = array();
 	foreach ($arr as $k => $v) {
-		$crumbs[] = '<a href="' . $k . '">' . $AppUI->_($v) . '</a>';
+		$crumbs[] = '<a href="' . $AppUI->___($k) . '">' . $AppUI->_($v) . '</a>';
 	}
 	return implode(' <strong>:</strong> ', $crumbs);
 }
@@ -163,7 +163,7 @@ function breadCrumbs(&$arr) {
 ##
 function dPcontextHelp($title, $link='') {
 	global $AppUI;
-	return ('<a href="#' . $link . '" onClick="' 
+	return ('<a href="#' . $AppUI->___($link) . '" onClick="' 
 	        . "javascript:window.open('?m=help&amp;dialog=1&amp;hid=$link', 'contexthelp', " 
 	        . "'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')" . '">' 
 			. $AppUI->_($title).'</a>');
@@ -263,9 +263,10 @@ function dPshowImage($src, $wid='', $hgt='', $alt='', $title='') {
 		return '';
 	}
 	
-	return ('<img src="' . $src . '" ' . (($wid) ? (' width="' . $wid . '"') : '') 
-	        . (($hgt) ? (' height="' . $hgt . '"') : '') 
-	        . ' alt="' . (($alt) ? $AppUI->_($alt) : $src) . '"'
+	return ('<img src="' . $AppUI->___($src) . '" ' 
+	        . (($wid) ? (' width="' . $AppUI->___($wid) . '"') : '') 
+	        . (($hgt) ? (' height="' . $AppUI->___($hgt) . '"') : '') 
+	        . ' alt="' . (($alt) ? $AppUI->_($alt) : $AppUI->___($src)) . '"'
 	        . (($title) ? (' title="' . $AppUI->_($title) . '"') : '') . ' border="0" />');
 }
 
@@ -280,14 +281,14 @@ function defVal($var, $def) {
 * Utility function to return a value from a named array or a specified default
 */
 function dPgetParam(&$arr, $name, $def=null) {
-	return isset($arr[$name]) ? $arr[$name] : $def;
+	return defVal($arr[$name], $def);
 }
 
 /**
  * Alternative to protect from XSS attacks.
  */
 function dPgetCleanParam(&$arr, $name, $def=null) {
-	$val = (isset($arr[$name]) ? $arr[$name] : $def);
+	$val = defVal($arr[$name], $def);
 	if (empty($val)) {
 		return $val;
 	}
@@ -515,22 +516,31 @@ function dPgetMicroDiff() {
 /**
 * Make text safe to output into double-quote enclosed attirbutes of an HTML tag
 */
-function dPformSafe($txt, $deslash=false, $isURI=false, $isJSVars=false) {
-	global $locale_char_set;
+define ('DP_FORM_DESLASH', 1);
+define ('DP_FORM_URI', 2);
+define ('DP_FORM_JSVARS', 4);
+function dPformSafe($txt,$flag_bits = 1) {
+	global $AppUI, $locale_char_set;
 	
 	if (!$locale_char_set) {
 		$locale_char_set = 'utf-8';
 	}
 	
+	$deslash = $flag_bits && FORM_DESLASH; 
+	$isURI = $flag_bits && FORM_URI;
+	$isJSVars = $flag_bits && FORM_JSVARS;
+	
+	
 	if (is_object($txt) || is_array($txt)) {
 		$txt_arr = ((is_object($txt)) ? get_object_vars($txt) : $txt);
 		foreach ($txt_arr as $k => $v) {
-			$value = (($deslash) ? stripslashes($v) : $v);
-			$value = (($isURI) ? str_replace(" ", "%20", $value) : $value);
-			$value = (($isJSVars) 
-			          ? str_replace("'", "\\'", str_replace('"', '\"', $value)) 
-			          : str_replace('&#039;', '&apos;', 
-			                        htmlspecialchars($value, ENT_QUOTES, $locale_char_set)));
+			$value = (($deslash) ? $AppUI->___($v, UI_OUTPUT_RAW) : $v);
+			$value = (($isURI) ? $AppUI->___($value, UI_OUTPUT_URI) : $value);
+			
+			if (!($isURI)) {
+				$value = (($isJSVars) ? $AppUI->___($value, UI_OUTPUT_JS) : $AppUI->___($value));
+			}
+			
 			if (is_object($txt)) {
 				$txt->$k = $value;
 			} else {
@@ -539,12 +549,21 @@ function dPformSafe($txt, $deslash=false, $isURI=false, $isJSVars=false) {
 		}
 		
 	} else {
+		$txt = (($deslash) ? $AppUI->___($v, UI_OUTPUT_RAW) : $txt);
+		$txt = (($isURI) ? $AppUI->___($txt, UI_OUTPUT_URI) : $txt);
+		
+		if (!($isURI)) {
+			$txt = (($isJSVars) ? $AppUI->___($txt, UI_OUTPUT_JS) : $AppUI->___($txt));
+		}
+		
+		/*
 		$txt = (($deslash) ? stripslashes($txt) : $txt);
 		$txt = (($isURI) ? str_replace(" ", "%20", $txt) : $txt);
 		$txt = (($isJSVars) 
 		        ? str_replace("'", "\\'", str_replace('"', '\"', $txt)) 
 		        : str_replace('&#039;', '&apos;', 
 		                      htmlspecialchars($txt, ENT_QUOTES, $locale_char_set)));
+		*/
 	}
 	return $txt;
 }

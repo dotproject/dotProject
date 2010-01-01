@@ -49,7 +49,7 @@ if (isset($_POST['searchtext'])) {
 
 
 $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext'):'';
-$search_text = dPformSafe($search_text, true);
+$search_text = dPformSafe($search_text);
 
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
 $titleBlock->addCell(('<input type="text" class="text" SIZE="20" name="searchtext"' 

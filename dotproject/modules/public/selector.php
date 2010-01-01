@@ -195,8 +195,8 @@ selector.style.height = (wh - count - 5) + "px";
 if (count($list) > 1) {
 	foreach ($list as $key => $val) {
 		echo ('<li>' . $html_disp_offset[$key] . '<a href="' . "javascript:setClose('" 
-		      . dPformSafe($key, false, false, true) . "','" 
-		      . dPformSafe($val, false, false, true) . "');" . '">' . dPformSafe($val) 
+		      . dPformSafe($key, DP_FORM_JSVARS) . "','" 
+		      . dPformSafe($val, DP_FORM_JSVARS) . "');" . '">' . dPformSafe($val) 
 		      . "</a></li>\n");
 	}
 } else {

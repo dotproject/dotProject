@@ -39,7 +39,7 @@ if (!($rows = $q->loadList())) {
 		       . dPformSafe($row['contact_id']) . '">' 
 		       . htmlspecialchars($row['contact_last_name'] . ', ' . $row['contact_first_name']) 
 		       .'</a>');
-		$s .= ('<td><a href="mailto:' . dPformSafe($row['contact_email'], false, true) . '">' 
+		$s .= ('<td><a href="mailto:' . dPformSafe($row['contact_email'], DP_FORM_URI) . '">' 
 		       . htmlspecialchars($row['contact_email']) . '</a></td>');
 		$s .= '<td>' . htmlspecialchars($dept_detail['dept_name']) . '</td>';
 		$s .= '</tr>';

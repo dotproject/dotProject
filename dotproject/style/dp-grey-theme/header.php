@@ -74,7 +74,7 @@ $AppUI->loadJS(); ?>
 	<th style="background: url(style/<?php 
 echo $uistyle; ?>/images/titlegrad.jpg;" class="banner" align="left"><strong>
 	<?php 
-echo ('<a href="' . dPformSafe($dPconfig['base_url'], false, true) . '">' . $page_title . '</a>'); 
+echo ('<a href="' . dPformSafe($dPconfig['base_url'], DP_FORM_URI) . '">' . $page_title . '</a>'); 
 ?>
 	</strong></th>
 	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php 
@@ -95,7 +95,7 @@ echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 	$links = array();
 	foreach ($nav as $module) {
 		if (getPermission($module['mod_directory'], 'access')) {
-			$links[] = ('<a href="?m=' . dPformSafe($module['mod_directory'], false, true) . '">' 
+			$links[] = ('<a href="?m=' . dPformSafe($module['mod_directory'], DP_FORM_URI) . '">' 
 						. $AppUI->_($module['mod_ui_name']) . '</a>');
 		}
 	}

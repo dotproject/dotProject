@@ -76,7 +76,7 @@ $a2z .= "\n</tr>\n</table>";
 // setup the title block
 $titleBlock = new CTitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
 
-$where = dPformSafe($where, true);
+$where = dPformSafe($where);
 
 $titleBlock->addCell(('<form action="index.php?m=admin" method="post">' 
                       . '<input type="text" name="where" class="text" size="10" value="' . $where 
