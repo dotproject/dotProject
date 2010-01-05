@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority;
+global $a, $addPwOiD, $addPwT, $AppUI, $cBuffer, $company_id, $department, $min_view, $m, $priority;
 global $projects, $tab, $user_id, $orderdir, $orderby, $dept_ids;
 
 $department = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);

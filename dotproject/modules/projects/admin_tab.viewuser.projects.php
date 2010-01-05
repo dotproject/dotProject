@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects;
+global $a, $addPwT, $AppUI, $cBuffer, $company_id, $department, $min_view, $m, $priority, $projects;
 global $tab, $user_id, $orderdir, $orderby;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -81,7 +81,7 @@ echo $AppUI->_('Show Projects with assigned Tasks'); ?></label>
 	<td align="right" nowrap="nowrap">
 		<form action="<?php echo $headerGet; ?>&amp;tab=<?php 
 echo $tab; ?>" method="post" name="pickCompany">
-			<?php echo $buffer; ?>
+			<?php echo $cBuffer; ?>
 		</form>
 	</td>
 	<td align="right" nowrap="nowrap">

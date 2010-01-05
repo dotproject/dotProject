@@ -49,43 +49,42 @@ $companies = $q->loadList();
 $q->clear();
 
 //get list of all departments, filtered by the list of permitted companies.
-$q->clear();
-$q->addTable('companies');
-$q->addQuery('company_id, company_name, dep.*');
-$q->addJoin('departments', 'dep', 'companies.company_id = dep.dept_company');
-$q->addOrder('company_name,dept_parent,dept_name');
+$q->addTable('companies', 'c');
+$q->addQuery('c.company_id, c.company_name, dep.*');
+$q->addJoin('departments', 'dep', 'c.company_id = dep.dept_company');
+$q->addOrder('c.company_name, dep.dept_parent, dep.dept_name');
 $obj->setAllowedSQL($AppUI->user_id, $q);
 $rows = $q->loadList();
 $q->clear();
 
 //display the select list
-$buffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
-$buffer .= '<option value="company_0" style="font-weight:bold;">'.$AppUI->_('All').'</option>'."\n";
+$cBuffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
+$cBuffer .= ('<option value="company_0" style="font-weight:bold;">' . $AppUI->_('All') 
+	             . '</option>'."\n");
 $company = '';
 foreach ($rows as $row) {
 	if ($row['dept_parent'] == 0) {
-		if ($company!=$row['company_id']) {
-			$buffer .= ('<option disabled="disabled" value="' . $company_prefix 
-			            . $row['company_id'] . '" style="font-weight:bold;">' 
-			            . $row['company_name'] . '</option>' . "\n");
-			$company=$row['company_id'];
+		if ($company != $row['company_id']) {
+			$cBuffer .= ('<option value="' . $AppUI->___($company_prefix . $row['company_id']) 
+			             . '" style="font-weight:bold;"' 
+			             . (($company_id == $row['company_id']) ? 'selected="selected"' : '') 
+			             . '>' . $AppUI->___($row['company_name']) . '</option>' . "\n");
+			$company = $row['company_id'];
 		}
-		if ($row['dept_parent']!=null) {
+		
+		if ($row['dept_parent'] != null) {
 			showchilddept($row);
 			findchilddept($rows, $row['dept_id']);
 		}
 	}
-	if ($row['dept_id'] == $department) {
-		$company_id=$row['dept_company'];
-	}
 }
-$buffer .= '</select>';
+$cBuffer .= '</select>';
 
 // setup the title block
 $titleBlock = new CTitleBlock('Departments', 'users.gif', $m, $m.$a);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 $titleBlock->addCell($AppUI->_('Department') . ':');
-$titleBlock->addCell($buffer, '', 
+$titleBlock->addCell($cBuffer, '', 
                      '<form action="?m=departments" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell();
 /*

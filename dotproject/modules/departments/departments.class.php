@@ -112,19 +112,17 @@ class CDepartment extends CDpObject {
 
 //writes out a single <option> element for display of departments
 function showchilddept(&$a, $level=1) {
-	Global $buffer, $department;
-	$s = '<option value="'.$a["dept_id"].'"'.(isset($department)&&$department==$a["dept_id"]?'selected="selected"':'').'>';
+	global $AppUI, $cBuffer, $department;
+	$s = ('<option value="' . $AppUI->___($a['dept_id']) . '"' 
+	      . ((isset($department) && $department == $a['dept_id']) ? 'selected="selected"' : '') 
+	      . '>');
 
 	for ($y=0; $y < $level; $y++) {
-		if ($y+1 == $level) {
-			$s .= '';
-		} else {
-			$s .= '&nbsp;&nbsp;';
-		}
+		$s .= (($y+1 == $level) ? '' : '&nbsp;&nbsp;');
 	}
-
-	$s .= '&nbsp;&nbsp;'.$a["dept_name"]."</option>\n";
-	$buffer .= $s;
+	
+	$s .= '&nbsp;&nbsp;' . $AppUI->___($a['dept_name']) . "</option>\n";
+	$cBuffer .= $s;
 
 //	echo $s;
 }
@@ -134,9 +132,10 @@ function findchilddept(&$tarr, $parent, $level=1) {
 	$level = $level+1;
 	$n = count($tarr);
 	for ($x=0; $x < $n; $x++) {
-		if ($tarr[$x]["dept_parent"] == $parent && $tarr[$x]["dept_parent"] != $tarr[$x]["dept_id"]) {
+		if ($tarr[$x]['dept_parent'] == $parent 
+		    && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
 			showchilddept($tarr[$x], $level);
-			findchilddept($tarr, $tarr[$x]["dept_id"], $level);
+			findchilddept($tarr, $tarr[$x]['dept_id'], $level);
 		}
 	}
 }
@@ -144,7 +143,7 @@ function findchilddept(&$tarr, $parent, $level=1) {
 function addDeptId($dataset, $parent) {
 	global $dept_ids;
 	foreach ($dataset as $data) {
-		if ($data['dept_parent']==$parent) {
+		if ($data['dept_parent'] == $parent) {
 			$dept_ids[] = $data['dept_id'];
 			addDeptId($dataset, $data['dept_id']);
 		}

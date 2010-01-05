@@ -3,7 +3,10 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+global $cBuffer;
+
 $AppUI->savePlace();
+$q = new DBQuery();
 
 // load the companies class to retrieved denied companies
 require_once ($AppUI->getModuleClass('companies'));
@@ -14,12 +17,11 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status'])
 	$projects_id = $_GET['project_id']; // This must be an array
 	
 	foreach ($projects_id as $project_id) {
-		$r  = new DBQuery;
-		$r->addTable('projects');
-		$r->addUpdate('project_status', $_GET['project_status']);
-		$r->addWhere('project_id = ' . $project_id);
-		$r->exec();
-		$r->clear();
+		$q->addTable('projects');
+		$q->addUpdate('project_status', $_GET['project_status']);
+		$q->addWhere('project_id = ' . $project_id);
+		$q->exec();
+		$q->clear();
 	}
 }
 
@@ -52,30 +54,20 @@ $department = (($AppUI->getState('ProjIdxDepartment') !== NULL)
                ? $AppUI->getState('ProjIdxDepartment') 
                : ($company_prefix . $AppUI->user_company));
 
-//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the 
-// $department variable, and populate the $company_id variable.
+//if $department contains the $company_prefix string that it's requesting a company
+// and not a department.  So, clear the $department variable, and populate the $company_id variable.
 if (!(mb_strpos($department, $company_prefix)===false)) {
 	$company_id = mb_substr($department,mb_strlen($company_prefix));
 	$AppUI->setState('ProjIdxCompany', $company_id);
 	unset($department);
 }
 
-$valid_ordering = array(
-	'project_name',
-	'user_username',
-	'my_tasks desc',
-	'total_tasks desc',
-	'total_tasks',
-	'my_tasks',
-	'project_color_identifier',
-	'company_name',
-	'project_end_date',
-	'project_start_date',
-	'project_actual_end_date',
-	'task_log_problem DESC,project_priority',
-	'project_status',
-	'project_percent_complete'
-);
+$valid_ordering = array('project_name', 'user_username', 'my_tasks desc', 'total_tasks desc',
+                        'total_tasks', 'my_tasks', 'project_color_identifier', 'company_name', 
+                        'project_end_date', 'project_start_date', 'project_actual_end_date', 
+                        'task_log_problem DESC,project_priority', 'project_status', 
+                        'project_percent_complete');
+
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
 	$orderdir = (($AppUI->getState('ProjIdxOrderDir') == 'asc') ? 'desc' : 'asc');
@@ -91,24 +83,15 @@ if (isset($_POST['show_owner'])) {
 }
 $owner = $AppUI->getState('ProjIdxowner') !== NULL ? $AppUI->getState('ProjIdxowner') : 0;
 
-
-$bufferUser = '<select name="show_owner" onchange="document.pickUser.submit()" class="text">';
-$bufferUser .= '<option value="0">' . $AppUI->_('All Users') . '</option>';
-
-$usersql = ('SELECT user_id, user_username, contact_first_name, contact_last_name' 
-            . ' FROM users, contacts' 
-            . ' WHERE user_contact = contact_id' 
-            . ' ORDER BY contact_last_name');
-
-if (($rows = db_loadList($usersql, NULL))) {
-	foreach ($rows as $row) {
-		$bufferUser .= ('<option value="' . $row['user_id'] . '"'
-		                . (($owner == $row['user_id']) ? ' selected="selected"' : '') . '>'
-		                . $row['contact_last_name'] . ', ' . $row['contact_first_name'] 
-		                . ' (' . $row['user_username'] . ') </option>');
-	}
-}
-$bufferUser .= '</select>';
+$q->addTable('users', 'u');
+$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+$q->addQuery('user_id');
+$q->addQuery("CONCAT(contact_last_name, ', ', contact_first_name, ' (', user_username, ')')" 
+             . ' AS label');
+$q->addOrder('contact_last_name, contact_first_name, user_username');
+$userRows = array(0 => $AppUI->_('All Users', UI_OUTPUT_RAW)) + $q->loadHashList();
+$bufferUser = arraySelect($userRows, 'show_owner', 
+                          'class="text" onchange="document.pickUser.submit()""', $owner);
 
 /* setting this to filter project_list_data function below
  0 = undefined
@@ -140,7 +123,7 @@ $titleBlock->addCell(('<form action="?m=projects" method="post" name="pickUser">
                       . $bufferUser . "\n" . '</form>' . "\n"));
 $titleBlock->addCell($AppUI->_('Company') . '/' . $AppUI->_('Division') . ':');
 $titleBlock->addCell(('<form action="?m=projects" method="post" name="pickCompany">' . "\n" 
-                      . $buffer . "\n" .  '</form>' . "\n"));
+                      . $cBuffer . "\n" .  '</form>' . "\n"));
 $titleBlock->addCell();
 if ($canAuthor) {
 	$titleBlock->addCell(('<form action="?m=projects&amp;a=addedit" method="post">' . "\n" 
@@ -152,7 +135,6 @@ $titleBlock->show();
 $project_types = dPgetSysVal('ProjectStatus');
 
 // count number of projects per project_status
-$q  = new DBQuery();
 $q->addTable('projects', 'p');
 $q->addQuery('p.project_status, COUNT(p.project_id) as count');
 $obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');

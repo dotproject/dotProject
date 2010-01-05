@@ -463,7 +463,7 @@ class CProject extends CDpObject {
 */
 
 function projects_list_data($user_id=false) {
-	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department;
+	global $AppUI, $addPwOiD, $cBuffer, $company, $company_id, $company_prefix, $deny, $department;
 	global $dept_ids, $dPconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems;
 	global $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $project_status;
 	global $currentTabId;
@@ -474,7 +474,7 @@ function projects_list_data($user_id=false) {
 	$obj_project = new CProject();
 	
 	// Let's delete temproary tables
-	$q  = new DBQuery;
+	$q = new DBQuery;
 	$q->dropTemp('tasks_sum, tasks_total, tasks_summy, tasks_critical, tasks_problems' 
 	             . ', tasks_users');
 	$q->exec();
@@ -688,26 +688,27 @@ function projects_list_data($user_id=false) {
 	$rows = $q->loadList();
 	
 	//display the select list
-	$buffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
-	$buffer .= ('<option value="company_0" style="font-weight:bold;">' . $AppUI->_('All') 
-	            . '</option>'."\n");
+	$cBuffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
+	$cBuffer .= ('<option value="company_0" style="font-weight:bold;">' . $AppUI->_('All') 
+	             . '</option>'."\n");
 	$company = '';
 	foreach ($rows as $row) {
 		if ($row['dept_parent'] == 0) {
 			if ($company != $row['company_id']) {
-				$buffer .= ('<option value="' . $company_prefix . $row['company_id'] 
-							. '" style="font-weight:bold;"' 
-							. (($company_id == $row['company_id']) ? 'selected="selected"' : '') 
-							. '>' . $row['company_name'] . '</option>' . "\n");
+				$cBuffer .= ('<option value="' . $AppUI->___($company_prefix . $row['company_id']) 
+				             . '" style="font-weight:bold;"' 
+				             . (($company_id == $row['company_id']) ? 'selected="selected"' : '') 
+				             . '>' . $AppUI->___($row['company_name']) . '</option>' . "\n");
 				$company = $row['company_id'];
 			}
+			
 			if ($row['dept_parent'] != null) {
 				showchilddept($row);
 				findchilddept($rows, $row['dept_id']);
 			}
 		}
 	}
-	$buffer .= '</select>';
+	$cBuffer .= '</select>';
 	
 }
 ?>

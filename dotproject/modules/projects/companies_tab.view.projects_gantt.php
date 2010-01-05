@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $m, $a, $addPwOiD, $AppUI, $buffer, $company_id, $min_view, $priority, $projects, $tab;
+global $m, $a, $addPwOiD, $AppUI, $cBuffer, $company_id, $min_view, $priority, $projects, $tab;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 

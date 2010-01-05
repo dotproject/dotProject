@@ -46,7 +46,7 @@ if ($search_string != '') {
 
 //$canEdit = getPermission($m, 'edit');
 // retrieve list of records
-$search_string = dPformSafe($search_string);
+$search_string = $AppUI->___($search_string);
 
 $perms =& $AppUI->acl();
 $owner_list = array(-1 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('companies');
