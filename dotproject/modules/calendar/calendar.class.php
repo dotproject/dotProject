@@ -415,6 +415,7 @@ class CMonthCalendar {
 		
 		$m = intval(mb_substr($day, 4, 2));
 		$d = intval(mb_substr($day, 6, 2));
+		$y = intval(substr($day, 0, 4));
 		
 		$q = new DBQuery;
 		$q->addTable('contacts', 'con');
@@ -422,16 +423,20 @@ class CMonthCalendar {
 		if (strlen($d) == 1) {
 			$d = '0'.$d;
 		}
+		if (strlen($m) == 1) {
+			$m = '0'.$m;
+		}
 		$q->addWhere("contact_birthday LIKE '%$m-$d'");
 		$rows = $q->loadList();
 		
 		if ($rows) {
 			$html .= '<div class="event">';
 			foreach ($rows as $row) {
+				$years = $y - substr($row['contact_birthday'], 0, 4);
 				$html .= dPshowImage(dPfindImage('birthday.png', 'calendar'), 16, 16, '');
 				$html .= ('<a href="index.php?m=contacts&a=view&contact_id=' . $row['contact_id'] 
 						  . '">' . $AppUI->___($row["contact_first_name"] . ' ' 
-				                               . $row["contact_last_name"]) . '</a>');
+				                               . $row["contact_last_name"]) . '</a> ('.$years.')');
 			}
 			$html .= '</div>';
 		}
