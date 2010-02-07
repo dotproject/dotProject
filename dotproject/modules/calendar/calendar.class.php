@@ -895,7 +895,10 @@ class CEvent extends CDpObject {
 		$q = new DBQuery;
 		$q->addTable('user_events', 'ue');
 		$q->addQuery('ue.user_id');
-		$q->addWhere('ue.event_id IN  (' . implode(',', $events) . ')');
+		$q->addWhere('ue.event_id IN (' . implode(',', $events) . ')');
+		if ($this->event_id) {
+			$q->addWhere('NOT(ue.event_id = ' . $this->event_id . ')');
+		}
 		
 		$clashes = $q->loadColumn();
 		$q->clear();
