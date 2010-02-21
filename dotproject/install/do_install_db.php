@@ -1,4 +1,6 @@
 <?php // $Id$
+//Max Execution Time in Installation No Limit 
+set_time_limit(0);
 
 include_once 'check_upgrade.php';
 if ($_POST['mode'] == 'install' && dPcheckUpgrade() == 'upgrade') {
