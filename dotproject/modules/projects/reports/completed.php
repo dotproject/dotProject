@@ -103,7 +103,7 @@ if (count($tasks)) {
 	}
 	while ($row = db_fetch_assoc($res)) {
 		$assigned_users[$row['task_id']][$row['user_id']] 
-		= utf8_safe_decode("$row[contact_first_name] $row[contact_last_name]") . " [$row[perc_assignment]%]";
+		= safe_utf8_decode("$row[contact_first_name] $row[contact_last_name]") . " [$row[perc_assignment]%]";
 	}
 	$q->clear();
 }
