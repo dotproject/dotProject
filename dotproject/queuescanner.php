@@ -47,4 +47,3 @@ The full text of the GPL is in the COPYING file.
 	$queue = new EventQueue;
 	$queue->scan();
 	echo 'Done, '.$queue->event_count.' events processed'."\n";
-?>
