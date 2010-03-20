@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+pull<?php /* $Id$ */
 ##
 ## Session Handling Functions
 ##
@@ -207,10 +207,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 	session_start();
 	if (is_array($start_vars)) {
 		foreach ($start_vars as $var) {
-			session_register($var);
+			$_SESSION[$var] = ${$var};
 		}
 	} else if (!(empty($start_vars))) {
-		session_register($start_vars);
+		$_SESSION[$start_vars] = ${$start_vars};
 	}
 }
 
