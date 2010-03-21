@@ -426,7 +426,7 @@ session_set_save_handler(
 }
 
 /*  TEST SCRIPT -- UNCOMMENT */
-
+/*
 if (0) {
 
 	session_start();
@@ -435,5 +435,5 @@ if (0) {
 	ADOConnection::outp( "
 -- \$_SESSION['AVAR']={$_SESSION['AVAR']}</p>",false);
 }
-
+*/
 ?>

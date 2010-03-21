@@ -714,9 +714,19 @@ class CTask extends CDpObject
 	 * @todo Can't delete a task with children
 	 */
 	function delete() {
-		$q = new DBQuery;
 		if (!($this->task_id)) {
 			return 'invalid task id';
+		}
+		$q = new DBQuery;
+		
+		if (dPgetConfig('check_task_empty_dynamic') && $this->task_parent != $this->task_id) {
+			//Check that we are not deleting the only child of a dynamic parent task
+			$task_test = new CTask();
+			$task_test->load($this->task_parent);
+			$siblings = $task_test->getChildren();
+			if ($task_test->task_dynamic == 1 && count($siblings) <= 1) {
+				return 'BadDyn_NoChild';
+			}
 		}
 		
 		//load task first because we need info on it to update the parent tasks later

@@ -1,7 +1,6 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"BadDyn_NoChild"=>"A Task cannot be set as Dynamic without child Task(s)",
 "-",
 "Access",
 "Action",
@@ -31,10 +30,11 @@
 "BadDep_CircularDep"=>"There is a circular dependency",
 "BadDep_CircularDepOnParentDependent"=>"There is a circular dependency between this task and its parents dependents",
 "BadDep_CircularGrandParent"=>"A task may not depend upon its ancestors",
-"BadDep_DynNoDep"=>"A Dynamic Task may not depend on another task",
+"BadDep_DynNoDep"=>"A dynamic task may not depend on another task",
+"BadDyn_NoChild"=>"A task cannot be set as dynamic without child(ren)",
 "BadParent_ChildDepOnParent"=>"A child of this task is dependent upon the parent of this task",
-"BadParent_CircularGrandParent"=>"An ancestor of this task is also a child!",
-"BadParent_CircularParent"=>"A parent of this task is also a child!",
+"BadParent_CircularGrandParent"=>"An ancestor of this task is also a child",
+"BadParent_CircularParent"=>"A parent of this task is also a child",
 "Begin new tasks if dependencies are finished before expected",
 "Calculate",
 "Calendar",
@@ -251,7 +251,7 @@
 "notifyChange"=>"Notify Assignees of Task by Email",
 "overAlloc"=>"The assignment percentage you chose runs out of user\'s free capacity. The relevant user has not been assigned.",
 "save",
-"save & new task",
+"save &amp; new task",
 "see gantt chart",
 "set priority to high",
 "set priority to low",
