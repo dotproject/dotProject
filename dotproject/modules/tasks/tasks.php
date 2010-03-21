@@ -71,7 +71,7 @@ if ($task_id > 0) {
 // shall all tasks be either opened or opened?
 $open_task_all = dPGetParam($_GET, 'open_task_all', 0);
 $close_task_all = dPGetParam($_GET, 'close_task_all', 0);
-// Closing and opening tasks only applies to dynamic tasks
+// Closing and opening tasks only applies to dynamic tasks or tasks with children
 $open_task_id = dPGetParam($_GET, 'open_task_id', 0);
 $close_task_id = dPGetParam($_GET, 'close_task_id', 0);
 
@@ -636,7 +636,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 					showtask($t1, -1, true, false, true);
 				} else {
 					if ($t1['task_parent'] == $t1['task_id']) {
-						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
+						$is_opened = (!(in_array($t1['task_id'], $tasks_closed)));
 						
 						//check for child
 						$no_children = empty($children_of[$t1['task_id']]);
@@ -655,7 +655,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 						  showtask($t1, 1, true, false, true); 
 						} else {
 							//display as close to "tree-like" as possible
-							$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
+							$is_opened = (!(in_array($t1['task_id'], $tasks_closed)));
 							
 							//check for child
 							$no_children = empty($children_of[$t1['task_id']]);

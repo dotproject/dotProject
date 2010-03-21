@@ -2208,8 +2208,8 @@ function openClosedTask($task) {
 			$task_dynamic = $to_open_task->task_dynamic;
 			$task_id = $task;
 		}
-		// don't "open" non-dynamic tasks
-		if ($task_dynamic == 1) {
+		// don't "open" non-dynamic tasks or tasks without children
+		if ($task_dynamic == 1 || count($to_open_task->getChildren())) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_closed);
 			if ($index !== false) {
@@ -2258,8 +2258,8 @@ function closeOpenedTask($task) {
 			$task_id = $task;
 			$task_dynamic = $to_close_task->task_dynamic;
 		}
-		// don't "close" non-dynamic tasks
-		if ($task_dynamic == 1) {
+		// don't "close" non-dynamic tasks or tasks without children
+		if ($task_dynamic == 1 || count($to_close_task->getChildren())) {
 			// only unset that which is set
 			$index = array_search($task_id, $tasks_opened);
 			if ($index !== false) {
@@ -2438,7 +2438,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		$s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
 			   . $alt . '>' . '<b>' . $a['task_name'] . '</b></a>' 
 			   . '<img src="./images/icons/milestone.gif" border="0"></td>');
-	} else if ($a['task_dynamic'] == 1) {
+	} else if ($a['task_dynamic'] == 1 || count($task_obj->getChildren()) ) {
 		if (! ($today_view || $hideOpenCloseLink)) {
 			$s .= ('<a href="index.php' . $query_string 
 				   . (($is_opened) 
@@ -2448,7 +2448,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				   . ' border="0" /></a>');
 		}
 		$s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
-			   . $alt . '><b><i>' . $a['task_name'] . '</i></b></a></td>');
+			   . $alt . '>' . (($a['task_dynamic'] == 1) ? '<b><i>' : '') . $a['task_name'] . (($a['task_dynamic'] == 1) ? '</i></b>' : '') . '</a></td>');
 	} else {
 	  $s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
 			 . $alt . '>' . $a['task_name'] . '</a></td>');
@@ -2551,7 +2551,7 @@ function findchild(&$tarr, $parent, $level=0) {
 	
 	foreach ($tarr as $x => $task) {
 		if ($task['task_parent'] == $parent && $task['task_parent'] != $task['task_id']) {
-			$is_opened = (!($task['task_dynamic']) || !(in_array($task['task_id'], $tasks_closed)));
+			$is_opened = (!(in_array($task['task_id'], $tasks_closed)));
 			
 			//check for child
 			$no_children = empty($children_of[$task['task_id']]);
