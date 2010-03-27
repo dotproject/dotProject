@@ -451,7 +451,7 @@ for ($i = 0; $i < count(@$gantt_arr); $i ++) {
 		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		//caption of milestone should be date
 		if ($showLabels == '1') {
-			$caption = $start->format($df);
+			$caption = $start_date_mile->format($df);
 		}
 		$bar->title->SetColor('#CC0000');
 	} else {
