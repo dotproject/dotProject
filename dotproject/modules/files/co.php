@@ -4,12 +4,14 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $file_id = intval(dPgetParam($_GET, 'file_id', 0));
+$co_cancel = intval(dPgetParam($_GET, 'co_cancel', 0));
 
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $file_id);
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+
 $canAdmin = getPermission('system', 'edit');
 
 // load the companies class to retrieved denied companies
@@ -17,8 +19,6 @@ require_once($AppUI->getModuleClass('projects'));
 
 $file_parent = intval(dPgetParam($_GET, 'file_parent', 0));
 
-// check if this record has dependencies to prevent deletion
-$msg = '';
 $obj = new CFile();
 
 // load the record data
@@ -29,7 +29,8 @@ if ($file_id > 0 && ! $obj->load($file_id)) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock('Checkout', 'folder5.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock(((($co_cancel) ? 'Cancel ' : '') . 'Checkout'), 
+                              'folder5.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=files', 'files list');
 $titleBlock->show();
 
@@ -55,13 +56,15 @@ $extra = array(
 	'where'=>'project_status<>7'
 );
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', 
+                                        null, $extra);
 $projects = arrayMerge(array('0'=>$AppUI->_('All')), $projects);
 ?>
 
 <script language='javascript'>
 function popFile(params) {
-    fileloader = window.open("fileviewer.php?"+params,"mywindow","location=1,status=1,scrollbars=0,width=80,height=80");
+    fileloader = window.open("fileviewer.php?"+params,"mywindow",
+	                         "location=1,status=1,scrollbars=0,width=80,height=80");
     fileloader.moveTo(0,0);
 }
 </script>
@@ -70,7 +73,7 @@ function popFile(params) {
 
 <form name="coFrm" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_co" />
-	<input type="hidden" name="del" value="0" />
+    <input type="hidden" name="co_cancel" value="<?php echo $co_cancel; ?>">
 	<input type="hidden" name="file_id" value="<?php echo $file_id;?>" />
     <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
     <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
@@ -78,11 +81,12 @@ function popFile(params) {
 
 <tr>
 	<td width="100%" valign="top" align="center">
-		<table cellspacing="1" cellpadding="2" width="60%">
-	<?php if ($file_id) { ?>
+		<table cellspacing="1" cellpadding="2" width="60%"><?php 
+if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name');?>:</td>
-			<td align="left" class="hilite"><?php echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
+			<td align="left" class="hilite"><?php 
+	echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type');?>:</td>
@@ -95,23 +99,31 @@ function popFile(params) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By');?>:</td>
 			<td align="left" class="hilite"><?php echo $obj->getOwner();?></td>
-		</tr>
-	<?php } ?>
+		</tr><?php 
+} ?>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('CO Reason');?>:</td>
+			<td align="right" nowrap="nowrap"><?php 
+echo $AppUI->_(($co_cancel) ? 'CO Cancel Reason' : 'CO Reason'); ?>:</td>
 			<td align="left">
-				<textarea name="file_co_reason" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_co_reason;?></textarea>
+				<textarea name="file_co_reason" class="textarea" style="width:270px"><?php 
+echo $obj->file_co_reason;?></textarea>
 			</td>
 		</tr>
-		
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify" id="notify" checked="checked" /><label for="notify"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label></td>		
+			<td align="left">
+				<input type="checkbox" name="notify" id="notify" checked="checked" />
+				<label for="notify"><?php 
+echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label>
+			</td>		
 		</tr>
-		
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" /><label for="notify_contacts"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></label></td>		
+			<td align="left">
+				<input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" />
+				<label for="notify_contacts"><?php 
+echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
+			</td>		
 		</tr>
 		
 		</table>
@@ -119,7 +131,10 @@ function popFile(params) {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = './index.php?m=files';}" />
+		<input class="button" type="button" name="cancel" value="<?php 
+echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php 
+echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); 
+?>')) {location.href = './index.php?m=files';}" />
 	</td>
 	<td align="right">
 		<input type="submit" class="button" value="<?php echo $AppUI->_('submit');?>" />

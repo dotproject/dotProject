@@ -115,7 +115,7 @@ function submitIt() {
 	f.submit();
 }
 function delIt() {
-	if (confirm("<?php echo $AppUI->_('filesDelete', UI_OUTPUT_JS);?>")) {
+	if (confirm("<?php echo $AppUI->_('filesDelete', UI_OUTPUT_JS); ?>")) {
 		var f = document.uploadFrm;
 		f.del.value='1';
 		f.submit();
@@ -124,7 +124,7 @@ function delIt() {
 function popTask() {
     var f = document.uploadFrm;
     if (f.file_project.selectedIndex == 0) {
-        alert("<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS);?>");
+        alert("<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>");
     } else {
         window.open('./index.php?m=public&a=selector&dialog=1&callback=setTask&table=tasks&task_project='
             + f.file_project.options[f.file_project.selectedIndex].value, 'task','left=50,top=50,height=250,width=400,resizable')
@@ -160,44 +160,51 @@ function setTask(key, val) {
 <form name="uploadFrm" action="?m=files" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="file_id" value="<?php echo $file_id;?>" />
-	<input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id;?>" />
+	<input type="hidden" name="file_id" value="<?php echo $file_id; ?>" />
+	<input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item;?>" />
+	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
 
 <tr>
 	<td width="100%" valign="top" align="center">
 		<table cellspacing="1" cellpadding="2" width="60%">
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder');?>:</td>
-			<td align="left"><?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : (($file_id == 0 && !$ci)?$folder:$obj->file_folder))); ?></td>
-		</tr>		
-	<?php if ($file_id) { ?>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
+			<td align="left"><?php 
+echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', 
+                     (($file_helpdesk_item) ? getHelpdeskFolder() 
+                      : (($file_id == 0 && !$ci) ? $folder : $obj->file_folder))); ?></td>
+		</tr><?php 
+if ($file_id) { ?>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name');?>:</td>
-			<td align="left" class="hilite"><?php echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?>:</td>
+			<td align="left" class="hilite"><?php 
+	echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name; ?></td>
 			<td>
-				<a href="./fileviewer.php?file_id=<?php echo $obj->file_id;?>"><?php echo $AppUI->_('download');?></a>
+				<a href="./fileviewer.php?file_id=<?php echo $obj->file_id; ?>"><?php 
+	echo dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', '16', '16', 
+	                 'download icon', 'download'); ?></a>
 			</td>
 		</tr>
 		<tr valign="top">
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type');?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->file_type;?></td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+			<td align="left" class="hilite"><?php echo $obj->file_type; ?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Size');?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->file_size;?></td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Size'); ?>:</td>
+			<td align="left" class="hilite"><?php echo $obj->file_size; ?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By');?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->getOwner();?></td>
-		</tr>
-	<?php } 
-		echo file_show_attr();?>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
+			<td align="left" class="hilite"><?php echo $obj->getOwner(); ?></td>
+		</tr><?php 
+} 
+echo file_show_attr(); ?>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description');?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 			<td align="left">
-				<textarea name="file_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_description;?></textarea>
+				<textarea name="file_description" class="textarea" style="width:270px"><?php 
+echo $obj->file_description; ?></textarea>
 			</td>
 		</tr>
 		<tr>
@@ -212,34 +219,48 @@ function setTask(key, val) {
 			?>
 			</td>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File');?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File'); ?>:</td>
 			<td align="left"><input type="File" class="button" name="formfile" style="width:270px"></td>
 		</tr>
-		<?php if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
+		<?php 
+if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" /><label for="final_ci"><?php echo $AppUI->_('Final Version'); ?></label></td>		
-		</tr>
-		<?php } ?>
+			<td align="left">
+				<input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" />
+				<label for="final_ci"><?php echo $AppUI->_('Final Version'); ?></label>
+			</td>		
+		</tr><?php 
+} ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify" id="notify" checked="checked" /><label for="notify"><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label></td>		
+			<td align="left">
+				<input type="checkbox" name="notify" id="notify" checked="checked" />
+				<label for="notify"><?php 
+	echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label>
+			</td>		
 		</tr>
-		
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
-			<td align="left"><input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" /><label for="notify_contacts"><?php echo $AppUI->_('Notify Project and Task Contacts'); ?></label></td>		
+			<td align="left">
+				<input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" />
+				<label for="notify_contacts"><?php 
+echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
+			</td>		
 		</tr>
-		
 		</table>
 	</td>
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php echo $AppUI->getPlace();?>'; }" />
+		<input class="button" type="button" name="cancel" value="<?php 
+echo $AppUI->_('cancel'); ?>" onClick="javascript:if (confirm('<?php 
+echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
+echo $AppUI->getPlace(); ?>'; }" />
 	</td>
 	<td align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit');?>" onclick="submitIt()" />
+		<input type="button" class="button" value="<?php 
+echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
 	</td>
 </tr>
 </form>

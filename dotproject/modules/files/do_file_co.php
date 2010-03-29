@@ -7,28 +7,17 @@ if (!defined('DP_BASE_DIR')) {
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
 $coReason = dPgetParam($_POST, 'file_co_reason', '');
 
+$co_cancel = intval(dPgetParam($_POST, 'co_cancel', 0));
 
 $not = dPgetParam($_POST, 'notify', '0');
 $notcont = dPgetParam($_POST, 'notify_contacts', '0');
 
 $obj = new CFile();
-$obj->_message = (($file_id) ? 'updated' : 'added');
-$obj->file_category = intval(dPgetParam($_POST, 'file_category', 0));
-
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
-
-if (!ini_get('safe_mode')) {
-	set_time_limit(600);
-}
-ignore_user_abort(1);
-
+$obj->load($file_id);
 $obj->checkout($AppUI->user_id, $file_id, $coReason);
 
 //Notification
-$obj->load($file_id);
+$obj->_message = (($co_cancel) ? 'reverted' : 'checked out');
 if ($not) {
 	$obj->notify();
 }
@@ -36,25 +25,30 @@ if ($notcont) {
 	$obj->notifyContacts();
 }
 
-// We now have to display the required page
-// Destroy the post stuff, and allow the page to display index.php again.
-$a = 'index';
-unset($_GET['a']);
+//Checkout Cancellation
+if ($co_cancel) {
+	$obj->checkout('', $file_id, '');
+	$obj->load($file_id);
+	$AppUI->setMsg('File checkout reverted', UI_MSG_OK);
+} else {
+	$AppUI->setMsg('File checkout completed', UI_MSG_OK);
+}
 
 $params = 'file_id=' . $file_id;
 $session_id = SID;
-                                                                      
+
 session_write_close();
 // are the params empty
 // Fix to handle cookieless sessions
 if ($session_id != "") {
-    $params .= "&" . $session_id;
+	$params .= "&" . $session_id;
 }
-//        header("Refresh: 0; URL=fileviewer.php?$params");
-echo '<script type="text/javascript">
-fileloader = window.open("fileviewer.php?'.$params.'", "mywindow",
-"location=1,status=1,scrollbars=0,width=20,height=20");
-fileloader.moveTo(0,0);
-</script>';
+
+if ($co_cancel != 1) {
+//header("Refresh: 0; URL=fileviewer.php?$params");
+	echo ('<script type="text/javascript">fileloader = window.open("fileviewer.php?' . $params 
+	      . '", "mywindow","location=1,status=1,scrollbars=0,width=20,height=20");' 
+	      . 'fileloader.moveTo(0,0);</script>');
+}
 
 ?>

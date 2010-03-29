@@ -144,7 +144,7 @@ function displayFolders($folder_id=0, $level=0) {
 				//edit folder
 				if ($canEdit_this) {
 					echo ('<a href="./index.php?m=files&a=addedit_folder&folder=' . $folder_id 
-					      . '">' . dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', 
+					      . '">' . dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', 
 					                           '16', '16', 'edit icon', 'edit this folder') 
 					      . '</a>');
 				}
@@ -424,12 +424,11 @@ function displayFiles($folder_id) {
 		<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('co Reason') ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
 		<th nowrap width="1"></th>
 		<th nowrap width="1"></th>
-	</tr>
-<?php
+	</tr><?php
 	$fp=-1;
 	$file_date = new CDate();
 	
@@ -453,169 +452,164 @@ function displayFiles($folder_id) {
 	<a href="?m=projects&a=view&project_id=<?php echo $row['file_project']; ?>">
 	<span style="<?php echo $style; ?>"><?php echo $row['project_name']; ?></span></a>
 	</td>
-</tr>
-<?php
+</tr><?php
 			}
 		}
 		$fp = $row['file_project'];
-	?>
-	<form name="frm_remove_file_<?php echo $row['file_id']; ?>" action="?m=files" 
-	 method="post">
+?>
+	<form name="frm_remove_file_<?php echo $row['file_id']; ?>" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="file_id" value="<?php echo $row['file_id']; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 	</form>		
-	<form name="frm_duplicate_file_<?php echo $row['file_id']; ?>" action="?m=files" 
-	 method="post">
+	<form name="frm_duplicate_file_<?php echo $row['file_id']; ?>" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="duplicate" value="1" />
 	<input type="hidden" name="file_id" value="<?php echo $row['file_id']; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 	</form>		
 	<tr>
-		<td nowrap="8%">
-<?php 
+		<td nowrap="8%"><?php 
 		$file_icon = getIcon($row['file_type']);
 ?>
-		  <a href="./fileviewer.php?file_id=<?php echo $row['file_id']; ?>" 
-		   title="<?php echo $row['file_description']; ?>"> 
-		  <?php 
+			<a href="./fileviewer.php?file_id=<?php echo $row['file_id']; ?>" title="<?php 
+		echo $row['file_description']; ?>"> 
+			<?php 
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16');
 ?>
-		  &nbsp;<?php echo $row['file_name']; ?> 
-		  </a>
+			&nbsp;<?php echo $row['file_name']; ?> 
+			</a>
 		</td>
 		<td width="20%"><?php echo $row['file_description'];?></td>
 		<td width="5%" nowrap="nowrap" align="center">
-<?php
+			<?php
 		$hidden_table = '';
 		echo $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
 ?>
-	  <a href="#" onClick="expand('versions_<?php echo $row['file_id']; ?>');">
-	  (<?php echo $row['file_versions']; ?>)
-	  </a>
-<?php 
+			<a href="#" onClick="expand('versions_<?php echo $row['file_id']; ?>');">
+			(<?php echo $row['file_versions']; ?>)
+			</a><?php 
 		}
 ?>
 		</td>
 		<td width="10%" nowrap="nowrap" align="center">
-		  <?php echo $file_types[$row['file_category']]; ?>
+			<?php echo $file_types[$row['file_category']]; ?>
 		</td>
 		<td width="5%" align="center">
-		  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['file_task']; ?>">
-		  <?php echo $row['task_name']; ?>
-		  </a>
+			<a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['file_task']; ?>">
+			<?php echo $row['task_name']; ?>
+			</a>
 		</td>
 		<td width="15%" nowrap="nowrap">
-		  <?php 
-		echo ($row["contact_first_name"] . ' ' . $row["contact_last_name"]); 
-?>
+			<?php echo ($row["contact_first_name"] . ' ' . $row["contact_last_name"]); ?>
 		</td>
 		<td width="5%" nowrap="nowrap" align="right">
-		  <?php echo file_size(intval($row['file_size'])); ?>
+			<?php echo file_size(intval($row['file_size'])); ?>
 		</td>
 		<td nowrap="nowrap">
-		  <?php echo ($row['file_type']); ?>
+			<?php echo ($row['file_type']); ?>
 		</td>
-		<td width="15%" nowrap="nowrap" align="right">
-		  <?php echo $file_date->format($df . ' ' . $tf); ?>
+		<td width="10%" nowrap="nowrap" align="right">
+			<?php echo $file_date->format($df . ' ' . $tf); ?>
 		</td>
-		<td width="10%"><?php echo $row['file_co_reason']; ?></td>
+		<td width="15%">
+			<?php echo $row['file_co_reason']; ?> <?php 
+	if (!(empty($row['file_checkout'])) 
+	    && $row['file_checkout'] == $AppUI->user_id) {
+?> 
+			<a href="?m=files&amp;a=co&amp;co_cancel=1&amp;file_id=<?php 
+		echo $row['file_id']; ?>">
+			<?php
+		echo dPshowImage((DP_BASE_URL . '/images/icons/stock_cancel-16.png'), '16', '16', 
+		                 'cancel checkout', 'cancel file checkout'); 
+?>
+			</a><?php
+} ?>
+		</td>
 		<td nowrap="nowrap" align="center">
-		  
-<?php 
+			<?php 
 		if ($canEdit && empty($row['file_checkout'])) {
 ?>
-			  <a href="?m=files&a=co&file_id=<?php echo $row['file_id']; ?>">
-			  <?php 
-			echo dPshowImage(DP_BASE_URL . '/modules/files/images/up.png', '16', '16', 
-			                 'checkout','checkout file') ?>
-			  </a>
-<?php 
+			<a href="?m=files&a=co&file_id=<?php echo $row['file_id']; ?>">
+			<?php 
+			echo dPshowImage(DP_BASE_URL . '/modules/files/images/co.png', '16', '16', 
+			                 'checkout','checkout file'); ?>
+			</a><?php 
 		} else if ($row['file_checkout'] == $AppUI->user_id) {
 ?>
-			  <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $row['file_id']; ?>">
-			  <?php 
-			echo dPshowImage(DP_BASE_URL . '/modules/files/images/down.png', '16', '16', 
-			                 'checkin','checkin file') ?>
-			  </a>
-<?php
+			<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $row['file_id']; ?>">
+			<?php 
+			echo dPshowImage(DP_BASE_URL . '/modules/files/images/ci.png', '16', '16', 
+			                 'checkin','checkin file'); ?>
+			</a><?php
 		} else if ($file['file_checkout'] == 'final') {
-			echo ('			  ' . $AppUI->_('final'));
+			echo $AppUI->_('final');
 		} else {
-			echo ('	  ' . $row['checkout_first_name'] . ' ' 
-			      . $row['checkout_last_name'] . '<br />(' . $row['co_user'] . ')');
-		}
+			echo ($AppUI->___('	  ' . $file['co_contact_first_name'] . ' ' 
+			                  . $file['co_contact_last_name']) . '<br />'
+				  . $AppUI->___('(' . $file['co_user'] . ')'));
+			}
 ?>
 		</td>
 		<td nowrap="nowrap" align="right" width="48">
-		  <?php 
+			<?php 
 		if (empty($row['file_checkout']) || $row['file_checkout'] == 'final') {
 			// Edit File
 			if ($canEdit || $row['project_owner'] == $AppUI->user_id) {
 ?>
-		  <a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id']; ?>">
-<?php
+			<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id']; ?>">
+			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 
 				                  'edit file', 'edit file'));
 ?>
-		  </a>
-<?php 
+			</a><?php 
 			}
 			// Duplicate File
 			if ($canAuthor || $row['project_owner'] == $AppUI->user_id) {
 ?>
-		  <a href="#" 
-		   onclick="document.frm_duplicate_file_<?php echo $row['file_id']; ?>.submit()">
-<?php
+			<a href="#"  onclick="document.frm_duplicate_file_<?php 
+				echo $row['file_id']; ?>.submit()">
+			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/duplicate.png', '16', '16', 
 				                  'duplicate file', 'duplicate file'));
 ?>
-		  </a>
-<?php 
+			</a><?php 
 			}
 			// Delete File
 			if ($canDelete || $row['project_owner'] == $AppUI->user_id) {
 ?>
-		  <a href="#" 
-		   onclick="if (confirm('Are you sure you want to delete this file?')) {document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
-<?php
+			<a href="#" onclick="if (confirm('Are you sure you want to delete this file?')) {document.frm_remove_file_<?php 
+				echo $row['file_id']; ?>.submit()}">
+			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', '16', '16', 
 				                  'delete file', 'delete file'));
 ?>
-		  </a>
-<?php 
+			</a><?php 
 			}
 		}
 ?>
 		</td>
-		<td nowrap="nowrap" align="center" width="1">
-<?php 
+		<td nowrap="nowrap" align="center" width="1"><?php 
 		if ((empty($row['file_checkout']) || $row['file_checkout'] == 'final') 
 		    && ($canEdit || $row['project_owner'] == $AppUI->user_id)) {
 			$bulk_op = ('onchange="(this.checked) ? addBulkComponent(' . $row['file_id'] 
 						. ') : removeBulkComponent(' . $row['file_id'] . ')"');
 ?>
-			<input type="checkbox" <?php echo $bulk_op; ?> 
-			 name="chk_sub_sel_file_<?php echo $file_row['file_id']; ?>" />
-<?php 
+			<input type="checkbox" <?php echo $bulk_op; ?> name="chk_sub_sel_file_<?php 
+			echo $file_row['file_id']; ?>" /><?php 
 		}
 ?>
 		</td>
-</tr>
-
-
-
-<?php 
+	</tr><?php 
 		if ($row['file_versions'] > 1) {
 ?>
-
-	  <tr><td colspan="20">
-		<table style="display: none" id="versions_<?php echo $row['file_id']; ?>" 
-		 width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-		  <tr>
+	<tr>
+		<td colspan="20">
+		<table style="display: none" id="versions_<?php echo $row['file_id']; 
+?>" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+		<tr>
 			<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
 			<th nowrap="nowrap"><?php echo $AppUI->_('Versions'); ?></th>
@@ -627,107 +621,99 @@ function displayFiles($folder_id) {
 			<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 			<th nowrap="nowrap"width="1">&nbsp;</th>
 			<th nowrap="nowrap"width="1">&nbsp;</th>
-		  </tr>
-<?php
+		</tr><?php
 			foreach ($file_versions as $file) {
 				if ($file['file_version_id'] == $row['file_version_id']) {
 					$file_icon = getIcon($file['file_type']);
 					$file_version_date = new Date($file['file_date']);
 ?>
-
-		  <form name="frm_delete_sub_file_<?php echo $file['file_id']; ?>" 
-		   action="?m=files" method="post">
-		  <input type="hidden" name="dosql" value="do_file_aed" />
-		  <input type="hidden" name="del" value="1" />
-		  <input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
-		  <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-		  </form>		
-		  <form name="frm_duplicate_sub_file_<?php echo $file['file_id']; ?>" 
-		   action="?m=files" method="post">
-		  <input type="hidden" name="dosql" value="do_file_aed" />
-		  <input type="hidden" name="duplicate" value="1" />
-		  <input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
-		  <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-		  </form>
-		  <tr>
+		<form name="frm_delete_sub_file_<?php echo $file['file_id']; 
+?>" action="?m=files" method="post">
+		<input type="hidden" name="dosql" value="do_file_aed" />
+		<input type="hidden" name="del" value="1" />
+		<input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
+		<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
+		</form>		
+		<form name="frm_duplicate_sub_file_<?php echo $file['file_id']; 
+?>" action="?m=files" method="post">
+		<input type="hidden" name="dosql" value="do_file_aed" />
+		<input type="hidden" name="duplicate" value="1" />
+		<input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
+		<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
+		</form>
+		<tr>
 			<td nowrap="8%">
-			  <a href="./fileviewer.php?file_id=<?php echo $file['file_id']; ?>" 
-			   title="<?php echo $file['file_description']; ?>">
-			  <?php
+				<a href="./fileviewer.php?file_id=<?php echo $file['file_id']; 
+?>" title="<?php echo $file['file_description']; ?>">
+				<?php
 					echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', 
 					                 '16');
 ?>
-			  <?php echo $file['file_name']; ?> 
-			  </a>
+				<?php echo $file['file_name']; ?> 
+				</a>
 			</td>
 			<td width="20%"><?php echo $file['file_description']; ?></td>
 			<td width="5%" nowrap="nowrap" align="center"><?php echo $file['file_version']; ?></td>
 			<td width="10%" nowrap="nowrap" align="center">
-			  <?php echo $file_types[$file['file_category']]; ?>
+				<?php echo $file_types[$file['file_category']]; ?>
 			</td>
 			<td width="5%" align="center">
-			  <a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['file_task']; ?>">
-			  <?php echo $file['task_name']; ?>
-			  </a>
+				<a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['file_task']; ?>">
+				<?php echo $file['task_name']; ?>
+				</a>
 			</td>
 			<td width="15%" nowrap="nowrap">
-			  <?php echo ($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
+				<?php echo ($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
 			</td>
 			<td width="5%" nowrap="nowrap" align="right">
 			  <?php echo file_size(intval($file['file_size'])); ?>
 			</td>
 			<td nowrap="nowrap">
-			  <?php echo ($row['file_type']); ?>
+				<?php echo ($row['file_type']); ?>
 			</td>
 			<td width="15%" nowrap="nowrap" align="right">
-			  <?php echo $file_version_date->format($df . ' ' . $tf); ?>
+				<?php echo $file_version_date->format($df . ' ' . $tf); ?>
 			</td>
 			
-			<td nowrap="nowrap" align="right" width="48">
-			  <?php 
+			<td nowrap="nowrap" align="right" width="48"><?php 
 					if ((empty($file['file_checkout']) || $file['file_checkout'] == 'final')) {
 						// Edit File
 						if ($canEdit || $row['project_owner'] == $AppUI->user_id) {
 ?>
-			  <a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id'];?>">
-<?php
+				<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id'];?>">
+				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', 
 							                  '16', '16', 'edit file', 'edit file'));
 ?>
-			  </a>
-<?php 
+				</a><?php 
 						}
 						// Duplicate File
 						if ($canAuthor) {
 ?>
-			  <a href="#" 
-			   onclick="document.frm_duplicate_file_<?php echo $row['file_id']; ?>.submit()">
-<?php
+				<a href="#" onclick="document.frm_duplicate_file_<?php echo $row['file_id']; 
+?>.submit()">
+				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/duplicate.png', 
 							                  '16', '16', 'duplicate file', 'duplicate file'));
 ?>
-			  </a>
-<?php 
+				</a><?php 
 						}
 						// Delete File
 						if ($canDelete) {
 ?>
-			  <a href="#" 
-			   onclick="if (confirm('<?php 
+				<a href="#" onclick="if (confirm('<?php 
 							echo $AppUI->_('Are you sure you want to delete this file?'); 
 ?>')) {document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
-<?php
+				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', 
 							                  '16', '16', 'delete file', $AppUI->_('delete file')));
 ?>
-			  </a>
-<?php 
+				</a><?php 
 						}
 					}
 ?>
 			</td>
-			<td nowrap="nowrap" align="center" width="1">
-<?php 
+			<td nowrap="nowrap" align="center" width="1"><?php 
 					if ((empty($row['file_checkout']) 
 					     || $row['file_checkout'] == 'final')
 						&& ($canEdit || $row['project_owner'] == $AppUI->user_id)) {
@@ -735,28 +721,28 @@ function displayFiles($folder_id) {
 						            . $row['file_id'] . ') : removeBulkComponent(' 
 						            . $row['file_id'] . ')"');
 ?>
-			  <input type="checkbox" <?php echo $bulk_op; ?> 
-			   name="chk_sub_sel_file_<?php echo $file_row['file_id']; ?>" />
-<?php 
+				<input type="checkbox" <?php echo $bulk_op; ?> name="chk_sub_sel_file_<?php 
+						echo $file_row['file_id']; ?>" /><?php 
 					}
 ?>
-			  </td>
-			</tr>
+			</td>
+		</tr>
 <?php
 				}
 			}
 ?>
 		</table>
-	  </td></tr>
+	</td>
+</tr>
 <?php
 
 		}
 	}
 ?>
 
-	</table>
-	<?php
-		shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder_id);
+</table>
+<?php
+	shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder_id);
 	echo "<br />";
 }
 

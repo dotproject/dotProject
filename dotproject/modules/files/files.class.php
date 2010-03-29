@@ -122,13 +122,13 @@ class CFile extends CDpObject {
 	}
 	
 	function checkout($userId, $fileId, $coReason) {
-		$q = new DBQuery;
-		$q->addTable('files');
-		$q->addUpdate('file_checkout', $userId);
-		$q->addUpdate('file_co_reason', $coReason);
-		$q->addWhere('file_id = ' . $fileId);
-		$q->exec();
-		$q->clear();
+		$this->_query->clear();
+		$this->_query->addTable('files');
+		$this->_query->addUpdate('file_checkout', $userId);
+		$this->_query->addUpdate('file_co_reason', $coReason);
+		$this->_query->addWhere('file_id = ' . $fileId);
+		$this->_query->exec();
+		$this->_query->clear();
 		
 		return true;
 	}
@@ -146,15 +146,15 @@ class CFile extends CDpObject {
 		$this->deleteFile();
 		
 		// delete any index entries
-		$q = new DBQuery;
-		$q->setDelete('files_index');
-		$q->addQuery('*');
-		$q->addWhere('file_id = ' . $this->file_id);
-		if (!$q->exec()) {
-			$q->clear();
+		$this->_query->clear();
+		$this->_query->setDelete('files_index');
+		$this->_query->addQuery('*');
+		$this->_query->addWhere('file_id = ' . $this->file_id);
+		if (!$this->_query->exec()) {
+			$this->_query->clear();
 			return db_error();
 		}
-		$q->clear();
+		$this->_query->clear();
 		
 		$this->_message = 'deleted';
 		
@@ -282,14 +282,13 @@ class CFile extends CDpObject {
 		}
 		// insert the strings into the table
 		while (list($key, $val) = each($wordarr)) {
-			$q  = new DBQuery;
-			$q->addTable('files_index');
-			
-			$q->addReplace('file_id', $this->file_id);
-			$q->addReplace('word', $wordarr[$key]['word']);
-			$q->addReplace('word_placement', $wordarr[$key]['wordplace']);
-			$q->exec();
-			$q->clear();
+			$this->_query->clear();
+			$this->_query->addTable('files_index');
+			$this->_query->addReplace('file_id', $this->file_id);
+			$this->_query->addReplace('word', $wordarr[$key]['word']);
+			$this->_query->addReplace('word_placement', $wordarr[$key]['wordplace']);
+			$this->_query->exec();
+			$this->_query->clear();
 		}
 		
 		db_exec('UNLOCK TABLES;');
@@ -334,7 +333,6 @@ class CFile extends CDpObject {
 			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
 			
-			$q = new DBQuery;
 			$users = array();
 			if (intval($this->file_task) != 0) {
 				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
@@ -343,33 +341,41 @@ class CFile extends CDpObject {
 				$body .= ("\n" . $AppUI->_('Description') . ': ' . "\n" . $task->task_description);
 				
 				//preparing users array
-				$q->addTable('tasks', 't');
-				$q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-				$q->addJoin('users', 'a', 'a.user_id = u.user_id');
-				$q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-				$q->addQuery('a.user_id as assignee_id, ac.contact_email as assignee_email' 
-				             . ', ac.contact_first_name as assignee_first_name' 
-				             . ', ac.contact_last_name as assignee_last_name');
-				$q->addWhere('t.task_id = ' . $this->file_task);
-				$users = $q->loadList();
+				$this->_query->clear();
+				$this->_query->addTable('tasks', 't');
+				$this->_query->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
+				$this->_query->addJoin('users', 'a', 'a.user_id = u.user_id');
+				$this->_query->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
+				$this->_query->addQuery('a.user_id as assignee_id' 
+				                        . ', ac.contact_email as assignee_email' 
+				                        . ', ac.contact_first_name as assignee_first_name' 
+				                        . ', ac.contact_last_name as assignee_last_name');
+				$this->_query->addWhere('t.task_id = ' . $this->file_task);
+				$users = $this->_query->loadList();
 			} else {
 				//find project owner and notify him about new or modified file
-				$q->addTable('users', 'u');
-				$q->addJoin('contacts', 'uc', 'uc.contact_id = u.user_contact');
-				$q->addQuery('u.user_id as owner_id, uc.contact_first_name as owner_first_name' 
-				             . ', uc.contact_last_name as owner_last_name' 
-				             . ', uc.contact_email as owner_email');
-				$q->addWhere('u.user_id = ' . $project->project_owner);
-				$users = $q->loadList();
+				$this->_query->clear();
+				$this->_query->addTable('users', 'u');
+				$this->_query->addJoin('contacts', 'uc', 'uc.contact_id = u.user_contact');
+				$this->_query->addQuery('u.user_id as owner_id' 
+				                        . ', uc.contact_first_name as owner_first_name' 
+				                        . ', uc.contact_last_name as owner_last_name' 
+				                        . ', uc.contact_email as owner_email');
+				$this->_query->addWhere('u.user_id = ' . $project->project_owner);
+				$users = $this->_query->loadList();
 			}
-			$q->clear();
+			$this->_query->clear();
 			
 			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
 			          . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 			if ($this->_message != 'deleted') {
 				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 				          . '/fileviewer.php?file_id=' . $this->file_id);
-				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;	
+				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
+				if ($this->file_co_reason != '') {
+					$body .= ("\n" . $AppUI->_('Checkout Reason') . ':' . "\n" 
+					          . $this->file_co_reason);
+				}
 			}
 			
 			//send mail			
@@ -424,42 +430,41 @@ class CFile extends CDpObject {
 			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
 			
-			$q = new DBQuery;
 			$users = array();
 			if (intval($this->file_task) != 0) {
 				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
 				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $this->file_task);
 				$body .= "\n" . $AppUI->_('Description') . ":\n" . $task->task_description;
+				$this->_query->clear();
+				$this->_query->addTable('project_contacts', 'pc');
+				$this->_query->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+				$this->_query->addQuery('c.contact_email as contact_email' 
+				                        . ', c.contact_first_name as contact_first_name' 
+				                        . ', c.contact_last_name as contact_last_name');
+				$this->_query->addWhere('pc.project_id = ' . $this->file_project);
+				$pc_users = $this->_query->loadList();
+				$this->_query->clear();   
 				
-				$q->addTable('project_contacts', 'pc');
-				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addQuery('c.contact_email as contact_email' 
-				             . ', c.contact_first_name as contact_first_name' 
-				             . ', c.contact_last_name as contact_last_name');
-				$q->addWhere('pc.project_id = ' . $this->file_project);
-				$pc_users = $q->loadList();
-				$q->clear();   
-				
-				$q->addTable('task_contacts', 'tc');
-				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addQuery('c.contact_email as contact_email' 
-				             . ', c.contact_first_name as contact_first_name' 
-				             . ', c.contact_last_name as contact_last_name');
-				$q->addWhere('tc.task_id = ' . $this->file_task);
-				$tc_users = $q->loadList();
-				$q->clear();
+				$this->_query->addTable('task_contacts', 'tc');
+				$this->_query->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
+				$this->_query->addQuery('c.contact_email as contact_email' 
+				                        . ', c.contact_first_name as contact_first_name' 
+				                        . ', c.contact_last_name as contact_last_name');
+				$this->_query->addWhere('tc.task_id = ' . $this->file_task);
+				$tc_users = $this->_query->loadList();
+				$this->_query->clear();
 				
   				$users = array_merge($pc_users, $tc_users);
 			} else {
-				$q->addTable('project_contacts', 'pc');
-				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addQuery('c.contact_email as contact_email' 
-				             . ', c.contact_first_name as contact_first_name' 
-				             . ', c.contact_last_name as contact_last_name');
-				$q->addWhere('pc.project_id = ' . $this->file_project);
-				$users = $q->loadList();
-				$q->clear();
+				$this->_query->addTable('project_contacts', 'pc');
+				$this->_query->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+				$this->_query->addQuery('c.contact_email as contact_email' 
+				                        . ', c.contact_first_name as contact_first_name' 
+				                        . ', c.contact_last_name as contact_last_name');
+				$this->_query->addWhere('pc.project_id = ' . $this->file_project);
+				$users = $this->_query->loadList();
+				$this->_query->clear();
 			}
 			
 			$body .= ("\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' 
@@ -467,7 +472,11 @@ class CFile extends CDpObject {
 			if ($this->_message != 'deleted') {
 				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
 				          . '/fileviewer.php?file_id=' . $this->file_id);
-				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;	
+				$body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
+				if ($this->file_co_reason != '') {
+					$body .= ("\n" . $AppUI->_('Checkout Reason') . ':' . "\n" 
+					          . $this->file_co_reason);
+				}
 			}
 			
 			// send mail
@@ -488,42 +497,38 @@ class CFile extends CDpObject {
 	}
 
 	function getOwner() {
-		
 		if (!($this->file_owner)) {
 			return '';
 		}
-		
-		$q = new DBQuery;
-		$q->addTable('users', 'a');
-		$q->leftJoin('contacts', 'b', 'b.contact_id = a.user_contact');
-		$q->addQuery('contact_first_name, contact_last_name');
-		$q->addWhere('a.user_id = ' . $this->file_owner);
-		if (!$q->exec()) {
-			$q->clear();
+		$this->_query->clear();
+		$this->_query->addTable('users', 'a');
+		$this->_query->leftJoin('contacts', 'b', 'b.contact_id = a.user_contact');
+		$this->_query->addQuery('contact_first_name, contact_last_name');
+		$this->_query->addWhere('a.user_id = ' . $this->file_owner);
+		if (!$this->_query->exec()) {
+			$this->_query->clear();
 			return db_error();
 		}
-		$row = $q->fetchRow();
-		$q->clear();
+		$row = $this->_query->fetchRow();
+		$this->_query->clear();
 		
 		return ($row['contact_first_name'] . ' ' . $row['contact_last_name']);
 	}
 	
 	function getTaskName() {
-		
 		if (!($this->file_task)) {
 			return '';
 		}
-		
-		$q = new DBQuery;
-		$q->addTable('tasks');
-		$q->addQuery('task_name');
-		$q->addWhere('task_id = ' . $this->file_task);
-		if (!$q->exec()) {
-			$q->clear();
+		$this->_query->clear();
+		$this->_query->addTable('tasks');
+		$this->_query->addQuery('task_name');
+		$this->_query->addWhere('task_id = ' . $this->file_task);
+		if (!$this->_query->exec()) {
+			$this->_query->clear();
 			return db_error();
 		}
-		$row = $q->fetchRow();
-		$q->clear();
+		$row = $this->_query->fetchRow();
+		$this->_query->clear();
 		
 		return $row['task_name'];
 	}
@@ -566,20 +571,18 @@ class CFileFolder extends CDpObject {
 		if (!(parent::canDelete($msg, $oid, $joins))) {
 			return false;
 		}
+		$this->_query->clear();
+      	$this->_query->addTable($this->_tbl);
+      	$this->_query->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
+      	$this->_query->addWhere('file_folder_parent=' . $oid);
+      	$sql1 = $this->_query->prepare();
+      	$this->_query->clear();
 		
-		$q = new DBQuery();
-      	$q->addTable($this->_tbl);
-      	$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
-      	$q->addWhere('file_folder_parent=' . $oid);
-      	$sql1 = $q->prepare();
-      	$q->clear();
-		
-      	$q = new DBQuery();
-      	$q->addTable('files');
-      	$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
-      	$q->addWhere('file_folder=' . $oid);
-      	$sql2 = $q->prepare();
-      	$q->clear();
+      	$this->_query->addTable('files');
+      	$this->_query->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
+      	$this->_query->addWhere('file_folder=' . $oid);
+      	$sql2 = $this->_query->prepare();
+      	$this->_query->clear();
 		
 		if (db_loadResult($sql1) > 0 || db_loadResult($sql2) > 0) {
 			$msg = $AppUI->_('Can not delete folder, it has files and/or subfolders.');
@@ -591,19 +594,19 @@ class CFileFolder extends CDpObject {
 	
 	/** @return string Returns the name of the parent folder or null if no parent was found **/
 	function getParentFolderName() {
-		$q = new DBQuery();
-      	$q->addTable($this->_tbl);
-      	$q->addQuery('file_folder_name');
-      	$q->addWhere('file_folder_id=' . $this->file_folder_parent);
-      	$sql = $q->prepare();
+		$this->_query->clear();
+      	$this->_query->addTable($this->_tbl);
+      	$this->_query->addQuery('file_folder_name');
+      	$this->_query->addWhere('file_folder_id=' . $this->file_folder_parent);
+      	$sql = $this->_query->prepare();
 		return db_loadResult($sql);
 	}
 	
 	function countFolders() {
-		$q = new DBQuery();
-      	$q->addTable($this->_tbl);
-      	$q->addQuery('COUNT(*)');
-      	$sql = $q->prepare();
+		$this->_query->clear();
+      	$this->_query->addTable($this->_tbl);
+      	$this->_query->addQuery('COUNT(*)');
+      	$sql = $this->_query->prepare();
 		$result = db_loadResult($sql);
 		return $result;
 	}

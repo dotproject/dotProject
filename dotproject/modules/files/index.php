@@ -6,6 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 
 $AppUI->savePlace();
 
+
 // "File" filters info
 $AppUI->setState('FileIdxTab', dPgetParam($_GET, 'tab'));
 $tab = $AppUI->getState('FileIdxTab', 0);
