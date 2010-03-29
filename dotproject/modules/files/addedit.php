@@ -77,8 +77,9 @@ if ($canDelete && $file_id > 0 && !($ci)) {
 $titleBlock->show();
 
 //Clear the file id if checking out so a new version is created.
-if ($ci)
-        $file_id = 0;
+if ($ci) {
+	$file_id = 0;
+}
 
 if ($obj->file_project) {
 	$file_project = $obj->file_project;
@@ -105,7 +106,8 @@ $extra = array(
 	'where'=>'project_status <> 7'
 );
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', null, $extra);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', 
+                                        null, $extra);
 $projects = arrayMerge(array('0'=>$AppUI->_('None', UI_OUTPUT_RAW)), $projects);
 
 $folders = getFolderSelectList();
@@ -128,7 +130,7 @@ function popTask() {
         alert("<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>");
     } else {
         window.open('./index.php?m=public&a=selector&dialog=1&callback=setTask&table=tasks&task_project='
-            + f.file_project.options[f.file_project.selectedIndex].value, 'task','left=50,top=50,height=250,width=400,resizable')
+		            + f.file_project.options[f.file_project.selectedIndex].value, 'task','left=50,top=50,height=250,width=400,resizable')
     }
 }
 

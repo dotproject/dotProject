@@ -14,24 +14,33 @@ $notcont = dPgetParam($_POST, 'notify_contacts', '0');
 
 $obj = new CFile();
 $obj->load($file_id);
-$obj->checkout($AppUI->user_id, $file_id, $coReason);
 
-//Notification
-$obj->_message = (($co_cancel) ? 'reverted' : 'checked out');
-if ($not) {
-	$obj->notify();
-}
-if ($notcont) {
-	$obj->notifyContacts();
+//set checkout messages
+if ($msg = $obj->checkout($AppUI->user_id, $coReason)) {
+	$AppUI->setMsg($msg, UI_MSG_ERROR);
+} else {
+	$AppUI->setMsg('File checkout completed', UI_MSG_OK);
+	//Notification
+	$obj->_message = (($co_cancel) ? 'reverted' : 'checked out');
+	if ($not) {
+		$obj->notify();
+	}
+	if ($notcont) {
+		$obj->notifyContacts();
+	}
 }
 
 //Checkout Cancellation
 if ($co_cancel) {
-	$obj->checkout('', $file_id, '');
-	$obj->load($file_id);
-	$AppUI->setMsg('File checkout reverted', UI_MSG_OK);
-} else {
-	$AppUI->setMsg('File checkout completed', UI_MSG_OK);
+	if ($msg = $obj->checkout('', '')) {
+		$AppUI->setMsg($msg, UI_MSG_ERROR);
+	} else {
+		$AppUI->setMsg('File checkout reverted', UI_MSG_OK);
+	}
+}
+
+if (($msg = $obj->store())) {
+	$AppUI->setMsg($msg, UI_MSG_ERROR);
 }
 
 $params = 'file_id=' . $file_id;

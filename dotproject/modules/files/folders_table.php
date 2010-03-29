@@ -683,8 +683,9 @@ function displayFiles($folder_id) {
 			<td nowrap="nowrap" align="right" width="48"><?php 
 					if (empty($file['file_checkout']) || $file['file_checkout'] == 'final') {
 						// Edit File
-						if ($canEdit && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
-						                 || $file['file_co_reason'] == '')) {
+						if ($canEdit && $dPconfig['files_show_versions_edit'] 
+						    && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
+						        || $file['file_co_reason'] == '')) {
 ?>
 				<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id'];?>">
 				<?php
@@ -705,8 +706,9 @@ function displayFiles($folder_id) {
 				</a><?php 
 						}
 						// Delete File
-						if ($canDelete && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
-						                   || $file['file_co_reason'] == '')) {
+						if ($canDelete && $dPconfig['files_show_versions_edit']
+						    && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
+						        || $file['file_co_reason'] == '')) {
 ?>
 				<a href="#" onclick="if (confirm('<?php 
 							echo $AppUI->_('Are you sure you want to delete this file?'); 

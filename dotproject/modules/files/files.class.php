@@ -121,16 +121,15 @@ class CFile extends CDpObject {
 		return NULL; // object is ok
 	}
 	
-	function checkout($userId, $fileId, $coReason) {
-		$this->_query->clear();
-		$this->_query->addTable('files');
-		$this->_query->addUpdate('file_checkout', $userId);
-		$this->_query->addUpdate('file_co_reason', $coReason);
-		$this->_query->addWhere('file_id = ' . $fileId);
-		$this->_query->exec();
-		$this->_query->clear();
+	function checkout($userId, $coReason) {
+		global $AppUI;
+		if (! $this->file_id) {
+			return $AppUI->_('fileIdError', UI_OUTPUT_RAW);
+		}
+		$this->file_checkout = $userId;
+		$this->file_co_reason = $coReason;
 		
-		return true;
+		return NULL;
 	}
 
 	function delete() {
