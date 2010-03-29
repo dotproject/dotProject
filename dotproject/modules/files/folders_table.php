@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 global $AppUI, $m, $a, $tab;
-global $canAccess, $canRead, $canEdit, $canAuthor, $canDelete;
+global $canAccess, $canRead, $canEdit, $canAuthor, $canDelete, $canAdmin;
 global $company_id, $project_id, $task_id, $folder, $page, $current_uri;
 global $currentTabId, $currentTabName, $tabbed, $showProject;
 global $cfObj;
@@ -25,6 +25,8 @@ $canRead_folders = getPermission('file_folders', 'view');
 $canEdit_folders = getPermission('file_folders', 'edit');
 $canAuthor_folders = getPermission('file_folders', 'add');
 $canDelete_folders = getPermission('file_folders', 'delete');
+
+$canAdmin = getPermission('system', 'edit');
 
 // load the following classes to retrieved denied records
 include_once($AppUI->getModuleClass('projects'));
@@ -517,7 +519,8 @@ function displayFiles($folder_id) {
 		<td width="15%">
 			<?php echo $row['file_co_reason']; ?> <?php 
 	if (!(empty($row['file_checkout'])) 
-	    && $row['file_checkout'] == $AppUI->user_id) {
+	    && ($row['file_checkout'] == $AppUI->user_id 
+	        || ($canEdit && ($canAdmin || $row['project_owner'] == $AppUI->user_id)))) {
 ?> 
 			<a href="?m=files&amp;a=co&amp;co_cancel=1&amp;file_id=<?php 
 		echo $row['file_id']; ?>">
@@ -557,7 +560,9 @@ function displayFiles($folder_id) {
 			<?php 
 		if (empty($row['file_checkout']) || $row['file_checkout'] == 'final') {
 			// Edit File
-			if ($canEdit || $row['project_owner'] == $AppUI->user_id) {
+			if ($canEdit && (empty($row['file_checkout']) 
+			                 || ($row['file_checkout'] == 'final' 
+			                     && ($canAdmin || $row['project_owner'] == $AppUI->user_id)))) {
 ?>
 			<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id']; ?>">
 			<?php
@@ -676,9 +681,10 @@ function displayFiles($folder_id) {
 			</td>
 			
 			<td nowrap="nowrap" align="right" width="48"><?php 
-					if ((empty($file['file_checkout']) || $file['file_checkout'] == 'final')) {
+					if (empty($file['file_checkout']) || $file['file_checkout'] == 'final') {
 						// Edit File
-						if ($canEdit || $row['project_owner'] == $AppUI->user_id) {
+						if ($canEdit && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
+						                 || $file['file_co_reason'] == '')) {
 ?>
 				<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id'];?>">
 				<?php
@@ -699,7 +705,8 @@ function displayFiles($folder_id) {
 				</a><?php 
 						}
 						// Delete File
-						if ($canDelete) {
+						if ($canDelete && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
+						                   || $file['file_co_reason'] == '')) {
 ?>
 				<a href="#" onclick="if (confirm('<?php 
 							echo $AppUI->_('Are you sure you want to delete this file?'); 

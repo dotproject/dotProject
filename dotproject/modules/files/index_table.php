@@ -46,6 +46,8 @@ include_once $AppUI->getModuleClass('tasks');
 require_once $AppUI->getSystemClass('query');
 require_once $AppUI->getModuleClass('files');
 
+$canAdmin = getPermission('system', 'edit');
+
 $project = new CProject();
 $task = new CTask();
 $cfObj = new CFileFolder();
@@ -284,7 +286,7 @@ foreach ($files as $file_row) {
 		<?php 
 	if ($canEdit && (empty($latest_file['file_checkout']) 
 	                 || ($latest_file['file_checkout'] == 'final' 
-	                     && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+	                     && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id)))) {
 		echo ('<a href="./index.php?m=files&amp;a=addedit&amp;file_id=' . $latest_file['file_id'] 
 		      . '">');
 		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 
@@ -321,8 +323,9 @@ foreach ($files as $file_row) {
 	<td width="10%">
 		<?php echo ($latest_file['file_co_reason']); ?> <?php 
 	if (!(empty($latest_file['file_checkout'])) 
-	    && $latest_file['file_checkout'] == $AppUI->user_id) {
-?> 
+	    && ($latest_file['file_checkout'] == $AppUI->user_id 
+	        || ($canEdit && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id)))) {
+?>
 		<a href="?m=files&amp;a=co&amp;co_cancel=1&amp;file_id=<?php 
 		echo $latest_file['file_id']; ?>">
 		<?php

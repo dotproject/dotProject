@@ -17,6 +17,7 @@ if (file_exists(DP_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
 }
 $canAdmin = getPermission('system', 'edit');
+
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];

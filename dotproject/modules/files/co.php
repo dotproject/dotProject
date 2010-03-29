@@ -12,8 +12,6 @@ if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canAdmin = getPermission('system', 'edit');
-
 // load the companies class to retrieved denied companies
 require_once($AppUI->getModuleClass('projects'));
 
@@ -26,6 +24,14 @@ if ($file_id > 0 && ! $obj->load($file_id)) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
 	$AppUI->redirect();
+}
+
+$canAdmin = getPermission('system', 'edit');
+if (!($canAdmin)) {
+	$canAdmin = $obj->canAdmin();
+}
+if ($obj->file_co_reason != '' && !($obj->file_checkout == $AppUI->user_id || $canAdmin)) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // setup the title block
