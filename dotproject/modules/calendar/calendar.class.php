@@ -652,8 +652,8 @@ class CEvent extends CDpObject {
 			if ($query_set == 'q') { // assemble query for non-recursive events
 				// following line is only good for *non-recursive* events
 				$$query_set->addWhere('(event_recurs <= 0)');
-				$$query_set->addWhere("(event_start_date <= '$db_end'" 
-									  . " AND event_end_date >= '$db_start')");
+				$$query_set->addWhere("(event_start_date < '$db_end'" 
+									  . " AND event_end_date > '$db_start')");
 				$eventList = $$query_set->loadList();
 			} else if ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
