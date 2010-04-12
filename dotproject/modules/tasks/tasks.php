@@ -630,7 +630,16 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 		
 		//start displaying tasks
 		if (is_array($p['tasks'])) {
+			$summaries = array('duration' => 0, 'start_date' => date('Y-m-d'), 'end-date' => '');
 			foreach ($p['tasks'] as $i => $t1) {
+				// Record summaries
+				$summaries['duration'] += $t1['task_duration'];
+				if ($t1['task_start_date'] < $summaries['start_date']) {
+					$summaries['start_date'] = $t1['task_start_date'];
+				}
+				if ($t1['task_end_date'] > $summaries['end_date']) {
+					$summaries['end_date'] = $t1['task_end_date'];
+				}
 				if ($task_sort_item1) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
 					showtask($t1, -1, true, false, true);
@@ -674,7 +683,17 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 				}
 			}
 		}
-		
+
+$df = $AppUI->getPref('SHDATEFORMAT');
+?>
+<tr>
+	<td colspan="<?php echo $cols - 4 ?>">Summaries: </td>
+	<td><?php $summary_date = new CDate($summaries['start_date']); echo $summary_date->format($df); ?></td>
+	<td align="center"><?php echo $summaries['duration'] ?> hours</td>
+	<td><?php $summary_date = new CDate($summaries['end_date']); echo $summary_date->format($df); ?></td>
+	<td></td>
+</tr>
+<?php
 		if ($tnums && $dPconfig['enable_gantt_charts'] && !$min_view) { 
 ?>
 <tr>
