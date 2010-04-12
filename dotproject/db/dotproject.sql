@@ -529,7 +529,7 @@ CREATE TABLE `sysvals` (
   `sysval_key_id` int(10) unsigned NOT NULL default '0',
   `sysval_title` varchar(48) NOT NULL default '',
   `sysval_value` text NOT NULL,
-  PRIMARY KEY  (`sysval_id`)
+  PRIMARY KEY  (`sysval_id`),
   UNIQUE KEY `idx_sysval_title` (`sysval_title`)
 ) TYPE=MyISAM;
 
