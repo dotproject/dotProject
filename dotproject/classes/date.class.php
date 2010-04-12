@@ -37,6 +37,14 @@ define('SEC_DAY',	  86400);
 */
 class CDate extends Date {
 
+	function CDate($date = null)
+	{
+		if (!is_object($date) && strlen($date) == 12 && strpos($date, '-') === false && strpos($date, '/') === false) {
+			$date = $date.'00';
+		}
+		return parent::Date($date);
+	}
+
 /**
 * extend PEAR Date's format() meet to translation needs
 */
@@ -47,6 +55,13 @@ class CDate extends Date {
 		return $output;
 	}
 
+	function after($when)
+	{
+		if (!is_object($when)) {
+			$when = new CDate($when);
+		}
+		return parent::after($when);
+	}
 
 /**
 * Overloaded compare method
@@ -56,6 +71,11 @@ class CDate extends Date {
 */
 	function compare($d1, $d2, $convertTZ=false)
 	{
+		if (!is_object($d1)) {
+			$d1 = new CDate($d1);
+		} else if (!is_object($d2)) {
+			$d2 = new CDate($d2);
+		}
 		if ($convertTZ) {
 			$d1->convertTZ(new Date_TimeZone('UTC'));
 			$d2->convertTZ(new Date_TimeZone('UTC'));

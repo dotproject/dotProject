@@ -35,7 +35,7 @@ if ($selected && count($selected)) {
 	$new_project = dPgetParam($_POST, 'new_project', $project_id);
 	
 	foreach ($selected as $key => $val) {
-		$t = &new CTask();
+		$t = new CTask();
 		$t->load($val);
 		if (isset($_POST['include_children']) && $_POST['include_children']) {
 			$children = $t->getDeepChildren();
@@ -50,7 +50,7 @@ if ($selected && count($selected)) {
 			if (isset($children)) {
 				foreach ($children as $child_id) {
 					if (getPermission('tasks', 'edit', $child_t->task_id)) {
-						$child_t = &new CTask();
+						$child_t = new CTask();
 						$child_t->load($child_id);
 						$child_t->task_percent_complete = 100;
 						$child_t->store();
@@ -92,7 +92,7 @@ if ($selected && count($selected)) {
 			$t->store();
 			if (isset($children)) {
 				foreach ($children as $child_id) {
-					$child_t = &new CTask();
+					$child_t = new CTask();
 					$child_t->load($child_id);
 					$child_t->task_priority = $action;
 					$child_t->store();

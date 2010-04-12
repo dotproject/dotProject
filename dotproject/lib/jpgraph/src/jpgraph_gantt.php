@@ -1,5 +1,6 @@
 <?php
 /*=======================================================================
+<<<<<<< HEAD
 // File:	JPGRAPH_GANTT.PHP
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
@@ -13,6 +14,20 @@
 require_once('jpgraph_plotband.php'); 
 require_once('jpgraph_iconplot.php'); 
 require_once('jpgraph_plotmark.inc');
+=======
+ // File:        JPGRAPH_GANTT.PHP
+ // Description: JpGraph Gantt plot extension
+ // Created:     2001-11-12
+ // Ver:         $Id: jpgraph_gantt.php 1809 2009-09-09 13:07:33Z ljp $
+ //
+ // Copyright (c) Aditus Consulting. All rights reserved.
+ //========================================================================
+ */
+
+require_once('jpgraph_plotband.php');
+require_once('jpgraph_iconplot.php');
+require_once('jpgraph_plotmark.inc.php');
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
 
 // Maximum size for Automatic Gantt chart
 DEFINE('MAX_GANTTIMG_SIZE_W',4000);
@@ -247,6 +262,7 @@ class GanttActivityInfo {
     
     // Adjust headers left, right or centered
     function SetHeaderAlign($aAlign) {
+<<<<<<< HEAD
 	$this->iHeaderAlign=$aAlign;
     }
 
@@ -321,6 +337,81 @@ class GanttActivityInfo {
 	    $this->vgrid->Stroke($aImg,$cols[$i],$aYBottom,$cols[$i],
 				    $aImg->height - $aImg->bottom_margin);
 	}
+=======
+        $this->iHeaderAlign=$aAlign;
+    }
+
+    function Stroke($aImg,$aXLeft,$aYTop,$aXRight,$aYBottom,$aUseTextHeight=false) {
+
+        if( !$this->iShow ) return;
+
+        $txt = new TextProperty();
+        $txt->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+        $txt->SetColor($this->iFontColor);
+        $txt->SetAlign($this->iHeaderAlign,'top');
+        $n=count($this->iTitles);
+
+        if( $n == 0 )
+        return;
+
+        $x = $aXLeft;
+        $h = $this->iHeight;
+        $yTop = $aUseTextHeight ? $aYBottom-$h-$this->iTopColMargin-$this->iBottomColMargin : $aYTop ;
+
+        if( $h < 0 ) {
+            JpGraphError::RaiseL(6001);
+            //('Internal error. Height for ActivityTitles is < 0');
+        }
+
+        $aImg->SetLineWeight(1);
+        // Set background color
+        $aImg->SetColor($this->iBackgroundColor);
+        $aImg->FilledRectangle($aXLeft,$yTop,$aXRight,$aYBottom-1);
+
+        if( $this->iStyle == 1 ) {
+            // Make a 3D effect
+            $aImg->SetColor('white');
+            $aImg->Line($aXLeft,$yTop+1,$aXRight,$yTop+1);
+        }
+
+        for($i=0; $i < $n; ++$i ) {
+            if( $this->iStyle == 1 ) {
+                // Make a 3D effect
+                $aImg->SetColor('white');
+                $aImg->Line($x+1,$yTop,$x+1,$aYBottom);
+            }
+            $x += $this->iLeftColMargin;
+            $txt->Set($this->iTitles[$i]);
+
+            // Adjust the text anchor position according to the choosen alignment
+            $xp = $x;
+            if( $this->iHeaderAlign == 'center' ) {
+                $xp = (($x-$this->iLeftColMargin)+($x+$this->iWidth[$i]))/2;
+            }
+            elseif( $this->iHeaderAlign == 'right' ) {
+                $xp = $x +$this->iWidth[$i]-$this->iRightColMargin;
+            }
+
+            $txt->Stroke($aImg,$xp,$yTop+$this->iTopHeaderMargin);
+            $x += $this->iWidth[$i];
+            if( $i < $n-1 ) {
+                $aImg->SetColor($this->iColor);
+                $aImg->Line($x,$yTop,$x,$aYBottom);
+            }
+        }
+
+        $aImg->SetColor($this->iColor);
+        $aImg->Line($aXLeft,$yTop, $aXRight,$yTop);
+
+        // Stroke vertical column dividers
+        $cols=array();
+        $this->GetColStart($aImg,$cols);
+        $n=count($cols);
+        for( $i=1; $i < $n; ++$i ) {
+            $this->vgrid->Stroke($aImg,$cols[$i],$aYBottom,$cols[$i],
+            $aImg->height - $aImg->bottom_margin);
+        }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 }
 
@@ -711,6 +802,7 @@ class GanttGraph extends Graph {
 			break;
 		    case DAYSTYLE_SHORTDATE1 :
                         $txt =  "23/6";
+<<<<<<< HEAD
 			break;
 		    case DAYSTYLE_SHORTDATE2 :
 			$txt =  "23 Jun";
@@ -881,6 +973,178 @@ class GanttGraph extends Graph {
 	    $this->img->CreateImgCanvas($width,$height);			
 	    $this->img->SetMargin($lm,$rm,$tm,$bm);
 	}
+=======
+                        break;
+                    case DAYSTYLE_SHORTDATE2 :
+                        $txt =  "23 Jun";
+                        break;
+                    case DAYSTYLE_SHORTDATE3 :
+                        $txt =  "Mon 23";
+                        break;
+                    case DAYSTYLE_SHORTDATE4 :
+                        $txt =  "88";
+                        break;
+                    case DAYSTYLE_CUSTOM :
+                        $txt = date($this->scale->day->iLabelFormStr,strtotime('2003-12-20 18:00'));
+                        break;
+                    case DAYSTYLE_ONELETTER :
+                    default:
+                        $txt = "M";
+                        break;
+                }
+                $fw = $this->scale->day->GetStrWidth($this->img,$txt)+6;
+            }
+
+            // If we have hours enabled we must make sure that each day has enough
+            // space to fit the number of hours to be displayed.
+            if( $this->scale->IsDisplayHour() ) {
+                // Depending on what format the user has choose we need different amount
+                // of space. We therefore create a typical string for the choosen format
+                // and determine the length of that string.
+                switch( $this->scale->hour->iStyle ) {
+                    case HOURSTYLE_HMAMPM:
+                        $txt = '12:00pm';
+                        break;
+                    case HOURSTYLE_H24:
+                        // 13
+                        $txt = '24';
+                        break;
+                    case HOURSTYLE_HAMPM:
+                        $txt = '12pm';
+                        break;
+                    case HOURSTYLE_CUSTOM:
+                        $txt = date($this->scale->hour->iLabelFormStr,strtotime('2003-12-20 18:00'));
+                        break;
+                    case HOURSTYLE_HM24:
+                    default:
+                        $txt = '24:00';
+                        break;
+                }
+
+                $hfw = $this->scale->hour->GetStrWidth($this->img,$txt)+6;
+                $mw = $hfw;
+                if( $this->scale->IsDisplayMinute() ) {
+                    // Depending on what format the user has choose we need different amount
+                    // of space. We therefore create a typical string for the choosen format
+                    // and determine the length of that string.
+                    switch( $this->scale->minute->iStyle ) {
+                        case HOURSTYLE_CUSTOM:
+                            $txt2 = date($this->scale->minute->iLabelFormStr,strtotime('2005-05-15 18:55'));
+                            break;
+                        case MINUTESTYLE_MM:
+                        default:
+                            $txt2 = '15';
+                            break;
+                    }
+
+                    $mfw = $this->scale->minute->GetStrWidth($this->img,$txt2)+6;
+                    $n2 = ceil(60 / $this->scale->minute->GetIntervall() );
+                    $mw = $n2 * $mfw;
+                }
+                $hfw = $hfw < $mw ? $mw : $hfw ;
+                $n = ceil(24*60 / $this->scale->TimeToMinutes($this->scale->hour->GetIntervall()) );
+                $hw = $n * $hfw;
+                $fw = $fw < $hw ? $hw : $fw ;
+            }
+
+            // We need to repeat this code block here as well.
+            // THIS iS NOT A MISTAKE !
+            // We really need it since we need to adjust for minutes both in the case
+            // where hour scale is shown and when it is not shown.
+
+            if( $this->scale->IsDisplayMinute() ) {
+                // Depending on what format the user has choose we need different amount
+                // of space. We therefore create a typical string for the choosen format
+                // and determine the length of that string.
+                switch( $this->scale->minute->iStyle ) {
+                    case HOURSTYLE_CUSTOM:
+                        $txt = date($this->scale->minute->iLabelFormStr,strtotime('2005-05-15 18:55'));
+                        break;
+                    case MINUTESTYLE_MM:
+                    default:
+                        $txt = '15';
+                        break;
+                }
+
+                $mfw = $this->scale->minute->GetStrWidth($this->img,$txt)+6;
+                $n = ceil(60 / $this->scale->TimeToMinutes($this->scale->minute->GetIntervall()) );
+                $mw = $n * $mfw;
+                $fw = $fw < $mw ? $mw : $fw ;
+            }
+
+            // If we display week we must make sure that 7*$fw is enough
+            // to fit up to 10 characters of the week font (if the week is enabled)
+            if( $this->scale->IsDisplayWeek() ) {
+                // Depending on what format the user has choose we need different amount
+                // of space
+                $fsw = strlen($this->scale->week->iLabelFormStr);
+                if( $this->scale->week->iStyle==WEEKSTYLE_FIRSTDAY2WNBR ) {
+                    $fsw += 8;
+                }
+                elseif( $this->scale->week->iStyle==WEEKSTYLE_FIRSTDAYWNBR ) {
+                    $fsw += 7;
+                }
+                else {
+                    $fsw += 4;
+                }
+
+                $ww = $fsw*$this->scale->week->GetFontWidth($this->img);
+                if( 7*$fw < $ww ) {
+                    $fw = ceil($ww/7);
+                }
+            }
+
+            if( !$this->scale->IsDisplayDay() && !$this->scale->IsDisplayHour() &&
+            	!( ($this->scale->week->iStyle==WEEKSTYLE_FIRSTDAYWNBR ||
+            		$this->scale->week->iStyle==WEEKSTYLE_FIRSTDAY2WNBR) && $this->scale->IsDisplayWeek() ) ) {
+                // If we don't display the individual days we can shrink the
+                // scale a little bit. This is a little bit pragmatic at the
+                // moment and should be re-written to take into account
+                // a) What scales exactly are shown and
+                // b) what format do they use so we know how wide we need to
+                // make each scale text space at minimum.
+                $fw /= 2;
+                if( !$this->scale->IsDisplayWeek() ) {
+                    $fw /= 1.8;
+                }
+            }
+
+            $cw = $this->GetMaxActInfoColWidth() ;
+            $this->scale->actinfo->SetMinColWidth($cw);
+            if( $this->img->width <= 0 ) {
+                // Now determine the width for the activity titles column
+
+                // Firdst find out the maximum width of each object column
+                $titlewidth = max(max($this->GetMaxLabelWidth(),
+                $this->scale->tableTitle->GetWidth($this->img)),
+                $this->scale->actinfo->GetWidth($this->img));
+
+                // Add the width of the vertivcal divider line
+                $titlewidth += $this->scale->divider->iWeight*2;
+
+				// Adjust the width by the user specified zoom factor
+				$fw *= $this->iZoomFactor;
+
+                // Now get the total width taking
+                // titlewidth, left and rigt margin, dayfont size
+                // into account
+                $width = $titlewidth + $nd*$fw + $lm+$rm;
+            }
+            else {
+                $width = $this->img->width;
+            }
+
+            $width = round($width);
+            $height = round($height);
+            // Make a sanity check on image size
+            if( $width > MAX_GANTTIMG_SIZE_W || $height > MAX_GANTTIMG_SIZE_H ) {
+                JpgraphError::RaiseL(6007,$width,$height);
+                //("Sanity check for automatic Gantt chart size failed. Either the width (=$width) or height (=$height) is larger than MAX_GANTTIMG_SIZE. This could potentially be caused by a wrong date in one of the activities.");
+            }
+            $this->img->CreateImgCanvas($width,$height);
+            $this->img->SetMargin($lm,$rm,$tm,$bm);
+        }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
     // Return an array width the maximum width for each activity
@@ -1501,6 +1765,7 @@ class IconImage {
 // Description: Holds properties for a text
 //===================================================
 class TextProperty {
+<<<<<<< HEAD
     var $iFFamily=FF_FONT1,$iFStyle=FS_NORMAL,$iFSize=10;
     var $iColor="black";
     var $iShow=true;
@@ -1516,6 +1781,24 @@ class TextProperty {
 	
 //---------------
 // PUBLIC METHODS	
+=======
+    public $iShow=true;
+    public $csimtarget='',$csimwintarget='',$csimalt='';
+    private $iFFamily=FF_FONT1,$iFStyle=FS_NORMAL,$iFSize=10;
+    private $iFontArray=array();
+    private $iColor="black";
+    private $iText="";
+    private $iHAlign="left",$iVAlign="bottom";
+
+    //---------------
+    // CONSTRUCTOR
+    function __construct($aTxt='') {
+        $this->iText = $aTxt;
+    }
+
+    //---------------
+    // PUBLIC METHODS
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     function Set($aTxt) {
 	$this->iText = $aTxt;
     }
@@ -1578,6 +1861,15 @@ class TextProperty {
 	$this->iFSize	 = $aFSize;
     }
 
+    function SetColumnFonts($aFontArray) {
+        if( !is_array($aFontArray) || count($aFontArray[0]) != 3 ) {
+            JpGraphError::RaiseL(6033);
+            // 'Array of fonts must contain arrays with 3 elements, i.e. (Family, Style, Size)'
+        }
+        $this->iFontArray = $aFontArray;
+    }
+
+
     function IsColumns() {
 	return is_array($this->iText) ; 
     }
@@ -1585,6 +1877,7 @@ class TextProperty {
     // Get width of text. If text contains several columns separated by
     // tabs then return both the total width as well as an array with a 
     // width for each column.
+<<<<<<< HEAD
     function GetWidth(&$aImg,$aUseTabs=false,$aTabExtraMargin=1.1) {
 	$extra_margin=4;
 	$aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
@@ -1629,11 +1922,66 @@ class TextProperty {
 	else {
 	    JpGraphError::RaiseL(6012);
 	}
+=======
+    function GetWidth($aImg,$aUseTabs=false,$aTabExtraMargin=1.1) {
+        $extra_margin=4;
+        $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+        if( is_string($this->iText) ) {
+            if( strlen($this->iText) == 0 ) return 0;
+            $tmp = preg_split('/\t/',$this->iText);
+            if( count($tmp) <= 1 || !$aUseTabs ) {
+                $w = $aImg->GetTextWidth($this->iText);
+                return $w + 2*$extra_margin;
+            }
+            else {
+                $tot=0;
+                $n = count($tmp);
+                for($i=0; $i < $n; ++$i) {
+                    $res[$i] = $aImg->GetTextWidth($tmp[$i]);
+                    $tot += $res[$i]*$aTabExtraMargin;
+                }
+                return array(round($tot),$res);
+            }
+        }
+        elseif( is_object($this->iText) ) {
+            // A single icon
+            return $this->iText->GetWidth()+2*$extra_margin;
+        }
+        elseif( is_array($this->iText) ) {
+            // Must be an array of texts. In this case we return the sum of the
+            // length + a fixed margin of 4 pixels on each text string
+            $n = count($this->iText);
+            $nf = count($this->iFontArray);
+            for( $i=0, $w=0; $i < $n; ++$i ) {
+                if( $i < $nf ) {
+                    $aImg->SetFont($this->iFontArray[$i][0],$this->iFontArray[$i][1],$this->iFontArray[$i][2]);
+                }
+                else {
+                    $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+                }
+                $tmp = $this->iText[$i];
+                if( is_string($tmp) ) {
+                    $w += $aImg->GetTextWidth($tmp)+$extra_margin;
+                }
+                else {
+                    if( is_object($tmp) === false ) {
+                        JpGraphError::RaiseL(6012);
+                    }
+                    $w += $tmp->GetWidth()+$extra_margin;
+                }
+            }
+            return $w;
+        }
+        else {
+            JpGraphError::RaiseL(6012);
+        }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
     // for the case where we have multiple columns this function returns the width of each
     // column individually. If there is no columns just return the width of the single
     // column as an array of one
+<<<<<<< HEAD
     function GetColWidth(&$aImg,$aMargin=0) {
 	$aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
 	if( is_array($this->iText) ) {
@@ -1655,12 +2003,63 @@ class TextProperty {
 	else {
 	    return array($this->GetWidth($aImg));
 	}
+=======
+    function GetColWidth($aImg,$aMargin=0) {
+        $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+        if( is_array($this->iText) ) {
+            $n = count($this->iText);
+            $nf = count($this->iFontArray);
+            for( $i=0, $w=array(); $i < $n; ++$i ) {
+                $tmp = $this->iText[$i];
+                if( is_string($tmp) ) {
+                    if( $i < $nf ) {
+                        $aImg->SetFont($this->iFontArray[$i][0],$this->iFontArray[$i][1],$this->iFontArray[$i][2]);
+                    }
+                    else {
+                        $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+                    }
+                    $w[$i] = $aImg->GetTextWidth($tmp)+$aMargin;
+                }
+                else {
+                    if( is_object($tmp) === false ) {
+                        JpGraphError::RaiseL(6012);
+                    }
+                    $w[$i] = $tmp->GetWidth()+$aMargin;
+                }
+            }
+            return $w;
+        }
+        else {
+            return array($this->GetWidth($aImg));
+        }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 	
     // Get total height of text
+<<<<<<< HEAD
     function GetHeight(&$aImg) {
 	$aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
 	return $aImg->GetFontHeight();
+=======
+    function GetHeight($aImg) {
+        $nf = count($this->iFontArray);
+        $maxheight = -1;
+
+        if( $nf > 0 ) {
+            // We have to find out the largest font and take that one as the
+            // height of the row
+            for($i=0; $i < $nf; ++$i ) {
+                $aImg->SetFont($this->iFontArray[$i][0],$this->iFontArray[$i][1],$this->iFontArray[$i][2]);
+                $height = $aImg->GetFontHeight();
+                $maxheight = max($height,$maxheight);
+            }
+        }
+
+        $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+        $height = $aImg->GetFontHeight();
+        $maxheight = max($height,$maxheight);
+        return $maxheight;
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 	
     // Unhide/hide the text	
@@ -1671,6 +2070,7 @@ class TextProperty {
     // Stroke text at (x,y) coordinates. If the text contains tabs then the
     // x parameter should be an array of positions to be used for each successive
     // tab mark. If no array is supplied then the tabs will be ignored.
+<<<<<<< HEAD
     function Stroke(&$aImg,$aX,$aY) {
 	if( $this->iShow ) {
 	    $aImg->SetColor($this->iColor);
@@ -1720,6 +2120,70 @@ class TextProperty {
 		}	
 	    }
 	}
+=======
+    function Stroke($aImg,$aX,$aY) {
+        if( $this->iShow ) {
+            $aImg->SetColor($this->iColor);
+            $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+            $aImg->SetTextAlign($this->iHAlign,$this->iVAlign);
+            if( $this->GetNbrTabs() < 1 ) {
+                if( is_string($this->iText) ) {
+                    if( is_array($aX) ) $aX=$aX[0];
+                    if( is_array($aY) ) $aY=$aY[0];
+                    $aImg->StrokeText($aX,$aY,$this->iText);
+                }
+                elseif( is_array($this->iText) && ($n = count($this->iText)) > 0 ) {
+                    $ax = is_array($aX) ;
+                    $ay = is_array($aY) ;
+                    if( $ax && $ay ) {
+                        // Nothing; both are already arrays
+                    }
+                    elseif( $ax ) {
+                        $aY = array_fill(0,$n,$aY);
+                    }
+                    elseif( $ay ) {
+                        $aX = array_fill(0,$n,$aX);
+                    }
+                    else {
+                        $aX = array_fill(0,$n,$aX);
+                        $aY = array_fill(0,$n,$aY);
+                    }
+                    $n = min($n, count($aX) ) ;
+                    $n = min($n, count($aY) ) ;
+                    for($i=0; $i < $n; ++$i ) {
+                        $tmp = $this->iText[$i];
+                        if( is_object($tmp) ) {
+                            $tmp->Stroke($aImg,$aX[$i],$aY[$i]);
+                        }
+                        else {
+                            if( $i < count($this->iFontArray) ) {
+                                $font = $this->iFontArray[$i];
+                                $aImg->SetFont($font[0],$font[1],$font[2]);
+                            }
+                            else {
+                                $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+                            }
+                        	$aImg->StrokeText($aX[$i],$aY[$i],str_replace("\t"," ",$tmp));
+                        }
+                    }
+                }
+            }
+            else {
+                $tmp = preg_split('/\t/',$this->iText);
+                $n = min(count($tmp),count($aX));
+                for($i=0; $i < $n; ++$i) {
+                    if( $i < count($this->iFontArray) ) {
+                        $font = $this->iFontArray[$i];
+                        $aImg->SetFont($font[0],$font[1],$font[2]);
+                    }
+                    else {
+                        $aImg->SetFont($this->iFFamily,$this->iFStyle,$this->iFSize);
+                    }
+                    $aImg->StrokeText($aX[$i],$aY,$tmp[$i]);
+                }
+            }
+        }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 }
 
@@ -2186,6 +2650,7 @@ class GanttScale {
 	
     // Translate a date to screen coordinates	(horizontal scale)
     function TranslateDate($aDate) {
+<<<<<<< HEAD
 	//
 	// In order to handle the problem with Daylight savings time
 	// the scale written with equal number of seconds per day beginning
@@ -2208,6 +2673,51 @@ class GanttScale {
 	}
 	$img=$this->iImg;		
 	return ($aDate-$this->iStartDate-$offset)/SECPERDAY*$this->GetDayWidth()+$img->left_margin+$this->iLabelWidth;;
+=======
+        //
+        // In order to handle the problem with Daylight savings time
+        // the scale written with equal number of seconds per day beginning
+        // with the start date. This means that we "cement" the state of
+        // DST as it is in the start date. If later the scale includes the
+        // switchover date (depends on the locale) we need to adjust back
+        // if the date we try to translate has a different DST status since
+        // we would otherwise be off by one hour.
+        $aDate = $this->NormalizeDate($aDate);
+        $tmp = localtime($aDate);
+        $cloc = $tmp[8];
+        $tmp = localtime($this->iStartDate);
+        $sloc = $tmp[8];
+        $offset = 0;
+        if( $sloc != $cloc) {
+            if( $sloc )
+            $offset = 3600;
+            else
+            $offset = -3600;
+        }
+        $img=$this->iImg;
+        return ($aDate-$this->iStartDate-$offset)/SECPERDAY*$this->GetDayWidth()+$img->left_margin+$this->iLabelWidth;;
+    }
+
+    // Get screen coordinatesz for the vertical position for a bar
+    function TranslateVertPos($aPos,$atTop=false) {
+        $img=$this->iImg;
+        if( $aPos > $this->iVertLines )
+        	JpGraphError::RaiseL(6015,$aPos);
+        // 'Illegal vertical position %d'
+        if( $this->iVertLayout == GANTT_EVEN ) {
+            // Position the top bar at 1 vert spacing from the scale
+            $pos =  round($img->top_margin + $this->iVertHeaderSize +  ($aPos+1)*$this->iVertSpacing);
+        }
+        else {
+            // position the top bar at 1/2 a vert spacing from the scale
+            $pos = round($img->top_margin + $this->iVertHeaderSize  + $this->iTopPlotMargin + ($aPos+1)*$this->iVertSpacing);
+        }
+
+        if( $atTop )
+            $pos -= $this->iVertSpacing;
+
+        return $pos;
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
     // Get screen coordinatesz for the vertical position for a bar		
@@ -2234,6 +2744,7 @@ class GanttScale {
 					
     // Convert a date to timestamp
     function NormalizeDate($aDate) {
+<<<<<<< HEAD
 	if( $aDate === false ) return false; 
 	if( is_string($aDate) ) {
 	    $t = strtotime($aDate);
@@ -2248,6 +2759,22 @@ class GanttScale {
 	else
 	    JpGraphError::RaiseL(6017,$aDate);
 //Unknown date format in GanttScale ($aDate).");
+=======
+        if( $aDate === false ) return false;
+        if( is_string($aDate) ) {
+            $t = strtotime($aDate);
+            if( $t === FALSE || $t === -1 ) {
+                JpGraphError::RaiseL(6016,$aDate);
+                //("Date string ($aDate) specified for Gantt activity can not be interpretated. Please make sure it is a valid time string, e.g. 2005-04-23 13:30");
+            }
+            return $t;
+        }
+        elseif( is_int($aDate) || is_float($aDate) )
+            return $aDate;
+        else
+            JpGraphError::RaiseL(6017,$aDate);
+        //Unknown date format in GanttScale ($aDate).");
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
     
@@ -2388,6 +2915,7 @@ class GanttScale {
 	    $minint = $this->TimeToMinutes($tmp);
 	    if( 1440 % $minint !== 0 ) { 
                 JpGraphError::RaiseL(6020,$tmp);
+<<<<<<< HEAD
 //('Intervall for hours must divide the day evenly, e.g. 0:30, 1:00, 1:30, 4:00 etc. You have specified an intervall of '.$tmp);
             } 
 
@@ -2451,6 +2979,191 @@ class GanttScale {
 	    return $yb - $img->top_margin;
 	}
 	return $aYCoord;
+=======
+                //('Intervall for hours must divide the day evenly, e.g. 0:30, 1:00, 1:30, 4:00 etc. You have specified an intervall of '.$tmp);
+            }
+
+            $n = ceil(24*60 / $minint );
+            $datestamp = $this->iStartDate;
+            $day = date('w',$this->iStartDate);
+            $doback = !$this->minute->iShowLabels;
+            $width = $this->GetDayWidth() / $n ;
+            for($j=0; $j < $this->GetNumberOfDays(); ++$j, $day += 1,$day %= 7) {
+                for($i=0; $i < $n ;++$i, $x+=$width) {
+                    if( $day==6 || $day==0 ) {
+
+                        $img->PushColor($this->day->iWeekendBackgroundColor);
+                        if( $this->iUsePlotWeekendBackground && $doback )
+                        $img->FilledRectangle($x,$yt+$this->day->iFrameWeight,$x+$width,$img->height-$img->bottom_margin);
+                        else
+                        $img->FilledRectangle($x,$yt+$this->day->iFrameWeight,$x+$width,$yb-$this->day->iFrameWeight);
+                        $img->PopColor();
+
+                    }
+
+                    if( $day==0 )
+                    $img->SetColor($this->day->iSundayTextColor);
+                    else
+                    $img->SetColor($this->day->iTextColor);
+
+                    switch( $this->hour->iStyle ) {
+                        case HOURSTYLE_HMAMPM:
+                            // 1:35pm
+                            $txt = date('g:ia',$datestamp);
+                            break;
+                        case HOURSTYLE_H24:
+                            // 13
+                            $txt = date('H',$datestamp);
+                            break;
+                        case HOURSTYLE_HAMPM:
+                            $txt = date('ga',$datestamp);
+                            break;
+                        case HOURSTYLE_CUSTOM:
+                            $txt = date($this->hour->iLabelFormStr,$datestamp);
+                            break;
+                        case HOURSTYLE_HM24:
+                        default:
+                            $txt = date('H:i',$datestamp);
+                            break;
+                    }
+                    $img->StrokeText(round($x+$width/2),round($yb-$this->hour->iTitleVertMargin),$txt);
+                    $img->SetColor($this->hour->grid->iColor);
+                    $img->SetLineWeight($this->hour->grid->iWeight);
+                    $img->Line($x,$yt,$x,$yb);
+                    $this->hour->grid->Stroke($img,$x,$yb,$x,$img->height-$img->bottom_margin);
+                    //$datestamp += $minint*60
+                    $datestamp = mktime(date('H',$datestamp),date('i',$datestamp)+$minint,0,
+                    date("m",$datestamp),date("d",$datestamp)+1,date("Y",$datestamp));
+
+                }
+            }
+            $img->SetColor($this->hour->iFrameColor);
+            $img->SetLineWeight($this->hour->iFrameWeight);
+            $img->Rectangle($xt,$yt,$xb,$yb);
+            return $yb - $img->top_margin;
+        }
+        return $aYCoord;
+    }
+
+
+    // Stroke the day scale (including gridlines)
+    function StrokeDays($aYCoord,$getHeight=false) {
+        $img=$this->iImg;
+        $daywidth=$this->GetDayWidth();
+        $xt=$img->left_margin+$this->iLabelWidth;
+        $yt=$aYCoord+$img->top_margin;
+        if( $this->day->iShowLabels ) {
+            $img->SetFont($this->day->iFFamily,$this->day->iFStyle,$this->day->iFSize);
+            $yb=$yt + $img->GetFontHeight() + $this->day->iTitleVertMargin + $this->day->iFrameWeight;
+            if( $getHeight ) {
+                return $yb - $img->top_margin;
+            }
+            $xb=$img->width-$img->right_margin+1;
+            $img->SetColor($this->day->iBackgroundColor);
+            $img->FilledRectangle($xt,$yt,$xb,$yb);
+
+            $x = $xt;
+            $img->SetTextAlign("center");
+            $day = date('w',$this->iStartDate);
+            $datestamp = $this->iStartDate;
+
+            $doback = !($this->hour->iShowLabels || $this->minute->iShowLabels);
+
+            setlocale(LC_TIME,$this->iDateLocale->iLocale);
+
+            for($i=0; $i < $this->GetNumberOfDays(); ++$i, $x+=$daywidth, $day += 1,$day %= 7) {
+                if( $day==6 || $day==0 ) {
+                    $img->SetColor($this->day->iWeekendBackgroundColor);
+                    if( $this->iUsePlotWeekendBackground && $doback)
+                        $img->FilledRectangle($x,$yt+$this->day->iFrameWeight,
+                                              $x+$daywidth,$img->height-$img->bottom_margin);
+                    else
+                        $img->FilledRectangle($x,$yt+$this->day->iFrameWeight,
+                    $x+$daywidth,$yb-$this->day->iFrameWeight);
+                }
+
+                $mn = strftime('%m',$datestamp);
+                if( $mn[0]=='0' )
+                    $mn = $mn[1];
+
+                switch( $this->day->iStyle ) {
+                    case DAYSTYLE_LONG:
+                        // "Monday"
+                        $txt = strftime('%A',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORT:
+                        // "Mon"
+                        $txt = strftime('%a',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDAYDATE1:
+                        // "Mon 23/6"
+                        $txt = strftime('%a %d/'.$mn,$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDAYDATE2:
+                        // "Mon 23 Jun"
+                        $txt = strftime('%a %d %b',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDAYDATE3:
+                        // "Mon 23 Jun 2003"
+                        $txt = strftime('%a %d %b %Y',$datestamp);
+                        break;
+                    case DAYSTYLE_LONGDAYDATE1:
+                        // "Monday 23 Jun"
+                        $txt = strftime('%A %d %b',$datestamp);
+                        break;
+                    case DAYSTYLE_LONGDAYDATE2:
+                        // "Monday 23 Jun 2003"
+                        $txt = strftime('%A %d %b %Y',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDATE1:
+                        // "23/6"
+                        $txt = strftime('%d/'.$mn,$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDATE2:
+                        // "23 Jun"
+                        $txt = strftime('%d %b',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDATE3:
+                        // "Mon 23"
+                        $txt = strftime('%a %d',$datestamp);
+                        break;
+                    case DAYSTYLE_SHORTDATE4:
+                        // "23"
+                        $txt = strftime('%d',$datestamp);
+                        break;
+                    case DAYSTYLE_CUSTOM:
+                        // Custom format
+                        $txt = strftime($this->day->iLabelFormStr,$datestamp);
+                        break;
+                    case DAYSTYLE_ONELETTER:
+                    default:
+                        // "M"
+                        $txt = strftime('%A',$datestamp);
+                        $txt = strtoupper($txt[0]);
+                        break;
+                }
+
+                if( $day==0 )
+                    $img->SetColor($this->day->iSundayTextColor);
+                else
+                    $img->SetColor($this->day->iTextColor);
+                $img->StrokeText(round($x+$daywidth/2+1),
+                round($yb-$this->day->iTitleVertMargin),$txt);
+                $img->SetColor($this->day->grid->iColor);
+                $img->SetLineWeight($this->day->grid->iWeight);
+                $img->Line($x,$yt,$x,$yb);
+                $this->day->grid->Stroke($img,$x,$yb,$x,$img->height-$img->bottom_margin);
+                $datestamp = mktime(0,0,0,date("m",$datestamp),date("d",$datestamp)+1,date("Y",$datestamp));
+                //$datestamp += SECPERDAY;
+
+            }
+            $img->SetColor($this->day->iFrameColor);
+            $img->SetLineWeight($this->day->iFrameWeight);
+            $img->Rectangle($xt,$yt,$xb,$yb);
+            return $yb - $img->top_margin;
+        }
+        return $aYCoord;
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
 
@@ -2575,6 +3288,7 @@ class GanttScale {
 	
     // Stroke week header and grid
     function StrokeWeeks($aYCoord,$getHeight=false) {
+<<<<<<< HEAD
 	if( $this->week->iShowLabels ) {
 	    $img=$this->iImg;	
 	    $yt=$aYCoord+$img->top_margin;		
@@ -2649,6 +3363,83 @@ class GanttScale {
 	return $aYCoord;
     }	
 	
+=======
+        if( $this->week->iShowLabels ) {
+            $img=$this->iImg;
+            $yt=$aYCoord+$img->top_margin;
+            $img->SetFont($this->week->iFFamily,$this->week->iFStyle,$this->week->iFSize);
+            $yb=$yt + $img->GetFontHeight() + $this->week->iTitleVertMargin + $this->week->iFrameWeight;
+
+            if( $getHeight ) {
+                return $yb - $img->top_margin;
+            }
+
+            $xt=$img->left_margin+$this->iLabelWidth;
+            $weekwidth=$this->GetDayWidth()*7;
+            $wdays=$this->iDateLocale->GetDayAbb();
+            $xb=$img->width-$img->right_margin+1;
+            $week = $this->iStartDate;
+            $weeknbr=$this->GetWeekNbr($week);
+            $img->SetColor($this->week->iBackgroundColor);
+            $img->FilledRectangle($xt,$yt,$xb,$yb);
+            $img->SetColor($this->week->grid->iColor);
+            $x = $xt;
+            if( $this->week->iStyle==WEEKSTYLE_WNBR ) {
+                $img->SetTextAlign("center");
+                $txtOffset = $weekwidth/2+1;
+            }
+            elseif( $this->week->iStyle==WEEKSTYLE_FIRSTDAY  ||
+                    $this->week->iStyle==WEEKSTYLE_FIRSTDAY2 ||
+                    $this->week->iStyle==WEEKSTYLE_FIRSTDAYWNBR ||
+                    $this->week->iStyle==WEEKSTYLE_FIRSTDAY2WNBR ) {
+                $img->SetTextAlign("left");
+                $txtOffset = 3;
+            }
+            else {
+                JpGraphError::RaiseL(6021);
+                //("Unknown formatting style for week.");
+            }
+
+            for($i=0; $i<$this->GetNumberOfDays()/7; ++$i, $x+=$weekwidth) {
+                $img->PushColor($this->week->iTextColor);
+
+                if( $this->week->iStyle==WEEKSTYLE_WNBR )
+                    $txt = sprintf($this->week->iLabelFormStr,$weeknbr);
+                elseif( $this->week->iStyle==WEEKSTYLE_FIRSTDAY ||
+                        $this->week->iStyle==WEEKSTYLE_FIRSTDAYWNBR )
+                    $txt = date("j/n",$week);
+                elseif( $this->week->iStyle==WEEKSTYLE_FIRSTDAY2 ||
+                        $this->week->iStyle==WEEKSTYLE_FIRSTDAY2WNBR ) {
+                    $monthnbr = date("n",$week)-1;
+                    $shortmonth = $this->iDateLocale->GetShortMonthName($monthnbr);
+                    $txt = Date("j",$week)." ".$shortmonth;
+                }
+
+                if( $this->week->iStyle==WEEKSTYLE_FIRSTDAYWNBR ||
+                $this->week->iStyle==WEEKSTYLE_FIRSTDAY2WNBR ) {
+                    $w = sprintf($this->week->iLabelFormStr,$weeknbr);
+                    $txt .= ' '.$w;
+                }
+
+                $img->StrokeText(round($x+$txtOffset),
+                round($yb-$this->week->iTitleVertMargin),$txt);
+
+                $week = strtotime('+7 day',$week);
+                $weeknbr = $this->GetWeekNbr($week);
+                $img->PopColor();
+                $img->SetLineWeight($this->week->grid->iWeight);
+                $img->Line($x,$yt,$x,$yb);
+                $this->week->grid->Stroke($img,$x,$yb,$x,$img->height-$img->bottom_margin);
+            }
+            $img->SetColor($this->week->iFrameColor);
+            $img->SetLineWeight($this->week->iFrameWeight);
+            $img->Rectangle($xt,$yt,$xb,$yb);
+            return $yb-$img->top_margin;
+        }
+        return $aYCoord;
+    }
+
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     // Format the mont scale header string
     function GetMonthLabel($aMonthNbr,$year) {
 	$sn = $this->iDateLocale->GetShortMonthName($aMonthNbr);
@@ -2681,6 +3472,7 @@ class GanttScale {
 	
     // Stroke month scale and gridlines
     function StrokeMonths($aYCoord,$getHeight=false) {
+<<<<<<< HEAD
 	if( $this->month->iShowLabels ) {
 	    $img=$this->iImg;		
 	    $img->SetFont($this->month->iFFamily,$this->month->iFStyle,$this->month->iFSize);
@@ -2744,10 +3536,76 @@ class GanttScale {
 	    return $yb-$img->top_margin;
 	}
 	return $aYCoord;
+=======
+        if( $this->month->iShowLabels ) {
+            $img=$this->iImg;
+            $img->SetFont($this->month->iFFamily,$this->month->iFStyle,$this->month->iFSize);
+            $yt=$aYCoord+$img->top_margin;
+            $yb=$yt + $img->GetFontHeight() + $this->month->iTitleVertMargin + $this->month->iFrameWeight;
+            if( $getHeight ) {
+                return $yb - $img->top_margin;
+            }
+            $monthnbr = $this->GetMonthNbr($this->iStartDate)-1;
+            $xt=$img->left_margin+$this->iLabelWidth;
+            $xb=$img->width-$img->right_margin+1;
+
+            $img->SetColor($this->month->iBackgroundColor);
+            $img->FilledRectangle($xt,$yt,$xb,$yb);
+
+            $img->SetLineWeight($this->month->grid->iWeight);
+            $img->SetColor($this->month->iTextColor);
+            $year = 0+strftime("%Y",$this->iStartDate);
+            $img->SetTextAlign("center");
+            if( $this->GetMonthNbr($this->iStartDate) == $this->GetMonthNbr($this->iEndDate)
+                && $this->GetYear($this->iStartDate)==$this->GetYear($this->iEndDate) ) {
+                $monthwidth=$this->GetDayWidth()*($this->GetMonthDayNbr($this->iEndDate) - $this->GetMonthDayNbr($this->iStartDate) + 1);
+            }
+            else {
+                $monthwidth=$this->GetDayWidth()*($this->GetNumDaysInMonth($monthnbr,$year)-$this->GetMonthDayNbr($this->iStartDate)+1);
+            }
+            // Is it enough space to stroke the first month?
+            $monthName = $this->GetMonthLabel($monthnbr,$year);
+            if( $monthwidth >= 1.2*$img->GetTextWidth($monthName) ) {
+                $img->SetColor($this->month->iTextColor);
+                $img->StrokeText(round($xt+$monthwidth/2+1),
+                round($yb-$this->month->iTitleVertMargin),
+                $monthName);
+            }
+            $x = $xt + $monthwidth;
+            while( $x < $xb ) {
+                $img->SetColor($this->month->grid->iColor);
+                $img->Line($x,$yt,$x,$yb);
+                $this->month->grid->Stroke($img,$x,$yb,$x,$img->height-$img->bottom_margin);
+                $monthnbr++;
+                if( $monthnbr==12 ) {
+                    $monthnbr=0;
+                    $year++;
+                }
+                $monthName = $this->GetMonthLabel($monthnbr,$year);
+                $monthwidth=$this->GetDayWidth()*$this->GetNumDaysInMonth($monthnbr,$year);
+                if( $x + $monthwidth < $xb )
+                    $w = $monthwidth;
+                else
+                    $w = $xb-$x;
+                if( $w >= 1.2*$img->GetTextWidth($monthName) ) {
+                    $img->SetColor($this->month->iTextColor);
+                    $img->StrokeText(round($x+$w/2+1),
+                    round($yb-$this->month->iTitleVertMargin),$monthName);
+                }
+                $x += $monthwidth;
+            }
+            $img->SetColor($this->month->iFrameColor);
+            $img->SetLineWeight($this->month->iFrameWeight);
+            $img->Rectangle($xt,$yt,$xb,$yb);
+            return $yb-$img->top_margin;
+        }
+        return $aYCoord;
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 
     // Stroke year scale and gridlines
     function StrokeYears($aYCoord,$getHeight=false) {
+<<<<<<< HEAD
 	if( $this->year->iShowLabels ) {
 	    $img=$this->iImg;	
 	    $yt=$aYCoord+$img->top_margin;		
@@ -2803,6 +3661,63 @@ class GanttScale {
 	    return $yb-$img->top_margin;
 	}
 	return $aYCoord;
+=======
+        if( $this->year->iShowLabels ) {
+            $img=$this->iImg;
+            $yt=$aYCoord+$img->top_margin;
+            $img->SetFont($this->year->iFFamily,$this->year->iFStyle,$this->year->iFSize);
+            $yb=$yt + $img->GetFontHeight() + $this->year->iTitleVertMargin + $this->year->iFrameWeight;
+
+            if( $getHeight ) {
+                return $yb - $img->top_margin;
+            }
+
+            $xb=$img->width-$img->right_margin+1;
+            $xt=$img->left_margin+$this->iLabelWidth;
+            $year = $this->GetYear($this->iStartDate);
+            $img->SetColor($this->year->iBackgroundColor);
+            $img->FilledRectangle($xt,$yt,$xb,$yb);
+            $img->SetLineWeight($this->year->grid->iWeight);
+            $img->SetTextAlign("center");
+            if( $year == $this->GetYear($this->iEndDate) )
+                $yearwidth=$this->GetDayWidth()*($this->GetYearDayNbr($this->iEndDate)-$this->GetYearDayNbr($this->iStartDate)+1);
+            else
+                $yearwidth=$this->GetDayWidth()*($this->GetNumDaysInYear($year)-$this->GetYearDayNbr($this->iStartDate)+1);
+
+            // The space for a year must be at least 20% bigger than the actual text
+            // so we allow 10% margin on each side
+            if( $yearwidth >= 1.20*$img->GetTextWidth("".$year) ) {
+                $img->SetColor($this->year->iTextColor);
+                $img->StrokeText(round($xt+$yearwidth/2+1),
+                                 round($yb-$this->year->iTitleVertMargin),
+                                 $year);
+            }
+            $x = $xt + $yearwidth;
+            while( $x < $xb ) {
+                $img->SetColor($this->year->grid->iColor);
+                $img->Line($x,$yt,$x,$yb);
+                $this->year->grid->Stroke($img,$x,$yb,$x,$img->height-$img->bottom_margin);
+                $year += 1;
+                $yearwidth=$this->GetDayWidth()*$this->GetNumDaysInYear($year);
+                if( $x + $yearwidth < $xb )
+                    $w = $yearwidth;
+                else
+                    $w = $xb-$x;
+                if( $w >= 1.2*$img->GetTextWidth("".$year) ) {
+                    $img->SetColor($this->year->iTextColor);
+                    $img->StrokeText(round($x+$w/2+1),
+                                     round($yb-$this->year->iTitleVertMargin),
+                                     $year);
+                }
+                $x += $yearwidth;
+            }
+            $img->SetColor($this->year->iFrameColor);
+            $img->SetLineWeight($this->year->iFrameWeight);
+            $img->Rectangle($xt,$yt,$xb,$yb);
+            return $yb-$img->top_margin;
+        }
+        return $aYCoord;
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
     }
 	
     // Stroke table title (upper left corner)
@@ -3469,6 +4384,7 @@ class TextPropertyBelow extends TextProperty {
 
 class GanttVLine extends GanttPlotObject {
 
+<<<<<<< HEAD
     var $iLine,$title_margin=3;
     var $iDayOffset=1;	// Defult to right edge of day
 	
@@ -3487,6 +4403,33 @@ class GanttVLine extends GanttPlotObject {
 
 //---------------
 // PUBLIC METHODS	
+=======
+    private $iLine,$title_margin=3, $iDayOffset=0.5;
+    private $iStartRow = -1, $iEndRow = -1;
+
+    //---------------
+    // CONSTRUCTOR
+    function __construct($aDate,$aTitle="",$aColor="darkred",$aWeight=2,$aStyle="solid") {
+        GanttPlotObject::__construct();
+        $this->iLine = new LineProperty();
+        $this->iLine->SetColor($aColor);
+        $this->iLine->SetWeight($aWeight);
+        $this->iLine->SetStyle($aStyle);
+        $this->iStart = $aDate;
+        $this->title = new TextPropertyBelow();
+        $this->title->Set($aTitle);
+    }
+
+    //---------------
+    // PUBLIC METHODS
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
+
+    // Set start and end rows for the VLine. By default the entire heigh of the
+    // Gantt chart is used
+    function SetRowSpan($aStart, $aEnd=-1) {
+        $this->iStartRow = $aStart;
+        $this->iEndRow = $aEnd;
+    }
 
     function SetDayOffset($aOff=0.5) {
 	if( $aOff < 0.0 || $aOff > 1.0 )
@@ -3496,6 +4439,7 @@ class GanttVLine extends GanttPlotObject {
     }
 	
     function SetTitleMargin($aMarg) {
+<<<<<<< HEAD
 	$this->title_margin = $aMarg;
     }
 	
@@ -3512,6 +4456,41 @@ class GanttVLine extends GanttPlotObject {
 	$this->title->Align("center","top");
 	$this->title->Stroke($aImg,$x,$y2+$this->title_margin);
     }	
+=======
+        $this->title_margin = $aMarg;
+    }
+
+    function SetWeight($aWeight) {
+        $this->iLine->SetWeight($aWeight);
+    }
+
+    function Stroke($aImg,$aScale) {
+        $d = $aScale->NormalizeDate($this->iStart);
+        if( $d <  $aScale->iStartDate || $d > $aScale->iEndDate )
+            return;
+        if($this->iDayOffset != 0.0)
+            $d += 24*60*60*$this->iDayOffset;
+        $x = $aScale->TranslateDate($d);//d=1006858800,
+
+        if( $this->iStartRow > -1 ) {
+            $y1 = $aScale->TranslateVertPos($this->iStartRow,true) ;
+        }
+        else {
+            $y1 = $aScale->iVertHeaderSize+$aImg->top_margin;
+        }
+
+        if( $this->iEndRow > -1 ) {
+            $y2 = $aScale->TranslateVertPos($this->iEndRow);
+        }
+        else {
+            $y2 = $aImg->height - $aImg->bottom_margin;
+        }
+
+        $this->iLine->Stroke($aImg,$x,$y1,$x,$y2);
+        $this->title->Align("center","top");
+        $this->title->Stroke($aImg,$x,$y2+$this->title_margin);
+    }
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
 }
 
 //===================================================

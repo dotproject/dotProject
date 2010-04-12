@@ -1,5 +1,6 @@
 <?php
 /*=======================================================================
+<<<<<<< HEAD
 // File: 	JPGRAPH_CANVTOOLS.PHP
 // Description:	Some utilities for text and shape drawing on a canvas
 // Created: 	2002-08-23
@@ -14,6 +15,21 @@ DEFINE('CORNER_TOPLEFT',0);
 DEFINE('CORNER_TOPRIGHT',1);
 DEFINE('CORNER_BOTTOMRIGHT',2);
 DEFINE('CORNER_BOTTOMLEFT',3);
+=======
+ // File:        JPGRAPH_CANVTOOLS.PHP
+ // Description: Some utilities for text and shape drawing on a canvas
+ // Created:     2002-08-23
+ // Ver:         $Id: jpgraph_canvtools.php 1857 2009-09-28 14:38:14Z ljp $
+ //
+ // Copyright (c) Aditus Consulting. All rights reserved.
+ //========================================================================
+ */
+
+define('CORNER_TOPLEFT',0);
+define('CORNER_TOPRIGHT',1);
+define('CORNER_BOTTOMRIGHT',2);
+define('CORNER_BOTTOMLEFT',3);
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
 
 
 //===================================================
@@ -42,6 +58,10 @@ class CanvasScale {
 	$this->ixmax = $xmax;
 	$this->iymin = $ymin;
 	$this->iymax = $ymax;
+    }
+
+    function Get() {
+        return array($this->ixmin,$this->ixmax,$this->iymin,$this->iymax);
     }
 
     function Translate($x,$y) {
@@ -84,6 +104,10 @@ class Shape {
 	list($x1,$y1) = $this->scale->Translate($x1,$y1);
 	list($x2,$y2) = $this->scale->Translate($x2,$y2);
 	$this->img->Line($x1,$y1,$x2,$y2);
+    }
+
+    function SetLineWeight($aWeight) {
+        $this->img->SetLineWeight($aWeight);
     }
 
     function Polygon($p,$aClosed=false) {

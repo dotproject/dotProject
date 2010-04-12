@@ -34,7 +34,7 @@ function toggle(id) {
 	if ($viewtype == 'single') {
 ?>
 		var elems = document.getElementsByTagName("div");
-		for (var i=0; i<elems.length; i++)
+		for (var i=0; i<elems.length; i++) {
 			if (elems[i].className == 'message') {
 				elems[i].style.display = 'none';
 			}

@@ -1,18 +1,16 @@
 <?php
 //=======================================================================
-// File:	JPG-CONFIG.INC
-// Description:	Configuration file for JpGraph library
-// Created: 	2004-03-27
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id$
+// File:        JPG-CONFIG.INC
+// Description: Configuration file for JpGraph library
+// Created:     2004-03-27
+// Ver:         $Id: jpg-config.inc.php 1871 2009-09-29 05:56:39Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 
 
-
 //------------------------------------------------------------------------
-// Directories for cache and font directory. 
+// Directories for cache and font directory.
 //
 // CACHE_DIR:
 // The full absolute name of the directory to be used to store the
@@ -28,8 +26,8 @@
 //
 // UNIX:
 //   CACHE_DIR /tmp/jpgraph_cache/
-//   TTF_DIR   /usr/X11R6/lib/X11/fonts/truetype/
-//   MBTTF_DIR /usr/share/fonts/ja/TrueType/
+//   TTF_DIR   /usr/share/fonts/truetype/
+//   MBTTF_DIR /usr/share/fonts/truetype/
 //
 // WINDOWS:
 //   CACHE_DIR $SERVER_TEMP/jpgraph_cache/
@@ -37,24 +35,26 @@
 //   MBTTF_DIR $SERVER_SYSTEMROOT/fonts/
 //
 //------------------------------------------------------------------------
-// DEFINE("CACHE_DIR","/tmp/jpgraph_cache/");
-// DEFINE("TTF_DIR","/usr/X11R6/lib/X11/fonts/truetype/");
-// DEFINE("MBTTF_DIR","/usr/share/fonts/ja/TrueType/");
+// define('CACHE_DIR','/tmp/jpgraph_cache/');
+// define('TTF_DIR','/usr/share/fonts/truetype/');
+// define('MBTTF_DIR','/usr/share/fonts/truetype/');
 
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are
 // using the cache.
 // The directory must be the filesysystem name as seen by PHP
-// and the 'http' version must be the same directory but as 
-// seen by the HTTP server relative to the 'htdocs' ddirectory. 
+// and the 'http' version must be the same directory but as
+// seen by the HTTP server relative to the 'htdocs' ddirectory.
 // If a relative path is specified it is taken to be relative from where
 // the image script is executed.
-// Note: The default setting is to create a subdirectory in the 
+// Note: The default setting is to create a subdirectory in the
 // directory from where the image script is executed and store all files
 // there. As ususal this directory must be writeable by the PHP process.
-DEFINE("CSIMCACHE_DIR","csimcache/"); 
-DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
+define('CSIMCACHE_DIR','csimcache/');
+define('CSIMCACHE_HTTP_DIR','csimcache/');
 
+
+/** TODO: is all of this still needed as of jpgraph 3.0.7? **/
 //------------------------------------------------------------------------
 // Defines for font setup
 //------------------------------------------------------------------------
@@ -62,9 +62,9 @@ DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
 // Actual name of the TTF file used together with FF_CHINESE aka FF_BIG5
 // This is the TTF file being used when the font family is specified as
 // either FF_CHINESE or FF_BIG5
-define('TTF_DIR', DP_BASE_DIR . '/lib/fonts/');
+define('TTF_DIR', DP_BASE_DIR . '/lib/fonts/vera/');
 define('FF_CUSTOM', 18);
-define('BASE_FONT', 'FreeSans');
+/*define('BASE_FONT', 'FreeSans');
 define('CUSTOM_TTF_FONT', BASE_FONT . '.ttf');
 define('CUSTOM_TTF_FONT_BOLD', BASE_FONT.'Bold.ttf');
 define('CUSTOM_TTF_FONT_ITALIC', BASE_FONT.'Oblique.ttf');
@@ -111,6 +111,7 @@ DEFINE('MINCHO_TTF_FONT','ipam.ttf');
 DEFINE('PMINCHO_TTF_FONT','ipamp.ttf');
 DEFINE('GOTHIC_TTF_FONT','ipag.ttf');
 DEFINE('PGOTHIC_TTF_FONT','ipagp.ttf');
+*/
 
 //------------------------------------------------------------------------
 // Various JpGraph Settings. Adjust accordingly to your
@@ -118,118 +119,74 @@ DEFINE('PGOTHIC_TTF_FONT','ipagp.ttf');
 // default (Enable by setting USE_CACHE to true)
 //------------------------------------------------------------------------
 
-// Deafult graphic format set to "auto" which will automatically
+// Deafult locale for error messages.
+// This defaults to English = 'en'
+define('DEFAULT_ERR_LOCALE','en');
+
+// Deafult graphic format set to 'auto' which will automatically
 // choose the best available format in the order png,gif,jpeg
 // (The supported format depends on what your PHP installation supports)
-DEFINE("DEFAULT_GFORMAT","auto");
-
-// Should the image be a truecolor image? 
-// Note 1: Has only effect with GD 2.0.1 and above.
-// Note 2: GD 2.0.1 + PHP 4.0.6 on Win32 crashes when trying to use 
-// trucolor.
-// Note 3: MUST be enabled to get background images working with GD2
-DEFINE('USE_TRUECOLOR',true);
-
-// Specify what version of the GD library is installed.
-// If this is set to 'auto' the version will be automatically 
-// determined.
-// However since determining the library takes ~1ms you can also 
-// manually specify the version if you know what version you have. 
-// This means that you should 
-// set this define to true if you have GD 2.x installed to save 1ms. 
-DEFINE("USE_LIBRARY_GD2",'auto');
+define('DEFAULT_GFORMAT','auto');
 
 // Should the cache be used at all? By setting this to false no
-// files will be generated in the cache directory.  
+// files will be generated in the cache directory.
 // The difference from READ_CACHE being that setting READ_CACHE to
 // false will still create the image in the cache directory
 // just not use it. By setting USE_CACHE=false no files will even
 // be generated in the cache directory.
-DEFINE("USE_CACHE",false);
+define('USE_CACHE',false);
 
-// Should we try to find an image in the cache before generating it? 
+// Should we try to find an image in the cache before generating it?
 // Set this define to false to bypass the reading of the cache and always
-// regenerate the image. Note that even if reading the cache is 
+// regenerate the image. Note that even if reading the cache is
 // disabled the cached will still be updated with the newly generated
-// image. Set also "USE_CACHE" below.
-DEFINE("READ_CACHE",true);
+// image. Set also 'USE_CACHE' below.
+define('READ_CACHE',true);
 
 // Determine if the error handler should be image based or purely
 // text based. Image based makes it easier since the script will
 // always return an image even in case of errors.
-DEFINE("USE_IMAGE_ERROR_HANDLER",true);
+define('USE_IMAGE_ERROR_HANDLER',true);
+
+// Should the library examine the global php_errmsg string and convert
+// any error in it to a graphical representation. This is handy for the
+// occasions when, for example, header files cannot be found and this results
+// in the graph not being created and just a 'red-cross' image would be seen.
+// This should be turned off for a production site.
+define('CATCH_PHPERRMSG',true);
 
 // Determine if the library should also setup the default PHP
 // error handler to generate a graphic error mesage. This is useful
 // during development to be able to see the error message as an image
-// instead as a "red-cross" in a page where an image is expected.
-DEFINE("INSTALL_PHP_ERR_HANDLER",false);
-
-// Should the library examin the global php_errmsg string and convert
-// any error in it to a graphical representation. This is handy for the
-// occasions when, for example, header files cannot be found and this results
-// in the graph not being created and just a "red-cross" image would be seen.
-// This should be turned off for a production site.
-DEFINE("CATCH_PHPERRMSG",true);
-
-// If the color palette is full should JpGraph try to allocate
-// the closest match? If you plan on using background images or
-// gradient fills it might be a good idea to enable this.
-// If not you will otherwise get an error saying that the color palette is 
-// exhausted. The drawback of using approximations is that the colors 
-// might not be exactly what you specified. 
-// Note1: This does only apply to paletted images, not truecolor 
-// images since they don't have the limitations of maximum number
-// of colors.
-DEFINE("USE_APPROX_COLORS",true);
+// instead as a 'red-cross' in a page where an image is expected.
+define('INSTALL_PHP_ERR_HANDLER',false);
 
 // Should usage of deprecated functions and parameters give a fatal error?
 // (Useful to check if code is future proof.)
-DEFINE("ERR_DEPRECATED",true);
+define('ERR_DEPRECATED',true);
 
-// Should the time taken to generate each picture be branded to the lower
-// left in corner in each generated image? Useful for performace measurements
-// generating graphs
-DEFINE("BRAND_TIMING",false);
-
-// What format should be used for the timing string?
-DEFINE("BRAND_TIME_FORMAT","(%01.3fs)");
+// The builtin GD function imagettfbbox() fuction which calculates the bounding box for
+// text using TTF fonts is buggy. By setting this define to true the library
+// uses its own compensation for this bug. However this will give a
+// slightly different visual apparance than not using this compensation.
+// Enabling this compensation will in general give text a bit more space to more
+// truly reflect the actual bounding box which is a bit larger than what the
+// GD function thinks.
+define('USE_LIBRARY_IMAGETTFBBOX',true);
 
 //------------------------------------------------------------------------
 // The following constants should rarely have to be changed !
 //------------------------------------------------------------------------
 
 // What group should the cached file belong to
-// (Set to "" will give the default group for the "PHP-user")
+// (Set to '' will give the default group for the 'PHP-user')
 // Please note that the Apache user must be a member of the
 // specified group since otherwise it is impossible for Apache
 // to set the specified group.
-DEFINE("CACHE_FILE_GROUP","wwwadmin");
+define('CACHE_FILE_GROUP','www');
 
 // What permissions should the cached file have
-// (Set to "" will give the default persmissions for the "PHP-user")
-DEFINE("CACHE_FILE_MOD",0664);
-
-// Decide if we should use the bresenham circle algorithm or the
-// built in Arc(). Bresenham gives better visual apperance of circles 
-// but is more CPU intensive and slower then the built in Arc() function
-// in GD. Turned off by default for speed
-DEFINE("USE_BRESENHAM",false);
-
-// Special file name to indicate that we only want to calc
-// the image map in the call to Graph::Stroke() used
-// internally from the GetHTMLCSIM() method.
-DEFINE("_CSIM_SPECIALFILE","_csim_special_");
-
-// HTTP GET argument that is used with image map
-// to indicate to the script to just generate the image
-// and not the full CSIM HTML page.
-DEFINE("_CSIM_DISPLAY","_jpg_csimd");
-
-// Special filename for Graph::Stroke(). If this filename is given
-// then the image will NOT be streamed to browser of file. Instead the
-// Stroke call will return the handler for the created GD image.
-DEFINE("_IMG_HANDLER","__handle");
-
+// (Set to '' will give the default persmissions for the 'PHP-user')
+define('CACHE_FILE_MOD',0664);
 
 ?>

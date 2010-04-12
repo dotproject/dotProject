@@ -1,6 +1,10 @@
 IMPORTANT
 
+<<<<<<< HEAD
 This package is a sub set of JpGraph 1.17. Some not required files
+=======
+This package is a sub set of JpGraph 3.0.7. Some not required files
+>>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
 (like examples, docs, tests, etc) were removed from this distribution,
 in order to reduce the size of the package. Please read the README
 file for more info.
