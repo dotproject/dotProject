@@ -633,7 +633,9 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 			$summaries = array('duration' => 0, 'start_date' => date('Y-m-d'), 'end-date' => '');
 			foreach ($p['tasks'] as $i => $t1) {
 				// Record summaries
-				$summaries['duration'] += $t1['task_duration'];
+				if (!$t1['task_dynamic']) {
+					$summaries['duration'] += $t1['task_duration'];
+				}
 				if ($t1['task_start_date'] < $summaries['start_date']) {
 					$summaries['start_date'] = $t1['task_start_date'];
 				}
