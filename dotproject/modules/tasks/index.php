@@ -121,5 +121,3 @@ $titleBlock->show();
 // include the re-usable sub view
 $min_view = false;
 include(DP_BASE_DIR.'/modules/tasks/tasks.php');
-
-?>
