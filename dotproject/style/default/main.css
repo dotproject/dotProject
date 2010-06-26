@@ -469,3 +469,14 @@ table.tbl td.event td {
 }
 
 .hidden {display:none;}
+
+th strong {
+  float: left;
+  margin-top: 2px;
+}
+th form {
+  float: right;
+  padding: 0;
+  margin: 0;
+  margin-top: 1px;
+}
