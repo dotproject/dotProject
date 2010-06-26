@@ -59,6 +59,9 @@ $ta = $tl & 1;
 $tt = $tl & 2;
 $tp = $tl & 4;
 
+//notify owner checkbox 
+$notify_own = $AppUI->getPref('MAILALL'); 
+
 //task log e-mail list
 $task_email_title = array();
 $q->addTable('task_contacts', 'tc');
@@ -206,7 +209,8 @@ echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"',
             <td valign="middle"><?php
 if ($obj->task_owner != $AppUI->user_id) {
 ?>
-              <input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" />
+              <input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" <?php 
+echo (($notify_own) ? ' checked="checked"' : ''); ?> />
             </td>
             <td valign="middle">
               <label for="task_log_notify_owner"><?php echo $AppUI->_('Notify creator'); ?></label>
