@@ -526,10 +526,9 @@ function dPformSafe($txt, $flag_bits = 0) {
 		$locale_char_set = 'utf-8';
 	}
 	
-	$deslash = $flag_bits && FORM_DESLASH; 
-	$isURI = $flag_bits && FORM_URI;
-	$isJSVars = $flag_bits && FORM_JSVARS;
-	
+	$deslash = $flag_bits && DP_FORM_DESLASH; 
+	$isURI = $flag_bits && DP_FORM_URI;
+	$isJSVars = $flag_bits && DP_FORM_JSVARS;
 	
 	if (is_object($txt) || is_array($txt)) {
 		$txt_arr = ((is_object($txt)) ? get_object_vars($txt) : $txt);
@@ -550,7 +549,7 @@ function dPformSafe($txt, $flag_bits = 0) {
 		}
 		
 	} else {
-		$txt = (($deslash) ? $AppUI->___($v, UI_OUTPUT_RAW) : $txt);
+		$txt = (($deslash) ? $AppUI->___($txt, UI_OUTPUT_RAW) : $txt);
 		$txt = (($isURI) ? $AppUI->___($txt, UI_OUTPUT_URI) : $txt);
 		
 		if (!($isURI)) {

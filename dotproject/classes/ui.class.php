@@ -449,6 +449,7 @@ class CAppUI {
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_URI:
 				$str = str_replace(' ', '%20', $str);
+				break;
 			case UI_OUTPUT_HTML:
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 				$str = str_replace('&#039;', '&apos;', $str);
