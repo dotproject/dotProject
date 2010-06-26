@@ -147,7 +147,7 @@ echo ($AppUI->_($recurs[$obj->event_recurs]) . ' (' . $obj->event_times_recuring
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo str_replace(chr(10), "<br />", $obj->event_description);?>&nbsp;
+				<?php echo nl2br(strip_tags($obj->event_description));?>&nbsp;
 			</td>
 		</tr>
 		</table>

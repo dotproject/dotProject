@@ -28,7 +28,7 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status'])
 // End of project status update
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
-	$AppUI->setState('ProjIdxTab', $_GET['tab']);
+	$AppUI->setState('ProjIdxTab', intval(dPgetCleanParam($_GET, 'tab')));
 }
 
 $tab = $AppUI->getState('ProjIdxTab') !== NULL ? $AppUI->getState('ProjIdxTab') : 500;
