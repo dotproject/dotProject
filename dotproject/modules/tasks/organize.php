@@ -104,8 +104,8 @@ if ($selected && count($selected)) {
 
 $AppUI->savePlace();
 
-$proj =& new CProject;
-$tobj =& new CTask;
+$proj = new CProject;
+$tobj = new CTask;
 $q = new DBQuery;
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'p.project_id');

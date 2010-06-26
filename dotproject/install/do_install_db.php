@@ -14,7 +14,7 @@ $baseUrl .= isset($_SERVER['SCRIPT_NAME']) ? dirname(dirname($_SERVER['SCRIPT_NA
 
 require_once DP_BASE_DIR.'/install/install.inc.php';
 
-$AppUI =& new InstallerUI; // Fake AppUI class to appease the db_connect utilities.
+$AppUI = new InstallerUI(); // Fake AppUI class to appease the db_connect utilities.
 
 $dbMsg = '';
 $cFileMsg = 'Not Created';

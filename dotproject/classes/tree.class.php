@@ -17,7 +17,7 @@ class CDpTree
 	 */
 	function CDpTree() {
 		$emptynode = null;
-		$this->base_node =& new CDpTreeNode(0, $emptynode);
+		$this->base_node = new CDpTreeNode(0, $emptynode);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class CDpTreeNode
 	}
 
 	function add($id, &$data) {
-		$this->children[$id] =& new CDpTreeNode($id, $data, $this);
+		$this->children[$id] = new CDpTreeNode($id, $data, $this);
 
 	}
 

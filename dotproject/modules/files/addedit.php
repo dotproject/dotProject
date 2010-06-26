@@ -32,7 +32,7 @@ $file_parent = intval(dPgetParam($_GET, 'file_parent', 0));
 $file_project = intval(dPgetParam($_GET, 'project_id', 0));
 $file_helpdesk_item = intval(dPgetParam($_GET, 'file_helpdesk_item', 0));
 
-$q =& new DBQuery;
+$q = new DBQuery;
 
 // check if this record has dependencies to prevent deletion
 $msg = '';

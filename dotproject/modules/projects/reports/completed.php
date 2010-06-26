@@ -17,7 +17,7 @@ $font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 
 require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-$pdf =& new Cezpdf($paper='A4',$orientation='landscape');
+$pdf = new Cezpdf($paper='A4',$orientation='landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont("$font_dir/Helvetica.afm");
 
@@ -67,7 +67,7 @@ if ($hasResources)
 $columns[] = "<b>" . safe_utf8_decode($AppUI->_('Finish Date')) . "</b>";
 
 // Grab the completed items in the last week
-$q =& new DBQuery;
+$q = new DBQuery;
 $q->addQuery('a.*');
 $q->addQuery('b.user_username');
 $q->addTable('tasks', 'a');

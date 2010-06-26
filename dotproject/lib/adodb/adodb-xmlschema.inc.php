@@ -119,7 +119,7 @@ class dbObject {
 	* NOP
 	*/
 	function dbObject( &$parent, $attributes = NULL ) {
-		$this->parent =& $parent;
+		$this->parent = $parent;
 	}
 	
 	/**
@@ -243,27 +243,14 @@ class dbTable extends dbObject {
 	var $drop_field = array();
 	
 	/**
-	* @var array List of rows of data that needs to be loaded into
-	* table once created.
-	* @access private
-	*/
-	var $row_data = array();
-	var $current_row = 0;
-	var $row_field = 0;
-
-	var $html_table;
-
-	/**
 	* Iniitializes a new table object.
 	*
 	* @param string $prefix DB Object prefix
 	* @param array $attributes Array of table attributes.
 	*/
 	function dbTable( &$parent, $attributes = NULL ) {
-		$this->parent =& $parent;
+		$this->parent = $parent;
 		$this->name = $this->prefix($attributes['NAME']);
-		$trans_table = get_html_translation_table(HTML_ENTITIES);
-		$this->html_table = array_flip($trans_table);
 	}
 	
 	/**
@@ -318,10 +305,6 @@ class dbTable extends dbObject {
 			case 'DEFTIMESTAMP':
 				// Add a field option to the table object
 				$this->addFieldOpt( $this->current_field, $this->currentElement );
-				break;
-			case 'ROW':
-				$this->row_data[$this->current_row] = array();
-				$this->row_field = 0;
 				break;
 			default:
 				// print_r( array( $tag, $attributes ) );
@@ -379,9 +362,9 @@ class dbTable extends dbObject {
 	* @param array $attributes Index attributes
 	* @return object dbIndex object
 	*/
-	function &addIndex( $attributes ) {
+	function addIndex( $attributes ) {
 		$name = strtoupper( $attributes['NAME'] );
-		$this->indexes[$name] =& new dbIndex( $this, $attributes );
+		$this->indexes[$name] = new dbIndex( $this, $attributes );
 		return $this->indexes[$name];
 	}
 	
@@ -391,9 +374,9 @@ class dbTable extends dbObject {
 	* @param array $attributes Data attributes
 	* @return object dbData object
 	*/
-	function &addData( $attributes ) {
+	function addData( $attributes ) {
 		if( !isset( $this->data ) ) {
-			$this->data =& new dbData( $this, $attributes );
+			$this->data = new dbData( $this, $attributes );
 		}
 		return $this->data;
 	}
@@ -480,10 +463,12 @@ class dbTable extends dbObject {
 	* @return array Options
 	*/
 	function addTableOpt( $opt ) {
-		$this->opts[] = $opt;
-		
+		if(isset($this->currentPlatform)) {
+			$this->opts[$this->parent->db->databaseType] = $opt;
+		}
 		return $this->opts;
 	}
+
 	
 	/**
 	* Generates the SQL that will create the table in the database
@@ -658,7 +643,7 @@ class dbIndex extends dbObject {
 	* @internal
 	*/
 	function dbIndex( &$parent, $attributes = NULL ) {
-		$this->parent =& $parent;
+		$this->parent = $parent;
 		
 		$this->name = $this->prefix ($attributes['NAME']);
 	}
@@ -802,7 +787,7 @@ class dbData extends dbObject {
 	* @internal
 	*/
 	function dbData( &$parent, $attributes = NULL ) {
-		$this->parent =& $parent;
+		$this->parent = $parent;
 	}
 	
 	/**
@@ -1001,7 +986,7 @@ class dbQuerySet extends dbObject {
 	* @param array $attributes Attributes
 	*/
 	function dbQuerySet( &$parent, $attributes = NULL ) {
-		$this->parent =& $parent;
+		$this->parent = $parent;
 			
 		// Overrides the manual prefix key
 		if( isset( $attributes['KEY'] ) ) {
@@ -1321,7 +1306,7 @@ class adoSchema {
 		$this->mgq = get_magic_quotes_runtime();
 		set_magic_quotes_runtime(0);
 		
-		$this->db =& $db;
+		$this->db = $db;
 		$this->debug = $this->db->debug;
 		$this->dict = NewDataDictionary( $this->db );
 		$this->sqlArray = array();
@@ -1644,7 +1629,7 @@ class adoSchema {
 	*
 	* @access private
 	*/
-	function &create_parser() {
+	function create_parser() {
 		// Create the parser
 		$xmlParser = xml_parser_create();
 		xml_set_object( $xmlParser, $this );

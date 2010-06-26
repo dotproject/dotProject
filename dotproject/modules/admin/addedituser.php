@@ -22,7 +22,7 @@ if (!$canEdit) {
 //$roles
 // Create the roles class container
 require_once DP_BASE_DIR.'/modules/system/roles/roles.class.php';
-$crole =& new CRole;
+$crole = new CRole;
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();

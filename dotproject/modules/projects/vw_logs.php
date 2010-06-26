@@ -104,7 +104,7 @@ function delIt2(id) {
 </tr>
 <?php
 // Winnow out the tasks we are not allowed to view.
-$project =& new CProject;
+$project = new CProject;
 
 // Pull the task comments
 $q  = new DBQuery;

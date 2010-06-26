@@ -33,7 +33,7 @@ $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress'),
                                                     ? 'My projects' : "User's projects")), 
                             $projectStatus);
 
-$pjobj =& new CProject;
+$pjobj = new CProject;
 $working_hours = $dPconfig['daily_working_hours'];
 
 $q = new DBQuery;

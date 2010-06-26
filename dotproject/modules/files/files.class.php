@@ -267,11 +267,7 @@ class CFile extends CDpObject {
 		$nwords = count($warr);
 		for ($x=0; $x < $nwords; $x++) {
 			$newword = $warr[$x];
-<<<<<<< HEAD
-			if (!ereg('[[:punct:]]', $newword) && !ereg('[[:digit:]]', $newword) 
-=======
 			if (!preg_match('/[[:punct:]]/', $newword) && !preg_match('/[[:digit:]]/', $newword) 
->>>>>>> 534faa4... Merge branch 'php_53_compat' into stable_2
 			    && mb_strlen(trim($newword)) > 2) {
 				$wordarr[] = array('word' => $newword, 'wordplace' => $x);
 			}

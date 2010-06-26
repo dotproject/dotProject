@@ -784,9 +784,15 @@ Date:   Fri May 8 20:41:34 2009 +0000
     git-svn-id: https://dotproject.svn.sourceforge.net/svnroot/dotproject/branches/stable_2@5884 6cfb33f2-fe3e-0410-9678-87ca8a581921
 
 
+<<<<<<< HEAD
+Also some minor format clean-up and removed obsolete 
+use of '=&' assignment operator in conjunction with 
+the 'new' operator (i.e. $t = new Task();). 
+=======
 commit bf8ffb41e760b6dad0ff59621f3d12a96c2e0856
 Author: merlinyoda <merlinyoda@6cfb33f2-fe3e-0410-9678-87ca8a581921>
 Date:   Sat May 9 21:54:21 2009 +0000
+>>>>>>> stable_2
 
     Better fix for Mantis Report #2471:
     Last fix wasn't detecting clashes for recurrent events.

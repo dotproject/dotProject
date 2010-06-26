@@ -28,9 +28,9 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 $f = dPgetParam($_POST, 'f', 0);
 
 
-$forum =& new CForum;
+$forum = new CForum;
 require_once $AppUI->getModuleClass('projects');
-$project =& new CProject;
+$project = new CProject;
 
 $max_msg_length = 30;
 

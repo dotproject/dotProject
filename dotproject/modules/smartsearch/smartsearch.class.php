@@ -178,18 +178,17 @@ function highlight($text, $keyval) {
 		if (mb_strlen($key[0])>0) {
 			 $key[0] = stripslashes($key[0]);
 			if (isset($ssearch['ignore_specchar']) && $ssearch['ignore_specchar'] == 'on') {
-				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
-				$txt = $rep_func(recode2regexp_utf8($key[0]), 
+				$case = (($ssearch['ignore_case']=='on') ? '/i' : '/');
+				$txt = preg_replace('/'.recode2regexp_utf8($key[0]).$case, 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
 								 $txt);
 			} else if (!(isset($ssearch['ignore_specchar'])) || $ssearch['ignore_specchar'] == '') {
-				$rep_func = (($ssearch['ignore_case']=='on') ? 'eregi_replace' : 'ereg_replace');
-				$txt = $rep_func($key[0], 
+				$case = (($ssearch['ignore_case']=='on') ? '/i' : '/');
+				$txt = preg_replace('/'.$key[0].$case, 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
 								 $txt);
 			} else {
-				$rep_func = 'eregi_replace';
-				$txt = $rep_func(sql_regcase($key[0]), 
+				$txt = preg_replace('/'.sql_regcase($key[0]).'/i', 
 								 ('<span style="background:' . $hicolor[$key[1]] .'" >\0</span>'), 
 								 $txt);
 			}
@@ -204,51 +203,51 @@ function recode2regexp_utf8($input) {
       switch($input[$i]) {
           case 'A':
           case 'a':
-      		$result.='(' . $input[$i] . "|A!|A¤|A?|A„)";
+      		$result.='(' . $input[$i] . "|A!|Aï¿½|A?|Aï¿½)";
       		break;
           case 'C':
           case 'c':
-      		$result .= '(' . $input[$i] . "|Ä?|ÄO)";
+      		$result .= '(' . $input[$i] . "|ï¿½?|ï¿½O)";
       		break;
           case 'D':
           case 'd':
-      		$result .= '(' . $input[$i] . "|Ä?|ÄŽ)";
+      		$result .= '(' . $input[$i] . "|ï¿½?|ÄŽ)";
       		break;
           case 'E':
           case 'e':
-      		$result .= '(' . $input[$i] . "|A©|Ä›|A‰|Äš)";
+      		$result .= '(' . $input[$i] . "|Aï¿½|Ä›|Aï¿½|Äš)";
       		break;
           case 'I':
           case 'i':
-      		$result .= '(' . $input[$i] . "|A­|A?)";
+      		$result .= '(' . $input[$i] . "|Aï¿½|A?)";
       		break;
           case 'L':
           case 'l':
-      		$result .= '(' . $input[$i] . "|Äo|Ä3|Ä1|Ä1)";
+      		$result .= '(' . $input[$i] . "|ï¿½o|ï¿½3|ï¿½1|ï¿½1)";
       		break;
           case 'N':
           case 'n':
-      		$result .= '(' . $input[$i] . "|A^|A‡)";
+      		$result .= '(' . $input[$i] . "|A^|Aï¿½)";
       		break;
           case 'O':
           case 'o':
-      		$result .= '(' . $input[$i] . "|A3|A´|A“|A”)";
+      		$result .= '(' . $input[$i] . "|A3|Aï¿½|Aï¿½|Aï¿½)";
       		break;
           case 'R':
           case 'r':
-      		$result .= '(' . $input[$i] . "|A•|A™|A”|A~)";
+      		$result .= '(' . $input[$i] . "|Aï¿½|Aï¿½|Aï¿½|A~)";
       		break;
           case 'S':
           case 's':
-      		$result .= '(' . $input[$i] . "|A!|A )";
+      		$result .= '(' . $input[$i] . "|A!|Aï¿½)";
       		break;
           case 'T':
           case 't':
-      		$result .= '(' . $input[$i] . "|AY|A¤)";
+      		$result .= '(' . $input[$i] . "|AY|Aï¿½)";
       		break;
           case 'U':
           case 'u':
-      		$result .= '(' . $input[$i] . "|Ao|A—|Aš|A®)";
+      		$result .= '(' . $input[$i] . "|Ao|Aï¿½|Aï¿½|Aï¿½)";
       		break;
           case 'Y':
           case 'y':

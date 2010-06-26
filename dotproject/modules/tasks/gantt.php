@@ -31,7 +31,7 @@ $f = dPgetParam($_REQUEST, 'f', 0);
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 require_once $AppUI->getModuleClass('projects');
-$project =& new CProject;
+$project = new CProject;
 if ($project_id > 0) {
 	$criticalTasks = $project->getCriticalTasks($project_id);
 	$project->load($project_id);
@@ -129,7 +129,7 @@ if ($caller == 'todo') {
 	$q->addOrder('p.project_id, ' . (($sortByName) ? 't.task_name, ' : '') . 't.task_start_date');
 }
 // get any specifically denied tasks
-$task =& new CTask;
+$task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks_data = $q->loadHashList('task_id');
 $q->clear();

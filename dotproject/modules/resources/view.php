@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$obj =& new CResource;
+$obj = new CResource;
 $resource_id = dPgetParam($_GET, 'resource_id', 0);
 
 $canView = getPermission($m, 'view', $resource_id);
@@ -20,7 +20,7 @@ if (! $resource_id) {
 }
 // TODO: tab stuff
 
-$obj =& new CResource;
+$obj = new CResource;
 
 if (! $obj->load($resource_id)) {
 	$AppUI->setMsg('Resource');
@@ -30,7 +30,7 @@ if (! $obj->load($resource_id)) {
 	$AppUI->savePlace();
 }
 
-$titleBlock =& new CTitleBlock('View Resource', 'helpdesk.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('View Resource', 'helpdesk.png', $m, "$m.$a");
 if ($canAuthor) {
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new resource') 
 	                      . '" />'), '', '<form action="?m=resources&a=addedit" method="post">', 

@@ -32,7 +32,7 @@ if (isset($_POST['clash_action'])) {
 </script>
 <?php
 
-	$titleBlock =& new CTitleBlock((($obj->event_id) ? 'Edit Event' : 'Add Event'), 
+	$titleBlock = new CTitleBlock((($obj->event_id) ? 'Edit Event' : 'Add Event'), 
 	                               'myevo-appointments.png', $m, "$m.$a");
 	$titleBlock->show();
 	
@@ -79,17 +79,17 @@ function clash_cancel() {
 function clash_suggest() {
 	global $AppUI, $m, $a;
 	
-	$obj =& new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	
-	$start_date =& new CDate($obj->event_start_date);
-	$end_date =& new CDate($obj->event_end_date);
+	$start_date = new CDate($obj->event_start_date);
+	$end_date = new CDate($obj->event_end_date);
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$start_secs = $start_date->getTime();
 	$end_secs = $end_date->getTime();
 	$duration = (int) (($end_secs - $start_secs) / 60);
 	
-	$titleBlock =& new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', 
+	$titleBlock = new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', 
 	                               $m, "$m.$a");
 	$titleBlock->show();
 	$calurl = DP_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
@@ -197,7 +197,7 @@ echo $AppUI->_('submit'); ?>" class="button" onClick="set_clash_action('process'
 function clash_process() {
 	global $AppUI, $do_include;
 	
-	$obj =& new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$attendees = $_SESSION['add_event_attendees'];
 	$users = array();
@@ -244,7 +244,7 @@ function clash_process() {
 	// and start/end times we need
 	$first_day = $start_date->format('%E');
 	$end_day = $final_date->format('%E');
-	$oneday =& new Date_Span(array(1,0,0,0));
+	$oneday = new Date_Span(array(1,0,0,0));
 	
 	$slots = array();
 	$curr_date = new CDate($start_date);
@@ -293,7 +293,7 @@ function clash_process() {
  */
 function clash_mail() {
 	global $AppUI;
-	$obj =& new CEvent;
+	$obj = new CEvent;
 	if (! $obj->bind ($_SESSION['add_event_post'])) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	} else {
@@ -312,7 +312,7 @@ function clash_accept() {
 	global $AppUI, $do_redirect;
 	
 	$AppUI->setMsg('Event');
-	$obj =& new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];
 	$is_new = ($obj->event_id == 0);

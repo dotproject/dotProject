@@ -27,7 +27,7 @@ if (!($canRead && $obj->canAccess($AppUI->user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$q =& new DBQuery;
+$q = new DBQuery;
 
 $q->addTable('tasks');
 $q->leftJoin('users', 'u1', 'u1.user_id = task_owner');

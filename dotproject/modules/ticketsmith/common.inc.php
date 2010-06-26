@@ -468,7 +468,7 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "original_author":
             if ($value) {
-                $value = ereg_replace("\"", "", $value);
+                $value = preg_replace('/\"/', '', $value);
                 $output = htmlspecialchars($value);
             }
             else {
@@ -477,7 +477,7 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "email":
             if ($value) {
-                $value = ereg_replace("\"", "", $value);
+                $value = preg_replace('/\"/', '', $value);
                 $output = htmlspecialchars($value);
             }
             else {

@@ -91,7 +91,7 @@ $titleBlock->show();
 $company_id = $row->project_company;
 $selected_departments = array();
 if ($project_id) {
-	$q =& new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('project_departments');
 	$q->addQuery('department_id');
 	$q->addWhere('project_id = ' . $project_id);
@@ -114,7 +114,7 @@ if ($department_selection_list!='' || $project_id) {
 // Get contacts list
 $selected_contacts = array();
 if ($project_id) {
-	$q =& new DBQuery;
+	$q = new DBQuery;
 	$q->addTable('project_contacts');
 	$q->addQuery('contact_id');
 	$q->addWhere('project_id = ' . $project_id);

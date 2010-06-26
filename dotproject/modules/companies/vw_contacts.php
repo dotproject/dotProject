@@ -30,7 +30,7 @@ if (!($rows = $q->loadList())) {
 </tr>
 <?php
 	foreach ($rows as $row) {
-		$contact =& new CContact;
+		$contact = new CContact;
 		$contact->bind($row);
 		$dept_detail = $contact->getDepartmentDetails();
 		

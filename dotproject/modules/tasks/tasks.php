@@ -105,7 +105,7 @@ if (isset($_POST['show_task_options'])) {
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 require_once $AppUI->getModuleClass('projects');
-$project =& new CProject;
+$project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 
 if (count($allowedProjects)) {
@@ -296,7 +296,7 @@ if (count($allowedProjects)) {
 }
 
 //
-$obj =& new CTask;
+$obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);

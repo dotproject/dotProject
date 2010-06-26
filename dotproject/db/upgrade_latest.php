@@ -35,7 +35,7 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 		$last_updated = '00000000';
 	}
 
-	$perms =& new dPacl;
+	$perms = new dPacl;
 	
 	// Place the upgrade code here, depending on the last_updated date.
 	// DO NOT REMOVE PREVIOUS VERSION CODE!!!

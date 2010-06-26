@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
+V5.09 25 June 2009   (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -83,7 +83,7 @@ class perf_mysql extends adodb_perf{
 	
 	function perf_mysql(&$conn)
 	{
-		$this->conn =& $conn;
+		$this->conn = $conn;
 	}
 	
 	function Explain($sql,$partial=false)

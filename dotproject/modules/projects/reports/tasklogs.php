@@ -152,13 +152,13 @@ if ($do_report) {
 		$sql .= "\n	AND task_log_creator = $log_userfilter";
 	}
 
-	$proj =& new CProject;
+	$proj = new CProject;
 	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
 	if (count($allowedProjects)) {
 		$sql .= "\n     AND " . implode(" AND ", $allowedProjects);
 	}
 
-	$obj =& new CTask;
+	$obj = new CTask;
 	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 	if (count($allowedTasks)) {
 		$sql .= ' AND ' . implode(' AND ', $allowedTasks);
@@ -266,7 +266,7 @@ if ($do_report) {
 		
 		require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-		$pdf =& new Cezpdf();
+		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont("$font_dir/Helvetica.afm");
 

@@ -99,7 +99,7 @@ class Auth_Container_ADOdb extends Auth_Container
     {
         if (is_string($dsn) || is_array($dsn)) {
         	if(!$this->db) {
-	        	$this->db = &ADONewConnection($dsn);
+	        	$this->db = ADONewConnection($dsn);
 	    		if( $err = ADODB_Pear_error() ) {
 	   	    		return PEAR::raiseError($err);
 	    		}

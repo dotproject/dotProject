@@ -284,7 +284,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
             /* do number/author */
             print("<td bgcolor=\"$color\">\n");
             print("<strong>$number</strong> : \n");
-            $row["author"] = ereg_replace("\"", "", $row["author"]);
+            $row["author"] = preg_replace('/\"/', '', $row["author"]);
             $row["author"] = htmlspecialchars($row["author"]);
             print($row["author"] . "\n");
             print("</td>\n");

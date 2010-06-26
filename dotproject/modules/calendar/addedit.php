@@ -81,11 +81,11 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 // pull projects
 require_once($AppUI->getModuleClass('projects'));
-$q =& new DBQuery;
+$q = new DBQuery;
 $q->addTable('projects', 'p');
 $q->addQuery('p.project_id, p.project_name');
 
-$prj =& new CProject;
+$prj = new CProject;
 $allowedProjects = $prj->getAllowedSQL($AppUI->user_id);
 
 if (count($allowedProjects)) { 

@@ -4,9 +4,9 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 global $tabbed, $currentTabName, $currentTabId, $AppUI;
-$obj =& new CResource;
+$obj = new CResource;
 
-$query =& new DBQuery;
+$query = new DBQuery;
 $obj->setAllowedSQL($AppUI->user_id, $query);
 $query->addTable($obj->_tbl);
 if (!$tabbed)

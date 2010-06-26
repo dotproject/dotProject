@@ -8,9 +8,9 @@ if (!defined('DP_BASE_DIR')) {
 global $AppUI, $task_id, $obj;
 
 require_once $AppUI->getModuleClass('resources');
-$resource =& new CResource;
+$resource = new CResource;
 
-$q =& new DBQuery;
+$q = new DBQuery;
 $q->addQuery('a.*');
 $q->addQuery('b.percent_allocated');
 $q->addQuery('c.resource_type_name');

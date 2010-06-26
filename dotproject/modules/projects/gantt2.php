@@ -28,7 +28,7 @@ if ($company_id != 0) {
 if ($showInactive != '1') {
 	$filter1[] = ' project_status <> 7';
 }
-$pjobj =& new CProject;
+$pjobj = new CProject;
 $allowed_projects = $pjobj->getAllowedSQL($AppUI->user_id);
 $where = array_merge($filter1, $allowed_projects);
 

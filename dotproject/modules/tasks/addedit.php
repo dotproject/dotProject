@@ -333,7 +333,7 @@ if (isset($_GET['tab'])) {
 	$AppUI->setState('TaskAeTabIdx', dPgetParam($_GET, 'tab', 0));
 }
 $tab = $AppUI->getState('TaskAeTabIdx', 0);
-$tabBox =& new CTabBox(('?m=tasks&a=addedit' 
+$tabBox = new CTabBox(('?m=tasks&a=addedit' 
                         . (($task_project) ? '&task_project=' . $task_project 
                            : '&task_id=' . $task_id)), '', $tab, '');
 $tabBox->add(DP_BASE_DIR.'/modules/tasks/ae_desc', 'Details');

@@ -105,9 +105,9 @@ if ($file_id) {
 	// projects tat are denied access
 	require_once($AppUI->getModuleClass('projects'));
 	require_once($AppUI->getModuleClass('files'));
-	$project =& new CProject;
+	$project = new CProject;
 	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
-	$fileclass =& new CFile;
+	$fileclass = new CFile;
 	$fileclass->load($file_id);
 	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');
 	

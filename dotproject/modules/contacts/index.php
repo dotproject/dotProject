@@ -53,7 +53,7 @@ $showfields = array('contact_company' => 'contact_company', 'company_name' => 'c
                     'contact_phone' => 'contact_phone','contact_email' => 'contact_email');
 
 require_once $AppUI->getModuleClass('companies');
-$company =& new CCompany;
+$company = new CCompany;
 $allowedCompanies = $company->getAllowedSQL($AppUI->user_id);
 
 // assemble the sql statement

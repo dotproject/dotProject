@@ -1,13 +1,41 @@
 <?php
 
 /**
-  V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V5.09 25 June 2009   (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
 	
   Set tabs to 4 for best viewing.
  
+*/
+
+/*
+In ADOdb, named quotes for MS SQL Server use ". From the MSSQL Docs:
+
+	Note Delimiters are for identifiers only. Delimiters cannot be used for keywords, 
+	whether or not they are marked as reserved in SQL Server.
+	
+	Quoted identifiers are delimited by double quotation marks ("):
+	SELECT * FROM "Blanks in Table Name"
+	
+	Bracketed identifiers are delimited by brackets ([ ]):
+	SELECT * FROM [Blanks In Table Name]
+	
+	Quoted identifiers are valid only when the QUOTED_IDENTIFIER option is set to ON. By default, 
+	the Microsoft OLE DB Provider for SQL Server and SQL Server ODBC driver set QUOTED_IDENTIFIER ON 
+	when they connect. 
+	
+	In Transact-SQL, the option can be set at various levels using SET QUOTED_IDENTIFIER, 
+	the quoted identifier option of sp_dboption, or the user options option of sp_configure.
+	
+	When SET ANSI_DEFAULTS is ON, SET QUOTED_IDENTIFIER is enabled.
+	
+	Syntax
+	
+		SET QUOTED_IDENTIFIER { ON | OFF }
+
+
 */
 
 // security - hide paths
@@ -41,7 +69,7 @@ class ADODB2_mssql extends ADODB_DataDict {
 		case 'TINYINT': return  'I1';
 		case 'SMALLINT': return 'I2';
 		case 'BIGINT':  return  'I8';
-		
+		case 'SMALLDATETIME': return 'T';
 		case 'REAL':
 		case 'FLOAT': return 'F';
 		default: return parent::MetaType($t,$len,$fieldobj);
@@ -61,6 +89,8 @@ class ADODB2_mssql extends ADODB_DataDict {
 		case 'B': return 'IMAGE';
 			
 		case 'D': return 'DATETIME';
+		
+		case 'TS':
 		case 'T': return 'DATETIME';
 		case 'L': return 'BIT';
 		
@@ -123,7 +153,7 @@ class ADODB2_mssql extends ADODB_DataDict {
 	}
 	
 	// return string must begin with space
-	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname,&$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
 	{	
 		$suffix = '';
 		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";

@@ -13,7 +13,7 @@ require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 $type = dPgetParam($_GET, 'type', '');
 $column = dPgetParam($_GET, 'column', 'timestamp');
 $direction = dPgetParam($_GET, 'direction', 'DESC');
-$q =& new DBQuery;
+$q = new DBQuery;
 $q->addQuery(array(
 	'ticket',
 	'author',
@@ -46,7 +46,7 @@ if ($err = db_error()) {
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$pdf =& new Cezpdf($paper='A4',$orientation='landscape');
+$pdf = new Cezpdf($paper='A4',$orientation='landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont("$font_dir/Helvetica.afm");
 

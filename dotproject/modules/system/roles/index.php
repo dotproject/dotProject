@@ -16,7 +16,7 @@ if (!($canAccess)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$crole =& new CRole;
+$crole = new CRole;
 $roles = $crole->getRoles();
 
 $role_id = dPgetParam($_GET, 'role_id', 0);

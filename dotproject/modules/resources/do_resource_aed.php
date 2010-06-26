@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $del = dPgetParam($_POST, 'del', 0);
-$obj =& new CResource;
+$obj = new CResource;
 $msg = '';
 
 if (! $obj->bind($_POST)) {

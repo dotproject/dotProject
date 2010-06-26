@@ -17,7 +17,7 @@ require_once DP_BASE_DIR.'/includes/db_connect.php';
 require_once DP_BASE_DIR.'/classes/permissions.class.php';
 
 dPmsg('Creating new Permissions objects');
-$perms =& new dPacl;
+$perms = new dPacl;
 
 // First, create the basic ACL sections.
 $perms->add_object_section('System', 'system', 1, 0, 'aco');

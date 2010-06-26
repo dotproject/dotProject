@@ -314,7 +314,6 @@ class CMonthCalendar {
 			}
 			
 			foreach ($week as $day) {
-				$this_day = new CDate($day);
 				$y = intval(mb_substr($day, 0, 4));
 				$m = intval(mb_substr($day, 4, 2));
 				$d = intval(mb_substr($day, 6, 2));
@@ -330,6 +329,7 @@ class CMonthCalendar {
 					$class = 'day';
 				}
 				$day = mb_substr($day, 0, 8);
+				$this_day = new CDate($day);
 				$html .= "\n\t" . '<td class="' . $class . '"';
 				if ($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
 					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
@@ -600,7 +600,7 @@ class CEvent extends CDpObject {
 			$user_id = $AppUI->user_id;
 		}
 		
-		$project =& new CProject;
+		$project = new CProject;
 		if ($project_id) {
 			$p =& $AppUI->acl();
 			
@@ -791,10 +791,10 @@ class CEvent extends CDpObject {
 		$time_format = $AppUI->getPref('TIMEFORMAT');
 		$fmt = $date_format . ' ' . $time_format;
 		
-		$start_date =& new CDate($this->event_start_date);
-		$end_date =& new CDate($this->event_end_date);
+		$start_date = new CDate($this->event_start_date);
+		$end_date = new CDate($this->event_end_date);
 		
-		$mail =& new Mail;
+		$mail = new Mail;
 		$type = (($update) ? $AppUI->_('Updated') : $AppUI->_('New'));
 		$subject_title = (($clash) ? ($AppUI->_('Requested Event')) 
 		                  : ($type . " " . $AppUI->_('Event')));

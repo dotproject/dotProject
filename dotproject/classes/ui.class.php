@@ -683,7 +683,7 @@ class CAppUI {
 		// Now that the password has been checked, see if they are allowed to
 		// access the system
 		if (!(isset($GLOBALS['acl']))) {
-			$GLOBALS['acl'] =& new dPacl;
+			$GLOBALS['acl'] = new dPacl;
 		}
 		if (!($GLOBALS['acl']->checkLogin($user_id))) {
 			dprint(__FILE__, __LINE__, 1, 'Permission check failed');
@@ -865,7 +865,7 @@ class CAppUI {
  */
 	function &acl() {
 		if (!(isset($GLOBALS['acl']))) {
-			$GLOBALS['acl'] =& new dPacl;
+			$GLOBALS['acl'] = new dPacl;
 	  	}
 	  	return $GLOBALS['acl'];
 	}
