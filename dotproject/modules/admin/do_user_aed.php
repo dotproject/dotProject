@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once($AppUI->getSystemClass('libmail'));
+require_once $AppUI->getSystemClass('libmail');
 include $AppUI->getModuleClass('contacts');
 $del = dPgetParam($_REQUEST, 'del', false);
 $user_id_aed = intval(dPgetParam($_REQUEST, 'user_id', 0));
@@ -42,22 +42,16 @@ if ($del) {
 	if (!(getPermission('admin', 'add') && getPermission('users', 'add'))) {
 		$AppUI->redirect('m=admin&a=access_denied');
 	}
-	// check if a user with the param Username already exists
-	$userEx = FALSE;
 	
 	//pull a list of existing usernames
-	$sql = 'SELECT user_username FROM users';
 	$q = new DBQuery;
 	$q->addTable('users','u');
 	$q->addQuery('user_username');
-	$users = $q->loadList();
+	$q->addWhere("user_username like '{$obj->user_username}'");
+	$userEx = $q->loadResult();
 	
-	// Iterate the above userNameExistenceCheck for each user
-	foreach ($users as $usrs) {
-		$usrLst = array_map('userExistence', $usrs);
-	}
 	// If userName already exists quit with error and do nothing
-	if ($userEx == TRUE) {
+	if ($userEx) {
 		$AppUI->setMsg('already exists. Try another username.', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
@@ -66,7 +60,6 @@ if ($del) {
 } else if (! getPermission('admin', 'edit') || ! getPermission('users', 'edit', $user_id_aed)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-
 
 if (($msg = $contact->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -89,8 +82,7 @@ if (($msg = $contact->store())) {
 		}
 		$AppUI->setMsg($isNewUser ? 'added' : 'updated', UI_MSG_OK, true);
 	}
-	$AppUI->redirect((($isNewUser) 
-	                  ? ('m=admin&a=viewuser&user_id=' . $obj->user_id . '&tab=3') : ''));
+	$AppUI->redirect(($isNewUser ? ('m=admin&a=viewuser&user_id=' . $obj->user_id . '&tab=3') : ''));
 }
 
 
@@ -111,17 +103,22 @@ function notifyNewUser($address, $username, $logname, $logpwd) {
 			$email = 'dotproject@' . $AppUI->cfg['site_domain'];
 		}
 		
-		$mail->From('"' . $AppUI->user_first_name .' ' . $AppUI->user_last_name 
-		            . '" <' . $email . '>');
+		$name = $AppUI->user_first_name .' ' . $AppUI->user_last_name;
+		$body = $username.',
+		
+An access account has been created for you in our dotProject project management system.
+
+You can access it here at ' . $dPconfig['base_url'] . '
+
+Your username is: ' . $logname . '
+Your password is: ' . $logpwd .'
+
+This account will allow you to see and interact with projects. If you have any questions please contact us.';
+		
+		$mail->From('"'.$name.'" <'.$email.'>');
 		$mail->To($address);
 		$mail->Subject('New Account Created - dotProject Project Management System');
-		$mail->Body($username.",\n\n" . 'An access account has been created for you in our' 
-		            . ' dotProject project management system.' . "\n\n" 
-		            . 'You can access it here at ' . $dPconfig['base_url'] . "\n\n" 
-		            . 'Your username is: ' . $logname . "\n" . 'Your password is: ' . $logpwd 
-		            . "\n\n" . 'This account will allow you to see and interact with projects.' 
-		            . ' If you have any questions please contact us.');
+		$mail->Body($body);
 		$mail->Send();
 	}
 }
-?>
