@@ -85,14 +85,6 @@ if (($msg = $contact->store())) {
 	$AppUI->redirect(($isNewUser ? ('m=admin&a=viewuser&user_id=' . $obj->user_id . '&tab=3') : ''));
 }
 
-
-function userExistence($userName) {
-	global $obj, $userEx;
-	if ($userName == $obj->user_username) {
-		$userEx = TRUE;
-	}
-}
-
 function notifyNewUser($address, $username, $logname, $logpwd) {
 	global $AppUI, $dPconfig;
 	$mail = new Mail;
