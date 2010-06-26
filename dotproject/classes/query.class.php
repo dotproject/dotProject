@@ -687,7 +687,7 @@ class DBQuery {
 	function loadHash() {
 		global $db;
 		if (! $this->exec(ADODB_FETCH_ASSOC)) {
-			exit ($this->db->ErrorMsg());
+			exit ($db->ErrorMsg());
 		}
 		$hash = $this->fetchRow();
 		$this->clear();
@@ -723,8 +723,9 @@ class DBQuery {
 	}
 
 	function loadObject(&$object, $bindAll=false , $strip = true) {
+		global $db;
 		if (! $this->exec(ADODB_FETCH_NUM)) {
-			die ($this->_db->ErrorMsg());
+			die ($db->ErrorMsg());
 		}
 		if ($object != null) {
 			$hash = $this->fetchRow();
