@@ -21,7 +21,12 @@
 }}} */
 
 ini_set('display_errors', 1);
-error_reporting(E_ALL & ~E_NOTICE);
+
+if (defined('E_DEPRECATED')) {
+	error_reporting(E_ALL & ~(E_DEPRECATED|E_NOTICE));
+} else {
+	error_reporting(E_ALL & ~E_NOTICE);
+}
 
 global $baseDir;
 global $baseUrl;
