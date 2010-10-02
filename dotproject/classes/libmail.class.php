@@ -617,18 +617,23 @@ function QueueMail() {
  *  @access private
  */
 function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
-	extract($args);
+	foreach ($args as $k => $v) {
+		// Only set variables we know about.
+		if (isset($this->$k) || property_exists($this, $k)) { # See PHP manual.
+			$this->$k = $v;
+		}
+	}
 	if ($this->transport == 'smtp') {
 		return $this->SMTPSend();
 	} else {
 		$headers = '';
-		foreach ($xheaders as $k => $v) {
+		foreach ($this->xheaders as $k => $v) {
 			if ($k == 'To' || $k == 'Subject') {
 				continue;
 			}
 			$headers .= $k . ': ' . trim($v) . "\r\n";
 		}
-		return @mail($xheaders['To'], $xheaders['Subject'], $fullBody, $headers);
+		return @mail($this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers);
 	}
 }
 
