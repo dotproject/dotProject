@@ -62,13 +62,15 @@
  *  New Years day (00) is a monthless day
  *  Note: Leap Years are not yet accounted for in the Human Calendar system
  *
- * @author     Allan Kent <allan@lodestone.co.za>
- * @copyright  1997-2005 Allan Kent
- * @license    http://www.opensource.org/licenses/bsd-license.php
- *             BSD License
- * @version    Release: 1.4.7
- * @link       http://pear.php.net/package/Date
- * @since      Class available since Release 1.3
+ * @category  Date and Time
+ * @package   Date
+ * @author    Allan Kent <allan@lodestone.co.za>
+ * @copyright 1997-2005 Allan Kent
+ * @license   http://www.opensource.org/licenses/bsd-license.php
+ *            BSD License
+ * @version   Release: 1.5.0a1
+ * @link      http://pear.php.net/package/Date
+ * @since     Class available since Release 1.3
  */
 class Date_Human
 {
@@ -78,20 +80,6 @@ class Date_Human
      * Returns an associative array containing the converted date information
      * in 'Human Calendar' format.
      *
-     * @param int day in DD format, default current local day
-     * @param int month in MM format, default current local month
-     * @param int year in CCYY format, default to current local year
-     *
-     * @access public
-     *
-     * @return associative array(
-     *               hdom,       // Human Day Of Month, starting at 1
-     *               hdow,       // Human Day Of Week, starting at 1
-     *               hwom,       // Human Week of Month, starting at 1
-     *               hwoy,       // Human Week of Year, starting at 1
-     *               hmoy,       // Human Month of Year, starting at 0
-     *               )
-     *
      * If the day is New Years Day, the function will return
      * "hdom" =>  0
      * "hdow" =>  0
@@ -100,8 +88,22 @@ class Date_Human
      * "hmoy" => -1
      *  Since 0 is a valid month number under the Human Calendar, I have left
      *  the month as -1 for New Years Day.
+     *
+     * @param int $day   in DD format, default current local day
+     * @param int $month in MM format, default current local month
+     * @param int $year  in CCYY format, default to current local year
+     *
+     * @return   associative array(
+     *               hdom,       // Human Day Of Month, starting at 1
+     *               hdow,       // Human Day Of Week, starting at 1
+     *               hwom,       // Human Week of Month, starting at 1
+     *               hwoy,       // Human Week of Year, starting at 1
+     *               hmoy,       // Human Month of Year, starting at 0
+     *               )
+     * @access   public
+     * @static
      */
-    function gregorianToHuman($day=0, $month=0, $year=0)
+    function gregorianToHuman($day = 0, $month = 0, $year = 0)
     {
         /*
          * Check to see if any of the arguments are empty
@@ -124,7 +126,7 @@ class Date_Human
         /*
          * We need to know how many days into the year we are
          */
-        $dateinfo = getdate(mktime(0, 0, 0, $month, $day, $year));
+        $dateinfo  = getdate(mktime(0, 0, 0, $month, $day, $year));
         $dayofyear = $dateinfo["yday"];
         /*
          * Human Calendar starts at 0 for months and the first day of the year
@@ -170,12 +172,11 @@ class Date_Human
          * Same for week of the year, but use $dayofyear instead $humanDayOfMonth
          */
         $humanWeekOfMonth = ceil($humanDayOfMonth / 7);
-        $humanWeekOfYear = ceil($dayofyear / 7);
+        $humanWeekOfYear  = ceil($dayofyear / 7);
         /*
          * Return an associative array of the values
          */
-        return array(
-                     "hdom" => $humanDayOfMonth,
+        return array("hdom" => $humanDayOfMonth,
                      "hdow" => $humanDayOfWeek,
                      "hwom" => $humanWeekOfMonth,
                      "hwoy" => $humanWeekOfYear,
@@ -188,15 +189,15 @@ class Date_Human
     /**
      * Returns unix timestamp for a given Human Calendar date
      *
-     * @param int day in DD format
-     * @param int month in MM format
-     * @param int year in CCYY format, default to current local year
+     * @param int $day   in DD format
+     * @param int $month in MM format
+     * @param int $year  in CCYY format, default to current local year
      *
-     * @access public
-     *
-     * @return int unix timestamp of date
+     * @return   int unix timestamp of date
+     * @access   public
+     * @static
      */
-    function humanToGregorian($day, $month, $year=0)
+    function humanToGregorian($day, $month, $year = 0)
     {
         /*
          * Check to see if the year has been passed through.
@@ -204,13 +205,13 @@ class Date_Human
          */
         if (empty($year)) {
             $dateinfo = getdate(time());
-            $year = $dateinfo["year"];
+            $year     = $dateinfo["year"];
         }
         /*
          * We need to get the day of the year that we are currently at so that
          * we can work out the Gregorian Month and day
          */
-        $DayOfYear = $month * 28;
+        $DayOfYear  = $month * 28;
         $DayOfYear += $day;
         /*
          * Human Calendar starts at 0, so we need to increment $DayOfYear

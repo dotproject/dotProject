@@ -30,8 +30,10 @@ $yy = $this_week->getYear();
 // prepare time period for 'events'
 $first_time = new CDate(Date_calc::beginOfWeek($dd, $mm, $yy, 
                                                FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$week_time = new CDate($first_time); // Can't use first_time after we adjust it.
 $first_time->setTime(0, 0, 0);
 $first_time->subtractSeconds(1);
+
 $last_time = new CDate(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
 $prev_week = new CDate(Date_calc::beginOfPrevWeek($dd, $mm, $yy, 
@@ -101,7 +103,7 @@ echo ('?m=calendar&a=week_view&date='.$prev_week->format(FMT_TIMESTAMP_DATE)); ?
 	<th width="100%">
 		<span style="font-size:12pt"><?php 
 echo ($AppUI->_('Week') . ' ' 
-      . htmlentities($first_time->format('%U - %Y'), ENT_COMPAT, $locale_char_set)); ?></span>
+      . htmlentities($week_time->format('%V - %Y'), ENT_COMPAT, $locale_char_set)); ?></span>
 	</th>
 	<td>
 		<a href="<?php 
