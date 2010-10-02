@@ -13,15 +13,13 @@ define('SECONDS_PER_DAY', 60 * 60 * 24);
 ## Returns the best color based on a background color (x is cross-over)
 ##
 function bestColor($bg, $lt='#ffffff', $dk='#000000') {
-// cross-over color = x
-	$x = 128;
-	$r = hexdec(mb_substr($bg, 0, 2));
-	$g = hexdec(mb_substr($bg, 2, 2));
-	$b = hexdec(mb_substr($bg, 4, 2));
-
-	return (($r < $x && $g < $x 
-	         || $r < $x && $b < $x 
-	         || $b < $x && $g < $x) ? $lt  : $dk);
+	if (empty($bg)) {
+		$bg = $lt;
+	}
+	$bg = str_replace('#', '', $bg);
+	$dk = str_replace('#', '', $dk);
+	$base = new CSS_Color($bg);
+	return '#' . $base->calcFG($bg,$dk);
 }
 
 ##
