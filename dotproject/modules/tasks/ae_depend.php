@@ -118,5 +118,5 @@ $taskDep = db_loadHashList($sql);
 <input type="hidden" name="hdependencies" />
 </form>
 <script language="javascript">
-  subForm.push(new FormDefinition(<?php echo $tab; ?>, document.dependFrm, checkDetail, saveDepend));
+  subForm.push(new FormDefinition(<?php echo $currentTabId; ?>, document.dependFrm, checkDetail, saveDepend));
 </script>

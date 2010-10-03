@@ -121,5 +121,5 @@ $custom_fields->printHTML();
 </table>
 </form>
 <script language="javascript">
- subForm.push(new FormDefinition(<?php echo $tab;?>, document.detailFrm, checkDetail, saveDetail));
+ subForm.push(new FormDefinition(<?php echo $currentTabId;?>, document.detailFrm, checkDetail, saveDetail));
 </script>

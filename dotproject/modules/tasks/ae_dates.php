@@ -168,5 +168,5 @@ if ($can_edit_time_information) {
 </table>
 </form>
 <script language="javascript" type="text/javascript">
- subForm.push(new FormDefinition(<?php echo $tab;?>, document.datesFrm, checkDates, saveDates));
+ subForm.push(new FormDefinition(<?php echo $currentTabId;?>, document.datesFrm, checkDates, saveDates));
 </script>

@@ -530,7 +530,7 @@ function FormDefinition(id, form, check, save) {
 function fd_check()
 {
 	if (this.checkHandler) {
-		return this.checkHandler(this.form);
+		return this.checkHandler(this.form, this.id);
 	} else {
 		return true;
 	}
@@ -539,7 +539,7 @@ function fd_check()
 function fd_save()
 {
 	if (this.saveHandler) {
-		var copy_list = this.saveHandler(this.form);
+		var copy_list = this.saveHandler(this.form, this.id);
 		return copyForm(this.form, document.editFrm, copy_list);
 	} else {
 		return this.form.submit();
@@ -549,7 +549,7 @@ function fd_save()
 function fd_submit()
 {
 	if (this.saveHandler)
-		this.saveHandler(this.form);
+		this.saveHandler(this.form, this.id);
 	return this.form.submit();
 }
 
@@ -559,15 +559,17 @@ function fd_seed()
 }
 
 // Sub-form specific functions.
-function checkDates(form) {
+function checkDates(form, id) {
 	if (can_edit_time_information && check_task_dates) {
 		if (!form.task_start_date.value) {
 			alert(task_start_msg);
+			show_tab(id);
 			form.task_start_date.focus();
 			return false;
 		}
 		if (!form.task_end_date.value) {
 			alert(task_end_msg);
+			show_tab(id);
 			form.task_end_date.focus();
 			return false;
 		}
@@ -638,7 +640,7 @@ function copyForm(form, to, extras) {
 	return true;
 }
 
-function saveDates(form) {
+function saveDates(form, id) {
 	if (can_edit_time_information) {
 		if (form.task_start_date.value.length > 0) {
 			form.task_start_date.value += form.start_hour.value + form.start_minute.value;
@@ -652,7 +654,7 @@ function saveDates(form) {
 	return new Array('task_start_date', 'task_end_date');
 }
 
-function saveDepend(form) {
+function saveDepend(form, id) {
 	var dl = form.task_dependencies.length -1;
         hd = form.hdependencies;
 	hd.value = "";
@@ -662,19 +664,19 @@ function saveDepend(form) {
         return new Array('hdependencies');;
 }
 
-function checkDetail(form) {
+function checkDetail(form, id) {
 	return true;
 }
 
-function saveDetail(form) {
+function saveDetail(form, id) {
 	return null;
 }
 
-function checkResource(form) {
+function checkResource(form, id) {
 	return true;
 }
 
-function saveResource(form) {
+function saveResource(form, id) {
 	var fl = form.assigned.length -1;
 	ha = form.hassign;
 	ha.value = "";

@@ -106,5 +106,5 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 <input type="hidden" name="hassign" />
 </form>
 <script language="javascript">
-  subForm.push(new FormDefinition(<?php echo $tab; ?>, document.resourceFrm, checkResource, saveResource));
+  subForm.push(new FormDefinition(<?php echo $currentTabId; ?>, document.resourceFrm, checkResource, saveResource));
 </script>
