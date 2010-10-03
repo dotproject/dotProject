@@ -564,13 +564,18 @@ function checkDates(form, id) {
 		if (!form.task_start_date.value) {
 			alert(task_start_msg);
 			show_tab(id);
-			form.task_start_date.focus();
+			// If the start date is not hidden or disabled, focus
+			if ( form.task_start_date.type != 'hidden' && ! form.task_start_date.disabled) {
+				form.task_start_date.focus();
+			}
 			return false;
 		}
 		if (!form.task_end_date.value) {
 			alert(task_end_msg);
 			show_tab(id);
-			form.task_end_date.focus();
+			if (form.task_end_date.type != 'hidden' && ! form.task_end_date.disabled) {
+				form.task_end_date.focus();
+			}
 			return false;
 		}
 		//check if the start date is > then end date
