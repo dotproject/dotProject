@@ -68,7 +68,12 @@ $baseUrl = preg_replace('#/$#D', '', $baseUrl);
 // Define to deprecate the global baseUrl
 define('DP_BASE_URL', $baseUrl);
 // And now we need to ensure we have a valid path for included pear libraries.
-set_include_path(get_include_path().PATH_SEPARATOR.DP_BASE_DIR.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'PEAR');
+// This dependency sucks, but if we don't do it we have no idea what versions we have
+$dpLib = DP_BASE_DIR.DIRECTORY_SEPARATOR.'lib';
+$pear = $dpLib . DIRECTORY_SEPARATOR. 'PEAR';
+// If you want a really secure path, comment the second one out and uncomment this
+// set_include_path('.'.PATH_SEPARATOR.$dpLib.PATH_SEPARATOR.$pear);
+set_include_path('.'.PATH_SEPARATOR.$dpLib.PATH_SEPARATOR.$pear.PATH_SEPARATOR.get_include_path());
 
 // required includes for start-up
 global $dPconfig;
