@@ -49,7 +49,7 @@ foreach ($modules as $row) {
 	if (isset($modFiles[$row['mod_directory']])) {
 		$modFiles[$row['mod_directory']] = '';
 	}
-	$query_string = '?m='.$m.'&amp;a=domodsql&amp;mod_id={'.$row['mod_id'].'}';
+	$query_string = '?m='.$m.'&amp;a=domodsql&amp;mod_id='.$row['mod_id'];
 	$s = '';
 	// arrows
 	// TODO: sweep this block of code and add line returns to improve View Source readability 
@@ -81,7 +81,7 @@ foreach ($modules as $row) {
 	       . ($row['mod_active'] ? $AppUI->_('deactivate') : $AppUI->_('activate')) . '</a>');
 	*/
 	if ($canEdit) {
-		$s .= '<a href="' . $query_string . '&amp;cmd=toggle&">';
+		$s .= '<a href="' . $query_string . '&amp;cmd=toggle">';
 	}
 	$s .= ($row['mod_active'] ? $AppUI->_('active') : $AppUI->_('disabled'));
 	if ($canEdit) {
