@@ -107,8 +107,8 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "</table>\n";
 	$message .= "<table width='600' border='0' cellpadding='4' cellspacing='1' bgcolor='#878676'>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
-	$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
 	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
@@ -119,8 +119,8 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>$subject</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
-	$message .= "		<td bgcolor='white' nowrap="nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "</table>\n";
 	$message .= "</body>\n";
@@ -163,7 +163,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "<table border=0 cellpadding=4 cellspacing=1>\n";
 			$message .= "	<tr>\n";
 			$message .= "	<td valign=top><img src=".DP_BASE_URL."/images/icons/ticketsmith.gif alt= border=0 width=42 height=42></td>\n";
-			$message .= "		<td nowrap="nowrap'><span class=title>".$AppUI->_('Trouble Ticket Management')."</span></td>\n";
+			$message .= "		<td nowrap='nowrap'><span class=title>".$AppUI->_('Trouble Ticket Management')."</span></td>\n";
 			$message .= "		<td valign=top align=right width=100%>&nbsp;</td>\n";
 			$message .= "	</tr>\n";
 			$message .= "</table>\n";
@@ -172,8 +172,8 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "		<td colspan=2><font face='arial,san-serif' size='2' color='white'>".$AppUI->_('Ticket assigned to you')."</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
-			$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
 			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
@@ -184,8 +184,8 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>$subject</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white' nowrap="nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
-			$message .= "		<td bgcolor='white' nowrap="nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "</table>\n";
 			$message .= "</body>\n";

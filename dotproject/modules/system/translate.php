@@ -12,7 +12,7 @@ if (!$canEdit || $AppUI->user_type != 1) {
 $module = dPgetParam($_REQUEST, 'module', 'admin');
 $lang = dPgetParam($_REQUEST, 'lang', $AppUI->user_locale);
 
-$AppUI->savePlace('m=system&a=translate&module='.$module'.&lang=' . $lang);
+$AppUI->savePlace('m=system&a=translate&module='.$module.'&lang=' . $lang);
 
 // read the installed modules
 $modules = arrayMerge($AppUI->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));

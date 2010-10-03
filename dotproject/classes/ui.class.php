@@ -529,8 +529,6 @@ class CAppUI {
 			$params .= (($params) ? '&' : '')  . $session_id;
 		}
 		ob_implicit_flush(); // Ensure any buffering is disabled.
-		// Clean up URL and make it XHTML compliant
-		$params = htmlspecialchars(html_entity_decode($params, ENT_QUOTES, 'UTF-8'), ENT_NOQUOTES, 'UTF-8');
 		header('Location: index.php?' . $params);
 		exit();	// stop the PHP execution
 	}

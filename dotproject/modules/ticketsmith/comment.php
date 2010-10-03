@@ -60,7 +60,7 @@ if (@$comment) {
 } else {
 
     /* start table */
-	print("<table class="std\" bgcolor=\"#eeeeee\" width=\"100%\">\n");
+	print('<table class="std" bgcolor="#eeeeee" width="100%">'."\n");
     print("<tr>\n");
 	print("<th colspan=\"2\" align=\"center\" >\n");
     print("<div class=\"heading\">".$AppUI->_($title)."</div>\n");

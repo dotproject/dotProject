@@ -618,13 +618,14 @@ function copyForm(form, to, extras) {
 					to.appendChild(h.addHidden(elem.name, elem.options[elem.selectedIndex].value));
 				break;
 			case 'select-multiple':
-				var sel = to.appendChild(h.addSelect(elem.name, false, true));
-				sel.style.visible = "hidden";
+				var sel = h.addSelect(elem.name, false, true);
+				sel.style.visibility = "hidden";
 				for (var x = 0; x < elem.options.length; x++) {
 					if (elem.options[x].selected) {
 						sel.appendChild(h.addOption(elem.options[x].value, '', true));
 					}
 				}
+				to.appendChild(sel);
 				break;
 			case 'radio':
 			case 'checkbox':

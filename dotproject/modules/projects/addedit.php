@@ -258,7 +258,7 @@ function setDepartment(department_id_string) {
 
 </script>
 
-<form name="editFrm" action="./index.php?m=projects" enctype="multipart/form-data" method="post">
+<form name="editFrm" action="?m=projects" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 	<input type="hidden" name="project_creator" value="<?php echo $AppUI->user_id;?>" />
@@ -266,7 +266,7 @@ function setDepartment(department_id_string) {
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
+		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = '?m=projects';}" />
 	</td>
 	<td align="right">
 		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt();" />

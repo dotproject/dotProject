@@ -143,8 +143,7 @@ $s .= '<td align="right">' . sprintf("%.2f", $hrs) . '</td>';
 $s .= ('<td align="right" colspan="3"><form action="?m=tasks&amp;a=view&amp;tab=1&amp;task_id=' 
        . $task_id . '" method="post">');
 if (getPermission('tasks', 'edit', $task_id)) {
-	$s .= ('<input type="submit" class="button" value="' . $AppUI->_('new log') 
-	       . '" />';
+	$s .= '<input type="submit" class="button" value="' . $AppUI->_('new log') . '" />';
 }
 $s .= '</form></td></tr>';
 echo $s;
