@@ -21,11 +21,11 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 		// left buttoms
 		if ($xpg_prev_page > 0) {
 			echo '<td align="left" width="15%">';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=1">';
-			echo '<img src="images/navfirst.gif" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_prev_page . '">';
+			echo '<a href="?m=' . $m . '&amp;page=1">';
+			echo '<img src="images/navfirst.gif" border="0" Alt="First Page" /></a>&nbsp;&nbsp;';
+			echo '<a href="?m=' . $m . '&amp;page=' . $xpg_prev_page . '">';
 			echo ('<img src="images/navleft.gif" border="0" Alt="Previous page (' . $xpg_prev_page 
-				  . ')"></a></td>');
+				  . ')" /></a></td>');
 		} else {
 			echo '<td width="15%">&nbsp;</td>' . "\n";
 		} 
@@ -39,10 +39,10 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 		// right buttoms
 		if ($xpg_next_page <= $xpg_total_pages) {
 			echo '<td align="right" width="15%">';
-			echo '<a href="./index.php?m=' . $m . '&amp;page='.$xpg_next_page.'">';
-			echo '<img src="images/navright.gif" border="0" Alt="Next Page ('.$xpg_next_page.')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="images/navlast.gif" border="0" Alt="Last Page"></a></td>';
+			echo '<a href="?m=' . $m . '&amp;page='.$xpg_next_page.'">';
+			echo '<img src="images/navright.gif" border="0" Alt="Next Page ('.$xpg_next_page.')" /></a>&nbsp;&nbsp;';
+			echo '<a href="?m=' . $m . '&amp;page=' . $xpg_total_pages . '">';
+			echo '<img src="images/navlast.gif" border="0" Alt="Last Page" /></a></td>';
 		} else {
 			echo ('<td width="15%">&nbsp;</td></tr>' . "\n");
 		}
@@ -222,7 +222,7 @@ for ($i=($page-1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i<$pmax && $i<$xpg_
 	<td nowrap="nowrap" width="20">
 	<?php 
 	if ($canEdit) {
-		echo ("\n" . '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' 
+		echo ("\n" . '<a href="?m=' . $m . '&amp;a=addedit&amp;link_id=' 
 		      . $row['link_id'] . '">');
 		echo dPshowImage('./images/icons/stock_edit-16.png', '16', '16');
 		echo "\n</a>";
@@ -235,7 +235,7 @@ for ($i=($page-1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i<$pmax && $i<$xpg_
 	<td width="20%"><?php echo $row['link_description'];?></td>
     <td width="10%" nowrap="nowrap" align="center"><?php 
 	echo $link_types[$row['link_category']];?></td> 
-	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php 
+	<td width="5%" align="center"><a href="?m=tasks&amp;a=view&amp;task_id=<?php 
 	echo $row['task_id'];?>"><?php echo $row['task_name'];?></a></td>
 	<td width="15%" nowrap="nowrap"><?php 
 	echo $row['contact_first_name'].' '.$row['contact_last_name'];?></td>

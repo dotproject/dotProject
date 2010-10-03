@@ -44,30 +44,30 @@ function submitIt() {
 }
 </script>
 
-<TABLE width="100%" border=0 cellpadding="0" cellspacing=1 class="std">
 <form name="ticketform" action="?m=ticketsmith" method="post">
 <input type="hidden" name="dosql" value="do_ticket_aed">
 
-<TR height="20">
-	<Th colspan=2>
-		&nbsp;<font face="verdana,helveitica,arial,sans-serif" color=#ffffff><strong><?php echo $AppUI->_('Trouble Details'); ?></strong></font>
+<table width="100%" border=0 cellpadding="0" cellspacing=1 class="std">
+<tr height="20">
+	<th colspan="2">
+		&nbsp;<font face="verdana,helveitica,arial,sans-serif" color="#ffffff"><strong><?php echo $AppUI->_('Trouble Details'); ?></strong></font>
 	</th>
 </tr>
 <tr>
-	<TD align="right"><?php echo $AppUI->_('Name'); ?>:</td>
-	<TD><input type="text" class="text" name="name" value="<?php echo $AppUI->user_first_name . ' ' . $AppUI->user_last_name; ?>" size=50 maxlength="255"> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
+	<td align="right"><?php echo $AppUI->_('Name'); ?>:</td>
+	<td><input type="text" class="text" name="name" value="<?php echo $AppUI->user_first_name . ' ' . $AppUI->user_last_name; ?>" size=50 maxlength="255" /> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
 </tr>
 <tr>
-	<TD align="right"><?php echo $AppUI->_('E-Mail'); ?>:</td>
-	<TD><input type="text" class="text" name="email" value="<?php echo $AppUI->user_email; ?>" size=50 maxlength="50"> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
+	<td align="right"><?php echo $AppUI->_('E-Mail'); ?>:</td>
+	<td><input type="text" class="text" name="email" value="<?php echo $AppUI->user_email; ?>" size="50" maxlength="50" /> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
 </tr>
 <tr>
-	<TD align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
-	<TD><input type="text" class="text" name="subject" value="" size=50 maxlength="50"> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
+	<td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
+	<td><input type="text" class="text" name="subject" value="" size="50" maxlength="50" /> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
 </tr>
 <tr>
-	<TD align="right"><?php echo $AppUI->_('Priority'); ?>:</td>
-	<TD>
+	<td align="right"><?php echo $AppUI->_('Priority'); ?>:</td>
+	<td>
 		<select name="priority" class="text">
 			<option value="0"><?php echo $AppUI->_('Low'); ?>
 			<option value="1" selected><?php echo $AppUI->_('Normal'); ?>
@@ -112,19 +112,19 @@ function submitIt() {
 		echo arraySelect($importList, 'ticket_project', 'size="1" class="text"', null);
 	?></td>
 </tr>
-<TR>
-	<TD align="right"><?php echo $AppUI->_('Description of Problem'); ?>: </td>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Description of Problem'); ?>: </td>
 	<td><span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
 </tr>
-<TR>
-	<TD colspan=2 align="center">
+<tr>
+	<td colspan="2" align="center">
 		<textarea cols="70" rows="10" class="textarea" name="description"><?php echo @$crow["description"];?></textarea>
 	</td>
 </tr>
-<TR>
-	<TD><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onClick="javascript:history.back(-1);"></td>
-	<TD align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onClick="submitIt()"></td>
+<tr>
+	<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back(-1);" /></td>
+	<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="javascript:submitIt()" /></td>
 </tr>
+</table>
 </form>
-</TABLE>
 &nbsp;<br />&nbsp;<br />&nbsp;

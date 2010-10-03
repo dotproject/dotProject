@@ -63,9 +63,9 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 	if (getPermission('admin', 'view') && getPermission('users', 'view'))
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	if ($user_id > 0) {
-		$titleBlock->addCrumb(('?m=admin&a=viewuser&user_id=' . $user_id), 'view this user');
+		$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", "view this user" );
 		if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
+		$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=$user_id", "edit preferences" );
 		}
 	}
 	$titleBlock->show();
@@ -125,9 +125,9 @@ function popDept() {
     if (f.selectedIndex == 0) {
         alert('<?php echo $AppUI->_('Please select a company first!', UI_OUTPUT_JS); ?>');
     } else {
-        window.open('./index.php?m=public&a=selector&dialog=1&callback=setDept&table=departments&company_id='
+        window.open('?m=public&'+'a=selector&'+'dialog=1&'+'callback=setDept&'+'table=departments&'+'company_id='
             + f.contact_company.options[f.contact_company.selectedIndex].value
-            + '&dept_id='+f.contact_department.value,'dept','left=50,top=50,height=250,width=400,resizable')
+            + '&'+'dept_id='+f.contact_department.value,'dept','left=50,top=50,height=250,width=400,resizable')
     }
 }
 
@@ -172,7 +172,7 @@ function setDept(key, val) {
 <tr>
     <td align="right"> <?php echo $AppUI->_('User Type');?>:</td>
     <td>
-<?php echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true); ?>
+<?php echo arraySelect($utypes, 'user_type', 'class="text" size="1"', $user['user_type'], true); ?>
     </td>
 </tr>
 <?php } // End of security
@@ -205,7 +205,7 @@ echo $user['contact_last_name'];?>" maxlength="50" /></td>
     <td align="right"> <?php echo $AppUI->_('Company');?>:</td>
     <td>
 <?php 
-echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
+echo arraySelect($companies, 'contact_company', 'class="text" size="1"', $user['contact_company']);
 ?>
     </td>
 </tr>
@@ -218,7 +218,7 @@ echo @$user['contact_department'];?>" />
         <input type="text" class="text" name="dept_name" value="<?php 
 echo @$user['dept_name'];?>" size="40" disabled="disabled" />
         <input type="button" class="button" value="<?php 
-echo $AppUI->_('select dept');?>..." onclick="popDept()" />
+echo $AppUI->_('select dept');?>..." onclick="javascript:popDept()" />
     </td>
 </tr>
 <tr>
@@ -227,13 +227,13 @@ echo $AppUI->_('select dept');?>..." onclick="popDept()" />
 echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 </tr>
 <tr>
-    <td align="right" valign=top><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
-    <td><textarea class="text" cols=50 name="user_signature" style="height: 50px"><?php 
+    <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
+    <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php 
 echo @$user['user_signature'];?></textarea></td>
 </tr>
 <tr>
 	<td align="right"><?php if ($user['user_contact']) { ?>
-		<a href="?m=contacts&a=addedit&contact_id=<?php 
+		<a href="?m=contacts&amp;a=addedit&amp;contact_id=<?php 
 echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a>
 	<?php } ?></td>
 	<td>&nbsp;</td>
@@ -241,9 +241,10 @@ echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info
 <tr>
     <td align="right">* <?php echo $AppUI->_('Required Fields'); ?></td>
     <td></td>
+</tr>
 <tr>
     <td align="left">
-        <input type="button" value="<?php echo $AppUI->_('back');?>" onClick="javascript:history.back(-1);" class="button" />
+        <input type="button" value="<?php echo $AppUI->_('back');?>" onclick="javascript:history.back(-1);" class="button" />
     </td>
     <td align="right">
     <?php if ($canEdit && !$user_id) { ?>
@@ -252,8 +253,9 @@ echo $AppUI->_('Inform new user of their account details?'); ?></label>
 	<input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
 <?php } ?>
 	<input type="button" value="<?php 
-echo $AppUI->_('submit');?>" onclick="submitIt()" class="button" />
+echo $AppUI->_('submit');?>" onclick="javascript:submitIt()" class="button" />
     </td>
 </tr>
 </table>
+</form>
 <?php } ?>

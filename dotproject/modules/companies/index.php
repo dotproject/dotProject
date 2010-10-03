@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 // First order check if we are allowed to view
 if (!$canAccess) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 $AppUI->savePlace();
 
@@ -62,7 +62,7 @@ $titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_s
                       . '<table><tr><td><strong>' . $AppUI->_('Search') 
                       . '</strong><input class="text" type="text" name="search_string" value="' 
                       .  dPformSafe($search_string) . '" /><br />' 
-                      . '<a href="index.php?m=companies&search_string=-1">' 
+                      . '<a href="index.php?m=companies&amp;search_string=-1">' 
                       . $AppUI->_('Reset search') . '</a></td><td valign="top"><strong>' 
                       . $AppUI->_('Owner filter').'</strong> ' . $owner_combo 
                       . ' </td></tr></table></form>'));
@@ -71,7 +71,7 @@ $search_string = addslashes($search_string);
 
 if ($canEdit) {
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company') 
-	                      . '">'), '', '<form action="?m=companies&a=addedit" method="post">', 
+	                      . '">'), '', '<form action="?m=companies&amp;a=addedit" method="post">', 
 	                     '</form>');
 }
 $titleBlock->show();

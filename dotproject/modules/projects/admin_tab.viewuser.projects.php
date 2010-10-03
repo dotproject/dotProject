@@ -108,7 +108,7 @@ echo $tab; ?>" method="post" name="pickCompany">
 		<?php echo $AppUI->_('Project Name'); ?>
 		</a>
 	</th>
-	<th nowrap="nowrap">
+          <th nowrap="nowrap">
 		<a href="<?php echo $headerGet; ?>&amp;orderby=project_start_date" class="hdr">
 		<?php echo $AppUI->_('Start'); ?>
 		</a>
@@ -118,17 +118,17 @@ echo $tab; ?>" method="post" name="pickCompany">
 		<?php echo $AppUI->_('Duration'); ?>
 		</a>
 	</th>
-	<th nowrap="nowrap">
+        <th nowrap="nowrap">
 		<a href="<?php echo $headerGet; ?>&amp;orderby=project_end_date" class="hdr">
 		<?php echo $AppUI->_('Due Date'); ?>
 		</a>
 	</th>
-	<th nowrap="nowrap">
+        <th nowrap="nowrap">
 		<a href="<?php echo $headerGet; ?>&amp;orderby=project_actual_end_date" class="hdr">
 		<?php echo $AppUI->_('Actual'); ?>
 		</a>
 	</th>
-	<th nowrap="nowrap">
+        <th nowrap="nowrap">
 		<a href="<?php echo $headerGet; ?>&amp;orderby=task_log_problem" class="hdr">
 		<?php echo $AppUI->_('P'); ?>
 		</a>
@@ -249,7 +249,7 @@ echo ($style); ?>><?php echo htmlspecialchars($actual_end_date->format($df)); ?>
 ?>
 		&nbsp;
 <?php 
-		}
+	}
 ?>
 	</td>
 	<td align="center" nowrap="nowrap"><?php 

@@ -59,7 +59,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 
 $AppUI->getModuleJS('resources', 'tabs');
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 <?php
 echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
@@ -71,7 +71,7 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 }
 ?>
 </script>
-<form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>"
+<form action="?m=tasks&amp;a=addedit&amp;task_project=<?php echo $task_project; ?>"
   method="post" name="otherFrm">
 <input type="hidden" name="sub_form" value="1" />
 <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
@@ -97,7 +97,7 @@ for ($i = 1, $sz=sizeof($keys); $i < $sz; $i++) {
 				<td colspan="2" align="center">
 					<table>
 					<tr>
-						<td align="right"><input type="button" class="button" value="&gt;" onClick="addResource(document.otherFrm)" /></td>
+						<td align="right"><input type="button" class="button" value="&gt;" onclick="javascript:addResource(document.otherFrm)" /></td>
 						<td>
 							<select name="resource_assignment" class="text">
 							<?php 
@@ -108,7 +108,7 @@ for ($i = 5; $i <= 100; $i+=5) {
 ?>
 							</select>
 						</td>				
-						<td align="left"><input type="button" class="button" value="&lt;" onClick="removeResource(document.otherFrm)" /></td>					
+						<td align="left"><input type="button" class="button" value="&lt;" onclick="javascript:removeResource(document.otherFrm)" /></td>					
 					</tr>
 					</table>
 				</td>
@@ -124,6 +124,6 @@ for ($i = 5; $i <= 100; $i+=5) {
 </tr>
 </table>
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
   subForm.push(new FormDefinition(<?php echo $tab; ?>, document.otherFrm, checkOther, saveOther));
 </script>

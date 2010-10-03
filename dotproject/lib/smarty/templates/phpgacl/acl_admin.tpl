@@ -32,8 +32,8 @@
               </select>
             </td>
             <td valign="middle">
-              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onClick="select_item(document.acl_admin.aco_section, document.acl_admin.elements['aco[]'], document.acl_admin.elements['selected_aco[]'])">
-              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onClick="deselect_item(document.acl_admin.elements['selected_aco[]'])">
+              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onclick="javascript:select_item(document.acl_admin.aco_section, document.acl_admin.elements['aco[]'], document.acl_admin.elements['selected_aco[]'])">
+              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onclick="javascript:deselect_item(document.acl_admin.elements['selected_aco[]'])">
             </td>
             <td>
               <br />
@@ -68,14 +68,14 @@
             </td>
             <td>
               [ <a href="javascript: location.href = 'edit_objects.php?object_type=aro&section_value=' + document.acl_admin.aro_section.options[document.acl_admin.aro_section.selectedIndex].value + '&return_page={$return_page}';">Edit</a> ]
-              [ <a href="#" onClick="window.open('object_search.php?src_form=acl_admin&object_type=aro&section_value=' + document.acl_admin.aro_section.options[document.acl_admin.aro_section.selectedIndex].value + '&return_page={$return_page}','','status=yes,width=400,height=400');return false;">Search</a> ]
+              [ <a href="#" onclick="javascript:window.open('object_search.php?src_form=acl_admin&object_type=aro&section_value=' + document.acl_admin.aro_section.options[document.acl_admin.aro_section.selectedIndex].value + '&return_page={$return_page}','','status=yes,width=400,height=400');return false;">Search</a> ]
               <br />
               <select name="aro[]" tabindex="0" size="10" width="200" multiple>
               </select>
             </td>
             <td valign="middle">
-              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onClick="select_item(document.acl_admin.aro_section, document.acl_admin.elements['aro[]'], document.acl_admin.elements['selected_aro[]'])">
-              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onClick="deselect_item(document.acl_admin.elements['selected_aro[]'])">
+              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onclick="javascript:select_item(document.acl_admin.aro_section, document.acl_admin.elements['aro[]'], document.acl_admin.elements['selected_aro[]'])">
+              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onclick="javascript:deselect_item(document.acl_admin.elements['selected_aro[]'])">
             </td>
             <td>
              <br />
@@ -89,7 +89,7 @@
 			  <select name="aro_groups[]" tabindex="0" size="8" multiple>
 			    {html_options options=$options_aro_groups selected=$selected_aro_groups}
 			  </select>
-			  <br /><input type="button" class="un-select" name="Un-Select" value="Un-Select" onClick="unselect_all(document.acl_admin.elements['aro_groups[]'])">
+			  <br /><input type="button" class="un-select" name="Un-Select" value="Un-Select" onclick="javascript:unselect_all(document.acl_admin.elements['aro_groups[]'])">
             </td>
           </tr>
 
@@ -116,14 +116,14 @@
             </td>
             <td>
               [ <a href="javascript: location.href = 'edit_objects.php?object_type=axo&section_value=' + document.acl_admin.axo_section.options[document.acl_admin.axo_section.selectedIndex].value + '&return_page={$return_page}';">Edit</a> ]
-              [ <a href="#" onClick="window.open('object_search.php?src_form=acl_admin&object_type=axo&section_value=' + document.acl_admin.axo_section.options[document.acl_admin.axo_section.selectedIndex].value + '&return_page={$return_page}','','status=yes,width=400,height=400');return false;">Search</a> ]
+              [ <a href="#" onclick="javascript:window.open('object_search.php?src_form=acl_admin&object_type=axo&section_value=' + document.acl_admin.axo_section.options[document.acl_admin.axo_section.selectedIndex].value + '&return_page={$return_page}','','status=yes,width=400,height=400');return false;">Search</a> ]
               <br />
               <select name="axo[]" tabindex="0" size="10" width="200" multiple>
               </select>
             </td>
             <td valign="middle">
-              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onClick="select_item(document.acl_admin.axo_section, document.acl_admin.elements['axo[]'], document.acl_admin.elements['selected_axo[]'])">
-              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onClick="deselect_item(document.acl_admin.elements['selected_axo[]'])">
+              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onclick="javascript:select_item(document.acl_admin.axo_section, document.acl_admin.elements['axo[]'], document.acl_admin.elements['selected_axo[]'])">
+              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onclick="javascript:deselect_item(document.acl_admin.elements['selected_axo[]'])">
             </td>
             <td>
               <br />
@@ -137,7 +137,7 @@
               <select name="axo_groups[]" tabindex="0" size="8" multiple>
                 {html_options options=$options_axo_groups selected=$selected_axo_groups}
               </select>
-              <br /><input type="button" class="un-select" name="Un-Select" value="Un-Select" onClick="unselect_all(document.acl_admin.elements['axo_groups[]'])">
+              <br /><input type="button" class="un-select" name="Un-Select" value="Un-Select" onclick="javascript:unselect_all(document.acl_admin.elements['axo_groups[]'])">
             </td>
         </tr>
 

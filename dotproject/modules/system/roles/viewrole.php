@@ -15,11 +15,11 @@ $tab = $AppUI->getState('RoleVwTab') !== NULL ? $AppUI->getState('RoleVwTab') : 
 
 if (! is_array($role)) {
 	$titleBlock = new CTitleBlock('Invalid Role', 'main-settings.png', $m, "$m.$a");
-	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
+	$titleBlock->addCrumb('?m=system&amp;u=roles', 'role list');
 	$titleBlcok->show();
 } else {
 	$titleBlock = new CTitleBlock('View Role', 'main-settings.png', $m, "$m.$a");
-	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
+	$titleBlock->addCrumb('?m=system&amp;u=roles', 'role list');
 	$titleBlock->show();
 	// Now onto the display of the user.
 ?>
@@ -35,7 +35,7 @@ if (! is_array($role)) {
 </table>
 
 <?php
-	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id='.$role_id, DP_BASE_DIR . '/modules/system/roles/', $tab);
+	$tabBox = new CTabBox('?m=system&amp;u=roles&amp;a=viewrole&amp;role_id='.$role_id, DP_BASE_DIR . '/modules/system/roles/', $tab);
 	$tabBox->add('vw_role_perms', 'Permissions');
 	$tabBox->show();
 } // End of check for valid role

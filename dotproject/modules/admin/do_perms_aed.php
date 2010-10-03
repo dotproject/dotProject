@@ -11,7 +11,7 @@ $AppUI->setMsg('Permission');
 
 if ($del) {
 	if (! $obj->checkModule($m, 'delete')) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect('m=public&amp;a=access_denied');
 	}
 	if ($obj->del_acl(intval($_REQUEST['permission_id']))) {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
@@ -22,7 +22,7 @@ if ($del) {
 } else {
 	if (($isNotNew && ! $obj->checkModule($m, 'edit'))
 	|| (!$isNotNew && ! $obj->checkModule($m, 'add'))) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect('m=public&amp;a=access_denied');
 	}
 	if ($obj->addUserPermission()) {
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);

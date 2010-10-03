@@ -54,7 +54,7 @@ $topics = $q->loadList();
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 ?>
-<table width="100%" cellspacing="1" cellpadding="2" border="0">
+<table width="100%" cellspacing="1" cellpadding="2" border="0" summary="breadcrumbs">
 <tr>
 	<td><?php echo breadCrumbs($crumbs);?></td>
 	<td align="right">
@@ -63,8 +63,8 @@ if ($canEdit) {
 ?>
 		<input type="button" class=button style="width:120;" value="<?php 
 echo $AppUI->_('start a new topic'); 
-?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&post_message=1';">
+?>" onclick="javascript:window.location='?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;post_message=1';" />
 	<?php 
 }
 ?>
@@ -72,20 +72,20 @@ echo $forum_id; ?>&post_message=1';">
 </tr>
 </table>
 
-<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php 
 echo $f; ?>" method="post">
+<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl" summary="forum topics">
 <tr>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&orderby=message_title" class="hdr"><?php echo $AppUI->_('Topics'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&orderby=user_username" class="hdr"><?php echo $AppUI->_('Author'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&orderby=replies" class="hdr"><?php echo $AppUI->_('Replies'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php 
-echo $forum_id; ?>&orderby=latest_reply" class="hdr"><?php echo $AppUI->_('Last Post'); ?></a></th>
+	<th><a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch'); ?></a></th>
+	<th><a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;orderby=message_title" class="hdr"><?php echo $AppUI->_('Topics'); ?></a></th>
+	<th><a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;orderby=user_username" class="hdr"><?php echo $AppUI->_('Author'); ?></a></th>
+	<th><a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;orderby=replies" class="hdr"><?php echo $AppUI->_('Replies'); ?></a></th>
+	<th><a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+echo $forum_id; ?>&amp;orderby=latest_reply" class="hdr"><?php echo $AppUI->_('Last Post'); ?></a></th>
 
 </tr>
 <?php
@@ -110,8 +110,8 @@ foreach ($topics as $row) {
 		}
 		?>
 		<span style="font-size:10pt;">
-		<a href="?m=forums&a=viewer&forum_id=<?php 
-		echo $forum_id . '&message_id=' . $row['message_id']; ?>"><?php 
+		<a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
+		echo $forum_id . '&amp;message_id=' . $row['message_id']; ?>"><?php 
 		echo $row['message_title']; ?></a>
 		</span>
 	</td>
@@ -139,9 +139,9 @@ foreach ($topics as $row) {
 ?>
 </table>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="1">
 <input type="hidden" name="dosql" value="do_watch_forum" />
 <input type="hidden" name="watch" value="topic" />
+<table width="100%" border="0" cellpadding="0" cellspacing="1">
 <tr>
 	<td>&nbsp;</td>
 </tr>
@@ -150,5 +150,5 @@ foreach ($topics as $row) {
 		<input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
 	</td>
 </tr>
-</form>
 </table>
+</form>

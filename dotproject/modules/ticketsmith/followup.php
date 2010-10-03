@@ -13,7 +13,7 @@ $ticket_type = dPgetParam($_GET, 'ticket_type', '');
 // setup the title block
 $titleBlock = new CTitleBlock('Post Followup', 'gconf-app-icon.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
-$titleBlock->addCrumb("?m=ticketsmith&a=view&ticket=$ticket", "view this ticket");
+$titleBlock->addCrumb("?m=ticketsmith&amp;a=view&amp;ticket=$ticket", "view this ticket");
 $titleBlock->show();
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
@@ -87,38 +87,38 @@ if (@$followup) {
     do_query("UPDATE tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
 
     /* redirect to parent */
-    echo("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php?m=ticketsmith&a=view&ticket=$ticket_parent\">");
+    echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
 
     exit();
 
 } else {
 
     /* start table */
-	print("<table class=std width=100%>\n");
+	print("<table class='std' width='100%'>\n");
     print("<tr>\n");
-    print("<th colspan=2 align=center>\n");
-    print("<div class=heading> ".$AppUI->_($title)."</div>\n");
+    print("<th colspan='2' align='center'>\n");
+    print("<div class='heading'> ".$AppUI->_($title)."</div>\n");
     print("</th>\n");
     print("</tr>\n");
 
     /* start form */
-    print("<form name='ticketform' action=\"index.php?m=ticketsmith&a=followup&ticket=$ticket\" method=post>\n");
+    print("<form name='ticketform' action='?m=ticketsmith&amp;a=followup&amp;ticket=$ticket' method='post'>\n");
 
     /* get ticket */
     $ticket_info = query2hash("SELECT * FROM tickets WHERE ticket = $ticket");
 
     /* output From: line */
     print("<tr>\n");
-    print("<td align=left><strong>".$AppUI->_('From')."</strong></td>");
-    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
-    print("<td align=left>" . $from_name . " &lt;" . $from_email . "&gt;</td>\n");
+    print("<td align='left'><strong>".$AppUI->_('From')."</strong></td>");
+    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM ".$dbprefix."users u LEFT JOIN ".$dbprefix."contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    print("<td align='left'>" . $from_name . " &lt;" . $from_email . "&gt;</td>\n");
     print("</tr>\n");
 
     /* output To: line */
     print("<tr>\n");
-    print("<td align=left><strong>".$AppUI->_('To')."</strong></td>");
-    $recipient = query2result("SELECT author FROM tickets WHERE ticket = '$ticket_parent'");
-    print("<td align=left>" . format_field($recipient, "recipient") . "</td>\n");
+    print("<td align='left'><strong>".$AppUI->_('To')."</strong></td>");
+    $recipient = query2result("SELECT author FROM ".$dbprefix."tickets WHERE ticket = '$ticket_parent'");
+    print("<td align='left'>" . format_field($recipient, "recipient") . "</td>\n");
     print("</tr>\n");
 
     /* output ticket */
@@ -130,18 +130,18 @@ if (@$followup) {
 	else {
 		$fields["headings"][$loop] = $AppUI->_($fields["headings"][$loop]);
 	}
-        print("<td align=left><strong>" . $fields["headings"][$loop] . "</strong></td>");
-        print("<td align=left>" . format_field($ticket_info[$fields["columns"][$loop]], $fields["types"][$loop]) . "</td>\n");
+        print("<td align='left'><strong>" . $fields["headings"][$loop] . "</strong></td>");
+        print("<td align='left'>" . format_field($ticket_info[$fields["columns"][$loop]], $fields["types"][$loop]) . "</td>\n");
         print("</tr>\n");
     }
 
     /* output submit button */
-    print('<tr><td><br /></td><td><font size=-1><input class=button type=submit value="'.$AppUI->_('Post Followup').'"></font></td></tr>');
+	print('<tr><td><br /></td><td><font size="-1"><input class="button" type="submit" value="'.$AppUI->_('Post Followup').'" /></font></td></tr>');
 
     /* output actions */
     print("<tr>\n");
-    print("<td align=left valign=top><br /></td>");
-    print("<td align=left valign=top>&nbsp;</td>\n");
+    print("<td align='left' valign='top'><br /></td>");
+    print("<td align='left' valign='top'>&nbsp;</td>\n");
     print("</tr>\n");
 
     /* end table */

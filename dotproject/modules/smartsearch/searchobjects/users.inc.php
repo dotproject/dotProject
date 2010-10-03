@@ -11,7 +11,7 @@ class users extends smartsearch
 	var $table = 'users';
 	var $table_module = 'admin';
 	var $table_key = 'user_id';
-	var $table_link = 'index.php?m=admin&a=viewuser&user_id=';
+	var $table_link = '?m=admin&amp;a=viewuser&amp;user_id=';
 	var $table_title = 'Users';
 	var $table_orderby = 'user_username';
 	var $search_fields = array ('user_username', 'user_signature');

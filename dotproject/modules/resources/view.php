@@ -33,13 +33,13 @@ if (! $obj->load($resource_id)) {
 $titleBlock = new CTitleBlock('View Resource', 'helpdesk.png', $m, "$m.$a");
 if ($canAuthor) {
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new resource') 
-	                      . '" />'), '', '<form action="?m=resources&a=addedit" method="post">', 
+	                      . '" />'), '', '<form action="?m=resources&amp;a=addedit" method="post">', 
 	                     '</form>');
 }
 
 $titleBlock->addCrumb('?m=resources', 'resource list');
 if ($canEdit) {
-	$titleBlock->addCrumb("?m=resources&a=addedit&resource_id=$resource_id", "edit this resource");
+	$titleBlock->addCrumb("?m=resources&amp;a=addedit&amp;resource_id=$resource_id", "edit this resource");
 }
 if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete resource', $canDelete, 'no delete permission');
@@ -48,11 +48,11 @@ $titleBlock->show();
 
 if ($canDelete) {
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 	can_delete = true;
 	delete_msg = "<?php echo $AppUI->_('doDelete').' '.$AppUI->_('Resource').'?';?>";
 </script>
-<form name="frmDelete" action="./index.php?m=resources" method="post">
+<form name="frmDelete" action="?m=resources" method="post">
   <input type="hidden" name="dosql" value="do_resource_aed" />
   <input type="hidden" name="del" value="1" />
   <input type="hidden" name="resource_id" value="<?php echo $resource_id;?>" />
@@ -60,7 +60,7 @@ if ($canDelete) {
 <?php
 }
 ?>
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std" summary="resources">
 <tr>
   <td valign="top" width="100%">
 		<strong><?php echo $AppUI->_('Details');?></strong>

@@ -88,7 +88,7 @@ foreach ($user_roles as $row) {
 </tr>
 <tr>
 	<td>
-		<input type="reset" value="<?php echo $AppUI->_('clear');?>" class="button" name="sqlaction" onClick="clearIt();">
+		<input type="reset" value="<?php echo $AppUI->_('clear');?>" class="button" name="sqlaction" onclick="clearIt();">
 	</td>
 	<td align="right">
 		<input type="submit" value="<?php echo $AppUI->_('add');?>" class="button" name="sqlaction2">

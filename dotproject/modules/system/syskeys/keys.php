@@ -12,7 +12,7 @@ $titleBlock = new CTitleBlock('System Lookup Keys', 'myevo-weather.png', $m, "$m
 $titleBlock->addCrumb("?m=system", "System Admin");
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -30,6 +30,9 @@ function delIt(id) {
 <?php } ?>
 </script>
 
+<form name="sysKeyFrm" method="post" action="?m=system&amp;u=syskeys&amp;a=do_syskey_aed">
+<input type="hidden" name="del" value="0" />
+
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
 <tr>
 	<th>&nbsp;</th>
@@ -40,29 +43,28 @@ function delIt(id) {
 <?php
 
 function showRow($id=0, $name='', $label='') {
-	GLOBAL $canEdit, $syskey_id, $CR, $AppUI;
+	GLOBAL $canEdit, $syskey_id, $CR, $AppUI, $locale_char_set;
 	$s = '<tr>'.$CR;
 	if ($syskey_id == $id && $canEdit) {
-		$s .= '<form name="sysKeyFrm" method="post" action="?m=system&u=syskeys&a=do_syskey_aed">'.$CR;
-		$s .= '<input type="hidden" name="del" value="0" />'.$CR;
-		$s .= '<input type="hidden" name="syskey_id" value="'.$id.'" />'.$CR;
-
-		$s .= '<td>&nbsp;</td>';
-		$s .= '<td><input type="text" name="syskey_name" value="'.$name.'" class="text" /></td>';
-		$s .= '<td><textarea name="syskey_label" class="small" rows="2" cols="40">'.$label.'</textarea></td>';
+		$s .= '<td><input type="hidden" name="syskey_id" value="'.$id.'" />&nbsp;</td>';
+		$s .= '<td><input type="text" name="syskey_name" value="'.htmlspecialchars($name, ENT_COMPAT, $locale_char_set).'" class="text" /></td>';
+		$s .= '<td><textarea name="syskey_label" class="small" rows="2" cols="40">'.htmlspecialchars($label, ENT_COMPAT, $locale_char_set).'</textarea></td>';
 		$s .= '<td><input type="submit" value="'.$AppUI->_($id ? 'edit' : 'add').'" class="button" /></td>';
 		$s .= '<td>&nbsp;</td>';
 	} else {
 		$s .= '<td width="12">';
 		if ($canEdit) {
-			$s .= '<a href="?m=system&u=syskeys&a=keys&syskey_id='.$id.'"><img src="./images/icons/pencil.gif" alt="edit" border="0" width="12" height="12"></a>';
+			$s .= '<a href="?m=system&amp;u=syskeys&amp;a=keys&amp;syskey_id='.$id.'">
+					<img src="./images/icons/pencil.gif" alt="edit" border="0" width="12" height="12" /></a>';
 			$s .= '</td>'.$CR;
 		}
-		$s .= '<td>'.$name.'</td>'.$CR;
-		$s .= '<td colspan="2">'.$label.'</td>'.$CR;
+		$s .= '<td>'.htmlspecialchars($name, ENT_COMPAT, $locale_char_set).'</td>'.$CR;
+		$s .= '<td colspan="2">'.htmlspecialchars($label, ENT_COMPAT, $locale_char_set).'</td>'.$CR;
 		$s .= '<td width="16">';
 		if ($canEdit) {
-			$s .= '<a href="javascript:delIt('.$id.')"><img align="absmiddle" src="./images/icons/trash.gif" width="16" height="16" alt="'.$AppUI->_('delete').'" border="0"></a>';
+			$s .= '<a href="javascript:delIt('.$id.')">
+					<img align="middle" src="./images/icons/trash.gif" width="16" height="16" alt="'
+						.$AppUI->_('delete').'" border="0" /></a>';
 		}
 		$s .= '</td>'.$CR;
 	}
@@ -81,3 +83,4 @@ if ($syskey_id == 0) {
 }
 ?>
 </table>
+</form>

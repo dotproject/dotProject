@@ -4,8 +4,9 @@ function popEmailContacts() {
 	updateEmailContacts();
 	var email_others = document.getElementById('email_others');
 	window.open(
-	  './index.php?m=public&a=contact_selector&dialog=1&call_back=setEmailContacts&selected_contacts_id='
-		+ email_others.value, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+	  '?m=public&'+'a=contact_selector&'+'dialog=1&'+'call_back=setEmailContacts&'
+		+ 'selected_contacts_id='+ email_others.value, 
+		'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setEmailContacts(contact_id_string) {

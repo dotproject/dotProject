@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
 
 GLOBAL $AppUI, $company_id, $canEdit;
 
-$q = new DBQuery;
+$q  = new DBQuery;
 $q->addTable('departments');
 $q->addQuery('departments.*, COUNT(contact_department) dept_users');
 $q->addJoin('contacts', 'c', 'c.contact_department = dept_id');
@@ -24,14 +24,14 @@ function showchilddept_comp(&$a, $level=0) {
 	global $AppUI;
 	$s = ('<td><a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' 
 	      . $a['dept_id'] . '" title="'.$AppUI->_('edit').'">' 
-	      . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '') . '</td><td>');
+	      . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '') . '<a></td><td>');
 
 	for ($y=0; $y < $level; $y++) {
 		$s .= dPshowImage(('./images/' . (($y+1 == $level) ? 'corner-dots.gif' : 'shim.gif')), 
 		                  16, 12, '');
 	}
 
-	$s .= ('<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' 
+	$s .= ('<a href="?m=departments&amp;a=view&amp;dept_id=' . $a['dept_id'] . '">' 
 	       . $a['dept_name'] . '</a>');
 	$s .= '</td>';
 	$s .= '<td align="center">' . (($a['dept_users']) ? $a['dept_users'] : '') . '</td>';
@@ -53,7 +53,7 @@ function findchilddept_comp(&$tarr, $parent, $level=0) {
 }
 
 
-$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">';
+$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="view departments">';
 $s .= '<tr>';
 $rows = db_loadList($sql, NULL);
 if (count($rows)) {
@@ -77,7 +77,7 @@ foreach ($rows as $row) {
 echo ('<tr><td colspan="3" nowrap="nowrap" rowspan="99" align="right" valign="top"' 
       . ' style="background-color:#ffffff">');
 if ($canEdit) {
-	echo ('<input type="button" class=button value="' . $AppUI->_('new department') 
+	echo ('<input type="button" class="button" value="' . $AppUI->_('new department') 
 	      . '" onclick="javascript:window.location=' 
 		  . '\'./index.php?m=departments&amp;a=addedit&amp;company_id=' . $company_id . '\';" />');
 }

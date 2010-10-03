@@ -184,7 +184,7 @@ TD.clsBtnOff {
 TD.topBtnOff {
 	color: #FFFFFF;
 	padding: 0 3;
-	tab-index: 0;
+	/* tab-index: 0; //tab index not valid for TD */
 	border: solid #cccccc 2px;
 }
 

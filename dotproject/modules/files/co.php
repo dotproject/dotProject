@@ -67,7 +67,7 @@ $projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_nam
 $projects = arrayMerge(array('0'=>$AppUI->_('All')), $projects);
 ?>
 
-<script language='javascript'>
+<script type="text/javascript" language='javascript'>
 function popFile(params) {
     fileloader = window.open("fileviewer.php?"+params,"mywindow",
 	                         "location=1,status=1,scrollbars=0,width=80,height=80");
@@ -75,7 +75,6 @@ function popFile(params) {
 }
 </script>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
 <form name="coFrm" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_co" />
@@ -84,6 +83,7 @@ function popFile(params) {
     <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
     <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
         
+<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
 <tr>
 	<td width="100%" valign="top" align="center">
@@ -138,13 +138,13 @@ echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
 <tr>
 	<td>
 		<input class="button" type="button" name="cancel" value="<?php 
-echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php 
+echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('<?php 
 echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); 
-?>')) {location.href = './index.php?m=files';}" />
+?>')) {location.href = '?m=files';}" />
 	</td>
 	<td align="right">
 		<input type="submit" class="button" value="<?php echo $AppUI->_('submit');?>" />
 	</td>
 </tr>
-</form>
 </table>
+</form>

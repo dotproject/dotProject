@@ -8,7 +8,7 @@ require_once($AppUI->getSystemClass('CustomFields'));
 $titleBlock = new CTitleBlock('Custom Fields - Add/Edit', '', 'admin', 
                               'admin.custom_field_addedit');
 $titleBlock->addCrumb('?m=system', 'system admin');
-$titleBlock->addCrumb('?m=system&a=custom_field_editor', 'custom fields');
+$titleBlock->addCrumb('?m=system&amp;a=custom_field_editor', 'custom fields');
 $titleBlock->show();
 
 $field_id = ((dpGetParam($_POST, 'field_id', NULL) != NULL) 
@@ -91,7 +91,7 @@ foreach ($html_types as $k => $ht) {
 	$visible_state['div_'.$k] = 'display: ' . (($k == $field_htmltype) ? 'block' : 'none');
 }
 ?>
-<script>
+<script type="text/javascript">
 function hideAll() {
 	var selobj = document.getElementById('field_htmltype');
 	for (i = 0; i < selobj.options.length; i++) {
@@ -133,7 +133,7 @@ function postCustomField() {
 	frm.submit();
 }
 </script>
-<form method="POST" action="?m=system&amp;a=custom_field_editor" id="custform" />
+<form method="post" action="?m=system&amp;a=custom_field_editor" id="custform" />
 <table class="std">
 	<th colspan="2">
 		<?php echo $edit_title?> <?php echo $AppUI->_($module)?> <?php echo $AppUI->_('Module') ?>
@@ -160,7 +160,7 @@ echo htmlspecialchars($field_description)?>" />
 		</td><td>
 		<?php 
 echo arraySelect($html_types, 'field_htmltype', 
-                 'id="field_htmltype" onChange="javascript:showAttribs()"', $field_htmltype); ?>
+                 'id="field_htmltype" onchange="javascript:showAttribs()"', $field_htmltype); ?>
 	</td></tr>
 	<tr><td colspan="2">
 		<hr />
@@ -193,7 +193,7 @@ foreach ($select_items as $itm) {
 ?>
 		<tr>
 			<td><input type="text" name="select_newitem" /></td>
-			<td><input type="button" value="<?php echo $AppUI->_('Add')?>" onClick="javascript:addSelectItem()" /></td>
+			<td><input type="button" value="<?php echo $AppUI->_('Add')?>" onclick="javascript:addSelectItem()" /></td>
 		</tr>
 		</table>
 	</td></tr>
@@ -231,8 +231,8 @@ foreach ($select_items as $itm) {
 	</div>
 	</td></tr>
 	<tr><td colspan="2" align="right">
-		<input type="button" value="Cancel" onClick="location = '?m=system&amp;a=custom_field_editor';" />
-		<input type="button" value="Save" onClick="javascript:postCustomField()" />
+		<input type="button" value="Cancel" onclick="javascript:location = '?m=system&amp;a=custom_field_editor';" />
+		<input type="button" value="Save" onclick="javascript:postCustomField()" />
 	</td></tr>
 	</form>
 </table>

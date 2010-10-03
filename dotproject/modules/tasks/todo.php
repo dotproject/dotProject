@@ -188,7 +188,7 @@ if ($m == 'tasks' && $a == 'todo') {
 	<td width="80%" valign="top">
 		<?php
 	// Tabbed information boxes
-	$tabBox = new CTabBox('?m=tasks&a=todo', DP_BASE_DIR . '/modules/', $tab);
+	$tabBox = new CTabBox('?m=tasks&amp;a=todo', DP_BASE_DIR . '/modules/', $tab);
 	$tabBox->add('tasks/todo_tasks_sub', 'My Tasks');
 	$tabBox->add('tasks/todo_gantt_sub', 'My Gantt');
 	// Wouldn't it be better to user $tabBox->loadExtras('tasks', 'todo'); and then

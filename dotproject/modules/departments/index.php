@@ -27,7 +27,7 @@ $department = (($AppUI->getState('DeptIdxDepartment') !== NULL)
 
 $canRead = getPermission($m, 'view', $department);
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 $AppUI->savePlace();
 
@@ -58,7 +58,7 @@ $rows = $q->loadList();
 $q->clear();
 
 //display the select list
-$cBuffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
+$cBuffer = '<select name="department" onchange="javascript:document.pickCompany.submit()" class="text">';
 $cBuffer .= ('<option value="company_0" style="font-weight:bold;">' . $AppUI->_('All') 
 	             . '</option>'."\n");
 $company = '';
@@ -100,10 +100,10 @@ if ($canEdit) {
 $titleBlock->addCrumb('?m=companies', 'company list');
 
 if ($company_id) {
-	$titleBlock->addCrumb('?m=companies&a=view&company_id='.$company_id, 'view this company');
+	$titleBlock->addCrumb('?m=companies&amp;a=view&amp;company_id='.$company_id, 'view this company');
 }
 if ($canEdit && $department > 0) {
-	$titleBlock->addCrumb('?m=departments&a=addedit&dept_id='.$department, 'edit this department');
+	$titleBlock->addCrumb('?m=departments&;amp;a=addedit&ampdept_id='.$department, 'edit this department');
 
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete department', $canDelete, $msg);

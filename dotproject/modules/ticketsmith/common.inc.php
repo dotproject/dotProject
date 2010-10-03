@@ -106,7 +106,7 @@ function chooseSelectedValue ($name, $options, $selected) {
 function create_selectbox ($name, $options, $selected) {
 
 	$output= "";
-	$output .= "<select name=\"$name\" onChange=\"document.ticketform.submit()\" class=\"text\">\n";
+	$output .= '<select name=".$name.'" onchange="javascript:document.ticketform.submit()" class="text">'."\n";
 
 	while (list($key, $val) = each($options)) {
 		$output .= "<option value=\"$key\"";
@@ -381,15 +381,15 @@ function format_field ($value, $type, $ticket = NULL) {
                     $value = $latest_value;
                 }
             }
-            $output = "<a href=index.php?m=ticketsmith&a=view&ticket=$value>$value&nbsp;";
-            $output .= "<img src=images/icons/pencil.gif border=0></a>";
+            $output = "<a href='?m=ticketsmith&amp;a=view&amp;ticket='$value'>$value&nbsp;";
+			$output .= "<img src='images/icons/pencil.gif' border='0' alt='' /></a>";
             break;
 	case "attach":
-	    $output = "<A href=index.php?m=ticketsmith&a=attach&ticket=$value>";
+	    $output = "<a href='?m=ticketsmith&amp;a=attach&amp;ticket=$value'>";
 	    $output .= "Link</a>";
 	    break;
 	case "doattach":
-	    $output = "<A href=index.php?m=ticketsmith&a=attach&newparent=$value&dosql=reattachticket&ticket=$ticket>";
+	    $output = "<a href='?m=ticketsmith&amp;a=attach&amp;newparent=$value&amp;dosql=reattachticket&amp;ticket=$ticket'>";
 	    $output .= "Link</a>";
 	    break;
         case "open_date":
@@ -456,15 +456,15 @@ function format_field ($value, $type, $ticket = NULL) {
             $value = preg_replace("/(\[\#\d+\])(\w+)/", "\\2", $value);
             $value = "Re: " . $value;
             $value = htmlspecialchars($value);
-            @$output .= "<input type=\"text\" name=\"subject\" value=\"$value\" size=\"70\">\n";
+			@$output .= "<input type=\"text\" name=\"subject\" value=\"$value\" size=\"70\" />\n";
             break;
         case "cc":
             $value = htmlspecialchars($value);
-            $output = "<input type=\"text\" name=\"cc\" value=\"$value\" size=\"70\">";
+			$output = "<input type=\"text\" name=\"cc\" value=\"$value\" size=\"70\" />";
             break;
         case "recipient":
             $value = htmlspecialchars($value);
-            $output = "<input type=\"text\" name=\"recipient\" value=\"$value\" size=\"70\">";
+			$output = "<input type=\"text\" name=\"recipient\" value=\"$value\" size=\"70\" />";
             break;
         case "original_author":
             if ($value) {
@@ -493,7 +493,7 @@ function format_field ($value, $type, $ticket = NULL) {
 			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
 			}
-			$output = '<a href="index.php?m=companies&a=view&company_id='.$value.'">'.$obj->company_name.'</a>';
+			$output = '<a href="?m=companies&amp;a=view&amp;company_id='.$value.'">'.$obj->company_name.'</a>';
 			break;
 		case 'ticket_project':
 		    $q  = new DBQuery;
@@ -504,7 +504,7 @@ function format_field ($value, $type, $ticket = NULL) {
 			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
 			}
-			$output = '<a href="index.php?m=projects&a=view&project_id='.$value.'">'.$obj->project_name.'</a>';
+			$output = '<a href="?m=projects&amp;a=view&amp;project_id='.$value.'">'.$obj->project_name.'</a>';
 			break;
         default:
             $output = $value ? htmlspecialchars($value) : "<em>".$AppUI->_('none')."</em>";

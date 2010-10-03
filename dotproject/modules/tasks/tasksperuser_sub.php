@@ -45,7 +45,8 @@ var calendarField = '';
 function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.log_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
+	window.open('index.php?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date='
+				+ idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
@@ -166,7 +167,7 @@ function chPriority(user_id) {
 echo $start_date->format(FMT_TIMESTAMP_DATE); ?>" />
 		<input type="text" name="start_date" value="<?php 
 echo $start_date->format($df); ?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar('start_date')">
+		<a href="#" onclick="javascript:popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
@@ -176,7 +177,7 @@ echo $AppUI->_('Calendar'); ?>" border="0" />
 echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
 		<input type="text" name="end_date" value="<?php 
 echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar('end_date')">
+		<a href="#" onclick="javascript:popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo ($AppUI->_('Calendar')); ?>" border="0" />
 		</a>
@@ -345,23 +346,23 @@ if ($do_report) {
 				}
 			}
 ?>
-		<form name="assFrm<?php 
-			echo($user_id); ?>" action="index.php?m=tasks&a=tasksperuser" method="post">
-		<input type="hidden" name="chUTP" value="0" />
-		<input type="hidden" name="del" value="1" />
-		<input type="hidden" name="rm" value="0" />
-		<input type="hidden" name="store" value="0" />
-		<input type="hidden" name="dosql" value="do_task_assign_aed" />
-		<input type="hidden" name="user_id" value="<?php echo($user_id); ?>" />
-		<input type="hidden" name="hassign" />
-		<input type="hidden" name="htasks" />
 		<tr>
 			<td style="background: #D0D0D0;color: #000000;font-weight: bold;" nowrap="nowrap">
+				<form name="assFrm<?php 
+					echo($user_id); ?>" action="?m=tasks&amp;a=tasksperuser" method="post">
+				<input type="hidden" name="chUTP" value="0" />
+				<input type="hidden" name="del" value="1" />
+				<input type="hidden" name="rm" value="0" />
+				<input type="hidden" name="store" value="0" />
+				<input type="hidden" name="dosql" value="do_task_assign_aed" />
+				<input type="hidden" name="user_id" value="<?php echo($user_id); ?>" />
+				<input type="hidden" name="hassign" />
+				<input type="hidden" name="htasks" />
 				<input onclick="javascript:checkAll('<?php 
 			echo($user_id); ?>');" type="checkbox" name="master" value="true"/>
 			</td>
 			<td colspan="6" style="background: #D0D0D0;color: #000000;font-weight: bold;" nowrap="nowrap">
-				<a href="index.php?m=calendar&a=day_view&user_id=<?php 
+				<a href="index.php?m=calendar&amp;a=day_view&amp;user_id=<?php 
 			echo($user_id); ?>&tab=1"><?php echo($userAlloc[$user_id]['userFC']); ?></a>
 			</td>
 <?php 
@@ -451,23 +452,23 @@ if ($do_report) {
 		if (!$show_orphaned) {
 			$user_id = 0; //reset user id to zero (create new object - no user)
 ?>
-		<form name="assFrm<?php 
-			echo($user_id); ?>" action="index.php?m=tasks&a=tasksperuser" method="post">
-		<input type="hidden" name="del" value="1" />
-		<input type="hidden" name="rm" value="0" />
-		<input type="hidden" name="store" value="0" />
-		<input type="hidden" name="dosql" value="do_task_assign_aed" />
-		<input type="hidden" name="user_id" value="<?php echo($user_id); ?>" />
-		<input type="hidden" name="hassign" />
-		<input type="hidden" name="htasks" />
 		<tr>
 			<td style="background: #D0D0D0;color: #000000;font-weight: bold;" nowrap="nowrap">
+				<form name="assFrm<?php 
+					echo($user_id); ?>" action="index.php?m=tasks&amp;a=tasksperuser" method="post">
+				<input type="hidden" name="del" value="1" />
+				<input type="hidden" name="rm" value="0" />
+				<input type="hidden" name="store" value="0" />
+				<input type="hidden" name="dosql" value="do_task_assign_aed" />
+				<input type="hidden" name="user_id" value="<?php echo($user_id); ?>" />
+				<input type="hidden" name="hassign" />
+				<input type="hidden" name="htasks" />
 				<input onclick="javascript:checkAll('<?php 
 			echo($user_id); ?>');" type="checkbox" name="master" value="true"/>
 			</td>
 			<td colspan="6" style="background: #D0D0D0;color: #000000;font-weight: bold;" nowrap="nowrap">
-				<a href="index.php?m=calendar&a=day_view&user_id=<?php 
-			echo($user_id); ?>&tab=1"><?php echo $AppUI->_('Orphaned Tasks'); ?></a>
+				<a href="index.php?m=calendar&amp;a=day_view&amp;user_id=<?php 
+			echo($user_id); ?>&amp;tab=1"><?php echo $AppUI->_('Orphaned Tasks'); ?></a>
 			</td>
 <?php 
 			$wx = (weekCells($display_week_hours,$sss,$sse));
@@ -505,8 +506,6 @@ if ($do_report) {
 			                  . '"'), 0, true); ?>
 					</td>
 				</tr></table>
-			</td>
-		</tr>
 <?php 
 			$orphTasks = array_diff(array_map("getOrphanedTasks",$task_list), array(NULL));
 			
@@ -524,6 +523,8 @@ if ($do_report) {
 	}//end of else
 }
 ?>
+			</td>
+		</tr>
 	</table>
 </center>
 
@@ -575,7 +576,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 		$tmp .= (($task->userPriority < 0) 
 		         ? ('-' . -$task->userPriority) 
 		         : ('+' . $task->userPriority));
-		$tmp .= '.gif" width="13" height="16">';
+		$tmp .= '.gif" width="13" height="16" alt="" />';
 	}
 	$tmp .= '</td>';
 	
@@ -589,7 +590,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	if ($level >= 1) {
 		$tmp .=  dPshowImage(dPfindImage('corner-dots.gif', 'tasks'), 16, 12, 'Subtask')."&nbsp;";
 	}
-	$tmp .=  '<a href="?m=tasks&a=view&task_id=' . $task->task_id . '">' . $task->task_name . '</a>';
+	$tmp .=  '<a href="?m=tasks&amp;a=view&amp;task_id=' . $task->task_id . '">' . $task->task_name . '</a>';
 	if ($task->task_milestone == true) { 
 		$tmp .= '</strong>';
 	}
@@ -598,12 +599,12 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 		$tmp .= (($task->task_priority < 0) 
 		         ? ('-' . -$task->task_priority) 
 		         : ('+' . $task->task_priority));
-		$tmp .= '.gif" width="13" height="16">)';
+		$tmp .= '.gif" width="13" height="16" alt="" />)';
 	}
 	$tmp .= '</td>';
 	
 	$tmp .= '<td align="center">';
-	$tmp .=  ('<a href="?m=projects&a=view&project_id=' . $task->task_project 
+	$tmp .=  ('<a href="?m=projects&amp;a=view&amp;project_id=' . $task->task_project 
 	        . '" style="background-color:#' . @$projects['project_color_identifier'] . '; color:' 
 	        . bestColor(@$projects['project_color_identifier']) . '">' 
 	        . $projects['project_short_name'] . '</a>');
@@ -633,7 +634,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	$sep = $us = '';
 	foreach ($users as $row) {
 		if ($row['user_id']) {
-			$us .= ($sep . '<a href="?m=admin&a=viewuser&user_id=' . $row[0] . '">' 
+			$us .= ($sep . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $row[0] . '">' 
 			        . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '&nbsp;(' 
 			        . $row['perc_assignment'] . '%)</a>');
 			$sep = ', ';

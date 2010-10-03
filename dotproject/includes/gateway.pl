@@ -592,7 +592,7 @@ sub mail_report {
 	print MAIL "Ticket ID: $ticket\n";
 	print MAIL "Author   : $author\n";
 	print MAIL "Subject  : $subject\n";
-	print MAIL "View     : $app_root/index.php?m=ticketsmith&a=view&ticket=$ticket\n";
+	print MAIL "View     : $app_root/index.php?m=ticketsmith&amp;a=view&amp;ticket=$ticket\n";
 	print MAIL "\n--$boundary\n";
 	print MAIL "Content-disposition: inline\n";
 	print MAIL "Content-type: text/html\n\n";
@@ -614,35 +614,35 @@ sub mail_report {
 	print MAIL "</head>\n";
 	print MAIL "<body>\n";
 	print MAIL "\n";
-	print MAIL "<table border=0 cellpadding=4 cellspacing=1>\n";
+	print MAIL "<table \"border=0\" cellpadding=\"4\" cellspacing=\"1\">\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td nowrap><span class=title>Trouble Ticket Management</span></td>\n";
-	print MAIL "        <td valign=top align=right width=100%>&nbsp;</td>\n";
+	print MAIL "        <td nowrap><span class=\"title\">Trouble Ticket Management</span></td>\n";
+	print MAIL "        <td valign=\"top\" align=\"right\" width=\"100%\">&nbsp;</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "</table>\n";
-	print MAIL "<table width=600 border=0 cellpadding=4 cellspacing=1 bgcolor=#878676>\n";
+	print MAIL "<table width=\"600\" border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#878676\">\n";
 	print MAIL "    <tr>\n";
 	if ($parent) {
-		print MAIL "        <td colspan=2><font face=arial,san-serif size=2 color=white>Followup Ticket Entered</font></TD>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">Followup Ticket Entered</font></td>\n";
 	} else {
-		print MAIL "        <td colspan=2><font face=arial,san-serif size=2 color=white>New Ticket Entered</font></TD>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
 	}
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>Ticket ID:</TD>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>$ticket</TD>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">Ticket ID:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">$ticket</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white class=td>Author:</TD>\n";
-	print MAIL "        <td bgcolor=white class=td>$author</TD>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">Author:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">$author</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white class=td>Subject:</TD>\n";
-	print MAIL "        <td bgcolor=white><font face=arial,san-serif size=2>$subject</font></TD>";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">Subject:</td>\n";
+	print MAIL "        <td bgcolor=\"white\"><font face=\"arial,san-serif\" size=\"2\">$subject</font></td>";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>View:</TD>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td><a href=$app_root/index.php?m=ticketsmith&a=view&ticket=$ticket>$app_root/index.php?m=ticketsmith&a=view&ticket=$ticket</a></TD>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">View:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\"><a href=\"$app_root/index.php?m=ticketsmith&amp;a=view&amp;ticket=$ticket\">$app_root/index.php?m=ticketsmith&amp;a=view&amp;ticket=$ticket</a></td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "</table>\n";
 	print MAIL "</body>\n";
@@ -714,7 +714,7 @@ sub mail_acknowledgement {
 	print MAIL "<head>\n";
 	print MAIL "<style>\n";
 	print MAIL ".title {\n";
-	print MAIL "    FONT-SIZE: 18pt; SIZE: 18pt;\n";
+	print MAIL "    font-size: 18pt; size: 18pt;\n";
 	print MAIL "}\n";
 	print MAIL ".td {\n";
 	print MAIL "	font: 9pt arial, san-serif;\n";
@@ -724,36 +724,36 @@ sub mail_acknowledgement {
 	print MAIL "</head>\n";
 	print MAIL "<body>\n";
 	print MAIL "\n";
-	print MAIL "<table border=0 cellpadding=4 cellspacing=1>\n";
+	print MAIL "<table border=\"0\" cellpadding=\"4\" cellspacing=\"1\">\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td nowrap><span class=title>Trouble Ticket Management</span></td>\n";
-	print MAIL "        <td valign=top align=right width=100%>&nbsp;</td>\n";
+	print MAIL "        <td nowrap><span class=\"title\">Trouble Ticket Management</span></td>\n";
+	print MAIL "        <td valign=\"top\" align=\"right\" width=\"100%\">&nbsp;</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "</table>\n";
-	print MAIL "<table width=600 border=0 cellpadding=4 cellspacing=1 bgcolor=#878676>\n";
+	print MAIL "<table width=\"600\" border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#878676\">\n";
 	print MAIL "    <tr>\n";
 	if ($parent) {
-		print MAIL "        <td colspan=2><font face=arial,san-serif size=2 color=white>Response received</font></TD>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">Response received</font></td>\n";
 	}
 	else {
-		print MAIL "        <td colspan=2><font face=arial,san-serif size=2 color=white>New Ticket Entered</font></TD>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
 	}
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>Ticket ID:</TD>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>$ticket</TD>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">Ticket ID:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">$ticket</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white class=td>Author:</TD>\n";
-	print MAIL "        <td bgcolor=white class=td>$author</TD>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">Author:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">$author</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white class=td>Subject:</TD>\n";
-	print MAIL "        <td bgcolor=white class=td>$subject</TD>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">Subject:</td>\n";
+	print MAIL "        <td bgcolor=\"white\" class=\"td\">$subject</td>\n";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>&nbsp;</TD>\n";
-	print MAIL "        <td bgcolor=white nowrap class=td>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">&nbsp;</td>\n";
+	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">\n";
 	if ($parent) {
 		print MAIL "This is an acknowledgement that your response to\n";
 		print MAIL "Ticket ID $ticket has been received\n";
@@ -763,7 +763,7 @@ sub mail_acknowledgement {
 		print MAIL "by an automated support tracking system. It will be assigned to a<br />\n";
 		print MAIL "support representative who will be in touch in due course.\n";
 	}
-	print MAIL "            </font></TD>\n";
+	print MAIL "            </font></td>\n";
 	print MAIL "	</tr>\n";
 	print MAIL "</table>\n";
 	print MAIL "</body>\n";

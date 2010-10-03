@@ -113,7 +113,7 @@ function popPermItem() {
 		return;
 	}
 	f.permission_table.value = tables[pgo];
-	window.open('./index.php?m=public&a=selector&dialog=1&callback=setPermItem&table=' + tables[pgo], 'selector', 'left=50,top=50,height=250,width=400,resizable')
+	window.open('?m=public&'+'a=selector&'+'dialog=1&'+'callback=setPermItem&'+'table=' + tables[pgo], 'selector', 'left=50,top=50,height=250,width=400,resizable')
 }
 
 // Callback function for the generic selector
@@ -269,7 +269,7 @@ foreach ($user_acls as $acl) {
 ?>
 <tr>
 	<td>
-		<input type="reset" value="<?php echo $AppUI->_('clear');?>" class="button" name="sqlaction" onClick="clearIt();">
+		<input type="reset" value="<?php echo $AppUI->_('clear');?>" class="button" name="sqlaction" onclick="clearIt();">
 	</td>
 	<td align="right">
 		<input type="submit" value="<?php echo $AppUI->_('add');?>" class="button" name="sqlaction2">

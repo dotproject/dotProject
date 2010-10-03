@@ -26,8 +26,8 @@ $showProject = false;
 
 $project_id = $obj->task_project;
 if (getPermission('files', 'edit')) { 
-	echo ('<a href="./index.php?m=files&a=addedit&project_id=' . $project_id 
-	      . '&file_task=' . $task_id . '">' . $AppUI->_('Attach a file') . '</a>');
+	echo ('<a href="./index.php?m=files&amp;a=addedit&amp;project_id=' . $project_id 
+	      . '&amp;file_task=' . $task_id . '">' . $AppUI->_('Attach a file') . '</a>');
 	echo dPshowImage(dPfindImage('stock_attach-16.png', $m), 16, 16, '');
 }
 

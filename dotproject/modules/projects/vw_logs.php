@@ -149,7 +149,7 @@ foreach ($logs as $row) {
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>';
-	$s .= '<td width="30%"><a href="?m=tasks&a=view&task_id='.$row['task_id'].'&tab=0">'.@$row["task_log_name"].'</a></td>';
+	$s .= '<td width="30%"><a href="?m=tasks&amp;a=view&amp;task_id='.$row['task_id'].'&amp;tab=0">'.@$row["task_log_name"].'</a></td>';
 	$s .= '<td width="100">'.$row["user_username"].'</td>';
 	$s .= '<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>';
 	$s .= '<td width="100">'.$row["task_log_costcode"].'</td>';

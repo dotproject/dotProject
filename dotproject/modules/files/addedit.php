@@ -11,7 +11,7 @@ $preserve = $dPconfig['files_ci_preserve_attr'];
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $file_id);
 if (!($canEdit)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 if (file_exists(DP_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
@@ -63,7 +63,7 @@ if (!($canAdmin)) {
 	$canAdmin = $obj->canAdmin();
 }
 if ($obj->file_checkout == 'final' && !($canAdmin)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 
 // setup the title block
@@ -112,7 +112,7 @@ $projects = arrayMerge(array('0'=>$AppUI->_('None', UI_OUTPUT_RAW)), $projects);
 
 $folders = getFolderSelectList();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.uploadFrm;
 	f.submit();
@@ -129,7 +129,7 @@ function popTask() {
     if (f.file_project.selectedIndex == 0) {
         alert("<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>");
     } else {
-        window.open('./index.php?m=public&a=selector&dialog=1&callback=setTask&table=tasks&task_project='
+        window.open('?m=public&amp;a=selector&amp;dialog=1&amp;callback=setTask&amp;table=tasks&amp;task_project='
 		            + f.file_project.options[f.file_project.selectedIndex].value, 'task','left=50,top=50,height=250,width=400,resizable')
     }
 }
@@ -158,8 +158,6 @@ function setTask(key, val) {
 }
 </script>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
-
 <form name="uploadFrm" action="?m=files" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
@@ -168,6 +166,7 @@ function setTask(key, val) {
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
 
+<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 <tr>
 	<td width="100%" valign="top" align="center">
 		<table cellspacing="1" cellpadding="2" width="60%">
@@ -223,14 +222,14 @@ echo $obj->file_description; ?></textarea>
 			</td>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File'); ?>:</td>
-			<td align="left"><input type="File" class="button" name="formfile" style="width:270px"></td>
+			<td align="left"><input type="File" class="button" name="formfile" style="width:270px" /></td>
 		</tr>
 		<?php 
 if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
-				<input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" />
+				<input type="checkbox" name="final_ci" id="final_ci" onclick="javascript:finalCI()" />
 				<label for="final_ci"><?php echo $AppUI->_('Final Version'); ?></label>
 			</td>		
 		</tr><?php 
@@ -257,17 +256,17 @@ echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
 <tr>
 	<td>
 		<input class="button" type="button" name="cancel" value="<?php 
-echo $AppUI->_('cancel'); ?>" onClick="javascript:if (confirm('<?php 
+echo $AppUI->_('cancel'); ?>" onclick="javascript:if (confirm('<?php 
 echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
 echo $AppUI->getPlace(); ?>'; }" />
 	</td>
 	<td align="right">
 		<input type="button" class="button" value="<?php 
-echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+echo $AppUI->_('submit'); ?>" onclick="javascript:submitIt()" />
 	</td>
 </tr>
-</form>
 </table>
+</form>
 
 <?php 
 function file_show_attr() {
@@ -278,10 +277,10 @@ function file_show_attr() {
 	if ($ci) {
 		$str_out = ('<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision') 
 					. '</td><td>' 
-		            . '<input type="Radio" name="revision_type" value="minor" checked="checked">' 
+		            . '<input type="Radio" name="revision_type" value="minor" checked="checked" />' 
 		            . '</td></tr>' 
 		            . '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Major Revision') 
-		            . '</td><td>' . '<input type="Radio" name="revision_type" value="major" >' 
+		            . '</td><td>' . '<input type="Radio" name="revision_type" value="major" />' 
 		            . '</td></tr>');
 	} else {
 		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Version') . ':</td>';
@@ -307,7 +306,7 @@ function file_show_attr() {
     
     
 	$select_disabled=' ';  
-	$onclick_task=' onclick="popTask()" ';
+	$onclick_task=' onclick="javascript:popTask()" ';
 	if ($ci && $preserve) {
 		$select_disabled=' disabled ';  
         $onclick_task=' ';

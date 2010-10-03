@@ -29,7 +29,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $NO_DATE = "0000-00-00 00:00:00";
 
 function task_link($task) {
-	return "<a href='index.php?m=tasks&a=addedit&task_id=" . $task["task_id"] . "'>" . $task["task_name"] . "</a>";
+	return "<a href='index.php?m=tasks&amp;a=addedit&amp;task_id=" . $task["task_id"] . "'>" . $task["task_name"] . "</a>";
 }
 
 function search_task($task_id) {
@@ -49,19 +49,19 @@ function log_info($msg) {
 
 function log_action($msg) {
 	global $action;
-	echo "&nbsp;&nbsp;<font color=red size=2>$msg</font><br />";
+	echo '&nbsp;&nbsp;<font color="red" size="2">'.$msg.'</font><br />';
 	$action = true;
 }
 
 function log_error($msg, $fields = "") {
 	global $action;
-	echo "<font color=red size=1>ERROR: $msg</font><br />$fields<hr>";
+	echo '<font color="red" size="1">ERROR: '.$msg.'</font><br />'.$fields.'<hr />';
 	$action = true;
 }
 
 function log_warning($msg, $fields = "") {
 	global $show_warnings;
-	echo "WARNING: $msg<br />$fields<hr>";
+	echo "WARNING: $msg<br />$fields<hr />";
 }
 
 function fixate_task($task_index, $time, $dep_on_task) {
@@ -286,7 +286,7 @@ function process_dependencies($i) {
 <tr>
 	<td><?php echo dPshowImage(dPfindImage('applet-48.png', $m), 16, 16, ''); ?></td>
 	<td nowrap><h1><?php echo $AppUI->_('Tasks Organizer Wizard'); ?></h1></td>
-	<td nowrap><img src="./images/shim.gif" width="16" height="16" alt="" border="0"></td>
+	<td nowrap><img src="./images/shim.gif" width="16" height="16" alt="" border="0" /></td>
 	<td valign="top" align="right" width="100%"></td>
 </tr>
 </table>
@@ -342,7 +342,7 @@ function checkbox($name, $descr, $default = 0, $show = true) {
 $sql = "SELECT project_id, project_name FROM projects ORDER BY project_name";
 $projects = arrayMerge(array(0 => '(' . $AppUI->_('All') . ')'), db_loadHashList($sql));
 
-echo $AppUI->_('Project').": " . arraySelect($projects, 'project_id', 'class="text"', $project_id) . "<br>";
+echo $AppUI->_('Project').": " . arraySelect($projects, 'project_id', 'class="text"', $project_id) . "<br />";
 
 checkbox("option_check_delayed_tasks", "Check delays for fixed tasks", 1, $do == "conf");
 checkbox("option_fix_task_group_date_ranges", "Fix date ranges for task groups according to subtasks dates", 1, $do == "conf");
@@ -384,11 +384,11 @@ if ($do != "conf") {
 		if (!$row["task_duration"] && $row["task_end_date"] == $NO_DATE) {
 			log_error("Task " .task_link($row) . " has no duration.",
 				"Please enter the expected duration: "
-				."<input class=input type=text name='set_duration[" . $row["task_id"] . "]' size=3>"
-				. "<select name='dayhour[" . $row["task_id"] . "]'>"
-				. "<option value='1'>hour(s)</option>"
-				. "<option value='24'>day(s)</option>"
-				. "</select>"
+				.'<input class="input" type="text" name="set_duration['.$row['task_id'].']" size="3" />'
+				.'<select name="dayhour['.$row['task_id'].']">'
+				.'<option value="1">hour(s)</option>'
+				.'<option value="24">day(s)</option>'
+				.'</select>'
 			);
 			$errors = true;
 		}
@@ -467,7 +467,7 @@ if ($do != "conf") {
 	}
 	
 	if (!$action) {
-		echo "<font size=2><strong>".$AppUI->_('Tasks are already organized')."</strong></font><br />";
+		echo '<font size="2"><strong>'.$AppUI->_('Tasks are already organized').'</strong></font><br />';
 	}
 
 	echo '</td>';
@@ -478,18 +478,18 @@ if ($do != "conf") {
 
 if ($do=="conf" || $action) {
 	if (!$errors) {
-		echo "<input type=hidden name=do value=" . ($do=="ask"?"fixate":"ask") . ">";
+		echo '<input type="hidden" name="do" value="' . ($do=="ask"?"fixate":"ask") . '" />';
 		if ($do == "ask") {
-			echo "<font size=2><strong>".$AppUI->_('Do you want to accept this changes?')."</strong></font><br />";
-			echo "<input type=button value=accept class=button onClick='javascript:document.form.submit()'>";
+			echo '<font size="2"><strong>'.$AppUI->_('Do you want to accept this changes?').'</strong></font><br />';
+			echo '<input type="button" value="accept" class="button" onclick="javascript:document.form.submit()" />';
 		} else if ($do == "fixate") {
-			echo "<font size=2><strong>".$AppUI->_('Tasks has been reorganized')."</strong></font><br />";
+			echo '<font size="2"><strong>'.$AppUI->_('Tasks has been reorganized').'</strong></font><br />';
 		} else if ($do == "conf") {
-				echo "<input type=button value=".$AppUI->_('start')." class=button onClick='javascript:document.form.submit()'>";
+				echo '<input type="button" value="'.$AppUI->_('start').'" class="button" onclick="javascript:document.form.submit()" />';
 		}
 	} else {
-		echo "<font size=2><strong>".$AppUI->_('Please correct the above errors')."</strong></font><br />";
-		echo "<input type=button value=submit class=button onClick='javascript:document.form.submit()'>";
+		echo '<font size="2"><strong>'.$AppUI->_('Please correct the above errors').'</strong></font><br />';
+		echo '<input type="button" value="submit" class="button" onclick="javascript:document.form.submit()" />';
 	}
 }
 ?>

@@ -23,12 +23,12 @@ $active = intval(!$AppUI->getState('ConfigIdxTab'));
 
 $titleBlock = new CTitleBlock('System Configuration', 'control-center.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
-$titleBlock->addCrumb('?m=system&a=addeditpref', 'default user preferences');
+$titleBlock->addCrumb('?m=system&amp;a=addeditpref', 'default user preferences');
 $titleBlock->show();
 
 if (is_dir(DP_BASE_DIR.'/install')) {
 	$AppUI->setMsg('You have not removed your install directory, this is a major security risk!', UI_MSG_ALERT);
-	echo '<span class="error">' . $AppUI->getMsg() . '</span>'."\n";
+	echo '<div class="error">' . $AppUI->getMsg() . '</div>'."\n";
 }
 
 echo $AppUI->_('syscfg_intro');
@@ -75,16 +75,20 @@ foreach ($rs as $c) {
 	}
 	$output .= '<tr>
 			<td class="item" width="20%">'.$AppUI->_($c['config_name'].'_title').'</td>
-            		<td align="left">
-' .				$entry . '
-				<a href="#" onClick="javascript:window.open(\'?m=system&a=systemconfig_help&dialog=1&cn='.$c['config_name'].'\', \'contexthelp\', \'width=400, height=200, left=50, top=50, scrollbars=yes, resizable=yes\')" '.$tooltip.'>(?)</a>
-				<input class="button" type="hidden"  name="dPcfgId['.$c['config_name'].']" value="'.$c['config_id'].'" />
+					<td align="left">' . $entry ."\n\t" .
+			'<a href="#" onclick="javascript:window.open(' .
+				'\'?m=system&amp;a=systemconfig_help&amp;dialog=1&amp;cn='
+				. $c['config_name']. "', 'contexthelp', "
+				. "'width=400, height=200, left=50, top=50, scrollbars=yes, resizable=yes')\" "
+				. $tooltip.'>(?)</a>
+				<input class="button" type="hidden"  name="dPcfgId['.$c['config_name'].']" value="'
+				.$c['config_id'].'" />
 			</td>
         </tr>
 	';
 
 	}
-echo '<form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post">';
+echo '<form name="cfgFrm" action="?m=system&amp;a=systemconfig" method="post">';
 ?>
 <input type="hidden" name="dosql" value="do_systemconfig_aed" />
 <table cellspacing="0" cellpadding="3" border="0" class="std" width="100%" align="center">

@@ -37,7 +37,7 @@ else
 	</form>
 	<?php endif; ?>
 	</th>
-	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
+	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border="0" alt="http://dotproject.net/" /></a></th>
 	</tr></table></td>
 </tr>
 <?php if (!$dialog) {
@@ -78,7 +78,7 @@ else
 		}
 	}
 
-	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
+	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="javascript:f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
 
 	echo "        <input type=\"hidden\" name=\"a\" value=\"addedit\" />\n";
 
@@ -115,7 +115,7 @@ else
 ?>                              <b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
 				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> |
 <?php } ?>
-				<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
+				<a href="?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 			</td>
 		</tr>
 		</table>

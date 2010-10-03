@@ -166,42 +166,42 @@ if (isset($_POST['searchtext'])) {
 $search_text = (($AppUI->getState('searchtext')) ? $AppUI->getState('searchtext'):'');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell(('<input type="text" class="text" SIZE="10" name="searchtext"' 
-                      . ' onChange="document.searchfilter.submit();" value="' . $search_text . '"' 
+                      . ' onchange="javascript:document.searchfilter.submit();" value="' . $search_text . '"' 
                       . 'title="' . $AppUI->_('Search in name and description fields') 
                       . '"/><!--<input type="submit" class="button" value=">" title="' 
                       . $AppUI->_('Search in name and description fields') . '"/>-->'), '',
-					 ('<form action="?m=projects&a=view&project_id=' . $project_id 
+					 ('<form action="?m=projects&amp;a=view&amp;project_id=' . $project_id 
                       . '" method="post" id="searchfilter">'), '</form>');
 
 if ($canAuthorTask) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new task') 
-	                      . '">'), '', ('<form action="?m=tasks&a=addedit&task_project=' 
+	                      . '" />'), '', ('<form action="?m=tasks&amp;a=addedit&amp;task_project=' 
 	                                    . $project_id . '" method="post">'), '</form>');
 }
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event') 
-	                      . '">'), '', ('<form action="?m=calendar&a=addedit&event_project=' 
+	                      . '" />'), '', ('<form action="?m=calendar&amp;a=addedit&amp;event_project=' 
 	                                    . $project_id . '" method="post">'), '</form>');
 
 	$titleBlock->addCell();
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new file') 
-	                      . '">'), '', ('<form action="?m=files&a=addedit&project_id=' 
+	                      . '" />'), '', ('<form action="?m=files&amp;a=addedit&amp;project_id=' 
 	                                    . $project_id . '" method="post">'), '</form>');
 }
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($canEdit) {
-	$titleBlock->addCrumb(('?m=projects&a=addedit&project_id=' . $project_id), 'edit this project');
+	$titleBlock->addCrumb(('?m=projects&amp;a=addedit&amp;project_id=' . $project_id), 'edit this project');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
 	}
-	$titleBlock->addCrumb('?m=tasks&a=organize&project_id=' . $project_id, 'organize tasks');
+	$titleBlock->addCrumb('?m=tasks&amp;a=organize&amp;project_id=' . $project_id, 'organize tasks');
 }
-$titleBlock->addCrumb('?m=projects&a=reports&project_id=' . $project_id, 'reports');
+$titleBlock->addCrumb('?m=projects&amp;a=reports&amp;project_id=' . $project_id, 'reports');
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 <?php
 //security improvement:
 //some javascript functions may not appear on client side in case of user not having write permissions
@@ -217,14 +217,12 @@ echo ($AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT
 <?php } ?>
 </script>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-
 <form name="frmDelete" action="./index.php?m=projects" method="post">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
-
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;background-color:#<?php 
 echo $obj->project_color_identifier; ?>" colspan="2">
@@ -243,7 +241,7 @@ echo ('<span style="color:' . bestColor($obj->project_color_identifier) . '; fon
 			<td align="right" nowrap><?php echo $AppUI->_('Company'); ?>:</td>
             <td class="hilite" width="100%"><?php 
 echo (((getPermission('companies', 'view', $obj->project_company)) 
-       ? ('<a href="?m=companies&a=view&company_id=' . $obj->project_company . '">') : '') 
+       ? ('<a href="?m=companies&amp;a=view&amp;company_id=' . $obj->project_company . '">') : '') 
       . htmlspecialchars($obj->company_name, ENT_QUOTES) 
 	  . ((getPermission('companies', 'view', $obj->project_company)) ? '</a>' : '')); 
 ?></td>
@@ -252,7 +250,7 @@ echo (((getPermission('companies', 'view', $obj->project_company))
 			<td align="right" nowrap><?php echo $AppUI->_('Internal Company'); ?>:</td>
             <td class="hilite" width="100%"><?php 
 echo (((getPermission('companies', 'view', $obj->project_company_internal)) 
-       ? ('<a href="?m=companies&a=view&company_id=' . $obj->project_company_internal . '">') : '') 
+       ? ('<a href="?m=companies&amp;a=view&amp;company_id=' . $obj->project_company_internal . '">') : '') 
       . htmlspecialchars($obj->company_name_internal, ENT_QUOTES) 
 	  . ((getPermission('companies', 'view', $obj->project_company_internal)) 
          ? '</a>' : '')); 
@@ -276,7 +274,7 @@ echo htmlspecialchars(@$obj->project_short_name, ENT_QUOTES); ?></td>
 			<td class="hilite"><?php 
 if ($project_id > 0) {
 	echo (($actual_end_date) 
-	      ? ('<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' 
+	      ? ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $criticalTasks[0]['task_id'] . '">' 
 	         . '<span '. $style.'>'.$actual_end_date->format($df).'</span></a>') 
 	      : '-');
 } else {
@@ -421,7 +419,7 @@ if (count($contacts) > 0) {
 ?>
 				<tr>
 					<td class='hilite'><?php 
-		echo ((($canEdit) ? ('<a href="index.php?m=contacts&a=view&contact_id=' 
+		echo ((($canEdit) ? ('<a href="index.php?m=contacts&amp;a=view&amp;contact_id=' 
 							 . $contact_id . '">') :'') 
 		      . ($contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name']) 
 		      . (($canEdit) ? '</a>' : ''));
@@ -450,8 +448,8 @@ if (count($contacts) > 0) {
 </table>
 
 <?php
-$tabBox = new CTabBox(('?m=projects&a=view&project_id=' . $project_id), '', $tab);
-$query_string = ('?m=projects&a=view&project_id=' . $project_id);
+$tabBox = new CTabBox(('?m=projects&amp;a=view&amp;project_id=' . $project_id), '', $tab);
+$query_string = ('?m=projects&amp;a=view&amp;project_id=' . $project_id);
 //tabbed information boxes
 //Note that we now control these based upon module requirements.
 $canAccessTask = getPermission('tasks', 'access');

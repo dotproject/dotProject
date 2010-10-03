@@ -786,14 +786,14 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 		echo '<td align="left" width="15%">' . "\n";		
 		if ($xpg_prev_page > 0) {
 			echo ('<a href="./index.php?m=' . $m 
-			      . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
-			      . (($folder) ? ('&folder=' . $folder) : '') . '&page=1">' 
+			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '') 
+			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=1">' 
 			      . '<img src="images/navfirst.gif" border="0" Alt="' 
 			      . $AppUI->_('First Page') .'"></a>' . "\n");
 			echo ('&nbsp;&nbsp;' . "\n");
 			echo ('<a href="./index.php?m=' . $m 
-				  . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
-				  . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_prev_page . '">' 
+				  . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '') 
+				  . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_prev_page . '">' 
 				  . '<img src="images/navleft.gif" border="0" Alt="' 
 				  . $AppUI->_('Previous Page') .': ' . $xpg_prev_page .'"></a>' . "\n");
 		} else {
@@ -818,9 +818,9 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 		for ($n = $start_page_range; $n <= $end_page_range; $n++) {
 			echo (($n == $page) 
 				  ? '<b>' : ('<a href="./index.php?m=' . $m 
-			                 . (($a) ? ('&a=' . $a) : '') 
-			                 . (($tab) ? ('&tab=' . $tab) : '') 
-			                 . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $n . '">')); 
+			                 . (($a) ? ('&amp;a=' . $a) : '') 
+			                 . (($tab) ? ('&amp;tab=' . $tab) : '') 
+			                 . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $n . '">')); 
 			echo ($n); 
 			echo (($n == $page) ? '</b>' : '</a>');
 			echo (($n < $end_page_range) ? ' | ' : " ]\n");
@@ -832,14 +832,14 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 		echo '<td align="left" width="15%">' . "\n";
 		if ($xpg_next_page <= $xpg_total_pages) {
 			echo ('<a href="./index.php?m=' . $m 
-			      . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
-			      . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_next_page . '">' 
+			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '') 
+			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_next_page . '">' 
 			      . '<img src="images/navright.gif" border="0" Alt="' 
 			      . $AppUI->_('Next Page') .': ' . $xpg_next_page .'"></a>' . "\n");
 			echo "&nbsp;&nbsp;\n";
 			echo ('<a href="./index.php?m=' . $m 
-			      . (($a) ? ('&a=' . $a) : '') . (($tab) ? ('&tab=' . $tab) : '') 
-			      . (($folder) ? ('&folder=' . $folder) : '') . '&page=' . $xpg_total_pages . '">' 
+			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '') 
+			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_total_pages . '">' 
 			      . '<img src="images/navlast.gif" border="0" Alt="' 
 			      . $AppUI->_('Last Page') .'"></a>' . "\n");
 		} else {

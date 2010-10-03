@@ -10,7 +10,7 @@ $obj = new CResource;
 $titleBlock = new CTitleBlock('Resources', 'helpdesk.png', $m, "$m.$a");
 if ($canAuthor) {
     $titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new resource') 
-	                      . '">'), '', '<form action="?m=resources&a=addedit" method="post">', 
+	                      . '" />'), '', '<form action="?m=resources&amp;=addedit" method="post">', 
 	                     '</form>');
 }
 $titleBlock->show();

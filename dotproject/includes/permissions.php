@@ -116,7 +116,7 @@ function getDenyEdit($mod, $item_id=0) {
  */
 function winnow($mod, $key, &$where, $alias = 'perm') {
 	die ('The function winnow() is deprecated.  Check to see that the
-	module/code has been updated to the latest permissions handling<br>');
+	module/code has been updated to the latest permissions handling<br />');
 }
 
 ?>

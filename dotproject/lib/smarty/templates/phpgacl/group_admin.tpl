@@ -12,7 +12,7 @@
             <th width="20%">Value</th>
             <th width="6%">Objects</th>
             <th width="30%">Functions</th>
-            <th width="2%"><input type="checkbox" class="checkbox" name="select_all" onClick="checkAll(this)"/></th>
+            <th width="2%"><input type="checkbox" class="checkbox" name="select_all" onclick="javascript:checkAll(this)"/></th>
           </tr>
 {foreach from=$groups item=group}
           <tr valign="middle" align="center">

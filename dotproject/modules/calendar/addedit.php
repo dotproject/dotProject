@@ -20,7 +20,7 @@ $date = dPgetParam($_GET, 'date', null);
 $obj = new CEvent();
 
 if ($is_clash) {
-	$obj->bind($_SESSION['add_event_post']);
+  $obj->bind($_SESSION['add_event_post']);
 }
 else if (!$obj->load($event_id) && $event_id) {
 	$AppUI->setMsg('Event');
@@ -40,7 +40,7 @@ $assigned = array();
 if ($is_clash) {
 	$assignee_list = $_SESSION['add_event_attendees'];
 	if (isset($assignee_list) && $assignee_list) {
-		$q = new DBQuery;
+		$q  = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('user_id, CONCAT_WS(" " , contact_first_name, contact_last_name)');
@@ -125,23 +125,23 @@ if (!$event_id && !$is_clash) {
 	} else {
 		$seldate->setTime(dPgetConfig('cal_day_start'),0,0);
 	}
-	$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
 	if ($h && $h < dPgetConfig('cal_day_end')) {
 		$seldate->addSeconds($inc * 60);
 	} else {
 		$seldate->setTime(dPgetConfig('cal_day_end'),0,0);
 	}
-	$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
+		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 }
 
 $recurs =  array ('Never',
-                  'Hourly',
-                  'Daily',
-                  'Weekly',
-                  'Bi-Weekly',
-                  'Monthly',
-                  'Quarterly',
-                  'Semi-Annually',
+	'Hourly',
+	'Daily',
+	'Weekly',
+	'Bi-Weekly',
+	'Monthly',
+	'Quarterly',
+	'Semi-Annually',
                   'Annually');
 
 $remind = array ('900' => '15 mins',
@@ -167,7 +167,7 @@ for ($minutes=0; $minutes < $check; $minutes++) {
 }
 ?>
 
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 function submitIt() {
 	var form = document.editFrm;
 	if (form.event_title.value.length < 1) {
@@ -210,7 +210,7 @@ var calendarField = '';
 function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.event_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240,scrollbars=no,status=no');
+	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240,scrollbars=no,status=no');
 }
 
 /**
@@ -272,18 +272,18 @@ function removeUser() {
 
 </script>
 
-<table cellspacing="1" cellpadding="2" border="0" width="100%" class="std">
 <form name="editFrm" action="?m=calendar" method="post">
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id;?>" />
 	<input type="hidden" name="event_project" value="0" />
 	<input type="hidden" name="event_assigned" value="" />
 
+<table cellspacing="1" cellpadding="2" border="0" width="100%" class="std">
 <tr>
 	<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title');?>:</td>
 	<td width="20%">
 		<input type="text" class="text" size="25" name="event_title" value="<?php 
-echo @$obj->event_title;?>" maxlength="255">
+echo @$obj->event_title;?>" maxlength="255" />
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">
 	<?php echo $AppUI->_('Description'); ?> :<br/>
@@ -323,10 +323,10 @@ echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
 		<input type="hidden" name="event_start_date" value="<?php 
-echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>">
+echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
 		<input type="text" name="start_date" value="<?php 
-echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled">
-		<a href="#" onClick="popCalendar('start_date')">
+echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled" />
+		<a href="#" onclick="javascript:popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
@@ -341,10 +341,10 @@ echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->for
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
 		<input type="hidden" name="event_end_date" value="<?php 
-echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>">
+echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
 		<input type="text" name="end_date" value="<?php 
-echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled">
-		<a href="#" onClick="popCalendar('end_date')">
+echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
+		<a href="#" onclick="javascript:popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
@@ -362,7 +362,7 @@ echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_r
 	<td>
 		<input type="text"  name="event_times_recuring" value="<?php 
 echo ((isset($obj->event_times_recuring)) ? $obj->event_times_recuring : '1'); 
-?>" maxlength="2" size=3> <?php echo $AppUI->_('times'); ?>
+?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 	</td>
 </tr>
 <?php /* FUNCTIONALITY NOT YET ENABLED ?>
@@ -396,9 +396,9 @@ echo arraySelect($assigned, 'assigned',
 		<table>
 			<tr>
 				<td align="left"><input type="button" class="button" value="&gt;"
-				onClick="addUser()" /></td>
+				onclick="javascript:addUser()" /></td>
 				<td align="right"><input type="button" class="button" value="&lt;"
-				onClick="removeUser()" /></td>
+				onclick="javascript:removeUser()" /></td>
 			</tr>
 		</table>
 	</td>
@@ -426,12 +426,12 @@ $custom_fields->printHTML();
 <tr>
 	<td colspan="2">
 		<input type="button" value="<?php 
-echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back();">
+echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back();" />
 	</td>
 	<td align="right" colspan="2">
 		<input type="button" value="<?php 
-echo $AppUI->_('submit'); ?>" class="button" onClick="submitIt()">
+echo $AppUI->_('submit'); ?>" class="button" onClick="javascript:submitIt()" />
 	</td>
 </tr>
-</form>
 </table>
+</form>

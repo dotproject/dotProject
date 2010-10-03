@@ -245,7 +245,7 @@ class CFile extends CDpObject {
 		}
 		// buffer the file
 		$filepath = (DP_BASE_DIR . '/files/' . $this->file_project . '/' 
-		             . $this->file_real_filename);
+		                    . $this->file_real_filename);
 		$fp = fopen($filepath, 'rb');
 		$x = fread($fp, $this->file_size);
 		fclose($fp);

@@ -76,7 +76,7 @@ if (!defined('DP_BASE_DIR')) {
 			$data_update_script .= "opener.document.changecontact.$contact_field.value = '".$r_data[$record_field]."';\n";
 		}
 		?>
-			<script language='javascript'>
+			<script language='javascript' type="text/javascript">
 				<?php echo $data_update_script; ?>
 				self.close();
 			</script>
@@ -84,7 +84,7 @@ if (!defined('DP_BASE_DIR')) {
 	} else {
 		?>
 		
-		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name."&$additional_get_information"; ?>" method="post">
+		<form name="frmSelector" action="?m=contacts&amp;a=select_contact_company&amp;dialog=1&amp;table_name=<?php echo $table_name."&amp;$additional_get_information"; ?>" method="post">
 			<table cellspacing="0" cellpadding="3" border="0">
 			<tr>
 				<td colspan="2">

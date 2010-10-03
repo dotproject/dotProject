@@ -119,7 +119,7 @@ $default_search_string = dPformSafe(mb_substr($AppUI->getState('ContIdxWhere'), 
 $a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= "\n<tr>";
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show'). ': </td>';
-$a2z .= '<td><a href="./index.php?m=contacts&amp;where=0">' . $AppUI->_('All') . '</a></td>';
+$a2z .= '<td><a href="?m=contacts&amp;where=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
 	$cu = chr($c);
 	$cell = ((mb_strpos($let, "$cu") > 0) 
@@ -144,18 +144,18 @@ $titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, "$m.$a");
 $titleBlock->addCell($a2z);
 if ($canAuthor) {
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new contact') 
-	                      . '">'), '', '<form action="?m=contacts&a=addedit" method="post">', 
+	                      . '">'), '', '<form action="?m=contacts&amp;a=addedit" method="post">', 
 	                     '</form>');
-	$titleBlock->addCrumbRight('<a href="./index.php?m=contacts&a=csvexport&suppressHeaders=true">' 
+	$titleBlock->addCrumbRight('<a href="?m=contacts&amp;a=csvexport&amp;suppressHeaders=true">' 
 	                           . $AppUI->_('CSV Download'). '</a> | ' 
-	                           . '<a href="./index.php?m=contacts&a=vcardimport&dialog=0">' 
+	                           . '<a href="?m=contacts&amp;a=vcardimport&amp;dialog=0">' 
 	                           . $AppUI->_('Import vCard') . '</a>');
 }
 $titleBlock->show();
 // TODO: Check to see that the Edit function is separated.
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 // Callback function for the generic selector
 function goProject(key, val) {
 	var f = document.modProjects;
@@ -170,7 +170,7 @@ function goProject(key, val) {
   <input type='hidden' name='a' value='view' />
   <input type='hidden' name='project_id' />
 </form>
-<table width="100%" border="0" cellpadding="1" cellspacing="1" height="400" class="contacts">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" style="height:400px;" class="contacts" summary="Contacts">
 <tr>
 <?php
 for ($z = 0; $z < $carrWidth; $z++) {
@@ -179,11 +179,11 @@ for ($z = 0; $z < $carrWidth; $z++) {
 	<?php
 	for ($x = 0; $x < @count($carr[$z]); $x++) {
 	?>
-		<table width="100%" cellspacing="1" cellpadding="1">
+		<table width="100%" cellspacing="1" cellpadding="1" summary="contact info">
 		<tr>
 			<td width="100%">
 				<?php $contactid = $carr[$z][$x]['contact_id']; ?>
-				<a href="./index.php?m=contacts&a=view&contact_id=<?php 
+				<a href="?m=contacts&amp;a=view&amp;contact_id=<?php 
 		echo $contactid; 
 ?>"><strong><?php 
 		echo (($carr[$z][$x]['contact_order_by']) 
@@ -193,10 +193,10 @@ for ($z = 0; $z < $carrWidth; $z++) {
 				&nbsp;<a title="<?php 
 		echo ($AppUI->_('Export vCard for') . ' ' . $carr[$z][$x]['contact_first_name'] . ' ' 
 		      . $carr[$z][$x]['contact_last_name']); 
-?>" href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php 
+?>" href="?m=contacts&amp;a=vcardexport&amp;suppressHeaders=true&amp;contact_id=<?php 
 		echo $contactid; ?>" >(vCard)</a>
 				&nbsp;<a title="<?php 
-		echo $AppUI->_('Edit'); ?>" href="?m=contacts&a=addedit&contact_id=<?php 
+		echo $AppUI->_('Edit'); ?>" href="?m=contacts&amp;a=addedit&amp;contact_id=<?php 
 		echo $contactid; ?>"><?php echo $AppUI->_('Edit'); ?></a>
 <?php
 		$q = new DBQuery;
@@ -211,8 +211,8 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		$projects_contact = db_fetch_row($res);
 		$q->clear();
 		if ($projects_contact[0] > 0) {
-			echo ('&nbsp;<a href="" onClick="window.open(' 
-			      . "'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects" 
+			echo ('&nbsp;<a href="" onclick="javascript:window.open(' 
+			      . "'?m=public&amp;a=selector&amp;dialog=1&amp;callback=goProject&amp;table=projects" 
 			      . '&user_id=' . $carr[$z][$x]['contact_id'] 
 			      . "', 'selector', 'left=50,top=50,height=250,width=400,resizable');" 
 			      . 'return false;">' . $AppUI->_('Projects') . '</a>');

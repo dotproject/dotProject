@@ -111,8 +111,8 @@ $taskDep = db_loadHashList($sql);
 				</td>
 			</tr>
 			<tr>
-				<td align="right"><input type="button" class="button" value="&gt;" onClick="addTaskDependency(document.dependFrm, document.datesFrm)" /></td>
-				<td align="left"><input type="button" class="button" value="&lt;" onClick="removeTaskDependency(document.dependFrm, document.datesFrm)" /></td>
+				<td align="right"><input type="button" class="button" value="&gt;" onclick="javascript:addTaskDependency(document.dependFrm, document.datesFrm)" /></td>
+				<td align="left"><input type="button" class="button" value="&lt;" onclick="javascript:removeTaskDependency(document.dependFrm, document.datesFrm)" /></td>
 			</tr>
 		</table>
 <input type="hidden" name="hdependencies" />

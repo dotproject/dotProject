@@ -12,7 +12,7 @@ class events extends smartsearch
 	var $table_module = 'calendar';
 	var $table_key = 'event_id';
 	var $table_extra = '';
-	var $table_link = 'index.php?m=calendar&a=view&event_id=';
+	var $table_link = '?m=calendar&amp;a=view&amp;event_id=';
 	var $table_title = 'Events';
 	var $table_orderby = 'event_start_date';
 	var $search_fields = array('event_title', 'event_description', 'event_start_date', 

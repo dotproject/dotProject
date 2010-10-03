@@ -86,28 +86,28 @@ $forums = $q->loadList();
 // setup the title block
 $titleBlock = new CTitleBlock('Forums', 'support.png', $m, "$m.$a");
 $titleBlock->addCell(
-	arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f , true), '',
+	arraySelect($filters, 'f', 'size="1" class="text" onchange="javascript:document.forum_filter.submit();"', $f , true), '',
 	'<form name="forum_filter" action="?m=forums" method="post">', '</form>'
 );
 
 if ($canAuthor) {
 	$titleBlock->addCell(
-		'<input type="submit" class="button" value="'.$AppUI->_('new forum').'">', '',
+		'<input type="submit" class="button" value="'.$AppUI->_('new forum').'" />', '',
 		'<form action="index.php" method="get"><input type="hidden" name="m" value="forums" /><input type="hidden" name="a" value="addedit" />', '</form>'
 	);
 }
 $titleBlock->show();
 ?>
 
-<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
-<form name="watcher" action="./index.php?m=forums&f=<?php echo $f;?>" method="post">
+<form name="watcher" action="./index.php?m=forums&amp;f=<?php echo $f;?>" method="post">
+<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl" summary="forums">
 <tr>
 	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap" width="25"><a href="?m=forums&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch');?></a></th>
-	<th nowrap="nowrap"><a href="?m=forums&orderby=forum_name" class="hdr"><?php echo $AppUI->_('Forum Name');?></a></th>
-	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_topics" class="hdr"><?php echo $AppUI->_('Topics');?></a></th>
-	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_replies" class="hdr"><?php echo $AppUI->_('Replies');?></a></th>
-	<th nowrap="nowrap" width="200"><a href="?m=forums&orderby=forum_last_date" class="hdr"><?php echo $AppUI->_('Last Post Info');?></a></th>
+	<th nowrap="nowrap" width="25"><a href="?m=forums&amp;orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch');?></a></th>
+	<th nowrap="nowrap"><a href="?m=forums&amp;orderby=forum_name" class="hdr"><?php echo $AppUI->_('Forum Name');?></a></th>
+	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&amp;orderby=forum_topics" class="hdr"><?php echo $AppUI->_('Topics');?></a></th>
+	<th nowrap="nowrap" width="50" align="center"><a href="?m=forums&amp;orderby=forum_replies" class="hdr"><?php echo $AppUI->_('Replies');?></a></th>
+	<th nowrap="nowrap" width="200"><a href="?m=forums&amp;orderby=forum_last_date" class="hdr"><?php echo $AppUI->_('Last Post Info');?></a></th>
 </tr>
 <?php
 $p ="";
@@ -120,7 +120,7 @@ foreach ($forums as $row) {
 ?>
 <tr>
 	<td colspan="6" style="background-color:#<?php echo $row["project_color_identifier"];?>">
-		<a href="?m=projects&a=view&project_id=<?php echo $row["forum_project"];?>">
+		<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $row["forum_project"];?>">
 			<font color=<?php echo bestColor($row["project_color_identifier"]);?>>
 			<strong><?php echo $row["project_name"];?></strong>
 			</font>
@@ -133,7 +133,7 @@ foreach ($forums as $row) {
 <tr>
 	<td nowrap="nowrap" align="center">
 	<?php if ($row["forum_owner"] == $AppUI->user_id || getPermission('forums', 'add')) { ?>
-		<a href="?m=forums&a=addedit&forum_id=<?php echo $row["forum_id"];?>" title="<?php echo $AppUI->_('edit');?>">
+		<a href="?m=forums&amp;a=addedit&amp;forum_id=<?php echo $row["forum_id"];?>" title="<?php echo $AppUI->_('edit');?>">
 		<?php echo dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '');?>
 		</a>
 	<?php } 
@@ -149,7 +149,7 @@ foreach ($forums as $row) {
 
 	<td>
 		<span style="font-size:10pt;font-weight:bold">
-			<a href="?m=forums&a=viewer&forum_id=<?php echo $row["forum_id"];?>"><?php echo $row["forum_name"];?></a>
+			<a href="?m=forums&amp;a=viewer&amp;forum_id=<?php echo $row["forum_id"];?>"><?php echo $row["forum_name"];?></a>
 		</span>
 		<br /><?php echo $row["forum_description"];?>
 		<br /><font color="#777777"><?php echo $AppUI->_('Owner').' '.$row["user_username"];?>,
@@ -172,8 +172,9 @@ foreach ($forums as $row) {
 
 		$id = $row['message_parent'] < 0 ? $row['message_id'] : $row['message_parent'];
 
-		echo '<br />&gt;&nbsp;<a href="?m=forums&a=viewer&forum_id='.$row['forum_id'].'&message_id='.$id.'">';
-		echo '<font color=#777777>'.$row['message_body'];
+		echo '<br />&gt;&nbsp;<a href="?m=forums&amp;a=viewer&amp;forum_id='.$row['forum_id']
+			.'&amp;message_id='.$id.'">'
+			.'<font color="#777777">'.$row['message_body'];
 		echo $row['message_length'] > $max_msg_length ? '...' : '';
 		echo '</font></a>';
 	} else {
@@ -186,9 +187,9 @@ foreach ($forums as $row) {
 <?php } ?>
 </table>
 
+<input type="hidden" name="dosql" value="do_watch_forum" />
+<input type="hidden" name="watch" value="forum" />
 <table width="100%" cellspacing="1" cellpadding="0" border="0">
-	<input type="hidden" name="dosql" value="do_watch_forum" />
-	<input type="hidden" name="watch" value="forum" />
 <tr>
 	<td>&nbsp;</td>
 </tr>
@@ -197,5 +198,5 @@ foreach ($forums as $row) {
 		<input type="submit" class="button" value="<?php echo $AppUI->_('update watches');?>" />
 	</td>
 </tr>
-</form>
 </table>
+</form>

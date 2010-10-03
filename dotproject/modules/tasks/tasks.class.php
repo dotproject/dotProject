@@ -2371,22 +2371,22 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$canEdit = getPermission('tasks', 'edit', $a['task_id']);
 	$canViewLog = getPermission('task_log', 'view', $a['task_id']);
 	if ($canEdit) {
-		$s .= ("\n\t\t".'<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '">'
+		$s .= ("\n\t\t".'<a href="?m=tasks&amp;a=addedit&amp;task_id=' . $a['task_id'] . '">'
 			   . "\n\t\t\t".'<img src="./images/icons/pencil.gif" alt="' . $AppUI->_('Edit Task') 
-			   . '" border="0" width="12" height="12">' . "\n\t\t</a>");
+			   . '" border="0" width="12" height="12" />' . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
 	// pinned
 	$pin_prefix = $a['task_pinned'] ? '' : 'un';
-	$s .= ("\n\t<td>\n\t\t" . '<a href="?m=tasks&pin=' . ($a['task_pinned']?0:1) 
+	$s .= ("\n\t<td>\n\t\t" . '<a href="?m=tasks&amp;pin=' . ($a['task_pinned']?0:1) 
 		   . '&task_id=' . $a['task_id'] . '">'
 		   . "\n\t\t\t".'<img src="./images/icons/' . $pin_prefix . 'pin.gif" alt="'
-		   . $AppUI->_($pin_prefix . 'pin Task') . '" border="0" width="12" height="12">'
+		   . $AppUI->_($pin_prefix . 'pin Task') . '" border="0" width="12" height="12" />'
 		   . "\n\t\t</a>\n\t</td>");
 	// New Log
 	$s .= ("\n\t" . '<td align="center">');
 	if ($canViewLog && $a['task_dynamic'] != 1) {
-		$s .= ('<a href="?m=tasks&a=view&task_id=' . $a['task_id'] . '&tab=1">' 
+		$s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '&tab=1">' 
 			   . $AppUI->_('Log') . '</a>');
 	} else {
 		$s .= $AppUI->_('-');
@@ -2396,8 +2396,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$s .= ("\n\t" . '<td align="right">' . intval($a['task_percent_complete']) . '%</td>' 
 		   . "\n\t" . '<td align="center" nowrap="nowrap">');
 	if (@$a['task_log_problem']>0) {
-		$s .= ('<a href="?m=tasks&a=view&task_id=' 
-			   . $a['task_id'] . '&tab=0&problem=1">' 
+		$s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' 
+			   . $a['task_id'] . '&amp;tab=0&amp;problem=1">' 
 			   . dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') 
 			   . '</a>');
 	} else if ($a['task_priority'] != 0) {
@@ -2405,7 +2405,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 																   ? '+' : '-') 
 									  . abs($a['task_priority']) . '.gif'), 13, 16, '', '');
 	}
-	$s .= ((@$a['file_count'] > 0) ? '<img src="./images/clip.png" alt="F">' : '') . '</td>';
+	$s .= ((@$a['file_count'] > 0) ? '<img src="./images/clip.png" alt="F" />' : '') . '</td>';
 	// dots
 	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
 	//level
@@ -2414,7 +2414,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	}
 	for ($y=0; $y < $level; $y++) {  
 		$s .= ('<img src="' . (($y+1 == $level) ? './images/corner-dots.gif' : './images/shim.gif') 
-			   . '" width="16" height="12" border="0">');
+			   . '" width="16" height="12" border="0" alt="" />');
 	}
 	// name link
 	/*
@@ -2427,7 +2427,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$alt = str_replace("\n", ' ', $alt);
 	*/
 	$alt = ((!empty($a['task_description']))
-			? ('onmouseover="return overlib(' . "'" 
+			? ('onmouseover="javascript:return overlib(' . "'" 
 			   . htmlspecialchars('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
 														   addslashes($a['task_description']))
 								  , ENT_QUOTES) . '</p></div>' . "', CAPTION, '" 
@@ -2435,9 +2435,9 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			: ' ');
 	
 	if ($a['task_milestone'] > 0) {
-		$s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
+		$s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" ' 
 			   . $alt . '>' . '<b>' . $a['task_name'] . '</b></a>' 
-			   . '<img src="./images/icons/milestone.gif" border="0"></td>');
+			   . '<img src="./images/icons/milestone.gif" border="0" alt="Milestone" /></td>');
 	} else if ($a['task_dynamic'] == 1 || count($task_obj->getChildren()) ) {
 		if (! ($today_view || $hideOpenCloseLink)) {
 			$s .= ('<a href="index.php' . $query_string 
@@ -2445,17 +2445,17 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 					  ? ('&close_task_id='.$a['task_id'] 
 						 . '"><img src="images/icons/collapse.gif" align="center"') 
 					  : ('&open_task_id='.$a['task_id'] . '"><img src="images/icons/expand.gif"')) 
-				   . ' border="0" /></a>');
+				   . ' border="0" alt="" /></a>');
 		}
-		$s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
+		$s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" ' 
 			   . $alt . '>' . (($a['task_dynamic'] == 1) ? '<b><i>' : '') . $a['task_name'] . (($a['task_dynamic'] == 1) ? '</i></b>' : '') . '</a></td>');
 	} else {
-	  $s .= ('&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ' 
+	  $s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" ' 
 			 . $alt . '>' . $a['task_name'] . '</a></td>');
 	}
 	
 	if ($today_view) { // Show the project name
-		$s .= ('<td width="50%"><a href="./index.php?m=projects&a=view&project_id=' 
+		$s .= ('<td width="50%"><a href="?m=projects&amp;a=view&amp;project_id=' 
 			   . $a['task_project'] . '">' . '<span style="padding:2px;background-color:#' 
 			   . $a['project_color_identifier'] . ';color:' 
 			   . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>' 
@@ -2463,7 +2463,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	}
 	// task owner
 	if (! $today_view) {
-		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&a=viewuser&user_id=' 
+		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' 
 			   . $a['user_id'] . '">' . $a['user_username'] . '</a>' . '</td>');
 	}
 	// $s .= '<td nowrap="nowrap" align="center">' . $a['user_username'] . '</td>';
@@ -2476,7 +2476,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				$a_u_tmp_array[] = ('<a href="mailto:' . $val['user_email'] . '">' 
 									. $val['user_username'] . '</a>'); 
 				*/
-				$a_u_tmp_array[] = ('<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"' 
+				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $val['user_id'] . '"' 
 						  . 'title="' . $AppUI->_('Extent of Assignment') . ':' 
 						  . $userAlloc[$val['user_id']]['charge'] . '%; ' 
 						  . $AppUI->_('Free Capacity') . ':' 
@@ -2486,7 +2486,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			$s .= join (', ', $a_u_tmp_array) . '</td>';
 		} else {
 			$s .= ('<td align="center" nowrap="nowrap">'
-				   .'<a href="?m=admin&a=viewuser&user_id=' . $assigned_users[0]['user_id'] 
+				   .'<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id'] 
 				   . '" title="' . $AppUI->_('Extent of Assignment') . ':' 
 				   . $userAlloc[$assigned_users[0]['user_id']]['charge']. '%; ' 
 				   . $AppUI->_('Free Capacity') . ':' 
@@ -2494,14 +2494,14 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				   . $assigned_users[0]['user_username'] 
 				   .' (' . $assigned_users[0]['perc_assignment'] .'%)</a>');
 			if ($a['assignee_count'] > 1) {
-				$s .= (' <a href="javascript: void(0);" onClick="toggle_users(' 
+				$s .= (' <a href="javascript: void(0);" onclick="javascript:toggle_users(' 
 					   . "'users_" . $a['task_id'] . "'" . ');" title="' 
 					   . join (', ', $a_u_tmp_array) .'">(+' . ($a['assignee_count'] - 1) . ')</a>'
 					   . '<span style="display: none" id="users_' . $a['task_id'] . '">');
 				$a_u_tmp_array[] = $assigned_users[0]['user_username'];
 				for ($i = 1, $xi = count($assigned_users); $i < $xi; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
-					$s .= ('<br /><a href="?m=admin&a=viewuser&user_id=' 
+					$s .= ('<br /><a href="?m=admin&amp;a=viewuser&amp;user_id=' 
 						   . $assigned_users[$i]['user_id'] . '" title="' 
 						   . $AppUI->_('Extent of Assignment') . ':' 
 						   . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' 
@@ -2674,7 +2674,7 @@ function sort_by_item_title($title, $item_name, $item_type) {
 	
 	if (isset($item_order)) {
 		echo ('<img src="./images/arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') 
-			  . '.gif" width="11" height="11">');
+			  . '.gif" width="11" height="11" alt="" />');
 	} else {
 		$item_order = SORT_DESC;
 	}

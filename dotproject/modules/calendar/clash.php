@@ -22,7 +22,7 @@ if (isset($_POST['clash_action'])) {
 } else {
 
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
   function set_clash_action(action) {
     var f = document.clash_form;
     f.clash_action.value = action;
@@ -42,21 +42,21 @@ if (isset($_POST['clash_action'])) {
 	$_SESSION['add_event_attendees'] = $_POST['event_assigned'];
 	$_SESSION['add_event_mail'] = isset($_POST['mail_invited']) ? $_POST['mail_invited'] : 'off';
 	
-	echo '<table width="100%" class="std"><tr><td><b>' . $AppUI->_('clashEvent') . '</b></tr></tr>';
+	echo '<table width="100%" summary="Attendee Clash" class="std"><tr><td><b>' . $AppUI->_('clashEvent') . '</b></tr></tr>';
 	foreach ($clash as $user) {
 		echo '<tr><td>' . $user . "</td></tr>\n";
 	}
 	echo "</table>\n";
-	$calurl = DP_BASE_URL.'/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
-	echo ('<a href="#" onclick="set_clash_action(\'suggest\');">' 
+	$calurl = DP_BASE_URL.'/index.php?m=calendar&amp;a=clash&amp;event_id=' . $obj->event_id;
+	echo ('<a href="#" onclick="javascript:set_clash_action(\'suggest\');">' 
 		  . $AppUI->_('Suggest Alternative') . '</a> : ');
-	echo '<a href="#" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
-	echo ('<a href="#" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') 
+	echo '<a href="#" onclick="javascript:set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
+	echo ('<a href="#" onclick="javascript:set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') 
 	      . '</a> : ');
-	echo ('<a href="#" onclick="set_clash_action(\'accept\');">' 
+	echo ('<a href="#" onclick="javascript:set_clash_action(\'accept\');">' 
 		  . $AppUI->_('Book Event Despite Conflict') . "</a>\n");
 	echo '<form name="clash_form" method="post" action="' . $calurl . '">';
-	echo '<input type="hidden" name="clash_action" value="cancel">';
+	echo '<input type="hidden" name="clash_action" value="cancel" />';
 	echo "</form>\n";
 }
 
@@ -106,13 +106,13 @@ function clash_suggest() {
 		$t->addSeconds($addMins);
 	}
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 var calendarField = '';
 
 function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.editFrm.event_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
+	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
 }
 
 /**
@@ -138,10 +138,10 @@ function set_clash_action(action) {
   <td width='50%' align='right'><?php echo $AppUI->_('Earliest Date'); ?>:</td>
   <td width='50%' align='left' nowrap="nowrap">
     <input type="hidden" name="event_start_date" value="<?php 
-echo $start_date->format(FMT_TIMESTAMP_DATE); ?>">
+echo $start_date->format(FMT_TIMESTAMP_DATE); ?>" />
     <input type="text" name="start_date" value="<?php 
-echo $start_date->format($df);?>" class="text" disabled="disabled">
-      <a href="#" onClick="popCalendar('start_date')">
+echo $start_date->format($df);?>" class="text" disabled="disabled" />
+      <a href="#" onclick="javascript:popCalendar('start_date')">
 	<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar');?>" border="0" />
       </a>
@@ -151,10 +151,10 @@ echo $AppUI->_('Calendar');?>" border="0" />
   <td width='50%' align='right'><?php echo $AppUI->_('Latest Date'); ?>:</td>
   <td width='50%' align='left' nowrap="nowrap">
     <input type="hidden" name="event_end_date" value="<?php 
-echo $end_date->format(FMT_TIMESTAMP_DATE); ?>">
+echo $end_date->format(FMT_TIMESTAMP_DATE); ?>" />
     <input type="text" name="end_date" value="<?php 
-echo $end_date->format($df);?>" class="text" disabled="disabled">
-      <a href="#" onClick="popCalendar('end_date')">
+echo $end_date->format($df);?>" class="text" disabled="disabled" />
+      <a href="#" onclick="javascript:popCalendar('end_date')">
 	<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar');?>" border="0" />
       </a>
@@ -180,9 +180,9 @@ echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->for
   </td>
 </tr>
 <tr>
-  <td><input type="button" value="<?php echo $AppUI->_('cancel'); ?>" class="button" onClick="set_clash_action('cancel');" /></td>
+  <td><input type="button" value="<?php echo $AppUI->_('cancel'); ?>" class="button" onclick="javascript:set_clash_action('cancel');" /></td>
   <td align="right"><input type="button" value="<?php 
-echo $AppUI->_('submit'); ?>" class="button" onClick="set_clash_action('process')" /></td>
+echo $AppUI->_('submit'); ?>" class="button" onclick="javascript:set_clash_action('process')" /></td>
 </tr>
 </table>
 <input type='hidden' name='clash_action' value='cancel'>

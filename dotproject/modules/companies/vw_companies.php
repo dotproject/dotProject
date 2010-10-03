@@ -50,24 +50,24 @@ $q->addGroup('c.company_id');
 $q->addOrder($orderby . ' ' . $orderdir);
 $rows = $q->loadList();
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="company list">
 <tr>
 	<td nowrap="nowrap" width="60" align="right">&nbsp;<?php 
 echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=company_name" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=company_name" class="hdr"><?php 
 echo $AppUI->_('Company Name'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=countp" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=countp" class="hdr"><?php 
 echo $AppUI->_('Active Projects'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=inactive" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=inactive" class="hdr"><?php 
 echo $AppUI->_('Archived Projects'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=company_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
+		<a href="?m=companies&amp;orderby=company_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
 	</th>
 </tr>
 <?php
@@ -78,7 +78,7 @@ foreach ($rows as $row) {
 	$none = false;
 	$s .= "\n" . '<tr>';
 	$s .= "\n" . '<td>&nbsp;</td>';
-	$s .= ("\n" . '<td><a href="./index.php?m=companies&a=view&company_id=' 
+	$s .= ("\n" . '<td><a href="./index.php?m=companies&amp;a=view&amp;company_id=' 
 	       . dPformSafe($row['company_id']) . '" title="' . dPformSafe($row['company_description']) 
 	       .'">' . htmlspecialchars($row['company_name']) .'</a></td>');
 	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' . $row['countp'] . '</td>');

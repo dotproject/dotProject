@@ -102,7 +102,7 @@ function displayFolders($folder_id=0, $level=0) {
 		//"loop" through one folder
 		if ($canRead_this && $level) {
 			// indent and display the title
-			echo ('<table width="100%"><tr>' . "\n");
+			echo ('<table width="100%" summary="files folders"><tr>' . "\n");
 			echo ('<td>' . "\n");
 		}
 		
@@ -111,8 +111,8 @@ function displayFolders($folder_id=0, $level=0) {
 		
 		echo ((($m=='files') 
 		       ? ('<a' . (($folder_id) 
-		                  ? (' href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab 
-		                     . '&folder=' . $folder_id . '"') : '') . ' name="ff' . $folder_id 
+		                  ? (' href="?m=' . $m . '&a=' . $a . '&amp;tab=' . $tab 
+		                     . '&amp;folder=' . $folder_id . '"') : '') . ' name="ff' . $folder_id 
 		          . '">') : '') . "\n");
 		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 
 		                  'folder icon', $AppUI->_('show only this folder')) 
@@ -120,7 +120,7 @@ function displayFolders($folder_id=0, $level=0) {
 		echo ((($m=='files') ? '</a>' : ''). "\n");
 		
 		if ($file_count > 0) {
-			echo ('<a href="#ff' . $folder_id . '" onClick="expand(' . "'files_" 
+			echo ('<a href="#ff' . $folder_id . '" onclick="javascript:expand(' . "'files_" 
 			      . $folder_id . "'" . ')" class="has-files">(' . $file_count 
 			      . ' files) +</a>'. "\n");
 		}
@@ -145,30 +145,30 @@ function displayFolders($folder_id=0, $level=0) {
 				echo ('<td align="right" width="64" nowrap="nowrap">' . "\n");
 				//edit folder
 				if ($canEdit_this) {
-					echo ('<a href="./index.php?m=files&a=addedit_folder&folder=' . $folder_id 
+					echo ('<a href="?m=files&amp;a=addedit_folder&amp;folder=' . $folder_id 
 					      . '">' . dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', 
 					                           '16', '16', 'edit icon', 'edit this folder') 
 					      . '</a>');
 				}
 				//add folder
 				if ($canAuthor_this) {
-					echo ('<a href="./index.php?m=files&a=addedit_folder&file_folder_parent=' 
-					      . $folder_id . '&folder=0">' 
+					echo ('<a href="?m=files&amp;a=addedit_folder&amp;file_folder_parent=' 
+					      . $folder_id . '&amp;folder=0">' 
 					      . dPshowImage(DP_BASE_URL . '/modules/files/images/edit_add.png', '16',
 					                    '16', 'new folder', $AppUI->_('add a new subfolder')) 
 					      . '</a>');
 				}
 				if ($canDelete_this) {
 					//remove folder
-					echo ('<a href="#" onclick="delCheck('  . "'" . $folder_id . "'" 
+					echo ('<a href="#" onclick="javascript:delCheck('  . "'" . $folder_id . "'" 
 					      . ')">' .dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', 
 					                           '16', '16', 'delete icon', 
 					                           $AppUI->_('delete this folder')) 
 					      . '</a>');
 				}
 				//add file to folder
-				echo ('<a href="./index.php?m=files&a=addedit&folder=' . $folder_id 
-				      . '&project_id=' . $project_id . '&file_id=0">' 
+				echo ('<a href="?m=files&amp;a=addedit&amp;folder=' . $folder_id 
+				      . '&amp;project_id=' . $project_id . '&amp;file_id=0">' 
 				      . dPshowImage(DP_BASE_URL . '/modules/files/images/folder_new.png', '16', 
 				                    '16', 'new file', $AppUI->_('add new file to this folder')) 
 				      . '</a>');
@@ -415,7 +415,7 @@ function displayFiles($folder_id) {
 		return;	
 	}
 ?>
-	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="folders table">
 	<tr>
 		<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
@@ -424,7 +424,7 @@ function displayFiles($folder_id) {
 		<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
@@ -451,7 +451,7 @@ function displayFiles($folder_id) {
 ?>
 <tr>
 	<td colspan="20" style="border: outset 2px #eeeeee;<?php echo $style; ?>">
-	<a href="?m=projects&a=view&project_id=<?php echo $row['file_project']; ?>">
+	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $row['file_project']; ?>">
 	<span style="<?php echo $style; ?>"><?php echo $row['project_name']; ?></span></a>
 	</td>
 </tr><?php
@@ -459,6 +459,8 @@ function displayFiles($folder_id) {
 		}
 		$fp = $row['file_project'];
 ?>
+	<tr>
+		<td nowrap="8%">
 	<form name="frm_remove_file_<?php echo $row['file_id']; ?>" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="1" />
@@ -471,8 +473,7 @@ function displayFiles($folder_id) {
 	<input type="hidden" name="file_id" value="<?php echo $row['file_id']; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 	</form>		
-	<tr>
-		<td nowrap="8%"><?php 
+<?php
 		$file_icon = getIcon($row['file_type']);
 ?>
 			<a href="./fileviewer.php?file_id=<?php echo $row['file_id']; ?>" title="<?php 
@@ -490,7 +491,7 @@ function displayFiles($folder_id) {
 		echo $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
 ?>
-			<a href="#" onClick="expand('versions_<?php echo $row['file_id']; ?>');">
+			<a href="#" onclick="javascript:expand('versions_<?php echo $row['file_id']; ?>');">
 			(<?php echo $row['file_versions']; ?>)
 			</a><?php 
 		}
@@ -500,7 +501,7 @@ function displayFiles($folder_id) {
 			<?php echo $file_types[$row['file_category']]; ?>
 		</td>
 		<td width="5%" align="center">
-			<a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['file_task']; ?>">
+			<a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $row['file_task']; ?>">
 			<?php echo $row['task_name']; ?>
 			</a>
 		</td>
@@ -535,14 +536,14 @@ function displayFiles($folder_id) {
 			<?php 
 		if ($canEdit && empty($row['file_checkout'])) {
 ?>
-			<a href="?m=files&a=co&file_id=<?php echo $row['file_id']; ?>">
+			<a href="?m=files&amp;a=co&amp;file_id=<?php echo $row['file_id']; ?>">
 			<?php 
 			echo dPshowImage(DP_BASE_URL . '/modules/files/images/co.png', '16', '16', 
 			                 'checkout','checkout file'); ?>
 			</a><?php 
 		} else if ($row['file_checkout'] == $AppUI->user_id) {
 ?>
-			<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $row['file_id']; ?>">
+			<a href="?m=files&amp;a=addedit&amp;ci=1&amp;file_id=<?php echo $row['file_id']; ?>">
 			<?php 
 			echo dPshowImage(DP_BASE_URL . '/modules/files/images/ci.png', '16', '16', 
 			                 'checkin','checkin file'); ?>
@@ -564,7 +565,7 @@ function displayFiles($folder_id) {
 			                 || ($row['file_checkout'] == 'final' 
 			                     && ($canAdmin || $row['project_owner'] == $AppUI->user_id)))) {
 ?>
-			<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id']; ?>">
+			<a href="?m=files&amp;a=addedit&amp;file_id=<?php echo $row['file_id']; ?>">
 			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 
 				                  'edit file', 'edit file'));
@@ -574,7 +575,7 @@ function displayFiles($folder_id) {
 			// Duplicate File
 			if ($canAuthor || $row['project_owner'] == $AppUI->user_id) {
 ?>
-			<a href="#"  onclick="document.frm_duplicate_file_<?php 
+			<a href="#"  onclick="javascript:document.frm_duplicate_file_<?php 
 				echo $row['file_id']; ?>.submit()">
 			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/duplicate.png', '16', '16', 
@@ -585,7 +586,7 @@ function displayFiles($folder_id) {
 			// Delete File
 			if ($canDelete || $row['project_owner'] == $AppUI->user_id) {
 ?>
-			<a href="#" onclick="if (confirm('Are you sure you want to delete this file?')) {document.frm_remove_file_<?php 
+			<a href="#" onclick="if (confirm('Are you sure you want to delete this file?')) {javascript:document.frm_remove_file_<?php 
 				echo $row['file_id']; ?>.submit()}">
 			<?php
 				echo (dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', '16', '16', 
@@ -599,7 +600,7 @@ function displayFiles($folder_id) {
 		<td nowrap="nowrap" align="center" width="1"><?php 
 		if ((empty($row['file_checkout']) || $row['file_checkout'] == 'final') 
 		    && ($canEdit || $row['project_owner'] == $AppUI->user_id)) {
-			$bulk_op = ('onchange="(this.checked) ? addBulkComponent(' . $row['file_id'] 
+			$bulk_op = ('onchange="javascript:(this.checked) ? addBulkComponent(' . $row['file_id'] 
 						. ') : removeBulkComponent(' . $row['file_id'] . ')"');
 ?>
 			<input type="checkbox" <?php echo $bulk_op; ?> name="chk_sub_sel_file_<?php 
@@ -632,6 +633,8 @@ function displayFiles($folder_id) {
 					$file_icon = getIcon($file['file_type']);
 					$file_version_date = new Date($file['file_date']);
 ?>
+		<tr>
+			<td nowrap="8%">
 		<form name="frm_delete_sub_file_<?php echo $file['file_id']; 
 ?>" action="?m=files" method="post">
 		<input type="hidden" name="dosql" value="do_file_aed" />
@@ -646,8 +649,6 @@ function displayFiles($folder_id) {
 		<input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
 		<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 		</form>
-		<tr>
-			<td nowrap="8%">
 				<a href="./fileviewer.php?file_id=<?php echo $file['file_id']; 
 ?>" title="<?php echo $file['file_description']; ?>">
 				<?php
@@ -663,7 +664,7 @@ function displayFiles($folder_id) {
 				<?php echo $file_types[$file['file_category']]; ?>
 			</td>
 			<td width="5%" align="center">
-				<a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['file_task']; ?>">
+				<a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $file['file_task']; ?>">
 				<?php echo $file['task_name']; ?>
 				</a>
 			</td>
@@ -687,7 +688,7 @@ function displayFiles($folder_id) {
 						    && ($canAdmin || $file['project_owner'] == $AppUI->user_id 
 						        || $file['file_co_reason'] == '')) {
 ?>
-				<a href="./index.php?m=files&a=addedit&file_id=<?php echo $row['file_id'];?>">
+				<a href="?m=files&amp;a=addedit&amp;file_id=<?php echo $row['file_id'];?>">
 				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', 
 							                  '16', '16', 'edit file', 'edit file'));
@@ -697,7 +698,7 @@ function displayFiles($folder_id) {
 						// Duplicate File
 						if ($canAuthor) {
 ?>
-				<a href="#" onclick="document.frm_duplicate_file_<?php echo $row['file_id']; 
+				<a href="#" onclick="javascript:document.frm_duplicate_file_<?php echo $row['file_id']; 
 ?>.submit()">
 				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/duplicate.png', 
@@ -712,7 +713,7 @@ function displayFiles($folder_id) {
 ?>
 				<a href="#" onclick="if (confirm('<?php 
 							echo $AppUI->_('Are you sure you want to delete this file?'); 
-?>')) {document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
+?>')) {javascript:document.frm_remove_file_<?php echo $row['file_id']; ?>.submit()}">
 				<?php
 							echo (dPshowImage(DP_BASE_URL . '/modules/files/images/remove.png', 
 							                  '16', '16', 'delete file', $AppUI->_('delete file')));
@@ -726,7 +727,7 @@ function displayFiles($folder_id) {
 					if ((empty($row['file_checkout']) 
 					     || $row['file_checkout'] == 'final')
 						&& ($canEdit || $row['project_owner'] == $AppUI->user_id)) {
-						$bulk_op = ('onchange="(this.checked) ? addBulkComponent(' 
+						$bulk_op = ('onchange="javascript:(this.checked) ? addBulkComponent(' 
 						            . $row['file_id'] . ') : removeBulkComponent(' 
 						            . $row['file_id'] . ')"');
 ?>
@@ -773,7 +774,7 @@ if ($folder > 0) {
 ?>
 
 
-<script type="text/JavaScript">
+<script type="text/javascript" language="javascript">
 function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";
@@ -889,18 +890,16 @@ if ($folder) {
 	<tr>
 		<td nowrap="nowrap">
 <?php 
-	echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder=0">' 
+	echo ("\t\t\t" . '<a href="?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=0">' 
 	      . "\n");
 	echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/home.png', '22', '22', 
 	                             'folder icon', $AppUI->_('back to root folder')) . "\n");
 	echo ("\t\t\t" . '</a>' . "\n");
-?>
-<?php 
 	
 	$canRead_parent = (($folder) 
 	                   ? getPermission('file_folders', 'view', $cfObj->file_folder_parent) : true);
 	if ($canRead_parent) {
-		echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder=' 
+		echo ("\t\t\t" . '<a href="?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' 
 		      . $cfObj->file_folder_parent . '">' . "\n");
 		echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/back.png', '22', '22', 
 		                             'folder icon', $AppUI->_('back to parent folder')) . "\n");
@@ -908,7 +907,7 @@ if ($folder) {
 	}
 	
 	if ($canEdit_this_folder) {
-		echo ("\t\t\t" . '<a href="./index.php?m=' . $m . '&a=addedit_folder&tab=' . $tab 
+		echo ("\t\t\t" . '<a href="?m=' . $m . '&amp;a=addedit_folder&amp;tab=' . $tab 
 		      . '&folder=' . $cfObj->file_folder_id . '" title="' . $AppUI->_('edit folder') 
 		      . ': '. $cfObj->file_folder_name . '">' . "\n");
 		echo ("\t\t\t" . dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', 
@@ -972,7 +971,7 @@ $projects_list = arrayMerge(array('O' => ('(' . $AppUI->_('Move to Project') . '
 ?>
 	<tr>
 		<td colspan="50" align="right">
-			<form name='frm_bulk' method='POST' action='?m=files&a=do_files_bulk_aed'>
+			<form name='frm_bulk' method='POST' action='?m=files&amp;a=do_files_bulk_aed'>
 			<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 			<table id="tbl_bulk" name="tbl_bulk">
 				<tr>
@@ -990,7 +989,7 @@ echo ("\t\t\t\t\t\t" . arraySelectTree($folders_list, 'bulk_file_folder',
 					</td>
 					<td align="right">
 						<input type="button" class="button" value="<?php echo $AppUI->_('Go');?>" 
-						 onclick="goCheck();" />
+						 onclick="javascript:goCheck();" />
 					</td>
 				</tr>
 			</table>

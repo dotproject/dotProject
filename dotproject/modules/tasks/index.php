@@ -52,8 +52,8 @@ $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext'):'
 $search_text = dPformSafe($search_text);
 
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
-$titleBlock->addCell(('<input type="text" class="text" SIZE="20" name="searchtext"' 
-                      . ' onChange="document.searchfilter.submit();" value="' . $search_text 
+$titleBlock->addCell(('<input type="text" class="text" size="20" name="searchtext"' 
+                      . ' onchange="javascript:document.searchfilter.submit();" value="' . $search_text 
                       . '"title="' . $AppUI->_('Search in name and description fields') 
                       . '"/><!--<input type="submit" class="button" value=">" title="' 
                       . $AppUI->_('Search in name and description fields') . '"/>-->'), '',
@@ -67,7 +67,7 @@ if (getPermission('admin', 'view')) {
 	$user_list = $perms->getPermittedUsers('tasks');
 	$titleBlock->addCell(arraySelect($user_list, 'user_id', 
 	                                 ('size="1" class="text"' 
-	                                  . ' onChange="document.userIdForm.submit();"'), 
+	                                  . ' onchange="javascript:document.userIdForm.submit();"'), 
 	                                 $user_id, false), '',
 	                     '<form action="?m=tasks" method="post" name="userIdForm">','</form>');
 }
@@ -75,7 +75,7 @@ if (getPermission('admin', 'view')) {
 $titleBlock->addCell();
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(arraySelect($filters2, 'f2', 
-                                 'size=1 class=text onChange="document.companyFilter.submit();"', 
+                                 'size=1 class=text onchange="javascript:document.companyFilter.submit();"', 
                                  $f2, false), '', 
                      '<form action="?m=tasks" method="post" name="companyFilter">', '</form>'
 );
@@ -85,8 +85,8 @@ $titleBlock->addCell(arraySelect($filters2, 'f2',
 $titleBlock->addCell();
 if ($canEdit && $project_id) {
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new task') 
-	                      . '">'), '', 
-						 ('<form action="?m=tasks&a=addedit&task_project=' . $project_id 
+	                      . '" />'), '', 
+						 ('<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id 
 	                      . '" method="post">'), '</form>');
 }
 
@@ -101,20 +101,20 @@ $titleBlock = new CTitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':');
 $titleBlock->addCell(arraySelect($filters, 'f', 
-                                 'size=1 class=text onChange="document.taskFilter.submit();"', 
+                                 'size=1 class=text onchange="javascript:document.taskFilter.submit();"', 
                                  $f, true), '',
                      '<form action="?m=tasks" method="post" name="taskFilter">', '</form>');
 $titleBlock->addCell();
 
-$titleBlock->addCrumb('?m=tasks&a=todo&user_id=' . $user_id, 'my todo');
+$titleBlock->addCrumb('?m=tasks&amp;a=todo&amp;user_id=' . $user_id, 'my todo');
 if (dPgetParam($_GET, 'pinned') == 1) {
 	$titleBlock->addCrumb('?m=tasks', 'all tasks');
 } else {
-	$titleBlock->addCrumb('?m=tasks&pinned=1', 'my pinned tasks');
+	$titleBlock->addCrumb('?m=tasks&amp;pinned=1', 'my pinned tasks');
 }
-$titleBlock->addCrumb('?m=tasks&inactive=toggle', 'show '.$in.'active tasks');
-$titleBlock->addCrumb('?m=tasks&a=tasksperuser', 'tasks per user');
-$titleBlock->addCrumb('?m=projects&a=reports', 'reports');
+$titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show '.$in.'active tasks');
+$titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
+$titleBlock->addCrumb('?m=projects&amp;a=reports', 'reports');
 
 $titleBlock->show();
 

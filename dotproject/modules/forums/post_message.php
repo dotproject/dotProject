@@ -62,12 +62,12 @@ if ($message_parent != -1) {
 
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
-$crumbs["?m=forums&a=viewer&forum_id=$forum_id"] = 'topics for this forum';
+$crumbs["?m=forums&amp;a=viewer&amp;forum_id=$forum_id"] = 'topics for this forum';
 if ($message_parent > -1) {
-	$crumbs["?m=forums&a=viewer&forum_id=$forum_id&message_id=$message_parent"] = 'this topic';
+	$crumbs["?m=forums&amp;a=viewer&amp;forum_id=$forum_id&amp;message_id=$message_parent"] = 'this topic';
 }
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -105,7 +105,7 @@ function orderByName(x) {
 }
 </script>
 
-<table cellspacing="1" cellpadding="2" border="0" width="98%">
+<table cellspacing="1" cellpadding="2" border="0" width="98%" summary="breadcrumbs">
 <tr>
 	<td><?php echo breadCrumbs($crumbs);?></td>
 	<td align="right"></td>
@@ -114,9 +114,7 @@ function orderByName(x) {
 
 <table cellspacing="0" cellpadding="3" border="0" width="98%" class="std">
 
-<!-- <form name="changeforum" action="?m=forums&a=viewposts&forum_id=<?php echo $forum_id;?>" method="post"> -->
-
-<form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id;?>" method="post">
+<form name="changeforum" action="?m=forums&amp;forum_id=<?php echo $forum_id;?>" method="post">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id;?>" />
 	<input type="hidden" name="message_parent" value="<?php echo $message_parent;?>" />
@@ -125,6 +123,7 @@ function orderByName(x) {
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0';?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id;?>" />
 
+<table cellspacing="0" cellpadding="3" border="0" width="98%" class="std">
 <tr>
 	<th valign="top" colspan="2"><strong><?php
 		echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
@@ -139,14 +138,14 @@ if ($message_parent >= 0) {
 <tr><td align="right"><?php echo $AppUI->_('Author') ?>:</td><td align="left"><?php echo dPgetUsername($message_info['user_username']) ?> (<?php echo $date->format("$df $tf");?>)</td></tr>
 <tr><td align="right"><?php echo  $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
 <tr><td align="right" valign="top"><?php echo  $AppUI->_('Message') ?>:</td><td align="left"><textarea name="message_parent_body" cols="60" readonly="readonly" style="height:100px; font-size:8pt"><?php echo $message_info['message_body'];?></textarea></td></tr>
-<tr><td colspan="2" align="left"><hr></td></tr>
+<tr><td colspan="2" align="left"><hr /></td></tr>
 <?php
 }
 ?>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Subject');?>:</td>
 	<td>
-		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$message_info['message_title'];?>" size=50 maxlength=250>
+		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$message_info['message_title'];?>" size=50 maxlength=250 />
 	</td>
 </tr>
 <tr>
@@ -157,7 +156,7 @@ if ($message_parent >= 0) {
 </tr>
 <tr>
 	<td>
-		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';">
+		<input type="button" value="<?php echo $AppUI->_('back');?>" class=button onclick="javascript:window.location='?<?php echo $back_url; ?>';">
 	</td>
 	<td align="right"><?php
 if ($canEdit && ($forum_info['forum_owner'] == $AppUI->user_id 
@@ -168,7 +167,7 @@ if ($canEdit && ($forum_info['forum_owner'] == $AppUI->user_id
                  || !($message_id))) {
 	echo '<input type="hidden" name="dosql" value="do_post_aed" />';
 	echo ('<input type="button" value="' . $AppUI->_('submit') 
-	      . '" class=button onclick="submitIt()">');
+	      . '" class=button onclick="javascript:submitIt()" />');
 }
 ?></td>
 </tr>

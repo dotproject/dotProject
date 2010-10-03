@@ -34,18 +34,18 @@ $projects = arrayMerge(array('0'=>$AppUI->_('All', UI_OUTPUT_JS)), $projects);
 $titleBlock = new CTitleBlock('Links', 'folder5.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell(
-        '<input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" .         'title="'. $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>'
+        '<input type="text" class="text" size="10" name="search" onchange="javascript:document.searchfilter.submit();" value=' . "'$search'" .         'title="'. $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>'
  ,'',       '<form action="?m=links" method="post" id="searchfilter">', '</form>'
 );
 $titleBlock->addCell($AppUI->_('Filter') . ':');
 $titleBlock->addCell(
-	arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id), '',
+	arraySelect($projects, 'project_id', 'onchange="javascript:document.pickProject.submit()" size="1" class="text"', $project_id), '',
 	'<form name="pickProject" action="?m=links" method="post">', '</form>'
 );
 if ($canEdit) {
 	$titleBlock->addCell(
-		'<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
-		'<form action="?m=links&a=addedit" method="post">', '</form>'
+		'<input type="submit" class="button" value="'.$AppUI->_('new link').'" />', '',
+		'<form action="?m=links&amp;a=addedit" method="post">', '</form>'
 	);
 }
 $titleBlock->show();
@@ -62,7 +62,7 @@ $i = 0;
 
 foreach ($link_types as $link_type) {
 	$tabBox->add('index_table', $link_type);
-	++$i;
+        ++$i;
 }
                                                                                 
 $tabBox->show();

@@ -18,7 +18,7 @@
             <th>Order</th>
             <th>Name</th>
             <th width="4%">Functions</th>
-            <th width="2%"><input type="checkbox" class="checkbox" name="select_all" onClick="checkAll(this)"/></th>
+            <th width="2%"><input type="checkbox" class="checkbox" name="select_all" onclick="javascript:checkAll(this)"/></th>
           </tr>
 {section name=x loop=$objects}
           <tr valign="top" align="center">

@@ -49,20 +49,19 @@ function setCalendar(idate, fdate) {
 }
 </script>
 
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
-
 <form name="editFrm" action="" method="GET">
 <input type="hidden" name="m" value="projects" />
 <input type="hidden" name="a" value="reports" />
 <input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type;?>" />
 
+<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
 		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
 		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" style="width: 80px" />
-		<a href="#" onClick="popCalendar('start_date')">
+		<a href="#" onclick="javascript:popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
@@ -70,14 +69,14 @@ function setCalendar(idate, fdate) {
 	<td nowrap="nowrap">
 		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
-		<a href="#" onClick="popCalendar('end_date')">
+		<a href="#" onclick="popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
 
-	<TD NOWRAP>
+	<td nowrap="nowrap">
 		<?php echo $AppUI->_('User');?>:
-		<SELECT NAME="log_userfilter" CLASS="text" STYLE="width: 80px">
+		<select name="log_userfilter" class="text" style="width: 80px">
 
 	<?php
 		$usersql = "
@@ -86,24 +85,24 @@ function setCalendar(idate, fdate) {
 		";
 
 		if ($log_userfilter == 0) {
-			echo '<OPTION VALUE="0" SELECTED>'.$AppUI->_('All users');
+			echo '<option value="0" selected="selected">'.$AppUI->_('All users');
 		} else {
-			echo '<OPTION VALUE="0">All users';
+			echo '<option value="0">All users';
 		}
 
 		if (($rows = db_loadList($usersql, NULL))) {
 			foreach ($rows as $row) {
 				if ($log_userfilter == $row["user_id"])
-					echo "<OPTION VALUE='".$row["user_id"]."' SELECTED>".$row["user_username"];
+					echo "<option value='".$row["user_id"]."' selected='selected'>".$row["user_username"];
 				else
-					echo "<OPTION VALUE='".$row["user_id"]."'>".$row["user_username"];
+					echo "<option value='".$row["user_id"]."'>".$row["user_username"];
 			}
 		}
 
 	?>
 
-		</SELECT>
-	</TD>
+		</select>
+	</td>
 
 	<td nowrap="nowrap">
 		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
@@ -124,8 +123,8 @@ function setCalendar(idate, fdate) {
 		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit');?>" />
 	</td>
 </tr>
-</form>
 </table>
+</form>
 
 <?php
 if ($do_report) {
@@ -175,7 +174,7 @@ if ($do_report) {
 	$logs = db_loadList($sql);
 	echo db_error();
 ?>
-	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
+	<table cellspacing="1" cellpadding="4" border="0" class="tbl" summary"project task summary">
 	<tr>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Created by');?></th>
 		<?php if ($project_id == 0) { ?>
@@ -207,10 +206,10 @@ if ($do_report) {
 	<tr>
 		<td><?php echo $log['creator'];?></td>
 		<?php if ($project_id == 0) { ?>
-			<td><a href="index.php?m=projects&a=view&project_id=<?php echo $log['project_id']; ?>"><?php echo $log['project_name'] ?></a></td>
+			<td><a href="?m=projects&amp;a=view&amp;project_id=<?php echo $log['project_id']; ?>"><?php echo $log['project_name'] ?></a></td>
 		<?php } ?>
 		<td>
-			<a href="index.php?m=tasks&a=view&tab=1&task_id=<?php echo $log['task_log_task'];?>&task_log_id=<?php echo $log['task_log_id'];?>"><?php echo $log['task_log_name'];?></a>
+			<a href="?m=tasks&amp;a=view&amp;tab=1&amp;task_id=<?php echo $log['task_log_task'];?>&amp;task_log_id=<?php echo $log['task_log_id'];?>"><?php echo $log['task_log_name'];?></a>
 		</td>
 		<td><?php
       $transbrk = "\n[translation]\n";

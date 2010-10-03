@@ -84,7 +84,7 @@ $ttl = $project_id > 0 ? "Edit Project" : "New Project";
 $titleBlock = new CTitleBlock($ttl, 'applet3-48.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=projects", "projects list");
 if ($project_id != 0)
-$titleBlock->addCrumb("?m=projects&a=view&project_id=$project_id", "view this project");
+$titleBlock->addCrumb("?m=projects&amp;a=view&amp;project_id=$project_id", "view this project");
 $titleBlock->show();
 
 //Build display list for departments
@@ -133,7 +133,7 @@ if ($project_id == 0 && $contact_id > 0) {
 <!-- import the language module -->
 <script type="text/javascript" src="<?php echo DP_BASE_URL;?>/lib/calendar/lang/calendar-<?php echo $AppUI->user_locale; ?>.js"></script>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function setColor(color) {
 var f = document.editFrm;
 if (color) {
@@ -158,6 +158,10 @@ var calendarField = '';
 var calWin = null;
 
 function popCalendar(field) {
+//due to a bug in Firefox (where window.open, when in a function, does not properly unescape a url)
+// we CANNOT do a window open with &amp; separating the parameters
+//this bug does not occur if the window open occurs in an onclick event
+//this bug does NOT occur in Internet explorer
 calendarField = field;
 idate = eval('document.editFrm.project_' + field + '.value');
 window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
@@ -212,8 +216,9 @@ function submitIt() {
 
 var selected_contacts_id = "<?php echo implode(',', $selected_contacts); ?>";
 
+// See above note re firefox bug and window.open
 function popContacts() {
-	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 
+	window.open('?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 
 	            'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
@@ -228,15 +233,19 @@ function setContacts(contact_id_string) {
 var selected_departments_id = "<?php echo implode(',', $selected_departments); ?>";
 
 function popDepartment() {
-        var f = document.editFrm;
-	var url = './index.php?m=public&a=selector&dialog=1&callback=setDepartment&table=departments&company_id='
+//due to a bug in Firefox (where window.open, when in a function, does not properly unescape a url)
+// we CANNOT do a window open with &amp; separating the parameters
+//this bug does not occur if the window open occurs in an onclick event
+//this bug does NOT occur in Internet explorer
+	var f = document.editFrm;
+	var url = '?m=public&a=selector&dialog=1&callback=setDepartment&table=departments&company_id='
             + f.project_company.options[f.project_company.selectedIndex].value
             + '&dept_id='
             + selected_departments_id;
 //prompt('',url);
         window.open(url,'dept','left=50,top=50,height=250,width=400,resizable');
 
-//	window.open('./index.php?m=public&a=selector&dialog=1&call_back=setDepartment&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+//	window.open('?m=public&amp;a=selector&amp;dialog=1&amp;call_back=setDepartment&amp;selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setDepartment(department_id_string) {
@@ -249,18 +258,18 @@ function setDepartment(department_id_string) {
 
 </script>
 
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <form name="editFrm" action="./index.php?m=projects" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 	<input type="hidden" name="project_creator" value="<?php echo $AppUI->user_id;?>" />
 	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
+<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
+		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
 	</td>
 	<td align="right">
-		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt();" />
+		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt();" />
 	</td>
 </tr>
 <tr>
@@ -269,7 +278,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name');?></td>
 			<td width="100%" colspan="2">
-				<input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onBlur="setShort();" class="text" /> *
+				<input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onblur="javascript:setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
@@ -297,14 +306,14 @@ function setDepartment(department_id_string) {
 			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
 				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
 
-				<a href="#" onClick="popCalendar('start_date', 'start_date');">
+				<a href="#" onclick="javascript:popCalendar('start_date', 'start_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 				</a>
 			</td>
 			<td rowspan="6" valign="top">
 					<?php
 						if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
-							echo "<input type='button' class='button' value='".$AppUI->_("Select contacts...")."' onclick='javascript:popContacts();' />";
+							echo '<input type="button" class="button" value="'.$AppUI->_("Select contacts...").'" onclick="javascript:popContacts();" />';
 						}
 						// Let's check if the actual company has departments registered
 						if ($department_selection_list != "") {
@@ -321,7 +330,7 @@ function setDepartment(department_id_string) {
 			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 				<input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 
-				<a href="#" onClick="popCalendar('end_date', 'end_date');">
+				<a href="#" onclick="javascript:popCalendar('end_date', 'end_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 				</a>
 			</td>
@@ -329,17 +338,17 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget');?> <?php echo $dPconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="Text" name="project_target_budget" value="<?php echo @$row->project_target_budget;?>" maxlength="10" class="text" />
+				<input type="text" name="project_target_budget" value="<?php echo @$row->project_target_budget;?>" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3"><hr noshade="noshade" size="1"></td>
+			<td colspan="3"><hr noshade="noshade" size="1" /></td>
 		</tr>
 <tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date');?></td>
 			<td nowrap="nowrap">
                                 <?php if ($project_id > 0) { ?>
-                                        <?php echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
+                                        <?php echo $actual_end_date ? '<a href="?m=tasks&amp;a=view&amp;task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
                                         <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
                                         <?php echo $actual_end_date ? '</a>' : '';?>
                                 <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
@@ -348,11 +357,11 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget');?> <?php echo $dPconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="text" name="project_actual_budget" value="<?php echo @$row->project_actual_budget;?>" size="10" maxlength="10" class="text"/>
+				<input type="text" name="project_actual_budget" value="<?php echo @$row->project_actual_budget;?>" size="10" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3"><hr noshade="noshade" size="1"></td>
+			<td colspan="3"><hr noshade="noshade" size="1" /></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL');?></td>
@@ -363,7 +372,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL');?></td>
 			<td colspan="2">
-				<input type="Text" name="project_demo_url" value='<?php echo @$row->project_demo_url;?>' size="40" maxlength="255" class="text" />
+				<input type="text" name="project_demo_url" value='<?php echo @$row->project_demo_url;?>' size="40" maxlength="255" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -381,7 +390,7 @@ function setDepartment(department_id_string) {
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority');?></td>
-			<td nowrap>
+			<td nowrap="nowrap">
 				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true);?> *
 			</td>
 		</tr>
@@ -394,13 +403,13 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier');?></td>
 			<td nowrap="nowrap">
-				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>" size="10" maxlength="6" onBlur="setColor();" class="text" /> *
+				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>" size="10" maxlength="6" onblur="javascript:setColor();" class="text" /> *
 			</td>
 			<td nowrap="nowrap" align="right">
-				<a href="#" onClick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
+				<a href="#" onclick="javascript:newwin=window.open('?m=public&amp;a=color_selector&amp;dialog=1&amp;callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
 			</td>
 			<td nowrap="nowrap">
-				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onClick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" /></a></span>
+				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onclick="javascript:newwin=window.open('?m=public&amp;a=color_selector&amp;dialog=1&amp;callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" alt="" /></a></span>
 			</td>
 		</tr>
 		<tr>
@@ -446,7 +455,9 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td colspan="4">
 				<?php echo $AppUI->_('Description');?><br />
-				<textarea name="project_description" cols="50" rows="10" wrap="virtual" class="textarea"><?php echo dPformSafe(@$row->project_description);?></textarea>
+				<textarea name="project_description" cols="50" rows="10" style="wrap:virtual;" class="textarea">
+				<?php echo dPformSafe(@$row->project_description);?>
+				</textarea>
 			</td>
 		</tr>
 		</table>
@@ -454,14 +465,14 @@ function setDepartment(department_id_string) {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = './index.php?m=projects';}" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = '?m=projects';}" />
 	</td>
 	<td align="right">
-		<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt();" />
+		<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt();" />
 	</td>
 </tr>
-</form>
 </table>
+</form>
 * <?php echo $AppUI->_('requiredField');?>
 
 <?php

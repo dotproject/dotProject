@@ -97,19 +97,19 @@ $titleBlock->addCell(
 if ($canEdit) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new task').'">', '',
-		'<form action="?m=tasks&a=addedit&task_project='.$obj->task_project.'&task_parent=' . $task_id . '" method="post">', '</form>'
+		'<form action="?m=tasks&amp;a=addedit&amp;task_project='.$obj->task_project.'&amp;task_parent=' . $task_id . '" method="post">', '</form>'
 	);
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new file').'">', '',
-		'<form action="?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id . '" method="post">', '</form>'
+		'<form action="?m=files&amp;a=addedit&amp;project_id=' . $obj->task_project . '&amp;file_task=' . $obj->task_id . '" method="post">', '</form>'
 	);
 }
 $titleBlock->addCrumb('?m=tasks', 'tasks list');
 if ($canReadProject) {
-	$titleBlock->addCrumb("?m=projects&a=view&project_id=$obj->task_project", 'view this project');
+	$titleBlock->addCrumb("?m=projects&amp;a=view&amp;project_id=$obj->task_project", 'view this project');
 }
 if ($canEdit) {
-	$titleBlock->addCrumb("?m=tasks&a=addedit&task_id=$task_id", 'edit this task');
+	$titleBlock->addCrumb("?m=tasks&amp;a=addedit&amp;task_id=$task_id", 'edit this task');
 }
 if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);

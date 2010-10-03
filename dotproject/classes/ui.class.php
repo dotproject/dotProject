@@ -529,6 +529,8 @@ class CAppUI {
 			$params .= (($params) ? '&' : '')  . $session_id;
 		}
 		ob_implicit_flush(); // Ensure any buffering is disabled.
+		// Clean up URL and make it XHTML compliant
+		$params = htmlspecialchars(html_entity_decode($params, ENT_QUOTES, 'UTF-8'), ENT_NOQUOTES, 'UTF-8');
 		header('Location: index.php?' . $params);
 		exit();	// stop the PHP execution
 	}
@@ -1023,7 +1025,7 @@ class CTabBox_core {
 			echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' 
 				  . $extra . '</tr></table>');
 		} else {
-			echo '<img src="./images/shim.gif" height="10" width="1" />';
+			echo '<img src="./images/shim.gif" height="10" width="1" alt="" />';
 		}
 		
 		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
@@ -1240,11 +1242,11 @@ class CTitleBlock_core {
 		$s .= ("\n" . '<td align="left" width="100%" nowrap="nowrap"><h1>' 
 		       . $AppUI->_($this->title) . '</h1></td>');
 		foreach ($this->cells1 as $c) {
-			$s .= $c[2] ? "\n" . $c[2] : '';
 			$s .= "\n" . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
+			$s .= $c[2] ? "\n" . $c[2] : '';
 			$s .= $c[1] ? "\n\t" . $c[1] : '&nbsp;';
-			$s .= "\n" . '</td>';
 			$s .= $c[3] ? "\n" . $c[3] : '';
+			$s .= "\n" . '</td>';
 		}
 		if ($this->showhelp) {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
@@ -1257,7 +1259,7 @@ class CTitleBlock_core {
 			$s .= ("\n\t" . '<a href="#' . $this->helpref 
 			       . '" onClick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' 
 				   . $this->helpref 
-				   . "', 'contexthelp', 'width=400,height=400,left=50,top=50,scrollbars=yes," 
+			       . "', 'contexthelp', 'width=400,height=400,left=50,top=50,scrollbars=yes," 
 			       . 'resizable=yes\')" title="' . $AppUI->_('Help') . '">');
 			$s .= "\n\t\t" . dPshowImage('./images/icons/stock_help-16.png', '16', '16', 
 			                             $AppUI->_('Help'));
@@ -1286,7 +1288,7 @@ class CTitleBlock_core {
 				$s .= "\n\t" . '<td align="right" nowrap="nowrap"' . ($c[0] ? " $c[0]" : '') . '>';
 				$s .= $c[1] ? "\n\t$c[1]" : '&nbsp;';
 				$s .= "\n\t" . '</td>';
-				$s .= $c[3] ? "\n\t$c[3]" : '';
+				$s .= $c[3] ? "\n\t".$c[3] : '';
 			}
 			$s .= "\n</tr>\n</table>";
 		}

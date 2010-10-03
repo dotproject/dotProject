@@ -27,11 +27,11 @@ $user = (($user_id) ? dPgetUsernameFromID($user_id) : 'Default');
 $titleBlock = new CTitleBlock('Edit User Preferences', 'myevo-weather.png', $m, "$m.$a");
 if (getPermission('system', 'edit')) {
 	$titleBlock->addCrumb("?m=system", "system admin");
-	$titleBlock->addCrumb("?m=system&a=systemconfig", "system configuration");
+	$titleBlock->addCrumb("?m=system&amp;a=systemconfig", "system configuration");
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 function submitIt() {
 	var form = document.changeuser;
 	// Collate the checked states of the task log stuff
@@ -48,14 +48,13 @@ function submitIt() {
 }
 </script>
 
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
-
 <form name="changeuser" action="./index.php?m=system" method="post">
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id;?>" />
 	<input type="hidden" name="del" value="0" />
 
-<tr height="20">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
+<tr>
 	<th colspan="2"><?php echo $AppUI->_('User Preferences');?>:
 	<?php
 		echo $user_id ? "$user" : $AppUI->_("Default");
@@ -72,7 +71,7 @@ function submitIt() {
 	$langlist = array();
 	foreach ($LANGUAGES as $lang => $langinfo)
 		$langlist[$lang] = $langinfo[1];
-	echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', @$prefs['LOCALE'], true);
+	echo arraySelect($langlist, 'pref_name[LOCALE]', 'class="text" size="1"', @$prefs['LOCALE'], true);
 	$AppUI->setWarning($temp);
 ?>
 	</td>
@@ -83,7 +82,7 @@ function submitIt() {
 	<td>
 <?php
 	$tabview = array('either', 'tabbed', 'flat');
-	echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', @$prefs['TABVIEW'], true);
+	echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class="text" size="1"', @$prefs['TABVIEW'], true);
 ?>
 	</td>
 </tr>
@@ -102,7 +101,7 @@ function submitIt() {
 	$f = "%b/%d/%Y"; $dates[$f]	= $ex->format($f);
 	$f = "%d.%m.%Y"; $dates[$f]	= $ex->format($f);
         $f = "%Y/%b/%d"; $dates[$f]     = $ex->format($f); 
-	echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', @$prefs['SHDATEFORMAT'], false);
+	echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class="text" size="1"', @$prefs['SHDATEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -116,7 +115,7 @@ function submitIt() {
 	$f = "%I:%M %p"; $times[$f]	= $ex->format($f);
 	$f = "%H:%M"; $times[$f]	= $ex->format($f).' (24)';
 	$f = "%H:%M:%S"; $times[$f]	= $ex->format($f).' (24)';
-	echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', @$prefs['TIMEFORMAT'], false);
+	echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class="text" size="1"', @$prefs['TIMEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -135,7 +134,7 @@ function submitIt() {
 	foreach (array_keys($LANGUAGES) as $lang) {
 		$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 	}
-	echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', @$prefs['CURRENCYFORM'], false);
+	echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class="text" size="1"', @$prefs['CURRENCYFORM'], false);
 ?>
 	</td>
 </tr>
@@ -147,7 +146,7 @@ function submitIt() {
         $uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'default';
 	$styles = $AppUI->readDirs('style');
 	$temp = $AppUI->setWarning(false);
-	echo arraySelect($styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true , true);
+	echo arraySelect($styles, 'pref_name[UISTYLE]', 'class="text" size="1"', $uis, true , true);
 	$AppUI->setWarning($temp);
 ?>
 	</td>
@@ -161,7 +160,7 @@ function submitIt() {
         for ($i = 5; $i <= 200; $i+=5) {
                 $taskAssMax[$i] = $i.'%';
         }
-	echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $tam, false);
+	echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class="text" size="1"', $tam, false);
 
 ?>
 	</td>
@@ -171,7 +170,7 @@ function submitIt() {
 	<td>
 <?php
 	require_once $AppUI->getModuleClass('calendar');
-	echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', @$prefs['EVENTFILTER'], true);
+	echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class="text" size="1"', @$prefs['EVENTFILTER'], true);
 ?>
 	</td>
 </tr>
@@ -184,7 +183,7 @@ function submitIt() {
 		1 => 'Include task/event owner'
 	);
  
-	echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', @$prefs['MAILALL'], true);
+	echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class="text" size="1"', @$prefs['MAILALL'], true);
 
 ?>
 	</td>
@@ -192,7 +191,7 @@ function submitIt() {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Task Log Email Defaults');?>:</td>
 	<td>
-		<input type='hidden' name='pref_name[TASKLOGEMAIL]' id='task_log_email_defaults' value='<?php echo @$prefs['TASKLOGEMAIL']; ?>'>
+		<input type='hidden' name='pref_name[TASKLOGEMAIL]' id='task_log_email_defaults' value='<?php echo @$prefs['TASKLOGEMAIL']; ?>' />
 <?php
 	if (! isset($prefs['TASKLOGEMAIL'])) {
 		$prefs['TASKLOGEMAIL'] = 0;
@@ -221,7 +220,7 @@ function submitIt() {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Task Log Email Subject');?>:</td>
 	<td>
-		<input type='text' name='pref_name[TASKLOGSUBJ]' value='<?php echo @$prefs['TASKLOGSUBJ']; ?>'>
+		<input type='text' name='pref_name[TASKLOGSUBJ]' value='<?php echo @$prefs['TASKLOGSUBJ']; ?>' />
 	</td>
 </tr>
 <tr>
@@ -230,13 +229,14 @@ function submitIt() {
 	<?php
 		$record_method['0'] = $AppUI->_('None');
 		$record_method['1'] = $AppUI->_('Append to Log');
-		echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class=text size=1', @$prefs['TASKLOGNOTE'], false);
+		echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1"', @$prefs['TASKLOGNOTE'], false);
 	?>
 	</td>
 </tr>
 
 <tr>
-	<td align="left"><input class="button"  type="button" value="<?php echo $AppUI->_('back');?>" onClick="javascript:history.back(-1);" /></td>
-	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('submit');?>" onClick="submitIt()" /></td>
+	<td align="left"><input class="button"  type="button" value="<?php echo $AppUI->_('back');?>" onclick="javascript:history.back(-1);" /></td>
+	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt()" /></td>
 </tr>
 </table>
+</form>

@@ -12,7 +12,7 @@ class projects extends smartsearch
 	var $table_alias = 'p';
 	var $table_module = 'projects';
 	var $table_key = 'p.project_id';
-	var $table_link = 'index.php?m=projects&a=view&project_id=';
+	var $table_link = '?m=projects&amp;a=view&amp;project_id=';
 	var $table_title = 'Projects';
 	var $table_orderby = 'p.project_name';
 	var $search_fields = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_description', 

@@ -109,7 +109,7 @@ function delIt() {
 		</tr>	
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
-			<td class="hilite" width="100%"><a href='?m=projects&a=view&project_id=<?php 
+			<td class="hilite" width="100%"><a href='?m=projects&amp;a=view&amp;project_id=<?php 
 echo $obj->event_project ?>'><?php echo $event_project;?></a></td>
 		</tr>
 		<tr>

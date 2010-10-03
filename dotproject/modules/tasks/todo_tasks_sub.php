@@ -35,7 +35,7 @@ if ($other_users) {
 	if (($rows = db_loadList($usersql))) {
 		foreach ($rows as $row) {
 		  echo ('<option value="' . $row['user_id'] . '"' 
-				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . '>' 
+				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . ' />' 
 				. $row['contact_last_name'].', ' . $row["contact_first_name"]) ;
 		}
 	}
@@ -45,37 +45,37 @@ if ($other_users) {
 	</td>
 	<td align="right" width="50%"><?php echo $AppUI->_('Show'); ?>:</td>
 	<td>
-	  <input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()"<?php echo (($showPinned) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_pinned" id="show_pinned" onclick="javascript:document.form_buttons.submit()"<?php echo (($showPinned) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_pinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo (($$showArcProjs) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showArcProjs) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_arc_proj"><?php echo $AppUI->_('Archived Projects'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="document.form_buttons.submit()" <?php echo (($$showHoldProjs) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showHoldProjs) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_hold_proj"><?php echo $AppUI->_('Projects on Hold'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo (($$showDynTasks) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showDynTasks) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_dyn_task"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_low_task" id="show_low_task" onclick="document.form_buttons.submit()" <?php echo (($$showLowTasks) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_low_task" id="show_low_task" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showLowTasks) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_low_task"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
 	</td>
 	<td>
-		<input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="document.form_buttons.submit()" <?php echo (($$showEmptyDate) ? 'checked="checked"' : ''); ?> />
+		<input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showEmptyDate) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 		<label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
@@ -84,7 +84,7 @@ if ($other_users) {
 </table>
 </form>
 
-<form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date"; ?>">
+<form name="form" method="post" action="index.php?<?php echo "m=$m&amp;a=$a&amp;date=$date"; ?>">
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
 	<th width='10'>&nbsp;</th>
@@ -161,7 +161,7 @@ if (dPgetConfig('direct_edit_assignment')) {
 ?>
 <tr>
 	<td colspan="9" align="right" height="30">
-		<input type="submit" class="button" value="<?php echo $AppUI->_('update task'); ?>">
+		<input type="submit" class="button" value="<?php echo $AppUI->_('update task'); ?>" />
 	</td>
 	<td colspan="3" align="center">
 <?php

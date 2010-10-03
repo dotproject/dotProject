@@ -257,7 +257,7 @@ echo ($style); ?>><?php echo htmlspecialchars($actual_end_date->format($df)); ?>
 ?>
 		&nbsp;
 <?php 
-		}
+	}
 ?>
 	</td>
 	<td align="center" nowrap="nowrap"><?php 

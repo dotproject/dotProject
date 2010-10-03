@@ -21,13 +21,13 @@ echo $uistyle; ?>/main.css" media="all" />
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 
 	<?php $AppUI->loadJS(); ?>
-	<script language="JavaScript">
+	<script language="javascript" type="text/javascript">
 	function doBtn(ev) {
 		var e = new CommonEvent(ev);
 		
 		var oEl = e.target;
 		var doit = e.type;
-		
+	
 		while (! oEl.className || -1 == oEl.className.indexOf("Btn")) {
 			oEl = oEl.parentNode;
 			if (!oEl) {
@@ -70,7 +70,7 @@ echo ($AppUI->_('Current user') . ": $AppUI->user_first_name $AppUI->user_last_n
 echo $AppUI->_('My Info');?></a>
 		</td>
 		<td class="topBtnOff" nowrap style="background-color: #cccccc" align="center">
-			<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>
+			<a href="?logout=-1"><?php echo $AppUI->_('Logout');?></a>
 		</td>
 		<td class="topBtnOff" nowrap style="background-color: #cccccc" align="center"><?php 
 echo dPcontextHelp('Help');?>
@@ -79,7 +79,6 @@ echo dPcontextHelp('Help');?>
 	</table>
 	</td>
 	<form name="frm_new" method="get" action="./index.php">
-	<td>
 <?php
 	
 	$newItemPermCheck = array('companies' => 'Company',
@@ -95,7 +94,7 @@ echo dPcontextHelp('Help');?>
 		}
 	}
 	
-	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
+	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="javascript:f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod) f.submit();"', '', true);
 	echo '</td><input type="hidden" name="a" value="addedit" />';
 
 //build URI string
@@ -109,7 +108,7 @@ echo dPcontextHelp('Help');?>
 		echo '<input type="hidden" name="file_id" value="'.$file_id.'" />';
 	}
 ?>
-	</form>
+	</form></td>
 <?php } // END DIALOG BLOCK ?>
 </tr>
 </table>
@@ -121,8 +120,8 @@ echo dPcontextHelp('Help');?>
 ?>
 		<table cellspacing=0 cellpadding=2 border=0 height="600">
 		<tr>
-			<td><img src="images/shim.gif" width="70" height="3"></td>
-			<td rowspan="100"><img src="images/shim.gif" width="10" height="100"></td>
+			<td><img src="images/shim.gif" width="70" height="3" alt="" /></td>
+			<td rowspan="100"><img src="images/shim.gif" width="10" height="100" alt="" /></td>
 		</tr>
 	<?php
 		$nav = $AppUI->getMenuModules();
@@ -134,19 +133,19 @@ echo dPcontextHelp('Help');?>
 					   . '<table cellspacing=0 cellpadding=0 border=0><tr><td class="clsBtnOff">' 
 					   . '<img src="' 
 					   . dPfindImage($module['mod_ui_icon'], $module['mod_directory']) 
-					   . '" alt="" border="0" width="30" height="30"></td></tr></table>' 
+					   . '" alt="" border="0" width="30" height="30" /></td></tr></table>' 
 					   . $AppUI->_($module['mod_ui_name']) ."</a></td></tr>\n");
 			}
 		}
 		echo $s;
 		?>
 		<tr height="100%">
-			<td>&nbsp;<img src="images/shim.gif" width="7" height="10"></td>
+			<td>&nbsp;<img src="images/shim.gif" width="7" height="10" alt="" /></td>
 		</tr>
 		</table>	
 <?php } // END DIALOG ?>
 	</td>
 <td valign="top" align="left" width="100%">
 <?php 
-		echo $AppUI->getMsg();
+	echo $AppUI->getMsg();
 ?>

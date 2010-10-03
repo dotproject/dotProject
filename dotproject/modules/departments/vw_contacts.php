@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 	global $dept_id;
 ?>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl" summary="view department contacts">
 <?php
 	echo "<tr><th>".$AppUI->_("Name")."</th><th>".$AppUI->_("Email")."</th><th>".$AppUI->_("Telephone")."</th></tr>";
 	

@@ -25,14 +25,14 @@
             </td>
             <td>
               [ <a href="javascript: location.href = 'edit_objects.php?object_type={$group_type}&section_value=' + document.assign_group.{$group_type}_section.options[document.assign_group.{$group_type}_section.selectedIndex].value + '&return_page={$return_page}';">Edit</a> ]
-              [ <a href="#" onClick="window.open('object_search.php?src_form=assign_group&object_type={$group_type}&section_value=' + document.assign_group.{$group_type}_section.options[document.assign_group.{$group_type}_section.selectedIndex].value,'','status=yes,width=400,height=400','','status=yes,width=400,height=400');">Search</a> ]
+              [ <a href="#" onclick="javascript:window.open('object_search.php?src_form=assign_group&object_type={$group_type}&section_value=' + document.assign_group.{$group_type}_section.options[document.assign_group.{$group_type}_section.selectedIndex].value,'','status=yes,width=400,height=400','','status=yes,width=400,height=400');">Search</a> ]
               <br />
               <select name="objects[]" tabindex="0" size="10" width="200" multiple>
               </select>
             </td>
             <td valign="middle">
-              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onClick="select_item(document.assign_group.{$group_type}_section, document.assign_group.elements['objects[]'], document.assign_group.elements['selected_{$group_type}[]'])">
-              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onClick="deselect_item(document.assign_group.elements['selected_{$group_type}[]'])">
+              <br /><input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onclick="javascript:select_item(document.assign_group.{$group_type}_section, document.assign_group.elements['objects[]'], document.assign_group.elements['selected_{$group_type}[]'])">
+              <br /><input type="button" class="deselect" name="deselect" value="&nbsp;&lt;&lt;&nbsp;" onclick="javascript:deselect_item(document.assign_group.elements['selected_{$group_type}[]'])">
             </td>
             <td>
               <br />
@@ -63,7 +63,7 @@
 	<th>{$object_type}</th>
 	<th>{$group_type|upper} Value</th>
 	<th width="4%">Functions</th>
-	<th width="2%"><input type="checkbox" class="checkbox" name="select_all" onClick="checkAll(this)"/></th>
+	<th width="2%"><input type="checkbox" class="checkbox" name="select_all" onclick="javascript:checkAll(this)"/></th>
         </tr>
 {foreach from=$rows item=row}
   <tr valign="top" align="center">

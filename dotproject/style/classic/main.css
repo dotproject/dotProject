@@ -82,15 +82,18 @@ Begin IE TD buttonizing
 */
 
 TD.clsBtnUp {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: inset 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: inset 2px;
 }
 
 TD.clsBtnDown {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: inset 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: inset 2px;
 }
 
 TD.clsBtnOn {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: outset #eeeeee 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: outset #eeeeee 2px;
 }
 
 TD.clsBtnOff {
@@ -98,15 +101,18 @@ TD.clsBtnOff {
 }
 
 TD.topBtnUp {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: inset 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: inset 2px;
 }
 
 TD.topBtnDown {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: inset 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: inset 2px;
 }
 
 TD.topBtnOn {
-	cursor: hand;    color: #FFFFFF;    padding: 0 3;    border: outset #eeeeee 2px;
+	/* cursor: hand;    //hand is invalid for css 2.1 */
+	color: #FFFFFF;    padding: 0 3;    border: outset #eeeeee 2px;
 }
 
 TD.topBtnOff {

@@ -77,15 +77,15 @@ $AppUI->setState('LDAPProto', dPgetParam($_POST, 'ldap_proto'));
 $proto = $AppUI->getState('LDAPProto', '3');
 
 ?>
-<form method="post">
+<form method="post" action="">
 <table border="0" cellpadding="2" cellspacing="1" width="600" class="std">
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Server'); ?>:</td>
-		<td><input type="text" name="server" value="<?php echo $server; ?>" size="50"></td>
+		<td><input type="text" name="server" value="<?php echo $server; ?>" size="50" /></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Port'); ?>:</td>
-		<td><input type="text" name="port" value="<?php echo $port; ?>" size="4"></td>
+		<td><input type="text" name="port" value="<?php echo $port; ?>" size="4" /></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Protocol'); ?>:</td>
@@ -94,35 +94,36 @@ echo $AppUI->_('Version 2') . ' <input type="radio" name="ldap_proto" value="2"'
 if ($proto == '2') {
 	echo ' checked="checked"';
 }
-echo '> ' . $AppUI->_('Version 3') . ' <input type="radio" name="ldap_proto" value="3"';
+echo ' /> ' . $AppUI->_('Version 3') . ' <input type="radio" name="ldap_proto" value="3"';
 if ($proto == '3') {
 	echo ' checked="checked"';
 }
-echo '>';
+echo ' />';
 ?></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Bind Name'); ?>:</td>
-		<td><input type="text" name="bind_name" value="<?php echo $bind_name; ?>" size="50"></td>
+		<td><input type="text" name="bind_name" value="<?php echo $bind_name; ?>" size="50" /></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Bind Password'); ?>:</td>
-		<td><input type="password" name="bind_password" value="<?php echo $bind_password; ?>" size="25"></td>
+		<td><input type="password" name="bind_password" value="<?php echo $bind_password; ?>" size="25" /></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Base DN'); ?>:</td>
-		<td><input type="text" name="dn" value="<?php echo $dn; ?>" size="100"></td>
+		<td><input type="text" name="dn" value="<?php echo $dn; ?>" size="100" /></td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Filter'); ?>:</td>
-		<td><input type="text" name="filter" value="<?php echo $filter; ?>" size="100"></td>
+		<td><input type="text" name="filter" value="<?php echo $filter; ?>" size="100" /></td>
 	</tr>
 	<tr>
 		<td colspan="2" align="right"><input type="submit" name="test" value="<?php 
-echo $AppUI->_('Test Connection and Query'); ?>"><input type="submit" name="import" value="<?php 
-echo $AppUI->_('Import Users'); ?>"></td>
+echo $AppUI->_('Test Connection and Query'); ?>" /><input type="submit" name="import" value="<?php 
+echo $AppUI->_('Import Users'); ?>" /></td>
 	</tr>
 </table>
+</form>
 <pre>
 <?php
 echo '<b>';
@@ -132,7 +133,7 @@ if (isset($test)) {
 if (isset($import)) {
 	echo $import;
 }
-echo "</b>\n<hr />";
+echo "</b></pre>\n<hr />";
 if (isset($test) || isset($import)) {
 
 	$ds = @ldap_connect($server, $port);
@@ -266,4 +267,3 @@ function clean_value($str) {
 	return str_replace($bad_values,'',$str);
 }
 ?>
-</table>

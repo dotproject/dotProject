@@ -77,7 +77,7 @@ if ($display_option == 'custom') {
 if (!@$min_view) {
 	$titleBlock = new CTitleBlock('Gantt Chart', 'applet-48.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
-	$titleBlock->addCrumb(('?m=projects&a=view&project_id=' . $project_id), 'view this project');
+	$titleBlock->addCrumb(('?m=projects&amp;a=view&amp;project_id=' . $project_id), 'view this project');
 	$titleBlock->show();
 }
 ?>
@@ -87,7 +87,7 @@ var calendarField = "";
 function popCalendar(field) {
 	calendarField = field;
 	idate = eval("document.editFrm." + field + ".value");
-	window.open("index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=" + idate, 
+	window.open('?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date=' + idate, 
 	            "calwin", "width=250, height=220, scrollbars=no, status=no");
 }
 
@@ -144,12 +144,11 @@ function showFullProject() {
 
 </script>
 
-<table border="0" cellpadding="4" cellspacing="0">
-
 <form name="editFrm" method="post" action="?<?php 
-echo ('m=' . $m . '&a=' . $a . '&tab=' . $tab . '&project_id=' . $project_id); ?>">
+echo ('m=' . $m . '&amp;a=' . $a . '&amp=tab=' . $tab . '&amp;project_id=' . $project_id); ?>">
 <input type="hidden" name="display_option" value="<?php echo $display_option;?>" />
 
+<table border="0" cellpadding="4" cellspacing="0">
 <tr>
 	<td align="left" valign="top" width="20">
 <?php if ($display_option != "all") { ?>
@@ -167,7 +166,7 @@ echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
 		<input type="text" class="text" name="show_sdate" value="<?php 
 echo $start_date->format($df);?>" size="12" disabled="disabled" />
 		<a href="javascript:popCalendar('sdate')">
-		<img src="./images/calendar.gif" width="24" height="12" alt="" border="0">
+		<img src="./images/calendar.gif" width="24" height="12" alt="" border="0" />
 		</a>
 	</td>
 
@@ -178,7 +177,7 @@ echo $end_date->format(FMT_TIMESTAMP_DATE);?>" />
 		<input type="text" class="text" name="show_edate" value="<?php 
 echo $end_date->format($df);?>" size="12" disabled="disabled" />
 		<a href="javascript:popCalendar('edate')">
-		<img src="./images/calendar.gif" width="24" height="12" alt="" border="0">
+		<img src="./images/calendar.gif" width="24" height="12" alt="" border="0" />
 		</a>
 	<td valign="top">
 		<input type="checkbox" name="showLabels" id="showLabels" <?php 
@@ -197,22 +196,22 @@ echo $AppUI->_('Sort by Task Name'); ?></label>
 	</td>	
 	<td align="left">
 		<input type="button" class="button" value="<?php 
-echo $AppUI->_('submit');?>" onclick='document.editFrm.display_option.value="custom";submit();'>
+echo $AppUI->_('submit');?>" onclick='javascript:document.editFrm.display_option.value="custom";submit();'>
 	</td>
 
 	<td align="right" valign="top" width="20">
 <?php if ($display_option != "all") { ?>
 	  <a href="javascript:scrollNext()">
 	  	<img src="./images/next.gif" width="16" height="16" alt="<?php 
-echo $AppUI->_('next');?>" border="0">
+echo $AppUI->_('next');?>" border="0" />
 	  </a>
 <?php } ?>
 	</td>
 </tr>
 <?php if ($a == 'todo') { ?>
-<input type="hidden" name="show_form" value="1" />
 <tr>
 	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">
+		<input type="hidden" name="show_form" value="1" />
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
 			<tr>
 			<td align="center" valign="bottom" nowrap="nowrap">
@@ -246,8 +245,6 @@ echo $AppUI->_('Low Priority Tasks'); ?></label>
 	</td>
 </tr>
 <?php } ?>
-</form>
-
 <tr>
 	<td align="center" valign="bottom" colspan="7">
 		<a href='javascript:showThisMonth()'><?php echo $AppUI->_('show this month'); ?></a> : 
@@ -257,6 +254,7 @@ echo (($a == 'todo') ? $AppUI->_('show all') : $AppUI->_('show full project')); 
 </tr>
 
 </table>
+</form>
 
 <table cellspacing="0" cellpadding="0" border="1" align="center">
 <tr>
@@ -273,18 +271,18 @@ if ($a != 'todo') {
 	$cnt[0]['N'] = ((empty($tasks)) ? 0 : 1);
 }
 if ($cnt[0]['N'] > 0) {
-	$src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id 
+	$src = ('?m=tasks&amp;a=gantt&amp;suppressHeaders=1&amp;project_id=' . $project_id 
 	        . (($display_option == 'all') ? '' 
-	           : ('&start_date=' . $start_date->format('%Y-%m-%d') 
-	              . '&end_date=' . $end_date->format('%Y-%m-%d'))) . "&width='" 
+	           : ('&amp;start_date=' . $start_date->format('%Y-%m-%d') 
+	              . '&amp;end_date=' . $end_date->format('%Y-%m-%d'))) . "&width='" 
 			. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)" 
-			. "+'&showLabels=" . $showLabels . '&showWork=' . $showWork 
-	        . '&sortByName=' . $sortByName . '&showPinned=' . $showPinned 
-	        . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs 
-	        . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks 
-	        . '&caller=' . $a . '&user_id=' . $user_id);
+			. "+'&amp;showLabels=" . $showLabels . '&amp;showWork=' . $showWork 
+	        . '&amp;sortByName=' . $sortByName . '&amp;showPinned=' . $showPinned 
+	        . '&amp;showArcProjs=' . $showArcProjs . '&amp;showHoldProjs=' . $showHoldProjs 
+	        . '&amp;showDynTasks=' . $showDynTasks . '&amp;showLowTasks=' . $showLowTasks 
+	        . '&amp;caller=' . $a . '&amp;user_id=' . $user_id);
 ?>
-	<script>document.write('<img src="<?php echo $src; ?>" />')</script>
+	<script type="text/javascript">document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
 <?php
 	//If we have a problem displaying this we need to display a warning.
 	//Put it at the bottom just in case

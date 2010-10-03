@@ -19,7 +19,7 @@ $sql = ('SELECT * FROM modules'
         . ' ORDER BY mod_ui_order');
 $modules = db_loadList($sql);
 
-echo '<table cellpadding="2">';
+echo '<table cellpadding="2" summary="module list">';
 
 foreach ($modules as $module) {
 	echo '<tr><td colspan="4">';
@@ -28,7 +28,7 @@ foreach ($modules as $module) {
 	
 	echo '<tr><td colspan="4">';
 	echo ('<a href="?m=system&amp;a=custom_field_addedit&amp;module=' . $module['mod_name'] 
-		  . '"><img src="./images/icons/stock_new.png" align="center" width="16" height="16" border="0">' 
+		  . '"><img src="./images/icons/stock_new.png" align="center" width="16" height="16" border="0" alt="" />' 
 		  . $AppUI->_('Add a new Custom Field to this Module') . '</a><br /><br />');
 	echo '</td></tr>';
 	
@@ -39,10 +39,10 @@ foreach ($modules as $module) {
 		echo '<tr><td class="hilite">';
 		echo ('<a href="?m=system&amp;a=custom_field_addedit&amp;module=' . $module['mod_name'] 
 		      . '&amp;field_id=' . $f['field_id'] 
-			  . '"><img src="./images/icons/stock_edit-16.png" align="center" width="16" height="16" border="0">Edit</a>');
+			  . '"><img src="./images/icons/stock_edit-16.png" align="center" width="16" height="16" border="0" alt="" />Edit</a>');
 		echo '</td><td class="hilite">';
 		echo ('<a href="?m=system&amp;a=custom_field_addedit&amp;field_id=' . $f['field_id'] 
-			  . '&amp;delete=1"><img src="./images/icons/stock_delete-16.png" align="center" width="16" height="16" border="0">Delete</a>');
+			  . '&amp;delete=1"><img src="./images/icons/stock_delete-16.png" align="center" width="16" height="16" border="0" alt="" />Delete</a>');
 		echo '</td><td class="hilite">';
 		echo htmlspecialchars($f['field_description']) . "\n";
 		echo '</td></tr>';

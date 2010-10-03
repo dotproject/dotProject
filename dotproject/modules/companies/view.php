@@ -11,7 +11,7 @@ $canEdit = getPermission($m, 'edit', $company_id);
 
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 
 // retrieve any state parameters
@@ -55,16 +55,16 @@ $titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company') 
-	                      . '" />'), '', '<form action="?m=companies&a=addedit" method="post">', 
+	                      . '" />'), '', '<form action="?m=companies&amp;a=addedit" method="post">', 
 	                     '</form>');
 	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new project') 
 	                      . '" />'), '', 
-	                     ('<form action="?m=projects&a=addedit&company_id=' 
+	                     ('<form action="?m=projects&amp;a=addedit&amp;company_id=' 
 	                      . dPformSafe($company_id) . '" method="post">'), '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {
-	$titleBlock->addCrumb(('?m=companies&a=addedit&company_id=' . $company_id), 
+	$titleBlock->addCrumb(('?m=companies&amp;a=addedit&amp;company_id=' . $company_id), 
 	                      'edit this company');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete company', $canDelete, $msg);
@@ -72,7 +72,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/html">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side
@@ -88,8 +88,6 @@ function delIt() {
 <?php } ?>
 </script>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-
 <?php if ($canDelete) {
 ?>
 <form name="frmDelete" action="./index.php?m=companies" method="post">
@@ -99,6 +97,7 @@ function delIt() {
 </form>
 <?php } ?>
 
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td valign="top" width="50%">
 		<strong><?php echo $AppUI->_('Details'); ?></strong>
@@ -130,7 +129,7 @@ echo htmlspecialchars($obj->company_email); ?></td>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
 			<td class="hilite"><?php echo htmlspecialchars(@$obj->company_fax); ?></td>
 		</tr>
-		<tr valign=top>
+		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite">
 <?php if (!empty($obj->company_country)) { ?>
@@ -172,7 +171,7 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 	</td>
 	<td width="50%" valign="top">
 		<strong><?php echo $AppUI->_('Description'); ?></strong>
-		<table cellspacing="0" cellpadding="2" border="0" width="100%">
+		<table cellspacing="0" cellpadding="2" border="0" width="100%" summary="company description">
 		<tr>
 			<td class="hilite">
 				<?php 
@@ -193,7 +192,7 @@ echo str_replace(chr(10), '<br />', htmlspecialchars($obj->company_description))
 <?php
 // tabbed information boxes
 $moddir = DP_BASE_DIR . '/modules/companies/';
-$tabBox = new CTabBox(('?m=companies&a=view&company_id=' . $company_id), '', $tab);
+$tabBox = new CTabBox(('?m=companies&amp;a=view&amp;company_id=' . $company_id), '', $tab);
 $tabBox->add($moddir . 'vw_active', 'Active Projects');
 $tabBox->add($moddir . 'vw_archived', 'Archived Projects');
 $tabBox->add($moddir . 'vw_depts', 'Departments');

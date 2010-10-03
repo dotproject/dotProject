@@ -30,7 +30,7 @@ if (!(isset($showEditCheckbox))) {
 */
 
 if (empty($query_string)) {
-	$query_string = "?m=$m&a=$a";
+	$query_string = "?m=$m&amp;a=$a";
 }
 
 // Number of columns (used to calculate how many columns to span things through)
@@ -355,7 +355,7 @@ for ($x=0; $x < $nums; $x++) {
 
 ?>
 
-<script type="text/JavaScript">
+<script type="text/javaScript" language="javascript">
 function toggle_users(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "inline" : "none";
@@ -445,14 +445,14 @@ function chAssignment(project_id, rmUser, del) {
 <?php if ($project_id) { ?>
 <table width='100%' border='0' cellpadding='1' cellspacing='0'>
 <form name='task_list_options' method='POST' action='<?php echo $query_string; ?>'>
-<input type='hidden' name='show_task_options' value='1'>
+<input type='hidden' name='show_task_options' value='1' />
 <tr>
   <td align='right'>
 	<table>
 	<tr>
 	  <td><?php echo $AppUI->_('Show');?>:</td>
 	  <td>
-	  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();" 
+	  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="javascript:document.task_list_options.submit();" 
 	   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
 	  </td>
 	  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
@@ -494,7 +494,7 @@ foreach ($projects as $k => $p) {
 			// not minimal view
 ?>
 <form name="assFrm<?php echo($p['project_id']) ?>" 
-			action="index.php?m=<?php echo($m); ?>&a=<?php echo($a); ?>" method="post">
+			action="index.php?m=<?php echo($m); ?>&amp;a=<?php echo($a); ?>" method="post">
 <input type="hidden" name="del" value="1" />
 <input type="hidden" name="rm" value="0" />
 <input type="hidden" name="store" value="0" />
@@ -505,11 +505,11 @@ foreach ($projects as $k => $p) {
 
 <tr>
   <td>
-  <a href="index.php?m=tasks&f=<?php echo $f;?>&project_id=<?php echo $project_id ? 0 : $k;?>">
+  <a href="index.php?m=tasks&amp;f=<?php echo $f;?>&amp;project_id=<?php echo $project_id ? 0 : $k;?>">
   <img src="./images/icons/<?php 
 echo (($project_id) ? 'expand.gif' : 'collapse.gif'); 
 ?>" width="16" height="16" border="0" alt="<?php 
-echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only this project')); ?>">
+echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only this project')); ?>" />
   </a>
   </td>
   <td colspan="<?php echo $showEditCheckbox ? $cols-4 : $cols-1; ?>">
@@ -518,7 +518,7 @@ echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only th
 	<!-- patch 2.12.04 display company name next to project name -->
 	<td nowrap style="border: outset #eeeeee 2px;background-color:#<?php 
 echo @$p['project_color_identifier']; ?>">
-	<a href="./index.php?m=projects&a=view&project_id=<?php echo $k;?>">
+	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $k;?>">
 	<span style="color:<?php 
 echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 	<strong><?php echo @$p['company_name'].' :: '.@$p['project_name'];?></strong></span></a>
@@ -700,18 +700,19 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
-	<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> :
-	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>
+	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> :
+	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>
 	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;
 <!-- removed project-level report buttons per Mantis Report #2374
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>" 
    onclick="javascript:window.location='index.php?m=projects&a=reports&project_id=<?php echo $k;?>';" />
 -->
   <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart');?>" 
-   onclick="javascript:window.location='index.php?m=tasks&a=viewgantt&project_id=<?php echo $k;?>';" />
+		onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php
+			echo $k;?>';" />
+	</form>
   </td>
 </tr>
-</form>
 <?php
 		}
    }
@@ -739,9 +740,9 @@ $AppUI->savePlace();
   <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
 	<?php if ($min_view) { ?>
-	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&open_task_all=1'; ?>"><?php 
+	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php 
 echo $AppUI->_('Open'); ?></a> : 
-	<a href="<?php echo 'index.php'.$query_string.'&close_task_all=1'; ?>"><?php 
+	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1'; ?>"><?php 
 echo $AppUI->_('Close All Tasks'); ?></a> 
 	<?php } 
 ?>

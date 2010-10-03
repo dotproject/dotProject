@@ -25,7 +25,7 @@ else {
 }
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 
 	function focusOnSearchBox() {
 		document.forms.frmSearch.keyword1.focus();
@@ -93,7 +93,7 @@ foreach ($files as $tmp) {
 $titleBlock = new CTitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
-<form name="frmSearch" action="?m=<?php echo $m ;?>"  method="POST">
+<form name="frmSearch" action="?m=<?php echo $m ;?>"  method="post">
 <table cellspacing="5" cellpadding="0" border="0">
 <tr>
 	<td align="left">
@@ -116,13 +116,13 @@ echo (($all_words == 'on') ? ' checked="checked"' : ''); ?> />
 	</td>
 	<td align="left">
 		<input name="modselection" id="modselection" type="checkbox" value="on"<?php 
-echo (($mod_selection == 'on') ? ' checked="checked"' : ''); ?> onclick="toggleModules(this)" />
+echo (($mod_selection == 'on') ? ' checked="checked"' : ''); ?> onclick="javascript:toggleModules(this)" />
 		<label for="modselection"><?php 
 echo $AppUI->_('Modules selection');?></label>
 	</td>
 	<td align="left">
 		<input name="advancedsearch" id="advancedsearch" type="checkbox"<?php 
-echo (($advanced_search == 'on') ? ' checked="checked"' : ''); ?> onclick="toggleStatus(this)" />
+echo (($advanced_search == 'on') ? ' checked="checked"' : ''); ?> onclick="javascript:toggleStatus(this)" />
 		<label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label>
 	</td>
 </tr>
@@ -174,8 +174,8 @@ echo ($mod_selection == 'on' ? 'display:block' : 'display:none'); ?> ">
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
 	<td>
-		<a href="#" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | 
-		<a href="#" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a>
+		<a href="#" onclick="javascript:selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | 
+		<a href="#" onclick="javascript:deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a>
 	</td>
 </tr>
 <?php

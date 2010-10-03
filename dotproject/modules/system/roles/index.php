@@ -35,7 +35,7 @@ $crumbs['?m=system'] = 'System Admin';
 
 ?>
 
-<script language="javascript">
+<script type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -52,7 +52,7 @@ function delIt(id) {
 }
 <?php } ?>
 </script>
-
+<form name="roleFrm" method="post" action="?m=system&amp;u=roles">
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
 <tr>
 	<th>&nbsp;</th>
@@ -72,24 +72,24 @@ function showRow($role=null) {
 	$s = '<tr>' . $CR;
 	if (($role_id == $id || $id == 0) && $canEdit) {
 	// edit form
-		$s .= '<form name="roleFrm" method="post" action="?m=system&u=roles">' . $CR;
+		$s .= '<td>' . $CR;
 		$s .= '<input type="hidden" name="dosql" value="do_role_aed" />' . $CR;
 		$s .= '<input type="hidden" name="del" value="0" />' . $CR;
 		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />' . $CR;
 
-		$s .= '<td>&nbsp;</td>';
+		$s .= '&nbsp;</td>';
 		$s .= ('<td valign="top"><input type="text" name="role_name" value="' . $name 
 		       . '" class="text" /></td>');
 		$s .= ('<td valign="top"><input type="text" name="role_description" class="text" value="' 
-		       . $description . '"></td>');
+		       . $description . '" /></td>');
 		$s .= ('<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') 
 		       . '" class="button" /></td>');
 	} else {
 		$s .= '<td width="50" valign="top">';
 		if ($canEdit) {
-			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">';
+			$s .= '<a href="?m=system&amp;u=roles&amp;role_id=' . $id . '">';
 			$s .= dPshowImage('./images/icons/stock_edit-16.png');
-			$s .= '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">';
+			$s .= '</a><a href="?m=system&amp;u=roles&amp;a=viewrole&amp;role_id=' . $id . '" title="">';
 			$s .= dPshowImage('images/obj/lock.gif');
 			$s .= '</a>';
 		}
@@ -120,6 +120,7 @@ if ($role_id == 0) {
 }
 ?>
 </table>
+</form>
 <?php
  // Do all the tab stuff.
  

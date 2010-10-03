@@ -10,9 +10,9 @@ global $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
 $q = new DBQuery;
 $canDelete = getPermission($m, 'delete');
 ?>
-<table width="100%" border="0" cellpadding="1" cellspacing="0">
-<form name="form_buttons" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date";?>">
+<form name="form_buttons" method="post" action="index.php?<?php echo "m=$m&amp;a=$a&amp;date=$date";?>">
 <input type="hidden" name="show_form" value="1" />
+<table width="100%" border="0" cellpadding="1" cellspacing="0">
 <tr>
 	<td width="50%">
 		<?php
@@ -25,7 +25,7 @@ $canDelete = getPermission($m, 'delete');
 		$q->clear();
 		echo $AppUI->_('Show Todo for:'); 
 ?>
-		<select name="show_user_todo" onchange="document.form_buttons.submit()">
+		<select name="show_user_todo" onchange="javascript:document.form_buttons.submit();">
 		<?php
 		if ($rows = db_loadList($usersql, NULL)) {
 			foreach ($rows as $row) {
@@ -41,8 +41,8 @@ $canDelete = getPermission($m, 'delete');
 		</select>
 	</td>
 </tr>
-</form>
 </table>
+</form>
 <?php 
 $min_view = true;
 include DP_BASE_DIR . '/modules/tasks/viewgantt.php';

@@ -22,10 +22,10 @@ $messages = $q->loadList();
 
 $crumbs = array();
 $crumbs['?m=forums'] = "forums list";
-$crumbs["?m=forums&a=viewer&forum_id=$forum_id"] = "topics for this forum";
-$crumbs["?m=forums&a=view_pdf&forum_id=$forum_id&message_id=$message_id&sort=$sort&suppressHeaders=1"] = "view PDF file";
+$crumbs["?m=forums&amp;a=viewer&amp;forum_id=$forum_id"] = "topics for this forum";
+$crumbs["?m=forums&amp;a=view_pdf&amp;forum_id=$forum_id&amp;message_id=$message_id&amp;sort=$sort&amp;suppressHeaders=1"] = "view PDF file";
 ?>
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 <?php
 if ($viewtype != 'normal') {
 ?>
@@ -68,7 +68,7 @@ function delIt(id) {
 <?php } ?>
 </script>
 <?php
-$thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort";
+$thispage = "?m=$m&amp;a=viewer&amp;forum_id=$forum_id&amp;message_id=$message_id&amp;sort=$sort";
 // $thispage = $_PHP['self'];
 ?>
 
@@ -78,22 +78,22 @@ $thispage = "?m=$m&a=viewer&forum_id=$forum_id&message_id=$message_id&sort=$sort
 	<td>
 		<form action="<?php echo $thispage; ?>" method="post">
 		<?php echo $AppUI->_('View') ?>: 
-		<input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
-		<input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
-		<input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single')?'checked':'';?> onClick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
+		<input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal')?'checked="checked"':'';?> onclick="javascript:this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+		<input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short')?'checked="checked"':'';?> onclick="javascript:this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+		<input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single')?'checked="checked"':'';?> onclick="javascript:this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
 		</form>
 	</td>
 	<td align="right">
 		<?php $sort = ($sort == 'asc')?'desc':'asc'; ?>
-		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_id=<?php echo $message_id;?>&amp;sort=<?php echo $sort; ?>'" />
 	<?php 
 if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
                  || $AppUI->user_id == $row['message_author'] 
                  || getPermission('project', 'edit', $forum_info['project_id']) 
                  || !($forum_info['project_id']))) { 
 ?>
-		<input type="button" class=button value="<?php echo $AppUI->_('Post Reply');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />
-		<input type="button" class=button value="<?php echo $AppUI->_('New Topic');?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=0&post_message=1';" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply');?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_parent=<?php echo $message_id;?>&amp;post_message=1';" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('New Topic');?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_id=0&amp;post_message=1';" />
 	<?php 
 } 
 ?>
@@ -101,12 +101,12 @@ if ($canEdit && ($AppUI->user_id == $row['forum_moderated']
 </tr>
 </table>
 
-<table border="0" cellpadding="4" cellspacing="1" width="98%" class="tbl" align="center">
-<form name="messageForm" method="POST" action="?m=forums&forum_id=<?php echo $forum_id;?>">
+<form name="messageForm" method="POST" action="?m=forums&amp;forum_id=<?php echo $forum_id;?>">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_id" value="0" />
 </form>
+<table border="0" cellpadding="4" cellspacing="1" width="98%" class="tbl" align="center">
 <tr>
 <?php 
 if ($viewtype != 'short') {
@@ -186,7 +186,7 @@ foreach ($messages as $row) {
 		$s .= '</tr><tr>';
 		
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-		$s .= ('<img src="./images/icons/posticon.gif" alt="date posted" border="0" width="14" height="11">'
+		$s .= ('<img src="./images/icons/posticon.gif" alt="date posted" border="0" width="14" height="11" />'
 		       .$date->format("$df $tf") . '</td>');
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 		
@@ -198,8 +198,8 @@ foreach ($messages as $row) {
 		                 || getPermission('admin', 'edit'))) {
 			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
 			// edit message
-			$s .= ('<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] 
-			       . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row['message_id'] . '" title="' 
+			$s .= ('<td><a href="?m=forums&amp;a=viewer&amp;post_message=1&amp;forum_id=' . $row['message_forum'] 
+			       . '&amp;message_parent=' . $row['message_parent'] . '&amp;message_id=' . $row['message_id'] . '" title="' 
 			       . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">');
 			$s .= dPshowImage('./images/icons/stock_edit-16.png', '16', '16');
 			$s .= '</td><td>';
@@ -224,7 +224,7 @@ foreach ($messages as $row) {
 			$s .= ('<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] 
 			       . '</font></a>');
         }
-		$s .= ('<a name="' . $row['message_id'] . '" href="#' . $row['message_id'] . '" onClick="toggle(' 
+		$s .= ('<a name="' . $row['message_id'] . '" href="#' . $row['message_id'] . '" onclick="javascript:toggle(' 
 		       . $row['message_id'] . ')">');
         $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
         $s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
@@ -246,7 +246,7 @@ foreach ($messages as $row) {
 			$s .= ('<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] 
 			       . '</font></a>');
         }
-		$s .= '<a href="#" onClick="toggle(' . $row['message_id'] . ')">';
+		$s .= '<a href="#" onclick="javascript:toggle(' . $row['message_id'] . ')">';
         $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
         $side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
         $side .= str_replace(chr(13), "&nbsp;<br />", $row['message_body']);
@@ -272,19 +272,19 @@ if ($viewtype == 'single') {
 }
 ?>
 </table>
-<table border=0 cellpadding=2 cellspacing=1 width="98%" >
+<table border=0 cellpadding=2 cellspacing=1 width="98%" summary="">
 <tr>
 	<td><?php echo breadCrumbs($crumbs);?></td>
 	<td align="right">
-		<input type="button" class=button value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onClick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=<?php echo $message_id;?>&sort=<?php echo $sort; ?>'" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_id=<?php echo $message_id;?>&amp;sort=<?php echo $sort; ?>'" />
 		<?php 
 if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] 
                  || $AppUI->user_id == $row['message_author'] 
                  || getPermission('project', 'edit', $forum_info['project_id']) 
                  || !($forum_info['project_id']))) { 
 ?>
-		<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply');?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_parent=<?php echo $message_id;?>&post_message=1';" />
-		<input type="button" class="button" value="<?php echo $AppUI->_('New Topic');?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id;?>&message_id=0&post_message=1';" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply');?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_parent=<?php echo $message_id;?>&amp;post_message=1';" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('New Topic');?>" onclick="javascript:window.location='./index.php?m=forums&amp;a=viewer&amp;forum_id=<?php echo $forum_id;?>&amp;message_id=0&amp;post_message=1';" />
 	<?php } ?>
 	</td>
 </tr>

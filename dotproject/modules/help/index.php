@@ -18,7 +18,7 @@ if (!file_exists($inc)) {
 	}
 }
 if ($hid != 'help.toc') {
-	echo '<a href="?m=help&dialog=1">' . $AppUI->_('index') . '</a>';
+	echo '<a href="?m=help&amp;dialog=1">' . $AppUI->_('index') . '</a>';
 }
 readfile($inc);
 ?>

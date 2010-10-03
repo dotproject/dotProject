@@ -65,18 +65,18 @@ $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Week View', 'myevo-appointments.png', $m, "$m.$a");
-$titleBlock->addCrumb('?m=calendar&date='.$this_week->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=calendar&amp;date='.$this_week->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCell($AppUI->_('Company').':');
 $titleBlock->addCell(arraySelect($companies, 'company_id', 
-                                 'onChange="document.pickCompany.submit()" class="text"', 
+                                 'onchange="javascript:document.pickCompany.submit()" class="text"', 
                                  $company_id), '', 
                      ('<form action="' . $_SERVER['REQUEST_URI'] 
                       . '" method="post" name="pickCompany">'), '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
 $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 
-                                 'onChange="document.pickFilter.submit()" class="text"',
+                                 'onchange="javascript:document.pickFilter.submit()" class="text"',
                                  $event_filter, true), '', 
-                     ('<Form action="' . $_SERVER['REQUEST_URI'] 
+                     ('<form action="' . $_SERVER['REQUEST_URI'] 
                       . '" method="post" name="pickFilter">'), '</form>');
 $titleBlock->show();
 ?>
@@ -96,7 +96,7 @@ TD.weekDay  {
 <tr>
 	<td>
 		<a href="<?php 
-echo ('?m=calendar&a=week_view&date='.$prev_week->format(FMT_TIMESTAMP_DATE)); ?>">
+echo ('?m=calendar&amp;a=week_view&amp;date='.$prev_week->format(FMT_TIMESTAMP_DATE)); ?>">
 		<?php echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous week')); ?>
 		</a>
 	</td>
@@ -107,7 +107,7 @@ echo ($AppUI->_('Week') . ' '
 	</th>
 	<td>
 		<a href="<?php 
-echo ('?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE)); ?>">
+echo ('?m=calendar&amp;a=week_view&amp;date=' . $next_week->format(FMT_TIMESTAMP_DATE)); ?>">
 		<?php echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next week')); ?>
 		</a>
 	</td>
@@ -126,7 +126,7 @@ for ($i=0; $i < 7; $i++) {
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 
 	$day  = $show_day->getDay();
-	$href = ('?m=calendar&a=day_view&date=' . $dayStamp . '&tab=0');
+	$href = ('?m=calendar&amp;a=day_view&amp;date=' . $dayStamp . '&amp;tab=0');
 	
 	
 	$s = '';
@@ -165,7 +165,7 @@ for ($i=0; $i < 7; $i++) {
 ?>
 <tr>
 	<td colspan="2" align="right" bgcolor="#efefe7">
-		<a href="./index.php?m=calendar&a=week_view"><?php echo $AppUI->_('today');?></a>
+		<a href="?m=calendar&amp;a=week_view"><?php echo $AppUI->_('today');?></a>
 	</td>
 </tr>
 </table>

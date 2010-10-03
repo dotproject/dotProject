@@ -1,5 +1,5 @@
 <!-- $Id$ -->
-<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
+<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%" summary="dotProject Help Table of Contents">
 <tr>
 	<td width="100%" valign="top">
 		<p>
@@ -17,7 +17,7 @@
 			<a href="http://bugs.dotproject.net/" target="_blank">dotProject Bugs &amp; Suggestions</a> site.
 			<br />
 			<br />If you're looking for Professional Support concerning dotProject, have a look at our
-			<a href="http://www.dotproject.net/modules.php?op=modload&name=Web_Links&file=index&req=viewlink&cid=4" target="_blank">Commercial Support</a> links collection.
+			<a href="http://www.dotproject.net/modules.php?op=modload&amp;name=Web_Links&amp;file=index&amp;req=viewlink&amp;cid=4" target="_blank">Commercial Support</a> links collection.
 			<br />
 			<br />If the other places didn't bring the expected results visit our IRC channel at irc.freenode.net: #dotproject.
 		</p>

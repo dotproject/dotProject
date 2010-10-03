@@ -60,14 +60,14 @@ function setTasksStartDate(form, datesForm) {
 }
 
 function popContacts() {
-	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+	window.open('?m=public&'+'a=contact_selector&'+'dialog=1&'+'call_back=setContacts&'+'selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function popCalendar(field){
 	calendarField = field;
 	task_cal = document.getElementById('task_' + field.name);
 	idate = task_cal.value;
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
+	window.open('?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
 }
 
 /**
@@ -501,7 +501,7 @@ function calcFinish(f) {
 	f.task_end_date.value = e.getUTCFullYear()+tz2+(e.getMonth()+1)+tz1+e.getDate();
 	//f.end_date.value = tz2+(e.getMonth()+1)+"/"+tz1+e.getDate()+"/"+e.getUTCFullYear(); // MM/DD/YY
 	//f.end_date.value = tz1+e.getDate()+"/"+tz2+(e.getMonth()+1)+"/"+e.getUTCFullYear(); // DD/MM/YY
-	var url = 'index.php?m=public&a=date_format&dialog=1&field='+f.name+'.end_date&date=' + f.task_end_date.value;
+	var url = '?m=public&amp;a=date_format&amp;dialog=1&amp;field='+f.name+'.end_date&amp;date=' + f.task_end_date.value;
 	thread = window.frames['thread']; //document.getElementById('thread');
 	thread.location = url;
 	setAMPM(f.end_hour);
@@ -619,6 +619,7 @@ function copyForm(form, to, extras) {
 				break;
 			case 'select-multiple':
 				var sel = to.appendChild(h.addSelect(elem.name, false, true));
+				sel.style.visible = "hidden";
 				for (var x = 0; x < elem.options.length; x++) {
 					if (elem.options[x].selected) {
 						sel.appendChild(h.addOption(elem.options[x].value, '', true));

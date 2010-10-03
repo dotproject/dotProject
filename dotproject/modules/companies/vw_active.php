@@ -10,7 +10,7 @@ global $AppUI, $company_id, $pstatus, $dPconfig;
 
 $sort = dPgetParam($_GET, 'sort', 'project_name');
 if ($sort == 'project_priority') {
-	$sort .= ' DESC';
+        $sort .= ' DESC';
 }
 
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -35,11 +35,13 @@ $q->addOrder($sort);
 $s = '';
 
 if (!($rows = $q->loadList())) {
-	$s .= $AppUI->_('No data available').'<br />'.$AppUI->getMsg();
+	$s .= '<tr><td>'.$AppUI->_('No data available').'<br />'.$AppUI->getMsg().'</td></tr>';
 } else {
 	$s .= '<tr>';
-	$s .= '<th><a style="color:white" href="index.php?m=companies&a=view&company_id='.$company_id.'&sort=project_priority">'.$AppUI->_('P').'</a></th>'
-                .'<th><a style="color:white" href="index.php?m=companies&a=view&company_id='.$company_id.'&sort=project_name">'.$AppUI->_('Name').'</a></th>'
+	$s .= '<th><a style="color:white" href="?m=companies&amp;a=view&amp;company_id='.$company_id.'&amp;sort=project_priority">'
+			.$AppUI->_('P').'</a></th>'
+			.'<th><a style="color:white" href="?m=companies&amp;a=view&amp;company_id='.$company_id.'&amp;sort=project_name">'
+			.$AppUI->_('Name').'</a></th>'
 		.'<th>'.$AppUI->_('Owner').'</th>'
 		.'<th>'.$AppUI->_('Started').'</th>'
 		.'<th>'.$AppUI->_('Status').'</th>'
@@ -56,7 +58,7 @@ if (!($rows = $q->loadList())) {
 		
 		$s .= '</td>';
 		$s .= '<td width="100%">';
-		$s .= ('<a href="?m=projects&a=view&project_id=' . dPformSafe($row['project_id']) . '">' 
+		$s .= ('<a href="?m=projects&amp;a=view&amp;project_id=' . dPformSafe($row['project_id']) . '">' 
 		       . htmlspecialchars($row['project_name']) . '</a></td>');
 		$s .= ('<td nowrap="nowrap">' . htmlspecialchars($row['contact_first_name']) . '&nbsp;' 
 		       . htmlspecialchars($row['contact_last_name']) . '</td>');

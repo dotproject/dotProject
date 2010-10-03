@@ -67,7 +67,7 @@ class CMonthCalendar {
 	/**
 	 * @param Date $date
 	 */
-	function CMonthCalendar($date=null) {
+ function CMonthCalendar($date=null) {
 		$this->setDate($date);
 		
 		$this->classes = array();
@@ -165,7 +165,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	function setEvents($e) {
+ function setEvents($e) {
 		$this->events = $e;
 	}
 	
@@ -176,7 +176,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-	function setHighlightedDays($hd) {
+ function setHighlightedDays($hd) {
 		$this->highlightedDays = $hd;
 	}
 	
@@ -248,7 +248,7 @@ class CMonthCalendar {
 			$s .= "\n\t\t" . '<td align="right">';
 			$s .= ('<a href="' . $href . '">' 
 			       . dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next month')) 
-			       . '</a>');
+				   . '</a>');
 			$s .= "</td>";
 		}
 		
@@ -479,7 +479,7 @@ class CEvent extends CDpObject {
 	
 	// overload check operation
 	function check() {
-		// ensure changes to check boxes and select lists are honoured
+	// ensure changes to check boxes and select lists are honoured
 		$this->event_private = intval($this->event_private);
 		$this->event_type = intval($this->event_type);
 		$this->event_cwd = intval($this->event_cwd);
@@ -487,7 +487,7 @@ class CEvent extends CDpObject {
 	}
 	
 	
-	/**
+ /**
      *	Overloaded delete method
      *
      *	@author gregorerhardt

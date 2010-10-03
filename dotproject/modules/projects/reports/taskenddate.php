@@ -51,7 +51,7 @@ function setCalendar(idate, fdate) {
 	<td nowrap="nowrap">
 		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
 		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar('start_date')">
+		<a href="#" onclick="javascript:popCalendar('start_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
@@ -59,7 +59,7 @@ function setCalendar(idate, fdate) {
 	<td nowrap="nowrap">
 		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar('end_date')">
+		<a href="#" onclick="javascript:popCalendar('end_date')">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 		</a>
 	</td>
@@ -115,7 +115,7 @@ if ($do_report) {
     $first_task        = true;
     $task_log          = array();
     
-    echo "<table class='tbl' width='80%'>";
+    echo "<table class='tbl' width='80%' summary='task log'>";
     echo "<tr><th>".$AppUI->_("Task name")."</th><th>".$AppUI->_("T.Owner")."</th><th>".$AppUI->_("H.Alloc.")."</th><th>".$AppUI->_("Task end date")."</th><th>".$AppUI->_("Last activity date")."</th><th>".$AppUI->_("Done")."?</th></tr>";
     $hrs = $AppUI->_("hrs"); // To avoid calling $AppUI each row
     foreach ($tasks as $task) {

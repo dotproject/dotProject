@@ -29,7 +29,7 @@
 			<td><input type="text" class="search" name="value_search_str" value="{$value_search_str}" /></td>
 		  </tr>
 		  <tr class="controls" align="center">
-		  	<td colspan="2"><input type="submit" class="button" name="action" value="Search" /> <input type="button" class="button" name="action" value="Close" onClick="window.close();" /></td>
+		  	<td colspan="2"><input type="submit" class="button" name="action" value="Search" /> <input type="button" class="button" name="action" value="Close" onclick="javascript:window.close();" /></td>
           </tr>
         </tbody>
       </table>
@@ -48,7 +48,7 @@
 			  </select>
             </td>
             <td width="10%">
-				<input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onClick="opener.select_item(opener.document.forms['{$src_form}'].elements['{$object_type}_section'], this.form.elements['objects'], opener.document.forms['{$src_form}'].elements['selected_{$object_type}[]']);">
+				<input type="button" class="select" name="select" value="&nbsp;&gt;&gt;&nbsp;" onclick="javascript:opener.select_item(opener.document.forms['{$src_form}'].elements['{$object_type}_section'], this.form.elements['objects'], opener.document.forms['{$src_form}'].elements['selected_{$object_type}[]']);">
              </td>
           </tr>
 		{/if}

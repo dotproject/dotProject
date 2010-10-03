@@ -136,7 +136,7 @@ if (!@$min_view) {
 	$titleBlock = new CTitleBlock('Organize Tasks', 'applet-48.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
 	if ($project_id) {
-		$titleBlock->addCrumb(('?m=projects&a=view&project_id=' . $project_id), 'view project');
+		$titleBlock->addCrumb(('?m=projects&amp;a=view&amp;project_id=' . $project_id), 'view project');
 	}
 	$titleBlock->show();
 }
@@ -190,8 +190,8 @@ function showtask_edit($task, $level=0) {
 <?php 
 	if (getPermission('tasks', 'edit', $task['task_id'])) { 
 ?>
-		<a href="./index.php?m=tasks&a=addedit&task_id=<?php echo $task['task_id']; ?>">
-		<img src="./images/icons/pencil.gif" alt="Edit Task" border="0" width="12" height="12">
+		<a href="?m=tasks&amp;a=addedit&amp;task_id=<?php echo $task['task_id']; ?>">
+		<img src="./images/icons/pencil.gif" alt="Edit Task" border="0" width="12" height="12" />
 		</a>
 <?php } ?>
 	</td>
@@ -199,9 +199,9 @@ function showtask_edit($task, $level=0) {
 	<td>
 <?php 
 	if ($task['task_priority'] < 0) {
-		echo '<img src="./images/icons/low.gif" width="13" height="16">';
+		echo '<img src="./images/icons/low.gif" width="13" height="16" />';
 	} else if ($task['task_priority'] > 0) {
-		echo '<img src="./images/icons/' . $task['task_priority'] .'.gif" width="13" height="16">';
+		echo '<img src="./images/icons/' . $task['task_priority'] .'.gif" width="13" height="16" />';
 	}
 ?>
 	</td>
@@ -212,10 +212,10 @@ function showtask_edit($task, $level=0) {
 			echo '&nbsp;&nbsp;';
 		}
 		if ($level > 0) {
-			echo '<img src="./images/corner-dots.gif" width="16" height="12" border="0">'; 
+			echo '<img src="./images/corner-dots.gif" width="16" height="12" border="0" />'; 
 		}
 ?>	
-		<a href="./index.php?m=tasks&a=view&task_id=<?php echo $task['task_id']; ?>" title="<?php
+		<a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $task['task_id']; ?>" title="<?php
 		echo (((isset($task['parent_name'])) 
 		       ? ('*** ' . $AppUI->_('Parent Task') . ' ***' . "\n" 
 		          . htmlspecialchars($task['parent_name'], ENT_QUOTES) . "\n\n") : '') 
@@ -236,20 +236,20 @@ function showtask_edit($task, $level=0) {
 ?>
 
 <form name="form" method="post" action="index.php?<?php 
-echo "m=$m&a=$a&project_id=$project_id"; ?>">
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+echo "m=$m&amp;a=$a&amp;project_id=$project_id"; ?>">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="task listing">
 <tr>
 	<th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
 	<th width="15" align="center"><?php echo $AppUI->_('P'); ?></th>
 	<th>
-		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
-echo $project_id; ?>&sort=task_name">
+		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php 
+echo $project_id; ?>&amp;sort=task_name">
 		<?php echo $AppUI->_('Task'); ?>
 		</a>
 	</th>
 	<th nowrap="nowrap">
-		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
-echo $project_id; ?>&sort=task_duration">
+		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php 
+echo $project_id; ?>&amp;sort=task_duration">
 		<?php echo $AppUI->_('Duration'); ?>
 		</a>
 	</th>
@@ -318,7 +318,7 @@ foreach ($tasks as $t) {
 ?>
 
 <input type="checkbox" name="include_children" id="include_children" value='1' /><label for="include_children"><?php echo $AppUI->_('IncludeChildren'); ?></label><br />
-<table>
+<table summary="action project tasks">
 <tr>
 	<th>Action: </th>
 	<th>Project: </th>
@@ -326,7 +326,7 @@ foreach ($tasks as $t) {
 </tr>
 <tr>
 	<td><?php echo arraySelect($actions, 'action', '', '0'); ?></td>
-	<td><?php echo arraySelect($projects, 'new_project', ' onChange="updateTasks();"', '0'); ?></td>
+	<td><?php echo arraySelect($projects, 'new_project', ' onchange="javascript:updateTasks();"', '0'); ?></td>
 	<td><?php echo ($ts)?arraySelect($ts, 'new_task', '', '0'):''; ?></td>
 	<td><input type="submit" class="button" value="<?php 
 echo $AppUI->_('update selected tasks'); ?>"></td>
@@ -334,7 +334,7 @@ echo $AppUI->_('update selected tasks'); ?>"></td>
 </table>
 </form>
 
-<table>
+<table summary="task status">
 <tr>
   <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
   <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>

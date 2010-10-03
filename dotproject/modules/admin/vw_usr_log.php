@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 ?>
-<script language="JavaScript" type="text/javascript">
+<script language="javascript" type="text/javascript">
 var calendarField = '';
 var calWin = null;
 
@@ -12,7 +12,7 @@ var calWin = null;
 function popCalendar(field) {
 	calendarField = field;
 	idate = eval('document.frmDate.log_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
+	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
 }
 
 function setCalendar(idate, fdate) {
@@ -39,10 +39,10 @@ $end_date = intval($date_reg) ? new CDate(dPgetParam($_POST, "log_end_date", dat
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
 if ($a = dPgetParam($_REQUEST, "a", "") == "") {
-    $a = "&tab={$currentTabId}&showdetails=1";
+    $a = "&tab={$currentTabId}&amp;showdetails=1";
 } else {
     $user_id = intval(dPgetParam($_REQUEST, "user_id", 0));
-    $a = "&a=viewuser&user_id={$user_id}&tab={$currentTabId}&showdetails=1";
+    $a = "&amp;a=viewuser&amp;user_id={$user_id}&amp;tab={$currentTabId}&amp;showdetails=1";
 }
 
 ?>
@@ -55,14 +55,14 @@ if ($a = dPgetParam($_REQUEST, "a", "") == "") {
 	</tr>
 </table>
 
-<form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate">
-<table align="center" " width="100%">
+<form action="?m=admin<?php echo $a; ?>" method="post" name="frmDate">
+<table align="center" width="100%">
 	<tr align="center">
 		<td align="right" width="45%" ><?php echo $AppUI->_('Start Date');?></td>
 			<td width="55%" align="left">
 				<input type="hidden" name="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : "" ;?>" />
-				<input type="text" name="start_date" value="<?php echo $start_date ? $start_date->format($df) : "" ;?>" class="text" readonly disabled="disabled" />
-				<a href="#" onClick="popCalendar('start_date')">
+				<input type="text" name="start_date" value="<?php echo $start_date ? $start_date->format($df) : "" ;?>" class="text" readonly="readonly" disabled="disabled" />
+				<a href="#" onclick="javascript:popCalendar('start_date')">
 				<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" ></a>
 			</td>
 	</tr>
@@ -70,15 +70,15 @@ if ($a = dPgetParam($_REQUEST, "a", "") == "") {
 		<td align="right" width="45%"><?php echo $AppUI->_('End Date');?></td>
 			<td width="55%" align="left">
 				<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" readonly disabled="disabled" />
-				<a href="#" onClick="popCalendar('end_date')">
+				<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" readonly="readonly" disabled="disabled" />
+				<a href="#" onclick="javascript:popCalendar('end_date')">
 				<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0"></a>
 		</td>
 	</tr>
 </table>
 <table align="center">
 	<tr align="center">
-		<td><input type="submit" class="button" value="<?php echo $AppUI->_('Submit');?>" onClick="return checkDate('start','end')"></td>
+		<td><input type="submit" class="button" value="<?php echo $AppUI->_('Submit');?>" onclick="javascript:return checkDate('start','end')"></td>
 	</tr>
 </table>
 </form>
@@ -88,7 +88,7 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {
     $start_date = date("Y-m-d", strtotime(dPgetParam($_POST, "log_start_date", date("Y-m-d"))));
     $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetParam($_POST, "log_end_date", date("Y-m-d"))));
     
-	$q  = new DBQuery;
+    	$q  = new DBQuery;
 	$q->addTable('user_access_log', 'ual');
 	$q->addTable('users', 'u');
 	$q->addTable('contacts', 'c');

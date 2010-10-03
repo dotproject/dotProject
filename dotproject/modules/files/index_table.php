@@ -250,7 +250,7 @@ function expand(id) {
 	<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 </tr><?php
 $fp=-1;
@@ -360,7 +360,7 @@ foreach ($files as $file_row) {
 	echo $file_row['file_lastversion'];
 	if ($file_row['file_versions'] > 1) {
 ?>
-		<a href="#" onClick="expand('versions_<?php echo $latest_file['file_id']; ?>');">
+		<a href="#" onclick="javascript:expand('versions_<?php echo $latest_file['file_id']; ?>');">
 		(<?php echo $file_row['file_versions']; ?>)
 		</a><?php 
 	}

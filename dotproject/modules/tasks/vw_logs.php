@@ -15,7 +15,7 @@ $taskLogReference = dPgetSysVal('TaskLogReference');
 $taskLogReferenceImage = dPgetSysVal('TaskLogReferenceImage');
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -35,12 +35,12 @@ function delIt2(id) {
 <?php } ?>
 </script>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
-<form name="frmDelete2" action="./index.php?m=tasks" method="post">
+<form name="frmDelete2" action="?m=tasks" method="post">
 	<input type="hidden" name="dosql" value="do_updatetask">
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_log_id" value="0" />
 </form>
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
 
 <tr>
 	<th></th>
@@ -73,9 +73,9 @@ foreach ($logs as $row) {
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
 	if ($canEdit) {
-		$s .= ("\n\t\t" . '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=' 
+		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $task_id . '&tab=' 
 		       . (($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1') 
-		       . '&task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t" 
+		       . '&amp;task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t" 
 		       . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
@@ -140,13 +140,13 @@ foreach ($logs as $row) {
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= '<td align="right">' . sprintf("%.2f", $hrs) . '</td>';
-$s .= ('<td align="right" colspan="3"><form action="?m=tasks&a=view&tab=1&task_id=' 
+$s .= ('<td align="right" colspan="3"><form action="?m=tasks&amp;a=view&amp;tab=1&amp;task_id=' 
        . $task_id . '" method="post">');
 if (getPermission('tasks', 'edit', $task_id)) {
 	$s .= ('<input type="submit" class="button" value="' . $AppUI->_('new log') 
-	       . '"></form></td>');
+	       . '" />';
 }
-$s .= '</tr>';
+$s .= '</form></td></tr>';
 echo $s;
 ?>
 </table>

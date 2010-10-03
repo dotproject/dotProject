@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
 
 global $AppUI, $company_id;
 
-$q = new DBQuery;
+$q  = new DBQuery;
 $q->addTable('projects');
 $q->addQuery('project_id, project_name, project_start_date, project_status, project_target_budget' 
              . ', project_start_date, project_priority, contact_first_name, contact_last_name');
@@ -28,13 +28,13 @@ $q->addOrder('project_name');
 
 $s = '';
 if (!($rows = $q->loadList())) {
-	$s .= $AppUI->_('No data available') . '<br />' . $AppUI->getMsg();
+	$s .= '<tr><td>' . $AppUI->_('No data available') . '<br />' . $AppUI->getMsg() . '</td></tr>';
 } else {
 	$s .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Owner') . '</th></tr>';
 	
 	foreach ($rows as $row) {
 		$s .= '<tr><td>';
-		$s .= ('<a href="?m=projects&a=view&project_id=' . dPformSafe($row['project_id']) . '">' 
+		$s .= ('<a href="?m=projects&amp;a=view&amp;project_id=' . dPformSafe($row['project_id']) . '">' 
 		       . htmlspecialchars($row['project_name']) . '</a>');
 		$s .= ('<td>' . htmlspecialchars($row['contact_first_name']) . '&nbsp;' 
 		       . htmlspecialchars($row['contact_last_name']) . '</td>');

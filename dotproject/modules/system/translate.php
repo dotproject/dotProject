@@ -12,7 +12,7 @@ if (!$canEdit || $AppUI->user_type != 1) {
 $module = dPgetParam($_REQUEST, 'module', 'admin');
 $lang = dPgetParam($_REQUEST, 'lang', $AppUI->user_locale);
 
-$AppUI->savePlace('m=system&a=translate&module=$module&lang=' . $lang);
+$AppUI->savePlace('m=system&a=translate&module='.$module'.&lang=' . $lang);
 
 // read the installed modules
 $modules = arrayMerge($AppUI->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));
@@ -63,14 +63,14 @@ ksort($trans);
 
 $titleBlock = new CTitleBlock('Translation Management', 'rdf2.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Module'), '',
-                     '<form action="?m=system&a=translate" method="post" name="modlang">', '');
+                     '<form action="?m=system&amp;a=translate" method="post" name="modlang">', '');
 $titleBlock->addCell(arraySelect($modules, 'module', 
-                                 'size="1" class="text" onchange="document.modlang.submit();"', 
+                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"', 
                                  $module));
 $titleBlock->addCell($AppUI->_('Language'));
 $temp = $AppUI->setWarning(false);
 $titleBlock->addCell(arraySelect($locales, 'lang', 
-                                 'size="1" class="text" onchange="document.modlang.submit();"', 
+                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"', 
                                  $lang, true), 
                      '','', '</form>');
 $AppUI->setWarning($temp);
@@ -79,6 +79,9 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 
+<form action="?m=system&amp;a=translate_save" method="post" name="editlang">
+<input type="hidden" name="module" value="<?php echo $modules[$module];?>" />
+<input type="hidden" name="lang" value="<?php echo $lang;?>" />
 <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbl">
 <tr>
 	<th width="15%" nowrap><?php echo $AppUI->_('Abbreviation');?></th>
@@ -86,9 +89,6 @@ $titleBlock->show();
 	<th width="40%" nowrap><?php echo $AppUI->_('String').': '.$AppUI->_($locales[$lang]);?></th>
 	<th width="5%" nowrap><?php echo $AppUI->_('delete');?></th>
 </tr>
-<form action="?m=system&a=translate_save" method="post" name="editlang">
-<input type="hidden" name="module" value="<?php echo $modules[$module];?>" />
-<input type="hidden" name="lang" value="<?php echo $lang;?>" />
 <?php
 $index = 0;
 if ($lang == 'en') {

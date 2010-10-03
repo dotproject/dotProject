@@ -60,18 +60,18 @@ $q->clear();
 // setup the title block
 $titleBlock = new CTitleBlock('Configure Forums Module', 'support.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=system", "system admin");
-$titleBlock->addCrumb("?m=system&a=viewmods", "modules list");
+$titleBlock->addCrumb("?m=system&amp;a=viewmods", "modules list");
 $titleBlock->show();
 ?>
 
-<script language="javascript">
+<script type="text/javascript" language="javascript">
 function submitFrm(frmName) {
 
 	eval('document.'+frmName+'.submit();');
 
 }
 </script>
-<form name="frmForceWatch" method="post" action="?m=forums&a=configure">
+<form name="frmForceWatch" method="post" action="?m=forums&amp;a=configure">
 <input type="hidden" name="forcesubmit" value="true" />
 <input type="checkbox" name="forcewatch" id="forcewatch" value="dod" <?php echo $watchAll ? 'checked="checked"' : '';?> onclick="javascript:submitFrm('frmForceWatch');" />
 <label for="forcewatch"><?php echo $AppUI->_('forumForceWatch'); ?></label>

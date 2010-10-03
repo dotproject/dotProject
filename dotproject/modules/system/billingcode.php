@@ -12,7 +12,7 @@ $company_id=0;
 $company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 // Check permissions
 if (!$canEdit) {
-  $AppUI->redirect('m=public&a=access_denied');
+  $AppUI->redirect('m=public&amp;a=access_denied');
 }
 
 $q = new DBQuery;
@@ -33,7 +33,7 @@ $q->clear();
 $company_name = $company_list[$company_id];
 
 $titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, "$m.$a");
-$titleBlock->addCrumb('?m=system', 'system admin');
+$titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">
@@ -57,18 +57,18 @@ function delIt2(id) {
 -->
 </script>
 
-<form name="changeMe" action="./index.php?m=system&amp;a=billingcode" method="post">
-	<?php echo arraySelect($company_list, 'company_id', 'size="1" class="text" onchange="changeIt();"', $company_id, false);?>
+<form name="changeMe" action="?m=system&amp;a=billingcode" method="post">
+	<?php echo arraySelect($company_list, 'company_id', 'size="1" class="text" onchange="javascript:changeIt();"', $company_id, false);?>
 </form>
 
-<form name="frmDel" action="./index.php?m=system" method="post">
+<form name="frmDel" action="?m=system" method="post">
   <input type="hidden" name="dosql" value="do_billingcode_aed" />
   <input type="hidden" name="del" value="1" />
   <input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
   <input type="hidden" name="billingcode_id" value="" />
 </form>
 
-<form name="changecode" action="./index.php?m=system" method="post">
+<form name="changecode" action="?m=system" method="post">
   <input type="hidden" name="dosql" value="do_billingcode_aed" />
   <input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
   <input type="hidden" name="billingcode_status" value="0" />
@@ -92,9 +92,9 @@ foreach ($billingcodes as $code) {
 ?>
 <tr>
   <td><input type="hidden" name="billingcode_id" value="<?php echo $code_id; ?>" /></td>
-  <td><input type="text" name="billingcode_name" value="<?php echo $code_name; ?>" /></td>
+  <td><input type="text" name="billingcode_name" value="<?php echo $code_name; ?>" size="20" /></td>
   <td><input type="text" name="billingcode_value" value="<?php echo $code_value; ?>" /></td>
-  <td><input type="text" name="billingcode_desc" value="<?php echo $code_desc; ?>" /></td>
+  <td><input type="text" name="billingcode_desc" value="<?php echo $code_desc; ?>" size="50" /></td>
 </tr>
 <?php
 	} else {
@@ -130,9 +130,9 @@ if (!(isset($_GET['billingcode_id']))) {
 ?>
 <tr>
   <td><input type="hidden" name="billingcode_id" value="" /></td>
-  <td><input type="text" name="billingcode_name" value="" /></td>
+  <td><input type="text" name="billingcode_name" value="" size="20" /></td>
   <td><input type="text" name="billingcode_value" value="" /></td>
-  <td><input type="text" name="billingcode_desc" value="" /></td>
+  <td><input type="text" name="billingcode_desc" value="" size="50" /></td>
 </tr>
 <?php 
 }

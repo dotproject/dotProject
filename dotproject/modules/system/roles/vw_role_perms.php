@@ -48,7 +48,7 @@ $perm_list = $perms->getPermissionList();
 
 ?>
 
-<script language="Javascript" type="text/javascript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -248,7 +248,7 @@ foreach ($role_acls as $acl) {
 	<td nowrap align="right"><?php echo $AppUI->_('Item');?>:</td>
 	<td>
 		<input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
-		<input type="button" name="permission_item_sel_button" class="text" value="..." onclick="popPermItem();" />
+		<input type="button" name="permission_item_sel_button" class="text" value="..." onclick="javascript:popPermItem();" />
 	</td>
 </tr>
 <tr>
@@ -277,7 +277,7 @@ foreach ($role_acls as $acl) {
 <tr>
 	<td>
 		<input type="reset" value="<?php 
-echo $AppUI->_('clear');?>" class="button" name="sqlaction" onClick="clearIt();" />
+echo $AppUI->_('clear');?>" class="button" name="sqlaction" onclick="javascript:clearIt();" />
 	</td>
 	<td align="right">
 		<input type="submit" value="<?php 

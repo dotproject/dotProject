@@ -51,7 +51,7 @@ $canAccess_folders = getPermission('file_folders', 'access');
 $titleBlock = new CTitleBlock('Files', 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCell($AppUI->_('Filter') . ':');
 $titleBlock->addCell(arraySelect($projects, 'project_id', 
-                                 'onChange="document.pickProject.submit()" size="1" class="text"', 
+                                 'onchange="javascript:document.pickProject.submit()" size="1" class="text"', 
                                  $project_id), 
                      '', '<form name="pickProject" action="?m=files" method="post">', '</form>');
 
@@ -63,13 +63,13 @@ $canAuthor_folders = getPermission('file_folders', 'add');
 
 if ($canAuthor) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') 
-	                     . '">', '', '<form action="?m=files&a=addedit&folder=' . $folder 
+	                     . '" />', '', '<form action="?m=files&amp;a=addedit&amp;folder=' . $folder 
 	                     . '" method="post">', '</form>');
 }
 if ($canAuthor_folders) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' 
-	                     . $AppUI->_('new folder').'">', '', 
-	                     '<form action="?m=files&a=addedit_folder" method="post">', '</form>');
+	                     . $AppUI->_('new folder').'" />', '', 
+	                     '<form action="?m=files&amp;a=addedit_folder" method="post">', '</form>');
 }
 $titleBlock->show();
 

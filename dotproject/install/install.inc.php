@@ -160,7 +160,7 @@ function InstallLoadSQL($sqlfile, $last_update = null)
    if (!$result = $db->Execute($pieces[$i])) {
     $errors++;
     $dbErr = true;
-    $dbMsg .= $db->ErrorMsg().'<br>';
+    $dbMsg .= $db->ErrorMsg().'<br />';
    }
   }
  }

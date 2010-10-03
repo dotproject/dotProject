@@ -245,13 +245,13 @@ var cal_day_end = <?php echo intval(dPgetConfig('cal_day_end')); ?>;
 var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours')); ?>;
 </script>
 
-<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
-<form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post">
+<form name="editFrm" action="?m=tasks&amp;project_id=<?php echo $task_project; ?>" method="post">
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php 
 echo $obj->task_contacts; ?>" />
+<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php 
 echo $project->project_color_identifier; ?>" >
@@ -314,13 +314,13 @@ echo (($obj->task_milestone) ? ' checked="checked"' : ''); ?> />
 		<tr>
 			<td>
 				<input class="button" type="button" name="cancel" value="<?php 
-echo $AppUI->_('cancel'); ?>" onClick="if (confirm('<?php 
+echo $AppUI->_('cancel'); ?>" onclick="javascript:if (confirm('<?php 
 echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
 echo $AppUI->getPlace(); ?>';}" />
 			</td>
 			<td>
 				<input class="button" type="button" name="btnFuseAction" value="<?php 
-echo $AppUI->_('save'); ?>" onClick="submitIt(document.editFrm);" />
+echo $AppUI->_('save'); ?>" onclick="javascript:submitIt(document.editFrm);" />
 			</td>
 		</tr>
 		</table>
@@ -354,13 +354,13 @@ $tabBox->show('', true);
 		<tr>
 			<td>
 				<input class="button" type="button" name="cancel2" value="<?php 
-echo $AppUI->_('cancel'); ?>" onClick="if (confirm('<?php 
+echo $AppUI->_('cancel'); ?>" onclick="javascript:if (confirm('<?php 
 echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')) {location.href = '?<?php 
 echo $AppUI->getPlace(); ?>';}" />
 			</td>
 			<td>
 				<input class="button" type="button" name="btnFuseAction2" value="<?php 
-echo $AppUI->_('save'); ?>" onClick="submitIt(document.editFrm);" />
+echo $AppUI->_('save'); ?>" onclick="javascript:submitIt(document.editFrm);" />
 			</td>
 		</tr>
 		</table>

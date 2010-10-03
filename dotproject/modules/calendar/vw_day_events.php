@@ -26,7 +26,7 @@ if (getPermission('admin', 'view')) {
 $events = CEvent::getEventsForPeriod($first_time, $last_time, $event_filter, $user_id);
 
 $start_hour = dPgetConfig('cal_day_start');
-$end_hour = dPgetConfig('cal_day_end');
+$end_hour   = dPgetConfig('cal_day_end');
 
 foreach ($events as $row) {
 	$start_date = new CDate($row['event_start_date']);
@@ -118,11 +118,11 @@ foreach($disp_columns as $col_count) {
 $html  = '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickFilter">';
 $html .= ($AppUI->_('Event Filter') . ":" 
           . arraySelect($event_filter_list, 'event_filter', 
-                        'onChange="document.pickFilter.submit()" class="text"', 
+                        'onchange="javascript:document.pickFilter.submit()" class="text"', 
                         $event_filter, true));
 if ($other_users) {
 	$html .= ($AppUI->_("Show Events for") . ":" 
-	          . '<select name="show_user_events" onchange="document.pickFilter.submit()"' 
+	          . '<select name="show_user_events" onchange="javascript:document.pickFilter.submit()"' 
 	          . ' class="text">');
 	$q = new DBQuery;
 	$q->addTable('users', 'u');
@@ -172,7 +172,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
 			}
 			
-			$href = "?m=calendar&a=view&event_id=".$row['event_id'];
+			$href = "?m=calendar&amp;a=view&amp;event_id=".$row['event_id'];
 			$alt = $row['event_description'];
 
 			$html .= "\n\t" .'<td class="event" rowspan="' . $rows . '" valign="top">';

@@ -15,13 +15,13 @@ if (!defined('DP_BASE_DIR')) {
 	</th>
 	<?php } ?>
 	<th width="150">
-		<a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name');?></a>
+		<a href="?m=admin&amp;a=index&amp;orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name');?></a>
 	</th>
 	<th>
-		<a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name');?></a>
+		<a href="?m=admin&amp;a=index&amp;orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name');?></a>
 	</th>
 	<th>
-		<a href="?m=admin&a=index&orderby=contact_company" class="hdr"><?php echo $AppUI->_('Company');?></a>
+		<a href="?m=admin&amp;a=index&amp;orderby=contact_company" class="hdr"><?php echo $AppUI->_('Company');?></a>
 	</th>
 </tr>
 <?php 
@@ -39,13 +39,13 @@ foreach ($users as $row) {
 		<table cellspacing="0" cellpadding="0" border="0">
 		<tr>
 			<td>
-				<a href="./index.php?m=admin&a=addedituser&user_id=<?php echo $row['user_id'];?>" title="<?php echo $AppUI->_('edit');?>">
+				<a href="./index.php?m=admin&amp;a=addedituser&amp;user_id=<?php echo $row['user_id'];?>" title="<?php echo $AppUI->_('edit');?>">
 					<?php echo dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''); ?>
 				</a>
 			</td>
 			<td>
-				<a href="?m=admin&a=viewuser&user_id=<?php echo $row['user_id'];?>&tab=3" title="">
-					<img src="images/obj/lock.gif" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions');?>">
+				<a href="?m=admin&amp;a=viewuser&amp;user_id=<?php echo $row['user_id'];?>&amp;tab=3" title="">
+					<img src="images/obj/lock.gif" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions');?>" />
 				</a>
 			</td>
 			<td>
@@ -53,7 +53,7 @@ foreach ($users as $row) {
 		$user_display = addslashes($row['contact_first_name'] . ' ' . $row['contact_last_name']);
 		$user_display = trim($user_display);
 		if (empty($user_display)) {
-			$user_display = $row['user_username'];
+        $user_display = $row['user_username'];
 		}
 ?>
 				<a href="javascript:delMe(<?php echo $row['user_id'];?>, '<?php echo $user_display;?>')" title="<?php echo $AppUI->_('delete');?>">
@@ -68,7 +68,7 @@ foreach ($users as $row) {
 		if (dPgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td>
 	       <?php 
-			$q = new DBQuery;
+	          	$q  = new DBQuery;
 			$q->addTable('user_access_log', 'ual');
 			$q->addQuery('user_access_log_id,' 
 			             . ' (unix_timestamp(now()) - unix_timestamp(date_time_in))/3600 as hours,' 
@@ -99,7 +99,7 @@ foreach ($users as $row) {
 ?>
 	</td>
 	<td>
-		<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $row['user_id'];?>"><?php 
+		<a href="?m=admin&amp;a=viewuser&amp;user_id=<?php echo $row['user_id'];?>"><?php 
 echo $row['user_username'];?></a>
 	</td>
 	<td>
@@ -108,12 +108,12 @@ echo $row['user_username'];?></a>
 	if ($row['contact_last_name'] && $row['contact_first_name']) {
 		echo $row['contact_last_name'].', '.$row['contact_first_name'];
 	} else {
-		echo '<span style="font-style: italic">unknown</span>';
+        echo '<span style="font-style: italic">unknown</span>';
 	}
 ?>
 	</td>
 	<td>
-		<a href="./index.php?m=companies&a=view&company_id=<?php echo $row['contact_company'];?>"><?php echo $row['company_name'];?></a>
+		<a href="?m=companies&amp;a=view&amp;company_id=<?php echo $row['contact_company'];?>"><?php echo $row['company_name'];?></a>
 	</td>
 </tr>
 <?php 

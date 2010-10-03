@@ -177,14 +177,14 @@ TD.clsBtnOn {
 TD.clsBtnOff {
 	color: #FFFFFF;
 	padding: 0 3;
-	tab-index: 0;
+	/* tab-index: 0; //not valid for TD */
 	border: solid #559999 2px;
 }
 
 TD.topBtnOff {
 	color: #FFFFFF;
 	padding: 0 3;
-	tab-index: 0;
+	/* tab-index: 0; //not valid for TD */
 	border: solid #cccccc 2px;
 }
 

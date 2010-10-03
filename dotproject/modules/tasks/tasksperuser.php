@@ -23,7 +23,7 @@ $compFilter = arrayMerge(array('all' => $AppUI->_('All Companies')), $companies)
 $titleBlock = new CTitleBlock('Tasks per User', 'applet-48.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(
-	arraySelect($compFilter, 'company_id', 'size="1" class="text" onChange="document.companyFilter.submit();"', $company_id, false), '',
+	arraySelect($compFilter, 'company_id', 'size="1" class="text" onchange="javascript:document.companyFilter.submit();"', $company_id, false), '',
 	'<form action="?m=tasks&a=tasksperuser" method="post" name="companyFilter">', '</form>'
 );
 $titleBlock->addCrumb("?m=tasks", "tasks list");

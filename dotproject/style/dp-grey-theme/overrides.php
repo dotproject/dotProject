@@ -21,7 +21,7 @@ class CTabBox extends CTabBox_core {
 		
 		// tabbed / flat view options
 		if (@$AppUI->getPref('TABVIEW') == 0) {
-			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
+			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%" summary="view tabs">' . "\n";
 			$s .= "<tr>\n";
 			$s .= '<td nowrap="nowrap">' . "\n";
 			$s .= '<a href="' . $this->baseHRef . 'tab=0">' . $AppUI->_('tabbed') . '</a> : ';
@@ -30,7 +30,7 @@ class CTabBox extends CTabBox_core {
 			echo $s;
 		} else {
 			if ($extra) {
-				echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%">' 
+				echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%" summary="tabs extra">' 
 					  . "\n<tr>\n" . $extra . "</tr>\n</table>\n");
 			} else {
 				//echo '<img src="./images/shim.gif" height="10" width="1" alt="" />' . "\n";
@@ -39,7 +39,7 @@ class CTabBox extends CTabBox_core {
 
 		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
 		// flat view, active = -1
-			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
+			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%" summary="tabs flat view active=-1">' . "\n";
 			foreach ($this->tabs as $k => $v) {
 				echo '<tr><td><strong>'.($v[2] ? $v[1] : $AppUI->_($v[1]))."</strong></td></tr>\n";
 				echo '<tr><td>';
@@ -51,8 +51,8 @@ class CTabBox extends CTabBox_core {
 			echo "</table>\n";
 		} else {
 			// tabbed view
-			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">' . "\n";
-			$s .= '<tr><td>' . "\n" .'<table border="0" cellpadding="0" cellspacing="0"><tr>' . "\n";
+			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="tabbed view">' . "\n";
+			$s .= '<tr><td>' . "\n" .'<table border="0" cellpadding="0" cellspacing="0" summary="tabs"><tr>' . "\n";
 			
 			if (count($this->tabs)-1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
@@ -81,7 +81,7 @@ class CTabBox extends CTabBox_core {
 				$s .='">'.(($v[2]) ? $v[1] : $AppUI->_($v[1])).'</a>&nbsp;</td>' . "\n";
 				$s .= ('<td valign="middle"><img id="righttab_' . $k . '" src="./style/' . $uistyle 
 					   . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>');
-				$s .= '<td class="tabsp"><img src="./images/shim.gif" /></td>' . "\n";
+				$s .= '<td class="tabsp"><img src="./images/shim.gif" alt="" /></td>' . "\n";
 			}
 			$s .= '</tr></table>' . "\n" .'</td></tr>' . "\n";
 			$s .= '<tr><td width="100%" colspan="'.(count($this->tabs)*4 + 1).'" class="tabox">';

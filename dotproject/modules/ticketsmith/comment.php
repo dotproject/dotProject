@@ -13,7 +13,7 @@ $ticket_type = dPgetParam($_GET, 'ticket_type', '');
 // setup the title block
 $titleBlock = new CTitleBlock('Post Comment', 'gconf-app-icon.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
-$titleBlock->addCrumb("?m=ticketsmith&a=view&ticket=$ticket", "view this ticket");
+$titleBlock->addCrumb("?m=ticketsmith&amp;a=view&amp;ticket=$ticket", "view this ticket");
 $titleBlock->show();
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
@@ -53,14 +53,14 @@ if (@$comment) {
     do_query("UPDATE tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
 
     /* return to ticket view */
-    echo("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php?m=ticketsmith&a=view&ticket=$ticket_parent\">");
+    echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
 
     exit();
 
 } else {
 
     /* start table */
-	print("<table class=std bgcolor=\"#eeeeee\" width=\"100%\">\n");
+	print("<table class="std\" bgcolor=\"#eeeeee\" width=\"100%\">\n");
     print("<tr>\n");
 	print("<th colspan=\"2\" align=\"center\" >\n");
     print("<div class=\"heading\">".$AppUI->_($title)."</div>\n");
@@ -68,7 +68,7 @@ if (@$comment) {
     print("</tr>\n");
 
     /* start form */
-    print("<form name='ticketform' action=\"index.php?m=ticketsmith&a=comment&ticket=$ticket\" method=\"post\">\n");
+    print('<form name="ticketform" action="?m=ticketsmith&amp;a=comment&amp;ticket='.$ticket.'" method="post">' . "\n");
 
     /* determine poster */
     print("<tr>\n");
@@ -88,7 +88,7 @@ if (@$comment) {
     print("</td>\n");
 
     /* output submit button */
-    print('<tr><td><br /></td><td><font size=\"-1\"><input type="submit" class=button value="'.$AppUI->_('Post Comment').'"></font></td></tr>');
+	print('<tr><td><br /></td><td><font size=\"-1\"><input type="submit" class=button value="'.$AppUI->_('Post Comment').'" /></font></td></tr>');
 
     /* footer links */
     print("<tr>\n");

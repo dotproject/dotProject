@@ -36,7 +36,7 @@ if (count($resources)) {
 }
 
 ?>
-<table class='std' width='100%' cellpadding=4 cellspacing=1>
+<table class='std' width='100%' cellpadding="4" cellspacing="1">
 <tr><th>Type</th><th>Resource</th><th>Allocation</th><th>&nbsp;</th></tr>
 <?php
 foreach ($resources as $res) {

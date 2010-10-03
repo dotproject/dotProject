@@ -105,7 +105,7 @@ $tab = dPgetParam($_REQUEST, 'tab', 0);
 }
 //]]>
 </script>
-<form id="frmSessions" name="frmSessions" method="post" action="?m=admin&tab=<?php echo ($tab);?>">
+<form id="frmSessions" name="frmSessions" method="post" action="?m=admin&amp;tab=<?php echo ($tab);?>">
 <div id="hiddenfrmSessions">
 	<input type="hidden" id="out_session" name="out_session" value="" />
 	<input type="hidden" id="out_user_log_id" name="out_user_log_id" value="" />
@@ -116,15 +116,15 @@ $tab = dPgetParam($_REQUEST, 'tab', 0);
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">
   <tr>
     <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
-    <th width="150"><a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php 
+    <th width="150"><a href="?m=admin&amp;a=index&amp;orderby=user_username" class="hdr"><?php 
 echo $AppUI->_('Login Name'); ?></a></th>
-    <th><a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php 
+    <th><a href="?m=admin&amp;a=index&amp;orderby=contact_last_name" class="hdr"><?php 
 echo $AppUI->_('Real Name'); ?></a></th>
-    <th><a href="?m=admin&a=index&orderby=contact_company" class="hdr"><?php 
+    <th><a href="?m=admin&amp;a=index&amp;orderby=contact_company" class="hdr"><?php 
 echo $AppUI->_('Company');?></a></th>
-    <th><a href="?m=admin&a=index&orderby=date_time_in" class="hdr"><?php 
+    <th><a href="?m=admin&amp;a=index&amp;orderby=date_time_in" class="hdr"><?php 
 echo $AppUI->_('Date Time IN');?></a></th>
-    <th><a href="?m=admin&a=index&orderby=user_ip" class="hdr"><?php 
+    <th><a href="?m=admin&amp;a=index&amp;orderby=user_ip" class="hdr"><?php 
 echo $AppUI->_('Internet Address');?></a></th>
   </tr>
 
@@ -134,7 +134,7 @@ foreach ($rows as $row) {
 	echo ('    <td align="center" nowrap="nowrap">' . "\n") ;
 	if ($canEdit && $canDelete) {
 		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_session')
-		      .'" onclick="logoutSession(\'' . $row['session_id'] . "', '" 
+		      .'" onclick="javascript:logoutSession(\'' . $row['session_id'] . "', '" 
 		      . $row['user_access_log_id'] . "', '" . $row['u_user_id']  ."', '" 
 		      . ($row['contact_first_name'] . ' ' . $row['contact_last_name']) . '\');" />' . "\n");
 	}
@@ -142,11 +142,11 @@ foreach ($rows as $row) {
 	echo ('    <td align="center" nowrap="nowrap">' . "\n") ;
 	if ($canEdit && $canDelete && $logoutUserFlag) {
 		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_user') 
-		      .'" onclick="logoutUser(\'' . $row['u_user_id']  ."', '" 
+		      .'" onclick="javascript:logoutUser(\'' . $row['u_user_id']  ."', '" 
 		      . ($row['contact_first_name'] . ' ' . $row['contact_last_name']) . '\');" />' . "\n");
 	}
 	echo ("    </td>\n");
-	echo ('    <td><a href="./index.php?m=admin&a=viewuser&user_id=' . $row['u_user_id'] 
+	echo ('    <td><a href="?m=admin&amp;a=viewuser&amp;user_id=' . $row['u_user_id'] 
 		  . '">'.$row['user_username'] . "</a></td>\n");
 	echo ('    <td>');
 	
@@ -158,7 +158,7 @@ foreach ($rows as $row) {
 	}
     
 	echo ("</td>\n");
-	echo ('    <td><a href="./index.php?m=companies&a=view&company_id=' . $row['contact_company'] 
+	echo ('    <td><a href="?m=companies&amp;a=view&amp;company_id=' . $row['contact_company'] 
 	      . '">' . $row['company_name'] . "</a></td>\n");
 	echo ('    <td>' . $row['date_time_in'] . "</td>\n");
 	echo ('    <td>' . $row['user_ip'] . "</td>\n");

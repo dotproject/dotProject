@@ -26,7 +26,7 @@ if ($folder) {
 	$canAuthor_folder = getPermission('file_folders', 'add', $folder);
 }
 if (($folder && !($canEdit_folder && $canRead_folder)) || (!($folder) && !($canAuthor_folder))) {
-	$AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect("m=public&amp;a=access_denied");
 }
 
 $msg = '';
@@ -46,7 +46,7 @@ if ($canDelete_folder) {
 $titleBlock->show();
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.folderFrm;
 	var msg = '';
@@ -68,14 +68,13 @@ function delIt() {
 	}
 }
 </script>
-<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
-
 <form name="folderFrm" action="?m=files" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 
+<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 <tr>
 	<td width="100%" valign="top" align="center">
 		<table cellspacing="1" cellpadding="2" width="60%">
@@ -102,11 +101,11 @@ function delIt() {
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')) {location.href = '?<?php echo $referrer; ?>';}" />
+		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')) {location.href = '?<?php echo $referrer; ?>';}" />
 	</td>
 	<td align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit');?>" onclick="submitIt()" />
+		<input type="button" class="button" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt()" />
 	</td>
 </tr>
-</form>
 </table>
+</form>

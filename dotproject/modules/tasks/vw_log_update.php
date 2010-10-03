@@ -17,12 +17,12 @@ $task_log_id = intval(dPgetParam($_GET, 'task_log_id', 0));
 $log = new CTaskLog();
 if ($task_log_id) {
 	if (!($canEdit)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect('m=public&amp;a=access_denied');
 	}
 	$log->load($task_log_id);
 } else {
 	if (!($canAdd)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect('m=public&amp;a=access_denied');
 	}
 	$log->task_log_task = $task_id;
 	$log->task_log_name = $obj->task_name;
@@ -32,7 +32,7 @@ if ($task_log_id) {
 $task = new CTask;
 $task->load($task_id);
 if (!($task->canAccess($AppUI->user_id))) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&amp;a=access_denied');
 }
 
 $q = new DBQuery;
@@ -98,7 +98,7 @@ for ($req; !($req->EOF); $req->MoveNext()) {
 ?>
 
 <!-- TIMER RELATED SCRIPTS -->
-<script language="JavaScript">
+<script type="text/javascript" language="javascript">
 	// please keep these lines on when you copy the source
 	// made by: Nicolas - http://www.javascript-page.com
 	// adapted by: Juan Carlos Gonzalez jcgonz@users.sourceforge.net
@@ -160,7 +160,8 @@ if ($obj->canUserEditTimeInformation()) {
 	function popCalendar(field) {
 		calendarField = field;
 		idate = eval('document.editFrm.task_' + field + '.value');
-		window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=251, height=220, scrollbars=no, status=no');
+		window.open('index.php?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date='
+					+ idate, 'calwin', 'width=251, height=220, scrollbars=no, status=no');
 	}
 <?php 
 }
@@ -169,8 +170,8 @@ if ($obj->canUserEditTimeInformation()) {
 <!-- END OF TIMER RELATED SCRIPTS -->
 
 <a name="log"></a>
-<form name="editFrm" action="?m=tasks&a=view&task_id=<?php echo $task_id; ?>" method="post"
-  onsubmit='updateEmailContacts();'>
+<form name="editFrm" action="?m=tasks&amp;a=view&amp;task_id=<?php echo $task_id; ?>" method="post"
+  onsubmit='javascript:updateEmailContacts();'>
   <input type="hidden" name="uniqueid" value="<?php echo uniqid(""); ?>" />
   <input type="hidden" name="dosql" value="do_updatetask" />
   <input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
@@ -186,10 +187,10 @@ echo(($log->task_log_creator == 0) ? $AppUI->user_id : $log->task_log_creator) ?
         <td align="right"><?php echo $AppUI->_('Date'); ?></td>
         <td nowrap="nowrap">
           <input type="hidden" name="task_log_date" value="<?php 
-echo $log_date->format(FMT_DATETIME_MYSQL); ?>">
+echo $log_date->format(FMT_DATETIME_MYSQL); ?>" />
           <input type="text" name="log_date" value="<?php 
-echo $log_date->format($df); ?>" class="text" disabled="disabled">
-          <a href="#" onClick="popCalendar('log_date')">
+echo $log_date->format($df); ?>" class="text" disabled="disabled" />
+		<a href="#" onclick="javascript:popCalendar('log_date')">
           <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar'); ?>" border="0" />
           </a>
@@ -257,9 +258,9 @@ if ($obj->canUserEditTimeInformation()) {
 	echo (($end_date) ? $end_date->format(FMT_TIMESTAMP) : ''); ?>" />
           <input type="text" name="end_date" value="<?php 
 	echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-          <a href="#" onClick="popCalendar('end_date')">
+			<a href="#" onclick="javascript:popCalendar('end_date')">
           <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar'); ?>" border="0">
+	echo $AppUI->_('Calendar'); ?>" border="0" />
           </a>
         </td>
       </tr>
@@ -316,19 +317,19 @@ echo (($ta) ? ' checked="checked"' : ''); ?> />
           <label for="email_assignees"><?php echo $AppUI->_('Task Assignees'); ?></label>
           <input type="hidden" name="email_task_list" id="email_task_list" value="<?php 
 echo implode(',', $cid); ?>" />
-          <input type="checkbox" onmouseover="window.status = '<?php 
+          <input type="checkbox" onmouseover="javascript:window.status = '<?php 
 echo addslashes(implode(',',$task_email_title)); 
-?>';" onmouseout="window.status = '';" name="email_task_contacts" id="email_task_contacts"<?php
+?>';" onmouseout="javascript:window.status = '';" name="email_task_contacts" id="email_task_contacts"<?php
 echo (($tt) ? ' checked="checked"' : ''); ?> />
           <label for="email_task_contacts"><?php echo $AppUI->_('Task Contacts'); ?></label>
           <input type="hidden" name="email_project_list" id="email_project_list" value="<?php 
 echo implode(',', $cid); ?>" />
-          <input type="checkbox" onmouseover="window.status = '<?php 
+          <input type="checkbox" onmouseover="javascript:window.status = '<?php 
 echo addslashes(implode(',', $proj_email_title)); 
-?>';" onmouseout="window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php 
+?>';" onmouseout="javascript:window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php 
 echo (($tp) ? ' checked="checked"' : ''); ?> />
           <label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
-          <input type='hidden' name='email_others' id='email_others' value=''>
+          <input type='hidden' name='email_others' id='email_others' value='' />
           <?php
 if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 ?>

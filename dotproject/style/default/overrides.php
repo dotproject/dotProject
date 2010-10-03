@@ -38,7 +38,7 @@ class CTabBox extends CTabBox_core {
 
 		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
-			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
+			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%" summary="flat view">' . "\n";
 			foreach ($this->tabs as $k => $v) {
 				echo '<tr><td><strong>'.($v[2] ? $v[1] : $AppUI->_($v[1]))."</strong></td></tr>\n";
 				echo '<tr><td>';
@@ -50,7 +50,7 @@ class CTabBox extends CTabBox_core {
 			echo "</table>\n";
 		} else {
 			// tabbed view
-			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">' . "\n";
+			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="tabbed view">' . "\n";
 			$s .= '<tr><td>' . "\n" .'<table border="0" cellpadding="0" cellspacing="0"><tr>' . "\n";
 			
 			if (count($this->tabs)-1 < $this->active) {
@@ -60,7 +60,8 @@ class CTabBox extends CTabBox_core {
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
-				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/images/tab' . $sel . 'Left.png" id="lefttab_' . $k .'" border="0" alt="" /></td>' . "\n";
+				$s .= '<td valign="middle"><img src="./style/'.$uistyle.'/images/tab'.$sel
+					.'Left.png" id="lefttab_'.$k.'" border="0" alt="" /></td>'."\n";
 				$s .= '<td id="toptab_'.$k.'" valign="middle" nowrap="nowrap"';
 				
 				$s .= (($js_tabs) 
@@ -77,9 +78,11 @@ class CTabBox extends CTabBox_core {
 				}
 				
 				$s .='">'.(($v[2]) ? $v[1] : $AppUI->_($v[1])).'</a>&nbsp;</td>' . "\n";
-				$s .= ('<td valign="middle"><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/tab' 
-					   . $sel . 'Right.png" border="0" alt="" /></td>' . "\n");
-				$s .= '<td class="tabsp"><img src="./images/shim.gif" height="1" width="3" /></td>' . "\n";
+				$s .= ('<td valign="middle"><img id="righttab_' . $k . '" src="./style/' 
+					. $uistyle . '/images/tab' 
+					. $sel . 'Right.png" border="0" alt="" /></td>' . "\n");
+				$s .= '<td class="tabsp"><img src="./images/shim.gif" height="1" width="3" alt="" /></td>'
+					. "\n";
 			}
 			$s .= '</tr></table>' . "\n" .'</td></tr>' . "\n";
 			$s .= '<tr><td width="100%" colspan="'.(count($this->tabs)*4 + 1).'" class="tabox">' . "\n";
@@ -100,7 +103,7 @@ class CTabBox extends CTabBox_core {
 					$currentTabName = $v[1];
 					require $this->baseInc.$v[0].'.php';
 					echo '</div>';
-					echo ('<script language="JavaScript" type="text/javascript">' . "\n" 
+					echo ('<script language="javascript" type="text/javascript">' . "\n" 
 						  . '//<!--' . "\n" 
 						  . 'show_tab('.$this->active.');' . "\n" 
 						  . '//-->' . "\n" 

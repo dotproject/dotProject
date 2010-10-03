@@ -11,7 +11,7 @@ class contacts extends smartsearch
 	var $table = 'contacts';
 	var $table_module = 'contacts';
 	var $table_key = 'contact_id';
-	var $table_link = 'index.php?m=contacts&a=view&contact_id=';
+	var $table_link = '?m=contacts&amp;a=view&amp;contact_id=';
 	var $table_title = 'Contacts';
 	var $table_orderby = 'contact_last_name,contact_first_name';
 	var $search_fields = array('contact_last_name', 'contact_first_name', 'contact_title', 

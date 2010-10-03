@@ -95,33 +95,33 @@ function delIt() {
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id;?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std" summary="view department">
 <tr valign="top">
 	<td width="50%">
 		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
+		<table cellspacing="1" cellpadding="2" border="0" width="100%" summary="details">
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Company'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
 			<td bgcolor="#ffffff" width="100%"><?php echo $dept['company_name'];?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Department'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
 			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_name'];?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Owner'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['contact_first_name'].' '.@$dept['contact_last_name'];?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Phone'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
 			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_phone'];?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap><?php echo $AppUI->_('Fax'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
 			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_fax'];?></td>
 		</tr>
 		<tr valign=top>
-			<td align="right" nowrap><?php echo $AppUI->_('Address'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td bgcolor="#ffffff"><?php
 				echo @$dept['dept_address1']
 					.(($dept['dept_address2']) ? '<br />'.$dept['dept_address2'] : '')

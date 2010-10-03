@@ -74,9 +74,9 @@ if ($can_edit_time_information) {
 	echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
 		<input type="text" name="start_date" id="start_date" value="<?php 
 	echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar(document.datesFrm.start_date)">
+		<a href="#" onclick="javascript:popCalendar(document.datesFrm.start_date)">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar');?>" border="0">
+	echo $AppUI->_('Calendar');?>" border="0" />
 					</a>
 	</td>
 	<td>
@@ -95,7 +95,7 @@ if ($can_edit_time_information) {
 		echo ('<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' 
 			  . (($start_date) ? $start_date->getAMPM() : (($start > 11) ? 'pm' : 'am')) 
 			  . '" disabled="disabled" class="text" size="2" /></td>');
-	}
+		}
 ?>
 		</tr></table>
 	</td>
@@ -107,9 +107,9 @@ if ($can_edit_time_information) {
 	echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 		<input type="text" name="end_date" id="end_date" value="<?php 
 	echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-		<a href="#" onClick="popCalendar(document.datesFrm.end_date)">
+		<a href="#" onclick="javascript:popCalendar(document.datesFrm.end_date)">
 			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar');?>" border="0">
+	echo $AppUI->_('Calendar');?>" border="0" />
 					</a>
 	</td>
         <td>
@@ -126,7 +126,7 @@ if ($can_edit_time_information) {
 		echo ('<td><input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' 
 			  . (($end_date) ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) 
 			  . '" disabled="disabled" class="text" size="2" /></td>');
-	}
+		}
 ?>
 	</tr></table>
 	</td>
@@ -147,9 +147,9 @@ if ($can_edit_time_information) {
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calculate');?>:</td>
 	<td nowrap="nowrap">
 		<input type="button" value="<?php 
-	echo $AppUI->_('Duration');?>" onclick="calcDuration(document.datesFrm)" class="button" />
+	echo $AppUI->_('Duration');?>" onclick="javascript:calcDuration(document.datesFrm)" class="button" />
 		<input type="button" value="<?php 
-	echo $AppUI->_('Finish Date');?>" onclick="calcFinish(document.datesFrm)" class="button" />
+	echo $AppUI->_('Finish Date');?>" onclick="javascript:calcFinish(document.datesFrm)" class="button" />
 	</td>
 	<td><?php echo $AppUI->_('Working Days').': '.$cwd_hr; ?></td>
 </tr>
@@ -160,13 +160,13 @@ if ($can_edit_time_information) {
 	<td colspan='2'><?php 
 	echo $AppUI->_('Only the task owner, project owner, or system administrator' 
 				   . ' is able to edit time related information.'); ?>
-	</td>
+        </td>
 </tr>
 <?php
 } // end of can_edit_time_information
 ?>
 </table>
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
  subForm.push(new FormDefinition(<?php echo $tab;?>, document.datesFrm, checkDates, saveDates));
 </script>

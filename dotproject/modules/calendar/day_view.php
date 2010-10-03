@@ -71,7 +71,7 @@ $titleBlock->addCrumb(('?m=calendar&amp;date=' . $this_day->format(FMT_TIMESTAMP
 $titleBlock->addCrumb(('?m=calendar&amp;a=week_view&amp;date=' . $this_week), 'week view');
 $titleBlock->addCell(($AppUI->_('Company') . ':'));
 $titleBlock->addCell(arraySelect($companies, 'company_id', 
-                                 'onChange="document.pickCompany.submit()" class="text"', 
+                                 'onchange="document.pickCompany.submit()" class="text"', 
                                  $company_id), '', 
                      ('<td><form action="' . htmlspecialchars($_SERVER['REQUEST_URI']) 
                       . '" method="post" name="pickCompany">' 
@@ -86,35 +86,35 @@ $titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">
 function clickDay(idate, fdate) {
-		window.location = './index.php?m=calendar&a=day_view&date='+idate+'&tab=0';
+		window.location = '?m=calendar&amp;a=day_view&amp;date='+idate+'&amp;tab=0';
 }
 </script>
 
 <table width="100%" cellspacing="0" cellpadding="4">
 	<tr>
 		<td valign="top">
-			<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
-			<tr>
-				<td>
+				<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
+				<tr>
+						<td>
 					<a href="<?php 
 echo '?m=calendar&amp;a=day_view&amp;date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>">
 					<?php 
 echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous day')); ?>
 					</a>
-				</td>
-				<th width="100%">
+						</td>
+						<th width="100%">
 					<?php 
 echo ($AppUI->_($this_day->format('%A')) . ', ' . $this_day->format($df)); ?>
-				</th>
-				<td>
+						</th>
+						<td>
 					<a href="<?php 
 echo ('?m=calendar&amp;a=day_view&amp;date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>">
 					<?php 
 echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 					</a>
-				</td>
-			</tr>
-			</table>
+						</td>
+				</tr>
+				</table>
 		</td>
 	</tr>
 	<tr>
@@ -164,8 +164,8 @@ echo $minical->show();
 
 				</td>
 			</tr>
-		</table>
-		</td>
+	</table>
+	</td>
  <?php } ?>
 	</tr>
 </table>

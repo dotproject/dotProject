@@ -18,12 +18,12 @@ if (empty($sort_column)) $sort_column = "";
 $title = "Search Tickets";
 
 /* start form */
-print("<form name='ticketform' action=index.php?m=ticketsmith&a=search method=\"post\">\n");
+print("<form name='ticketform' action='?m=ticketsmith&amp;a=search' method='post'>\n");
 
 /* start table */
-print("<table class=maintable bgcolor=\"#eeeeee\" width=95%>\n");
+print("<table class='maintable' bgcolor='#eeeeee' width='95%'>\n");
 print("<tr>\n");
-print("<td colspan=\"2\" align=\"center\" bgcolor=#878676 width=100%>\n");
+print("<td colspan='2' align='center' bgcolor='#878676' width='100%'>\n");
 print("<div class=\"heading\">".$AppUI->_($title)."</div>\n");
 print("</td>\n</tr>\n");
 
@@ -78,21 +78,21 @@ $sort_choices = array("ticket"     => $AppUI->_("Ticket"),
 
 $sort_selectbox = create_selectbox("sort_column", $sort_choices, $sort_column);
 print($sort_selectbox);
-print(" <input type=\"radio\" name=\"sort_direction\" value=\"ASC\"> ".$AppUI->_('Ascending'));
-print(" <input type=\"radio\" name=\"sort_direction\" value=\"DESC\" checked> ".$AppUI->_('Descending'));
+print(" <input type=\"radio\" name=\"sort_direction\" value=\"ASC\" /> ".$AppUI->_('Ascending'));
+print(" <input type=\"radio\" name=\"sort_direction\" value=\"DESC\" checked='checked' /> ".$AppUI->_('Descending'));
 print("</td>\n");
 print("</tr>\n");
 
 /* submit button */
 print("<tr>\n");
 print("<td><br /></td>\n");
-print('<td><input type="submit" value="'.$AppUI->_('Search').'"></td>');
+print('<td><input type="submit" value="'.$AppUI->_('Search').'" /></td>');
 print("</tr>\n");
 
 /* output footer */
 print("<tr>\n");
 print("<td><br /></td>\n");
-print("<td><a href=index.php?m=ticketsmith>".$AppUI->_('Return to ticket list')."</a></td>\n");
+print("<td><a href='?m=ticketsmith'>".$AppUI->_('Return to ticket list')."</a></td>\n");
 print("</tr>\n");
 
 /* end table */

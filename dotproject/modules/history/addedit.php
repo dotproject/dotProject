@@ -73,14 +73,14 @@ $titleBlock->show();
 <table border="0" cellpadding="4" cellspacing="0" width="98%">
 <tr>
 	<td width="50%" align="right">
-		<a href="javascript:delIt()"><img align="absmiddle" src="./images/icons/trash.gif" width="16" height="16" alt="" border="0"><?php echo $AppUI->_('delete history');?></a>
+		<a href="javascript:delIt()"><img align="middle" src="./images/icons/trash.gif" width="16" height="16" alt="" border="0" alt="" /><?php echo $AppUI->_('delete history');?></a>
 	</td>
 </tr>
 </table>
 
-<table border="1" cellpadding="4" cellspacing="0" width="98%" class="std">
+<table border="1" cellpadding="4" cellspacing="0" width="98%" class="std" summary="project history">
 	
-<script>
+<script type="text/javascript">
 	function delIt() {
 		document.AddEdit.action.value = "del";
 		document.AddEdit.submit();
@@ -115,10 +115,10 @@ echo arraySelect($projects, 'history_project', 'class="text"', $history["history
 		<table>
 		<tr>
 			<td>
-				<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onClick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php echo $AppUI->getPlace();?>';}">
+				<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {location.href = '?<?php echo $AppUI->getPlace();?>';}">
 			</td>
 			<td>
-				<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onClick="submit()">
+				<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="javascript:submit()">
 			</td>
 		</tr>
 		</table>
@@ -128,5 +128,3 @@ echo arraySelect($projects, 'history_project', 'class="text"', $history["history
 	
 </table>
 </form>		
-</body>
-</html>

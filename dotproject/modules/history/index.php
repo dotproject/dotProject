@@ -65,7 +65,7 @@ function show_history($history) {
 			case 'history':
 			case 'files':
 			case 'links':
-				$link = '&a=addedit&' . $table_id . '=';
+				$link = '&amp;a=addedit&amp;' . $table_id . '=';
 				break;
 			case 'tasks':
 			case 'projects':
@@ -73,10 +73,10 @@ function show_history($history) {
 			case 'departments':
 			case 'events':
 			case 'contacts':
-				$link = '&a=view&' . $table_id . '=';
+				$link = '&amp;a=view&amp;' . $table_id . '=';
 				break;
 			case 'forums':
-				$link = '&a=viewer&' . $table_id . '=';
+				$link = '&amp;a=viewer&amp;' . $table_id . '=';
 				break;
 			case 'task_log':
 				$module = 'tasks';
@@ -85,7 +85,8 @@ function show_history($history) {
 				$q->addWhere('task_log_id = ' . $id);
 				$task_log_task = $q->loadResult();
 				$q->clear();
-				$link = '&a=view&task_id=' . $task_log_task . '&tab=1&' . $table_id . '=';
+				$link = '&amp;a=view&amp;task_id=' . $task_log_task . '&amp;tab=1&amp;' . $table_id 
+						. '=';
 				$in_page_anchor = '#log';
 				break;
 		}
@@ -195,7 +196,7 @@ $last_page = (($pages > $max_pages) ? min(($first_page + $max_pages - 1), $pages
 	<td nowrap align="right">
 	  <form name="filter" action="?m=history" method="post" >
 	  <?php echo $AppUI->_('Changes to'); ?>:
-		<select name="filter" onChange="document.filter.submit()">
+		<select name="filter" onchange="javascript:document.filter.submit()">
 		  <option value=""><?php echo $AppUI->_('Show all'); ?></option>
 <?php
 foreach ($filter_options as $mod => $mod_data) {
@@ -220,7 +221,7 @@ if ($pages > 1) {
 		if ($i == $page) {
 			echo '<b>'.$i.'</b>';
 		} else {
-			echo '<a href="?m=history&filter=' . $in_filter . '&pg=' . $i . '">' . $i . '</a>';
+			echo '<a href="?m=history&amp;filter=' . $in_filter . '&amp;pg=' . $i . '">' . $i . '</a>';
 		}
 	}
 }
@@ -228,7 +229,7 @@ if ($pages > 1) {
 	  </form>
 	</td>
 	<td align="right"><input class="button" type="button" value="<?php 
-echo $AppUI->_('Add history'); ?>" onclick="window.location='?m=history&a=addedit'"></td>
+echo $AppUI->_('Add history'); ?>" onclick="window.location='?m=history&amp;a=addedit'"></td>
   </tr>
 </table>
 
@@ -254,9 +255,9 @@ foreach ($history as $row) {
 	    || getPermission($module, 'access', $row['history_item'])) {
 ?>
   <tr>	
-	<td><a href="?m=history&a=addedit&history_id=<?php echo ($row['history_id']); ?>">
+	<td><a href="?m=history&amp;a=addedit&amp;history_id=<?php echo ($row['history_id']); ?>">
 	  <img src="./images/icons/pencil.gif" alt="<?php 
-echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12">
+echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" />
 	</a></td>
 	<td align="center"><?php echo ($hd->format($df) . ' ' . $hd->format($tf)); ?></td>
 	<td><?php echo show_history($row); ?></td>

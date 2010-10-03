@@ -12,7 +12,7 @@ $titleBlock = new CTitleBlock('Trouble Ticket Management', 'gconf-app-icon.png',
 if ($canAuthor) {
 	$titleBlock->addCell(
 		'<input type="submit" class="button" value="'.$AppUI->_('new ticket').'">', '',
-		'<form name="ticketform" action="?m=ticketsmith&a=post_ticket" method="post">', '</form>'
+		'<form name="ticketform" action="?m=ticketsmith&amp;a=post_ticket" method="post">', '</form>'
 	);
 }
 $titleBlock->show();
@@ -114,11 +114,13 @@ else {
 <?php
 if ($ticket_count > $limit) {
     if ($offset - $limit >= 0) {
-        print("<a href=index.php?m=ticketsmith&type=$type&column=$column&direction=$direction&offset=" . ($offset - $limit) . "><img src=images/navleft.gif border=0></a> | \n");
+        print("<a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
+				. ($offset - $limit) . "><img src='images/navleft.gif' border='0' alt='' /></a> | \n");
     }
     print($AppUI->_("$page_string")."\n");
     if ($offset + $limit < $ticket_count) {
-        print(" | <a href=index.php?m=ticketsmith&type=$type&column=$column&direction=$direction&offset=" . ($offset + $limit) . "><img src=images/navright.gif border=0></a>\n");
+        print(" | <a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
+				. ($offset + $limit) . "><img src='images/navright.gif' border='0' alt='' /></a>\n");
     }
 }
 ?>
@@ -149,8 +151,8 @@ if ($parent_count) {
     print("<tr>\n");
     for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
         print("<th align=" . $fields["aligns"][$loop] . ">");
-        print("<a href=index.php?m=ticketsmith&type=$type");
-        print("&column=" . $fields["columns"][$loop]);
+        print("<a href='?m=ticketsmith&amp;type=$type'");
+        print("&amp;column=" . $fields["columns"][$loop]);
         if ($column != $fields["columns"][$loop]) {
             $new_direction = "ASC";
         }
@@ -162,14 +164,14 @@ if ($parent_count) {
                 $new_direction == "ASC";
             }
         }
-        print("&direction=$new_direction");
+        print("&amp;direction=$new_direction");
         print(' class="hdr">' . $AppUI->_($fields["headings"][$loop]) . "</a></th>\n");
     }
     print("</tr>\n");
     while ($row = result2hash($result)) {
-        print("<tr height=25>\n");
+        print("<tr style='height:25px;'>\n");
         for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
-            print("<td  bgcolor=white align=" . $fields["aligns"][$loop] . ">\n");
+            print("<td  bgcolor='white' align=" . $fields["aligns"][$loop] . ">\n");
 
 	    	//translate some information, some not
 	    	if ($fields["headings"][$loop] == "Status") {
@@ -184,8 +186,8 @@ if ($parent_count) {
     }
 }
 else {
-    print("<tr height=25>\n");
-    print("<td align=center colspan=" . count($fields["headings"]) . ">\n");
+    print("<tr style='height:25px;'>\n");
+    print("<td align='center' colspan='" . count($fields["headings"]) . "'>\n");
     print($AppUI->_('There are no')." ");
     print($type == "All" ? "" : mb_strtolower($AppUI->_($type)) . " ");
     print($AppUI->_('tickets').".\n");
@@ -196,22 +198,22 @@ else {
 /* output action links */
 print("<tr>\n");
 print("<td><br /></td>\n");
-print("<td colspan=" . (count($fields["headings"]) - 1) . " align=right>\n");
-print("<table width=100% border=0 cellspacing=0 cellpadding=0>\n");
-print("<tr height=25><td align=left>");
+print("<td colspan='" . (count($fields["headings"]) - 1) . "' align='right'>\n");
+print("<table width='100%' border='0' cellspacing='0' cellpadding='0'>\n");
+print("<tr style='height:25px;'><td align='left'>");
 $types = array("My","Open","Processing","Closed","Deleted","All");
 for ($loop = 0; $loop < count($types); $loop++) {
-    $toggles[] = "<a href=index.php?m=ticketsmith&type=" . $types[$loop] . ">" . $AppUI->_($types[$loop]) . "</a>";
+    $toggles[] = "<a href='?m=ticketsmith&amp;type=" . $types[$loop] . "'>" . $AppUI->_($types[$loop]) . "</a>";
 }
 print(join(" | ", $toggles));
 print(" ".$AppUI->_('Tickets')."</td>\n");
 if ($type == "Deleted" && $parent_count) {
-    print("<td align=center><a href=index.php?m=ticketsmith&type=Deleted&action=expunge>".$AppUI->_('Expunge Deleted')."</a></td>");
+    print("<td align='center'><a href='?m=ticketsmith&amp;type=Deleted&amp;action=expunge'>".$AppUI->_('Expunge Deleted')."</a></td>");
 }
-print("<td align=right>
-<a href='index.php?m=ticketsmith&a=pdf&type=$type&suppressHeaders=1'>" . $AppUI->_('Report as PDF') . "</a> |
-<a href=index.php?m=ticketsmith&a=search>".$AppUI->_('Search')."</a> | 
-<a href=index.php?m=ticketsmith&type=$type>".$AppUI->_('Back to top')."</a></td></tr>\n");
+print("<td align='right'>
+<a href='?m=ticketsmith&amp;a=pdf&amp;type=$type&suppressHeaders=1'>" . $AppUI->_('Report as PDF') . "</a> |
+<a href='?m=ticketsmith&amp;a=search'>".$AppUI->_('Search')."</a> | 
+<a href='?m=ticketsmith&amp;type=$type'>".$AppUI->_('Back to top')."</a></td></tr>\n");
 print("</table>\n");
 print("</td>\n");
 print("</tr>\n");    

@@ -26,7 +26,7 @@ $showProject = false;
 
 
 if (getPermission('files', 'edit')) { 
-	echo ('<a href="./index.php?m=files&a=addedit&project_id=' . $project_id . '">' 
+	echo ('<a href="?m=files&amp;a=addedit&amp;project_id=' . $project_id . '">' 
 	      . $AppUI->_('Attach a file') . '</a>');
 	echo dPshowImage(dPfindImage('stock_attach-16.png', $m), 16, 16, ''); 
 }
