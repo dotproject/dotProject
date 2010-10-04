@@ -12,7 +12,7 @@ $company_id=0;
 $company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 // Check permissions
 if (!$canEdit) {
-  $AppUI->redirect('m=public&amp;a=access_denied');
+  $AppUI->redirect('m=public&a=access_denied');
 }
 
 $q = new DBQuery;

@@ -8,7 +8,7 @@ $AppUI->savePlace();
 $canEdit = getPermission($m, 'edit');
 $canRead = getPermission($m, 'view');
 if (!$canRead) {
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $hidden_modules = array(

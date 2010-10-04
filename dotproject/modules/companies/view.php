@@ -11,7 +11,7 @@ $canEdit = getPermission($m, 'edit', $company_id);
 
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // retrieve any state parameters

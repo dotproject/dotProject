@@ -11,7 +11,7 @@ $preserve = $dPconfig['files_ci_preserve_attr'];
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $file_id);
 if (!($canEdit)) {
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 if (file_exists(DP_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
@@ -63,7 +63,7 @@ if (!($canAdmin)) {
 	$canAdmin = $obj->canAdmin();
 }
 if ($obj->file_checkout == 'final' && !($canAdmin)) {
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // setup the title block

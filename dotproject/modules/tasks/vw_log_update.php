@@ -17,12 +17,12 @@ $task_log_id = intval(dPgetParam($_GET, 'task_log_id', 0));
 $log = new CTaskLog();
 if ($task_log_id) {
 	if (!($canEdit)) {
-		$AppUI->redirect('m=public&amp;a=access_denied');
+		$AppUI->redirect('m=public&a=access_denied');
 	}
 	$log->load($task_log_id);
 } else {
 	if (!($canAdd)) {
-		$AppUI->redirect('m=public&amp;a=access_denied');
+		$AppUI->redirect('m=public&a=access_denied');
 	}
 	$log->task_log_task = $task_id;
 	$log->task_log_name = $obj->task_name;
@@ -32,7 +32,7 @@ if ($task_log_id) {
 $task = new CTask;
 $task->load($task_id);
 if (!($task->canAccess($AppUI->user_id))) {
-	$AppUI->redirect('m=public&amp;a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $q = new DBQuery;
