@@ -116,6 +116,7 @@ bordertable {
 	border: 1px black solid;
 	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 8pt;
+	color: #000009;
 	/*height: 12pt; Select boxes are too small in Mozilla */
 }
 
@@ -480,3 +481,5 @@ th form {
   margin: 0;
   margin-top: 1px;
 }
+
+.disabled { color: #000000; }
