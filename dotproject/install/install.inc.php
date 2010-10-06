@@ -47,13 +47,14 @@ function dPInstallGetParam(&$arr, $name, $def=null) {
 * system.  The default is to 
 */
 function InstallGetVersion($mode, $db) {
+ global $dbprefix;
  $result = array(
   'last_db_update' => '',
   'last_code_update' => '',
   'code_version' => '1.0.2',
   'db_version' => '1'
 );
- $res = $db->Execute('SELECT * FROM dpversion LIMIT 1');
+ $res = $db->Execute('SELECT * FROM '.$dbprefix.'dpversion LIMIT 1');
  if ($res && $res->RecordCount() > 0) {
    $row = $res->FetchRow();
    $result['last_db_update'] = str_replace('-', '', $row['last_db_update']);
@@ -135,7 +136,7 @@ function InstallSplitSql($sql, $last_update) {
 
 function InstallLoadSQL($sqlfile, $last_update = null)
 {
- global $dbErr, $dbMsg, $db;
+ global $dbErr, $dbMsg, $db, $dbprefix;
 
  // Don't complain about missing files.
  if (! file_exists($sqlfile))
@@ -157,6 +158,7 @@ function InstallLoadSQL($sqlfile, $last_update = null)
  for ($i=0; $i<$piece_count; $i++) {
   $pieces[$i] = trim($pieces[$i]);
   if (!empty($pieces[$i]) && $pieces[$i] != "#") {
+   $pieces[$i] = str_replace('%dbprefix%',$dbprefix,$pieces[$i]);
    if (!$result = $db->Execute($pieces[$i])) {
     $errors++;
     $dbErr = true;

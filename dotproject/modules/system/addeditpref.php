@@ -13,13 +13,12 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 }
 
 // load the preferences
-$sql = "
-SELECT pref_name, pref_value
-FROM user_preferences
-WHERE pref_user in (0, $user_id)
-ORDER by pref_user
-";
-$prefs = db_loadHashList($sql);
+$q = new DBQuery;
+$q->addQuery('pref_name, pref_value');
+$q->addTable('user_preferences');
+$q->addWhere('pref_user in (0,' . (int)$user_id . ')');
+$q->addOrder('pref_user');
+$prefs = $q->loadHashList($sql);
 
 // get the user name
 $user = (($user_id) ? dPgetUsernameFromID($user_id) : 'Default');

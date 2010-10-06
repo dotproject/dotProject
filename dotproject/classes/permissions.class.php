@@ -52,6 +52,8 @@ class dPacl extends gacl_api {
 		$opts['db_user'] = dPgetConfig('dbuser');
 		$opts['db_password'] = dPgetConfig('dbpass');
 		$opts['db_name'] = dPgetConfig('dbname');
+		//the following is needed for phpgacl since the phpacl code also creates and uses XXX_XXX_XXX_Seq tables
+		$opts['db_table_prefix'] = dPgetConfig('dbprefix','').$this->_db_table_prefix; //Add our prefix to the default gacl prefix
 		$opts['caching'] = dPgetConfig('gacl_cache', false);
 		$opts['force_cache_expire'] = dPgetConfig('gacl_expire', true);
 		$opts['cache_dir'] = dPgetConfig('gacl_cache_dir', '/tmp');
@@ -441,6 +443,8 @@ class dPacl extends gacl_api {
 		}
 		
 		$q = new DBQuery;
+		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
+		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table, 'g1');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addOrder('g1.value');
@@ -593,7 +597,10 @@ class dPacl extends gacl_api {
 		}
 		
 		$q = new DBQuery;
+		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
+		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table, 'g1');
+		$map_table = str_replace(dPgetConfig('dbprefix',''),'',$map_table);
 		$q->innerJoin($map_table, 'g2', 'g2.group_id = g1.id');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addWhere("g2.$map_field = $id");
@@ -633,6 +640,8 @@ class dPacl extends gacl_api {
 		                   . $object_type));
 		
 		$q = new DBQuery;
+		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
+		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 		if (!(empty($value))) {
@@ -683,6 +692,8 @@ class dPacl extends gacl_api {
 		                   . $object_type));
 		
 		$q = new DBQuery;
+		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
+		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 		if (!(empty($section_value))) {
@@ -737,6 +748,8 @@ class dPacl extends gacl_api {
 		
 		//$query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
 		$q = new DBQuery;
+		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled and become (for example) dotp_dotp_gacl_???
+		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, value, name, order_value, hidden');
 		if (!(empty($section_value))) {

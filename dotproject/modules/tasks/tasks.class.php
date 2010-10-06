@@ -947,8 +947,10 @@ class CTask extends CDpObject
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 		
-		$sql = 'SELECT project_name FROM projects WHERE project_id=' . $this->task_project;
-		$projname = htmlspecialchars_decode(db_loadResult($sql));
+		$q->addTable("projects");
+		$q->addQuery("project_name");
+		$q->addWhere("project_id=$this->task_project");
+		$projname = htmlspecialchars_decode(db_loadResult($q->prepare(true)));
 		
 		$mail = new Mail;
 		
@@ -1341,7 +1343,7 @@ class CTask extends CDpObject
 				$q->clear();
 				
 				$q->addTable('user_tasks', 'ut');
-				$q->addQuery('COUNT(*) AS user_task_count');
+				$q->addQuery('COUNT(ut.user_id) AS user_task_count');
 				$q->addWhere('ut.user_id = ' . $user_id . ' AND ut.task_id = ' . $this->task_id);
 				$count = $q->loadResult();
 				$q->clear();

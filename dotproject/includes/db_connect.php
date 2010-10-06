@@ -27,7 +27,7 @@ $db->Execute("SET sql_mode := ''");
 * we will hurry up to load the system configuration details from the database.
 */
 
-$sql = 'SELECT config_name, config_value, config_type FROM config';
+$sql = 'SELECT '. dPgetConfig('dbprefix') . 'config_name, config_value, config_type FROM '.dPgetConfig('dbprefix','').'config';
 $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.
@@ -228,7 +228,15 @@ function db_loadObjectList($sql, $object, $maxrows = NULL) {
 * @param [type] $verbose
 */
 function db_insertArray($table, &$hash, $verbose=false) {
-	$fmtsql = "INSERT INTO $table (%s) VALUES(%s) ";
+	//TODO: if DBQuery class available, use it
+	$dbprefix = dPgetConfig('dbprefix','');
+	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
+		//have prefix and table does not have it prepended
+		$fmtsql = "INSERT INTO `$dbprefix$table` (%s) VALUES (%s) ";
+	} else {
+		// table has prefix already prepended (or no prefix)
+		$fmtsql = "INSERT INTO `$table` (%s) VALUES (%s) ";
+	}
 	foreach ($hash as $k => $v) {
 		if (is_array($v) || is_object($v) || $v == NULL) {
 			continue;
@@ -257,7 +265,13 @@ function db_insertArray($table, &$hash, $verbose=false) {
 * @param [type] $verbose
 */
 function db_updateArray($table, &$hash, $keyName, $verbose=false) {
-	$fmtsql = "UPDATE $table SET %s WHERE %s";
+	//TODO: If DBQuery available, use it
+	$dbprefix = dPgetConfig('dbprefix','');
+	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
+		$fmtsql = "UPDATE `$dbprefix$table` SET %s WHERE %s ";
+	} else {
+		$fmtsql = "UPDATE `$table` SET %s WHERE %s ";
+	}
 	foreach ($hash as $k => $v) {
 		if (is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
 			continue;
@@ -285,9 +299,16 @@ function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 *
 */
 function db_delete($table, $keyName, $keyValue) {
+	//TODO: If DBQuery available use it
+	$dbprefix = dPgetConfig('dbprefix','');
+	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
+		$sql = "DELETE FROM $dbprefix$table WHERE $keyName='$keyValue'";
+	} else {
+		$sql = "DELETE FROM $table WHERE $keyName='$keyValue'";
+	}
 	$keyName = db_escape($keyName);
 	$keyValue = db_escape($keyValue);
-	$ret = db_exec("DELETE FROM $table WHERE $keyName='$keyValue'");
+	$ret = db_exec( $sql );
 	return $ret;
 }
 
@@ -301,7 +322,13 @@ function db_delete($table, $keyName, $keyValue) {
 * @param [type] $verbose
 */
 function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
-	$fmtsql = "INSERT INTO `$table` (%s) VALUES (%s) ";
+	//TODO: If DBQuery available, use it
+	$dbprefix = dPgetConfig('dbprefix','');
+	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
+		$fmtsql = "INSERT INTO `$dbprefix$table` (%s) VALUES (%s) ";
+	} else {
+		$fmtsql = "INSERT INTO `$table` (%s) VALUES (%s) ";
+	}
 	foreach (get_object_vars($object) as $k => $v) {
 		if (is_array($v) || is_object($v) || $v == NULL) {
 			continue;
@@ -340,7 +367,13 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 	global $AppUI;
 	$perms =& $AppUI->acl();
 	
-	$fmtsql = "UPDATE `$table` SET %s WHERE %s";
+	//TODO: If DBQuery exists use it
+	$dbprefix = dPgetConfig('dbprefix','');
+	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
+		$fmtsql = "UPDATE `$dbprefix$table` SET %s WHERE %s";
+	} else {
+		$fmtsql = "UPDATE `$table` SET %s WHERE %s";
+	}
 	$obj_vars_arr = get_object_vars($object);
 	foreach ($obj_vars_arr as $k => $v) {
 		if (is_array($v) || is_object($v) || $k[0] == '_') { // internal or NA field
@@ -366,8 +399,16 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 					$keyDesc = $descriptionField;
 				} else {
 					//try to get a valid label field from module table by default
+					//If the passed $table has our dbprefix, we have to strip it
+					//TODO: If DBQuery available, use it
+					if ($dbprefix != '') {
+						if (!(strstr($table,$dbprefix) === false)) substr_replace($table,'',0,strlen($dbprefix));
+						$keyDesc = db_loadResult('SELECT permissions_item_label FROM '.$dbprefix.'modules' 
+						                         . " WHERE permissions_item_table = '" . $table . "'");
+					} else {
 					$keyDesc = db_loadResult('SELECT permissions_item_label FROM modules' 
 					                         . " WHERE permissions_item_table = '" . $table . "'");
+					}
 				}
 				
 				if ($keyDesc) {

@@ -22,7 +22,8 @@ $forum_id = intval(dPgetParam($_GET, 'forum_id', 0));
 //Pull forum information
 $q = new DBQuery;
 $q->addTable('forums');
-$q->addWhere("forums.forum_id = $forum_id");
+$q->addQuery('*');
+$q->addWhere('forum_id = '.$forum_id);
 $res = $q->exec();
 echo db_error();
 $forum_info = db_fetch_assoc($res);

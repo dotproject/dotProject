@@ -13,6 +13,7 @@ require_once $AppUI->getModuleClass('contacts');
 
 $q  = new DBQuery;
 $q->addTable('contacts');
+$q->addQuery('*');
 $q->addWhere("contact_company = '" . addslashes($obj->company_name) 
              . "' OR contact_company = '" . $obj->company_id . "'");
 $q->addOrder('contact_last_name'); 

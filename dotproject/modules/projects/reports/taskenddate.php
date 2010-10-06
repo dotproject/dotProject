@@ -66,11 +66,13 @@ function setCalendar(idate, fdate) {
 
 	<td nowrap='nowrap'>
 	   <?php
-	       $sql = "select user_id, concat_ws(' ', contact_first_name, contact_last_name)
-	               from users left join permissions on (user_id = permission_user)
-	                          left join contacts on (user_contact = contact_id)
-	               where !isnull(permission_user)";
-	       $users = array(0 => $AppUI->_("All")) + db_loadHashList($sql);
+			$q = new DBQuery;
+			$q->addTable('users','u');
+			$q->addQuery('u.user_id, concat_ws(\' \', c.contact_first_name, c.contact_last_name)');
+			$q->leftJoin('permissions','p','(u.user_id = p.permission_user)');
+			$q->leftJoin('contacts','c','(u.user_contact = c.contact_id)');
+			$q->addWhere('!isnull(p.permission_user)');
+			$users = array(0 => $AppUI->_("All")) + db_loadHashList($q->prepare(true));
 	       echo arraySelect($users, "user_id", "class='text'", $user_id);
 	   ?>
 	</td>
@@ -91,25 +93,26 @@ if ($do_report) {
 
     $user_filter     = "";
     
-    $sql = "select t.*, p.project_name, u.user_username
-            from tasks as t,
-                 users as u,
-                 projects as p";
+	$q = new DBQuery;
+	$q->addTable('tasks','t');
+	$q->addTable('users','u');
+	$q->addTable('projects','p');
+	$q->addQuery('t.*, p.project_name, u.user_username');
     if ($user_id > 0) {
-        $sql         .= ", user_tasks as ut";
+	$q->addTable('user_tasks', 'ut');
         $user_filter  = " and ut.user_id = $user_id
                          and ut.task_id = t.task_id ";
     }
-    $sql.=" where task_end_date   >= '".$start_date->format(FMT_DATETIME_MYSQL)."'
-                and task_end_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'
-                and p.project_id   = t.task_project
-                and t.task_dynamic = '0'
-                and t.task_owner = u.user_id
-                $projects_filter
-                $user_filter
-            order by project_name asc, task_end_date asc";
+	$q->addWhere("task_end_date >= '".$start_date->format(FMT_DATETIME_MYSQL)
+				."' and task_end_date <= '".$end_date->format(FMT_DATETIME_MYSQL)
+				."' and p.project_id = t.task_project"
+				." and t.task_dynamic = '0'"
+				.' and t.task_owner = u.user_id'
+				. $projects_filter
+				. $user_filter);
+	$q->addOrder('project_name asc, task_end_date asc');
 
-    $tasks = db_loadHashList($sql, "task_id");
+    $tasks = $q->loadHashList("task_id");
     $first_task = current($tasks);
     $actual_project_id = 0;
     $first_task        = true;
@@ -123,12 +126,16 @@ if ($do_report) {
             echo "<tr><td colspan='6'><b>".$task["project_name"]."</b></td>";
             $actual_project_id = $task["task_project"];
         }
-        $sql = "select *
-                from task_log
-                where task_log_task = ".$task["task_id"]."
-                order by task_log_date desc
-                limit 1";
-        db_loadHash($sql, $task_log);
+		if (!($q instanceof DBQuery)) {
+			//only create if wasn't already present as it may have been created above
+			$q = new DBQuery;
+		}
+		$q->addTable('task_log');
+		$q->addQuery('*');
+		$q->addWhere('task_log_task = '.$task['task_id']);
+		$q->addOrder('task_log_date desc');
+		$q->setLimit('1');
+        db_loadHash($q->prepare(true), $task_log);
         
         $done_img = $task["task_percent_complete"] == 100 ? "Yes" : "No";
         echo "<tr><td>&nbsp;&nbsp;&nbsp;".$task["task_name"]."</td><td>".$task["user_username"]."</td><td>".($task["task_duration"]*$task["task_duration_type"])." $hrs</td><td>".$task["task_end_date"]."</td><td>".$task_log["task_log_date"]."</td><td align='center'>$done_img</td></tr>";

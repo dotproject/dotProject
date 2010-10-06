@@ -37,9 +37,8 @@ $offset = @$offset ? $offset : 0;
 $limit = @$limit ? $limit : $CONFIG["view_rows"];
 
 
-
 /* count tickets */
-$query = "SELECT COUNT(*) FROM tickets WHERE parent = '0' and ticket != $ticket";
+$query = "SELECT COUNT(*) FROM ".dPgetConfig('dbprefix','')."tickets WHERE parent = '0' and ticket != $ticket";
 if ($type != 'All') {
     $query .= " AND type = '$type'";
 }
@@ -87,7 +86,7 @@ if ($ticket_count > $limit) {
 <?php
 /* form query */
 $select_fields= join(", ", $fields["columns"]);
-$query = "SELECT $select_fields FROM tickets WHERE ";
+$query = "SELECT $select_fields FROM ".dPgetConfig('dbprefix','')."tickets WHERE ";
 if ($type == "My") {
     $query .= "type = 'Open' AND (assignment = '$user_cookie' OR assignment = '0') AND ";
 }

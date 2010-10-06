@@ -41,8 +41,8 @@ $projectPriorityColor = dPgetSysVal('ProjectPriorityColor');
 $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
 
 //check that project has tasks; otherwise run seperate query
-$q->addTable('tasks');
-$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
+$q->addTable('tasks', 'tsk');
+$q->addQuery("COUNT(distinct tsk.task_id) AS total_tasks");
 $q->addWhere('task_project = '.$project_id);
 $hasTasks = $q->loadResult();
 $q->clear();
@@ -50,17 +50,17 @@ $q->clear();
 //load the record data
 //GJB: Note that we have to special case duration type 24 
 //and this refers to the hours in a day, NOT 24 hours
-$q->addTable('projects');
+$q->addTable('projects', 'p');
 $q->addJoin('companies', 'com', 'com.company_id = project_company');
 $q->addJoin('companies', 'com_internal', 'com_internal.company_id = project_company_internal');
 $q->addJoin('users', 'u', 'user_id = project_owner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 if ($hasTasks) {
-    $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+    $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 	$q->addQuery('com.company_name AS company_name, com_internal.company_name' 
 				 . ' AS company_name_internal' 
 				 . ", CONCAT_WS(', ',contact_last_name,contact_first_name) user_name" 
-				 . ', projects.*, SUM(t1.task_duration * t1.task_percent_complete' 
+				 . ', p.*, SUM(t1.task_duration * t1.task_percent_complete' 
 				 ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" 
 				 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}," 
 				 . ' t1.task_duration_type)) AS project_percent_complete');
@@ -68,7 +68,7 @@ if ($hasTasks) {
 } else {
 	$q->addQuery('com.company_name AS company_name, com_internal.company_name' 
 				 . ' AS company_name_internal' 
-				 . ", CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, projects.*, "
+				 . ", CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, p.*, "
                  .'(0.0) AS project_percent_complete');
 }
 $q->addWhere('project_id = ' . $project_id);

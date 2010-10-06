@@ -21,9 +21,12 @@ $roles = $crole->getRoles();
 
 $role_id = dPgetParam($_GET, 'role_id', 0);
 
-$modules = 
-$sql = 'SELECT mod_id, mod_name FROM modules WHERE mod_active > 0 ORDER BY mod_directory';
-$modules = arrayMerge(array('0'=>'All'), db_loadHashList($sql));
+$q = new DBQuery;
+$q->addQuery('mod_id, mod_name');
+$q->addTable('modules');
+$q->addWhere('mod_action > 0');
+$q->addOrder('mod_directory');
+$modules = arrayMerge(array('0'=>'All'), $q->loadHashList());
 
 // setup the title block
 $titleBlock = new CTitleBlock('Roles', 'main-settings.png', $m, "$m.$a");

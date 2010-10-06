@@ -69,19 +69,25 @@ $task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 $task_priority = dPgetParam($_POST, 'task_priority', 99);
 $selected = dPgetParam($_POST, 'selected_task', 0);
 
+$q = new DBQuery;
 if (is_array($selected) && count($selected)) {
 	foreach ($selected as $key => $val) {
 		if ($task_priority == 'c') {
 			// mark task as completed
-			$sql = "UPDATE tasks SET task_percent_complete=100 WHERE task_id=$val";
+			$q->addTable('tasks');
+			$q->addUpdate('task_percent_complete', "'100'");
+			$q->addWhere('task_id='.$val);
 		} else if ($task_priority == 'd') {
 			// delete task
-			$sql = "DELETE FROM tasks WHERE task_id=$val";
+			$q->setDelete('tasks');
+			$q->addWhere('task_id='.$val);
 		} else if ($task_priority > -2 && $task_priority < 2) {
 			// set priority
-			$sql = "UPDATE tasks SET task_priority=$task_priority WHERE task_id=$val";
+			$q->addTable('tasks');
+			$q->addUpdate('task_priority', $task_priority);
+			$q->addWhere('task_id='.$val);
 		}
-		db_exec($sql);
+		db_exec($q->prepare(true));
 		echo db_error();		
 	}
 }
@@ -92,7 +98,7 @@ $proj = new CProject;
 $tobj = new CTask;
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id);
-$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
+$allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'task_id');
 
 // query my sub-tasks (ignoring task parents)
 

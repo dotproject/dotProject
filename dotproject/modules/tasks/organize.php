@@ -294,12 +294,14 @@ if ($canEdit) {
 }
 
 $deny = $proj->getDeniedRecords($AppUI->user_id);
-$sql = 'SELECT p.project_id, p.project_name FROM projects AS p';
+$q = new DBQuery;
+$q->addTable('projects','p');
+$q->addQuery('p.project_id, p.project_name');
 if ($deny) {
-	$sql .= ' WHERE p.project_id NOT IN (' . implode(',', $deny) . ')';
+	$q->addWhere('p.project_id NOT IN (' . implode(',', $deny) . ')');
 }
-$sql .= ' ORDER BY p.project_name';
-$projects = db_loadHashList($sql, 'project_id');
+$q->addOrder('p.project_name');
+$projects = db_loadHashList($q->prepare(true), 'project_id');
 $p[0] = $AppUI->_('[none]');
 foreach ($projects as $proj) {
 	$p[$proj[0]] = $proj[1];

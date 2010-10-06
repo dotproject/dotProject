@@ -79,10 +79,11 @@ function setCalendar(idate, fdate) {
 		<select name="log_userfilter" class="text" style="width: 80px">
 
 	<?php
-		$usersql = "
-		SELECT user_id, user_username, contact_first_name, contact_last_name
-		FROM users LEFT JOIN contacts ON user_contact = contact_id ORDER BY user_username
-		";
+		$q = new DBQuery;
+		$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
+		$q->addTable('users', 'u');
+		$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+		$q->addOrder('u.user_username');
 
 		if ($log_userfilter == 0) {
 			echo '<option value="0" selected="selected">'.$AppUI->_('All users');
@@ -90,7 +91,7 @@ function setCalendar(idate, fdate) {
 			echo '<option value="0">All users';
 		}
 
-		if (($rows = db_loadList($usersql, NULL))) {
+		if (($rows = $q->loadList())) {
 			foreach ($rows as $row) {
 				if ($log_userfilter == $row["user_id"])
 					echo "<option value='".$row["user_id"]."' selected='selected'>".$row["user_username"];
@@ -129,49 +130,51 @@ function setCalendar(idate, fdate) {
 <?php
 if ($do_report) {
 
-	$sql = "SELECT p.project_id, p.project_name, t.*, CONCAT_WS(' ',contact_first_name,contact_last_name) AS creator, " 
-		."\n if (bc.billingcode_name is null, '', bc.billingcode_name) as billingcode_name"
-		."\nFROM task_log AS t"
-		."\nLEFT JOIN billingcode bc ON bc.billingcode_id = t.task_log_costcode "
-		."\nLEFT JOIN users AS u ON user_id = task_log_creator"
-                ."\nLEFT JOIN contacts ON user_contact = contact_id, tasks"
-		."\nLEFT JOIN projects p ON p.project_id = task_project"
-		."\nWHERE task_log_task = task_id";
+	$q = new DBQuery;
+	$q->addQuery('SELECT p.project_id, p.project_name, t.*, 
+		CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator,
+		if (bc.billingcode_name is null, \'\', bc.billingcode_name) as billingcode_name');
+	$q->addTable('task_log', 't');
+	$q->leftJoin('billingcode','bc', 'bc.billingcode_id = t.task_log_costcode');
+	$q->leftJoin('users', 'u', 'user_id = task_log_creator');
+	$q->leftJoin('contacts', 'c', 'u.user_contact = contact_id');
+	$q->innerJoin('tasks', 'tsk', 't.task_log_task = tsk.task_id');
+	$q->leftJoin('projects', 'p', 'p.project_id = task_project');
 	if ($project_id != 0) {
-		$sql .= "\nAND task_project = $project_id";
+		$q->addWhere('task_project = ' . (int)$project_id);
 	}
 	if (!$log_all) {
-		$sql .= "\n	AND task_log_date >= '".$start_date->format(FMT_DATETIME_MYSQL)."'"
-		."\n	AND task_log_date <= '".$end_date->format(FMT_DATETIME_MYSQL)."'";
+		$q->addWhere('task_log_date >= \''.$start_date->format(FMT_DATETIME_MYSQL).'\'');
+		$q->addWhere('task_log_date <= \''.$end_date->format(FMT_DATETIME_MYSQL)."'");
 	}
 	if ($log_ignore) {
-		$sql .= "\n	AND task_log_hours > 0";
+		$q->addWhere('task_log_hours > 0');
 	}
 	if ($log_userfilter) {
-		$sql .= "\n	AND task_log_creator = $log_userfilter";
+		$q->addWhere('task_log_creator = ' . (int)$log_userfilter);
 	}
 
 	$proj = new CProject;
 	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
 	if (count($allowedProjects)) {
-		$sql .= "\n     AND " . implode(" AND ", $allowedProjects);
+		$q->addWhere($allowedProjects);
 	}
 
 	$obj = new CTask;
 	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 	if (count($allowedTasks)) {
-		$sql .= ' AND ' . implode(' AND ', $allowedTasks);
+		$q->addWhere($allowedTasks);
 	}
 	$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_parent');
 	if (count($allowedChildrenTasks)) {
-		$sql .= ' AND ' . implode(' AND ', $allowedChildrenTasks);
+		$q->addWhere($allowedChildrenTasks);
 	}
 
-	$sql .= " ORDER BY task_log_date";
+	$q->addOrder('task_log_date');
 
 	//echo "<pre>$sql</pre>";
 
-	$logs = db_loadList($sql);
+	$logs = $q->loadList();
 	echo db_error();
 ?>
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl" summary"project task summary">
@@ -253,8 +256,11 @@ if ($do_report) {
 	if ($log_pdf) {
 	// make the PDF file
 		if ($project_id != 0) {
-			$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
-			$pname = db_loadResult($sql);
+			$q = new DBQuery;
+			$q->addTable('projects');
+			$q->addQuery('project_name');
+			$q->addWhere('project_id=' . $project_id);
+			$pname = db_loadResult($q->prepare(true));
 		} else {
 			$pname = "All Projects";
 		}

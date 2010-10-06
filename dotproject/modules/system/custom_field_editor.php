@@ -15,9 +15,11 @@ $edit_field_id = dpGetParam($_POST, 'field_id', NULL);
 $titleBlock->show();
 
 $sql = ('SELECT * FROM modules' 
-        . " WHERE mod_name IN ('Companies', 'Projects', 'Tasks', 'Calendar')" 
         . ' ORDER BY mod_ui_order');
-$modules = db_loadList($sql);
+$q = new DBQuery;
+$q->addTable('modules');
+$q->addWhere('mod_name IN (\'Companies\', \'Projects\', \'Tasks\', \'Calendar\')');
+$modules = $q->loadList();
 
 echo '<table cellpadding="2" summary="module list">';
 
@@ -32,8 +34,10 @@ foreach ($modules as $module) {
 		  . $AppUI->_('Add a new Custom Field to this Module') . '</a><br /><br />');
 	echo '</td></tr>';
 	
-	$sql = "SELECT * FROM custom_fields_struct WHERE field_module = '".mb_strtolower($module['mod_name'])."'";
-	$custom_fields = db_loadList($sql);
+	$q->clear();
+	$q->addTable('custom_fields_struct');
+	$q->addWhere('field_module = \''.mb_strtolower($module['mod_name'])."'");
+	$custom_fields = $q->loadList();
 	
 	foreach ($custom_fields as $f) {
 		echo '<tr><td class="hilite">';

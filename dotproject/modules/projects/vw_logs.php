@@ -108,12 +108,12 @@ $project = new CProject;
 
 // Pull the task comments
 $q  = new DBQuery;
-$q->addTable('task_log');
-$q->addQuery('task_log.*, user_username, task_id');
+$q->addTable('task_log','tl');
+$q->addQuery('tl.*, user_username, task_id');
 $q->addQuery('billingcode_name as task_log_costcode');
 $q->addJoin('users', 'u', 'user_id = task_log_creator');
 $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
-$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
+$q->addJoin('billingcode', 'b', 'tl.task_log_costcode = billingcode_id');
 //already included bY the setAllowedSQL function
 //$q->addJoin('projects', 'p', 'task_project = p.project_id');
 $q->addWhere("task_project = $project_id ");

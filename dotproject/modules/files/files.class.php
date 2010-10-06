@@ -272,7 +272,7 @@ class CFile extends CDpObject {
 				$wordarr[] = array('word' => $newword, 'wordplace' => $x);
 			}
 		}
-		db_exec('LOCK TABLES files_index WRITE');
+		db_exec('LOCK TABLES ' . dPgetConfig('dbprefix', '') . 'files_index WRITE');  //TODO: use DBQuery? What about other engines?
 		// filter out common strings
 		$ignore = array();
 		include_once (DP_BASE_DIR . '/modules/files/file_index_ignore.php');
@@ -290,7 +290,7 @@ class CFile extends CDpObject {
 			$this->_query->clear();
 		}
 		
-		db_exec('UNLOCK TABLES;');
+		db_exec('UNLOCK TABLES;');	//TODO: use DBQuery?  What about other sql engines?
 		return nwords;
 	}
 	

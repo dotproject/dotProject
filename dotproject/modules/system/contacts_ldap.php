@@ -11,7 +11,8 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$sql_table = 'contacts';
+// NOTE: Probably should look at replacing deprecated db_* functions.
+$sql_table = dPgetConfig('dbprefix','').'contacts';
 
 //Modify this mapping to match your LDAP->contact structure
 //For instance, of you want the contact_phone2 field to be populated out of, say telephonenumber2 then you would just modify

@@ -68,7 +68,7 @@ PRIMARY KEY (`link_id`) ,
 KEY `idx_link_task` (`link_task`) ,
 KEY `idx_link_project` (`link_project`) ,
 KEY `idx_link_parent` (`link_parent`) 
-) TYPE = MYISAM ");
+) DEFAULT CHARSET utf8");
 
 	$q->exec($sql);
 

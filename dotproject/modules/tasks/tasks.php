@@ -2,6 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+//TODO: Convert Static Queries
 
 GLOBAL $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;
 GLOBAL $task_sort_item1, $task_sort_type1, $task_sort_order1;
@@ -36,6 +37,8 @@ if (empty($query_string)) {
 // Number of columns (used to calculate how many columns to span things through)
 $cols = 13;
 
+$dbprefix = dPgetConfig('dbprefix','');
+
 /*
  * Let's figure out which tasks are selected
  */
@@ -52,8 +55,8 @@ if (isset($_GET['pin'])) {
 	
 	// load the record data
 	$sql = (($pin)
-	        ?"INSERT INTO user_task_pin (user_id, task_id) VALUES($AppUI->user_id, $task_id)"
-	        :"DELETE FROM user_task_pin WHERE user_id=$AppUI->user_id AND task_id=$task_id");
+	        ?"INSERT INTO {$dbprefix}user_task_pin (user_id, task_id) VALUES($AppUI->user_id, $task_id)"
+	        :"DELETE FROM {$dbprefix}user_task_pin WHERE user_id=$AppUI->user_id AND task_id=$task_id");
 	
 	if (!db_exec($sql)) {
 		$AppUI->setMsg('ins/del err', UI_MSG_ERROR, true);
@@ -115,14 +118,14 @@ if (count($allowedProjects)) {
 $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
 
 $q = new DBQuery;
-$q->addTable('projects');
+$q->addTable('projects', 'prj');
 $q->addQuery('company_name, project_id, project_color_identifier, project_name, '
              . ' SUM(t1.task_duration * t1.task_percent_complete'
              . ' * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type))'
              . ' / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours 
              . ', t1.task_duration_type)) AS project_percent_complete ');
 $q->addJoin('companies', 'com', 'company_id = project_company');
-$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+$q->addJoin('tasks', 't1', 'prj.project_id = t1.task_project');
 $q->addWhere($where_list . (($where_list) ? ' AND ' : '') . 't1.task_id = t1.task_parent');
 $q->addGroup('project_id');
 $q->addOrder('project_name');
@@ -130,9 +133,9 @@ $psql = $q->prepare();
 $q->clear();
 
 
-$q->addTable('projects');
+$q->addTable('projects', 'prj');
 $q->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
-$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+$q->addJoin('tasks', 't1', 'prj.project_id = t1.task_project');
 if ($where_list) {
 	$q->addWhere($where_list);
 }
@@ -162,35 +165,35 @@ if ($canAccessTask) {
 
 $join = '';
 // pull tasks
-$select = ('distinct tasks.task_id, task_parent, task_name, task_start_date, task_end_date, ' 
+$select = ('distinct tsk.task_id, task_parent, task_name, task_start_date, task_end_date, ' 
 		   . 'task_dynamic, task_pinned, pin.user_id as pin_user, task_priority, ' 
 		   . 'task_percent_complete, task_duration, task_duration_type, task_project, '
 		   . 'task_description, task_owner, task_status, usernames.user_username, ' 
 		   . 'usernames.user_id, task_milestone, assignees.user_username as assignee_username, ' 
 		   . 'count(distinct assignees.user_id) as assignee_count, '
 		   . 'co.contact_first_name, co.contact_last_name, ' 
-		   . 'count(distinct files.file_task) as file_count, ' 
+		   . 'count(distinct fi.file_task) as file_count, ' 
 		   . 'if (tlog.task_log_problem IS NULL, 0, tlog.task_log_problem) AS task_log_problem');
-$from = 'tasks';
+$from = $dbprefix.'tasks as tsk';
 $mods = $AppUI->getActiveModules();
 if (!empty($mods['history']) && getPermission('history', 'view')) {
 	$select .= ', MAX(history_date) as last_update';
-	$join = "LEFT JOIN history ON history_item = tasks.task_id AND history_table='tasks' ";
+	$join = "LEFT JOIN {$dbprefix}history ON history_item = tsk.task_id AND history_table='tasks' ";
 }
-$join .= 'LEFT JOIN projects ON project_id = task_project';
-$join .= ' LEFT JOIN users as usernames ON task_owner = usernames.user_id';
+$join .= 'LEFT JOIN '.$dbprefix.'projects as prj ON project_id = task_project';
+$join .= ' LEFT JOIN '.$dbprefix.'users as usernames ON task_owner = usernames.user_id';
 // patch 2.12.04 show assignee and count
-$join .= ' LEFT JOIN user_tasks as ut ON ut.task_id = tasks.task_id';
-$join .= ' LEFT JOIN users as assignees ON assignees.user_id = ut.user_id';
-$join .= ' LEFT JOIN contacts as co ON co.contact_id = usernames.user_contact';
+$join .= ' LEFT JOIN '.$dbprefix.'user_tasks as ut ON ut.task_id = tsk.task_id';
+$join .= ' LEFT JOIN '.$dbprefix.'users as assignees ON assignees.user_id = ut.user_id';
+$join .= ' LEFT JOIN '.$dbprefix.'contacts as co ON co.contact_id = usernames.user_contact';
 
 // check if there is log report with the problem flag enabled for the task
-$join .= (' LEFT JOIN task_log AS tlog ON tlog.task_log_task = tasks.task_id ' 
+$join .= (' LEFT JOIN '.$dbprefix.'task_log AS tlog ON tlog.task_log_task = tsk.task_id ' 
 		  . 'AND tlog.task_log_problem > 0');
 
 // to figure out if a file is attached to task
-$join .= ' LEFT JOIN files on tasks.task_id = files.file_task';
-$join .= ' LEFT JOIN user_task_pin as pin ON tasks.task_id = pin.task_id AND pin.user_id = ';
+$join .= ' LEFT JOIN '.$dbprefix.'files as fi on tsk.task_id = fi.file_task';
+$join .= ' LEFT JOIN '.$dbprefix.'user_task_pin as pin ON tsk.task_id = pin.task_id AND pin.user_id = ';
 $join .= $user_id ? $user_id : $AppUI->user_id;
 
 $where = $project_id ? ' task_project = '.$project_id : 'project_status <> 7';
@@ -205,10 +208,10 @@ switch ($f) {
 	case 'all':
 		break;
 	case 'myfinished7days':
-		$where .= ' AND user_tasks.user_id = '.$user_id;
+		$where .= ' AND ut.user_id = '.$user_id;
 	case 'allfinished7days':		 // patch 2.12.04 tasks finished in the last 7 days
-		$from = 'user_tasks, '.$from;
-		$where .= (' AND task_project = projects.project_id AND user_tasks.task_id = tasks.task_id '
+		$from = $dbprefix.'user_tasks ut2, '.$from;
+		$where .= (' AND task_project = prj.project_id AND ut2.task_id = tsk.task_id '
 		           . "AND task_percent_complete = 100 AND task_end_date >= '"
 		           . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d')-7, date('Y'))) 
 		           . "'");
@@ -218,7 +221,7 @@ switch ($f) {
 		$task_child_search->peek($task_id);
 		$childrenlist = $task_child_search->getDeepChildren();
 		
-		$where .= ' AND tasks.task_id IN (' . implode(',', $childrenlist) . ')';
+		$where .= ' AND tsk.task_id IN (' . implode(',', $childrenlist) . ')';
 		break;
 	case 'myproj':
 		$where .= ' AND project_owner = ' . $user_id;
@@ -230,35 +233,35 @@ switch ($f) {
 		$where .= ' AND project_company = ' . $AppUI->user_company;
 		break;
 	case 'myunfinished':
-		$from = 'user_tasks, '.$from;
+		$from = $dbprefix.'user_tasks as ut3, '.$from;
 		// This filter checks all tasks that are not already in 100%
 		// and the project is not on hold nor completed
 		// patch 2.12.04 finish date required to be consider finish
-		$where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id 
-		           . ' AND user_tasks.task_id = tasks.task_id ' 
+		$where .= (' AND task_project = prj.project_id AND ut3.user_id = ' . $user_id 
+		           . ' AND ut3.task_id = tsk.task_id ' 
 		           . "AND (task_percent_complete < 100 OR task_end_date = '') "
-		           . 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
-		           . 'AND projects.project_status <> 5');
+		           . 'AND prj.project_status <> 7 AND prj.project_status <> 4 ' 
+		           . 'AND prj.project_status <> 5');
 		break;
 	case 'allunfinished':
 		// patch 2.12.04 finish date required to be consider finish
 		// patch 2.12.04 2, also show unassigned tasks
-		$where .= (' AND task_project = projects.project_id ' 
+		$where .= (' AND task_project = prj.project_id ' 
 		           . "AND (task_percent_complete < 100 OR task_end_date = '') " 
-		           . 'AND projects.project_status <> 7 AND projects.project_status <> 4 ' 
-		           . 'AND projects.project_status <> 5');
+		           . 'AND prj.project_status <> 7 AND prj.project_status <> 4 ' 
+		           . 'AND prj.project_status <> 5');
 		break;
 	case 'unassigned':
-		$join .= ' LEFT JOIN user_tasks ON tasks.task_id = user_tasks.task_id';
-		$where .= ' AND user_tasks.task_id IS NULL';
+		$join .= ' LEFT JOIN '.$dbprefix.'user_tasks as ut4 ON tsk.task_id = ut4.task_id';
+		$where .= ' AND ut4.task_id IS NULL';
 		break;
 	case 'taskcreated':
-		$where .= ' AND task_owner = ' . $user_id;
+		$where .= ' AND tsk.task_owner = ' . $user_id;
 		break;
  default:
-		$from = 'user_tasks, '.$from;
-		$where .= (' AND task_project = projects.project_id AND user_tasks.user_id = ' . $user_id 
-		           . ' AND user_tasks.task_id = tasks.task_id');
+		$from = $dbprefix.'user_tasks as ut5, '.$from;
+		$where .= (' AND tsk.task_project = prj.project_id AND ut5.user_id = ' . $user_id 
+		           . ' AND ut5.task_id = tsk.task_id');
 		break;
 }
 
@@ -297,11 +300,11 @@ if (count($allowedProjects)) {
 
 //
 $obj = new CTask;
-$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
+$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'task_id');
 if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);
 }
-$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_parent');
+$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'task_parent');
 if (count($allowedChildrenTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedChildrenTasks);
 }
@@ -309,8 +312,8 @@ if (count($allowedChildrenTasks)) {
 
 // Filter by company
 if (! $min_view && $f2 != 'all') {
-	$join .= ' LEFT JOIN companies ON company_id = projects.project_company';
-	$where .= ' AND company_id = ' . intval($f2);
+	$join .= ' LEFT JOIN '.$dbprefix.'companies com ON com.company_id = prj.project_company';
+	$where .= ' AND com.company_id = ' . intval($f2);
 }
 
 // patch 2.12.04 ADD GROUP BY clause for assignee count
@@ -337,8 +340,8 @@ for ($x=0; $x < $nums; $x++) {
 	//add information about assigned users into the page output
 	$ausql = ('SELECT ut.user_id, u.user_username, contact_email, ut.perc_assignment, ' 
 			  . 'SUM(ut.perc_assignment) AS assign_extent, contact_first_name, contact_last_name ' 
-			  . 'FROM user_tasks ut LEFT JOIN users u ON u.user_id = ut.user_id ' 
-			  . 'LEFT JOIN contacts ON u.user_contact = contact_id ' 
+			  . 'FROM '.$dbprefix.'user_tasks ut LEFT JOIN '.$dbprefix.'users u ON u.user_id = ut.user_id ' 
+			  . 'LEFT JOIN '.$dbprefix.'contacts ON u.user_contact = contact_id ' 
 			  . 'WHERE ut.task_id=' . $row['task_id'] . ' GROUP BY ut.user_id ' 
 			  . 'ORDER BY ut.perc_assignment desc, u.user_username');
 	

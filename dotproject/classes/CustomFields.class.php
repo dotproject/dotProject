@@ -671,7 +671,7 @@ class CustomFields
 		$q->addQuery('m.' . $moduleTableName);
 		$q->addQuery('cfv.value_charvalue');
 		$q->addJoin('custom_fields_struct', 'cfs', 'cfs.field_id = cfv.value_field_id');
-		$q->addJoin($moduleTable, 'm', 'm.' . $moduleTableId . ' = cfv. value_object_id');
+		$q->addJoin($moduleTable, 'm', 'm.' . $moduleTableId . ' = cfv.value_object_id');
 		$q->addWhere('cfs.field_module = "' . $this->m . '"');
 		$q->addWhere('cfv.value_charvalue LIKE "%' . $keyword . '%"');
 		return $q->loadList();

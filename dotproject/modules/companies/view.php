@@ -27,13 +27,13 @@ $canDelete = $obj->canDelete($msg, $company_id);
 
 // load the record data
 $q  = new DBQuery;
-$q->addTable('companies');
-$q->addQuery('companies.*');
+$q->addTable('companies', 'co');
+$q->addQuery('co.*');
 $q->addQuery('con.contact_first_name');
 $q->addQuery('con.contact_last_name');
-$q->addJoin('users', 'u', 'u.user_id = companies.company_owner');
+$q->addJoin('users', 'u', 'u.user_id = co.company_owner');
 $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addWhere('companies.company_id = '.$company_id);
+$q->addWhere('co.company_id = '.$company_id);
 $sql = $q->prepare();
 $q->clear();
 

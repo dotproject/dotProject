@@ -88,6 +88,10 @@ else
             <td align="left"><input class="button" type="text" name="dbname" value="<?php echo  $dPconfig['dbname']; ?>" title="The Name of the Database dotProject will use and/or install" /></td>
           </tr>
           <tr>
+            <td class="item">Database Table Prefix</td>
+            <td align="left"><input class="button" type="text" name="dbprefix" value="<?php echo  $dPconfig['dbprefix']; ?>" title="The Database Table Prefix which dotProject will use on it's tables" /></td>
+          </tr>
+          <tr>
             <td class="item">Database User Name</td>
             <td align="left"><input class="button" type="text" name="dbuser" value="<?php echo $dPconfig['dbuser']; ?>" title="The Database User that dotProject uses for Database Connection" /></td>
           </tr>

@@ -125,15 +125,15 @@ $catsql = (($tab <= 0) ? '' : ('link_category = ' . --$tab));
 
 // SETUP FOR LINK LIST
 $q = new DBQuery();
-$q->addQuery('links.*');
-$q->addQuery('contact_first_name, contact_last_name');
+$q->addQuery('lnk.*');
+$q->addQuery('c.contact_first_name, c.contact_last_name');
 $q->addQuery('project_name, project_color_identifier, project_status');
 $q->addQuery('task_name, task_id');
-$q->addTable('links');
+$q->addTable('links', 'lnk');
 
 //$q->leftJoin('projects', 'p', 'p.project_id = link_project');
-$q->leftJoin('users', 'u', 'user_id = link_owner');
-$q->leftJoin('contacts', 'c', 'user_contact = contact_id');
+$q->leftJoin('users', 'u', 'user_id = lnk.link_owner');
+$q->leftJoin('contacts', 'c', 'user_contact = c.contact_id');
 //$q->leftJoin('tasks', 't', 'link_task = t.task_id');
 
 if (!empty($search)) {

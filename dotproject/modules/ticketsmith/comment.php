@@ -31,26 +31,27 @@ $author_name = dPgetParam($_POST, 'author_name', '');
 $author_email = dPgetParam($_POST, 'author_email', '');
 $comment = dPgetParam($_POST, 'comment', '');
 $body = dPgetParam($_POST, 'body', '');
+$dbprefix = dPgetConfig('dbprefix','');
 
 if (@$comment) {
 
     /* prepare fields */
-    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
-    $subject = db_escape(query2result("SELECT subject FROM tickets WHERE ticket = '$ticket_parent'"));
+    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
+    $subject = db_escape(query2result("SELECT subject FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'"));
     $comment = db_escape($comment);
     $author = $author_name . " <" . $author_email . ">";
     $timestamp = time();
     $body = escape_string($body);
 
     /* prepare query */
-    $query = "INSERT INTO tickets (author, subject, body, timestamp, type, parent, assignment) ";
+    $query = "INSERT INTO {$dbprefix}tickets (author, subject, body, timestamp, type, parent, assignment) ";
     $query .= "VALUES ('$author','$subject','$comment','$timestamp','Staff Comment','$ticket_parent','9999')";
 
     /* insert comment */
     do_query($query);
 
     /* update parent ticket's timestamp */
-    do_query("UPDATE tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
+    do_query("UPDATE {$dbprefix}tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
 
     /* return to ticket view */
     echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
@@ -73,7 +74,7 @@ if (@$comment) {
     /* determine poster */
     print("<tr>\n");
     print("<td align=\"left\"><strong>".$AppUI->_('From')."</strong></td>");
-    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
+    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM ".dPgetConfig('dbprefix','')."users u LEFT JOIN ".dPgetConfig('dbprefix','')."contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
     print("<td align=\"left\">" . $author_name . " &lt;" . $author_email . "&gt;</td>\n");
     print("</tr>");
 

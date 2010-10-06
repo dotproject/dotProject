@@ -59,9 +59,11 @@ class CPreferences {
 	}
 	
 	function delete() {
-		$sql = ('DELETE FROM user_preferences WHERE pref_user = ' . $this->pref_user 
-		        . " AND pref_name = '$this->pref_name'");
-		return ((!(db_exec($sql))) ? db_error() : null);
+		$q = new DBQuery;
+		$q->setDelete('user_preferences');
+		$q->addWhere('pref_user = ' . (int)$this->pref_user);
+		$q->addWhere('pref_name = \'' . $this->pref_name . '\'');
+		return ((!($q->exec())) ? db_error() : null);
 	}
 }
 
@@ -90,21 +92,26 @@ class CModule extends CDpObject {
 	}
 	
 	function install() {
-		$sql = "SELECT mod_directory FROM modules WHERE mod_directory = '$this->mod_directory'";
-		if (db_loadHash($sql, $temp)) {
+		$q = new DBQuery;
+		$q->addQuery('mod_directory');
+		$q->addTable('modules');
+		$q->addWhere("mod_directory = '$this->mod_directory'");
+		if ($q->loadHash()) {
 			// the module is already installed
 			// TODO: check for older version - upgrade
 			return false;
 		}
-		$sql = 'SELECT max(mod_ui_order) FROM modules';
+		$q->clear();
+		$q->addQuery('max(mod_ui_order)');
+		$q->addTable('modules');
 		
 		// We need to account for "pre-installed" modules that are "UI Inaccessible"
 		// in order to make sure we get the "correct" initial value for .
 		// mod_ui_order values of "UI Inaccessible" modules are irrelevant
 		// and should probably be set to 0 so as not to interfere.
-		$sql .= " WHERE mod_name NOT LIKE 'Public'";
+		$q->addWhere(" mod_name NOT LIKE 'Public'");
         
-		$this->mod_ui_order = db_loadResult($sql) + 1;
+		$this->mod_ui_order = $q->loadResult() + 1;
 		
 		$perms =& $GLOBALS['AppUI']->acl();
 		$perms->addModule($this->mod_directory, $this->mod_name);
@@ -128,7 +135,10 @@ class CModule extends CDpObject {
 	
 	function remove() {
 		$sql = "DELETE FROM modules WHERE mod_id = $this->mod_id";
-		if (!db_exec($sql)) {
+		$q = new DBQuery;
+		$q->setDelete('modules');
+		$q->addWhere('mod_id = ' . (int)$this->mod_id);
+		if (!$q->exec()) {
 			return db_error();
 		} else {
 			$perms =& $GLOBALS['AppUI']->acl();

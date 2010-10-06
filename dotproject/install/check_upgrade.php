@@ -47,7 +47,10 @@ require_once DP_BASE_DIR.'/lib/adodb/adodb.inc.php';
 function dPcheckExistingDB($conf) {
 	global $AppUI, $ADODB_FETCH_MODE;
 	$AppUI = new InstallerUI;
-	
+
+	if (isset($conf['dbprefix'])) {
+		$dbprefix = $conf['dbprefix'];
+	} else $dbprefix = '';
 	$ado = @NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysql');
 	if (empty($ado))
 		return false;
@@ -61,7 +64,8 @@ function dPcheckExistingDB($conf) {
 	// Find the tables in the database, if there are none, or if the
 	// basic tables of project and task are missing, we are doing an
 	// install.
-	$table_list = $ado->MetaTables('TABLE');
+
+	$table_list = $ado->MetaTables('TABLE',$conf['dbname'],$dbprefix.'%');
 	if (count($table_list) < 10) {
 		// There are now more than 60 tables in a standard dP
 		// install, but this will at least cover the basics.
@@ -74,9 +78,16 @@ function dPcheckExistingDB($conf) {
 	$found = false;
 	foreach ($table_list as $tbl) {
 		if (substr($tbl, -7) == 'sysvals') {
+			/*
+				The $prefix should be compared to the one taken from the dbprefix configuration variable $dbprefix, 
+				since with a prefix we could conceivably have more than 1 dotproject apps in the db but with
+				different prefixes (or some other app which uses a table named sysvals)
+			 */
 			$prefix = str_replace('sysvals', '', $tbl);
-			$found = true;
-			break;
+			if ($dbprefix == $prefix) { // Our prefix
+				$found = true;
+				break;
+			}
 		}
 	}
 	if (! $found) {
@@ -95,8 +106,8 @@ function dPcheckExistingDB($conf) {
 	// The install procedure populates them - If this situation changes
 	// then this code must be modified to suit.
 
-	$q1 = 'SELECT count(*) from gacl_phpgacl'; // Should be 2
-	$q2 = 'SELECT count(*) from gacl_axo'; // Should be greater than the count of modules
+	$q1 = 'SELECT count(*) from '.$dbprefix.'gacl_phpgacl'; // Should be 2
+	$q2 = 'SELECT count(*) from '.$dbprefix.'gacl_axo'; // Should be greater than the count of modules
 
 	$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 

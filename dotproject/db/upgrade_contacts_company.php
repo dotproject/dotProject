@@ -12,7 +12,11 @@ if (!defined('DP_BASE_DIR')) {
 */
 
 dPmsg('Fetching companies list');
-foreach (db_loadList('SELECT * FROM contacts') as $contact) {
+$q = new DBQuery;
+$q->addTable('contacts');
+$q->addQuery('*');
+$sql = $q->prepare(true);
+foreach (db_loadList($sql) as $contact) {
     $contact_company = $contact['contact_company'];
     if (is_numeric($contact_company)) {
         if (!checkCompanyId($contact_company)) {
@@ -38,9 +42,11 @@ foreach (db_loadList('SELECT * FROM contacts') as $contact) {
 
 
 function updateContactCompany($contact_array, $company_id) {
-    $sql = 'UPDATE contacts SET contact_company = ' . $company_id 
-	  . ' WHERE contact_id = '.$contact_array['contact_id'];
-    db_exec($sql);
+	$q = new DBQuery;
+	$q->addTable('contacts');
+	$q->addUpdate('contact_company = ' . $company_id);
+	$q->addWhere('contact_id = '.$contact_array['contact_id']);
+    db_exec($q->prepareUpdate());
 }
 
 function getContactGeneralInformation($contact_array) {
@@ -50,15 +56,25 @@ function getContactGeneralInformation($contact_array) {
 }
 
 function fetchCompanyId($company_name) {
-    return db_loadResult("SELECT company_id FROM companies WHERE company_name = '$company_name'");
+	$q = new DBQuery;
+	$q->addTable('companies');
+	$q->addQuery('company_id');
+	$q->addWhere("company_name = '$company_name'");
+    return db_loadResult( $q->prepare() );
 }
 
 function checkCompanyId($company_id) {
-    return db_loadResult("SELECT count(*) FROM companies WHERE company_id = '$company_id'");
+	$q = new DBQuery;
+	$q->addTable('companies');
+	$q->addQuery('count(*)');
+	$q->addWhere("company_id = '$company_id'");
+    return db_loadResult( $q->prepare() );
 }
 
 function insertCompany($company_name) {
-    $sql = "INSERT INTO companies (company_name) VALUES ('$company_name')";
-    db_exec($sql);
+	$q = new DBQuery;
+	$q->addTable("companies");
+	$q->addInsert('company_name',$company_name);
+    db_exec( $q->prepareInsert() );
     return db_insert_id();
 }

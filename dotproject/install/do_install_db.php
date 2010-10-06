@@ -22,6 +22,7 @@ $dbErr = false;
 $cFileErr = false;
 
 $dbtype = trim(dPInstallGetParam($_POST, 'dbtype', 'mysql'));
+$dbprefix = trim( dPInstallGetParam( $_POST, 'dbprefix', '' ) );
 $dbhost = trim(dPInstallGetParam($_POST, 'dbhost', ''));
 $dbname = trim(dPInstallGetParam($_POST, 'dbname', ''));
 $dbuser = trim(dPInstallGetParam($_POST, 'dbuser', ''));
@@ -39,6 +40,7 @@ $dPconfig = array(
  'dbtype' => $dbtype,
  'dbhost' => $dbhost,
  'dbname' => $dbname,
+ 'dbprefix' => $dbprefix,
  'dbpass' => $dbpass,
  'dbuser' => $dbuser,
  'dbpersist' => $dbpersist,
@@ -196,7 +198,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  if (empty($lastDBUpdate)) {
  	$lastDBUpdate = $code_updated;
  }
- $sql = "UPDATE dpversion
+ $sql = "UPDATE ".$dbprefix."dpversion
  SET db_version = '$dp_version_major',
  last_db_update = '$lastDBUpdate',
  code_version = '$current_version',
@@ -228,6 +230,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  $config .= '$dPconfig[\'dbtype\'] = \''.$dbtype.'\';'."\n";
  $config .= '$dPconfig[\'dbhost\'] = \''.$dbhost.'\';'."\n";
  $config .= '$dPconfig[\'dbname\'] = \''.$dbname.'\';'."\n";
+ $config .= '$dPconfig[\'dbprefix\'] = \''.$dbprefix.'\';'."\n";
  $config .= '$dPconfig[\'dbuser\'] = \''.$dbuser.'\';'."\n";
  $config .= '$dPconfig[\'dbpass\'] = \''.$dbpass.'\';'."\n";
  $config .= '$dPconfig[\'dbpersist\'] = ' . ($dbpersist ? 'true' : 'false') . ";\n";

@@ -57,7 +57,6 @@ class CDpObject {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
 		$this->_permission_name = (($perm_name) ? $perm_name : $table);
-		dPgetConfig('dbprefix', '');
 		$this->_query = new DBQuery;
 	}
 	/**

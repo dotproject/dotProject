@@ -96,13 +96,17 @@ function dPsessionDestroy($id, $user_access_log_id=0) {
  	global $AppUI;
     
 	$q = new DBQuery;
-	
+    $q->addTable('sessions'); // Alias not required
+    $q->addQuery('session_user');
+    $q->addWhere("session_id='". $id ."'"); //Using double quotes for readability
+    $sql2 = $q->prepare(true);
+
 	dprint(__FILE__, __LINE__, 11, "Killing session $id");
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q->addWhere('user_access_log_id' 
-	             . (($user_access_log_id) ? (' = ' . $user_access_log_id)
-	                : " IN (SELECT session_user from sessions WHERE session_id = '$id')"));
+	$q->addWhere('user_access_log_id = ' 
+	             . (($user_access_log_id) ? $user_access_log_id
+	                : '('.$sql2.')'));
 	$q->exec();
 	$q->clear();
 	
@@ -125,9 +129,14 @@ function dPsessionGC($maxlifetime) {
 	$where = ('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle 
 	          . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max);
 	$q = new DBQuery;
+    $q->addTable('sessions');
+    $q->addQuery('session_user');
+    $q->addWhere($where);
+    $sql2 = $q->prepare(true);
+
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q->addWhere("user_access_log_id IN (SELECT session_user from sessions WHERE $where)");
+	$q->addWhere('user_access_log_id IN ('. $sql2 .')');
 	$q->exec();
 	$q->clear();
 	
@@ -184,10 +193,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 	}
 	if (dPgetConfig('session_handling') == 'app') {
 		ini_set('session.save_handler', 'user');
-		// PHP 5.2 workaround
-		if (version_compare(phpversion(), '5.0.0', '>=')) {
-			register_shutdown_function('session_write_close');
-		} 
+	// PHP 5.2 workaround
+    if (version_compare(phpversion(), '5.0.0', '>=')) {
+        register_shutdown_function('session_write_close');
+    } 
 		session_set_save_handler('dPsessionOpen', 'dPsessionClose', 'dPsessionRead', 
 		                         'dPsessionWrite', 'dPsessionDestroy', 'dPsessionGC');
 		$max_time = dPsessionConvertTime('max_lifetime');

@@ -12,9 +12,9 @@ if (! getPermission('forums', 'view', $message_id))
 
 $q  = new DBQuery;
 $q->addTable('forums');
-$q->addTable('forum_messages');
-$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username,
-		forum_moderated, visit_user');
+$q->addTable('forum_messages', 'msg');
+$q->addQuery('msg.*, contact_first_name, contact_last_name, contact_email, user_username,
+			forum_moderated, visit_user');
 $q->addJoin('forum_visits', 'v', "visit_user = {$AppUI->user_id} AND visit_forum = $forum_id AND visit_message = 				forum_messages.message_id");
 $q->addJoin('users', 'u', 'message_author = u.user_id');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
@@ -38,10 +38,10 @@ foreach ($messages as $row) {
 		
 	$q  = new DBQuery;
 	$q->addTable('forum_messages');
-	$q->addTable('users');
+	$q->addTable('users', 'u');
 	$q->addQuery('DISTINCT contact_email, contact_first_name, contact_last_name, user_username');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere('users.user_id = '.$row["message_editor"]);
+	$q->addWhere('u.user_id = '.$row["message_editor"]);
 	$editor = $q->loadList();
 
 	$date = intval($row["message_date"]) ? new CDate($row["message_date"]) : null;

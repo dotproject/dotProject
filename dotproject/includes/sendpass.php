@@ -26,8 +26,12 @@ function sendNewPass() {
  $confirmEmail = trim(dPgetParam($_POST, 'checkemail', ''));
  $confirmEmail = mb_strtolower(db_escape($confirmEmail));
 
- $query = 'SELECT user_id FROM users LEFT JOIN contacts ON user_contact = contact_id'
-   . " WHERE user_username='$checkusername' AND LOWER(contact_email)='$confirmEmail'";
+ $q = new DBQuery;
+ $q->addTable('users', 'u');
+ $q->addQuery('u.user_id');
+ $q->addWhere('user_username=\''.$checkusername.'\' AND LOWER(contact_email)=\''.$confirmEmail.'\'');
+ $q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+ $query = $q->prepare(true);
  if (!($user_id = db_loadResult($query)) || !$checkusername || !$confirmEmail) {
   $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
   $AppUI->redirect();
@@ -48,8 +52,11 @@ function sendNewPass() {
  $m->Send();	// send the mail
 
  $newpass = md5($newpass);
- $sql = "UPDATE users SET user_password='$newpass' WHERE user_id='$user_id'";
- $cur = db_exec($sql);
+ $q->clear();
+ $q->addTable('users');
+ $q->addUpdate('user_password', $newpass, true);
+ $q->addWhere('user_id=\''.$user_id . '\'');
+ $cur = $q->exec();
  if (!$cur) {
   die('SQL error' . $database->stderr(true));
  } else {

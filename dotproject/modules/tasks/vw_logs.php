@@ -56,13 +56,15 @@ function delIt2(id) {
 </tr>
 <?php
 // Pull the task comments
-$sql = ('SELECT tl.*, u.user_username, bc.billingcode_name as task_log_costcode' 
-        . ' FROM task_log AS tl' 
-        . ' LEFT JOIN billingcode AS bc ON bc.billingcode_id = tl.task_log_costcode'
-        . ' LEFT JOIN users AS u ON u.user_id = tl.task_log_creator'
-        . ' WHERE task_log_task = ' . $task_id . (($problem) ? ' AND task_log_problem > 0' : '') 
-        . ' ORDER BY tl.task_log_date');
-$logs = (($canView) ? db_loadList($sql) : array());
+$q = new DBQuery;
+$q->addTable('task_log', 'tl');
+$q->addQuery('tl.*, u.user_username, bc.billingcode_name as task_log_costcode');
+$q->leftJoin('billingcode','bc','bc.billingcode_id = tl.task_log_costcode');
+$q->leftJoin('users', 'u', 'u.user_id = tl.task_log_creator');
+$q->addWhere('task_log_task=' . $task_id . (($problem) ? ' AND task_log_problem > 0' : ''));
+$q->addOrder('tl.task_log_date');
+ 
+$logs = (($canView) ? $q->loadList() : array());
 
 $s = '';
 $hrs = 0;

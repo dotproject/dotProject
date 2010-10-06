@@ -7,6 +7,7 @@ if (!$canRead) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
+$dbprefix = dPgetConfig('dbprefix','');
 $ticket = dPgetParam($_GET, 'ticket', '');
 $ticket_type = dPgetParam($_GET, 'ticket_type', '');
 
@@ -134,7 +135,9 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 
 	if (@$assignment_toggle != @$orig_assignment)
 	{
-		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
+		
+		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from "
+			."{$dbprefix}users u LEFT JOIN {$dbprefix}contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
 
 		if (@$mailinfo['contact_email']) {
 			$boundary = "_lkqwkASDHASK89271893712893";
@@ -213,7 +216,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 /* start form */
 
 /* get ticket */
-$ticket_info = query2hash("SELECT * FROM tickets WHERE ticket = $ticket");
+$ticket_info = query2hash("SELECT * FROM {$dbprefix}tickets WHERE ticket = $ticket");
 
 print("<input type=\"hidden\" name=\"orig_assignment\" value='" . $ticket_info["assignment"] . "' />\n");
 print("<input type=\"hidden\" name=\"author\" value='" . $ticket_info["author"] . "' />\n");
@@ -233,7 +236,7 @@ for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
 $ticket_info["assignment"];
 
 /* output attachment indicator */
-$attach_count = query2result("SELECT attachment FROM tickets WHERE ticket = '$ticket'");
+$attach_count = query2result("SELECT attachment FROM {$dbprefix}tickets WHERE ticket = '$ticket'");
 
 if ($attach_count == 1) {
     print("<tr>\n");
@@ -241,7 +244,7 @@ if ($attach_count == 1) {
     print("<td align=\"left\">This email had attachments which were removed.</td>\n");
     print("</tr>\n");
 } else if ($attach_count == 2) {
-  $result = do_query("SELECT file_id, file_name from files, tickets where ticket = '$ticket'
+  $result = do_query("SELECT file_id, file_name from {$dbprefix}files, {$dbprefix}tickets where ticket = '$ticket'
   and file_task = ticket and file_project = 0");
   if (number_rows($result)) {
        print("<tr>\n");
@@ -266,7 +269,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
     print("<td align=\"left\" valign=\"top\">\n");
 
     /* grab followups */
-    $query = "SELECT ticket, type, timestamp, author FROM tickets WHERE parent = '$ticket' ORDER BY ticket " . $CONFIG["followup_order"];
+    $query = "SELECT ticket, type, timestamp, author FROM {$dbprefix}tickets WHERE parent = '$ticket' ORDER BY ticket " . $CONFIG["followup_order"];
     $result = do_query($query);
 
     if (number_rows($result)) {
@@ -315,7 +318,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
 else {
 
     /* get peer followups */
-    $results = do_query("SELECT ticket, type FROM tickets WHERE parent = '$ticket_parent' ORDER BY ticket " . $CONFIG["followup_order"]);
+    $results = do_query("SELECT ticket, type FROM {$dbprefix}tickets WHERE parent = '$ticket_parent' ORDER BY ticket " . $CONFIG["followup_order"]);
 
     /* parse followups */
     while ($row = result2hash($results)) {

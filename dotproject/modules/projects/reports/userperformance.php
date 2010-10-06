@@ -82,11 +82,11 @@ function setCalendar(idate, fdate) {
 if ($do_report) {
 	
 	// Let's figure out which users we have
-	$sql = ('SELECT u.user_id, u.user_username, contact_first_name, contact_last_name' 
-			. ' FROM users AS u' 
-			. ' LEFT JOIN contacts ON u.user_contact = contact_id');
-	
-	$user_list = db_loadHashList($sql, 'user_id');
+	$q = new DBQuery;
+	$q->addTable('users', 'u');
+	$q->addQuery('u.user_id, u.user_username, contact_first_name, contact_last_name');
+	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+	$user_list = $q->loadHashList('user_id');
 	
 	// Now which tasks will we need and the real allocated hours (estimated time / number of users)
 	// Also we will use tasks with duration_type = 1 (hours) and those that are not marked
@@ -99,17 +99,23 @@ if ($do_report) {
 			. ' FROM tasks as t, user_tasks as ut' 
 			. " WHERE t.task_id = ut.task_id AND t.task_milestone = '0'");
 	
+	$q = new DBQuery;
+	$q->addTable('tasks', 't');
+	$q->addTable('user_tasks', 'ut');
+	$q->addQuery('t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ' 
+			. $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated' );
+	$q->addWhere("t.task_id = ut.task_id AND t.task_milestone = '0'");
 	if ($project_id != 0) {
-		$sql .= " AND t.task_project='$project_id'";
+		$q->addWhere('t.task_project=' . (int)$project_id);
 	}
 	if (!$log_all) {
-		$sql .= (' AND t.task_start_date >= "' . $start_date->format(FMT_DATETIME_MYSQL) 
-		         . '" AND t.task_start_date <= "' . $end_date->format(FMT_DATETIME_MYSQL) . '"');
+		$q->addWhere('t.task_start_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('t.task_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 	}
 	
-	$sql .= ' GROUP BY t.task_id';
+	$q->addGroup('t.task_id');
 	
-	$task_list = db_loadHashList($sql, 'task_id');
+	$task_list = $q->loadHashList('task_id');
 	//echo $sql;
 ?>
 
@@ -129,9 +135,13 @@ if ($do_report) {
 		$sum_hours_allocated_complete = $sum_hours_worked_complete = 0;
 	
 //TODO: Split times for which more than one users were working...	
+		$q = new DBQuery;
 		foreach ($user_list as $user_id => $user) {
-			$sql = 'SELECT task_id FROM user_tasks WHERE user_id = ' . $user_id;
-			$tasks_id = db_loadColumn($sql);
+			$q->clear();
+			$q->addTable('user_tasks');
+			$q->addQuery('task_id');
+			$q->addWhere('user_id = ' . (int)$user_id);
+			$tasks_id = $q->loadColumn();
 
 			$total_hours_allocated = $total_hours_worked = 0;
 			$hours_allocated_complete = $hours_worked_complete = 0;
@@ -139,14 +149,20 @@ if ($do_report) {
 			foreach ($tasks_id as $task_id) {
 				if (isset($task_list[$task_id])) {
 					// Now let's figure out how many time did the user spent in this task
-					$sql = ('SELECT sum(task_log_hours) FROM task_log' 
-					        ." WHERE task_log_task = $task_id AND task_log_creator = $user_id");
-					$hours_worked = round(db_loadResult($sql),2);
+					$q->clear();
+					$q->addTable('task_log');
+					$q->addQuery('sum(task_log_hours)');
+					$q->addWhere('task_log_task = '.(int)$task_id);
+					$q->addWhere('task_log_creator = '.(int)$user_id);
+					$hours_worked = round($q->loadResult(),2);
 					
 					
-					$sql = "SELECT task_percent_complete FROM tasks WHERE task_id = $task_id";
+					$q->clear();
+					$q->addTable('tasks');
+					$q->addQuery('task_percent_complete');
+					$q->addWhere('task_id = '.(int)$task_id);
 					//echo $sql;
-					$percent = db_loadColumn($sql);
+					$percent = $q->loadColumn();
 					$complete = ($percent[0] == 100);
                     
 					if ($complete) {

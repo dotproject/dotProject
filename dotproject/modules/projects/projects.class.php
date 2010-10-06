@@ -70,13 +70,13 @@ class CProject extends CDpObject {
 			                  ? dPgetConfig('daily_working_hours'):8);
 			
 			$q = new DBQuery;
-			$q->addTable('projects');
+			$q->addTable('projects','p');
 			$q->addQuery(' SUM(t1.task_duration * t1.task_percent_complete' 
 						 . ' * IF(t1.task_duration_type = 24, ' . $working_hours 
 						 . ', t1.task_duration_type)) / SUM(t1.task_duration' 
 						 . ' * IF(t1.task_duration_type = 24, ' . $working_hours 
 						 . ', t1.task_duration_type)) AS project_percent_complete');
-			$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+			$q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
 			$q->addWhere('project_id = ' . $oid . ' AND t1.task_id = t1.task_parent');
 			$this->project_percent_complete = $q->loadResult();
 		}

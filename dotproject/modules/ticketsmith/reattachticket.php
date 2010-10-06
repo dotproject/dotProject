@@ -7,7 +7,7 @@ if (!defined('DP_BASE_DIR')) {
 $newparent = dpGetParam($_GET, 'newparent', 0);
 $ticket = dpgetparam($_GET, 'ticket', 0);
 
-$sql1 = "update tickets set parent = $newparent,
+$sql1 = "update ".dPgetConfig('dbprefix','')."tickets set parent = $newparent,
   assignment = 9999,
   type = 'Client Followup'
   where ticket = $ticket";

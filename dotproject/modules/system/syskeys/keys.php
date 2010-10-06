@@ -3,8 +3,10 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-$sql = "SELECT * FROM syskeys ORDER BY syskey_name";
-$keys = db_loadList($sql);
+$q = new DBQuery;
+$q->addTable('syskeys');
+$q->addOrder('syskey_name');
+$keys = $q->loadList();
 
 $syskey_id = isset($_GET['syskey_id']) ? $_GET['syskey_id'] : 0;
 

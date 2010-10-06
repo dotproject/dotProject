@@ -29,12 +29,12 @@ if (!($canRead && $obj->canAccess($AppUI->user_id))) {
 
 $q = new DBQuery;
 
-$q->addTable('tasks');
+$q->addTable('tasks', "tsk");
 $q->leftJoin('users', 'u1', 'u1.user_id = task_owner');
 $q->leftJoin('projects', 'p', 'p.project_id = task_project');
 $q->leftJoin('task_log', 'tl', 'tl.task_log_task = task_id');
 $q->addWhere('task_id = ' . $task_id);
-$q->addQuery('tasks.*');
+$q->addQuery('tsk.*');
 $q->addQuery('project_name, project_color_identifier');
 $q->addQuery('u1.user_username as username');
 $q->addQuery('ROUND(SUM(task_log_hours),2) as log_hours_worked');
@@ -380,7 +380,7 @@ function delIt() {
 			$q->addWhere('tc.task_id = ' . $obj->task_id);
 			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 			$q->addQuery('contact_phone, dept_name');
-			$q->addWhere("(contact_owner = '$AppUI->user_id' or contact_private = '0')");
+			$q->addWhere('(contact_owner = '.$AppUI->user_id.' or contact_private = 0)');
 			$contacts = $q->loadHashList('contact_id');
 			$q->clear();
 			if (count($contacts)>0) {
@@ -416,7 +416,7 @@ function delIt() {
 			$q->addWhere('pc.project_id = ' . $obj->task_project);
 			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 			$q->addQuery('contact_phone, dept_name');
-			$q->addWhere("(contact_owner = '$AppUI->user_id' or contact_private = '0')");
+			$q->addWhere('(contact_owner = '.$AppUI->user_id.' or contact_private = 0)');
 			$contacts = $q->loadHashList('contact_id');
 			$q->clear();
 			if (count($contacts)>0) {

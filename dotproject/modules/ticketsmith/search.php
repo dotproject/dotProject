@@ -112,7 +112,7 @@ if ($search_pattern) {
     /* form search query */
     $select_columns = join(", ", $fields["columns"]);
     $search_pattern = "%" . escape_string($search_pattern) . "%";
-    $query = "SELECT $select_columns FROM tickets WHERE $search_field LIKE '$search_pattern'";
+    $query = "SELECT $select_columns FROM ".dPgetConfig('dbprefix','')."tickets WHERE $search_field LIKE '$search_pattern'";
     if ($search_depth == "Child") {
         $query .= " AND parent != 0";
     }

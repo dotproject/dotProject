@@ -327,7 +327,7 @@ function format_field ($value, $type, $ticket = NULL) {
     switch ($type) {
         case "user":
             if ($value) {
-	    	$output = query2result("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM users u LEFT JOIN contacts ON u.user_contact = contact_id WHERE user_id = '$value'");
+	    	$output = query2result("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM ".dPgetConfig('dbprefix','')."users u LEFT JOIN ".dPgetConfig('dbprefix','')."contacts ON u.user_contact = contact_id WHERE user_id = '$value'");
             } else {
                 $output = "-";
             }
@@ -362,7 +362,7 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "assignment":
             $options[0] = "-";
-	    $query = "SELECT user_id as id, CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM users u LEFT JOIN contacts ON u.user_contact = contact_id ORDER BY name";
+	    $query = "SELECT user_id as id, CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM ".dPgetConfig('dbprefix','')."users u LEFT JOIN ".dPgetConfig('dbprefix','')."contacts c ON u.user_contact = c.contact_id ORDER BY name";
             $result = do_query($query);
             while ($row = result2hash($result)) {
                 $options[$row["id"]] = $row["name"];
@@ -376,7 +376,7 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "view":
             if ($CONFIG["index_link"] == "latest") {
-                $latest_value = query2result("SELECT ticket FROM tickets WHERE parent = '$value' ORDER BY ticket DESC LIMIT 1");
+                $latest_value = query2result("SELECT ticket FROM ".dPgetConfig('dbprefix','')."tickets WHERE parent = '$value' ORDER BY ticket DESC LIMIT 1");
                 if ($latest_value) {
                     $value = $latest_value;
                 }
@@ -407,7 +407,7 @@ function format_field ($value, $type, $ticket = NULL) {
             else {
                 $output = get_time_ago($value);
             }
-            $latest_followup_type = query2result("SELECT type FROM tickets WHERE parent = '$ticket' ORDER BY timestamp DESC LIMIT 1");
+            $latest_followup_type = query2result("SELECT type FROM ".dPgetConfig('dbprefix','')."tickets WHERE parent = '$ticket' ORDER BY timestamp DESC LIMIT 1");
             if ($latest_followup_type) {
                 $latest_followup_type = preg_replace("/(\w+)\s.*/", "\\1", $latest_followup_type);
                 $output .= " [$latest_followup_type]";
@@ -435,7 +435,7 @@ function format_field ($value, $type, $ticket = NULL) {
         case "followup":
             $output = "\n<tt>\n";
             $output .= "<textarea style='font-family: monospace;' name=\"followup\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n";
-            $signature = query2result("SELECT user_signature FROM users WHERE user_id = '$AppUI->user_id'");
+            $signature = query2result("SELECT user_signature FROM ".dPgetConfig('dbprefix','')."users WHERE user_id = '$AppUI->user_id'");
             if ($signature) {
                 $output .= "\n";
                 $output .= "-- \n";
@@ -515,7 +515,8 @@ function format_field ($value, $type, $ticket = NULL) {
 
 /* figure out parent & type */
 if (isset($ticket)) {
-    list($ticket_type, $ticket_parent) = query2array("SELECT type, parent FROM tickets WHERE ticket = '$ticket'");
+    $dbprefix = dPgetConfig('dbprefix','');
+    list($ticket_type, $ticket_parent) = query2array("SELECT type, parent FROM {$dbprefix}tickets WHERE ticket = '$ticket'");
 }
 
 

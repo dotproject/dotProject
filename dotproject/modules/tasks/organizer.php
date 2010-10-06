@@ -123,9 +123,24 @@ function fixate_task($task_index, $time, $dep_on_task) {
 				$t2 = $task2["task_id"];
 				
 				if ($option_check_vital_users) {					
-					$sql1 = "select count(*) as num_users from user_tasks where task_id=$t1 or task_id=$t2 group by task_id having num_users <= 2";
-					$sql2 = "select count(*) as frec from user_tasks where task_id=$t1 or task_id=$t2 group by user_id having frec = 2";
-					$vital = mysql_num_rows(mysql_query($sql1)) == 2 && mysql_num_rows(mysql_query($sql2)) > 0;
+					$q = New DBQuery;
+					$q->addTable('user_tasks');
+					$q->addQuery('count(*)', 'num_users');
+					$q->addWhere("task_id=$t1 or task_id=$t2");
+					$q->addGroup('task_id having num_users <= 2');
+					$q->includeCount();
+					$q->exec();
+					$count1 = $q->foundRows();
+					$q->clear();
+					$q->addTable('user_tasks');
+					$q->addQuery('count(*)', 'frec');
+					$q->addWhere("task_id=$t1 or task_id=$t2");
+					$q->addGroup('user_id having frec = 2');
+					$q->includeCount();
+					$q->exec();
+					$count2 = $q->foundRows();
+					$q->clear();
+					$vital = ($count1 == 2) && ($count2 > 0);
 				} else {
 					$vital = true;
 				}
@@ -167,8 +182,17 @@ function fixate_task($task_index, $time, $dep_on_task) {
 		// echo "<input type=hidden name=fixate_task[" . $tasks[$task_index]["task_id"] . "] value=y>";
 	} else if ($do == "fixate") {
 		log_action("Task " . task_link($tasks[$task_index]) . " fixated to " . formatTime($start_date));
+		if (!($q instanceof DBQuery)) {
+			//only create if wasn't already present as it may have been created above
+			$q = new DBQuery;
+		}
+		$q->addTable('tasks');
+		$q->addUpdate('task_start_date',db_unix2dateTime($start_date));
+		$q->addUpdate('task_end_date',db_unix2dateTime($end_date));
+		$q->addWhere('where task_id ='.$tasks[$task_index]['task_id']);
 		$sql = "update tasks set task_start_date = '" . db_unix2dateTime($start_date) . "', task_end_date = '" .  db_unix2dateTime($end_date) . "' where task_id = " . $tasks[$task_index]["task_id"];
-		mysql_query($sql);
+		$q->exec();
+		$q->clear();
 	}
 	
 }
@@ -180,9 +204,16 @@ function get_last_children($task) {
 	// query children from task
 	$sql = "select * from tasks where task_parent=" . $task["task_id"];
 	$query = mysql_query($sql);
-	if (mysql_num_rows($query)) {
+	$q = new DBQuery;
+	$q->addTable('tasks');
+	$q->addQuery('*');
+	$q->addWhere('task_parent='.(int)$task['task_id']);
+	$q->includeCount();
+	$q->exec();
+	$qRows = $q->foundRows();
+	if ($qRows) {
 		// has children
-		while ($row = mysql_fetch_array($query)) {
+		while ($row = $q->fetchRow()) {
 			if ($row["task_id"] != $task["task_id"]) {
 				// add recursively children of children to $arr
 				$sub = get_last_children($row);
@@ -205,16 +236,22 @@ function process_dependencies($i) {
 
 	// query dependencies for this task
 
-	$query = mysql_query("select tasks.* from tasks,task_dependencies where task_id=dependencies_req_task_id and dependencies_task_id=" . $tasks[$i]["task_id"]);
-
-	if (mysql_num_rows($query) != 0) {
+	$q = New DBQuery;
+	$q->addTable('tasks','t');
+	$q->addTable('task_dependencies','td');
+	$q->addQuery('t.*');
+	$q->addWhere('task_id=dependencies_req_task_id and dependencies_task_id=' . (int)$tasks[$i]['task_id']);
+	$q->includeCount();
+	$q->exec();
+ 
+	if($q->foundRows() != 0) {
 		$all_fixed = true;
 		$latest_end_date = null;	   
 
 		// store dependencies in an array (for adding more entries on the fly)
 
 		$dependencies = array();
-		while ($row = mysql_fetch_array($query)) {
+		while ($row = $q->fetchRow()) {
 			array_push($dependencies, $row);
 		}		
 
@@ -299,8 +336,17 @@ function process_dependencies($i) {
 if ($set_duration) {
 	foreach ($set_duration as $key=>$val) {
 		if ($val) {
-			$sql = "update tasks set task_duration=" . ($val * $dayhour[$key]) . " where task_id=" . $key;
-			mysql_query($sql);
+			if (!($q instanceof DBQuery)) {
+				//only create if wasn't already present as it may have been created above
+				$q = new DBQuery;
+			} else {
+				$q->clear(); //ensure
+			}
+			$q->addTable('tasks');
+			$q->addUpdate('task_duration',($val * $dayhour[$key]));
+			$q->addWhere('task_id',$key);
+			$q->exec();
+			$q->clear();
 		}
 	}
 	$do = "ask"; // ask again
@@ -309,8 +355,17 @@ if ($set_duration) {
 if ($set_dynamic) {
 	foreach ($set_dynamic as $key=>$val) {
 		if ($val) {
-			$sql = "update tasks set task_dynamic=1 where task_id=$key";
-			mysql_query($sql);
+			if (!($q instanceof DBQuery)) {
+				//only create if wasn't already present as it may have been created above
+				$q = new DBQuery;
+			} else {
+				$q->clear(); //ensure
+			}
+			$q->addTable('tasks');
+			$q->addUpdate('task_dynamic','1');
+			$q->addWhere('task_id',$key);
+			$q->exec();
+			$q->clear();
 		}
 	}
 	$do = "ask";
@@ -339,8 +394,16 @@ function checkbox($name, $descr, $default = 0, $show = true) {
 }
 
 // pull projects
-$sql = "SELECT project_id, project_name FROM projects ORDER BY project_name";
-$projects = arrayMerge(array(0 => '(' . $AppUI->_('All') . ')'), db_loadHashList($sql));
+if (!($q instanceof DBQuery)) {
+	//only create if wasn't already present as it may have been created above
+	$q = new DBQuery;
+} else {
+	$q->clear(); //ensure
+}
+$q->addTable('projects');
+$q->addQuery('project_id, project_name');
+$q->addOrder('project_name');
+$projects = arrayMerge(array(0 => '(' . $AppUI->_('All') . ')'), $q->loadHashList());
 
 echo $AppUI->_('Project').": " . arraySelect($projects, 'project_id', 'class="text"', $project_id) . "<br />";
 
@@ -367,15 +430,16 @@ if ($do != "conf") {
 
 	// Select tasks without children (sub tasks)
 
-	$sql = "select a.*, !a.task_dynamic AS fixed FROM tasks AS a " .
-	  "LEFT JOIN tasks AS b ON a.task_id = b.task_parent AND a.task_id != b.task_id " .
-	  "WHERE (b.task_id IS NULL or b.task_id = b.task_parent) " .
-	  "AND (a.task_project = $project_id) " .
-	  "ORDER BY a.task_priority desc, a.task_order desc";	
+	$q = new DBQuery;
 
-	$dtrc = mysql_query($sql);
-
-	while ($row = mysql_fetch_array($dtrc, MYSQL_ASSOC)) {
+	$q->addTable('tasks','a');
+	$q->addQuery('!a.task_dynamic','fixed');
+	$q->leftJoin('tasks','b','a.task_id = b.task_parent AND a.task_id != b.task_id');
+	$q->addWhere('(b.task_id IS NULL or b.task_id = b.task_parent)');
+	$q->addOrder('a.task_priority desc, a.task_order desc');
+	$q->exec();
+ 
+	while ($row = $q->fetchRow()) {
 		
 		// check durations
 		
@@ -425,6 +489,7 @@ if ($do != "conf") {
 		}
 		array_push($tasks, $row);
 	}
+	$q->clear();
 	
 	if (!$errors) {
 		for ($i = 0, $xi = count($tasks); $i < $xi ; $i++) {
@@ -434,11 +499,15 @@ if ($do != "conf") {
 
 	if ($option_fix_task_group_date_ranges) {
 		// query taskgroups
-		$sql = "select distinct a.* from tasks as a, tasks as b " .
-		  "WHERE (b.task_parent = a.task_id and a.task_id != b.task_id) " .
-		  " AND (a.task_project = $project_id AND b.task_project = $project_id)";
-		$taskgroups = mysql_query($sql);
-		while ($tg = mysql_fetch_array($taskgroups)) {
+		$q = new DBQuery;
+		$q->addTable('tasks','a');
+		$q->addTable('tasks','b');
+		$q->addQuery('distinct a.*');
+		$q->leftJoin('tasks','b','a.task_id = b.task_parent AND a.task_id != b.task_id');
+		$q->addWhere('(b.task_parent = a.task_id and a.task_id != b.task_id) ' .
+					 'AND (a.task_project = $project_id AND b.task_project = $project_id)');
+		$q->exec();
+		while($tg = $q->fetchRow()) {
 			$children = get_last_children($tg);
 			$min_time = null;
 			$max_time = null;
@@ -460,7 +529,18 @@ if ($do != "conf") {
 					log_action("I will set date of task group " . task_link($tg) . " to " . formatTime($min_time) . " - " . formatTime($max_time) . ".");
 				} else if ($do == "fixate") {
 					log_action("Date range of task group " . task_link($tg) . " changed to " . formatTime($min_time) . " - " . formatTime($max_time) . ".");
-					mysql_query("update tasks set task_start_date='" .  db_unix2dateTime($min_time) . "', task_end_date='" .  db_unix2dateTime($max_time) . "' where task_id=" . $tg["task_id"]);
+					if (!($q instanceof DBQuery)) {
+						//only create if wasn't already present as it may have been created above
+						$q = new DBQuery;
+					} else {
+						$q->clear();//ensure
+					}
+					$q->addTable('tasks');
+					$q->addUpdate('task_start_date',db_unix2dateTime($min_time));
+					$q->addUpdate('task_end_date',db_unix2dateTime($max_time));
+					$q->addWhere('task_id = '. (int)$tg['task_id']);
+					$q->exec();
+					$q->clear();
 				}
 			}
 		}

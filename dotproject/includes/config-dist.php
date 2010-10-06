@@ -40,6 +40,7 @@ The full text of the GPL is in the COPYING file.
 $dPconfig['dbtype'] = 'mysql';      // ONLY MySQL is supported at present
 $dPconfig['dbhost'] = 'localhost';
 $dPconfig['dbname'] = 'dotproject';  // Change to match your DotProject Database Name
+$dPconfig['dbprefix'] = 'dotp_';		// Change to match your DotProject Database Table-Name Prefix
 $dPconfig['dbuser'] = 'dp_user';  // Change to match your MySQL Username
 $dPconfig['dbpass'] = 'dp_pass';  // Change to match your MySQL Password
 

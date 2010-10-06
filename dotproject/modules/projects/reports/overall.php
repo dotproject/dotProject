@@ -110,15 +110,18 @@ function showcompany($company, $restricted = false)
                 $company_billingcodes[$row['billingcode_id']]=$row['billingcode_name'];
         }
 */
-	$sql = "SELECT project_id, project_name
-		FROM projects
-		WHERE project_company = $company";
+	$q = new DBQuery;
+	$q->addTable('projects');
+	$q->addQuery('project_id, project_name');
+	$q->addWhere('project_company = ' . $company);
+	$sql = $q->prepare(true);
 
 	$projects = db_loadHashList($sql);
   
-	$sql = "SELECT company_name
-		FROM companies
-		WHERE company_id = $company";
+	$q->addTable('companies');
+	$q->addQuery('company_name');
+	$q->addWhere('company_id = ' . $company);
+	$sql = $q->prepare(true);
 	$company_name = db_loadResult($sql);                                                                                                                       
 
         $table = '<h2>Company: ' . $company_name . '</h2>
@@ -148,19 +151,26 @@ function showcompany($company, $restricted = false)
 		$pdfproject[] = safe_utf8_decode($name);
 		$project_hours = 0;
 		$project_row = "<tr><td>$name</td>";
-		$sql = "SELECT task_log_costcode, sum(task_log_hours) as hours
-			FROM projects, tasks, task_log
-			WHERE project_id = $project";
-		if ($log_start_date != 0 && !$log_all)
-			$sql .= " AND task_log_date >= $log_start_date";
-		if ($log_end_date != 0 && !$log_all)
-			$sql .= " AND task_log_date <= $log_end_date";
-		if ($restricted)
-			$sql .= " AND task_log_creator = '" . $AppUI->user_id . "'";
-			
-		$sql .= " AND project_id = task_project
-			AND task_id = task_log_task
-			GROUP BY project_id"; //task_log_costcode";
+
+		$q->addTable('projects', 'prj');
+		$q->addTable('tasks', 't');
+		$q->addTable('task_log', 'tl');
+		$q->addQuery('task_log_costcode, sum(task_log_hours) as hours');
+		$where = 'project_id = ' . $project;
+		if ($log_start_date != 0 && !$log_all) {
+			$where .= " AND task_log_date >= $log_start_date";
+		}
+		if ($log_end_date != 0 && !$log_all) {
+			$where .= " AND task_log_date <= $log_end_date";
+		}
+		if ($restricted) {
+			$where .= " AND task_log_creator = '" . $AppUI->user_id . "'";
+		}
+		$where .= ' AND project_id = task_project'
+				. ' AND task_id = task_log_task';
+		$q->addWhere($where);
+		$q->addGroup('project_id'); //task_log_costcode
+		$sql = $q->prepare(true);
 
 		$task_logs = db_loadHashList($sql);
 
@@ -208,19 +218,23 @@ if ($do_report) {
 
 	$total = 0;
 
-if ($fullaccess)
-	$sql = "SELECT company_id FROM companies";
-else
-	$sql = "SELECT company_id FROM companies WHERE company_owner='" . $AppUI->user_id . "'";
+$q = new DBQuery;
+$q->addTable('companies');
+$q->addQuery('company_id');
+if (!$fullaccess) {
+	$q->addWhere("company_owner='" . $AppUI->user_id . "'");
+}
+$sql = $q->prepare(true);
 
 $companies = db_loadColumn($sql);
 
-if (!empty($companies))	
+if (!empty($companies))	{
 	foreach ($companies as $company)
 		$total += showcompany($company);
-else
-{
-	$sql = "SELECT company_id FROM companies";
+} else {
+	$q->addTable('companies');
+	$q->addQuery('company_id');
+	$sql = $q->prepare(true);
 	foreach (db_loadColumn($sql) as $company)
 		$total += showcompany($company, true);
 }
