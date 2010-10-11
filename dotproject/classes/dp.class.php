@@ -345,12 +345,12 @@ class CDpObject {
 	// returns a list of records exposed to the user
 	function getAllowedRecords($uid, $fields='*', $orderby='', $index=null, $extra=null) {
 		global $AppUI;
-		$perms =& $AppUI->acl();
+		$perms = $AppUI->acl();
 		
 		$uid = intval($uid);
 		$uid || exit ('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
-		$deny =& $perms->getDeniedItems($this->_tbl, $uid);
-		$allow =& $perms->getAllowedItems($this->_tbl, $uid);
+		$deny = $perms->getDeniedItems($this->_tbl, $uid);
+		$allow = $perms->getAllowedItems($this->_tbl, $uid);
 		if (!($perms->checkModule($this->_tbl, 'view', $uid))) {
 			if (!(count($allow))) {
 				return array();	// No access, and no allow overrides, so nothing to show.

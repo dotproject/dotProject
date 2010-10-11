@@ -1,8 +1,5 @@
 #
 # dotproject.sql Database Schema
-#   updated by JRP (08 July 2002)
-#   updated by JCP (29 November 2002)
-#	updated by KwK (22 June 2008)
 #
 # Use this schema for creating your database for
 # a new installation of dotProject.
@@ -399,22 +396,6 @@ CREATE TABLE `%dbprefix%users` (
   `user_type` tinyint(3) not null default '0',
   `user_company` int(11) default '0',
   `user_department` int(11) default '0',
-/*  `user_first_name` varchar(50) default '',
-  `user_last_name` varchar(50) default '',
-  `user_email` varchar(255) default '',
-  `user_phone` varchar(30) default '',
-  `user_home_phone` varchar(30) default '',
-  `user_mobile` varchar(30) default '',
-  `user_address1` varchar(30) default '',
-  `user_address2` varchar(30) default '',
-  `user_city` varchar(30) default '',
-  `user_state` varchar(30) default '',
-  `user_zip` varchar(11) default '',
-  `user_country` varchar(30) default '',
-  `user_icq` varchar(20) default '',
-  `user_aol` varchar(20) default '',
-  `user_birthday` datetime default NULL,
-  `user_pic` TEXT,*/
   `user_owner` int(11) NOT NULL default '0',
   `user_signature` TEXT,
   PRIMARY KEY  (`user_id`),
@@ -1220,5 +1201,20 @@ CREATE TABLE `%dbprefix%file_folders` (
 	`file_folder_name` varchar(255) NOT NULL default '',
 	`file_folder_description` text,
 	PRIMARY KEY  (`file_folder_id`)
+);
+
+# 20101010
+
+DROP TABLE IF EXISTS `%dbprefix%dotpermissions`;
+CREATE TABLE `dotpermissions` (
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` varchar(80) NOT NULL DEFAULT '',
+  `section` varchar(80) NOT NULL DEFAULT '',
+  `axo` varchar(80) NOT NULL DEFAULT '',
+  `permission` varchar(80) NOT NULL DEFAULT '',
+  `allow` int(11) NOT NULL DEFAULT '0',
+  `priority` int(11) NOT NULL DEFAULT '0',
+  `enabled` int(11) NOT NULL DEFAULT '0',
+  KEY `user_id` (`user_id`,`section`,`permission`,`axo`)
 );
 

@@ -41,7 +41,7 @@ require_once DP_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
  */
 class dPacl extends gacl_api {
 	
-	function dPacl($opts = null) {
+	function __construct($opts = null) {
 		global $db;
 		
 		if (!(is_array($opts))) {
@@ -52,9 +52,8 @@ class dPacl extends gacl_api {
 		$opts['db_user'] = dPgetConfig('dbuser');
 		$opts['db_password'] = dPgetConfig('dbpass');
 		$opts['db_name'] = dPgetConfig('dbname');
-		//the following is needed for phpgacl since the phpacl code also creates and uses XXX_XXX_XXX_Seq tables
-		$opts['db_table_prefix'] = dPgetConfig('dbprefix','').$this->_db_table_prefix; //Add our prefix to the default gacl prefix
 		$opts['caching'] = dPgetConfig('gacl_cache', false);
+		$opts['db_table_prefix'] = dPgetConfig('dbprefix','').$this->_db_table_prefix;
 		$opts['force_cache_expire'] = dPgetConfig('gacl_expire', true);
 		$opts['cache_dir'] = dPgetConfig('gacl_cache_dir', '/tmp');
 		$opts['cache_expire_time'] = dPgetConfig('gacl_timeout', 600);
@@ -71,17 +70,45 @@ class dPacl extends gacl_api {
 	
 	function checkLogin($login) {
 		//Simple ARO<->ACO check, no AXO's required.
-		return $this->acl_check('system', 'login', 'user', $login);
-	}
-	
+		//return $this->acl_check('system', 'login', 'user', $login);
+    // For dotproject, this is equivalent to check if the user belongs to a group.
+    // checkLogin will be done in that way, instead checking for the "login" aco in the "system" section,
+    // because that should involve to check for nested ACOs when building the dotpermissions table, which
+    // would make it a bit more complex.
+    // 
+   $q = new DBQuery;
+   $q->addQuery('aro.value,aro.name, gr_aro.group_id');
+   $q->addTable('gacl_aro', 'aro');
+   $q->leftJoin('gacl_groups_aro_map', 'gr_aro', 'aro.id=gr_aro.aro_id');
+   $q->addWhere('aro.value=' . (int)$login);
+   $q->setLimit(1);
+   $arr=$q->loadHash();
+   return $arr?1:0;
+  }
+
 	function checkModule($module, $op, $userid = null) {
 		if (!($userid)) {
 			$userid = $GLOBALS['AppUI']->user_id;
 		}
+
+	    $q = new DBQuery;
+	    $q->addQuery('allow');
+	    $q->addTable('dotpermissions', 'dp');
+	    $q->addWhere("permission='$op' AND axo='$module' AND user_id='$userid' and section='app'");
+	    $q->addOrder('priority ASC, acl_id DESC');
+	    $q->setLimit(1);
+	    $arr=$q->loadHash();
+    
+	    $result=$arr['allow'];
+	    //echo $result;
+	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result");
+	    return $result;
+	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);
 		$result = $this->acl_check('application', $op, 'user', $userid, 'app', $module);
 		dprint(__FILE__, __LINE__, 2, "checkModule($module, $op, $userid) returned $result");
 		return $result;
+	*/
 	}
 	
 	function checkModuleItem($module, $op, $item = null, $userid = null) {
@@ -91,8 +118,15 @@ class dPacl extends gacl_api {
 		if (!($item)) {
 			return $this->checkModule($module, $op, $userid);
 		}
-		
-		$result = $this->acl_query('application', $op, 'user', $userid, $module, $item, null);
+
+		$q = new DBQuery;
+		$q->addQuery('allow');
+		$q->addTable('dotpermissions');
+		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$userid' and section='$module'");
+		$q->addOrder('priority ASC,acl_id DESC');
+		$q->setLimit(1);
+		$arr = $q->loadHash();
+	    $result=$arr['allow'];
 		//If there is no acl_id then we default back to the parent lookup
 		if (!($result && $result['acl_id'])) {
 			dprint(__FILE__, __LINE__, 2, 
@@ -115,14 +149,25 @@ class dPacl extends gacl_api {
 		if (!$user_id) {
 			$user_id = $GLOBALS['AppUI']->user_id;
 		}
-		$result = $this->acl_query('application', $op, 'user', $user_id, $module, $item);
-		return (($result && $result['acl_id'] && ! $result['allow']) ? true : false);
+		$q = new DBQuery;
+		$q->addQuery('allow');
+		$q->addTable('dotpermissions');
+		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$user_id' and section='$module'");
+		$q->addOrder('priority ASC, acl_id DESC');
+		$q->setLimit(1);
+		$arr = $q->loadHash();
+		if($arr && !$arr['allow']) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
+
 	function addLogin($login, $username) {
 		$res = $this->add_object('user', $username, $login, 1, 0, 'aro');
 		if (!($res)) {
 			dprint(__FILE__, __LINE__, 0, 'Failed to add user permission object');
+			$this->regeneratePermissions();
 		}
 		return $res;
 	}
@@ -135,10 +180,11 @@ class dPacl extends gacl_api {
 		//Check if the details have changed.
 		list ($osec, $val, $oord, $oname, $ohid) = $this->get_object_data($id, 'aro');
 		if ($oname != $username) {
-			$res = $this->edit_object($id, 'user', $username, $login, 1, 0, 'aro');
+			$res = $this->edit_object( $id, 'user', $username, $login, 1, 0, 'aro');
 			if (!($res)) {
 				dprint(__FILE__, __LINE__, 0, 'Failed to change user permission object');
 			}
+			$this->regeneratePermissions(); //this line was outside of this if (after the next bracket
 		}
 		return $res;
 	}
@@ -150,7 +196,9 @@ class dPacl extends gacl_api {
 			$id = $this->get_object_id('user', $login, 'aro');
 			if ($id) {
 				dprint(__FILE__, __LINE__, 0, 'Failed to remove user permission object');
-			}			
+			} else {
+				$this->regeneratePermissions();
+			}
 		}
 		return $id;
 	}
@@ -159,6 +207,7 @@ class dPacl extends gacl_api {
 		$res = $this->add_object('app', $modname, $mod, 1, 0, 'axo');
 		if ($res) {
 			 $res = $this->addGroupItem($mod);
+			 $this->regeneratePermissions();
 		}
 		if (!($res)) {
 			dprint(__FILE__, __LINE__, 0, 'Failed to add module permission object');
@@ -170,6 +219,8 @@ class dPacl extends gacl_api {
 		$res = $this->add_object_section(ucfirst($mod) . ' Record', $mod, 0, 0, 'axo');
 		if (!($res)) {
 			dprint(__FILE__, __LINE__, 0, 'Failed to add module permission section');
+		} else {
+			$this->regeneratePermissions();
 		}
 		return $res;
 	}
@@ -178,12 +229,15 @@ class dPacl extends gacl_api {
 		//Verify that description is properly escaped (no effect if already escaped)
 		$itemdesc = addslashes(stripslashes($itemdesc));
 		$res = $this->add_object($mod, $itemdesc, $itemid, 0, 0, 'axo');
+		$this->regeneratePermissions();
 		return $res;
 	}
 	
 	function addGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
 		if ($gid = $this->get_group_id($group, null, $type)) {
-			return $this->add_group_object($gid, $section, $item, $type);
+			$res=$this->add_group_object($gid, $section, $item, $type);
+			$this->regeneratePermissions();
+			return $res;
 		}
 		return false;
 	}
@@ -196,6 +250,8 @@ class dPacl extends gacl_api {
 		}
 		if (!($id)) {
 			dprint(__FILE__, __LINE__, 0, 'Failed to remove module permission object');
+		} else {
+			$this->regeneratePermissions();
 		}
 		return $id;
 	}
@@ -207,6 +263,8 @@ class dPacl extends gacl_api {
 		}
 		if (!($id)) {
 			dprint(__FILE__, __LINE__, 0, 'Failed to remove module permission section');
+		} else {
+			$this->regeneratePermissions();
 		}
 		return $id;
 	}
@@ -256,7 +314,9 @@ class dPacl extends gacl_api {
 		if ($gid = $this->get_group_id($group, null, $type)) {
 			return $this->del_group_object($gid, $section, $item, $type);
 		}
-		return false;
+		$res=$this->del_group_object($gid, $section, $item, $type);
+		$this->regeneratePermissions();
+		return $res;
 	}
 	
 	function isUserPermitted($userid, $module = null) {
@@ -322,96 +382,40 @@ class dPacl extends gacl_api {
 		        : false);
 	}
 	
-	function & getDeniedItems($module, $uid = null) {
+	function getDeniedItems($module, $uid = null) {
+      // Checking in dotpermissions..
+      // Is getDeniedItems operation-independent???
 		$items = array();
 		if (!($uid)) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
 		//first get role items
-		$roles = $this->getUserRoles($uid);
-		foreach ($roles as $role_arr) {
-			$acls = $this->getRoleACLs($role_arr['id']);
-			if (is_array($acls)) {
-				foreach ($acls as $acl) {
-					$acl_entry = $this->get_acl($acl);
-					if (in_array('view', $acl_entry['aco']['application']) 
-					    && $acl_entry['allow'] == false && $acl_entry['enabled'] == true 
-					    && isset($acl_entry['axo'][$module])) {
-						foreach ($acl_entry['axo'][$module] as $id) {
-							$items[] = $id;
-						}
-					}
-				}
-			} else {
-				dprint(__FILE__, __LINE__, 2, 
-				       "getDeniedItems($module, $uid) - no role ACL's match");
-			}
-		}
-		
-		
-		//now get use specific items
-		$acls = $this->getItemACLs($module, $uid);
-		if (is_array($acls)) {
-			foreach ($acls as $acl) {
-				$acl_entry = $this->get_acl($acl);
-				if ($acl_entry['allow'] == false && $acl_entry['enabled'] == true 
-				    && isset($acl_entry['axo'][$module])) {
-					foreach ($acl_entry['axo'][$module] as $id) {
-						$items[] = $id;
-					}
-				}
-			}
-		} else {
-			dprint(__FILE__, __LINE__, 2, "getDeniedItems($module, $uid) - no user ACL's match");
-		}
+		$q = new DBQuery;
+		$q->addQuery('distinct axo');
+		$q->addTable('dotpermissions');
+		$q->addWhere("allow=0 AND user_id=$uid AND section='$module' AND enabled=1");
+		$items = $q->loadColumn();
+
 		dprint(__FILE__,__LINE__, 2, 
 		       "getDeniedItems($module, $uid) returning " . count($items) . ' items');
 		return $items;
 	}
 	
 	//This is probably redundant.
-	function & getAllowedItems($module, $uid = null) {
+	function getAllowedItems($module, $uid = null) {
+    // Checking in dotpermissions..
+      // Is getAllowedItems operation-independent???
 		$items = array();
 		if (!($uid)) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
 		
-		//first get role items
-		$roles = $this->getUserRoles($uid);
-		foreach ($roles as $role_arr) {
-			$acls = $this->getRoleACLs($role_arr['id']);
-			if (is_array($acls)) {
-				foreach ($acls as $acl) {
-					$acl_entry = $this->get_acl($acl);
-					if (in_array('view', $acl_entry['aco']['application']) 
-					    && $acl_entry['allow'] == true && $acl_entry['enabled'] == true 
-					    && isset($acl_entry['axo'][$module])) {
-						foreach ($acl_entry['axo'][$module] as $id) {
-							$items[] = $id;
-						}
-					}
-				}
-			} else {
-				dprint(__FILE__, __LINE__, 2, 
-				       "getAllowedItems($module, $uid) - no role ACL's match");
-			}
-		}
-		
-		//now get use specific items
-		$acls = $this->getItemACLs($module, $uid);
-		if (is_array($acls)) {
-			foreach ($acls as $acl) {
-				$acl_entry = $this->get_acl($acl);
-				if ($acl_entry['allow'] == true && $acl_entry['enabled'] == true 
-				    && isset($acl_entry['axo'][$module])) {
-					foreach ($acl_entry['axo'][$module] as $id) {
-						$items[] = $id;
-					}
-				}
-			}
-		} else {
-			dprint(__FILE__, __LINE__, 2, "getAllowedItems($module, $uid) - no user ACL's match");
-		}
+		// Bug found by Anne (dotproject forum) -- Changed from "allow=0" to "allow!=0"
+		$q = new DBQuery;
+		$q->addQuery('distinct axo');
+		$q->addTable('dotpermissions');
+		$q->addWhere("allow!=0 AND user_id=$uid AND section='$module' AND enabled=1");
+		$items = $q->loadColumn();
 		dprint(__FILE__,__LINE__, 2, 
 		       "getAllowedItems($module, $uid) returning " . count($items) . ' items');
 		return $items;
@@ -425,7 +429,7 @@ class dPacl extends gacl_api {
 		$this->debug_text(('get_group_children(): Group_ID: ' . $group_id . ' Group Type: ' 
 						   . $group_type . ' Recurse: ' . $recurse));
 		
-		switch (mb_strtolower(trim($group_type))) {
+		switch (strtolower(trim($group_type))) {
 			case 'axo':
 				$group_type = 'axo';
 				$table = $this->_db_table_prefix .'axo_groups';
@@ -443,13 +447,11 @@ class dPacl extends gacl_api {
 		}
 		
 		$q = new DBQuery;
-		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
-		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table, 'g1');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addOrder('g1.value');
 	
-		switch (mb_strtoupper($recurse)) {
+		switch (strtoupper($recurse)) {
 			case 'RECURSE':
 				$q->addJoin($table, 'g2', 'g2.lft<g1.lft AND g2.rgt>g1.rgt');
 				$q->addWhere('g2.id='. $group_id);
@@ -472,11 +474,15 @@ class dPacl extends gacl_api {
 	function insertRole($value, $name) {
 		$role_parent = $this->get_group_id('role');
 		$value = str_replace(' ', '_', $value);
-		return $this->add_group($value, $name, $role_parent);
+		$res=$this->add_group($value, $name, $role_parent);
+		$this->regeneratePermissions();
+		return $res;
 	}
 	
 	function updateRole($id, $value, $name) {
-		return $this->edit_group($id, $value, $name);
+		$res=$this->edit_group($id, $value, $name);
+		$this->regeneratePermissions();
+		return $res;
 	}
 	
 	function deleteRole($id) {
@@ -485,7 +491,9 @@ class dPacl extends gacl_api {
 		foreach ($objs as $section => $value) {
 			$this->del_group_object($id, $section, $value);
 		}
-		return $this->del_group($id, false);
+		$res=$this->del_group($id, false);
+		$this->regeneratePermissions();
+		return $res;
 	}
 	
 	function insertUserRole($role, $user) {
@@ -509,11 +517,15 @@ class dPacl extends gacl_api {
 			}
 			$q->clear();
 		}
-		return $this->add_group_object($role, 'user', $user);
+		$res=$this->add_group_object($role, "user", $user);
+		$this->regeneratePermissions();
+		return $res;
 	}
 	
 	function deleteUserRole($role, $user) {
-		return $this->del_group_object($role, 'user', $user);
+	$res=$this->del_group_object($role, 'user', $user);
+	$this->regeneratePermissions();
+	return $res;
 	}
 	
 	/*
@@ -578,7 +590,7 @@ class dPacl extends gacl_api {
 	
 	function get_group_map($id, $group_type = 'ARO') {
 		$this->debug_text('get_group_map(): Assigned ID: ' . $id . ' Group Type: ' . $group_type);
-		$grp_type_mod = mb_strtolower(trim($group_type));
+		$grp_type_mod = strtolower(trim($group_type));
 		switch ($grp_type_mod) {
 			case 'axo':
 				$group_type = $grp_type_mod;
@@ -597,10 +609,7 @@ class dPacl extends gacl_api {
 		}
 		
 		$q = new DBQuery;
-		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
-		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table, 'g1');
-		$map_table = str_replace(dPgetConfig('dbprefix',''),'',$map_table);
 		$q->innerJoin($map_table, 'g2', 'g2.group_id = g1.id');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addWhere("g2.$map_field = $id");
@@ -621,7 +630,7 @@ class dPacl extends gacl_api {
 	\*======================================================================*/
 	function get_object_full($value = null , $section_value = null, $return_hidden = 1, 
 	                         $object_type = null) {
-		$obj_type_mod = mb_strtolower(trim($object_type));
+		$obj_type_mod = strtolower(trim($object_type));
 		switch($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -640,8 +649,6 @@ class dPacl extends gacl_api {
 		                   . $object_type));
 		
 		$q = new DBQuery;
-		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
-		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 		if (!(empty($value))) {
@@ -674,7 +681,7 @@ class dPacl extends gacl_api {
 	\*======================================================================*/
 	function get_objects_full($section_value = null, $return_hidden = 1, $object_type = null, 
 	                          $limit_clause = null) {
-		$obj_type_mod = mb_strtolower(trim($object_type));
+		$obj_type_mod = strtolower(trim($object_type));
 		switch ($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -692,8 +699,6 @@ class dPacl extends gacl_api {
 		                   . $object_type));
 		
 		$q = new DBQuery;
-		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled
-		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 		if (!(empty($section_value))) {
@@ -729,7 +734,7 @@ class dPacl extends gacl_api {
 	
 	function get_object_sections($section_value = null, $return_hidden = 1, $object_type = null, 
 	                             $limit_clause = null) {
-		$obj_type_mod = mb_strtolower(trim($object_type));
+		$obj_type_mod = strtolower(trim($object_type));
 		switch ($obj_type_mod) {
 			case 'aco':
 			case 'aro':
@@ -748,8 +753,6 @@ class dPacl extends gacl_api {
 		
 		//$query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
 		$q = new DBQuery;
-		//since we are going to use DBQuery we need to strip our dbprefix otherwise it will get doubled and become (for example) dotp_dotp_gacl_???
-		$table = str_replace(dPgetConfig('dbprefix',''),'',$table);
 		$q->addTable($table);
 		$q->addQuery('id, value, name, order_value, hidden');
 		if (!(empty($section_value))) {
@@ -789,8 +792,8 @@ class dPacl extends gacl_api {
 			return false;
 		}
 		
-		$mod_type = mb_substr($_POST['permission_module'],0,4);
-		$mod_id = mb_substr($_POST['permission_module'],4);
+		$mod_type = substr($_POST['permission_module'],0,4);
+		$mod_id = substr($_POST['permission_module'],4);
 		$mod_group = null;
 		$mod_mod = null;
 		if ($mod_type == 'grp,') {
@@ -832,13 +835,16 @@ class dPacl extends gacl_api {
 				$type_map[$t[0]][] = $t[1];
 			}
 		}
-		return $this->add_acl($type_map, $user_map, $role_map, $mod_mod, $mod_group, 
-		                      $_POST['permission_access'], 1, null, null, 'user');
+		$res = $this->add_acl($type_map, $user_map, $role_map, $mod_mod, $mod_group,
+								$_POST['permission_access'], 1, null, null, 'user');
+		$this->regeneratePermissions();
+	    return $res;
 	}
 	
 	//Deprecated, now just calls addUserPermission
 	function addRolePermission() {
-			return $this->addUserPermission();
+		$this->regeneratePermissions();
+		return $this->addUserPermission();
 	}
 	
 	//Some function overrides.
@@ -851,5 +857,79 @@ class dPacl extends gacl_api {
 		return $this->_debug_msg;
 	}
 	
+	function del_acl($id) {
+		gacl_api::del_acl($id);
+	    $this->regeneratePermissions();
+	}
+
+  /**
+   * dotpermissions table generation (Jose Maria Rodriguez Millan,28/05/2008)
+   * Generates a single table for permissions lookup.
+   * This should be regenerated every time an axo,aro or aco is added/modified/deleted.
+   * 
+   * This is very rough, as it regenerates the whole table independently of what was actually
+   * modified, but will do.
+   * 
+   * Maybe it'd be locking the table?
+   * 
+   */
+  function regeneratePermissions() {
+      $query2[]="TRUNCATE TABLE ".$dPconfig["dbprefix"]."dotpermissions";
+
+      // Direct "aro" - "axos" assignments
+      $query2[]="INSERT INTO ".$dPconfig["dbprefix"]."dotpermissions (acl_id,user_id,section,axo,permission,allow,priority,enabled) ".
+       "SELECT  acl.id,aro.value,axo_m.section_value,axo_m.value,aco_m.value,acl.allow,1,acl.enabled 
+		from ".$dPconfig["dbprefix"]."gacl_acl acl 
+		LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aco_map aco_m ON acl.id=aco_m.acl_id 
+		LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_map aro_m ON acl.id=aro_m.acl_id 
+		LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro aro ON aro_m.value=aro.value 
+		LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_map axo_m on axo_m.acl_id=acl.id 
+		WHERE aro.name IS NOT NULL AND axo_m.value IS NOT NULL";
+
+      // aro to axo groups
+      $query2[]="INSERT into ".$dPconfig["dbprefix"]."dotpermissions (acl_id,user_id,section,axo,permission,allow,priority,enabled) ".
+       "SELECT acl.id,aro.value,axo.section_value,axo.value,aco_m.value,acl.allow,2,acl.enabled 
+	   from ".$dPconfig["dbprefix"]."gacl_acl acl 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aco_map aco_m ON acl.id=aco_m.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_map aro_m ON acl.id=aro_m.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro aro ON aro_m.value=aro.value 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_groups_map axo_gm on axo_gm.acl_id=acl.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_groups axo_g on axo_gm.group_id=axo_g.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_groups_axo_map g_axo_m ON axo_g.id=g_axo_m.group_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo axo ON g_axo_m.axo_id=axo.id 
+	   WHERE aro.value IS NOT NULL AND axo_g.value IS NOT NULL";
+
+      // Aro groups to axos 
+      $query2[]="INSERT into ".$dPconfig["dbprefix"]."dotpermissions (acl_id,user_id,section,axo,permission,allow,priority,enabled) ".
+       "SELECT  acl.id,aro.value,axo_m.section_value,axo_m.value,aco_m.value,acl.allow,3,acl.enabled 
+	   from ".$dPconfig["dbprefix"]."gacl_acl acl 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aco_map aco_m ON acl.id=aco_m.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_groups_map aro_gm ON acl.id=aro_gm.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_groups aro_g ON aro_gm.group_id=aro_g.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_map axo_m on axo_m.acl_id=acl.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_groups_aro_map g_aro_m ON aro_g.id=g_aro_m.group_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro aro ON g_aro_m.aro_id=aro.id 
+	   WHERE axo_m.value IS NOT NULL AND aro.name IS NOT NULL";
+
+      // Aro groups to axo groups
+      $query2[]="INSERT into ".$dPconfig["dbprefix"]."dotpermissions (acl_id,user_id, section,axo,permission,allow,priority,enabled) ".
+       "SELECT acl.id,aro.value,axo.section_value,axo.value,aco_m.value,acl.allow,4,acl.enabled 
+	   from gacl_acl acl 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aco_map aco_m ON acl.id=aco_m.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_map aro_m ON acl.id=aro_m.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_groups_map aro_gm ON acl.id=aro_gm.acl_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro_groups aro_g ON aro_gm.group_id=aro_g.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_groups_map axo_gm on axo_gm.acl_id=acl.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo_groups axo_g on axo_gm.group_id=axo_g.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_groups_aro_map g_aro_m ON aro_g.id=g_aro_m.group_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_aro aro ON g_aro_m.aro_id=aro.id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_groups_axo_map g_axo_m ON axo_g.id=g_axo_m.group_id 
+	   LEFT JOIN ".$dPconfig["dbprefix"]."gacl_axo axo ON g_axo_m.axo_id=axo.id 
+	   WHERE axo_g.value IS NOT NULL and aro.value IS NOT NULL";
+
+      for($k=0;$k<count($query2);$k++)
+          mysql_query($query2[$k]);
+  }
+
 }
 ?>
