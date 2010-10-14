@@ -27,7 +27,7 @@ if (!defined('DP_BASE_DIR')) {
 <input type="hidden" name="lostpass" value="0" />
 <input type="hidden" name="redirect" value="<?php echo $redirect;?>" />
 <tr>
-	<th colspan="2"><em><?php echo $dPconfig['company_name'];?></em></th>
+	<th colspan="2"><em><?php echo dPgetConfig('company_name');?></em></th>
 </tr>
 <tr>
 	<td align="right" nowrap><?php echo $AppUI->_('Username');?>:</td>

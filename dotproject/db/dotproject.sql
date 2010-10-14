@@ -1206,7 +1206,7 @@ CREATE TABLE `%dbprefix%file_folders` (
 # 20101010
 
 DROP TABLE IF EXISTS `%dbprefix%dotpermissions`;
-CREATE TABLE `dotpermissions` (
+CREATE TABLE `%dbprefix%dotpermissions` (
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `user_id` varchar(80) NOT NULL DEFAULT '',
   `section` varchar(80) NOT NULL DEFAULT '',

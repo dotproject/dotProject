@@ -4,6 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
 }
 
+global $dbprefix;
 if ($mode == 'upgrade') {
 	include_once DP_BASE_DIR.'/includes/config.php';
 }
@@ -11,6 +12,9 @@ require_once DP_BASE_DIR.'/includes/main_functions.php';
 require_once DP_BASE_DIR.'/install/install.inc.php';
 require_once DP_BASE_DIR.'/includes/db_adodb.php';
 require_once DP_BASE_DIR.'/includes/db_connect.php';
+
+// Required here as we may either be an upgrade, or an install.
+$dbprefix = dPgetConfig('dbprefix', $dbprefix);
 
 
 // Now update the GACL class information.
@@ -151,7 +155,7 @@ $perms->add_acl($view_perms, null, array($worker_role, $guest_role), array('app'
 // Now we have the basic set up we need to create objects for all users
 dPmsg('Converting admin user permissions to Administrator Role');
 $sql = ('SELECT user_id, user_username, permission_id ' 
-		. 'FROM users LEFT JOIN permissions ON permission_user = users.user_id' 
+		. 'FROM ' . $dbprefix . 'users LEFT JOIN ' . $dbprefix. 'permissions ON permission_user = user_id' 
 		. ' WHERE permission_grant_on = ' . "'all'" 
 		." AND permission_item = -1 AND permission_value = -1");
 
@@ -168,7 +172,7 @@ if ($res) {
 
 // Upgrade permissions for custom modules
 dPmsg('Searching for add-on modules to add to new permissions');
-$sql = ('SELECT mod_directory, mod_name, permissions_item_table FROM modules '
+$sql = ('SELECT mod_directory, mod_name, permissions_item_table FROM ' . $dbprefix . 'modules '
 		.'WHERE mod_ui_active = 1 AND mod_type = '."'user'");
 $custom_modules = db_loadList($sql);
 foreach ($custom_modules as $mod) { 
@@ -178,4 +182,7 @@ foreach ($custom_modules as $mod) {
 		$perms->addModuleSection($mod['permissions_item_table']);
 	}
 }
+
+// Finally we need to regenerate the cached permissions.
+$perms->regeneratePermissions();
 ?>

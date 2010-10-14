@@ -27,7 +27,7 @@ $db->Execute("SET sql_mode := ''");
 * we will hurry up to load the system configuration details from the database.
 */
 
-$sql = 'SELECT '. dPgetConfig('dbprefix') . 'config_name, config_value, config_type FROM '.dPgetConfig('dbprefix','').'config';
+$sql = 'SELECT config_name, config_value, config_type FROM '.dPgetConfig('dbprefix','').'config';
 $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.

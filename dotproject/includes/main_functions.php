@@ -701,6 +701,14 @@ function dprint($file, $line, $level, $msg) {
 }
 
 /**
+ * Function to wrap the ADODB debug print so we can direct it via our normal debug processes.
+ */
+function db_dprint($msg, $newline)
+{
+	dprint('adodb', 0, 12, $msg);
+}
+
+/**
  * Return a list of modules that are associated with tabs for this
  * page.  This can be used to find post handlers, for instance.
  */

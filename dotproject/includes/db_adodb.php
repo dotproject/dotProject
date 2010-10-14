@@ -16,6 +16,7 @@ if (!(defined('DP_BASE_DIR'))) {
 require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
 
 $db = NewADOConnection(dPgetConfig('dbtype'));
+$GLOBALS['ADODB_OUTP'] = 'db_dprint';
 
 function db_connect($host='localhost', $dbname, $user='root', $passwd='', $persist=false) {
 	global $db, $ADODB_FETCH_MODE;

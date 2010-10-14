@@ -29,33 +29,34 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
  */
 function dPupgrade($from_version, $to_version, $last_updated) {
 
-	$latest_update = '20090427'; // Set to the latest upgrade date.
+	$latest_update = '20101014'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
 	}
 
+	$dbprefix = dPgetConfig('dbprefix','');
 	$perms = new dPacl;
 	
 	// Place the upgrade code here, depending on the last_updated date.
 	// DO NOT REMOVE PREVIOUS VERSION CODE!!!
 	switch ($last_updated) {
 		case '00000000':
-			$sql = 'SELECT project_id, project_departments, project_contacts FROM projects';
+			$sql = 'SELECT project_id, project_departments, project_contacts FROM ' . $dbprefix.'projects';
 			$projects = db_loadList($sql);
 
 			//split out related departments and store them seperatly.
-			$sql = 'DELETE FROM project_departments';
+			$sql = 'DELETE FROM '.$dbprefix . 'project_departments';
 			db_exec($sql);
 			//split out related contacts and store them seperatly.
-			$sql = 'DELETE FROM project_contacts';
+			$sql = 'DELETE FROM '.$dbprefix .'project_contacts';
 			db_exec($sql);
 
 			foreach ($projects as $project) {
                 $p_id = (($project['project_id'])?$project['project_id']:'0');
 				$departments = explode(',',$project['project_departments']);
 				foreach ($departments as $department) {
-					$sql = 'INSERT INTO project_departments (project_id, department_id) values ('.$p_id.', '.$department.')';
+					$sql = 'INSERT INTO '.$dbprefix.'project_departments (project_id, department_id) values ('.$p_id.', '.$department.')';
                     if ($p_id && $department) {
                         db_exec($sql);
                     }
@@ -63,7 +64,7 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 
 				$contacts = explode(',',$project['project_contacts']);
 				foreach ($contacts as $contact) {
-					$sql = 'INSERT INTO project_contacts (project_id, contact_id) values ('.$p_id.', '.$contact.')';
+					$sql = 'INSERT INTO '.$dbprefix.'project_contacts (project_id, contact_id) values ('.$p_id.', '.$contact.')';
                     if ($p_id && $contact) {
                         db_exec($sql);
                     }
@@ -74,21 +75,21 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 			 *  This segment will extract all the task/department and task/contact relational info and populate the task_departments and task_contacts tables.
 			 **/
 
-			$sql = 'SELECT task_id, task_departments, task_contacts FROM tasks';
+			$sql = 'SELECT task_id, task_departments, task_contacts FROM '.$dbprefix.'tasks';
 			$tasks = db_loadList($sql);
 
 			//split out related departments and store them seperatly.
-			$sql = 'DELETE FROM task_departments';
+			$sql = 'DELETE FROM '.$dbprefix.'task_departments';
 			db_exec($sql);
 			//split out related contacts and store them seperatly.
-			$sql = 'DELETE FROM task_contacts';
+			$sql = 'DELETE FROM '.$dbprefix.'task_contacts';
 			db_exec($sql);
 
 			foreach ($tasks as $task) {
 				$departments = explode(',',$task['task_departments']);
 				foreach ($departments as $department) {
 					if ($department) {
-						$sql = 'INSERT INTO task_departments (task_id, department_id) values ('.$task['task_id'].', '.$department.')';
+						$sql = 'INSERT INTO '.$dbprefix.'task_departments (task_id, department_id) values ('.$task['task_id'].', '.$department.')';
 						db_exec($sql);
 					}
 				}
@@ -96,13 +97,13 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 				$contacts = explode(',',$task['task_contacts']);
 				foreach ($contacts as $contact) {
 					if ($contact) {
-						$sql = 'INSERT INTO task_contacts (task_id, contact_id) values ('.$task['task_id'].', '.$contact.')';
+						$sql = 'INSERT INTO '.$dbprefix.'task_contacts (task_id, contact_id) values ('.$task['task_id'].', '.$contact.')';
 						db_exec($sql);
 					}
 				}
 			}
             
-            $sql = 'ALTER TABLE `projects` ADD `project_active` TINYINT(4) DEFAULT 1';
+            $sql = 'ALTER TABLE `'.$dbprefix.'projects` ADD `project_active` TINYINT(4) DEFAULT 1';
             db_exec($sql);
             
 			if (strcmp($from_version, '2') < 0) {
@@ -155,7 +156,10 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 			$perms->add_group_object($nonadmin, 'app', 'file_folders', 'axo');
 
 		case '20090427':
-			
+			// The SQL should have created our dotpermissions cache table, and populated it,
+			// So we really don't need to do anything here.
+
+		case '20101014':
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;

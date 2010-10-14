@@ -94,48 +94,12 @@ if ($maxfileuploadsize > 1048576) {
      is available.</td>
 </tr>
 <tr>
- <td class="item"><li>iBase Support</li></td>
-  <td align="left"><?php echo (function_exists('ibase_connect') && function_exists('ibase_server_info')) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.ibase_server_info().')</span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>Informix Support</li></td>
-  <td align="left"><?php echo function_exists('ifx_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
  <td class="item"><li>LDAP Support</li></td>
   <td align="left"><?php echo function_exists('ldap_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
 </tr>
 <tr>
- <td class="item"><li>mSQL Support</li></td>
-  <td align="left"><?php echo function_exists('msql_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"></span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>MSSQL Server Support</li></td>
-  <td align="left"><?php echo function_exists('mssql_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"></span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
  <td class="item"><li>MySQL Support</li></td>
   <td align="left"><?php echo function_exists('mysql_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.@mysql_get_server_info().')</span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>ODBC Support</li></td>
-  <td align="left"><?php echo function_exists('odbc_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"></span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>Oracle Support</li></td>
-  <td align="left"><?php echo function_exists('oci_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.ociserverversion().')</span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>PostgreSQL Support</li></td>
-  <td align="left"><?php echo function_exists('pg_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"></span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>SQLite Support</li></td>
-  <td align="left"><?php echo function_exists('sqlite_open') ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.sqlite_libversion().')</span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
-</tr>
-<tr>
- <td class="item"><li>Sybase Support</li></td>
-  <td align="left"><?php echo function_exists('sybase_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
 </tr>
 <tr>
             <td class="title" colspan="2"><br />Check for Directory and File Permissions</td>

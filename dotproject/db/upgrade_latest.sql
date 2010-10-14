@@ -7,8 +7,8 @@
 #
 # 20101010
 # Build the dotpermissions table and populate it.
-DROP TABLE IF EXISTS ``%dbprefix%dotpermissions`;`
-CREATE TABLE `dotpermissions` (
+DROP TABLE IF EXISTS `%dbprefix%dotpermissions`;
+CREATE TABLE `%dbprefix%dotpermissions` (
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `user_id` varchar(80) NOT NULL DEFAULT '',
   `section` varchar(80) NOT NULL DEFAULT '',
@@ -20,23 +20,23 @@ CREATE TABLE `dotpermissions` (
   KEY `user_id` (`user_id`,`section`,`permission`,`axo`)
 );
 
-INSERT INTO ``%dbprefix%dotpermissions`` 
+INSERT INTO `%dbprefix%dotpermissions`
 	(acl_id,user_id,section,axo,permission,allow,priority,enabled)
 SELECT
 	acl.id,aro.value,axo_m.section_value,axo_m.value,
 	aco_m.value,acl.allow,1,acl.enabled 
-FROM ``%dbprefix%gacl_acl` acl`
-LEFT JOIN ``%dbprefix%gacl_aco_map`` aco_m ON acl.id=aco_m.acl_id 
-LEFT JOIN ``%dbprefix%gacl_aro_map`` aro_m ON acl.id=aro_m.acl_id 
-LEFT JOIN ``%dbprefix%gacl_aro`` aro ON aro_m.value=aro.value 
-LEFT JOIN ``%dbprefix%gacl_axo_map`` axo_m on axo_m.acl_id=acl.id 
+FROM `%dbprefix%gacl_acl` acl
+LEFT JOIN `%dbprefix%gacl_aco_map` aco_m ON acl.id=aco_m.acl_id 
+LEFT JOIN `%dbprefix%gacl_aro_map` aro_m ON acl.id=aro_m.acl_id 
+LEFT JOIN `%dbprefix%gacl_aro` aro ON aro_m.value=aro.value 
+LEFT JOIN `%dbprefix%gacl_axo_map` axo_m on axo_m.acl_id=acl.id 
 WHERE aro.name IS NOT NULL AND axo_m.value IS NOT NULL;
 
-INSERT INTO ``%dbprefix%dotpermissions`` 
+INSERT INTO `%dbprefix%dotpermissions` 
 	(acl_id,user_id,section,axo,permission,allow,priority,enabled)
 SELECT acl.id,aro.value,axo.section_value,axo.value,
 	aco_m.value,acl.allow,2,acl.enabled 
-FROM ``%dbprefix%gacl_acl`` acl 
+FROM `%dbprefix%gacl_acl` acl 
 LEFT JOIN `%dbprefix%gacl_aco_map` aco_m ON acl.id=aco_m.acl_id 
 LEFT JOIN `%dbprefix%gacl_aro_map` aro_m ON acl.id=aro_m.acl_id 
 LEFT JOIN `%dbprefix%gacl_aro` aro ON aro_m.value=aro.value 

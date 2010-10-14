@@ -19,8 +19,9 @@ define('PERM_ALL', '-1');
 function getReadableModule() {
 	global $AppUI;
 	$perms =& $AppUI->acl();
+	$dbprefix = dPgetConfig('dbprefix', '');
 
-	$sql = 'SELECT mod_directory FROM modules WHERE mod_active > 0 ORDER BY mod_ui_order';
+	$sql = 'SELECT mod_directory FROM '.$dbprefix.'modules WHERE mod_active > 0 ORDER BY mod_ui_order';
 	$modules = db_loadColumn($sql);
 	foreach ($modules as $mod) {
 		if ($perms->checkModule($mod, 'access')) {
@@ -83,15 +84,15 @@ function getPermission($mod, $perm, $item_id = 0) {
 	// This can be done a lot better in PHPGACL, but is here for compatibility.
 	if ($item_id && $perm == 'view') {
 		if ($mod == 'task_log') {
-			$sql = ('SELECT task_log_task FROM task_log WHERE task_log_id =' . $item_id);
+			$sql = ('SELECT task_log_task FROM '.$dbprefix.'task_log WHERE task_log_id =' . $item_id);
 			$task_id = db_loadResult($sql);
 			$result = $result && getPermission('tasks', $perm, $task_id);
 		} else if ($mod == 'tasks') {
-			$sql = ('SELECT task_project FROM tasks WHERE task_id =' . $item_id);
+			$sql = ('SELECT task_project FROM '.$dbprefix.'tasks WHERE task_id =' . $item_id);
 			$project_id = db_loadResult($sql);
 			$result = $result && getPermission('projects', $perm, $project_id);
 		} else if ($mod == 'projects') {
-			$sql = ('SELECT project_company FROM projects WHERE project_id =' . $item_id);
+			$sql = ('SELECT project_company FROM '.$dbprefix.'projects WHERE project_id =' . $item_id);
 			$company_id = db_loadResult($sql);
 			$result = $result && getPermission('companies', $perm, $company_id);
 		}

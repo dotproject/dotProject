@@ -21,7 +21,8 @@ $cFileMsg = 'Not Created';
 $dbErr = false;
 $cFileErr = false;
 
-$dbtype = trim(dPInstallGetParam($_POST, 'dbtype', 'mysql'));
+global $dbprefix;
+$dbtype = 'mysql';
 $dbprefix = trim( dPInstallGetParam( $_POST, 'dbprefix', '' ) );
 $dbhost = trim(dPInstallGetParam($_POST, 'dbhost', ''));
 $dbname = trim(dPInstallGetParam($_POST, 'dbname', ''));
