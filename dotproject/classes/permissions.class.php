@@ -915,7 +915,7 @@ class dPacl extends gacl_api {
       // Aro groups to axo groups
       $query2[]="INSERT into {$dbprefix}dotpermissions (acl_id,user_id, section,axo,permission,allow,priority,enabled) ".
        "SELECT acl.id,aro.value,axo.section_value,axo.value,aco_m.value,acl.allow,4,acl.enabled 
-	   from gacl_acl acl 
+	   from {$dbprefix}gacl_acl acl 
 	   LEFT JOIN {$dbprefix}gacl_aco_map aco_m ON acl.id=aco_m.acl_id 
 	   LEFT JOIN {$dbprefix}gacl_aro_map aro_m ON acl.id=aro_m.acl_id 
 	   LEFT JOIN {$dbprefix}gacl_aro_groups_map aro_gm ON acl.id=aro_gm.acl_id 
@@ -928,8 +928,9 @@ class dPacl extends gacl_api {
 	   LEFT JOIN {$dbprefix}gacl_axo axo ON g_axo_m.axo_id=axo.id 
 	   WHERE axo_g.value IS NOT NULL and aro.value IS NOT NULL";
 
-      for($k=0;$k<count($query2);$k++)
-          mysql_query($query2[$k]);
+      foreach ($query2 as $query) {
+          mysql_query($query);
+      }
   }
 
 }

@@ -21,7 +21,6 @@ $cFileMsg = 'Not Created';
 $dbErr = false;
 $cFileErr = false;
 
-global $dbprefix;
 $dbtype = 'mysql';
 $dbprefix = trim( dPInstallGetParam( $_POST, 'dbprefix', '' ) );
 $dbhost = trim(dPInstallGetParam($_POST, 'dbhost', ''));
@@ -37,6 +36,7 @@ $do_db_cfg = isset($_POST['do_db_cfg']);
 $do_cfg = isset($_POST['do_cfg']);
 
 // Create a dPconfig array for dependent code
+global $dPconfig;
 $dPconfig = array(
  'dbtype' => $dbtype,
  'dbhost' => $dbhost,

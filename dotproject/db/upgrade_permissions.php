@@ -4,7 +4,6 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly. Instead, run the Installer in install/index.php.');
 }
 
-global $dbprefix;
 if ($mode == 'upgrade') {
 	include_once DP_BASE_DIR.'/includes/config.php';
 }
@@ -14,7 +13,7 @@ require_once DP_BASE_DIR.'/includes/db_adodb.php';
 require_once DP_BASE_DIR.'/includes/db_connect.php';
 
 // Required here as we may either be an upgrade, or an install.
-$dbprefix = dPgetConfig('dbprefix', $dbprefix);
+$dbprefix = dPgetConfig('dbprefix', '');
 
 
 // Now update the GACL class information.
