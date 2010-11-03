@@ -40,10 +40,10 @@ if ($project_id > 0) {
 $q = new DBQuery;
 
 // pull valid projects and their percent complete information
-$q->addTable('projects');
+$q->addTable('projects', 'pr');
 $q->addQuery('project_id, project_color_identifier, project_name' 
              . ', project_start_date, project_end_date');
-$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
+$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addWhere('project_status != 7');
 $q->addGroup('project_id');
 $q->addOrder('project_name');

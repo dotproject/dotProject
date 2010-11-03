@@ -76,6 +76,7 @@ function isAllowed($perm_type, $mod, $item_id = 0) {
 function getPermission($mod, $perm, $item_id = 0) {
 	global $AppUI;
 	$perms =& $AppUI->acl();
+	$dbprefix = dPgetConfig('dbprefix', '');
 	
 	// First check if the module is readable, i.e. has view permission.
 	$result = $perms->checkModuleItem($mod, $perm, $item_id);
