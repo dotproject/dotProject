@@ -524,19 +524,19 @@ function dPformSafe($txt, $flag_bits = 0) {
 		$locale_char_set = 'utf-8';
 	}
 	
-	$deslash = $flag_bits && DP_FORM_DESLASH; 
-	$isURI = $flag_bits && DP_FORM_URI;
-	$isJSVars = $flag_bits && DP_FORM_JSVARS;
+	$deslash = $flag_bits & DP_FORM_DESLASH;
+	$isURI = $flag_bits & DP_FORM_URI;
+	$isJSVars = $flag_bits & DP_FORM_JSVARS;
 	
 	if (is_object($txt) || is_array($txt)) {
-		$txt_arr = ((is_object($txt)) ? get_object_vars($txt) : $txt);
+		$txt_arr = is_object($txt) ? get_object_vars($txt) : $txt;
 		foreach ($txt_arr as $k => $v) {
-			$value = (($deslash) ? $AppUI->___($v, UI_OUTPUT_RAW) : $v);
-			$value = (($isURI) ? $AppUI->___($value, UI_OUTPUT_URI) : $value);
+			$value = $deslash ? $AppUI->___($v, UI_OUTPUT_RAW) : $v;
+			$value = $isURI ? $AppUI->___($value, UI_OUTPUT_URI) : $value;
 			
-			if (!($isURI)) {
-				$value = (($isJSVars) ? $AppUI->___($value, UI_OUTPUT_JS) : $value);
-				$value = ((!($deslash)) ? htmlspecialchars($value) : $AppUI->___($value));
+			if (!$isURI) {
+				$value = $isJSVars ? $AppUI->___($value, UI_OUTPUT_JS) : $value;
+				$value = $deslash ? htmlspecialchars($value) : $AppUI->___($value);
 			}
 			
 			if (is_object($txt)) {
@@ -547,12 +547,12 @@ function dPformSafe($txt, $flag_bits = 0) {
 		}
 		
 	} else {
-		$txt = (($deslash) ? $AppUI->___($txt, UI_OUTPUT_RAW) : $txt);
-		$txt = (($isURI) ? $AppUI->___($txt, UI_OUTPUT_URI) : $txt);
+		$txt = $deslash ? $AppUI->___($txt, UI_OUTPUT_RAW) : $txt;
+		$txt = $isURI ? $AppUI->___($txt, UI_OUTPUT_URI) : $txt;
 		
-		if (!($isURI)) {
-			$txt = (($isJSVars) ? $AppUI->___($txt, UI_OUTPUT_JS) : $AppUI->___($txt));
-			$txt = ((!($deslash)) ? htmlspecialchars($txt) : $AppUI->___($txt));
+		if (!$isURI) {
+			$txt = $isJSVars ? $AppUI->___($txt, UI_OUTPUT_JS) : $txt;
+			$txt = $deslash ? htmlspecialchars($txt) : $AppUI->___($txt);
 		}
 		
 		/*
