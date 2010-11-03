@@ -22,8 +22,8 @@ $messages = $q->loadList();
 
 $crumbs = array();
 $crumbs['?m=forums'] = "forums list";
-$crumbs["?m=forums&amp;a=viewer&amp;forum_id=$forum_id"] = "topics for this forum";
-$crumbs["?m=forums&amp;a=view_pdf&amp;forum_id=$forum_id&amp;message_id=$message_id&amp;sort=$sort&amp;suppressHeaders=1"] = "view PDF file";
+$crumbs["?m=forums&a=viewer&forum_id=$forum_id"] = "topics for this forum";
+$crumbs["?m=forums&a=view_pdf&forum_id=$forum_id&message_id=$message_id&sort=$sort&suppressHeaders=1"] = "view PDF file";
 ?>
 <script type="text/javascript" language="javascript">
 <?php

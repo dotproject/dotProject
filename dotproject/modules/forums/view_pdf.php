@@ -15,7 +15,7 @@ $q->addTable('forums');
 $q->addTable('forum_messages', 'msg');
 $q->addQuery('msg.*, contact_first_name, contact_last_name, contact_email, user_username,
 			forum_moderated, visit_user');
-$q->addJoin('forum_visits', 'v', "visit_user = {$AppUI->user_id} AND visit_forum = $forum_id AND visit_message = 				forum_messages.message_id");
+$q->addJoin('forum_visits', 'v', "visit_user = {$AppUI->user_id} AND visit_forum = $forum_id AND visit_message = msg.message_id");
 $q->addJoin('users', 'u', 'message_author = u.user_id');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 $q->addWhere("forum_id = message_forum AND (message_id = $message_id OR message_parent = $message_id)");
