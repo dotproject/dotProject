@@ -431,12 +431,12 @@ class dPacl extends gacl_api {
 		
 		switch (strtolower(trim($group_type))) {
 			case 'axo':
-				$table = 'axo';
-				$table = 'axo_groups';
+				$group_type = 'axo';
+				$table = 'gacl_axo_groups';
 				break;
 			default:
 				$group_type = 'aro';
-				$table = 'aro_groups';
+				$table = 'gacl_aro_groups';
 				break;
 		}
 		
