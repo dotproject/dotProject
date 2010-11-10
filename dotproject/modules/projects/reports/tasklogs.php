@@ -131,7 +131,7 @@ function setCalendar(idate, fdate) {
 if ($do_report) {
 
 	$q = new DBQuery;
-	$q->addQuery('SELECT p.project_id, p.project_name, t.*, 
+	$q->addQuery('p.project_id, p.project_name, t.*, 
 		CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator,
 		if (bc.billingcode_name is null, \'\', bc.billingcode_name) as billingcode_name');
 	$q->addTable('task_log', 't');
