@@ -18,7 +18,7 @@ $q->addQuery('pref_name, pref_value');
 $q->addTable('user_preferences');
 $q->addWhere('pref_user in (0,' . (int)$user_id . ')');
 $q->addOrder('pref_user');
-$prefs = $q->loadHashList($sql);
+$prefs = $q->loadHashList();
 
 // get the user name
 $user = (($user_id) ? dPgetUsernameFromID($user_id) : 'Default');
