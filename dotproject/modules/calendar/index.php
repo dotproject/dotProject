@@ -51,10 +51,10 @@ $titleBlock->show();
 
 <script language="javascript" type="text/javascript">
 function clickDay(uts, fdate) {
-	window.location = '?m=calendar&amp;a=day_view&amp;date='+uts+'&amp;tab=0';
+	window.location = '?m=calendar&a=day_view&date='+uts+'&tab=0';
 }
 function clickWeek(uts, fdate) {
-	window.location = '?m=calendar&amp;a=week_view&amp;date='+uts;
+	window.location = '?m=calendar&a=week_view&date='+uts;
 }
 </script>
 
