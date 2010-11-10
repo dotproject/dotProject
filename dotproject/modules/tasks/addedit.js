@@ -501,7 +501,7 @@ function calcFinish(f) {
 	f.task_end_date.value = e.getUTCFullYear()+tz2+(e.getMonth()+1)+tz1+e.getDate();
 	//f.end_date.value = tz2+(e.getMonth()+1)+"/"+tz1+e.getDate()+"/"+e.getUTCFullYear(); // MM/DD/YY
 	//f.end_date.value = tz1+e.getDate()+"/"+tz2+(e.getMonth()+1)+"/"+e.getUTCFullYear(); // DD/MM/YY
-	var url = '?m=public&amp;a=date_format&amp;dialog=1&amp;field='+f.name+'.end_date&amp;date=' + f.task_end_date.value;
+	var url = '?m=public&a=date_format&dialog=1&field='+f.name+'.end_date&date=' + f.task_end_date.value;
 	thread = window.frames['thread']; //document.getElementById('thread');
 	thread.location = url;
 	setAMPM(f.end_hour);

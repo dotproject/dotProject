@@ -245,7 +245,7 @@ function popDepartment() {
 //prompt('',url);
         window.open(url,'dept','left=50,top=50,height=250,width=400,resizable');
 
-//	window.open('?m=public&amp;a=selector&amp;dialog=1&amp;call_back=setDepartment&amp;selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+//	window.open('?m=public&a=selector&dialog=1&call_back=setDepartment&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setDepartment(department_id_string) {
@@ -406,10 +406,10 @@ function setDepartment(department_id_string) {
 				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>" size="10" maxlength="6" onblur="javascript:setColor();" class="text" /> *
 			</td>
 			<td nowrap="nowrap" align="right">
-				<a href="#" onclick="javascript:newwin=window.open('?m=public&amp;a=color_selector&amp;dialog=1&amp;callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
+				<a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
 			</td>
 			<td nowrap="nowrap">
-				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onclick="javascript:newwin=window.open('?m=public&amp;a=color_selector&amp;dialog=1&amp;callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" alt="" /></a></span>
+				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" alt="" /></a></span>
 			</td>
 		</tr>
 		<tr>
