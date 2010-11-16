@@ -22,6 +22,10 @@ if (!defined('DP_BASE_DIR')) {
 				$auth = new PostNukeAuthenticator();
 				return $auth;
 				break;
+			case 'ip':
+				$auth = new IPAuthenticator();
+				return $auth;
+				break;
 			default:
 				$auth = new SQLAuthenticator();
 				return $auth;
@@ -349,5 +353,25 @@ if (!defined('DP_BASE_DIR')) {
 
 	}
 
+	class IPAuthenticator extends SQLAuthenticator
+	{
+		function authenticate($username, $password)
+		{
+			$ret = parent::authenticate($username, $password);
+			if ($ret == false) {
+				return false;
+			}
 
-?>
+			$q  = new DBQuery;
+			$q->addTable('user_ip_lock');
+			$q->addQuery('user_id');
+			$q->addWhere("user_id = {$this->user_id}");
+			$q->addWhere("user_ip = '{$_SERVER['REMOTE_ADDR']}'");
+			$row = $q->loadResult();
+			if ($row) {
+				return false;
+			}
+
+			return true;
+		}
+	}
