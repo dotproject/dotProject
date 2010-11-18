@@ -42,12 +42,6 @@ if ($action) {
 		$AppUI->setMsg(db_error());
 	} else {	
 		$AppUI->setMsg($okMsg);
-                if ($action == 'add')
-			$q->clear();
-			$q->addTable('history');
-			$q->addUpdate('history_item = history_id');
-			$q->addWhere('history_table = \'history\'');
-			$okMsg = 'History deleted';
 	}
 	$q->clear();
 	$AppUI->redirect();
