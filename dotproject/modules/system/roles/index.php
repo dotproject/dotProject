@@ -24,7 +24,7 @@ $role_id = dPgetParam($_GET, 'role_id', 0);
 $q = new DBQuery;
 $q->addQuery('mod_id, mod_name');
 $q->addTable('modules');
-$q->addWhere('mod_action > 0');
+$q->addWhere('mod_active > 0');
 $q->addOrder('mod_directory');
 $modules = arrayMerge(array('0'=>'All'), $q->loadHashList());
 
