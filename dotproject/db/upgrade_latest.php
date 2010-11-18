@@ -29,7 +29,7 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
  */
 function dPupgrade($from_version, $to_version, $last_updated) {
 
-	$latest_update = '20101014'; // Set to the latest upgrade date.
+	$latest_update = '20101117'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
@@ -160,6 +160,7 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 			// So we really don't need to do anything here.
 
 		case '20101014':
+		case '20101117':
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;
