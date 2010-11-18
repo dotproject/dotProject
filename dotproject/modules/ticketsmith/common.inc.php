@@ -381,7 +381,7 @@ function format_field ($value, $type, $ticket = NULL) {
                     $value = $latest_value;
                 }
             }
-            $output = "<a href='?m=ticketsmith&amp;a=view&amp;ticket='$value'>$value&nbsp;";
+            $output = "<a href='?m=ticketsmith&amp;a=view&amp;ticket=$value'>$value&nbsp;";
 			$output .= "<img src='images/icons/pencil.gif' border='0' alt='' /></a>";
             break;
 	case "attach":
