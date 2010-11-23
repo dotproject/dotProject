@@ -53,6 +53,8 @@ class dPacl extends gacl_api {
 		$opts['db_password'] = dPgetConfig('dbpass');
 		$opts['db_name'] = dPgetConfig('dbname');
 		$opts['caching'] = dPgetConfig('gacl_cache', false);
+		// With dotP prefixing, we can end up with doubles if we perform queries ourself.
+		$this->_original_db_prefix = $this->_db_table_prefix;
 		$opts['db_table_prefix'] = dPgetConfig('dbprefix','').$this->_db_table_prefix;
 		$opts['force_cache_expire'] = dPgetConfig('gacl_expire', true);
 		$opts['cache_dir'] = dPgetConfig('gacl_cache_dir', '/tmp');
@@ -599,8 +601,8 @@ class dPacl extends gacl_api {
 				$group_type = 'aro';
 				break;
 		}
-		$table = $this->_db_table_prefix . $group_type . '_groups';
-		$map_table = $this->_db_table_prefix . 'groups_' . $group_type . '_map';
+		$table = $this->_original_db_prefix . $group_type . '_groups';
+		$map_table = $this->_original_db_prefix . 'groups_' . $group_type . '_map';
 		$map_field = $group_type . '_id';
 		
 		if (empty($id)) {
@@ -644,7 +646,7 @@ class dPacl extends gacl_api {
 				break;
 		}
 		
-		$table = $this->_db_table_prefix . $object_type;
+		$table = $this->_original_db_prefix . $object_type;
 		$this->debug_text(('get_object(): Section Value: ' . $section_value . ' Object Type: ' 
 		                   . $object_type));
 		
@@ -694,7 +696,7 @@ class dPacl extends gacl_api {
 				break;
 		}
 		
-		$table = $this->_db_table_prefix . $obj_type_mod;
+		$table = $this->_original_db_prefix . $obj_type_mod;
 		$this->debug_text(('get_objects(): Section Value: ' . $section_value . ' Object Type:  ' 
 		                   . $object_type));
 		
@@ -747,7 +749,7 @@ class dPacl extends gacl_api {
 				break;
 		}
 		
-		$table = $this->_db_table_prefix . $object_type . '_sections';
+		$table = $this->_original_db_prefix . $object_type . '_sections';
 		$this->debug_text(('get_objects(): Section Value: ' . $section_value . ' Object Type: ' 
 		                   . $object_type));
 		
