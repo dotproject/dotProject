@@ -27,7 +27,15 @@ if (!defined('DP_BASE_DIR')) {
 				return $auth;
 				break;
 			default:
-				$auth = new SQLAuthenticator();
+				// Try loading the authenticator class
+				$auth_mode = preg_replace('/[^a-z0-9_-]/i', '', $auth_mode);
+				@include_once(DP_BASE_DIR.'/classes/auth.'.$auth_mode.'.class.php');
+				$classname = $auth_mode . 'Authenticator';
+				if (class_exists($classname)) {
+					$auth = new $classname();
+				} else {
+					$auth = new SQLAuthenticator();
+				}
 				return $auth;
 				break;
 		}
