@@ -36,7 +36,11 @@ if (!function_exists('mb_stripos')) {
 if (!function_exists('mb_stristr')) {
 	function mb_stristr($haystack, $needle, $part = false, $encoding = null) {
 		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
-		return stristr($haystack, $needle, $part);
+		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+			return stristr($haystack, $needle, $part);
+		} else {
+			return stristr($haystack, $needle);
+		}
 	}
 }
 
@@ -57,7 +61,11 @@ if (!function_exists('mb_strpos')) {
 if (!function_exists('mb_strstr')) {
 	function mb_strstr($haystack, $needle, $part = false, $encoding = null) {
 		$encoding = (($encoding === null) ? mb_internal_encoding() : $encoding);
-		return strstr($haystack, $needle, $part);
+		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+			return strstr($haystack, $needle, $part);
+		} else {
+			return strstr($haystack, $needle);
+		}
 	}
 }
 
