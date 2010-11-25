@@ -51,7 +51,11 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 
 $start_date = $obj->event_start_date ? new CDate($obj->event_start_date) : null;
 $end_date = $obj->event_end_date ? new CDate($obj->event_end_date) : null;
-$event_project = db_LoadResult('SELECT project_name FROM projects where project_id=' . $obj->event_project);
+$q = new DBQuery();
+$q->addQuery('project_name');
+$q->addTable('projects');
+$q->addWhere('project_id = ' . (int)$obj->event_project);
+$event_project = $q->LoadResult();
 
 // setup the title block
 $titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, "$m.$a");
