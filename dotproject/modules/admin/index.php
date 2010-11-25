@@ -55,6 +55,9 @@ $q->addQuery('DISTINCT UPPER(SUBSTRING(u.user_username, 1, 1)) AS L'
 $arr = $q->loadList();
 foreach ($arr as $L) {
 	foreach ($L as $v) {
+		if (empty($v)) {
+			continue;
+		}
 		if (empty ($let)) {
 			$let .= $v;
 		} else {
