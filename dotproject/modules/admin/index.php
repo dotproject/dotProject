@@ -54,9 +54,13 @@ $q->addQuery('DISTINCT UPPER(SUBSTRING(u.user_username, 1, 1)) AS L'
 			 . ', UPPER(SUBSTRING(con.contact_last_name, 1, 1)) AS CL');
 $arr = $q->loadList();
 foreach ($arr as $L) {
-	$let .= mb_strpos($let, $L['L']) ? '' : $L['L'];
-	$let .= mb_strpos($let, $L['CF']) ? '' : $L['CF'];
-	$let .= mb_strpos($let, $L['CL']) ? '' : $L['CL'];
+	foreach ($L as $v) {
+		if (empty ($let)) {
+			$let .= $v;
+		} else {
+			$let .= (mb_strpos($let, $v) === false) ? $v : '';
+		}
+	}
 }
 $q->clear();
 
