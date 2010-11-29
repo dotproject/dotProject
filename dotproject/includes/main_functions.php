@@ -43,10 +43,12 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 			// array lookup for replacements would be a better approach. AJD.
 			$v=str_replace('&#369;','�',$v);
 			$v=str_replace('&#337;','�',$v);
+		} else {
+			$v = $AppUI->__($v);
 		}
 		$s .= ("\n\t" . '<option value="' . $AppUI->___($k) . '"' 
 		       . (($k == $selected && !$did_selected) ? ' selected="selected"' : '') . ">" 
-		       . $AppUI->___($v) . '</option>');
+		       . $v . '</option>');
 		if ($k == $selected) {
 			$did_selected = 1;
 		}
