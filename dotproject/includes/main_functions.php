@@ -44,7 +44,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 			$v=str_replace('&#369;','�',$v);
 			$v=str_replace('&#337;','�',$v);
 		} else {
-			$v = $AppUI->__($v);
+			$v = $AppUI->___($v);
 		}
 		$s .= ("\n\t" . '<option value="' . $AppUI->___($k) . '"' 
 		       . (($k == $selected && !$did_selected) ? ' selected="selected"' : '') . ">" 
