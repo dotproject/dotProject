@@ -9,6 +9,7 @@ require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 require(DP_BASE_DIR.'modules/ticketsmith/common.inc.php');
 
 $db = new DBQuery;
+$dbprefix = dPgetConfig('dbprefix','');
 
 /* determine page function */
 switch ($action) {
@@ -58,7 +59,7 @@ switch ($action) {
         break;
     case "edit":
         $title = "Edit User";
-        $user_info = query2hash("SELECT * FROM ".dPgetConfig('dbprefix','')."users WHERE id = '$id'");
+        $user_info = query2hash("SELECT * FROM {$dbprefix}users WHERE id = '$id'");
 		$content = "<tr><td><strong>Name</strong></td><td colspan=\"2\"><font size=\"-1\"><input type=\"text\" name=\"name\" size=\"20\" value=\"" . $user_info["name"] . "\" /></font></td></tr>\n";
 		$content .= "<tr><td><strong>Email</strong> </td><td colspan=\"2\"><font size=\"-1\"><input type=\"text\" name=\"email\" size=\"20\" value=\"" . $user_info["email"] . "\" /></font></td></tr>\n";
 		$content .= "<tr><td><strong>Password</strong></td><td colspan=\"2\"><font size=\"-1\"><input type=\"password\" name=\"password\" size=\"20\" value=\"" . $user_info["password"] . "\" /></font></td></tr>\n";
@@ -70,7 +71,7 @@ switch ($action) {
     default:
         $title = "User Administration";
         $content = "<tr><td align=\"center\"><strong>Edit</strong></td><td><strong>User</strong></td><td><strong>Email</strong></td></tr>\n";
-        $result = do_query("SELECT id, name, email FROM ".dPgetConfig('dbprefix','')."users WHERE username != 'admin' ORDER BY id");
+        $result = do_query("SELECT id, name, email FROM {$dbprefix}users WHERE username != 'admin' ORDER BY id");
         while ($row = result2hash($result)) {
             $content .= "<tr>";
 			$content .= "<td align=\"center\"><a href=\"?a=ticketsmith&amp;a=edit&amp;id=" . $row["id"] . "\"><img src='modules/ticketsmith/images/posticon.gif' border=\"0\" /></a></td>";

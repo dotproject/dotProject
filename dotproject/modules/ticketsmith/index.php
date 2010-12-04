@@ -45,7 +45,7 @@ if ($type == '') {
 
 /* expunge deleted tickets */
 if (@$action == "expunge") {
-    $deleted_parents = column2array("SELECT ticket FROM ".$dbprefix."tickets WHERE type = 'Deleted'");
+    $deleted_parents = column2array("SELECT ticket FROM {$dbprefix}tickets WHERE type = 'Deleted'");
     for ($loop = 0; $loop < count($deleted_parents); $loop++) {
         do_query("DELETE FROM ".$dbprefix."tickets WHERE ticket = '$deleted_parents[$loop]'");
         do_query("DELETE FROM ".$dbprefix."tickets WHERE parent = '$deleted_parents[$loop]'");
@@ -87,7 +87,7 @@ if ($type == "my") {
 }
 
 /* count tickets */
-$query = "SELECT COUNT(*) FROM ".$dbprefix."tickets WHERE parent = '0'";
+$query = "SELECT COUNT(*) FROM {$dbprefix}tickets WHERE parent = '0'";
 if ($type != 'All') {
     $query .= " AND type = '$type'";
 }
@@ -134,7 +134,7 @@ if ($ticket_count > $limit) {
 <?php
 /* form query */
 $select_fields= join(", ", $fields["columns"]);
-$query = "SELECT $select_fields FROM ".$dbprefix."tickets WHERE ";
+$query = "SELECT $select_fields FROM {$dbprefix}tickets WHERE ";
 if ($type == "My") {
     $query .= "type = 'Open' AND (assignment = '$AppUI->user_id' OR assignment = '0') AND ";
 }

@@ -8,6 +8,7 @@ if (!$canEdit) {
 }
 
 $ticket = dPgetParam($_GET, 'ticket', '');
+$dbprefix = dPgetConfig('dbprefix', '');
 
 $titleBlock = new CTitleBlock('Link Ticket', 'gconf-app-icon.php', $m, "$m.$a");
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
@@ -38,7 +39,7 @@ $limit = @$limit ? $limit : $CONFIG["view_rows"];
 
 
 /* count tickets */
-$query = "SELECT COUNT(*) FROM ".dPgetConfig('dbprefix','')."tickets WHERE parent = '0' and ticket != $ticket";
+$query = "SELECT COUNT(*) FROM {$dbprefix}tickets WHERE parent = '0' and ticket != $ticket";
 if ($type != 'All') {
     $query .= " AND type = '$type'";
 }
@@ -86,7 +87,7 @@ if ($ticket_count > $limit) {
 <?php
 /* form query */
 $select_fields= join(", ", $fields["columns"]);
-$query = "SELECT $select_fields FROM ".dPgetConfig('dbprefix','')."tickets WHERE ";
+$query = "SELECT $select_fields FROM {$dbprefix}tickets WHERE ";
 if ($type == "My") {
     $query .= "type = 'Open' AND (assignment = '$user_cookie' OR assignment = '0') AND ";
 }

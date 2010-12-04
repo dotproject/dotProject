@@ -45,10 +45,10 @@ if (@$followup) {
 
     /* prepare fields */
     $timestamp = time();
-    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM ".$dbprefix."users u LEFT JOIN ".$dbprefix."contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
     $author = "$from_name <$from_email>";
     if (!$recipient) {
-        $recipient = query2result("SELECT author FROM ".$dbprefix."tickets WHERE ticket = '$ticket_parent'");
+        $recipient = query2result("SELECT author FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'");
     }
 
     /* prepare posted stuff */
@@ -80,12 +80,12 @@ if (@$followup) {
     $cc = db_escape($cc);
 
     /* do database insert */
-    $query = "INSERT INTO ".$dbprefix."tickets (author, subject, recipient, body, cc, timestamp, type, assignment, parent) ";
+    $query = "INSERT INTO {$dbprefix}tickets (author, subject, recipient, body, cc, timestamp, type, assignment, parent) ";
     $query .= "VALUES ('$author','$subject','$recipient','$followup','$cc','$timestamp','Staff Followup','9999','$ticket_parent')";
     do_query($query);
 
     /* update parent activity */
-    do_query("UPDATE ".$dbprefix."tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
+    do_query("UPDATE {$dbprefix}tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
 
     /* redirect to parent */
     echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
@@ -106,19 +106,19 @@ if (@$followup) {
     print("<form name='ticketform' action='?m=ticketsmith&amp;a=followup&amp;ticket=$ticket' method='post'>\n");
 
     /* get ticket */
-    $ticket_info = query2hash("SELECT * FROM tickets WHERE ticket = $ticket");
+    $ticket_info = query2hash("SELECT * FROM {$dbprefix}tickets WHERE ticket = $ticket");
 
     /* output From: line */
     print("<tr>\n");
     print("<td align='left'><strong>".$AppUI->_('From')."</strong></td>");
-    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM ".$dbprefix."users u LEFT JOIN ".$dbprefix."contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
     print("<td align='left'>" . $from_name . " &lt;" . $from_email . "&gt;</td>\n");
     print("</tr>\n");
 
     /* output To: line */
     print("<tr>\n");
     print("<td align='left'><strong>".$AppUI->_('To')."</strong></td>");
-    $recipient = query2result("SELECT author FROM ".$dbprefix."tickets WHERE ticket = '$ticket_parent'");
+    $recipient = query2result("SELECT author FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'");
     print("<td align='left'>" . format_field($recipient, "recipient") . "</td>\n");
     print("</tr>\n");
 

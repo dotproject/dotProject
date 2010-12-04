@@ -74,7 +74,7 @@ if (@$comment) {
     /* determine poster */
     print("<tr>\n");
     print("<td align=\"left\"><strong>".$AppUI->_('From')."</strong></td>");
-    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM ".dPgetConfig('dbprefix','')."users u LEFT JOIN ".dPgetConfig('dbprefix','')."contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
     print("<td align=\"left\">" . $author_name . " &lt;" . $author_email . "&gt;</td>\n");
     print("</tr>");
 
