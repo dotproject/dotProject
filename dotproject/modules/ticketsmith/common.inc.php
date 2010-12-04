@@ -486,9 +486,9 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
 		case 'ticket_company':
 		    $q  = new DBQuery;
-			$q->addTable('companies');
-			$q->addQuery('companies.*');
-			$q->addWhere('companies.company_id = '.$value);
+			$q->addTable('companies','co');
+			$q->addQuery('co.*');
+			$q->addWhere('co.company_id = '.$value);
 			$sql = $q->prepare();
 			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
@@ -497,9 +497,9 @@ function format_field ($value, $type, $ticket = NULL) {
 			break;
 		case 'ticket_project':
 		    $q  = new DBQuery;
-			$q->addTable('projects');
-			$q->addQuery('projects.*');
-			$q->addWhere('projects.project_id = '.$value);
+			$q->addTable('projects', 'pr');
+			$q->addQuery('pr.*');
+			$q->addWhere('pr.project_id = '.$value);
 			$sql = $q->prepare();
 			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
