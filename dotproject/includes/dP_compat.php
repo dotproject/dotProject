@@ -22,7 +22,10 @@ if (!function_exists('mb_convert_encoding')) {
 
 if (!function_exists('mb_split')) {
 	function mb_split($pattern, $string, $limit = -1) {
-		return preg_split($pattern, $string, $limit);
+		# mb_split "patterns" are not PCRE patterns, so we need to
+		# find a terminator that is unlikely to be in the string.
+		$t = chr(1);
+		return preg_split($t.$pattern.$t, $string, $limit);
 	}
 }
 
