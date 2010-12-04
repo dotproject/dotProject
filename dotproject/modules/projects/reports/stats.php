@@ -25,7 +25,7 @@ if (!empty($project_id)){
 $all_tasks = $q->loadList();
 
 
-$q->addSelect('*, round(sum(task_log_hours),2) as work');
+$q->addQuery('*, round(sum(task_log_hours),2) as work');
 $q->addTable('projects', 'pr');
 $q->leftJoin('tasks','t', 'task_project = project_id');
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
