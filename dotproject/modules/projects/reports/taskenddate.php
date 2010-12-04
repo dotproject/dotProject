@@ -72,7 +72,7 @@ function setCalendar(idate, fdate) {
 			$q->leftJoin('permissions','p','(u.user_id = p.permission_user)');
 			$q->leftJoin('contacts','c','(u.user_contact = c.contact_id)');
 			$q->addWhere('!isnull(p.permission_user)');
-			$users = array(0 => $AppUI->_("All")) + db_loadHashList($q->prepare(true));
+			$users = array(0 => $AppUI->_("All")) + $q->loadHashList();
 	       echo arraySelect($users, "user_id", "class='text'", $user_id);
 	   ?>
 	</td>
@@ -135,7 +135,7 @@ if ($do_report) {
 		$q->addWhere('task_log_task = '.$task['task_id']);
 		$q->addOrder('task_log_date desc');
 		$q->setLimit('1');
-        db_loadHash($q->prepare(true), $task_log);
+		$task_log = $q->loadHash();
         
         $done_img = $task["task_percent_complete"] == 100 ? "Yes" : "No";
         echo "<tr><td>&nbsp;&nbsp;&nbsp;".$task["task_name"]."</td><td>".$task["user_username"]."</td><td>".($task["task_duration"]*$task["task_duration_type"])." $hrs</td><td>".$task["task_end_date"]."</td><td>".$task_log["task_log_date"]."</td><td align='center'>$done_img</td></tr>";

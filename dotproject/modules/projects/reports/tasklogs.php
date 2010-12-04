@@ -260,7 +260,7 @@ if ($do_report) {
 			$q->addTable('projects');
 			$q->addQuery('project_name');
 			$q->addWhere('project_id=' . $project_id);
-			$pname = db_loadResult($q->prepare(true));
+			$pname = $q->loadResult();
 		} else {
 			$pname = "All Projects";
 		}

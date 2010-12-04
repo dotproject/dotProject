@@ -114,15 +114,13 @@ function showcompany($company, $restricted = false)
 	$q->addTable('projects');
 	$q->addQuery('project_id, project_name');
 	$q->addWhere('project_company = ' . $company);
-	$sql = $q->prepare(true);
 
-	$projects = db_loadHashList($sql);
+	$projects = $q->loadHashList();
   
 	$q->addTable('companies');
 	$q->addQuery('company_name');
 	$q->addWhere('company_id = ' . $company);
-	$sql = $q->prepare(true);
-	$company_name = db_loadResult($sql);                                                                                                                       
+	$company_name = $q->loadResult();                                                                                                                       
 
         $table = '<h2>Company: ' . $company_name . '</h2>
         <table cellspacing="1" cellpadding="4" border="0" class="tbl">';
@@ -170,9 +168,8 @@ function showcompany($company, $restricted = false)
 				. ' AND task_id = task_log_task';
 		$q->addWhere($where);
 		$q->addGroup('project_id'); //task_log_costcode
-		$sql = $q->prepare(true);
 
-		$task_logs = db_loadHashList($sql);
+		$task_logs = $q->loadHashList();
 
 /*		if (isset($company_billingcodes))
 		foreach ($company_billingcodes as $code => $name)
@@ -224,9 +221,8 @@ $q->addQuery('company_id');
 if (!$fullaccess) {
 	$q->addWhere("company_owner='" . $AppUI->user_id . "'");
 }
-$sql = $q->prepare(true);
 
-$companies = db_loadColumn($sql);
+$companies = $q->loadColumn();
 
 if (!empty($companies))	{
 	foreach ($companies as $company)
@@ -234,8 +230,7 @@ if (!empty($companies))	{
 } else {
 	$q->addTable('companies');
 	$q->addQuery('company_id');
-	$sql = $q->prepare(true);
-	foreach (db_loadColumn($sql) as $company)
+	foreach ($q->loadColumn() as $company)
 		$total += showcompany($company, true);
 }
 

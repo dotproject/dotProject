@@ -16,25 +16,25 @@ function file_size($size)
         return $size . ' B';
 }
 
-$sql = '
-SELECT * 
-FROM projects
-LEFT JOIN tasks ON task_project = project_id';
-if (!empty($project_id))
-	$sql .= ' WHERE project_id = ' . $project_id;
-$all_tasks = db_loadList($sql);
+$q = new DBQuery();
+$q->addTable('projects', 'pr');
+$q->leftJoin('tasks', 't','task_project = project_id');
+if (!empty($project_id)){
+	$q->addWhere('project_id = ' . (int)$project_id);
+}
+$all_tasks = $q->loadList();
 
-$sql = '
-SELECT *, round(sum(task_log_hours),2) as work
-FROM projects
-LEFT JOIN tasks ON task_project = project_id
-LEFT JOIN user_tasks ON user_tasks.task_id = tasks.task_id
-LEFT JOIN users ON user_tasks.user_id = users.user_id
-LEFT JOIN task_log ON task_log_task = tasks.task_id AND task_log_creator = users.user_id';
+
+$q->addSelect('*, round(sum(task_log_hours),2) as work');
+$q->addTable('projects', 'pr');
+$q->leftJoin('tasks','t', 'task_project = project_id');
+$q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+$q->leftJoin('users', 'u', 'ut.user_id = u.user_id');
+$q->leftJoin('task_log', 'tl', 'task_log_task = t.task_id AND task_log_creator = u.user_id');
 if (!empty($project_id))
-	$sql .= ' WHERE project_id = ' . $project_id;
-$sql .= ' GROUP BY tasks.task_id, users.user_id';
-$users_all = db_loadList($sql);
+	$q->addWhere('project_id = ' . (int)$project_id);
+$q->addGroup('t.task_id, u.user_id');
+$users_all = $q->loadList();
 
 foreach ($users_all as $user)
 {
@@ -90,12 +90,11 @@ foreach ($all_tasks as $task)
 	}
 }
 
-$sql = '
-SELECT sum(file_size)
-FROM files
-WHERE file_project = ' . $project_id . '
-GROUP BY file_project';
-$files = db_loadResult($sql);
+$q->addQuery('sum(file_size)');
+$q->addTable('files');
+$q->addWhere('file_project = ' . (int)$project_id);
+$q->addGroup('file_project');
+$files = $q->loadResult();
 
 $ontime = round(100 * (1 - (count($tasks['overdue']) / count($all_tasks)) - (count($tasks['completed']) / count($all_tasks))));
 ?>

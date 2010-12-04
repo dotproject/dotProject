@@ -6,8 +6,11 @@ if (!defined('DP_BASE_DIR')) {
 // Output the PDF
 // make the PDF file
 if ($project_id != 0) {
-	$sql = "SELECT project_name FROM projects WHERE project_id=$project_id";
-	$pname = db_loadResult($sql);
+	$q = new DBQuery();
+	$q->addQuery('project_name');
+	$q->addTable('projects');
+	$q->addWhere('project_id = ' . (int)$project_id);
+	$pname = $q->loadResult();
 } else {
 	$pname = $AppUI->_('All Projects');
 }	
