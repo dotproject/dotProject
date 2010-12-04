@@ -31,8 +31,7 @@ function sendNewPass() {
  $q->addQuery('u.user_id');
  $q->addWhere('user_username=\''.$checkusername.'\' AND LOWER(contact_email)=\''.$confirmEmail.'\'');
  $q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
- $query = $q->prepare(true);
- if (!($user_id = db_loadResult($query)) || !$checkusername || !$confirmEmail) {
+ if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
   $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
   $AppUI->redirect();
  }

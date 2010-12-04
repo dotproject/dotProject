@@ -161,11 +161,11 @@ if ($do_report) {
 	}
 
 	$obj = new CTask;
-	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
+	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tsk.task_id');
 	if (count($allowedTasks)) {
 		$q->addWhere($allowedTasks);
 	}
-	$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_parent');
+	$allowedChildrenTasks = $obj->getAllowedSQL($AppUI->user_id, 'tsk.task_parent');
 	if (count($allowedChildrenTasks)) {
 		$q->addWhere($allowedChildrenTasks);
 	}
