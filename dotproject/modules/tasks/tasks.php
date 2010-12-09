@@ -450,6 +450,16 @@ function chAssignment(project_id, rmUser, del) {
 <form name='task_list_options' method='POST' action='<?php echo $query_string; ?>'>
 <input type='hidden' name='show_task_options' value='1' />
 <tr>
+	<?php if ($min_view) { ?>
+	<td>
+	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php 
+echo $AppUI->_('Expand All'); ?></a> : 
+	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1'; ?>"><?php 
+echo $AppUI->_('Collapse All'); ?></a> 
+	  &nbsp;&nbsp;
+	  </td>
+	<?php } 
+?>
   <td align='right'>
 	<table>
 	<tr>
@@ -703,8 +713,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
-	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1';?>"><?php echo $AppUI->_('Open'); ?></a> :
-	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>
+	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1';?>"><?php echo $AppUI->_('Expand All'); ?></a> :
+	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('Collapse All'); ?></a>
 	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;
 <!-- removed project-level report buttons per Mantis Report #2374
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>" 
@@ -744,9 +754,9 @@ $AppUI->savePlace();
   <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
 	<?php if ($min_view) { ?>
 	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php 
-echo $AppUI->_('Open'); ?></a> : 
+echo $AppUI->_('Expand All'); ?></a> : 
 	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1'; ?>"><?php 
-echo $AppUI->_('Close All Tasks'); ?></a> 
+echo $AppUI->_('Collapse All'); ?></a> 
 	<?php } 
 ?>
 	</td>
