@@ -1218,3 +1218,8 @@ CREATE TABLE `%dbprefix%dotpermissions` (
   KEY `user_id` (`user_id`,`section`,`permission`,`axo`)
 );
 
+# 20101216
+# Manage contacts properly
+INSERT INTO `%dbprefix%config` VALUES (0, 'user_contact_inactivate', 'true', 'auth', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'user_contact_activate', 'false', 'auth', 'checkbox');
+
