@@ -81,7 +81,7 @@ class dPacl extends gacl_api {
    $q = new DBQuery;
    $q->addQuery('aro.value,aro.name, gr_aro.group_id');
    $q->addTable('gacl_aro', 'aro');
-   $q->leftJoin('gacl_groups_aro_map', 'gr_aro', 'aro.id=gr_aro.aro_id');
+   $q->innerJoin('gacl_groups_aro_map', 'gr_aro', 'aro.id=gr_aro.aro_id');
    $q->addWhere('aro.value=' . (int)$login);
    $q->setLimit(1);
    $arr=$q->loadHash();
