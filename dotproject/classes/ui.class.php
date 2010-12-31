@@ -305,7 +305,7 @@ class CAppUI {
 			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
 		}
 		else {
-			$user_lang = ((mb_strtoupper(mb_substr(PHP_OS, 0, 3)) == 'WIN') ? $default_language 
+			$user_lang = ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? $default_language 
 						  : ($loc . '.' . $lcs));
 		}
 		
