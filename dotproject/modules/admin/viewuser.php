@@ -201,6 +201,9 @@ function popChgPwd() {
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_log', 'User Log');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_perms', 'Permissions');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_roles', 'Roles');
+	if ($canEdit) {
+		$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_transfer', 'Transfer');
+	}
 	$tabBox->show();
 	
 	$AppUI->setPref('TABVIEW', $oldViewPref);
