@@ -475,8 +475,8 @@ function projects_list_data($user_id=false) {
 	
 	// Let's delete temproary tables
 	$q = new DBQuery;
-	$q->dropTemp('tasks_sum, tasks_total, tasks_summy, tasks_critical, tasks_problems' 
-	             . ', tasks_users');
+	$table_list = array('tasks_sum','tasks_total','tasks_summy','tasks_critical','tasks_problems','tasks_users');
+	$q->dropTemp($table_list);
 	$q->exec();
 	$q->clear();
 

@@ -418,7 +418,12 @@ class DBQuery {
 			$q .= ' ' . $s;
 			break;
 		case 'drop':
-			$q = 'DROP TABLE IF EXISTS ' . $this->_table_prefix . $this->create_table;
+			$q = 'DROP TABLE IF EXISTS ' ;
+			if (is_array($this->create_table)) {
+				$q .= $this->_table_prefix . implode(','.$this->_table_prefix, $this->create_table);
+			} else {
+				$q .= $this->_table_prefix . $this->create_table;
+			}
 			break;
 		}
 		if ($clear) {

@@ -18,7 +18,7 @@ $obj = new CProject();
 // 16 August 2003
 
 $q = new DBQuery();
-$q->dropTemp('tasks_sum, tasks_summy');
+$q->dropTemp(array('tasks_sum', 'tasks_summy'));
 $q->exec();
 $q->clear();
 
