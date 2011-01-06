@@ -63,7 +63,7 @@ INSERT INTO `%dbprefix%dotpermissions`
 	(acl_id,user_id, section,axo,permission,allow,priority,enabled)
 SELECT acl.id,aro.value,axo.section_value,axo.value,aco_m.value,
 	acl.allow,4,acl.enabled 
-FROM gacl_acl acl 
+FROM `%dbprefix%gacl_acl` acl 
 LEFT JOIN `%dbprefix%gacl_aco_map` aco_m ON acl.id=aco_m.acl_id 
 LEFT JOIN `%dbprefix%gacl_aro_map` aro_m ON acl.id=aro_m.acl_id 
 LEFT JOIN `%dbprefix%gacl_aro_groups_map` aro_gm ON acl.id=aro_gm.acl_id 
