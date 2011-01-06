@@ -1679,19 +1679,21 @@ class CTask extends CDpObject
 		foreach ($tarr as $user_id) {
 			if (intval($user_id) > 0) {
 				$perc = $perc_assign[$user_id];
+				/*
 				if (dPgetConfig('check_overallocation') 
 					&& $perc > $alloc[$user_id]['freeCapacity']) {
 					// add Username of the overAssigned User
 					$overAssignment .= ' ' . $alloc[$user_id]['userFC'];
 				} 
 				else {
+				*/
 					$q->addTable('user_tasks');
 					$q->addReplace('user_id', $user_id);
 					$q->addReplace('task_id', $this->task_id);
 					$q->addReplace('perc_assignment', $perc);
 					$q->exec();
 					$q->clear();
-				}
+				// }
 			}
 		}
 		return $overAssignment;
@@ -1717,9 +1719,9 @@ class CTask extends CDpObject
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
-		if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
+		// if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
 			return array();
-		}
+		//}
 		$q = new DBQuery;
 		// retrieve the systemwide default preference for the assignment maximum
 		$q->addTable('user_preferences');
