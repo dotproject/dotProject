@@ -57,10 +57,10 @@ if ($obj->task_log_date) {
 }
 $dot = mb_strpos($obj->task_log_hours, ':');
 if ($dot > 0) {
-	$log_duration_minutes = sprintf('%.3f', mb_substr($obj->task_log_hours, $dot + 1)/60.0);
-	$obj->task_log_hours = floor($obj->task_log_hours) + $log_duration_minutes;
+	$log_duration_minutes = sprintf('%.3F', mb_substr($obj->task_log_hours, $dot + 1)/60.0);
+	$obj->task_log_hours = sprintf('%.3F', floor($obj->task_log_hours) + $log_duration_minutes);
 }
-$obj->task_log_hours = round($obj->task_log_hours, 3);
+$obj->task_log_hours = sprintf('%.3F', round($obj->task_log_hours, 3));
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Task Log');

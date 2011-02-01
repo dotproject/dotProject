@@ -2190,7 +2190,7 @@ class CTaskLog extends CDpObject
 	
 	// overload check method
 	function check() {
-		$this->task_log_hours = (float) $this->task_log_hours;
+		$this->task_log_hours = sprintf('%.3F', (float) $this->task_log_hours);
 		return NULL;
 	}
 }
