@@ -49,6 +49,12 @@ class CProject extends CDpObject {
 	}
 	
 	function check() {
+		if (empty($this->project_name)) {
+			return 'project name cannot be blank';
+		}
+		if (empty($thos->project_short_name)) {
+			return 'project short name cannot be blank';
+		}
 		// ensure changes of state in checkboxes is captured
 		$this->project_private = intval($this->project_private);
 		// Make sure project_short_name is the right size (issue with encoded characters)
