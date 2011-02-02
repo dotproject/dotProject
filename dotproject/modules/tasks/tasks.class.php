@@ -1720,8 +1720,9 @@ class CTask extends CDpObject
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
 		// if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
+		if (!dPgetConfig('direct_edit_assignment')) {
 			return array();
-		//}
+		}
 		$q = new DBQuery;
 		// retrieve the systemwide default preference for the assignment maximum
 		$q->addTable('user_preferences');
