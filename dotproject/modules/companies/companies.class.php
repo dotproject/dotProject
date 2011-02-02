@@ -52,6 +52,9 @@ class CCompany extends CDpObject {
 		if ($this->company_id === NULL) {
 			return 'company id is NULL';
 		}
+		if (empty($this->company_name)) {
+			return 'company name cannot be blank';
+		}
 		$this->company_id = intval($this->company_id);
 
 		return NULL; // object is ok
