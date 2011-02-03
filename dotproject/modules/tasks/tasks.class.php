@@ -809,6 +809,33 @@ class CTask extends CDpObject
 			return db_error();
 		}
 		$q->clear();
+
+		// delete task departments
+		$q->setDelete('task_departments');
+		if (!empty($childrenlist)) {
+			$q->addWhere('task_id IN (' . implode(', ', $childrenlist) 
+						 . ', ' . $task->task_id . ')');
+		} else {
+			$q->addWhere('task_id=' . $task->task_id);
+		}
+		if (!($q->exec())) {
+			return db_error();
+		}
+		$q->clear();
+
+		// delete task contacts
+		$q->setDelete('task_contacts');
+		if (!empty($childrenlist)) {
+			$q->addWhere('task_id IN (' . implode(', ', $childrenlist) 
+						 . ', ' . $task->task_id . ')');
+		} else {
+			$q->addWhere('task_id=' . $task->task_id);
+		}
+		if (!($q->exec())) {
+			return db_error();
+		}
+		$q->clear();
+
 		
 		return NULL;
 	}

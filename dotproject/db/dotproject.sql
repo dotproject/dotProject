@@ -340,12 +340,14 @@ CREATE TABLE `%dbprefix%tasks` (
 
 CREATE TABLE `%dbprefix%task_contacts` (
   `task_id` INT(10) NOT NULL,
-  `contact_id` INT(10) NOT NULL
+  `contact_id` INT(10) NOT NULL,
+  KEY `idx_task_contacts` (`task_id`)
 ) ;
 
 CREATE TABLE `%dbprefix%task_departments` (
   `task_id` INT(10) NOT NULL,
-  `department_id` INT(10) NOT NULL
+  `department_id` INT(10) NOT NULL,
+  KEY `idx_task_departments` (`task_id`)
 ) ;
 
 CREATE TABLE `%dbprefix%tickets` (
