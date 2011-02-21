@@ -53,7 +53,7 @@ if (!($rows = $q->loadList())) {
 		if ($row['project_priority'] < 0) {
 			$s .= dPshowImage('./images/icons/low.gif', 13, 16, '');
 		} else if ($row['project_priority'] > 0) {
-			$s .= dPshowImage(('./images/icons/' . $row['project_priority']), 13, 16, '');
+			$s .= dPshowImage(('./images/icons/' . $row['project_priority']) . '.gif', 13, 16, '');
 		}
 		
 		$s .= '</td>';
