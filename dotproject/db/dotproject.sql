@@ -10,7 +10,7 @@
 
 CREATE TABLE `%dbprefix%companies` (
   `company_id` INT(10) NOT NULL auto_increment,
-  `company_module` INT(10) NOT NULL default 0,
+  `company_module` INT(10) NOT NULL default '0',
   `company_name` varchar(100) default '',
   `company_phone1` varchar(30) default '',
   `company_phone2` varchar(30) default '',
@@ -574,7 +574,7 @@ CREATE TABLE `%dbprefix%common_notes` (
   `note_hours` float NOT NULL default '0',
   `note_code` varchar(8) NOT NULL default '',
   `note_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `note_modified` timestamp(14) NOT NULL,
+  `note_modified` timestamp,
   `note_modified_by` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`note_id`)
 ) ; 
@@ -591,7 +591,7 @@ CREATE TABLE `%dbprefix%user_access_log` (
 `date_time_out` DATETIME DEFAULT '0000-00-00 00:00:00',
 `date_time_last_action` DATETIME DEFAULT '0000-00-00 00:00:00',
 PRIMARY KEY ( `user_access_log_id` )
-) TYPE = MyISAM;
+);
 
 #20040910
 #Pinned tasks
