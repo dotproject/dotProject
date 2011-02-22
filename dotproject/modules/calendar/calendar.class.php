@@ -295,7 +295,7 @@ class CMonthCalendar {
 		$this_month = intval($date->getMonth());
 		$this_year = intval($date->getYear());
 		setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
-		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
+		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y:%m:%d:%w', LOCALE_FIRST_DAY);
 		setlocale(LC_ALL, $AppUI->user_lang);
 		
 		$df = $AppUI->getPref('SHDATEFORMAT');
@@ -304,9 +304,11 @@ class CMonthCalendar {
 		foreach ($cal as $week) {
 			$html .= "\n<tr>";
 			if ($this->showWeek) {
+				list($y,$m,$d,$dow) = explode(':', $week[0]);
+				$firstday = sprintf("%04d%02d%02d", $y, $m, $d);
 				$html .= ("\n\t" . '<td class="week">');
 				$html .= (($this->dayFunc) ? ('<a href="javascript:' . $this->weekFunc . "('" 
-                                              . $week[0] . "')" . '">') 
+                                              . $firstday . "')" . '">') 
 						  : '');
 				$html .= dPshowImage(dPfindImage('view.week.gif'), 16, 15, $AppUI->_('Week View'));
 				$html .= (($this->dayFunc) ? ('</a>') : '');
@@ -314,10 +316,8 @@ class CMonthCalendar {
 			}
 			
 			foreach ($week as $day) {
-				$y = intval(mb_substr($day, 0, 4));
-				$m = intval(mb_substr($day, 4, 2));
-				$d = intval(mb_substr($day, 6, 2));
-				$dow = intval(mb_substr($day, 8, 1));
+				list($y,$m,$d,$dow) = explode(':', $day);
+				$day = sprintf("%04d%02d%02d", $y, $m, $d);
 				
 				if ($m != $this_month) {
 					$class = 'empty';
@@ -349,7 +349,7 @@ class CMonthCalendar {
 		      }
       
 					if ($this->showEvents) {
-						$html .= $this->_drawEvents(mb_substr($day, 0, 8));
+						$html .= $this->_drawEvents($day);
 					}
 				}
 				$html .= "</td>";
