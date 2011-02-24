@@ -99,7 +99,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$file_id = isset($_GET['file_id']) ? $_GET['file_id'] : 0;
+$file_id = isset($_GET['file_id']) ? (int)$_GET['file_id'] : 0;
 
 if ($file_id) {
 	// projects tat are denied access
