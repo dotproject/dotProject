@@ -51,17 +51,17 @@ function submitIt() {
 	var f = document.folderFrm;
 	var msg = '';
 	if (f.file_folder_name.value.length < 1) {
-		msg += "\n<?php echo $AppUI->_('Folder Name'); ?>";
+		msg += "\n<?php echo $AppUI->_('Folder Name',UI_OUTPUT_JS); ?>";
 		f.file_folder_name.focus();
 	}
 	if (msg.length > 0) {
-		alert('<?php echo $AppUI->_('Please type'); ?>:' + msg);
+		alert('<?php echo $AppUI->_('Please type',UI_OUTPUT_JS); ?>:' + msg);
 	} else {
 		f.submit();
 	}
 }
 function delIt() {
-	if (confirm("<?php echo $AppUI->_('Delete Folder');?>")) {
+	if (confirm("<?php echo $AppUI->_('Delete Folder',UI_OUTPUT_JS);?>")) {
 		var f = document.folderFrm;
 		f.del.value='1';
 		f.submit();
