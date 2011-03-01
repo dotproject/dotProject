@@ -502,12 +502,12 @@ class ContourPlot extends Plot {
 
         if( $this->invertLegend ) {
             for ($i = 0; $i < $this->nbrContours; $i++) {
-                $aGraph->legend->Add(sprintf('%.1f',$this->contourVal[$i]), $this->contourColor[$i]);
+                $aGraph->legend->Add(sprintf('%.1F',$this->contourVal[$i]), $this->contourColor[$i]);
             }
         }
         else {
             for ($i = $this->nbrContours-1; $i >= 0 ; $i--) {
-                $aGraph->legend->Add(sprintf('%.1f',$this->contourVal[$i]), $this->contourColor[$i]);
+                $aGraph->legend->Add(sprintf('%.1F',$this->contourVal[$i]), $this->contourColor[$i]);
             }
         }
     }

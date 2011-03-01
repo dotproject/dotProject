@@ -477,7 +477,7 @@ class Footer {
         $x = $aImg->width - $this->iRightMargin;
         $this->right->Align('right','bottom');
         if( $this->iTimer != null ) {
-            $this->right->Set( $this->right->t . sprintf('%.3f',$this->iTimer->Pop()/1000.0) . $this->itimerpoststring );
+            $this->right->Set( $this->right->t . sprintf('%.3F',$this->iTimer->Pop()/1000.0) . $this->itimerpoststring );
         }
         $this->right->Stroke($aImg,$x,$y);
     }
@@ -3180,7 +3180,7 @@ class SuperScriptText extends Text {
         }
 
         $l = floor(log10($aVal));
-        $a = sprintf("%0.".$aPrecision."f",round($aVal / pow(10,$l),$aPrecision));
+        $a = sprintf("%0.".$aPrecision."F",round($aVal / pow(10,$l),$aPrecision));
         $a *= $neg;
         if( $this->iSimple && ($a == 1 || $a==-1) ) $a = '';
 
@@ -4343,7 +4343,7 @@ class LinearTicks extends Ticks {
             }
         }
         else {
-            $l = sprintf('%01.'.$precision.'f',round($aVal,$precision));
+            $l = sprintf('%01.'.$precision.'F',round($aVal,$precision));
         }
 
         if( ($this->supress_zerolabel && $l==0) ||  ($this->supress_first && $aIdx==0) || ($this->supress_last  && $aIdx==$aNbrTicks-1) ) {
