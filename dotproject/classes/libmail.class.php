@@ -458,7 +458,7 @@ function SMTPSend() {
 			}
 			$tls_connection = stream_socket_enable_crypto($this->socket, $this->tls, 
 			                                              STREAM_CRYPTO_METHOD_TLS_CLIENT);
-		} while ($tls_connection === 0 && (($tries * ($tries + 1)) / 2) < $this->timeout);
+		} while ($tls_connection === 0 && ($tries * ++$tries / 2) < $this->timeout);
 		
 		if (! $tls_connection) {
 			dprint(__FILE__, __LINE__, 1, 
