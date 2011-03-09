@@ -1017,7 +1017,7 @@ class CTabBox_core {
 			$s .= '<tr><td nowrap="nowrap">';
 			$s .= ('<a href="' . $this->baseHRef . 'tab=0">' . $AppUI->_('tabbed') . '</a> : ');
 			$s .= ('<a href="' . $this->baseHRef . 'tab=-1">' . $AppUI->_('flat') . '</a>');
-			$s .= ('</td>' . $AppUI->___($extra) . '</tr></table>');
+			$s .= ('</td>' .$extra . '</tr></table>');
 			echo $s;
 		} else if ($extra) {
 			echo ('<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' 
