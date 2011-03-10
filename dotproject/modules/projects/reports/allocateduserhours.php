@@ -231,10 +231,10 @@ if ($do_report) {
 function userUsageWeeks() {
 	global $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_date;
 	global $users, $user_data, $user_usage,$use_assigned_percentage, $user_tasks_counted_in, $task;
-	global $start_date, $end_date;
+	global $start_date, $end_date, $AppUI;
 	
 	$task_duration_per_week = $task->getTaskDurationPerWeek($use_assigned_percentage);
-	setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
+	$AppUI->setBaseLocale();
 	$ted = new CDate(Date_Calc::endOfWeek($task_end_date->day,$task_end_date->month,$task_end_date->year));
 	$tsd = new CDate(Date_Calc::beginOfWeek($task_start_date->day,$task_start_date->month,$task_start_date->year));
 	$ed = new CDate(Date_Calc::endOfWeek($end_date->day,$end_date->month,$end_date->year));
@@ -247,7 +247,7 @@ function userUsageWeeks() {
 	
 	for ($i = 0; $i<=$week_difference; $i++) {
 		if (!$actual_date->before($tsd) && !$actual_date->after($ted)) {
-			setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
+			$AppUI->setBaseLocale();
 			$awoy = $actual_date->year.Date_Calc::weekOfYear($actual_date->day,$actual_date->month,$actual_date->year);
 			setlocale(LC_ALL, $AppUI->user_lang);
 			foreach ($users as $user_id => $user_data) {
@@ -292,7 +292,7 @@ function showWeeks() {
 	$working_days_count = 0;
 	$allocated_hours_sum = 0;
 	
-	setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
+	$AppUI->setBaseLocale();
 	$ed = new CDate(Date_Calc::endOfWeek($end_date->day,$end_date->month,$end_date->year));
 	$sd = new CDate(Date_Calc::beginOfWeek($start_date->day,$start_date->month,$start_date->year));
 	setlocale(LC_ALL, $AppUI->user_lang);

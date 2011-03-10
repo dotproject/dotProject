@@ -49,7 +49,8 @@ class CDate extends Date {
 * extend PEAR Date's format() meet to translation needs
 */
 	function format($format) {
-		setlocale(LC_ALL, 'en_AU'.(($locale_char_set)? ('.' . $locale_char_set) : '.utf8'));
+		global $AppUI;
+		$AppUI->setBaseLocale();
 		$output = parent::format($format);
 		setlocale(LC_ALL, $AppUI->user_lang);
 		return $output;

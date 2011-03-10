@@ -67,6 +67,9 @@ class CAppUI {
 	var $user_lang=null;
 /** @var string */
 	var $base_locale = 'en'; // do not change - the base 'keys' will always be in english
+
+/** @var string */
+	var $base_date_locale = null;
 	
 /** @var string Message string*/
 	var $msg = '';
@@ -346,6 +349,29 @@ class CAppUI {
 			}
 		}
 		return $first_entry;
+	}
+
+/**
+ * Set the base locale, used for getting English date strings so they can be
+ * translated by the translation functions.
+ */
+	function setBaseLocale($context = LC_ALL)
+	{
+		global $locale_char_set;
+		
+		$LANGUAGES = $this->loadLanguages();
+
+		list($locale, $en_name, $local_name, $win_locale, $lcs) = $LANGUAGES['en_AU'];
+		$real_locale = 'en_AU';
+		if (strtoupper(substr(PHP_OS,0,3)) == 'WIN') {
+			$real_locale = $win_locale;
+		} else {
+			if (! isset($lcs)) {
+				$lcs = (isset($locale_char_set)) ? $locale_char_set : 'utf-8';
+			}
+			$real_locale .= '.' . $lcs;
+		}
+		setlocale($context, $real_locale);
 	}
 	
 /**
