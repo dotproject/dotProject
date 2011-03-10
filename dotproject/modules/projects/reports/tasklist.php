@@ -106,7 +106,7 @@ echo $AppUI->_('Next Day'); ?>" />
 echo $AppUI->_('Next Week'); ?>" />
       <input class="button" type="submit" name="period" value="<?php 
 echo $AppUI->_('Next Month'); ?>" />
-      <input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons
+      <input class="text" type="field" size="2" name="pvalue" value="1" /> - <?php echo $AppUI->_('value for the previous buttons'); ?>
     </td>
 <!--
     <td><input class="button" type="submit" name="do_report" value="<?php 

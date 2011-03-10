@@ -322,9 +322,9 @@ foreach ($tasks as $t) {
 <input type="checkbox" name="include_children" id="include_children" value='1' /><label for="include_children"><?php echo $AppUI->_('IncludeChildren'); ?></label><br />
 <table summary="action project tasks">
 <tr>
-	<th>Action: </th>
-	<th>Project: </th>
-	<th>Task: </th>
+	<th><?php echo $AppUI->_('Action'); ?>: </th>
+	<th><?php echo $AppUI->_('Project'); ?>: </th>
+	<th><?php echo $AppUI->_('Task'); ?>: </th>
 </tr>
 <tr>
 	<td><?php echo arraySelect($actions, 'action', '', '0'); ?></td>

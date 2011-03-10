@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+"End",
 "-",
 "Access",
 "Action",
@@ -109,6 +110,7 @@
 "Move",
 "Move this task (and its children), to project",
 "Must in general be entered with protocol name, e.g. http://...",
+"My Gantt",
 "My Projects",
 "My Tasks",
 "My Tasks (show in-active)",
@@ -173,6 +175,7 @@
 "Started and on time",
 "Status",
 "Stop",
+"Summaries",
 "Summary",
 "Target Budget",
 "Task",
@@ -205,8 +208,8 @@
 "Todo for",
 "Total Hours",
 "URL",
-"Unassign User from Task",
 "Unassign User from Task and handing-over to selected Users",
+"Unassign Users from Task",
 "Unknown",
 "Use the period",
 "User",

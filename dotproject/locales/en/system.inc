@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+"Import Users",
 "#",
 "(No Spaces)",
 "Abbreviation",
@@ -170,36 +171,53 @@
 "configure",
 "cs"=>"Czech",
 "currency_symbol_title"=>"Currency Symbol",
-"currency_symbol_tooltip"=>"Whilst we currently have locale support built in there is still an extra facility for setting Currency Symbol. \n
-\n
-Localisation of the currency-symbol. For the EURO sign symbol set to \'&#8364;\'\n
-\n
+"currency_symbol_tooltip"=>"Whilst we currently have locale support built in there is still an extra facility for setting Currency Symbol. 
+
+
+
+Localisation of the currency-symbol. For the EURO sign symbol set to \'&#8364;\'
+
+
+
 Check http://www.w3.org/TR/html401/sgml/entities.html for information about html special characters.",
 "daily_working_hours_title"=>"Daily Working Hours",
 "daily_working_hours_tooltip"=>"This setting establishes the standard number of hours in a working day for your installation, for example 8.0",
 "de"=>"German",
 "deactivate",
 "debug_title"=>"Debug Level",
-"debug_tooltip"=>"Turn this option on to display debug messages as well as log them.\n
-\n
-WARNING:  Setting to true, if the debug level is greater than 1, can cause dotProject to fail on messages that are technically only Warnings and therefore can be ignored.\n
-\n
-Normally errors will be displayed so this should only be set to track warnings and debug messages if you do not have access to the PHP log files.\n
-\n
-Anything other than 0 will provide debugging information.\n
-\n
-Level 1 is probably the most reasonable compromise between normal operation and error tracking information.\n
-\n
+"debug_tooltip"=>"Turn this option on to display debug messages as well as log them.
+
+
+
+WARNING:  Setting to true, if the debug level is greater than 1, can cause dotProject to fail on messages that are technically only Warnings and therefore can be ignored.
+
+
+
+Normally errors will be displayed so this should only be set to track warnings and debug messages if you do not have access to the PHP log files.
+
+
+
+Anything other than 0 will provide debugging information.
+
+
+
+Level 1 is probably the most reasonable compromise between normal operation and error tracking information.
+
+
+
 Set to 10 to get complete debugging information but be aware that this will generate large log files and/or debug listings very very quickly.",
 "default user preferences",
 "default_view_a_title"=>"Default Submodule",
-"default_view_a_tooltip"=>"If you want to define your own start/default page set this.\n
+"default_view_a_tooltip"=>"If you want to define your own start/default page set this.
+
 Specifies a subview like shown in the url of dP.",
 "default_view_m_title"=>"Default Module",
-"default_view_m_tooltip"=>"If you want to define your own start/default page set this.\n
+"default_view_m_tooltip"=>"If you want to define your own start/default page set this.
+
 If the value is empty then the first listed module becomes the default view.",
 "default_view_tab_title"=>"Default Tabbed Subview",
-"default_view_tab_tooltip"=>"If you want to define your own start/default page set this.\n
+"default_view_tab_tooltip"=>"If you want to define your own start/default page set this.
+
 Specifies a tabbed subview. 0=first tab, ...",
 "delete",
 "deleted",
@@ -208,9 +226,12 @@ Specifies a tabbed subview. 0=first tab, ...",
 "direct_edit_assignment_tooltip"=>"Turning this option on will allow you to edit task assignments and other options (per task block) in the main Task Module view.",
 "disabled",
 "display_debug_title"=>"Show Debug Messages",
-"display_debug_tooltip"=>"Set to true to display debug messages as well as log them. WARNING: Setting to true can cause dotproject to fail on warnings if the debug level is set greater than 1.\n
-Normally errors will be displayed so this should only be\n
-set to track warnings and debug messages if you do not\n
+"display_debug_tooltip"=>"Set to true to display debug messages as well as log them. WARNING: Setting to true can cause dotproject to fail on warnings if the debug level is set greater than 1.
+
+Normally errors will be displayed so this should only be
+
+set to track warnings and debug messages if you do not
+
 have access to the PHP log files.",
 "edit",
 "email_prefix_title"=>"Email Prefix",
@@ -242,10 +263,14 @@ have access to the PHP log files.",
 "host_style_title"=>"Default User Interface Style",
 "host_style_tooltip"=>"Default User Interface Style - as set in the User Preferences area, however, you will need to type the name of the default in here.  If you need a prompt - check the dropdown in the User preferences and repeat that name here.",
 "index_max_file_size_title"=>"Maximum File Size for Indexing",
-"index_max_file_size_tooltip"=>"File Indexing for Searching:\n
-Large Files may cause timeout problems during exhausting indexing process.\n
-Specify an upper filesize limit for indexing in KiloBytes.\n
-Have in mind that files greater than the specified value are not indexed!\n
+"index_max_file_size_tooltip"=>"File Indexing for Searching:
+
+Large Files may cause timeout problems during exhausting indexing process.
+
+Specify an upper filesize limit for indexing in KiloBytes.
+
+Have in mind that files greater than the specified value are not indexed!
+
 A negative value defines the absence of a limit (index all files).",
 "inserted",
 "install",
@@ -279,8 +304,10 @@ A negative value defines the absence of a limit (index all files).",
 "mail_auth_title"=>"Host requires login",
 "mail_auth_tooltip"=>"Some SMTP hosts require authentication, if yours does you will need to set this and provide a username and password",
 "mail_defer_title"=>"Queue Email for later sending",
-"mail_defer_tooltip"=>"Check this to queue email for later sending.  An entry will be made in the Event Queue.  You will need to either set the Scan Event Queue option in Session Handling or create a cron job to call:\n
-\n
+"mail_defer_tooltip"=>"Check this to queue email for later sending.  An entry will be made in the Event Queue.  You will need to either set the Scan Event Queue option in Session Handling or create a cron job to call:
+
+
+
 wget -O- http://your.domain/dotproject/queuescanner.php",
 "mail_group_title"=>"Email Settings",
 "mail_host_title"=>"SMTP Host",
@@ -322,10 +349,14 @@ wget -O- http://your.domain/dotproject/queuescanner.php",
 "reset_memory_limit_title"=>"Memory Limit for Gantt",
 "reset_memory_limit_tooltip"=>"Experiencing Errors with invisible Gantt Charts use this variable to temporarily expand your PHP Memory Limit for Gantt Chart drawing. Values of 64M, 128M etc. are common.",
 "restrict_color_selection_title"=>"Restrict Project Colour Selection",
-"restrict_color_selection_tooltip"=>"Used in conjuction with the System Value Look up option \"ProjectColors\" you can use this setting to control the project colour selection options accessible by all users on this system.\n
-\n
-If you turn this option on then project creators will only be able to select from the colour options defined in the System Value Lookup outlined above.\n
-\n
+"restrict_color_selection_tooltip"=>"Used in conjuction with the System Value Look up option \"ProjectColors\" you can use this setting to control the project colour selection options accessible by all users on this system.
+
+
+
+If you turn this option on then project creators will only be able to select from the colour options defined in the System Value Lookup outlined above.
+
+
+
 If you turn this option off then project creators will be able to access the default system presets and the full colour pallette.",
 "restrict_task_time_editing_title"=>"Restrict Task Time Editing",
 "restrict_task_time_editing_tooltip"=>"Turned on, this option will restrict the editing of task time settings to the task owner, the project owner or the system administration only.",
@@ -333,13 +364,18 @@ If you turn this option off then project creators will be able to access the def
 "session_gc_scan_queue_tooltip"=>"If using deferred email or any other event queue, setting this causes the session handler to check the queue when it garbage collects the session.  This is an option to using an external program to call the queue scanner.",
 "session_group_title"=>"Session Handling Settings",
 "session_handling_title"=>"Session Handler",
-"session_handling_tooltip"=>"Which session handling to use, should be either \'php\' for traditional\n
-PHP session management, or \'app\' for the dotProject application to manage its own sessions via the database.\n
-Session Management: This extends the session handling of PHP to beyond browser-based sessions and stores the session information in the\n
+"session_handling_tooltip"=>"Which session handling to use, should be either \'php\' for traditional
+
+PHP session management, or \'app\' for the dotProject application to manage its own sessions via the database.
+
+Session Management: This extends the session handling of PHP to beyond browser-based sessions and stores the session information in the
+
 database. This allows for prolonged sessions with lower overheads.",
 "session_idle_time_title"=>"Session Idle Time",
-"session_idle_time_tooltip"=>"The maximum time a session can have no activity before it is declared dead.\n
-Values are in seconds unless followed by a letter: h = hours, d = days, m = months, y = years.\n
+"session_idle_time_tooltip"=>"The maximum time a session can have no activity before it is declared dead.
+
+Values are in seconds unless followed by a letter: h = hours, d = days, m = months, y = years.
+
 You can only have 1 character within a string, so 2d4h is NOT valid, but 28h is.",
 "session_max_lifetime_title"=>"Session Maximum Lifetime",
 "session_max_lifetime_tooltip"=>"The maximum time a session can exist before it is trashed, regardless of how active it is.",
@@ -356,12 +392,18 @@ You can only have 1 character within a string, so 2d4h is NOT valid, but 28h is.
 "sql_item_title"=>"Standard dotProject",
 "submit",
 "sv"=>"Swedish",
-"syscfg_intro"=>"The following configuration variables have a direct impact on how your system functions.\n
-\n
-If you adjust any of these options incorrectly this may affect the operation of your installation and restoring the setting may require external action.\n
-\n
-We would strongly suggest that if any of these items are not clearly understood that it would be safer to leave them as they are or check the code implications before proceeding.\n
-\n
+"syscfg_intro"=>"The following configuration variables have a direct impact on how your system functions.
+
+
+
+If you adjust any of these options incorrectly this may affect the operation of your installation and restoring the setting may require external action.
+
+
+
+We would strongly suggest that if any of these items are not clearly understood that it would be safer to leave them as they are or check the code implications before proceeding.
+
+
+
 There are mouseover-tooltips and (?)-information popups with each of the fields that include as much information as we are able to provide.",
 "system admin",
 "system configuration",

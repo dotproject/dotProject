@@ -73,7 +73,7 @@ function checkAllProjects()
 	}
 }
 </script>
-<p>Transfer tasks and projects from this user to another</p>
+<p><?php echo $AppUI->_('Transfer tasks and projects from this user to another'); ?></p>
 <form name="frmTxfr" method="post" action="?m=admin">
 	<input type="hidden" name="dosql" value="do_user_transfer" />
 	<input type="hidden" name="from_user" value="<?php echo $user_id; ?>" />
@@ -96,7 +96,7 @@ function checkAllProjects()
 <table width="100%" cellspacing="1" cellpadding="2" border="0" class="std">
 <tr><th><?php echo $AppUI->_('To User'); ?></th></tr>
 <tr><td><?php echo arraySelect($users, 'user', 'size="8"', false); ?></td></tr>
-<tr><td><input type="submit" name="Go" value="Transfer"/></td></tr>
+<tr><td><input type="submit" name="Go" value="<?php echo $AppUI->_('Transfer'); ?>"/></td></tr>
 </table>
 </td></tr>
 </table>
