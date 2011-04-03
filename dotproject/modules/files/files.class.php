@@ -330,13 +330,13 @@ class CFile extends CDpObject {
 			
 			$body = $AppUI->_('Project').': '.$project->project_name;
 			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
-			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
+			          . '/index.php?m=projects&a=view&project_id=' . $this->file_project);
 			
 			$users = array();
 			if (intval($this->file_task) != 0) {
 				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
 				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $this->file_task);
+				          . '/index.php?m=tasks&a=view&task_id=' . $this->file_task);
 				$body .= ("\n" . $AppUI->_('Description') . ': ' . "\n" . $task->task_description);
 				
 				//preparing users array
@@ -427,13 +427,13 @@ class CFile extends CDpObject {
 			
 			$body = $AppUI->_('Project') . ': ' . $project->project_name;
 			$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
-			          . '/index.php?m=projects&amp;a=view&amp;project_id=' . $this->file_project);
+			          . '/index.php?m=projects&a=view&project_id=' . $this->file_project);
 			
 			$users = array();
 			if (intval($this->file_task) != 0) {
 				$body .= "\n\n" . $AppUI->_('Task') . ': ' . $task->task_name;
 				$body .= ("\n" . $AppUI->_('URL') . ': ' . DP_BASE_URL 
-				          . '/index.php?m=tasks&amp;a=view&amp;task_id=' . $this->file_task);
+				          . '/index.php?m=tasks&a=view&task_id=' . $this->file_task);
 				$body .= "\n" . $AppUI->_('Description') . ":\n" . $task->task_description;
 				$this->_query->clear();
 				$this->_query->addTable('project_contacts', 'pc');
