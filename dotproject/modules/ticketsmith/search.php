@@ -12,10 +12,10 @@ $dbprefix = dPgetConfig('dbprefix','');
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
-$search_pattern = dPgetParam($_POST,'search_param','');
+$search_pattern = dPgetParam($_POST,'search_pattern','');
 $search_field = dPgetParam($_POST,'search_field','');
 $search_depth = dPgetParam($_POST, 'search_depth','');
-$sort_colum = dPgetParam($_POST,'sort_column','');
+$sort_column = dPgetParam($_POST,'sort_column','');
 $sort_direction = dPgetParam($_POST,'sort_direction', 'DESC');
 /* set title */
 $title = "Search Tickets";
@@ -81,8 +81,8 @@ $sort_choices = array("ticket"     => $AppUI->_("Ticket"),
 
 $sort_selectbox = create_selectbox("sort_column", $sort_choices, $sort_column);
 print($sort_selectbox);
-print(" <input type=\"radio\" name=\"sort_direction\" value=\"ASC\"". ($sort_direction == 'ASC' ? ' checked="checked"') ." /> ".$AppUI->_('Ascending'));
-print(" <input type=\"radio\" name=\"sort_direction\" value=\"DESC\"".($sort_direction != 'ASC' ? ' checked="checked"') . " /> ".$AppUI->_('Descending'));
+print(" <input type=\"radio\" name=\"sort_direction\" value=\"ASC\"". ($sort_direction == 'ASC' ? ' checked="checked"' : '') ." /> ".$AppUI->_('Ascending'));
+print(" <input type=\"radio\" name=\"sort_direction\" value=\"DESC\"".($sort_direction != 'ASC' ? ' checked="checked"' : '') . " /> ".$AppUI->_('Descending'));
 print("</td>\n");
 print("</tr>\n");
 
@@ -123,6 +123,7 @@ if ($search_pattern) {
         $query .= " AND type = '$search_depth'";
     }
     $query .= " ORDER BY $sort_column $sort_direction";
+    
     
     /* perform search */
     $result = do_query($query);
