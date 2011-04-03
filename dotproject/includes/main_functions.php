@@ -164,7 +164,7 @@ function breadCrumbs(&$arr) {
 function dPcontextHelp($title, $link='') {
 	global $AppUI;
 	return ('<a href="#' . $AppUI->___($link) . '" onClick="' 
-	        . "javascript:window.open('?m=help&amp;dialog=1&amp;hid=$link', 'contexthelp', " 
+	        . "javascript:window.open('?m=help&dialog=1&hid=$link', 'contexthelp', " 
 	        . "'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')" . '">' 
 			. $AppUI->_($title).'</a>');
 }

@@ -97,7 +97,7 @@ function popTask() {
     if (f.link_project.selectedIndex == 0) {
         alert("<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS);?>");
     } else {
-        window.open('?m=public&amp;a=selector&amp;dialog=1&amp;callback=setTask&amp;table=tasks&amp;task_project='
+        window.open('?m=public&a=selector&dialog=1&callback=setTask&table=tasks&task_project='
             + f.link_project.options[f.link_project.selectedIndex].value, 'task','left=50,top=50,height=250,width=400,resizable')
     }
 }
