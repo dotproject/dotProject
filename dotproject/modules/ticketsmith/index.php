@@ -116,12 +116,12 @@ else {
 if ($ticket_count > $limit) {
     if ($offset - $limit >= 0) {
         print("<a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
-				. ($offset - $limit) . "><img src='images/navleft.gif' border='0' alt='' /></a> | \n");
+				. ($offset - $limit) . "'><img src='images/navleft.gif' border='0' alt='' /></a> | \n");
     }
     print($AppUI->_("$page_string")."\n");
     if ($offset + $limit < $ticket_count) {
         print(" | <a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
-				. ($offset + $limit) . "><img src='images/navright.gif' border='0' alt='' /></a>\n");
+				. ($offset + $limit) . "'><img src='images/navright.gif' border='0' alt='' /></a>\n");
     }
 }
 ?>
