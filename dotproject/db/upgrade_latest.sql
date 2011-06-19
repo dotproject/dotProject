@@ -1,6 +1,6 @@
 #
 # $Id$
-# 
+#
 # DO NOT USE THIS SCRIPT DIRECTLY - USE THE INSTALLER INSTEAD.
 #
 # All entries must be date stamped in the correct format.
@@ -10,3 +10,7 @@
 # Add indexes to task departments and task contacts
 ALTER TABLE `%dbprefix%task_departments` ADD KEY `idx_task_departments` (`task_id`);
 ALTER TABLE `%dbprefix%task_contacts` ADD KEY `idx_task_contacts` (`task_id`);
+
+# 20110619
+# Add index to optimize tasks list (slowest query)
+ALTER TABLE  `%dbprefix%user_tasks` ADD KEY `idx_user_tasks` ( `task_id` );
