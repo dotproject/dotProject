@@ -386,7 +386,8 @@ CREATE TABLE `%dbprefix%user_tasks` (
   `perc_assignment` int(11) NOT NULL default '100',
   `user_task_priority` tinyint(4) default '0',
   PRIMARY KEY  (`user_id`,`task_id`),
-  KEY `user_type` (`user_type`)
+  KEY `user_type` (`user_type`),
+	KEY `idx_user_tasks` ( `task_id` )
 ) ;
 
 CREATE TABLE `%dbprefix%users` (
