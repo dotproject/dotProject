@@ -140,6 +140,15 @@ switch ($table) {
 		$q->addQuery('SGD_id, SGD_name');
 		$q->addOrder('SGD_name');
 		break;
+	case 'helpdesk_items':
+		// Added by HaTaX for helpdesk support
+		include DP_BASE_DIR.'/modules/helpdesk/config.php';
+		$title = 'HelpDesk Items';
+		$q->addQuery("item_id, CONCAT_WS(' - ',CONCAT('#', item_id), item_title) AS name");
+		$q->addTable('helpdesk_items');
+		$q->addWhere("item_status != ".$HELPDESK_CONFIG['closed_status_id']);
+		$q->addOrder('item_id, name');
+		break;
 	default:
 		$ok = false;
 		break;
@@ -157,7 +166,7 @@ if (!$ok) {
 	                   ((!(empty($query_result))) ? $query_result : $q->loadHashList()));
 	echo db_error();
 ?>
-<script language="javascript">
+<script language="text/javascript">
 function setClose(key, val) {
 	window.opener.<?php echo $callback;?>(key,val);
 	window.close();
