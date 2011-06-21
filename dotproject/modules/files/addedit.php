@@ -13,9 +13,7 @@ $canEdit = getPermission($m, 'edit', $file_id);
 if (!($canEdit)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-if (file_exists(DP_BASE_DIR . '/modules/helpdesk/config.php')) {
-	include (DP_BASE_DIR . '/modules/helpdesk/config.php');
-}
+
 $canAdmin = getPermission('system', 'edit');
 
 // add to allow for returning to other modules besides Files
@@ -245,10 +243,15 @@ if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
 				<input type="checkbox" name="notify" id="notify" checked="checked" />
-				<label for="notify"><?php 
-	echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label>
+				<label for="notify"><?php
+if (!($file_helpdesk_item)) {
+	echo $AppUI->_('Notify Assignees of Task or Project Owner by Email');
+} else {
+	echo $AppUI->_('Notify helpdesk item assignees by email');
+}	?></label>
 			</td>		
 		</tr>
+<?php if (!($file_helpdesk_item)) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
@@ -257,6 +260,7 @@ if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
 			</td>		
 		</tr>
+<?php } ?>
 		</table>
 	</td>
 </tr>

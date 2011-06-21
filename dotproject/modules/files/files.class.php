@@ -3,20 +3,17 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once ($AppUI->getSystemClass('libmail'));
-require_once ($AppUI->getSystemClass('dp'));
-require_once ($AppUI->getSystemClass('date'));
-require_once ($AppUI->getModuleClass('tasks'));
-require_once ($AppUI->getModuleClass('projects'));
+require_once $AppUI->getSystemClass('libmail');
+require_once $AppUI->getSystemClass('dp');
+require_once $AppUI->getSystemClass('date');
+require_once $AppUI->getModuleClass('tasks');
+require_once $AppUI->getModuleClass('projects');
 global $helpdesk_available;
 
-/** The helpdesk module seems to no longer have files support (at least in the dotmods CVS)
-so this breaks if helpdesk is available.  This is NOT the way to build co-operating modules.
 if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
-	require_once($AppUI->getModuleClass('helpdesk'));
+	include_once $AppUI->getModuleClass('helpdesk');
 }
-*/
-$helpdesk_available = false;
+
 /**
 * File Class
 */
@@ -64,12 +61,12 @@ class CFile extends CDpObject {
 	}
 	
 	function addHelpDeskTaskLog() {
-		global $AppUI, $helpdesk_available;
+		global $AppUI, $helpdesk_available, $helpdesk_task_log, $helpdesk_file_id;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			
 			// create task log with information about the file that was uploaded
 			$task_log = new CHDTaskLog();
-			$task_log->task_log_help_desk_id = $this->_hditem->item_id;
+			$task_log->task_log_help_desk_id = $this->file_helpdesk_item;
 			if ($this->_message != 'deleted') {
 				$task_log->task_log_name = 'File ' . $this->file_name .' uploaded';
 			} else {
@@ -81,6 +78,8 @@ class CFile extends CDpObject {
 			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 			if ($msg = $task_log->store()) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
+			} else {
+				$helpdesk_task_log = $task_log->task_log_id;
 			}
 		}
 		return NULL;
@@ -296,19 +295,23 @@ class CFile extends CDpObject {
 	
 	//function notifies about file changing
 	function notify() {	
-		GLOBAL $AppUI, $dPconfig, $locale_char_set, $helpdesk_available;
+		global $AppUI, $dPconfig, $locale_char_set, $helpdesk_available, $helpdesk_task_log, $HELPDESK_CONFIG;
 		
 		// if helpdesk_item is available send notification to assigned users
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->_hditem = new CHelpDeskItem();
 			$this->_hditem->load($this->file_helpdesk_item);
 			
-			$task_log = new CHDTaskLog();
-			$task_log_help_desk_id = $this->_hditem->item_id;
+			// This section modified by HaTaX on 6-04-2011 for helpdesk changes
+			if ($this->_message != 'deleted') {
+				$this->_hditem->log_status(99, $this->file_name, "uploaded with description \"".$this->file_description."\" ");
+			} else {
+				$this->_hditem->log_status(99, $this->file_name, "deleted.");
+			}
+
 			// send notifcation about new log entry
-			// 2 = TASK_LOG
-			$this->_hditem->notify(2, $task_log->task_log_id);
-			
+			// 7 = FILE_LOG
+			$this->_hditem->notify(7, $helpdesk_task_log);
 		}
 		
 		//if no project specified than we will not do anything
@@ -613,8 +616,7 @@ class CFileFolder extends CDpObject {
 
 
 function file_size($size) {
-  
-	$size_measurments = array(0 => 'B', 1 => 'KiB', 2 => 'MiB', 3 => 'GiB', 4 => 'TiB');
+	$size_measurments = array(0 => 'b', 1 => 'Kb', 2 => 'Mb', 3 => 'Gb', 4 => 'Tb');
 	$size_length = sizeof($size_measurments) - 1;
 	
 	for ($i = 0; $i < $size_length; $i++) {
