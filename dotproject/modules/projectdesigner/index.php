@@ -305,7 +305,11 @@ if (!$project_id) {
       		'<input type="submit" class="button" value="'.$AppUI->_('new file').'">', '',
       		'<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post">', '</form>'
       	);
-      	$titleBlock->addCrumb( "?m=projects&a=addedit&project_id=$project_id", "edit this project" );
+				if ($canEdit) {
+	      	$titleBlock->addCrumb( "?m=projects&a=addedit&project_id=$project_id", "edit this project" );
+				}
+  	    $titleBlock->addCrumb( "?m=tasks&a=organize&project_id=$project_id", "organize tasks" );
+      	$titleBlock->addCrumb( "?m=projects&a=reports&project_id=$project_id", "reports" );
       	if ($canDeleteProject) {
       		$titleBlock->addCrumbDelete( 'delete project', $canDelete, $msg );
       	}
