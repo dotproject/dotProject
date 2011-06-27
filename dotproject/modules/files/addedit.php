@@ -178,9 +178,16 @@ function setTask(key, val) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
 			<td align="left"><?php 
-echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', 
-                     (($file_helpdesk_item) ? getHelpdeskFolder() 
-                      : (($file_id == 0 && !$ci) ? $folder : $obj->file_folder))); ?></td>
+//Modifed by HaTaX to check for passed folder destination and if selection is disabled
+//Negative value of folder id disables selection ability
+$folder_sel = intval(dPgetParam($_GET, 'folder_sel', 0));
+$disabled = '';
+if ($folder_sel < 0) {
+	$disabled = ' disabled="disabled"';
+}
+echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"'.$disabled, 
+                (($folder_sel ? $folder_sel
+			: (($file_id == 0 && !$ci) ? $folder : $obj->file_folder) ))); ?></td>
 		</tr><?php 
 if ($file_id) { ?>
 		<tr>
@@ -372,16 +379,3 @@ function file_show_attr() {
 	return ($str_out);
 }
 
-
-//TODO: export helpdesk code if possible...
-function getHelpdeskFolder() {
-	$q = new DBQuery();
-	$q->addTable('file_folders', 'ff');
-	$q->addQuery('file_folder_id');
-	$q->addWhere('ff.file_folder_name = "Helpdesk"');
-	$ffid = $q->loadResult();
-	$q->clear();
-	return intval($ffid);
-}
-
-?>
