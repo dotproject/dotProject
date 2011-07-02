@@ -186,7 +186,7 @@ if ($folder_sel < 0) {
 	$disabled = ' disabled="disabled"';
 }
 echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"'.$disabled, 
-                (($folder_sel ? $folder_sel
+                (($folder_sel ? abs($folder_sel)
 			: (($file_id == 0 && !$ci) ? $folder : $obj->file_folder) ))); ?></td>
 		</tr><?php 
 if ($file_id) { ?>
