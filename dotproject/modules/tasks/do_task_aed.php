@@ -68,9 +68,13 @@ if ($sub_form) {
 	}
 	
 	// Check to see if the task_project has changed
+	$move_files = false;
 	if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->task_project != $_POST['new_task_project'])) {
+		$move_files = $obj->task_project;
 		$obj->task_project = $_POST['new_task_project'];
 		$obj->task_parent  = $obj->task_id;
+		// Need to ensure any files that are associated with the task also
+		// get their project changed.
 	}
 	
 	// Map task_dynamic checkboxes to task_dynamic values for task dependencies.
@@ -143,6 +147,28 @@ if ($sub_form) {
 			                              && $task_end_date->dateDiff($end_date))) {
 				$obj->addReminder();
 			}
+
+			// If there was a file that was attached to both the task, and the task
+			// has moved projects, we need to move the file as well
+			if ($move_files) {
+				require_once $AppUI->getModuleClass('files');
+				$filehandler = new CFile();
+				$q = new DBQuery();
+				$q->addTable('files', 'f');							
+				$q->addQuery('file_id');
+				$q->addWhere('file_task = ' . (int)$obj->task_id);
+				$files = $q->loadColumn();
+				if (!empty($files)) {
+					foreach ($files as $file) {
+						$filehandler->load($file);
+						$realname = $filehandler->file_real_filename;
+						$filehandler->file_project = $obj->task_project;
+						$filehandler->moveFile($move_files, $realname);
+						$filehandler->store();
+					}
+				}
+			}
+			
 			$AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
 		}
 		
