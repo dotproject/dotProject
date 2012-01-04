@@ -28,7 +28,7 @@ $company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 
                                        'EVENTFILTER', 'my');
 
-$AppUI->setState('CalDayViewTab', dPgetParam($_GET, 'tab', $tab));
+$AppUI->setState('CalDayViewTab', dPgetCleanParam($_GET, 'tab', $tab));
 $tab = $AppUI->getState('CalDayViewTab' ,'0');
 
 // get the prefered date format
@@ -37,7 +37,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 // get the passed timestamp (today if none)
 $ctoday = new CDate();
 $today = $ctoday->format(FMT_TIMESTAMP_DATE);
-$date = dPgetParam($_GET, 'date', $today);
+$date = dPgetCleanParam($_GET, 'date', $today);
 // establish the focus 'date'
 $this_day = new CDate($date);
 $dd = $this_day->getDay();

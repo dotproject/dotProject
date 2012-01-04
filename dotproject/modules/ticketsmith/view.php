@@ -8,12 +8,12 @@ if (!$canRead) {
 }
 
 $dbprefix = dPgetConfig('dbprefix','');
-$ticket = dPgetParam($_GET, 'ticket', '');
-$ticket_type = dPgetParam($_GET, 'ticket_type', '');
+$ticket = (int)dPgetParam($_GET, 'ticket', '');
+$ticket_type = escape_string(dPgetParam($_GET, 'ticket_type', ''));
 
-$type_toggle = dPgetParam($_POST, 'type_toggle', '');
-$priority_toggle = dPgetParam($_POST, 'priority_toggle', '');
-$assignment_toggle = dPgetParam($_POST, 'assignment_toggle', '');
+$type_toggle = escape_string(dPgetParam($_POST, 'type_toggle', ''));
+$priority_toggle = (int)dPgetParam($_POST, 'priority_toggle', '');
+$assignment_toggle = (int)dPgetParam($_POST, 'assignment_toggle', '');
 
 // setup the title block
 $titleBlock = new CTitleBlock('View Ticket', 'gconf-app-icon.png', $m, "$m.$a");

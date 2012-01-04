@@ -240,8 +240,8 @@ class CAppUI {
 		global $AppUI;
 		
 		// define bad characters and their replacement
-		$bad_chars = ';/\\';
-		$bad_replace = '....'; // Needs the same number of chars as $bad_chars
+		$bad_chars = ';/\\\'()"$';
+		$bad_replace = '.........'; // Needs the same number of chars as $bad_chars
 		
 		// check whether the filename contained bad characters
 		if (mb_strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
