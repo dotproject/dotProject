@@ -2715,10 +2715,11 @@ function sort_by_item_title($title, $item_name, $item_type) {
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
 	
 	echo ('<a href="./index.php?');
+	$not_first = 0;
 	foreach ($_GET as $var => $val) {
 		if (!(in_array($var, array('task_sort_item1', 'task_sort_type1', 'task_sort_order1', 
 		                           'task_sort_item2', 'task_sort_type2', 'task_sort_order2')))) {
-			echo ((($not_first) ? '&' : '') . $var . '=' . $val);
+			echo ((($not_first) ? '&' : '') . $var . '=' . dPgetCleanParam($_GET,$var));
 			$not_first = 1;
 		}
 	}

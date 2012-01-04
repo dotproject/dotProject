@@ -115,7 +115,7 @@ foreach($disp_columns as $col_count) {
 	$disp_max_cols = (($col_count > $disp_max_cols) ? $col_count : $disp_max_cols);
 }
 
-$html  = '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickFilter">';
+$html  = '<form method="post" name="pickFilter">';
 $html .= ($AppUI->_('Event Filter') . ":" 
           . arraySelect($event_filter_list, 'event_filter', 
                         'onchange="javascript:document.pickFilter.submit()" class="text"', 

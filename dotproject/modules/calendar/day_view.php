@@ -73,8 +73,7 @@ $titleBlock->addCell(($AppUI->_('Company') . ':'));
 $titleBlock->addCell(arraySelect($companies, 'company_id', 
                                  'onchange="document.pickCompany.submit()" class="text"', 
                                  $company_id), '', 
-                     ('<td><form action="' . htmlspecialchars($_SERVER['REQUEST_URI']) 
-                      . '" method="post" name="pickCompany">' 
+                     ('<td><form method="post" name="pickCompany">' 
                       . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
                      '</tr></table></form></td>');
 $titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event') 

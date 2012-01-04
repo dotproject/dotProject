@@ -45,6 +45,7 @@ if (!(isset($GLOBALS['OS_WIN']))) {
 
 // tweak for pathname consistence on windows machines
 require_once (DP_BASE_DIR . '/classes/csscolor.class.php'); // Required before main_functions
+require_once (DP_BASE_DIR . '/classes/kses.class.php'); // Required before main_functions
 require_once (DP_BASE_DIR . '/includes/main_functions.php');
 require_once (DP_BASE_DIR . '/includes/db_adodb.php');
 require_once (DP_BASE_DIR . '/includes/db_connect.php');
