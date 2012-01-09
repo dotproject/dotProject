@@ -9,9 +9,9 @@ if (!$canRead) {
 
 $dbprefix = dPgetConfig('dbprefix','');
 $ticket = (int)dPgetParam($_GET, 'ticket', '');
-$ticket_type = escape_string(dPgetParam($_GET, 'ticket_type', ''));
+$ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
-$type_toggle = escape_string(dPgetParam($_POST, 'type_toggle', ''));
+$type_toggle = dPgetCleanParam($_POST, 'type_toggle', '');
 $priority_toggle = (int)dPgetParam($_POST, 'priority_toggle', '');
 $assignment_toggle = (int)dPgetParam($_POST, 'assignment_toggle', '');
 
@@ -59,10 +59,10 @@ else {
 }
 
 /* perform updates */
-$orig_assignment = dPgetParam($_POST, 'orig_assignment', '');
-$author = dPgetParam($_POST, 'author', '');
-$priority = dPgetParam($_POST, 'priority', '');
-$subject = dPgetParam($_POST, 'subject', '');
+$orig_assignment = dPgetCleanParam($_POST, 'orig_assignment', '');
+$author = dPgetCleanParam($_POST, 'author', '');
+$priority = dPgetCleanParam($_POST, 'priority', '');
+$subject = dPgetCleanParam($_POST, 'subject', '');
 
 if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
     do_query("UPDATE {$dbprefix}tickets SET type = '$type_toggle', priority = '$priority_toggle', assignment = '$assignment_toggle' WHERE ticket = '$ticket'");

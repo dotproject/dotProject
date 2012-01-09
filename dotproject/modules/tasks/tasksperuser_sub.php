@@ -5,17 +5,17 @@ if (!defined('DP_BASE_DIR')) {
 
 $AppUI->savePlace();
 
-$do_report = dPgetParam($_POST, 'do_report', true);
-$log_start_date = dPgetParam($_POST, 'log_start_date', 0);
-$log_end_date = dPgetParam($_POST, 'log_end_date', 0);
-$log_all = dPgetParam($_POST, 'log_all', true);
-$use_period = dPgetParam($_POST, 'use_period', 0);
-$show_orphaned = dPgetParam($_POST, 'show_orphaned', 0);
-$display_week_hours = dPgetParam($_POST, 'display_week_hours', 0);
-$max_levels = dPgetParam($_POST, 'max_levels', '');
-$log_userfilter = dPgetParam($_POST, 'log_userfilter', 0);
-$company_id = dPgetParam($_POST, 'company_id', 'all');
-$project_id = dPgetParam($_POST, 'project_id', 'all');
+$do_report = (bool)dPgetParam($_POST, 'do_report', true);
+$log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
+$log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);
+$log_all = (bool)dPgetParam($_POST, 'log_all', true);
+$use_period = (int)dPgetParam($_POST, 'use_period', 0);
+$show_orphaned = (int)dPgetParam($_POST, 'show_orphaned', 0);
+$display_week_hours = (int)dPgetParam($_POST, 'display_week_hours', 0);
+$max_levels = dPgetCleanParam($_POST, 'max_levels', '');
+$log_userfilter = (int)dPgetParam($_POST, 'log_userfilter', 0);
+$company_id = dPgetCleanParam($_POST, 'company_id', 'all');
+$project_id = dPgetCleanParam($_POST, 'project_id', 'all');
 
 require_once ($AppUI->getModuleClass('projects'));
 require_once ($AppUI->getModuleClass('tasks'));

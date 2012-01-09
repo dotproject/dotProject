@@ -47,12 +47,12 @@ if ($caller == 'todo') {
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for').' '.dPgetUsername($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 
-	$showLabels = dPgetParam($_REQUEST, 'showLabels', false);
-	$showPinned = dPgetParam( $_REQUEST, 'showPinned', false );
-	$showArcProjs = dPgetParam( $_REQUEST, 'showArcProjs', false );
-	$showHoldProjs = dPgetParam( $_REQUEST, 'showHoldProjs', false );
-	$showDynTasks = dPgetParam( $_REQUEST, 'showDynTasks', false );
-	$showLowTasks = dPgetParam( $_REQUEST, 'showLowTasks', true);
+	$showLabels = (bool)dPgetParam($_REQUEST, 'showLabels', false);
+	$showPinned = (bool)dPgetParam( $_REQUEST, 'showPinned', false );
+	$showArcProjs = (bool)dPgetParam( $_REQUEST, 'showArcProjs', false );
+	$showHoldProjs = (bool)dPgetParam( $_REQUEST, 'showHoldProjs', false );
+	$showDynTasks = (bool)dPgetParam( $_REQUEST, 'showDynTasks', false );
+	$showLowTasks = (bool)dPgetParam( $_REQUEST, 'showLowTasks', true);
 
 	$q = new DBQuery;
 	$q->addQuery('ta.*');
@@ -152,7 +152,7 @@ foreach ($proTasks as $row) {
         $projects[$row['task_project']]['tasks'][] = $row;
 }
 $q->clear();
-$width      = dPgetParam( $_GET, 'width', 600 );
+$width      = (int)dPgetParam( $_GET, 'width', 600 );
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 //	$start_min = $projects[$project_id]['project_start_date'];
@@ -160,8 +160,8 @@ if ($caller != 'todo') {
 //	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
 	$end_max = substr($criticalTasks[0]['task_end_date'],0,10);
 }
-$start_date = dPgetParam( $_GET, 'start_date', $start_min );
-$end_date   = dPgetParam( $_GET, 'end_date', $end_max );
+$start_date = dPgetCleanParam( $_GET, 'start_date', $start_min );
+$end_date   = dPgetCleanParam( $_GET, 'end_date', $end_max );
 
 $count = 0;
 

@@ -80,7 +80,7 @@ $q->addOrder($orderby);
 $rows = $q->loadList();
 $q->clear();
 
-$tab = dPgetParam($_REQUEST, 'tab', 0);
+$tab = (int)dPgetParam($_REQUEST, 'tab', 0);
 
 ?>
 <script language="JavaScript" type="text/javascript">

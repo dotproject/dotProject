@@ -12,7 +12,7 @@ if (isset($_REQUEST['project_id'])) {
 
 $project_id = $AppUI->getState('LinkIdxProject') !== NULL ? $AppUI->getState('LinkIdxProject') : 0;
 
-if (dPgetParam($_GET, 'tab', -1) != -1) {
+if ((int)dPgetParam($_GET, 'tab', -1) != -1) {
 	$AppUI->setState('LinkIdxTab', intval(dPgetParam($_GET, 'tab')));
 }
 $tab = $AppUI->getState('LinkIdxTab') !== NULL ? $AppUI->getState('LinkIdxTab') : 0;

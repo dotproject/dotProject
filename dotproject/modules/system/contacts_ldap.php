@@ -52,7 +52,7 @@ if (isset($_POST['bind_name'])) {
 $bind_name = $AppUI->getState('LDAPBindName', '');
 //$bind_name = 'dcordes';
 
-$bind_password = dPgetParam($_POST,'bind_password', '');
+$bind_password = dPgetCleanParam($_POST,'bind_password', '');
 
 if (isset($_POST['port'])) {
 	$AppUI->setState('LDAPPort', $_POST['port']);
@@ -71,10 +71,10 @@ if (isset($_POST['filter'])) {
 $filter = $AppUI->getState('LDAPFilter',  '(objectclass=Person)');
 //$filter = '(objectclass=dominoPerson)'; 
 
-$import = dPgetParam($_POST,'import');
-$test = dPgetParam($_POST,'test');
+$import = dPgetCleanParam($_POST,'import');
+$test = dPgetCleanParam($_POST,'test');
 
-$AppUI->setState('LDAPProto', dPgetParam($_POST, 'ldap_proto'));
+$AppUI->setState('LDAPProto', dPgetCleanParam($_POST, 'ldap_proto'));
 $proto = $AppUI->getState('LDAPProto', '3');
 
 ?>

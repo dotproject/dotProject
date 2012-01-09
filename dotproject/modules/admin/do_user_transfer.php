@@ -8,7 +8,7 @@ if (! $AppUI->acl()->checkModule($m, 'edit')) {
 }
 
 $user_id = (int)dPgetParam($_POST, 'user');
-$projects = dPgetParam($_POST, 'project');
+$projects = dPgetCleanParam($_POST, 'project');
 $from_user = (int)dPgetParam($_POST, 'from_user');
 
 if (count($projects) > 1) {

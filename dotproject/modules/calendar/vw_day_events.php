@@ -15,7 +15,7 @@ $no_modify = false;
 
 if (getPermission('admin', 'view')) {
 	$other_users = true;
-	if (($show_uid = dPgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
+	if (($show_uid = (int)dPgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
 		$user_id = $show_uid;
 		$no_modify = true;
 		$AppUI->setState('event_user_id', $user_id);

@@ -33,7 +33,7 @@ if (getPermission('files', 'edit')) {
 
 $canAccess_folders = getPermission('file_folders', 'access');
 if ($canAccess_folders) {
-	$folder = dPgetParam($_GET, 'folder', 0);
+	$folder = (int)dPgetParam($_GET, 'folder', 0);
 	require(DP_BASE_DIR . '/modules/files/folders_table.php');
 } else if (getPermission('files', 'view')) {
 	require(DP_BASE_DIR . '/modules/files/index_table.php');

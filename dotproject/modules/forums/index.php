@@ -25,7 +25,7 @@ $orderdir        = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('Foru
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
-$f = dPgetParam($_POST, 'f', 0);
+$f = (int)dPgetParam($_POST, 'f', 0);
 
 
 $forum = new CForum;

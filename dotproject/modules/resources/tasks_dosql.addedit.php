@@ -18,7 +18,7 @@ $other_resources = null;
 function resource_presave() {
 	global $other_resources;
 	//check to see if we are in the post save list or if we need to query the session.
-	$other_resources = dPgetParam($_POST, 'hresource_assign');
+	$other_resources = (int)dPgetParam($_POST, 'hresource_assign');
 	dprint(__FILE__, __LINE__, 5, "setting other resources to $other_resources");
 }
 

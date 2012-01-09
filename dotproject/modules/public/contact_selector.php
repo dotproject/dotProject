@@ -3,14 +3,14 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-$show_all = dPgetParam($_REQUEST, 'show_all', 0);
-$company_id = dPgetParam($_REQUEST, 'company_id', 0);
-$contact_id = dPgetParam($_POST, 'contact_id', 0);
-$call_back = dPgetParam($_GET, 'call_back', null);
-$contacts_submited = dPgetParam($_POST, 'contacts_submited', 0);
-$selected_contacts_id = dPgetParam($_GET, 'selected_contacts_id', '');
+$show_all = (int)dPgetParam($_REQUEST, 'show_all', 0);
+$company_id = (int)dPgetParam($_REQUEST, 'company_id', 0);
+$contact_id = (int)dPgetParam($_POST, 'contact_id', 0);
+$call_back = dPgetCleanParam($_GET, 'call_back', null);
+$contacts_submited = (int)dPgetParam($_POST, 'contacts_submited', 0);
+$selected_contacts_id = dPgetCleanParam($_GET, 'selected_contacts_id', '');
 if (dPgetParam($_POST, 'selected_contacts_id'))	{
-	$selected_contacts_id = dPgetParam($_POST, 'selected_contacts_id');
+	$selected_contacts_id = dPgetCleanParam($_POST, 'selected_contacts_id');
 }
 ?>
 <script language="javascript">

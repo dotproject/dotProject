@@ -7,11 +7,11 @@ if (!defined('DP_BASE_DIR')) {
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
 $del = intval(dPgetParam($_POST, 'del', 0));
 $duplicate = intval(dPgetParam($_POST, 'duplicate', 0));
-$redirect = dPgetParam($_POST, 'redirect', '');
+$redirect = dPgetCleanParam($_POST, 'redirect', '');
 global $db;
 
-$not = dPgetParam($_POST, 'notify', '0');
-$notcont = dPgetParam($_POST, 'notify_contacts', '0');
+$not = (bool)dPgetParam($_POST, 'notify', '0');
+$notcont = (bool)dPgetParam($_POST, 'notify_contacts', '0');
 
 $obj = new CFile();
 if ($file_id) { 
@@ -41,8 +41,8 @@ if ($file_id) {
 }
 $obj->file_category = intval(dPgetParam($_POST, 'file_category', 0));
 
-$version = dPgetParam($_POST, 'file_version', 0);
-$revision_type   = dPgetParam($_POST, 'revision_type', 0);
+$version = dPgetCleanParam($_POST, 'file_version', 0);
+$revision_type   = dPgetCleanParam($_POST, 'revision_type', 0);
 
 if (strcasecmp('major', $revision_type) == 0) {
 	$major_num = strtok($version, '.') + 1;

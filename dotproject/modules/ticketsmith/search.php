@@ -12,11 +12,11 @@ $dbprefix = dPgetConfig('dbprefix','');
 
 require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
-$search_pattern = dPgetParam($_POST,'search_pattern','');
-$search_field = dPgetParam($_POST,'search_field','');
-$search_depth = dPgetParam($_POST, 'search_depth','');
-$sort_column = dPgetParam($_POST,'sort_column','');
-$sort_direction = dPgetParam($_POST,'sort_direction', 'DESC');
+$search_pattern = dPgetCleanParam($_POST,'search_pattern','');
+$search_field = dPgetCleanParam($_POST,'search_field','');
+$search_depth = dPgetCleanParam($_POST, 'search_depth','');
+$sort_column = dPgetCleanParam($_POST,'sort_column','');
+$sort_direction = dPgetCleanParam($_POST,'sort_direction', 'DESC');
 /* set title */
 $title = "Search Tickets";
 

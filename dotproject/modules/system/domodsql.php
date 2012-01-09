@@ -6,9 +6,9 @@ if (!defined('DP_BASE_DIR')) {
 ##
 ## Activate or move a module entry
 ##
-$cmd = dPgetParam($_GET, 'cmd', '0');
+$cmd = dPgetCleanParam($_GET, 'cmd', '0');
 $mod_id = intval(dPgetParam($_GET, 'mod_id', '0'));
-$mod_directory = dPgetParam($_GET, 'mod_directory', '0');
+$mod_directory = dPgetCleanParam($_GET, 'mod_directory', '0');
 
 $obj = new CModule();
 if ($mod_id) {

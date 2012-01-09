@@ -98,12 +98,12 @@ GLOBAL $AppUI, $deny1, $canAccess, $canRead, $canEdit;
 // $xpg_result      - pointer to results from SELECT LIMIT
 
 $tab = $AppUI->getState('LinkIdxTab') !== NULL ? $AppUI->getState('LinkIdxTab') : 0;
-$page = dPgetParam($_GET, 'page', 1);
-$search = dPgetParam($_REQUEST, 'search', '');
+$page = (int)dPgetParam($_GET, 'page', 1);
+$search = dPgetCleanParam($_REQUEST, 'search', '');
 
 global $project_id, $task_id, $showProject;
 if (!isset($project_id))
-        $project_id = dPgetParam($_REQUEST, 'project_id', 0);
+        $project_id = (int)dPgetParam($_REQUEST, 'project_id', 0);
 if (!isset($showProject))
         $showProject = true;
 

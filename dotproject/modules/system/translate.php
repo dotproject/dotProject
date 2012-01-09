@@ -9,8 +9,8 @@ if (!$canEdit || $AppUI->user_type != 1) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$module = dPgetParam($_REQUEST, 'module', 'admin');
-$lang = dPgetParam($_REQUEST, 'lang', $AppUI->user_locale);
+$module = dPgetCleanParam($_REQUEST, 'module', 'admin');
+$lang = dPgetCleanParam($_REQUEST, 'lang', $AppUI->user_locale);
 
 $AppUI->savePlace('m=system&a=translate&module='.$module.'&lang=' . $lang);
 

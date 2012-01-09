@@ -14,7 +14,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $filter1 = array();
 $projectStatus = dPgetSysVal('ProjectStatus');
 $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $projectStatus);
-$proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
+$proFilter = (int)dPgetParam($_REQUEST, 'proFilter', '-1');
 
 if ($proFilter == '-2') {
         $filter1[] = ' project_status != 3';
@@ -53,10 +53,10 @@ $q->addQuery('min(t.task_start_date) AS task_min_date, max(t.task_end_date) AS t
 $taskMinMax = $q->loadList();
 $q->clear();
 
-$width = dPgetParam($_GET, 'width', 600);
-$start_date = dPgetParam($_GET, 'start_date', 0);
-$end_date = dPgetParam($_GET, 'end_date', 0);
-$showTaskGantt = dPgetParam($_GET, 'showTaskGantt', 0);
+$width = (int)dPgetParam($_GET, 'width', 600);
+$start_date = dPgetCleanParam($_GET, 'start_date', 0);
+$end_date = dPgetCleanParam($_GET, 'end_date', 0);
+$showTaskGantt = (int)dPgetParam($_GET, 'showTaskGantt', 0);
 
 
 $graph2 = new GanttGraph($width);

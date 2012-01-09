@@ -14,7 +14,7 @@ if (!(($canEdit && $event_id) || ($canAuthor && !($event_id)))) {
 }
 
 // get the passed timestamp (today if none)
-$date = dPgetParam($_GET, 'date', null);
+$date = dPgetCleanParam($_GET, 'date', null);
 
 // load the record data
 $obj = new CEvent();

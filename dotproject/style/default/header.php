@@ -2,7 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
-$dialog = dPgetParam($_GET, 'dialog', 0);
+$dialog = (int)dPgetParam($_GET, 'dialog', 0);
 if ($dialog)
 	$page_title = '';
 else
@@ -32,7 +32,7 @@ else
 	?></strong>
 	<?php if (getPermission('smartsearch', 'access')): ?>
 	<form name="frmHeaderSearch" action="?m=smartsearch"  method="post">
-		<input class="text" type="text" id="keyword1" name="keyword1" value="<?php echo dPgetParam($_POST, 'keyword1', ''); ?>" accesskey="k" />
+		<input class="text" type="text" id="keyword1" name="keyword1" value="<?php echo dPgetCleanParam($_POST, 'keyword1', ''); ?>" accesskey="k" />
 		<input class="button" type="submit" value="<?php echo $AppUI->_('Search')?>" />
 	</form>
 	<?php endif; ?>

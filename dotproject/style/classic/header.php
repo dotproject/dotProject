@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-$dialog = dPgetParam($_GET, 'dialog', 0);
+$dialog = (int)dPgetParam($_GET, 'dialog', 0);
 
 ?>
 

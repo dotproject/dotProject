@@ -96,14 +96,14 @@ $taskPriority = dPgetSysVal('TaskPriority');
 
 $task_project = intval(dPgetParam($_GET, 'task_project', null));
 
-$task_sort_item1 = dPgetParam($_GET, 'task_sort_item1', '');
-$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', 0);
+$task_sort_item1 = dPgetCleanParam($_GET, 'task_sort_item1', '');
+$task_sort_type1 = dPgetCleanParam($_GET, 'task_sort_type1', 0);
 $task_sort_order1 = intval(dPgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
-$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', 0);
+$task_sort_item2 = dPgetCleanParam($_GET, 'task_sort_item2', '');
+$task_sort_type2 = dPgetCleanParam($_GET, 'task_sort_type2', 0);
 $task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 if (isset($_POST['show_task_options'])) {
-	$AppUI->setState('TaskListShowIncomplete', dPgetParam($_POST, 'show_incomplete', 0));
+	$AppUI->setState('TaskListShowIncomplete', (int)dPgetParam($_POST, 'show_incomplete', 0));
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 

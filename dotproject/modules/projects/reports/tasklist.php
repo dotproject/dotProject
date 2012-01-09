@@ -10,18 +10,18 @@ if (!defined('DP_BASE_DIR')) {
 require_once $AppUI->getSystemClass('tree');
 
 //error_reporting(E_ALL);
-$do_report = dPgetParam($_POST, 'do_report', 0);
-$log_all = dPgetParam($_POST, 'log_all', 0);
-$log_pdf = dPgetParam($_POST, 'log_pdf', 0);
-$incomplete = dPgetParam($_POST, 'incomplete', 0);
-$log_ignore = dPgetParam($_POST, 'log_ignore', 0);
-$days = dPgetParam($_POST, 'days', 30);
+$do_report = (int)dPgetParam($_POST, 'do_report', 0);
+$log_all = (int)dPgetParam($_POST, 'log_all', 0);
+$log_pdf = (int)dPgetParam($_POST, 'log_pdf', 0);
+$incomplete = (int)dPgetParam($_POST, 'incomplete', 0);
+$log_ignore = (int)dPgetParam($_POST, 'log_ignore', 0);
+$days = (int)dPgetParam($_POST, 'days', 30);
 
-$list_start_date = dPgetParam($_POST, 'list_start_date', 0);
-$list_end_date = dPgetParam($_POST, 'list_end_date', 0);
+$list_start_date = dPgetCleanParam($_POST, 'list_start_date', 0);
+$list_end_date = dPgetCleanParam($_POST, 'list_end_date', 0);
 
-$period = dPgetParam($_POST, 'period', 0);
-$period_value = dPgetParam($_POST, 'pvalue', 1);
+$period = dPgetCleanParam($_POST, 'period', 0);
+$period_value = dPgetCleanParam($_POST, 'pvalue', 1);
 if ($period) {
 	$today = new CDate();
 	$ts = $today->format(FMT_TIMESTAMP_DATE);

@@ -29,14 +29,14 @@ if ($obj->project_actual_end_date) {
 
 // let's check if there are some assigned departments to project
 if (!dPgetParam($_POST, "project_departments", 0)) {
-	$obj->project_departments = implode(",", dPgetParam($_POST, "dept_ids", array()));
+	$obj->project_departments = implode(",", dPgetCleanParam($_POST, "dept_ids", array()));
 }
 
-$del = dPgetParam($_POST, 'del', 0);
+$del = (int)dPgetParam($_POST, 'del', 0);
 
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
-	$project_id = dPgetParam($_POST, 'project_id', 0);
+	$project_id = (int)dPgetParam($_POST, 'project_id', 0);
 	$canDelete = $obj->canDelete($msg, $project_id);
 	if (!$canDelete) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -56,8 +56,8 @@ else {
 	} else {
 		$isNotNew = @$_POST['project_id'];
 		
-		if ($importTask_projectId = dPgetParam($_POST, 'import_tasks_from', '0')) {
-			$scale_project = dPgetParam($_POST, 'scale_project', '0');
+		if ($importTask_projectId = (int)dPgetParam($_POST, 'import_tasks_from', '0')) {
+			$scale_project = (int)dPgetParam($_POST, 'scale_project', '0');
 			$obj->importTasks($importTask_projectId, $scale_project);
 		}
 		$AppUI->setMsg($isNotNew ? 'Project updated' : 'Project inserted', UI_MSG_OK, true);

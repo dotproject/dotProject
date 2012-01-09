@@ -5,12 +5,12 @@ if (!defined('DP_BASE_DIR')) {
 
 //addfile sql
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
-$coReason = dPgetParam($_POST, 'file_co_reason', '');
+$coReason = dPgetCleanParam($_POST, 'file_co_reason', '');
 
 $co_cancel = intval(dPgetParam($_POST, 'co_cancel', 0));
 
-$not = dPgetParam($_POST, 'notify', '0');
-$notcont = dPgetParam($_POST, 'notify_contacts', '0');
+$not = (bool)dPgetParam($_POST, 'notify', '0');
+$notcont = (bool)dPgetParam($_POST, 'notify_contacts', '0');
 
 $obj = new CFile();
 $obj->load($file_id);

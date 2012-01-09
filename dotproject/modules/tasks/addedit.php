@@ -26,7 +26,7 @@ $task_parent = isset($_REQUEST['task_parent'])? $_REQUEST['task_parent'] : $obj-
 //check for a valid project parent
 $task_project = intval($obj->task_project);
 if (!$task_project) {
-	$task_project = dPgetParam($_REQUEST, 'task_project', 0);
+	$task_project = (int)dPgetParam($_REQUEST, 'task_project', 0);
 	if (!$task_project) {
 		$AppUI->setMsg('badTaskProject', UI_MSG_ERROR);
 		$AppUI->redirect();
@@ -330,7 +330,7 @@ echo $AppUI->_('save'); ?>" onclick="javascript:submitIt(document.editFrm);" />
 </form>
 <?php
 if (isset($_GET['tab'])) {
-	$AppUI->setState('TaskAeTabIdx', dPgetParam($_GET, 'tab', 0));
+	$AppUI->setState('TaskAeTabIdx', (int)dPgetParam($_GET, 'tab', 0));
 }
 $tab = $AppUI->getState('TaskAeTabIdx', 0);
 $tabBox = new CTabBox(('?m=tasks&a=addedit' 

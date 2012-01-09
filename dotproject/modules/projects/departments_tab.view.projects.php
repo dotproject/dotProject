@@ -54,8 +54,8 @@ $orderby  = $AppUI->getState('DeptProjIdxOrderBy') ? $AppUI->getState('DeptProjI
 $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProjIdxOrderDir') : 'asc';
 
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('addProjWithTasks',  dPgetParam($_POST, 'add_pwt', 0));
-	$AppUI->setState('addProjWithOwnerInDep',  dPgetParam($_POST, 'add_pwoid', 0));
+	$AppUI->setState('addProjWithTasks',  (int)dPgetParam($_POST, 'add_pwt', 0));
+	$AppUI->setState('addProjWithOwnerInDep',  (int)dPgetParam($_POST, 'add_pwoid', 0));
 }
 $addPwT = $AppUI->getState('addProjWithTasks', 0);
 $addPwOiD = $AppUI->getState('addProjWithOwnerInDep', 0);

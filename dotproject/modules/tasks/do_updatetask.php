@@ -42,7 +42,7 @@ function cleanText($text) {
 
 $notify_owner = ((isset($_POST['task_log_notify_owner'])) ? $_POST['task_log_notify_owner'] : 0);
 
-$del = dPgetParam($_POST, 'del', 0);
+$del = (int)dPgetParam($_POST, 'del', 0);
 
 $obj = new CTaskLog();
 
@@ -85,9 +85,9 @@ $task->load($obj->task_log_task);
 $task->htmlDecode();
 $task->check();
 $task_end_date = new CDate($task->task_end_date);
-$task->task_percent_complete = dPgetParam($_POST, 'task_percent_complete', null);
+$task->task_percent_complete = dPgetCleanParam($_POST, 'task_percent_complete', null);
 
-if (dPgetParam($_POST, 'task_end_date', '') != '') {
+if (dPgetCleanParam($_POST, 'task_end_date', '') != '') {
 	$new_date = new CDate($_POST['task_end_date']);
 	$new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
 	$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
@@ -111,11 +111,11 @@ if ($notify_owner && $msg = $task->notifyOwner()) {
 }
 
 // Check if we need to email the task log to anyone.
-$email_assignees = dPgetParam($_POST, 'email_assignees', null);
-$email_task_contacts = dPgetParam($_POST, 'email_task_contacts', null);
-$email_project_contacts = dPgetParam($_POST, 'email_project_contacts', null);
-$email_others = dPgetParam($_POST, 'email_others', '');
-$email_extras = dPgetParam($_POST, 'email_extras', null);
+$email_assignees = dPgetCleanParam($_POST, 'email_assignees', null);
+$email_task_contacts = dPgetCleanParam($_POST, 'email_task_contacts', null);
+$email_project_contacts = dPgetCleanParam($_POST, 'email_project_contacts', null);
+$email_others = dPgetCleanParam($_POST, 'email_others', '');
+$email_extras = dPgetCleanParam($_POST, 'email_extras', null);
 
 if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, 
     $email_others, $email_extras)) {

@@ -9,13 +9,13 @@ require(DP_BASE_DIR.'/modules/ticketsmith/config.inc.php');
 ##	Ticketsmith sql handler
 ##
 
-$name = dPgetParam($_POST, 'name', '');
-$email = dPgetParam($_POST, 'email', '');
-$subject = dPgetParam($_POST, 'subject', '');
-$priority = dPgetParam($_POST, 'priority', '');
-$description = dPgetParam($_POST, 'description', '');
-$ticket_company = dPgetParam($_POST, 'ticket_company', 0);
-$ticket_project = dPgetParam($_POST, 'ticket_project', 0);
+$name = dPgetCleanParam($_POST, 'name', '');
+$email = dPgetCleanParam($_POST, 'email', '');
+$subject = dPgetCleanParam($_POST, 'subject', '');
+$priority = dPgetCleanParam($_POST, 'priority', '');
+$description = dPgetCleanParam($_POST, 'description', '');
+$ticket_company = (int)dPgetParam($_POST, 'ticket_company', 0);
+$ticket_project = (int)dPgetParam($_POST, 'ticket_project', 0);
 
 $author = $name . " <" . $email . ">";
 $tsql =

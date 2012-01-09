@@ -33,12 +33,12 @@ function checkDate() {
 
 <?php
 $date_reg = date("Y-m-d");
-$start_date = intval($date_reg) ? new CDate(dPgetParam($_POST, "log_start_date", date("Y-m-d"))) : null;
-$end_date = intval($date_reg) ? new CDate(dPgetParam($_POST, "log_end_date", date("Y-m-d"))) : null;
+$start_date = intval($date_reg) ? new CDate(dPgetCleanParam($_POST, "log_start_date", date("Y-m-d"))) : null;
+$end_date = intval($date_reg) ? new CDate(dPgetCleanParam($_POST, "log_end_date", date("Y-m-d"))) : null;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
-if ($a = dPgetParam($_REQUEST, "a", "") == "") {
+if ($a = dPgetCleanParam($_REQUEST, "a", "") == "") {
     $a = "&tab={$currentTabId}&amp;showdetails=1";
 } else {
     $user_id = intval(dPgetParam($_REQUEST, "user_id", 0));
@@ -85,8 +85,8 @@ if ($a = dPgetParam($_REQUEST, "a", "") == "") {
 
 <?php 
 if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {  
-    $start_date = date("Y-m-d", strtotime(dPgetParam($_POST, "log_start_date", date("Y-m-d"))));
-    $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetParam($_POST, "log_end_date", date("Y-m-d"))));
+    $start_date = date("Y-m-d", strtotime(dPgetCleanParam($_POST, "log_start_date", date("Y-m-d"))));
+    $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetCleanParam($_POST, "log_end_date", date("Y-m-d"))));
     
     	$q  = new DBQuery;
 	$q->addTable('user_access_log', 'ual');

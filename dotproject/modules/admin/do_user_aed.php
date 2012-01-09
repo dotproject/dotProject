@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 require_once $AppUI->getSystemClass('libmail');
 include $AppUI->getModuleClass('contacts');
-$del = dPgetParam($_REQUEST, 'del', false);
+$del = (bool)dPgetParam($_REQUEST, 'del', false);
 $user_id_aed = intval(dPgetParam($_REQUEST, 'user_id', 0));
 
 $obj = new CUser();

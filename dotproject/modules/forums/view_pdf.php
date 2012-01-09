@@ -3,9 +3,9 @@ if (! defined('DP_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 $AppUI->savePlace();
-$sort = dPgetParam($_REQUEST, 'sort', 'asc');
-$forum_id = dPgetParam($_REQUEST, 'forum_id', 0);
-$message_id = dPgetParam($_REQUEST, 'message_id', 0);
+$sort = dPgetCleanParam($_REQUEST, 'sort', 'asc');
+$forum_id = (int)dPgetParam($_REQUEST, 'forum_id', 0);
+$message_id = (int)dPgetParam($_REQUEST, 'message_id', 0);
 
 if (! getPermission('forums', 'view', $message_id))
 	$AppUI->redirect("m=public&a=access_denied");
@@ -19,7 +19,7 @@ $q->addJoin('forum_visits', 'v', "visit_user = {$AppUI->user_id} AND visit_forum
 $q->addJoin('users', 'u', 'message_author = u.user_id');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 $q->addWhere("forum_id = message_forum AND (message_id = $message_id OR message_parent = $message_id)");
-if (dPgetConfig('forum_descendent_order') || dPgetParam($_REQUEST,'sort',0)) { $q->addOrder("message_date $sort"); }
+if (dPgetConfig('forum_descendent_order') || dPgetCleanParam($_REQUEST,'sort',0)) { $q->addOrder("message_date $sort"); }
 
 $messages = $q->loadList();
 

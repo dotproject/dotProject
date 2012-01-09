@@ -25,7 +25,7 @@ $other_users = false;
 if (getPermission('admin','view')) {
 	// let's see if the user has sysadmin access
 	$other_users = true;
-	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) {
+	if (($show_uid = (int)dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) {
 	// lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
 		$no_modify = true;
@@ -40,12 +40,12 @@ $canEdit = getPermission($m, 'edit');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('TaskDayShowArc', dPgetParam($_POST, 'show_arc_proj', 0));
-	$AppUI->setState('TaskDayShowLow', dPgetParam($_POST, 'show_low_task', 0));
-	$AppUI->setState('TaskDayShowHold', dPgetParam($_POST, 'show_hold_proj', 0));
-	$AppUI->setState('TaskDayShowDyn', dPgetParam($_POST, 'show_dyn_task', 0));
-	$AppUI->setState('TaskDayShowPin', dPgetParam($_POST, 'show_pinned', 0));
-	$AppUI->setState('TaskDayShowEmptyDate', dPgetParam($_POST, 'show_empty_date', 0));
+	$AppUI->setState('TaskDayShowArc', (int)dPgetParam($_POST, 'show_arc_proj', 0));
+	$AppUI->setState('TaskDayShowLow', (int)dPgetParam($_POST, 'show_low_task', 0));
+	$AppUI->setState('TaskDayShowHold', (int)dPgetParam($_POST, 'show_hold_proj', 0));
+	$AppUI->setState('TaskDayShowDyn', (int)dPgetParam($_POST, 'show_dyn_task', 0));
+	$AppUI->setState('TaskDayShowPin', (int)dPgetParam($_POST, 'show_pinned', 0));
+	$AppUI->setState('TaskDayShowEmptyDate', (int)dPgetParam($_POST, 'show_empty_date', 0));
 
 }
 // Required for today view.
@@ -58,16 +58,16 @@ $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
-$task_sort_item1 = dPgetParam($_GET, 'task_sort_item1', '');
-$task_sort_type1 = dPgetParam($_GET, 'task_sort_type1', 0);
+$task_sort_item1 = dPgetCleanParam($_GET, 'task_sort_item1', '');
+$task_sort_type1 = dPgetCleanParam($_GET, 'task_sort_type1', 0);
 $task_sort_order1 = intval(dPgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_item2 = dPgetParam($_GET, 'task_sort_item2', '');
-$task_sort_type2 = dPgetParam($_GET, 'task_sort_type2', 0);
+$task_sort_item2 = dPgetCleanParam($_GET, 'task_sort_item2', '');
+$task_sort_type2 = dPgetCleanParam($_GET, 'task_sort_type2', 0);
 $task_sort_order2 = intval(dPgetParam($_GET, 'task_sort_order2', 0));
 
 // if task priority set and items selected, do some work
-$task_priority = dPgetParam($_POST, 'task_priority', 99);
-$selected = dPgetParam($_POST, 'selected_task', 0);
+$task_priority = dPgetCleanParam($_POST, 'task_priority', 99);
+$selected = dPgetCleanParam($_POST, 'selected_task', 0);
 
 $q = new DBQuery;
 if (is_array($selected) && count($selected)) {

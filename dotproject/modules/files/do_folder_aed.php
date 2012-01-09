@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 $file_folder_id = intval(dPgetParam($_POST, 'file_folder_id', 0));
 $del = intval(dPgetParam($_POST, 'del', 0));
-$redirect = dPgetParam($_POST, 'redirect', '');
+$redirect = dPgetCleanParam($_POST, 'redirect', '');
 
 $obj = new CFileFolder();
 if ($file_folder_id) { 

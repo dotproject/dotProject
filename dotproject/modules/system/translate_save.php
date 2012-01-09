@@ -9,10 +9,10 @@ if (! defined('DP_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 
-$module = dPgetParam($_POST, 'module', 0);
-$lang = dPgetParam($_POST, 'lang', $AppUI->user_locale);
+$module = dPgetCleanParam($_POST, 'module', 0);
+$lang = dPgetCleanParam($_POST, 'lang', $AppUI->user_locale);
 
-$trans = dPgetParam($_POST, 'trans', 0);
+$trans = dPgetCleanParam($_POST, 'trans', 0);
 //echo '<pre>';print_r($trans);echo '</pre>';die;
 
 // save to core locales if a translation exists there, otherwise save

@@ -3,11 +3,11 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$do_report = dPgetParam($_POST, 'do_report', 0);
-$log_start_date = dPgetParam($_POST, 'log_start_date', 0);
-$log_end_date = dPgetParam($_POST, 'log_end_date', 0);
-$log_all = dPgetParam($_POST['log_all'], 0);
-$group_by_unit = dPgetParam($_POST['group_by_unit'],'day');
+$do_report = (int)dPgetParam($_POST, 'do_report', 0);
+$log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
+$log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);
+$log_all = (int)dPgetParam($_POST['log_all'], 0);
+$group_by_unit = dPgetCleanParam($_POST['group_by_unit'],'day');
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();

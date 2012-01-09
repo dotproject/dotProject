@@ -14,7 +14,7 @@ if ($user_id != $AppUI->user_id
 $AppUI->savePlace();
 
 if (isset($_POST['show_form'])) {
-	$add_pwt = dPgetParam($_POST, 'add_pwt', 0);
+	$add_pwt = (int)dPgetParam($_POST, 'add_pwt', 0);
 	$AppUI->setState('addProjWithTasks', $add_pwt);
 } else {
 	$AppUI->setState('addProjWithTasks', false);

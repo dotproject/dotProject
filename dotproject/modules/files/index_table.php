@@ -30,9 +30,9 @@ GLOBAL $currentTabId, $currentTabName, $tabbed;
 // $xpg_result		- pointer to results from SELECT LIMIT
 
 $tab = ((!$company_id && !$project_id && !$task_id) || $m=='files') ? $currentTabId : 0;
-$page = dPgetParam($_GET, "page", 1);
+$page = (int)dPgetParam($_GET, "page", 1);
 if (!isset($project_id)) {
-	$project_id = dPgetParam($_REQUEST, 'project_id', 0);
+	$project_id = (int)dPgetParam($_REQUEST, 'project_id', 0);
 }
 if (!isset($showProject)) {
 	$showProject = true;

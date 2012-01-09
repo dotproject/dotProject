@@ -10,22 +10,22 @@ if (!defined('DP_BASE_DIR')) {
 global $caller, $locale_char_set;
 global $user_id, $dPconfig;
 
-$showLabels = dPgetParam($_GET, 'showLabels', 0);
-$showWork = dPgetParam($_GET, 'showWork', 0);
-$sortByName = dPgetParam($_GET, 'sortByName', 0);
-$showPinned = dPgetParam($_REQUEST, 'showPinned', false);
-$showArcProjs = dPgetParam($_REQUEST, 'showArcProjs', false);
-$showHoldProjs = dPgetParam($_REQUEST, 'showHoldProjs', false);
-$showDynTasks = dPgetParam($_REQUEST, 'showDynTasks', false);
-$showLowTasks = dPgetParam($_REQUEST, 'showLowTasks', true);
+$showLabels = (int)dPgetParam($_GET, 'showLabels', 0);
+$showWork = (int)dPgetParam($_GET, 'showWork', 0);
+$sortByName = (int)dPgetParam($_GET, 'sortByName', 0);
+$showPinned = (bool)dPgetParam($_REQUEST, 'showPinned', false);
+$showArcProjs = (bool)dPgetParam($_REQUEST, 'showArcProjs', false);
+$showHoldProjs = (bool)dPgetParam($_REQUEST, 'showHoldProjs', false);
+$showDynTasks = (bool)dPgetParam($_REQUEST, 'showDynTasks', false);
+$showLowTasks = (bool)dPgetParam($_REQUEST, 'showLowTasks', true);
 
 ini_set('memory_limit', $dPconfig['reset_memory_limit']);
 
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
-$project_id = dPgetParam($_REQUEST, 'project_id', 0);
-$f = dPgetParam($_REQUEST, 'f', 0);
+$project_id = (int)dPgetParam($_REQUEST, 'project_id', 0);
+$f = dPgetCleanParam($_REQUEST, 'f', 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -188,15 +188,15 @@ foreach ($proTasks as $row) {
 }
 unset($proTasks);
 
-$width = min(dPgetParam($_GET, 'width', 600), 1400);
+$width = min((int)dPgetParam($_GET, 'width', 600), 1400);
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 	$start_min = $projects[$project_id]['project_start_date'];
 	$end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
 	            ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
 }
-$start_date = dPgetParam($_GET, 'start_date', $start_min);
-$end_date = dPgetParam($_GET, 'end_date', $end_max);
+$start_date = dPgetCleanParam($_GET, 'start_date', $start_min);
+$end_date = dPgetCleanParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 

@@ -7,8 +7,8 @@ if (!$canEdit) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$ticket = dPgetParam($_GET, 'ticket', '');
-$ticket_type = dPgetParam($_GET, 'ticket_type', '');
+$ticket = (int)dPgetParam($_GET, 'ticket', '');
+$ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
 // setup the title block
 $titleBlock = new CTitleBlock('Post Comment', 'gconf-app-icon.png', $m, "$m.$a");
@@ -27,10 +27,10 @@ if (!$ticket_parent) {
     $ticket_parent = $ticket;
 }
 
-$author_name = dPgetParam($_POST, 'author_name', '');
-$author_email = dPgetParam($_POST, 'author_email', '');
-$comment = dPgetParam($_POST, 'comment', '');
-$body = dPgetParam($_POST, 'body', '');
+$author_name = dPgetCleanParam($_POST, 'author_name', '');
+$author_email = dPgetCleanParam($_POST, 'author_email', '');
+$comment = dPgetCleanParam($_POST, 'comment', '');
+$body = dPgetCleanParam($_POST, 'body', '');
 $dbprefix = dPgetConfig('dbprefix','');
 
 if (@$comment) {

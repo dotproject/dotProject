@@ -4,10 +4,10 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 global $AppUI;
-$selected = dPgetParam($_POST, 'bulk_selected_file', 0);
-$redirect = dPgetParam($_POST, 'redirect', '');
-$bulk_file_project = dPgetParam($_POST, 'bulk_file_project', 'O');
-$bulk_file_folder = dPgetParam($_POST, 'bulk_file_folder', 'O');
+$selected = dPgetCleanParam($_POST, 'bulk_selected_file', 0);
+$redirect = dPgetCleanParam($_POST, 'redirect', '');
+$bulk_file_project = dPgetCleanParam($_POST, 'bulk_file_project', 'O');
+$bulk_file_folder = dPgetCleanParam($_POST, 'bulk_file_folder', 'O');
 
 if (is_array($selected) && count($selected)) {
 	$upd_file = new CFile();

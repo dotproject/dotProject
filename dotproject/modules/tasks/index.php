@@ -8,8 +8,8 @@ $AppUI->savePlace();
 // retrieve any state parameters
 $user_id = $AppUI->user_id;
 if (getPermission('admin', 'view')) { // Only sysadmins are able to change users
-	if (dPgetParam($_POST, 'user_id', 0) != 0) { // this means that 
-		$user_id = dPgetParam($_POST, 'user_id', 0);
+	if ((int)dPgetParam($_POST, 'user_id', 0) != 0) { // this means that 
+		$user_id = (int)dPgetParam($_POST, 'user_id', 0);
 		$AppUI->setState('user_id', $_POST['user_id']);
 	} else if ($AppUI->getState('user_id')) {
 		$user_id = $AppUI->getState('user_id');
@@ -92,7 +92,7 @@ if ($canEdit && $project_id) {
 
 $titleBlock->show();
 
-if (dPgetParam($_GET, 'inactive', '') == 'toggle')
+if (dPgetCleanParam($_GET, 'inactive', '') == 'toggle')
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
 $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 
@@ -107,7 +107,7 @@ $titleBlock->addCell(arraySelect($filters, 'f',
 $titleBlock->addCell();
 
 $titleBlock->addCrumb('?m=tasks&amp;a=todo&amp;user_id=' . $user_id, 'my todo');
-if (dPgetParam($_GET, 'pinned') == 1) {
+if ((int)dPgetParam($_GET, 'pinned') == 1) {
 	$titleBlock->addCrumb('?m=tasks', 'all tasks');
 } else {
 	$titleBlock->addCrumb('?m=tasks&amp;pinned=1', 'my pinned tasks');

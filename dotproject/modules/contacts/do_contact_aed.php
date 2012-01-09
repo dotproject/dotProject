@@ -11,7 +11,7 @@ if (!$obj->bind($_POST)) {
 	$AppUI->redirect();
 }
 
-$del = dPgetParam($_POST, 'del', 0);
+$del = (int)dPgetParam($_POST, 'del', 0);
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');

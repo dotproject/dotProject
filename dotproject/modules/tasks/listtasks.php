@@ -6,8 +6,8 @@ if (!defined('DP_BASE_DIR')) {
 if (!(getPermission('tasks', 'view'))) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
-$proj = dPgetParam($_GET, 'project', 0);
-$userFilter = dPgetParam($_GET, 'userFilter', false);	
+$proj = (int)dPgetParam($_GET, 'project', 0);
+$userFilter = (bool)dPgetParam($_GET, 'userFilter', false);	
 
 $q = new DBQuery();
 $q->addQuery('t.task_id, t.task_name');

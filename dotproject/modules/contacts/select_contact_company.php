@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-	$table_name = dPgetParam($_GET, "table_name", "companies");
+	$table_name = dPgetCleanParam($_GET, "table_name", "companies");
 
 	switch($table_name) {
 		case "companies":
@@ -32,7 +32,7 @@ if (!defined('DP_BASE_DIR')) {
 ?>
 
 <?php
-	if (dPgetParam($_POST, $id_field, 0) != 0) {
+	if (dPgetCleanParam($_POST, $id_field, 0) != 0) {
 		$q  = new DBQuery;
 		$q->addTable($table_name);
 		$q->addQuery('*');

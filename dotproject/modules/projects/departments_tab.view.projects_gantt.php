@@ -21,7 +21,7 @@ if (isset($_GET['tab'])) {
 }
 
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('addProjWithOwnerInDep',  dPgetParam($_POST, 'add_pwoid', 0));
+	$AppUI->setState('addProjWithOwnerInDep',  (int)dPgetParam($_POST, 'add_pwoid', 0));
 }
 $addPwOiD = $AppUI->getState('addProjWithOwnerInDep') ? $AppUI->getState('addProjWithOwnerInDep') : 0;
 

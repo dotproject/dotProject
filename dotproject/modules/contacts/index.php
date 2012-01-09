@@ -11,7 +11,7 @@ if (!($canAccess)) {
 
 $perms =& $AppUI->acl();
 $q = new DBQuery;
-$search_string = dPgetParam($_GET, 'search_string', null);
+$search_string = dPgetCleanParam($_GET, 'search_string', null);
 
 // To configure an aditional filter to use in the search string
 $additional_filter = '';

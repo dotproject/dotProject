@@ -19,7 +19,7 @@ if (!($canAccess)) {
 $crole = new CRole;
 $roles = $crole->getRoles();
 
-$role_id = dPgetParam($_GET, 'role_id', 0);
+$role_id = (int)dPgetParam($_GET, 'role_id', 0);
 
 $q = new DBQuery;
 $q->addQuery('mod_id, mod_name');

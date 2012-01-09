@@ -19,7 +19,7 @@ $event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'
                                        'my');
 
 // get the passed timestamp (today if none)
-$date = dPgetParam($_GET, 'date', null);
+$date = dPgetCleanParam($_GET, 'date', null);
 
 // establish the focus 'date'
 $this_week = new CDate($date);

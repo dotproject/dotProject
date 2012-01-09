@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $obj = new CResource;
-$resource_id = dPgetParam($_GET, 'resource_id', 0);
+$resource_id = (int)dPgetParam($_GET, 'resource_id', 0);
 
 $canView = getPermission($m, 'view', $resource_id);
 $canEdit = getPermission($m, 'edit', $resource_id);

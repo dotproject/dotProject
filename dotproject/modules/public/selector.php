@@ -16,9 +16,9 @@ function selPermWhere($obj, $idfld, $namefield, $prefix = '') {
 }
 
 $debug = false;
-$callback = dPgetParam($_GET, 'callback', 0);
-$table = dPgetParam($_GET, 'table', 0);
-$user_id = dPgetParam($_GET, 'user_id', 0);
+$callback = dPgetCleanParam($_GET, 'callback', 0);
+$table = dPgetCleanParam($_GET, 'table', 0);
+$user_id = (int)dPgetParam($_GET, 'user_id', 0);
 
 $ok = $callback & $table;
 
@@ -44,7 +44,7 @@ switch ($table) {
 	case 'departments':
 		// known issue: does not filter out denied companies
 		$title = 'Department';
-		$company_id = dPgetParam($_GET, 'company_id', 0);
+		$company_id = (int)dPgetParam($_GET, 'company_id', 0);
 		//$ok &= $company_id;  // Is it safe to delete this line ??? [kobudo 13 Feb 2003]
 		//$where = selPermWhere('companies', 'company_id');
 		$obj = new CDepartment;
@@ -52,7 +52,7 @@ switch ($table) {
 		$q->addWhere("dept_company = company_id ");
 		$q->addTable('companies', 'b');
 		
-		$hide_company = dPgetParam($_GET, 'hide_company', 0);
+		$hide_company = (int)dPgetParam($_GET, 'hide_company', 0);
 		$q->addQuery('dept_id');
 		if ($hide_company == 1) {
 			$q->addQuery("dept_name");
@@ -83,7 +83,7 @@ switch ($table) {
 		$q->addOrder('forum_name');
 		break;
 	case 'projects':
-		$project_company = dPgetParam($_GET, 'project_company', 0);
+		$project_company = (int)dPgetParam($_GET, 'project_company', 0);
 		
 		$title = 'Project';
 		$obj = new CProject;
@@ -100,7 +100,7 @@ switch ($table) {
 		}
 		break;	
 	case "tasks":
-		$task_project = dPgetParam($_GET, 'task_project', 0);
+		$task_project = (int)dPgetParam($_GET, 'task_project', 0);
 		
 		$title = 'Task';
 		$q->addQuery('task_id, task_name, task_parent, p.project_name');

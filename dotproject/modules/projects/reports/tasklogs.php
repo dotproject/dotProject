@@ -9,14 +9,14 @@ if (!defined('DP_BASE_DIR')) {
 if (!(getPermission('task_log', 'view'))) {
 	redirect('m=public&a=access_denied');
 }	
-$do_report = dPgetParam($_GET, "do_report", 0);
-$log_all = dPgetParam($_GET, 'log_all', 0);
-$log_pdf = dPgetParam($_GET, 'log_pdf', 0);
-$log_ignore = dPgetParam($_GET, 'log_ignore', 0);
-$log_userfilter = dPgetParam($_GET, 'log_userfilter', '0');
+$do_report = (int)dPgetParam($_GET, "do_report", 0);
+$log_all = (int)dPgetParam($_GET, 'log_all', 0);
+$log_pdf = (int)dPgetParam($_GET, 'log_pdf', 0);
+$log_ignore = (int)dPgetParam($_GET, 'log_ignore', 0);
+$log_userfilter = (int)dPgetParam($_GET, 'log_userfilter', '0');
 
-$log_start_date = dPgetParam($_GET, "log_start_date", 0);
-$log_end_date = dPgetParam($_GET, "log_end_date", 0);
+$log_start_date = dPgetCleanParam($_GET, "log_start_date", 0);
+$log_end_date = dPgetCleanParam($_GET, "log_end_date", 0);
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();

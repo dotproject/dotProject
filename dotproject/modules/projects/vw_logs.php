@@ -38,7 +38,7 @@ $q->addOrder('contact_first_name, contact_last_name');
 $users = array('-1' => $AppUI->_('All Users')) + $q->loadHashList();
 $q->clear();
 
-$cost_code = dPgetParam($_GET, 'cost_code', '0');
+$cost_code = dPgetCleanParam($_GET, 'cost_code', '0');
 
 if (isset($_GET['user_id'])) {
 	$AppUI->setState('ProjectsTaskLogsUserFilter', $_GET['user_id']);

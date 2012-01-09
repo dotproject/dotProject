@@ -8,7 +8,7 @@ $AppUI->savePlace();
 
 
 // "File" filters info
-$AppUI->setState('FileIdxTab', dPgetParam($_GET, 'tab'));
+$AppUI->setState('FileIdxTab', (int)dPgetParam($_GET, 'tab'));
 $tab = $AppUI->getState('FileIdxTab', 0);
 $active = intval(!$AppUI->getState('FileIdxTab'));
 

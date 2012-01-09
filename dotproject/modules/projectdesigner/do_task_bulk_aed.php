@@ -1,42 +1,42 @@
 <?php /* PROJECTDESIGNER $Id: do_task_bulk_aed.php,v 1.2 2007/06/19 11:43:04 pedroix Exp $ */
 global $AppUI;
-$project_id = dPgetParam( $_POST, 'project_id', 0 );
-$selected = dPgetParam( $_POST, 'bulk_selected_task', 0 );
-$bulk_task_project = dPgetParam( $_POST, 'bulk_task_project', '' );
-$bulk_task_parent = dPgetParam( $_POST, 'bulk_task_parent', '' );
-$bulk_task_dependency = dPgetParam( $_POST, 'bulk_task_dependency', '' );
-$bulk_task_priority = dPgetParam( $_POST, 'bulk_task_priority', '' );
-$bulk_task_access = dPgetParam( $_POST, 'bulk_task_access', '' );
-$bulk_task_assign = dPgetParam( $_POST, 'bulk_task_assign', '' );
-$bulk_task_assign_perc = dPgetParam( $_POST, 'bulk_task_assign_perc', '' );
-$bulk_task_unassign = dPgetParam( $_POST, 'bulk_task_unassign', '' );
-$bulk_task_other = dPgetParam( $_POST, 'bulk_task_other', '' );
-$bulk_task_owner = dPgetParam( $_POST, 'bulk_task_owner', '' );
-$bulk_task_type = dPgetParam( $_POST, 'bulk_task_type', '' );
-$bulk_task_duration = dPgetParam( $_POST, 'bulk_task_duration', '' );
-$bulk_task_durntype = dPgetParam( $_POST, 'bulk_task_durntype', '');
-$bulk_task_start_date = dPgetParam( $_POST, 'add_task_bulk_start_date', '' );
+$project_id = (int)dPgetParam( $_POST, 'project_id', 0 );
+$selected = dPgetCleanParam( $_POST, 'bulk_selected_task', 0 );
+$bulk_task_project = dPgetCleanParam( $_POST, 'bulk_task_project', '' );
+$bulk_task_parent = dPgetCleanParam( $_POST, 'bulk_task_parent', '' );
+$bulk_task_dependency = dPgetCleanParam( $_POST, 'bulk_task_dependency', '' );
+$bulk_task_priority = dPgetCleanParam( $_POST, 'bulk_task_priority', '' );
+$bulk_task_access = dPgetCleanParam( $_POST, 'bulk_task_access', '' );
+$bulk_task_assign = dPgetCleanParam( $_POST, 'bulk_task_assign', '' );
+$bulk_task_assign_perc = dPgetCleanParam( $_POST, 'bulk_task_assign_perc', '' );
+$bulk_task_unassign = dPgetCleanParam( $_POST, 'bulk_task_unassign', '' );
+$bulk_task_other = dPgetCleanParam( $_POST, 'bulk_task_other', '' );
+$bulk_task_owner = dPgetCleanParam( $_POST, 'bulk_task_owner', '' );
+$bulk_task_type = dPgetCleanParam( $_POST, 'bulk_task_type', '' );
+$bulk_task_duration = dPgetCleanParam( $_POST, 'bulk_task_duration', '' );
+$bulk_task_durntype = dPgetCleanParam( $_POST, 'bulk_task_durntype', '');
+$bulk_task_start_date = dPgetCleanParam( $_POST, 'add_task_bulk_start_date', '' );
 if ($bulk_task_start_date) {
    $start_date = new CDate($bulk_task_start_date);
    $bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
 }
-$bulk_task_end_date = dPgetParam( $_POST, 'add_task_bulk_end_date', '' );
+$bulk_task_end_date = dPgetCleanParam( $_POST, 'add_task_bulk_end_date', '' );
 if ($bulk_task_end_date) {
    $end_date = new CDate($bulk_task_end_date);
    $bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
 $bulk_move_date = intval(dPgetParam( $_POST, 'bulk_move_date', '' ));
-$bulk_task_percent_complete = dPgetParam( $_POST, 'bulk_task_percent_complete', '' );
+$bulk_task_percent_complete = dPgetCleanParam( $_POST, 'bulk_task_percent_complete', '' );
 
 //Lets store the panels view options of the user:
 $pdo = new CProjectDesignerOptions();
 $pdo->pd_option_user = $AppUI->user_id;
-$pdo->pd_option_view_project = dPgetParam( $_POST, 'opt_view_project', 0 );
-$pdo->pd_option_view_gantt = dPgetParam( $_POST, 'opt_view_gantt', 0 );
-$pdo->pd_option_view_tasks = dPgetParam( $_POST, 'opt_view_tasks', 0 );
-$pdo->pd_option_view_actions = dPgetParam( $_POST, 'opt_view_actions', 0 );
-$pdo->pd_option_view_addtasks = dPgetParam( $_POST, 'opt_view_addtsks', 0 );
-$pdo->pd_option_view_files = dPgetParam( $_POST, 'opt_view_files', 0 );
+$pdo->pd_option_view_project = (int)dPgetParam( $_POST, 'opt_view_project', 0 );
+$pdo->pd_option_view_gantt = (int)dPgetParam( $_POST, 'opt_view_gantt', 0 );
+$pdo->pd_option_view_tasks = (int)dPgetParam( $_POST, 'opt_view_tasks', 0 );
+$pdo->pd_option_view_actions = (int)dPgetParam( $_POST, 'opt_view_actions', 0 );
+$pdo->pd_option_view_addtasks = (int)dPgetParam( $_POST, 'opt_view_addtsks', 0 );
+$pdo->pd_option_view_files = (int)dPgetParam( $_POST, 'opt_view_files', 0 );
 $pdo->store();
 
 if (is_array($selected) && count( $selected )) {

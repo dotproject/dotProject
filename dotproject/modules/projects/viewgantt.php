@@ -10,14 +10,14 @@ $min_view = defVal($min_view, false);
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 $user_id = intval(dPgetParam($_GET, 'user_id', $AppUI->user_id));
 // sdate and edate passed as unix time stamps
-$sdate = dPgetParam($_POST, 'sdate', 0);
-$edate = dPgetParam($_POST, 'edate', 0);
-$showInactive = dPgetParam($_POST, 'showInactive', '0');
-$showLabels = dPgetParam($_POST, 'showLabels', '0');
-$sortTasksByName = dPgetParam($_POST, 'sortTasksByName', '0');
-$showAllGantt = dPgetParam($_POST, 'showAllGantt', '0');
-$showTaskGantt = dPgetParam($_POST, 'showTaskGantt', '0');
-$addPwOiD = dPgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
+$sdate = dPgetCleanParam($_POST, 'sdate', 0);
+$edate = dPgetCleanParam($_POST, 'edate', 0);
+$showInactive = (int)dPgetParam($_POST, 'showInactive', '0');
+$showLabels = (int)dPgetParam($_POST, 'showLabels', '0');
+$sortTasksByName = (int)dPgetParam($_POST, 'sortTasksByName', '0');
+$showAllGantt = (int)dPgetParam($_POST, 'showAllGantt', '0');
+$showTaskGantt = (int)dPgetParam($_POST, 'showTaskGantt', '0');
+$addPwOiD = (int)dPgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
 $m_orig = $m;
 $a_orig = $a;
 
@@ -53,7 +53,7 @@ natsort($projFilter);
 // months to scroll
 $scroll_date = 1;
 
-$display_option = dPgetParam($_POST, 'display_option', 'this_month');
+$display_option = dPgetCleanParam($_POST, 'display_option', 'this_month');
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');

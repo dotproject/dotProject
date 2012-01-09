@@ -7,10 +7,10 @@ $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $rm = isset($_POST['rm']) ? $_POST['rm'] : 0;
 $hassign = @$_POST['hassign'];
 $htasks = @$_POST['htasks'];
-$store = dPgetParam($_POST, 'store', 0);
-$chUTP = dPgetParam($_POST, 'chUTP', 0);
-$percentage_assignment = dPgetParam($_POST, 'percentage_assignment');
-$user_task_priority = dPgetParam($_POST, 'user_task_priority');
+$store = (int)dPgetParam($_POST, 'store', 0);
+$chUTP = (int)dPgetParam($_POST, 'chUTP', 0);
+$percentage_assignment = dPgetCleanParam($_POST, 'percentage_assignment');
+$user_task_priority = dPgetCleanParam($_POST, 'user_task_priority');
 $user_id = @$_POST['user_id'];
 
 // prepare the percentage of assignment per user as required by CTask::updateAssigned()

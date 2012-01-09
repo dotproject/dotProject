@@ -3,16 +3,16 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-$do_report = dPgetParam($_POST, 'do_report', 0);
-$log_start_date = dPgetParam($_POST, 'log_start_date', 0);
-$log_end_date = dPgetParam($_POST, 'log_end_date', 0);
-$log_all = dPgetParam($_POST['log_all'], 0);
-$use_period	= dPgetParam($_POST,'use_period',0); 
-$display_week_hours = dPgetParam($_POST,'display_week_hours',0); 
-$max_levels = dPgetParam($_POST,'max_levels', ''); 
-$log_userfilter = dPgetParam($_POST,'log_userfilter','');
-$log_open = dPgetParam($_POST,'log_open',0);
-$pdf_output = dPgetParam($_POST,'pdf_output',0);
+$do_report = (int)dPgetParam($_POST, 'do_report', 0);
+$log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
+$log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);
+$log_all = (int)dPgetParam($_POST['log_all'], 0);
+$use_period	= (int)dPgetParam($_POST,'use_period',0); 
+$display_week_hours = (int)dPgetParam($_POST,'display_week_hours',0); 
+$max_levels = dPgetCleanParam($_POST,'max_levels', ''); 
+$log_userfilter = dPgetCleanParam($_POST,'log_userfilter','');
+$log_open = (int)dPgetParam($_POST,'log_open',0);
+$pdf_output = (int)dPgetParam($_POST,'pdf_output',0);
 
 $table_header = '';
 $table_rows='';

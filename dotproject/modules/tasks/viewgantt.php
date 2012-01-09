@@ -10,28 +10,28 @@ $min_view = defVal(@$min_view, false);
 $project_id = defVal(@$_GET['project_id'], 0);
 
 // sdate and edate passed as unix time stamps
-$sdate = dPgetParam($_POST, 'sdate', 0);
-$edate = dPgetParam($_POST, 'edate', 0);
+$sdate = dPgetCleanParam($_POST, 'sdate', 0);
+$edate = dPgetCleanParam($_POST, 'edate', 0);
 
 
 
 //if set GantChart includes user labels as captions of every GantBar
-$showLabels = dPgetParam($_POST, 'showLabels', '0');
+$showLabels = (int)dPgetParam($_POST, 'showLabels', '0');
 $showLabels = (($showLabels != '0') ? '1' : $showLabels);
 
-$showWork = dPgetParam($_POST, 'showWork', '0');
+$showWork = (int)dPgetParam($_POST, 'showWork', '0');
 $showWork = (($showWork != '0') ? '1' : $showWork);
 
-$sortByName = dPgetParam($_POST, 'sortByName', '0');
+$sortByName = (int)dPgetParam($_POST, 'sortByName', '0');
 $sortByName = (($sortByName != '0') ? '1' : $sortByName);
 
 if ($a == 'todo') {
 	if (isset($_POST['show_form'])) {
-		$AppUI->setState('TaskDayShowArc', dPgetParam($_POST, 'showArcProjs', 0));
-		$AppUI->setState('TaskDayShowLow', dPgetParam($_POST, 'showLowTasks', 0));
-		$AppUI->setState('TaskDayShowHold', dPgetParam($_POST, 'showHoldProjs', 0));
-		$AppUI->setState('TaskDayShowDyn', dPgetParam($_POST, 'showDynTasks', 0));
-		$AppUI->setState('TaskDayShowPin', dPgetParam($_POST, 'showPinned', 0));
+		$AppUI->setState('TaskDayShowArc', (int)dPgetParam($_POST, 'showArcProjs', 0));
+		$AppUI->setState('TaskDayShowLow', (int)dPgetParam($_POST, 'showLowTasks', 0));
+		$AppUI->setState('TaskDayShowHold', (int)dPgetParam($_POST, 'showHoldProjs', 0));
+		$AppUI->setState('TaskDayShowDyn', (int)dPgetParam($_POST, 'showDynTasks', 0));
+		$AppUI->setState('TaskDayShowPin', (int)dPgetParam($_POST, 'showPinned', 0));
 	}
 	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
 	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
@@ -40,15 +40,15 @@ if ($a == 'todo') {
 	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
 
 } else {
-	$showPinned = dPgetParam($_POST, 'showPinned', '0');
+	$showPinned = (int)dPgetParam($_POST, 'showPinned', '0');
 	$showPinned = (($showPinned != '0') ? '1' : $showPinned);
-	$showArcProjs = dPgetParam($_POST, 'showArcProjs', '0');
+	$showArcProjs = (int)dPgetParam($_POST, 'showArcProjs', '0');
 	$showArcProjs = (($showArcProjs != '0') ? '1' : $showArcProjs);
-	$showHoldProjs = dPgetParam($_POST, 'showHoldProjs', '0');
+	$showHoldProjs = (int)dPgetParam($_POST, 'showHoldProjs', '0');
 	$showHoldProjs = (($showHoldProjs != '0') ? '1' : $showHoldProjs);
-	$showDynTasks = dPgetParam($_POST, 'showDynTasks', '0');
+	$showDynTasks = (int)dPgetParam($_POST, 'showDynTasks', '0');
 	$showDynTasks = (($showDynTasks != '0') ? '1' : $showDynTasks);
-	$showLowTasks = dPgetParam($_POST, 'showLowTasks', '0');
+	$showLowTasks = (int)dPgetParam($_POST, 'showLowTasks', '0');
 	$showLowTasks = (($showLowTasks != '0') ? '1' : $showLowTasks);
 	
 }
@@ -56,7 +56,7 @@ if ($a == 'todo') {
 // months to scroll
 $scroll_date = 1;
 
-$display_option = dPgetParam($_POST, 'display_option', 'this_month');
+$display_option = dPgetCleanParam($_POST, 'display_option', 'this_month');
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');

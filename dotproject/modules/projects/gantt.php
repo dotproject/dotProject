@@ -16,15 +16,15 @@ include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 $user_id = intval(dPgetParam($_REQUEST, 'user_id', $AppUI->user_id));
-$proFilter = dPgetParam($_REQUEST, 'proFilter', '-1');
+$proFilter = (int)dPgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = intval(dPgetParam($_REQUEST, 'company_id', 0));
 $department = intval(dPgetParam($_REQUEST, 'department', 0));
-$showLabels = dPgetParam($_REQUEST, 'showLabels', 0);
-$showInactive = dPgetParam($_REQUEST, 'showInactive', 0);
-$sortTasksByName = dPgetParam($_REQUEST, 'sortTasksByName', 0);
-$addPwOiD = dPgetParam($_REQUEST, 'addPwOiD', 0);
-$m_orig = dPgetParam($_REQUEST, 'm_orig', $m);
-$a_orig = dPgetParam($_REQUEST, 'a_orig', $a);
+$showLabels = (int)dPgetParam($_REQUEST, 'showLabels', 0);
+$showInactive = (int)dPgetParam($_REQUEST, 'showInactive', 0);
+$sortTasksByName = (int)dPgetParam($_REQUEST, 'sortTasksByName', 0);
+$addPwOiD = (int)dPgetParam($_REQUEST, 'addPwOiD', 0);
+$m_orig = dPgetCleanParam($_REQUEST, 'm_orig', $m);
+$a_orig = dPgetCleanParam($_REQUEST, 'a_orig', $a);
 
 
 $projectStatus = dPgetSysVal('ProjectStatus');
@@ -104,11 +104,11 @@ $projects = $q->loadList();
 $q->clear();
 
 // Don't push the width higher than about 1200 pixels, otherwise it may not display.
-$width = min(dPgetParam($_GET, 'width', 600), 1400);
-$start_date = dPgetParam($_GET, 'start_date', 0);
-$end_date   = dPgetParam($_GET, 'end_date', 0);
+$width = min((int)dPgetParam($_GET, 'width', 600), 1400);
+$start_date = dPgetCleanParam($_GET, 'start_date', 0);
+$end_date   = dPgetCleanParam($_GET, 'end_date', 0);
 
-$showAllGantt = dPgetParam($_REQUEST, 'showAllGantt', '0');
+$showAllGantt = (int)dPgetParam($_REQUEST, 'showAllGantt', '0');
 //$showTaskGantt = dPgetParam($_GET, 'showTaskGantt', '0');
 
 $graph = new GanttGraph($width);

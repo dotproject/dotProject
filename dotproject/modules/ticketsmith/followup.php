@@ -7,8 +7,8 @@ if (!$canRead) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$ticket = dPgetParam($_GET, 'ticket', '');
-$ticket_type = dPgetParam($_GET, 'ticket_type', '');
+$ticket = (int)dPgetParam($_GET, 'ticket', '');
+$ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
 // setup the title block
 $titleBlock = new CTitleBlock('Post Followup', 'gconf-app-icon.png', $m, "$m.$a");
@@ -35,10 +35,10 @@ if (!$ticket_parent) {
 }
 
 //echo '<pre>';print_r($_POST);echo '</pre>';die;
-$recipient = dPgetParam($_POST, 'recipient', '');
-$subject = dPgetParam($_POST, 'subject', '');
-$cc = dPgetParam($_POST, 'cc', '');
-$followup = dPgetParam($_POST, 'followup', '');
+$recipient = dPgetCleanParam($_POST, 'recipient', '');
+$subject = dPgetCleanParam($_POST, 'subject', '');
+$cc = dPgetCleanParam($_POST, 'cc', '');
+$followup = dPgetCleanParam($_POST, 'followup', '');
 $dbprefix = dPgetConfig('dbprefix','');
 
 if (@$followup) {

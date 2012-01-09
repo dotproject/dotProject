@@ -4,10 +4,10 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 require_once $AppUI->getModuleClass('contacts');
-$del = dPgetParam($_POST, 'del', false);
-$role_id = dPgetParam($_POST, 'role_id', 0);
-$user_id = dPgetParam($_POST, 'user_id', 0);
-$user_role = dPgetParam($_POST, 'user_role', 0);
+$del = (bool)dPgetParam($_POST, 'del', false);
+$role_id = (int)dPgetParam($_POST, 'role_id', 0);
+$user_id = (int)dPgetParam($_POST, 'user_id', 0);
+$user_role = (int)dPgetParam($_POST, 'user_role', 0);
 
 if (!(getPermission($m, 'edit', $user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');

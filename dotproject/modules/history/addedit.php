@@ -14,8 +14,8 @@ if (!$canEdit) {
 $action = @$_REQUEST["action"];
 $q = new DBQuery;
 if ($action) {
-	$history_description = dPgetParam($_POST, 'history_description', '');
-	$history_project = dPgetParam($_POST, 'history_project', '');
+	$history_description = dPgetCleanParam($_POST, 'history_description', '');
+	$history_project = dPgetCleanParam($_POST, 'history_project', '');
 	$userid = $AppUI->user_id;
 	
 	if ($action == 'add') {

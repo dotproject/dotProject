@@ -55,7 +55,7 @@ require_once (DP_BASE_DIR . '/classes/permissions.class.php');
 require_once (DP_BASE_DIR . '/includes/session.php');
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
-$suppressHeaders = dPgetParam($_GET, 'suppressHeaders', false);
+$suppressHeaders = (bool)dPgetParam($_GET, 'suppressHeaders', false);
 
 // manage the session variable(s)
 dPsessionStart(array('AppUI'));

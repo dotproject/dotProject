@@ -36,7 +36,7 @@ $obj = new CCompany();
 $deny = $obj->getDeniedRecords($AppUI->user_id);
 
 // Company search by Kist
-$search_string = dPgetParam($_REQUEST, 'search_string', '');
+$search_string = dPgetCleanParam($_REQUEST, 'search_string', '');
 if ($search_string != '') {
 	$search_string = (($search_string == '-1') ? '' : $search_string);
 	$AppUI->setState('search_string', $search_string);

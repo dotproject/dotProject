@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 $contact_id = intval(dPgetParam($_GET, 'contact_id', 0));
 $company_id = intval(dPgetParam($_REQUEST, 'company_id', 0));
-$company_name = dPgetParam($_REQUEST, 'company_name', null);
+$company_name = dPgetCleanParam($_REQUEST, 'company_name', null);
 
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $contact_id);
@@ -53,8 +53,8 @@ if ($contact_id == 0 && $company_id > 0) {
 
 <script language="javascript" type="text/javascript">
 <?php
-	echo "window.company_id=" . dPgetParam($company_detail, 'company_id', 0) . ";\n";
-	echo "window.company_value='" . addslashes(dPgetParam($company_detail, 'company_name', "")) . "';\n";
+	echo "window.company_id=" . (int)dPgetParam($company_detail, 'company_id', 0) . ";\n";
+	echo "window.company_value='" . dPgetCleanParam($company_detail, 'company_name', "") . "';\n";
 ?>
 
 function submitIt() {

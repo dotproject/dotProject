@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 $obj = new CEvent();
 $msg = '';
 
-$del = dPgetParam($_POST, 'del', 0);
+$del = (bool)dPgetParam($_POST, 'del', 0);
 
 // bind the POST parameter to the object record
 if (!$obj->bind($_POST)) {

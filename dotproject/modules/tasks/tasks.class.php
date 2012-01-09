@@ -122,7 +122,7 @@ class CTask extends CDpObject
 		 */
 		static $addedit;
 		if (!isset($addedit)) {
-			$addedit = dPgetParam($_POST, 'dosql', '') == 'do_task_aed' ? true : false;
+			$addedit = dPgetCleanParam($_POST, 'dosql', '') == 'do_task_aed' ? true : false;
 		}
 		$this_dependencies = array();
 		
@@ -131,7 +131,7 @@ class CTask extends CDpObject
 		 * list of dependencies and attempt to stop bad deps from being created
 		 */
 		if ($addedit) {
-			$hdependencies = dPgetParam($_POST, 'hdependencies', '0');
+			$hdependencies = dPgetCleanParam($_POST, 'hdependencies', '0');
 			if ($hdependencies) {
 				$this_dependencies = explode(',', $hdependencies);
 			}
@@ -949,7 +949,7 @@ class CTask extends CDpObject
 					 . $AppUI->user_last_name . "\n\n" 
 					 . $AppUI->_('Progress', UI_OUTPUT_RAW) . ': '  
 					 . $this->task_percent_complete . '%' . "\n\n" 
-					 . dPgetParam($_POST, 'task_log_description'));
+					 . dPgetCleanParam($_POST, 'task_log_description'));
 			
 			
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) 

@@ -10,9 +10,9 @@ $font_dir = DP_BASE_DIR.'/lib/ezpdf/fonts';
 $temp_dir = DP_BASE_DIR.'/files/temp';
 require($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-$type = dPgetParam($_GET, 'type', '');
-$column = dPgetParam($_GET, 'column', 'timestamp');
-$direction = dPgetParam($_GET, 'direction', 'DESC');
+$type = dPgetCleanParam($_GET, 'type', '');
+$column = dPgetCleanParam($_GET, 'column', 'timestamp');
+$direction = dPgetCleanParam($_GET, 'direction', 'DESC');
 $q = new DBQuery;
 $q->addQuery(array(
 	'ticket',

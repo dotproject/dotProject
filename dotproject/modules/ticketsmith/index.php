@@ -27,10 +27,10 @@ $limit = $CONFIG["view_rows"];
 $dbprefix = dPgetConfig('dbprefix','');
 
 $type = dPgetCleanParam($_GET, 'type', '');
-$column = dPgetParam($_GET, 'column', $column);
-$direction = dPgetParam($_GET, 'direction', $direction);
-$offset = dPgetParam($_GET, 'offset', $offset);
-$action = dPgetParam($_REQUEST, 'action', null);
+$column = dPgetCleanParam($_GET, 'column', $column);
+$direction = dPgetCleanParam($_GET, 'direction', $direction);
+$offset = dPgetCleanParam($_GET, 'offset', $offset);
+$action = dPgetCleanParam($_REQUEST, 'action', null);
 
 if ($type == '') {
 	if ($AppUI->getState("ticket_type")) {

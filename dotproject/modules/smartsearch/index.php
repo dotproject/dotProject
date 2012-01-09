@@ -6,19 +6,19 @@ if (!defined('DP_BASE_DIR')) {
 $files = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $m . '/searchobjects'), '\.php$');
 sort($files);
 
-$keyword1 = dPgetParam($_POST, 'keyword1', '');
-$keyword2 = dPgetParam($_POST, 'keyword2', '');
-$keyword3 = dPgetParam($_POST, 'keyword3', '');
-$keyword4 = dPgetParam($_POST, 'keyword4', '');
-$all_words = dPgetParam($_POST, 'allwords', '');
-$mod_selection = dPgetParam($_POST, 'modselection', '');
-$advanced_search = dPgetParam($_POST, 'advancedsearch', '');
+$keyword1 = dPgetCleanParam($_POST, 'keyword1', '');
+$keyword2 = dPgetCleanParam($_POST, 'keyword2', '');
+$keyword3 = dPgetCleanParam($_POST, 'keyword3', '');
+$keyword4 = dPgetCleanParam($_POST, 'keyword4', '');
+$all_words = dPgetCleanParam($_POST, 'allwords', '');
+$mod_selection = dPgetCleanParam($_POST, 'modselection', '');
+$advanced_search = dPgetCleanParam($_POST, 'advancedsearch', '');
 
 if ($advanced_search == 'on') { 
-	$ignore_specchar = dPgetParam($_POST, 'ignorespecchar', '');
-	$ignore_case = dPgetParam($_POST, 'ignorecase', '');
-	$display_all_flds = dPgetParam($_POST, 'displayallflds', '');
-	$show_empty = dPgetParam($_POST, 'showempty', '');
+	$ignore_specchar = dPgetCleanParam($_POST, 'ignorespecchar', '');
+	$ignore_case = dPgetCleanParam($_POST, 'ignorecase', '');
+	$display_all_flds = dPgetCleanParam($_POST, 'displayallflds', '');
+	$show_empty = dPgetCleanParam($_POST, 'showempty', '');
 }
 else {
 	$ignore_case = 'on';
@@ -185,7 +185,7 @@ foreach ($files as $tmp) {
 	require_once('./modules/' . $m . '/searchobjects/' . $tmp);
 	
 	$class_obj = new $temp();
-	$mod_select[$temp] = dPgetParam($_POST, ('mod_' . $temp), '');
+	$mod_select[$temp] = dPgetCleanParam($_POST, ('mod_' . $temp), '');
 	
 	if (getPermission($class_obj->table_module, 'access')) {
 ?>							

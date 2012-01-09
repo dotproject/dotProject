@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $project_id = intval(dPgetParam($_REQUEST, 'project_id', 0));
-$report_type = dPgetParam($_REQUEST, 'report_type', '');
+$report_type = dPgetCleanParam($_REQUEST, 'report_type', '');
 
 // check permissions for this record
 $canRead = getPermission($m, 'view', $project_id);
@@ -56,7 +56,7 @@ if (! $suppressHeaders) {
 	$titleBlock->show();
 }
 
-$report_type_var = dPgetParam($_GET, 'report_type', '');
+$report_type_var = dPgetCleanParam($_GET, 'report_type', '');
 if (!empty($report_type_var))
 	$report_type_var = '&report_type=' . $report_type;
 

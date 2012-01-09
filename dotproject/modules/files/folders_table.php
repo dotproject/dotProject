@@ -13,8 +13,8 @@ global $cfObj;
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
 
-$folder = dPgetParam($_GET, 'folder', 0);
-$page = dPgetParam($_GET, 'page', 1);
+$folder = (int)dPgetParam($_GET, 'folder', 0);
+$page = (int)dPgetParam($_GET, 'page', 1);
 
 
 global $canAccess_folders, $canRead_folders, $canEdit_folders;
@@ -33,7 +33,7 @@ include_once($AppUI->getModuleClass('projects'));
 include_once($AppUI->getModuleClass('tasks'));
 
 if (!isset($project_id)) {
-	$project_id = dPgetParam($_REQUEST, 'project_id', 0);
+	$project_id = (int)dPgetParam($_REQUEST, 'project_id', 0);
 }
 if (!$project_id) {
 	$showProject = true;

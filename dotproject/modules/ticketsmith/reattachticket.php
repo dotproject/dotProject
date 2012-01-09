@@ -4,8 +4,8 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 //update task
-$newparent = dPgetParam($_GET, 'newparent', 0);
-$ticket = dPgetParam($_GET, 'ticket', 0);
+$newparent = (int)dPgetParam($_GET, 'newparent', 0);
+$ticket = (int)dPgetParam($_GET, 'ticket', 0);
 $dbprefix = dPgetConfig('dbprefix','');
 
 $sql1 = "update {$dbprefix}tickets set parent = $newparent,

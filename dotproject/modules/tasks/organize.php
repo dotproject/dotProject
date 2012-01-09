@@ -9,12 +9,12 @@ $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 $user_id = $AppUI->user_id;
 $no_modify = false;
 
-$sort = dPgetParam($_REQUEST, 'sort', 'task_end_date');
+$sort = dPgetCleanParam($_REQUEST, 'sort', 'task_end_date');
 
 if (getPermission('admin', 'view')) { 
 	$other_users = true;
 	//lets see if the user wants to see anothers user mytodo
-	if (($show_uid = dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { 
+	if (($show_uid = (int)dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { 
 		$user_id = $show_uid;
 		$no_modify = true;
 		$AppUI->setState('user_id', $user_id);
@@ -27,8 +27,8 @@ if (getPermission('admin', 'view')) {
 $canEdit = getPermission($m, 'edit');
 
 // if task priority set and items selected, do some work
-$action = dPgetParam($_POST, 'action', 99);
-$selected = dPgetParam($_POST, 'selected', 0);
+$action = dPgetCleanParam($_POST, 'action', 99);
+$selected = dPgetCleanParam($_POST, 'selected', 0);
 
 if ($selected && count($selected)) {
 	$new_task = dPgetParam($_POST, 'new_task', -1);

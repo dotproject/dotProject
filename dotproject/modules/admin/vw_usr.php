@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
 	<td width="60" align="right">
 		&nbsp; <?php echo $AppUI->_('sort by');?>:&nbsp;
 	</td>
-	<?php if (dPgetParam($_GET, 'tab', 0) == 0) { ?>
+	<?php if ((int)dPgetParam($_GET, 'tab', 0) == 0) { ?>
 	<th width="125">
 	           <?php echo $AppUI->_('Login History');?>
 	</th>
@@ -65,7 +65,7 @@ foreach ($users as $row) {
 <?php } ?>
 	</td>
 	<?php 
-		if (dPgetParam($_REQUEST, 'tab', 0) == 0) { ?>
+		if ((int)dPgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td>
 	       <?php 
 	          	$q  = new DBQuery;
