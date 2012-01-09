@@ -152,7 +152,7 @@ if ($parent_count) {
     print("<tr>\n");
     for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
         print("<th align=" . $fields["aligns"][$loop] . ">");
-        print("<a href='?m=ticketsmith&amp;type=$type'");
+        print("<a href=\"?m=ticketsmith&amp;type=$type");
         print("&amp;column=" . $fields["columns"][$loop]);
         if ($column != $fields["columns"][$loop]) {
             $new_direction = "ASC";
@@ -166,7 +166,7 @@ if ($parent_count) {
             }
         }
         print("&amp;direction=$new_direction");
-        print(' class="hdr">' . $AppUI->_($fields["headings"][$loop]) . "</a></th>\n");
+        print('" class="hdr">' . $AppUI->_($fields["headings"][$loop]) . "</a></th>\n");
     }
     print("</tr>\n");
     while ($row = result2hash($result)) {
