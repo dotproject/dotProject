@@ -431,7 +431,7 @@ CREATE TABLE `%dbprefix%user_preferences` (
 
 INSERT INTO `%dbprefix%users` VALUES (1,1,'admin',MD5('passwd'),0,1,0,0,0,'');
 INSERT INTO `%dbprefix%contacts` (contact_id, contact_first_name, contact_last_name, contact_email) 
-  VALUES (1,'Admin','Person','admin@localhost');
+  VALUES (1,'Admin','Person','admin@example.com');
 
 INSERT INTO `%dbprefix%permissions` VALUES (1,1,"all",-1, -1);
 
@@ -534,7 +534,7 @@ INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title`
 INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 1, 'TaskLogReferenceImage', '0| 1|./images/obj/email.gif 2|./modules/helpdesk/images/helpdesk.png 3|./images/obj/phone.gif 4|./images/icons/stock_print-16.png');
 INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 1, 'UserType', '0|Default User\r\n1|Administrator\r\n2|CEO\r\n3|Director\r\n4|Branch Manager\r\n5|Manager\r\n6|Supervisor\r\n7|Employee');
 INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 1, 'ProjectRequiredFields', 'f.project_name.value.length|<3\r\nf.project_color_identifier.value.length|<3\r\nf.project_company.options[f.project_company.selectedIndex].value|<1' );
-INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 2, 'TicketNotify', '0|admin@localhost\n1|admin@localhost\n2|admin@localhost\r\n3|admin@localhost\r\n4|admin@localhost');
+INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 2, 'TicketNotify', '0|admin@example.com\n1|admin@example.com\n2|admin@example.com\r\n3|admin@example.com\r\n4|admin@example.com');
 INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 1, 'TicketPriority', '0|Low\n1|Normal\n2|High\n3|Highest\n4|911');
 INSERT INTO `%dbprefix%sysvals` ( `sysval_id` , `sysval_key_id` , `sysval_title` , `sysval_value` ) VALUES (null, 1, 'TicketStatus', '0|Open\n1|Closed\n2|Deleted');
 #
@@ -630,7 +630,7 @@ INSERT INTO `%dbprefix%config` VALUES (0, 'currency_symbol', '$', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'host_style', 'default', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'company_name', 'My Company', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'page_title', 'dotProject', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'site_domain', 'dotproject.net', '', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'site_domain', 'example.com', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'email_prefix', '[dotProject]', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'admin_username', 'admin', '', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'username_min_len', '4', '', 'text');
