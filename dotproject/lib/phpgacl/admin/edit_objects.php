@@ -71,18 +71,19 @@ switch ($_POST['action']) {
         break;    
     default:
         //Grab section name
-        $query = "select name from $object_sections_table where value = '". $_GET['section_value'] ."'";
+        $query = sprintf("select name from $object_sections_table where value = '%s'", $db->qstr($_GET['section_value'], get_magic_quotes_runtime()));
         $section_name = $db->GetOne($query);
         
-        $query = "select
+        $query = sprintf("select
                                     id,
                                     section_value,
                                     value,
                                     order_value,
                                     name
                         from    $object_table
-                        where   section_value='". $_GET['section_value'] ."'
-                        order by order_value";
+                        where   section_value='%s'
+                        order by order_value",
+			$db->qstr($_GET['section_value'], get_magic_quotes_runtime()));
         $rs = $db->pageexecute($query, $gacl_api->_items_per_page, $_GET['page']);        
         $rows = $rs->GetRows();
 
