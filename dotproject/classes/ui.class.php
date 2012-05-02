@@ -442,16 +442,21 @@ class CAppUI {
 	
 	//Output formatting function
 	function ___($str, $flags = 0) {
+		global $locale_char_set;
+		
+		if (! $locale_char_set) {
+			$locale_char_set = 'utf-8';
+		}
 		
 		switch ($flags & UI_CASE_MASK) {
 			case UI_CASE_UPPER:
-				$str = mb_strtoupper($str);
+				$str = mb_strtoupper($str, $locale_char_set);
 				break;
 			case UI_CASE_LOWER:
-				$str = mb_strtolower($str);
+				$str = mb_strtolower($str, $locale_char_set);
 				break;
 			case UI_CASE_UPPERFIRST:
-				$str = ucwords($str);
+				$str = mb_convert_case($str, MB_CASE_TITLE, $locale_char_set);
 				break;
 		}
 		/* Altered to support multiple styles of output, to fix
@@ -466,12 +471,6 @@ class CAppUI {
 		 * where appropriate.
 		 * AJD - 2004-12-10
 		 */
-		global $locale_char_set;
-		
-		if (! $locale_char_set) {
-			$locale_char_set = 'utf-8';
-		}
-		
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_URI:
 				$str = str_replace(' ', '%20', $str);
