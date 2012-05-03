@@ -746,15 +746,15 @@ function _addressEncode($addr, $offset=0) {
 	$matches = NULL;
 	$mail = '';
 	$txt = '';
-	if (!@preg_match('/^(.*)(\?<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches)) {
+	if (!@preg_match('/^(.*)\s?(<[^@]+@[a-z0-9\._-]+>)$/Di', $addr, $matches)) {
 		return $addr;
 	}
 	
 	$txt  = $matches[1];
 	$mail = $matches[2];
-	$txt = $this->_wordEncode($txt, $offset);
+	$txt = $this->_wordEncode(trim($txt), $offset);
 	
-	return (($offset + $this->_mb_strlen($txt . $mail) > 76) 
+	return (($offset + $this->_strlen($txt . $mail) > 76)
 	        ? ($txt . "\r\n " . $mail) : ($txt . $mail));
 }
 
@@ -796,31 +796,31 @@ function _utfToQuotedPrintable($str, $offset=0) {
 	$result = array();
 	$x = 0;
 	$s = '';
-	for ($i = 0, $len = mb_strlen($str); $i<$len; $i++) {
+	for ($i = 0, $len = strlen($str); $i<$len; $i++) {
 		$ord = ord($str[$i]);
 		if ($ord > 32 && $ord < 127 && $str[$i] != '?' && $str[$i] != '=') {
 			$s .= $str[$i];
 			$x++;
 		} else if (($ord & 0xE0) == 0xC0) {
-			$s .= sprintf('=%02x=%02x', $ord, ord($str[++$i]));
+			$s .= sprintf('=%02X=%02X', $ord, ord($str[++$i]));
 			$x+=6;
 		} else if (($ord & 0xF0) == 0xE0) {
-			$s .= sprintf('=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]));
+			$s .= sprintf('=%02X=%02X=%02X', $ord, ord($str[++$i]), ord($str[++$i]));
 			$x += 9;
 		} else if (($ord & 0xF8) == 0xF0) {
-			$s .= sprintf('=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), 
+			$s .= sprintf('=%02X=%02X=%02X=%02X', $ord, ord($str[++$i]), ord($str[++$i]), 
 			              ord($str[++$i]));
 			$x += 12;
 		} else if (($ord & 0xFC) == 0xF8) {
-			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), 
+			$s .= sprintf('=%02X=%02X=%02X=%02X=%02X', $ord, ord($str[++$i]), ord($str[++$i]), 
 			              ord($str[++$i]), ord($str[++$i]));
 			$x += 15;
 		} else if (($ord & 0xFE) == 0xFC) {
-			$s .= sprintf('=%02x=%02x=%02x=%02x=%02x=%02x', $ord, ord($str[++$i]), ord($str[++$i]), 
+			$s .= sprintf('=%02X=%02X=%02X=%02X=%02X=%02X', $ord, ord($str[++$i]), ord($str[++$i]), 
 			              ord($str[++$i]), ord($str[++$i]), ord($str[++$i]));
 			$x += 18;
 		} else {
-			$s .= sprintf('=%02x', $ord);
+			$s .= sprintf('=%02X', $ord);
 			$x += 3;
 		}
 		if ($x >= $l) {
