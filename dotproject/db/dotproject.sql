@@ -1164,7 +1164,7 @@ INSERT INTO `%dbprefix%gacl_acl_sections` (id, value, order_value, name) VALUES 
 
 DROP TABLE IF EXISTS `%dbprefix%sessions`;
 CREATE TABLE `%dbprefix%sessions` (
-	`session_id` varchar(40) NOT NULL default '',
+	`session_id` varchar(60) NOT NULL default '',
 	`session_user` INT DEFAULT '0' NOT NULL,
 	`session_data` LONGBLOB,
 	`session_updated` TIMESTAMP,
