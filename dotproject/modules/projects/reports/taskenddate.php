@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
-$do_report 		    = (int)dPgetParam($_POST, "do_report", 0);
+$do_report 		    = dPgetParam($_POST, "do_report", 0);
 $log_start_date 	= dPgetCleanParam($_POST, "log_start_date", 0);
 $log_end_date 	    = dPgetCleanParam($_POST, "log_end_date", 0);
 $user_id            = (int)dPgetParam($_POST, "user_id", $AppUI->user_id);
