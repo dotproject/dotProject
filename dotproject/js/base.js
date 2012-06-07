@@ -299,7 +299,12 @@ function _HTMLaddNode(type, child, args)
   var i;
   for (i = args.length() -1; i >=0; i--) {
     var elem = args.get(i);
-    node.setAttribute(elem.key, elem.data);
+    // Should set properties explicitly, so we check for value
+    if (elem.key == 'value') {
+      node.value = elem.data;
+    } else {
+      node.setAttribute(elem.key, elem.data);
+    }
   }
   return node;
 }
@@ -333,6 +338,7 @@ function _HTMLaddHidden(id, value)
    if (navigator.family == "gecko" || navigator.family == "opera"){
          c.add('type', 'hidden');
          type = 'INPUT';
+	 value = value.replace(/\n/g, '<br>');
    } else {
          type = 'TEXTAREA';
          c.add('className', 'hidden');
