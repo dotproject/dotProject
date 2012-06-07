@@ -10,7 +10,7 @@ if (!defined('DP_BASE_DIR')) {
 require_once $AppUI->getSystemClass('tree');
 
 //error_reporting(E_ALL);
-$do_report = (int)dPgetParam($_POST, 'do_report', 0);
+$do_report = dPgetParam($_POST, 'do_report', '');
 $log_all = (int)dPgetParam($_POST, 'log_all', 0);
 $log_pdf = (int)dPgetParam($_POST, 'log_pdf', 0);
 $incomplete = (int)dPgetParam($_POST, 'incomplete', 0);

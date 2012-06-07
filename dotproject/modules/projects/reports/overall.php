@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 /**
 * Generates a report of the task logs for given dates
 */
-$do_report = (int)dPgetParam($_POST, "do_report", 0);
+$do_report = dPgetParam($_POST, "do_report", 0);
 $log_pdf = (int)dPgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = dPgetCleanParam($_POST, "log_start_date", 0);

@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $coarseness = (int)dPgetParam($_POST, 'coarseness', 1);
-$do_report = (int)dPgetParam($_POST, 'do_report', 0);
+$do_report = dPgetParam($_POST, 'do_report', 0);
 $hideNonWd = (int)dPgetParam($_POST, 'hideNonWd', 0);
 $log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
 $log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);

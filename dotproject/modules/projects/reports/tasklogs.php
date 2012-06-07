@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
 if (!(getPermission('task_log', 'view'))) {
 	redirect('m=public&a=access_denied');
 }	
-$do_report = (int)dPgetParam($_GET, "do_report", 0);
+$do_report = dPgetParam($_GET, "do_report", '');
 $log_all = (int)dPgetParam($_GET, 'log_all', 0);
 $log_pdf = (int)dPgetParam($_GET, 'log_pdf', 0);
 $log_ignore = (int)dPgetParam($_GET, 'log_ignore', 0);
