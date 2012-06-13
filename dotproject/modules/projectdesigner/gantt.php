@@ -157,6 +157,9 @@ $width      = (int)dPgetParam( $_GET, 'width', 600 );
 if ($caller != 'todo') {
 //	$start_min = $projects[$project_id]['project_start_date'];
 	$start_min = substr($criticalTasksInverted[0]['task_start_date'],0,10);
+	if (! $start_min || $start_min == '0000-00-00') {
+		$start_min = $projects[$projct_id]['project_start_date'];
+	}
 //	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
 	$end_max = substr($criticalTasks[0]['task_end_date'],0,10);
 }
