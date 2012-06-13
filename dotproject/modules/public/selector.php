@@ -166,7 +166,7 @@ if (!$ok) {
 	                   ((!(empty($query_result))) ? $query_result : $q->loadHashList()));
 	echo db_error();
 ?>
-<script language="text/javascript">
+<script type="text/javascript">
 function setClose(key, val) {
 	window.opener.<?php echo $callback;?>(key,val);
 	window.close();
