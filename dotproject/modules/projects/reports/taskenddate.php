@@ -66,14 +66,7 @@ function setCalendar(idate, fdate) {
 
 	<td nowrap='nowrap'>
 	   <?php
-			$q = new DBQuery;
-			$q->addTable('users','u');
-			$q->addQuery('u.user_id, concat_ws(\' \', c.contact_first_name, c.contact_last_name)');
-			$q->leftJoin('permissions','p','(u.user_id = p.permission_user)');
-			$q->leftJoin('contacts','c','(u.user_contact = c.contact_id)');
-			$q->addWhere('!isnull(p.permission_user)');
-			$users = array(0 => $AppUI->_("All")) + $q->loadHashList();
-	       echo arraySelect($users, "user_id", "class='text'", $user_id);
+	       echo arraySelect(dPgetUsers(), "user_id", "class='text'", $user_id);
 	   ?>
 	</td>
 	
