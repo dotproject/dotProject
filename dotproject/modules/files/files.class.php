@@ -252,6 +252,11 @@ class CFile extends CDpObject {
 		// parse it
 		$parser = $parser . ' ' . $filepath;
 		$pos = mb_strpos($parser, '/pdf');
+		// If we have safe mode turned on just return.
+		// This should be replaced with a simple string tokenizer.
+		if (ini_get('safe_mode')) {
+			return 0;
+		}
 		$x = (($pos !== false) ? `$parser -` : `$parser`);
 		
 		// if nothing, return
