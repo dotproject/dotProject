@@ -23,7 +23,7 @@ if ($folder) {
 	$canRead_folder = getPermission('file_folders', 'view', $folder);
 	$canEdit_folder = getPermission('file_folders', 'edit', $folder);
 } else {
-	$canAuthor_folder = getPermission('file_folders', 'add', $folder);
+	$canAuthor_folder = getPermission('file_folders', 'add', $file_folder_parent ? $file_folder_parent : $folder);
 }
 if (($folder && !($canEdit_folder && $canRead_folder)) || (!($folder) && !($canAuthor_folder))) {
 	$AppUI->redirect("m=public&a=access_denied");
