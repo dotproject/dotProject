@@ -138,13 +138,13 @@ echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="dis
         <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
 echo $AppUI->_('Calendar'); ?>" border="0" />
       </a>
-      <input type="checkbox" name="log_all" id="log_all"<?php 
+      <input type="checkbox" name="log_all" id="log_all" value="1"<?php 
 echo (($log_all) ? ' checked="checked"' : ''); ?> />
       <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-      <input type="checkbox" name="log_pdf" id="log_pdf"<?php 
+      <input type="checkbox" name="log_pdf" id="log_pdf" value="1"<?php 
 echo (($log_pdf) ? ' checked="checked"' : ''); ?> />
       <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
-      <input type="checkbox" name="incomplete" id="incomplete"<?php 
+      <input type="checkbox" name="incomplete" id="incomplete" value="1"<?php 
 echo (($incomplete) ? ' checked="checked"' : ''); ?> />
       <label for="log_pdf"><?php echo $AppUI->_('Incomplete Tasks'); ?></label>
     </td>

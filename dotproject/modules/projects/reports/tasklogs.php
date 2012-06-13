@@ -106,17 +106,17 @@ function setCalendar(idate, fdate) {
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+		<input type="checkbox" name="log_all" id="log_all" value="1" <?php if ($log_all) echo 'checked="checked"' ?> />
 		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
+		<input type="checkbox" name="log_pdf" id="log_pdf" value="1" <?php if ($log_pdf) echo 'checked="checked"' ?> />
 		<label for="log_pdf"><?php echo $AppUI->_('Make PDF');?></label>
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_ignore" id="log_ignore" />
+		<input type="checkbox" name="log_ignore" id="log_ignore" value="1" />
 		<label for="log_ignore"><?php echo $AppUI->_('Ignore 0 hours');?></label>
 	</td>
 

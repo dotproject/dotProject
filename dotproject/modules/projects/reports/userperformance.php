@@ -66,7 +66,7 @@ function setCalendar(idate, fdate) {
 	</td>
 
 	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked'; ?> />
+		<input type="checkbox" name="log_all" id="log_all" value="1" <?php if ($log_all) echo 'checked'; ?> />
 		<label for="log_all"><?php echo $AppUI->_('Log All');?></label>
 	</td>
 

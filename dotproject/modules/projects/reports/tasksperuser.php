@@ -75,7 +75,7 @@ echo arraySelect(dPgetUsers(), 'log_userfilter', 'class="text" style="width: 200
 ?>
 	</td>
 	<td width="1%" nowrap="nowrap">
-		<input type="checkbox" name="use_period" id="use_period"<?php 
+		<input type="checkbox" name="use_period" id="use_period" value="1" <?php 
 echo (($use_period) ? ' checked="checked"' : ''); ?> value="use_period" />
 		<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
 	</td> 
@@ -103,7 +103,7 @@ echo ($AppUI->_('Calendar')); ?>" border="0" />
 echo (($max_levels) ? $max_levels : ''); ?>" />
 	</td>
 	<td width="1%" nowrap="nowrap">
-		<input type="checkbox" name="display_week_hours" id="display_week_hours"<?php 
+		<input type="checkbox" name="display_week_hours" id="display_week_hours" value="1" <?php 
 echo (($display_week_hours) ? ' checked="checked"' : ''); ?> value="display_week_hours" />
 		<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label>
 	</td>
