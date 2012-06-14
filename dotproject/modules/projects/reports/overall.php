@@ -121,7 +121,6 @@ function showcompany($company, $restricted = false)
 	$q->addQuery('company_name');
 	$q->addWhere('company_id = ' . $company);
 	$company_name = $q->loadResult();                                                                                                                       
-
         $table = '<h2>Company: ' . $company_name . '</h2>
         <table cellspacing="1" cellpadding="4" border="0" class="tbl">';
 	$project_row = '
@@ -151,9 +150,9 @@ function showcompany($company, $restricted = false)
 		$project_row = "<tr><td>$name</td>";
 
 		$q->addTable('projects', 'prj');
-		$q->addTable('tasks', 't');
-		$q->addTable('task_log', 'tl');
-		$q->addQuery('task_log_costcode, sum(task_log_hours) as hours');
+		$q->leftJoin('tasks', 't', 't.task_project = prj.project_id');
+		$q->leftJoin('task_log', 'tl', 'tl.task_log_task = t.task_id');
+		$q->addQuery('project_id, sum(task_log_hours) as hours');
 		$where = 'project_id = ' . $project;
 		if ($log_start_date != 0 && !$log_all) {
 			$where .= " AND task_log_date >= $log_start_date";
@@ -164,12 +163,10 @@ function showcompany($company, $restricted = false)
 		if ($restricted) {
 			$where .= " AND task_log_creator = '" . $AppUI->user_id . "'";
 		}
-		$where .= ' AND project_id = task_project'
-				. ' AND task_id = task_log_task';
 		$q->addWhere($where);
 		$q->addGroup('project_id'); //task_log_costcode
 
-		$task_logs = $q->loadHashList();
+		$task_logs = $q->loadHashList('project_id');
 
 /*		if (isset($company_billingcodes))
 		foreach ($company_billingcodes as $code => $name)
@@ -188,8 +185,11 @@ function showcompany($company, $restricted = false)
 			}
 		}
 */
-                foreach ($task_logs as $task_log)
-                        $project_hours += $task_log;
+                foreach ($task_logs as $task_log) {
+			if ($task_log['hours']) {
+				$project_hours += $task_log['hours'];
+			}
+		}
 		$project_row .= '<td>' . round($project_hours, 2) . '</td></tr>';
 		$pdfproject[]=round($project_hours, 2);
 		$hours += $project_hours;
