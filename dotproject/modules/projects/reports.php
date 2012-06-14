@@ -45,22 +45,33 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 $reports = $AppUI->readFiles(DP_BASE_DIR.'/modules/projects/reports', "\.php$");
 
+$report_type_var = dPgetCleanParam($_GET, 'report_type', '');
+if (!empty($report_type_var))
+	$report_type_var = '&report_type=' . $report_type;
+
+$report_title = 'Project Reports';
+if ($report_type) {
+	$report_type = $AppUI->checkFileName($report_type);
+	$report_type = str_replace(' ', '_', $report_type);
+	if (file_exists(DP_BASE_DIR.'/modules/projects/reports/'.$report_type.'.'.$AppUI->user_locale.'.txt')) {
+		$desc = file(DP_BASE_DIR.'/modules/projects/reports/'.$report_type.'.'.$AppUI->user_locale.'.txt');
+	} else {
+		$desc = file(DP_BASE_DIR.'/modules/projects/reports/'.$report_type.'.en.txt');
+	}
+	if ($desc[0]) {
+		$report_title .= ': ' . $desc[0];
+	}
+}
 // setup the title block
 if (! $suppressHeaders) {
-	$titleBlock = new CTitleBlock('Project Reports', 'applet3-48.png', $m, "$m.$a");
+	$titleBlock = new CTitleBlock($report_title, 'applet3-48.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
 	if ($report_type) {
 		$titleBlock->addCrumb('?m=projects&a=reports&project_id=' . $project_id, 'reports index');
 	}
 	$titleBlock->show();
-}
 
-$report_type_var = dPgetCleanParam($_GET, 'report_type', '');
-if (!empty($report_type_var))
-	$report_type_var = '&report_type=' . $report_type;
-
-if (!($suppressHeaders)) {
 	if (!isset($display_project_name)) {
 		$display_project_name = $AppUI->_('All');
 	}
@@ -74,8 +85,6 @@ if (!($suppressHeaders)) {
 <?php
 }
 if ($report_type) {
-	$report_type = $AppUI->checkFileName($report_type);
-	$report_type = str_replace(' ', '_', $report_type);
 	require DP_BASE_DIR.'/modules/projects/reports/'.$report_type.'.php';
 } else {
 	echo ('<table>'. "\n");
