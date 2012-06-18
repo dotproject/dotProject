@@ -2,7 +2,6 @@
 if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
-
 //addfile sql
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
 $del = intval(dPgetParam($_POST, 'del', 0));
@@ -13,6 +12,11 @@ global $db;
 $not = (bool)dPgetParam($_POST, 'notify', '0');
 $notcont = (bool)dPgetParam($_POST, 'notify_contacts', '0');
 
+// Check if we can, in fact, upload a file
+if (!ini_get('file_uploads')) {
+	$AppUI->setMsg('Cannot upload files - check PHP configuration', UI_MSG_ERROR);
+	$AppUI->redirect($redirect);
+}
 $obj = new CFile();
 if ($file_id) { 
 	$obj->_message = 'updated';
@@ -127,6 +131,9 @@ if (isset($_FILES['formfile'])) {
 		    $AppUI->redirect($redirect);
 		}
 	}
+} elseif (!$file_id) {
+	$AppUI->setMsg('No upload file!', UI_MSG_ERROR);
+	$AppUI->redirect($redirect);
 }
 
 // move the file on filesystem if the affiliated project was changed
