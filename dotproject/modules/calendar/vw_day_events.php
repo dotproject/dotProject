@@ -172,7 +172,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
 			}
 			
-			$href = "?m=calendar&amp;a=view&amp;event_id=".$row['event_id'];
+			$href = "?m=calendar&a=view&event_id=".$row['event_id'];
 			$alt = $row['event_description'];
 
 			$html .= "\n\t" .'<td class="event" rowspan="' . $rows . '" valign="top">';

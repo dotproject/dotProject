@@ -85,7 +85,7 @@ $titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">
 function clickDay(idate, fdate) {
-		window.location = '?m=calendar&amp;a=day_view&amp;date='+idate+'&amp;tab=0';
+		window.location = '?m=calendar&a=day_view&date='+idate+'&tab=0';
 }
 </script>
 
