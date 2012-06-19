@@ -214,7 +214,7 @@ if ($obj->task_owner != $AppUI->user_id) {
 echo (($notify_own) ? ' checked="checked"' : ''); ?> />
             </td>
             <td valign="middle">
-              <label for="task_log_notify_owner"><?php echo $AppUI->_('Notify creator'); ?></label>
+              <label for="task_log_notify_owner"><?php echo $AppUI->_('Notify owner'); ?></label>
 <?php 
 }
 ?>
