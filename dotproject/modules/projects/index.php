@@ -17,6 +17,9 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status'])
 	$projects_id = $_GET['project_id']; // This must be an array
 	
 	foreach ($projects_id as $project_id) {
+		if (! getPermission('projects', 'edit', $project_id)) {
+			continue; /* Cannot update the status of a project we can't edit */
+		}
 		$q->addTable('projects');
 		$q->addUpdate('project_status', $_GET['project_status']);
 		$q->addWhere('project_id = ' . $project_id);
