@@ -455,9 +455,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td colspan="4">
 				<?php echo $AppUI->_('Description');?><br />
-				<textarea name="project_description" cols="50" rows="10" style="wrap:virtual;" class="textarea">
-				<?php echo dPformSafe(@$row->project_description);?>
-				</textarea>
+				<textarea name="project_description" cols="50" rows="10" style="wrap:virtual;" class="textarea"><?php echo dPformSafe(@$row->project_description);?></textarea>
 			</td>
 		</tr>
 		</table>
