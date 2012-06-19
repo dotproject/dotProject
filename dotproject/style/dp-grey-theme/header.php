@@ -72,7 +72,7 @@ $AppUI->loadJS(); ?>
 <tr>
 	<td><table width='100%' cellpadding="3" cellspacing="0" border="0"><tr>
 	<th style="background: url(style/<?php 
-echo $uistyle; ?>/images/titlegrad.jpg;" class="banner" align="left"><strong>
+echo $uistyle; ?>/images/titlegrad.jpg" class="banner" align="left"><strong>
 	<?php 
 echo ('<a href="' . dPformSafe($dPconfig['base_url'], DP_FORM_URI) . '">' . $page_title . '</a>'); 
 ?>
