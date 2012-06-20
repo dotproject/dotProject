@@ -28,6 +28,12 @@ if (defined('E_DEPRECATED')) {
 	error_reporting(E_ALL & ~E_NOTICE);
 }
 
+if (function_exists('date_default_timezone_set')) {
+  # this is a bit of a hack in that it will guess from the system what
+  # the timezone is.
+  date_default_timezone_set(date_default_timezone_get());
+}
+
 global $baseDir;
 global $baseUrl;
 
