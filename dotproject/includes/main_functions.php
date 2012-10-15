@@ -288,6 +288,13 @@ function dPgetParam(&$arr, $name, $def=null) {
  * Alternative to protect from XSS attacks.
  */
 function dPgetCleanParam(&$arr, $name, $def=null) {
+	if (is_array($arr[$name])) {
+	  $val = array();
+	  foreach (array_keys($arr[$name]) as $key) {
+	     $val[$key] = dPgetCleanParam($arr[$name], $key, $def);
+	  }
+	  return $val;
+	}
 	$val = defVal($arr[$name], $def);
 	if (empty($val)) {
 		return $val;
