@@ -490,7 +490,7 @@ function format_field ($value, $type, $ticket = NULL) {
 		    $q  = new DBQuery;
 			$q->addTable('companies','co');
 			$q->addQuery('co.*');
-			$q->addWhere('co.company_id = '.$value);
+			$q->addWhere('co.company_id = '.(int)$value);
 			$sql = $q->prepare();
 			if (!db_loadObject($sql, $obj)) {
 				// it all dies!
