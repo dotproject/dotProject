@@ -5,8 +5,8 @@ if (!defined('DP_BASE_DIR')) {
 require_once($AppUI->getSystemClass('ui'));
 require_once ($AppUI->getSystemClass('date'));
 $df = $AppUI->getPref('SHDATEFORMAT');;
-$date = $_GET['date'];
-$field = $_GET['field'];
+$date = dPgetCleanParam($_GET,'date');
+$field = dPgetCleanParam($_GET,'field');
 $this_day = new CDate($date);
 $formatted_date = $this_day->format($df);
 ?>

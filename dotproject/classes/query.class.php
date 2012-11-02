@@ -890,6 +890,20 @@ class DBQuery {
 		global $db;
 		return $db->qstr($string, get_magic_quotes_runtime());
 	}
+
+	/**
+	 * We need to ensure we don't get queries that can cause SQL injections.
+	 * For this we need to remove quotes, semicolons, and various other components
+	 * that could cause us concern.  This is not exhaustive, but covers the most
+	 * common problems.
+	 */
+	function sanitise($string) {
+		return str_replace(array("'", '"', ')', '(', ';', '--'), '', $string);
+	}
+
+	function quote_sanitised($string) {
+		return $this->quote($this->sanitise($string));
+	}
 }
 //1}}}
 

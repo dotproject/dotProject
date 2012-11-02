@@ -17,12 +17,12 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status'])
 	$projects_id = $_GET['project_id']; // This must be an array
 	
 	foreach ($projects_id as $project_id) {
-		if (! getPermission('projects', 'edit', $project_id)) {
+		if (! getPermission('projects', 'edit', (int)$project_id)) {
 			continue; /* Cannot update the status of a project we can't edit */
 		}
 		$q->addTable('projects');
 		$q->addUpdate('project_status', $_GET['project_status']);
-		$q->addWhere('project_id = ' . $project_id);
+		$q->addWhere('project_id = ' . (int)$project_id);
 		$q->exec();
 		$q->clear();
 	}
@@ -50,7 +50,7 @@ $company_id = (($AppUI->getState('ProjIdxCompany') !== NULL)
 $company_prefix = 'company_';
 
 if (isset($_POST['department'])) {
-	$AppUI->setState('ProjIdxDepartment', $_POST['department']);
+	$AppUI->setState('ProjIdxDepartment', dPgetCleanParam($_POST, 'department'));
 	
 	//if department is set, ignore the company_id field
 	unset($company_id);
@@ -148,8 +148,8 @@ if ($owner > 0) {
 }
 if (isset($department)) {
 	$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
-	if (!$addPwOiD) {
-		$q->addWhere('pd.department_id in (' . implode(',',$dept_ids) . ')');
+	if (!$addPwOiD) { // Where is this set??
+		$q->addWhere('pd.department_id = ' . (int)$department);
 	}
 } else if ($company_id &&!$addPwOiD) {
 	$q->addWhere('p.project_company = ' . $company_id);

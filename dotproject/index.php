@@ -45,7 +45,6 @@ if (!(isset($GLOBALS['OS_WIN']))) {
 
 // tweak for pathname consistence on windows machines
 require_once (DP_BASE_DIR . '/classes/csscolor.class.php'); // Required before main_functions
-require_once (DP_BASE_DIR . '/classes/kses.class.php'); // Required before main_functions
 require_once (DP_BASE_DIR . '/includes/main_functions.php');
 require_once (DP_BASE_DIR . '/includes/db_adodb.php');
 require_once (DP_BASE_DIR . '/includes/db_connect.php');
@@ -306,6 +305,7 @@ if (file_exists($module_file)) {
 	
 	echo $AppUI->_('Missing file. Possible Module "' . $m . '" missing!');
 }
+// wtf??  why?
 if (!$suppressHeaders) {
 	echo ('<iframe name="thread" src="' . DP_BASE_URL 
 	      . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>');

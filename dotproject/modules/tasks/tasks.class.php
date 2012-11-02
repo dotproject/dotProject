@@ -2714,41 +2714,42 @@ function sort_by_item_title($title, $item_name, $item_type) {
 	/* flip the sort order for the link */
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
 	
-	echo ('<a href="./index.php?');
+	$link = '<a href="./index.php?';
 	$not_first = 0;
 	foreach ($_GET as $var => $val) {
 		if (!(in_array($var, array('task_sort_item1', 'task_sort_type1', 'task_sort_order1', 
 		                           'task_sort_item2', 'task_sort_type2', 'task_sort_order2')))) {
-			echo ((($not_first) ? '&' : '') . $var . '=' . dPgetCleanParam($_GET,$var));
+			$link .= ((($not_first) ? '&' : '') . $var . '=' . dPgetCleanParam($_GET,$var));
 			$not_first = 1;
 		}
 	}
 	
 	if ($item_name == 'task_log_problem_priority') {
-		echo '&task_sort_item1=task_log_problem';
-		echo '&task_sort_type1=' . $item_type;
-		echo '&task_sort_order1=' . SORT_DESC;
-		echo '&task_sort_item2=task_priority';
-		echo '&task_sort_type2=' . $item_type;
-		echo '&task_sort_order2=' . $item_order;
+		$link .= '&task_sort_item1=task_log_problem';
+		$link .= '&task_sort_type1=' . $item_type;
+		$link .= '&task_sort_order1=' . SORT_DESC;
+		$link .= '&task_sort_item2=task_priority';
+		$link .= '&task_sort_type2=' . $item_type;
+		$link .= '&task_sort_order2=' . $item_order;
 	} else {
-		echo '&task_sort_item1=' . $item_name;
-		echo '&task_sort_type1=' . $item_type;
-		echo '&task_sort_order1=' . $item_order;
+		$link .= '&task_sort_item1=' . $item_name;
+		$link .= '&task_sort_type1=' . $item_type;
+		$link .= '&task_sort_order1=' . $item_order;
 		
 		if ((($task_sort_item1 && $task_sort_item1 != $item_name) 
 			 || $task_sort_item2) && $task_sort_item2 != 'task_priority')  {
 			$item_num = (($task_sort_item1 == $item_name) ? '2' : '1');
-			echo '&task_sort_item2=' . ${'task_sort_item' . $item_num};
-			echo '&task_sort_type2=' . ${'task_sort_type' . $item_num};
-			echo '&task_sort_order2=' . ${'task_sort_order' . $item_num};
+			$link .= '&task_sort_item2=' . ${'task_sort_item' . $item_num};
+			$link .= '&task_sort_type2=' . ${'task_sort_type' . $item_num};
+			$link .= '&task_sort_order2=' . ${'task_sort_order' . $item_num};
 		}
 	}
-	echo '" class="hdr">';
+	$link .= '" class="hdr">';
 	
-	echo $AppUI->_($title);
+	$link .= $AppUI->_($title);
 	
-	echo '</a>';
+	$link .= '</a>';
+	echo dPsanitiseHTML($link);
 }
 
 ?>

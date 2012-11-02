@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 global $department, $min_view;
-$dept_id = isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0);
+$dept_id = intval(isset($_GET['dept_id']) ? $_GET['dept_id'] : (isset($department) ? $department : 0));
 
 // check permissions
 $canRead = getPermission($m, 'view', $dept_id);

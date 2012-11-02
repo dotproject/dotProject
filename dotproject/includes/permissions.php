@@ -75,6 +75,7 @@ function isAllowed($perm_type, $mod, $item_id = 0) {
 
 function getPermission($mod, $perm, $item_id = 0) {
 	global $AppUI;
+	$item_id = intval($item_id);
 	$perms =& $AppUI->acl();
 	$dbprefix = dPgetConfig('dbprefix', '');
 	

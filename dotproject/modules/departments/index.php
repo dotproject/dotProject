@@ -15,7 +15,7 @@ $company = $company_id = (($AppUI->getState('DeptIdxCompany') !== NULL)
 $company_prefix = 'company_';
 
 if (isset($_POST['department'])) {
-	$AppUI->setState('DeptIdxDepartment', $_POST['department']);
+	$AppUI->setState('DeptIdxDepartment', intval($_POST['department']));
 	
 	//if department is set, ignore the company_id field
 	unset($company_id);

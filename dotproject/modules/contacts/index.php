@@ -18,17 +18,17 @@ $additional_filter = '';
 // retrieve any state parameters
 if ($search_string) {
 	$AppUI->setState('ContIdxWhere', $search_string);
-	$get_search = addslashes(stripslashes($search_string));
-	$additional_filter = ("contact_first_name LIKE '%" . $get_search . "%'" 
-	                      . " OR contact_last_name LIKE '%" . $get_search . "%'" 
-	                      . " OR company_name LIKE '%" . $get_search . "%'" 
-	                      . " OR contact_notes LIKE '%" . $get_search . "%'" 
-	                      . " OR contact_email LIKE '%" . $get_search . "%'");
+	$get_search = $q->quote_sanitised('%' . $search_string . '%');
+	$additional_filter = ("contact_first_name LIKE " . $get_search
+	                      . " OR contact_last_name LIKE " . $get_search
+	                      . " OR company_name LIKE " . $get_search
+	                      . " OR contact_notes LIKE " . $get_search
+	                      . " OR contact_email LIKE " . $get_search);
 } else if (isset($_GET['where'])) {
 	$AppUI->setState('ContIdxWhere', $_GET['where']);
 }
 
-$where = ($AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%');
+$where = $q->quote_sanitised( $AppUI->getState('ContIdxWhere') ? ( $AppUI->getState('ContIdxWhere') . '%') : '%');
 
 // Pull First Letters
 $let = ":";
@@ -65,7 +65,7 @@ $q->addQuery('contact_first_name, contact_last_name, contact_phone, contact_owne
 $q->addQuery($showfields);
 $q->addQuery('user_id');
 foreach ($search_map as $search_name) {
-	$where_filter .= (' OR ' . $search_name . " LIKE '$where%'");
+	$where_filter .= (' OR ' . $search_name . " LIKE $where");
 }
 $where_filter = mb_substr($where_filter, 4);
 $where_filter .= (($additional_filter) ? (' OR ' . $additional_filter) : '');
@@ -112,9 +112,7 @@ $tdw = floor(100 / $carrWidth);
 /**
 * Contact search form
 */
- // Let's remove the first '%' that we previously added to ContIdxWhere
-$default_search_string = dPformSafe(mb_substr($AppUI->getState('ContIdxWhere'), 1, 
-                                              mb_strlen($AppUI->getState('ContIdxWhere'))), true);
+$default_search_string = dPformSafe($AppUI->getState('ContIdxWhere'), true);
 
 $a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= "\n<tr>";

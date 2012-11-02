@@ -6,6 +6,8 @@ if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
+require_once DP_BASE_DIR . '/includes/htmLawed.php';
+
 $CR = "\n";
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
@@ -299,10 +301,15 @@ function dPgetCleanParam(&$arr, $name, $def=null) {
 	if (empty($val)) {
 		return $val;
 	}
-	// Use kses library
-	$kses = new kses5();
-	$kses->AddProtocol('https');
-	return $kses->Parse($val);
+	return htmLawed($val, array('safe' => 1));
+}
+
+function dPsanitiseHTML($text) {
+	return htmLawed($text, array('safe' => 1));
+}
+
+function dPlink($title, $href) {
+	return dPsanitiseHTML('<a href="' . $href . '">' . $title . '</a>');
 }
 
 #

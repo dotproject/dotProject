@@ -41,7 +41,7 @@ if ($companiesType) {
 	$q->addWhere('c.company_type = ' . $company_type_filter);
 }
 if ($search_string != '') {
-	$q->addWhere("c.company_name LIKE '%" . $search_string . "%'");
+	$q->addWhere("c.company_name LIKE " . $q->quote_sanitised('%' . $search_string . '%') );
 }
 if ($owner_filter_id > 0) {
 	$q->addWhere('c.company_owner = ' . $owner_filter_id);

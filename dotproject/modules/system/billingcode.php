@@ -9,7 +9,7 @@ global $AppUI;
 ## add or edit a user preferences
 ##
 $company_id=0;
-$company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
+$company_id = isset($_REQUEST['company_id']) ? (int)$_REQUEST['company_id'] : 0;
 // Check permissions
 if (!$canEdit) {
   $AppUI->redirect('m=public&a=access_denied');

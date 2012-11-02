@@ -25,7 +25,7 @@ if (isset($_REQUEST['company_id'])) {
 }
 $company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
 
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', @$_REQUEST['event_filter'], 
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', dPgetCleanParam($_REQUEST,'event_filter'), 
                                        'EVENTFILTER', 'my');
 
 $AppUI->setState('CalDayViewTab', dPgetCleanParam($_GET, 'tab', $tab));
@@ -41,6 +41,11 @@ $date = dPgetCleanParam($_GET, 'date', $today);
 // establish the focus 'date'
 $this_day = new CDate($date);
 $dd = $this_day->getDay();
+if (!$dd) {
+  $date = $today;
+  $this_day = new CDate($today);
+  $dd = $this_day->getDay();
+}
 $mm = $this_day->getMonth();
 $yy = $this_day->getYear();
 
@@ -96,7 +101,7 @@ function clickDay(idate, fdate) {
 				<tr>
 						<td>
 					<a href="<?php 
-echo '?m=calendar&amp;a=day_view&amp;date='.$prev_day->format(FMT_TIMESTAMP_DATE); ?>">
+echo ('?m=calendar&amp;a=day_view&amp;date='.$prev_day->format(FMT_TIMESTAMP_DATE)); ?>">
 					<?php 
 echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous day')); ?>
 					</a>
