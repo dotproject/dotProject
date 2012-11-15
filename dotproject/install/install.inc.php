@@ -134,7 +134,7 @@ function InstallSplitSql($sql, $last_update) {
  return($ret);
 }
 
-function InstallLoadSQL($sqlfile, $last_update = null)
+function InstallLoadSql($sqlfile, $last_update = null)
 {
  global $dbErr, $dbMsg, $db, $dbprefix;
 

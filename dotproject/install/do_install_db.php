@@ -13,6 +13,7 @@ $baseUrl .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : getenv('HTTP_
 $baseUrl .= isset($_SERVER['SCRIPT_NAME']) ? dirname(dirname($_SERVER['SCRIPT_NAME'])) : dirname(dirname(getenv('SCRIPT_NAME')));
 
 require_once DP_BASE_DIR.'/install/install.inc.php';
+require_once DP_BASE_DIR.'/install/versions.inc.php';
 
 $AppUI = new InstallerUI(); // Fake AppUI class to appease the db_connect utilities.
 
@@ -48,11 +49,6 @@ $dPconfig = array(
  'root_dir' => $baseDir,
  'base_url' => $baseUrl
 );
-
-// Version array for moving from version to version.
-$versionPath = array('1.0.2',
-                     '2.0-alpha', '2.0-beta', '2.0', '2.0.1', '2.0.2', '2.0.3', '2.0.4',
-                     '2.1-rc1', '2.1-rc2', '2.1', '2.1.1', '2.1.2', '2.1.3', '2.1.4', '2.1.5', '2.1.6');
 
 global $lastDBUpdate;
 $lastDBUpdate = '';

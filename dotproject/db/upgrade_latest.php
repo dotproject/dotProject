@@ -29,7 +29,7 @@ require_once DP_BASE_DIR.'/classes/permissions.class.php';
  */
 function dPupgrade($from_version, $to_version, $last_updated) {
 
-	$latest_update = '20110106'; // Set to the latest upgrade date.
+	$latest_update = '20121115'; // Set to the latest upgrade date.
 
 	if (empty($last_updated) || empty($from_version)) {
 		$last_updated = '00000000';
