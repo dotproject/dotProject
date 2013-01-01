@@ -2460,9 +2460,9 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	*/
 	$alt = ((!empty($a['task_description']))
 			? ('onmouseover="javascript:return overlib(' . "'" 
-			   . htmlspecialchars('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
-														   addslashes($a['task_description']))
-								  , ENT_QUOTES) . '</p></div>' . "', CAPTION, '" 
+			   . $AppUI->showHTML('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
+														   $a['task_description'])
+								  ) . '</p></div>' . "', CAPTION, '" 
 			   . $AppUI->_('Description') . "'" . ', CENTER);" onmouseout="nd();"')
 			: ' ');
 	
@@ -2483,7 +2483,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			   . $alt . '>' . (($a['task_dynamic'] == 1) ? '<b><i>' : '') . $a['task_name'] . (($a['task_dynamic'] == 1) ? '</i></b>' : '') . '</a></td>');
 	} else {
 	  $s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" ' 
-			 . $alt . '>' . $a['task_name'] . '</a></td>');
+			 . $alt . '>' . $AppUI->showHTML($a['task_name']) . '</a></td>');
 	}
 	
 	if ($today_view) { // Show the project name
@@ -2513,7 +2513,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 						  . $userAlloc[$val['user_id']]['charge'] . '%; ' 
 						  . $AppUI->_('Free Capacity') . ':' 
 						  . $userAlloc[$val['user_id']]['freeCapacity'] . '%' . '">' 
-						  . $val['user_username'] . ' (' . $val['perc_assignment'] . '%)</a>');
+						  . $AppUI->showHTML($val['user_username']) . ' (' . $val['perc_assignment'] . '%)</a>');
 			}
 			$s .= join (', ', $a_u_tmp_array) . '</td>';
 		} else {
@@ -2523,23 +2523,23 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				   . $userAlloc[$assigned_users[0]['user_id']]['charge']. '%; ' 
 				   . $AppUI->_('Free Capacity') . ':' 
 				   . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%">' 
-				   . $assigned_users[0]['user_username'] 
+				   . $AppUI->showHTML($assigned_users[0]['user_username'] )
 				   .' (' . $assigned_users[0]['perc_assignment'] .'%)</a>');
 			if ($a['assignee_count'] > 1) {
 				$s .= (' <a href="javascript: void(0);" onclick="javascript:toggle_users(' 
 					   . "'users_" . $a['task_id'] . "'" . ');" title="' 
 					   . join (', ', $a_u_tmp_array) .'">(+' . ($a['assignee_count'] - 1) . ')</a>'
 					   . '<span style="display: none" id="users_' . $a['task_id'] . '">');
-				$a_u_tmp_array[] = $assigned_users[0]['user_username'];
+				$a_u_tmp_array[] = $AppUI->showHTML($assigned_users[0]['user_username']);
 				for ($i = 1, $xi = count($assigned_users); $i < $xi; $i++) {
-					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
+					$a_u_tmp_array[] = $AppUI->showHTML($assigned_users[$i]['user_username']);
 					$s .= ('<br /><a href="?m=admin&amp;a=viewuser&amp;user_id=' 
 						   . $assigned_users[$i]['user_id'] . '" title="' 
 						   . $AppUI->_('Extent of Assignment') . ':' 
 						   . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' 
 						   . $AppUI->_('Free Capacity') . ':' 
 						   . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%">' 
-						   . $assigned_users[$i]['user_username'] . ' (' 
+						   . $AppUI->showHTML($assigned_users[$i]['user_username']) . ' (' 
 						   . $assigned_users[$i]['perc_assignment'] . '%)</a>');
 				}
 				$s .= '</span>';

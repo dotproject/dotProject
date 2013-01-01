@@ -188,13 +188,13 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
 			<td style="background-color:#<?php echo $obj->project_color_identifier;?>">
 				<font color="<?php echo bestColor($obj->project_color_identifier); ?>">
-					<?php echo @$obj->project_name;?>
+					<?php echo $AppUI->showHTML(@$obj->project_name);?>
 				</font>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task');?>:</td>
-			<td class="hilite"><strong><?php echo @$obj->task_name;?></strong></td>
+			<td class="hilite"><strong><?php echo $AppUI->showHTML(@$obj->task_name);?></strong></td>
 		</tr>
 		<?php if ($obj->task_parent != $obj->task_id) { 
 			$obj_parent = new CTask();
@@ -202,12 +202,12 @@ function delIt() {
 		?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Parent');?>:</td>
-			<td class="hilite"><a href="<?php echo './index.php?m=tasks&a=view&task_id=' . @$obj_parent->task_id; ?>"><?php echo @$obj_parent->task_name;?></a></td>
+			<td class="hilite"><a href="<?php echo './index.php?m=tasks&a=view&task_id=' . @$obj_parent->task_id; ?>"><?php echo $AppUI->showHTML(@$obj_parent->task_name);?></a></td>
 		</tr>
 		<?php } ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner');?>:</td>
-			<td class="hilite"> <?php echo @$obj->username;?></td>
+			<td class="hilite"> <?php echo $AppUI->showHTML(@$obj->username);?></td>
 		</tr>				<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority');?>:</td>
 			<td class="hilite">
@@ -219,7 +219,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Web Address');?>:</td>
-			<td class="hilite" width="300"><a href="<?php echo @$obj->task_related_url;?>" target="task<?php echo $task_id;?>"><?php echo @$obj->task_related_url;?></a></td>
+			<td class="hilite" width="300"><a href="<?php echo $AppUI->showHTML(@$obj->task_related_url);?>" target="task<?php echo $task_id;?>"><?php echo $AppUI->showHTML(@$obj->task_related_url);?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone');?>:</td>
@@ -272,8 +272,8 @@ function delIt() {
 				$s = count($users) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach ($users as $row) {
 					$s .= '<tr>';
-					$s .= '<td class="hilite">'.dPgetUsernameFromID($row['user_id']).'</td>';
-					$s .= '<td class="hilite"><a href="mailto:'.$row['contact_email'].'">'.$row['contact_email'].'</a></td>';
+					$s .= '<td class="hilite">'.$AppUI->showHTML(dPgetUsernameFromID($row['user_id'])).'</td>';
+					$s .= '<td class="hilite"><a href="mailto:'.$AppUI->showHTML($row['contact_email']).'">'.$AppUI->showHTML($row['contact_email']).'</a></td>';
 					$s .= '</tr>';
 				}
 				echo '<table width="100%" cellspacing="1">'.$s.'</table>';
@@ -341,7 +341,7 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php $newstr = str_replace(chr(10), '<br />', $obj->task_description);echo $newstr;?>
+				<?php $newstr = str_replace(chr(10), '<br />', $obj->task_description);echo $AppUI->showHTML($newstr);?>
 		  </td>
 		</tr>
 <?php
@@ -361,11 +361,13 @@ function delIt() {
 		    	<td colspan='3' class="hilite">
 		    		<?php
 		    			foreach ($depts as $dept_id => $dept_info) {
-		    				echo '<div>'.$dept_info['dept_name'];
+						$op = '<div>'
+		    				.$dept_info['dept_name'];
 		    				if ($dept_info['dept_phone'] != '') {
-		    					echo '('.$dept_info['dept_phone'].')';
+		    					$op .= '('.$dept_info['dept_phone'].')';
 		    				}
-		    				echo '</div>';
+		    				$op .= '</div>';
+						echo $AppUI->showHTML($op);
 		    			}
 		    		?>
 		    	</td>
@@ -395,10 +397,10 @@ function delIt() {
 			    			echo '<tr><th>'.$AppUI->_('Name').'</font></th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
 			    			foreach ($contacts as $contact_id => $contact_data) {
 			    				echo '<tr>';
-			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
-			    				echo '<td class="hilite"><a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a></td>';
-			    				echo '<td class="hilite">'.$contact_data['contact_phone'].'</td>';
-			    				echo '<td class="hilite">'.$contact_data['dept_name'].'</td>';
+			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $AppUI->showHTML($contact_data['contact_first_name'].' '.$contact_data['contact_last_name']) .'</a></td>';
+			    				echo '<td class="hilite">' . $AppUI->showHTML('<a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a>') . '</td>';
+			    				echo '<td class="hilite">'.$AppUI->showHTML($contact_data['contact_phone']).'</td>';
+			    				echo '<td class="hilite">'.$AppUI->showHTML($contact_data['dept_name']).'</td>';
 			    				echo '</tr>';
 			    			}
 			    			echo '</table>';
@@ -431,10 +433,10 @@ function delIt() {
 			    			echo '<tr><th color="white">'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th><th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
 			    			foreach ($contacts as $contact_id => $contact_data) {
 			    				echo '<tr>';
-			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_first_name'].' '.$contact_data['contact_last_name'].'</a></td>';
-			    				echo '<td class="hilite"><a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a></td>';
-			    				echo '<td class="hilite">'.$contact_data['contact_phone'].'</td>';
-			    				echo '<td class="hilite">'.$contact_data['dept_name'].'</td>';
+			    				echo '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $AppUI->showHTML($contact_data['contact_first_name'].' '.$contact_data['contact_last_name']).'</a></td>';
+			    				echo '<td class="hilite">' . $AppUI->showHTML('<a href="mailto: '.$contact_data['contact_email'].'">'.$contact_data['contact_email'].'</a>') . '</td>';
+			    				echo '<td class="hilite">'.$AppUI->showHTML($contact_data['contact_phone']).'</td>';
+			    				echo '<td class="hilite">'.$AppUI->showHTML($contact_data['dept_name']).'</td>';
 			    				echo '</tr>';
 			    			}
 			    			echo '</table>';

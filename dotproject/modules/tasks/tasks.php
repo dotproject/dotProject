@@ -534,7 +534,7 @@ echo @$p['project_color_identifier']; ?>">
 	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $k;?>">
 	<span style="color:<?php 
 echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
-	<strong><?php echo @$p['company_name'].' :: '.@$p['project_name'];?></strong></span></a>
+	<strong><?php echo $AppUI->showHTML(@$p['company_name'].' :: '.@$p['project_name']);?></strong></span></a>
 	</td>
 	<td width="<?php echo (101 - intval(@$p['project_percent_complete']));?>%">
 	<?php echo (intval(@$p['project_percent_complete']));?>%

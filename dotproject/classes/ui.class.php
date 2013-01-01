@@ -491,6 +491,18 @@ class CAppUI {
 		return $str;
 	}
 
+	function showHTML($text) {
+		return $this->___($text, UI_OUTPUT_HTML);
+	}
+
+	function showRaw($text) {
+		return $this->___($text, UI_OUTPUT_RAW);
+	}
+	
+	function showJS($text) {
+		return $this->___($text, UI_OUTPUT_JS);
+	}
+
 /**
 * Set the display of warning for untranslated strings
 * @param string
