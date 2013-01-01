@@ -6,7 +6,7 @@ if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
-require_once DP_BASE_DIR . '/includes/htmLawed.php';
+require_once DP_BASE_DIR . '/includes/filter.php';
 
 $CR = "\n";
 define('SECONDS_PER_DAY', 60 * 60 * 24);
@@ -301,11 +301,11 @@ function dPgetCleanParam(&$arr, $name, $def=null) {
 	if (empty($val)) {
 		return $val;
 	}
-	return htmLawed($val, array('safe' => 1));
+	return filter_xss($val);
 }
 
 function dPsanitiseHTML($text) {
-	return htmLawed($text, array('safe' => 1));
+	return filter_xss($text);
 }
 
 function dPlink($title, $href) {

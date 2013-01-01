@@ -32,6 +32,7 @@ define ('UI_OUTPUT_URI', 0x30);
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
 require_once DP_BASE_DIR.'/classes/permissions.class.php';
+require_once DP_BASE_DIR.'/includes/filter.php';
 /**
 * The Application User Interface Class.
 *
@@ -476,8 +477,9 @@ class CAppUI {
 				$str = str_replace(' ', '%20', $str);
 				break;
 			case UI_OUTPUT_HTML:
-				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
-				$str = str_replace('&#039;', '&apos;', $str);
+				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				#$str = str_replace('&#039;', '&apos;', $str);
+				$str = filter_xss($str);
 				break;
 			case UI_OUTPUT_JS:
 				$str = addslashes(stripslashes($str));
@@ -488,7 +490,7 @@ class CAppUI {
 		}
 		return $str;
 	}
-	
+
 /**
 * Set the display of warning for untranslated strings
 * @param string
