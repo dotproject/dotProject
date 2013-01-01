@@ -47,6 +47,14 @@ $dPconfig['dbpass'] = 'dp_pass';  // Change to match your MySQL Password
 // set this value to true to use persistent database connections
 $dPconfig['dbpersist'] = false;
 
+/*************  XSS FILTERING ****************************
+* Don't include these or change the defaults unless you  *
+* undestand what this is likely to do. It would be a big *
+* mistake, for instance, to allow script tags            *
+*********************************************************/
+$dPconfig['filter_allowed_tags'] =  array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd');
+$dPconfig['filter_allowed_protocols'] = array('http', 'https', 'ftp', 'news', 'nntp', 'tel', 'telnet', 'mailto', 'irc', 'ssh', 'sftp', 'webcal', 'rtsp');
+
 /***************** Configuration for DEVELOPERS use only! ******/
 // Root directory is now automatically set to avoid
 // getting it wrong. It is also deprecated as $baseDir

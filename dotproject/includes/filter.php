@@ -31,12 +31,13 @@ function validate_utf8($string) {
   return (preg_match('/^./us', $string) == 1);
 }
 
-function filter_xss($string, $allowed_tags = array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd')) {
+function filter_xss($string) {
   // Only operate on valid UTF-8 strings. This is necessary to prevent cross
   // site scripting issues on Internet Explorer 6.
   if (!validate_utf8($string)) {
     return '';
   }
+  $allowed_tags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'));
   // Store the input format
   _filter_xss_split($allowed_tags, TRUE);
   // Remove NUL characters (ignored by some browsers)
