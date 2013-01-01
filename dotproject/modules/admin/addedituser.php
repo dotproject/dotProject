@@ -73,6 +73,7 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 <script type="text/javascript" language="javascript">
 function submitIt() {
     var form = document.editFrm;
+    var uid = new Number(form.user_id.value);
    if (form.user_username.value.length < <?php echo dPgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo dPgetConfig('admin_username'); ?>') {
         alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS)  ;?>"  + <?php echo dPgetConfig('username_min_len'); ?>);
         form.user_username.focus();
@@ -80,7 +81,7 @@ function submitIt() {
     } else if (form.user_role.value <=0) {
         alert("<?php echo $AppUI->_('adminValidRole', UI_OUTPUT_JS);?>");
         form.user_role.focus();     <?php } ?>
-    } else if (form.user_password.value.length < <?php echo dPgetConfig('password_min_len'); ?>) {
+    } else if ((uid == 0 || form.user_password.value.length > 0) && form.user_password.value.length < <?php echo dPgetConfig('password_min_len'); ?>) {
         alert("<?php echo $AppUI->_('adminValidPassword', UI_OUTPUT_JS);?>" + <?php echo dPgetConfig('password_min_len'); ?>);
         form.user_password.focus();
     } else if (form.user_password.value !=  form.password_check.value) {
@@ -160,10 +161,9 @@ function setDept(key, val) {
 	if (@$user['user_username']) {
 		echo ('<input type="hidden" class="text" name="user_username" value="' 
 		      . $user['user_username'] . '" />');
-		echo '<strong>' . $user['user_username'] . '</strong>';
+		echo '<strong>' . $AppUI->showHTML($user['user_username']) . '</strong>';
 	} else {
-		echo ('<input type="text" class="text" name="user_username" value="' 
-		      . $user['user_username'] . '" maxlength="255" size="40" />');
+		echo ('<input type="text" class="text" name="user_username"  maxlength="255" size="40" />');
 	}
 ?>
 	</td></tr>
@@ -186,12 +186,11 @@ function setDept(key, val) {
 ?>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Password');?>:</td>
-    <td><input type="password" class="text" name="user_password" value="<?php 
-echo $user['user_password'];?>" maxlength="32" size="32" /> </td>
+    <td><input type="password" class="text" name="user_password"  maxlength="32" size="32" /> </td>
 </tr>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Confirm Password');?>:</td>
-    <td><input type="password" class="text" name="password_check" value="<?php echo $user['user_password'];?>" maxlength="32" size="32" /> </td>
+    <td><input type="password" class="text" name="password_check"  maxlength="32" size="32" /> </td>
 </tr>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Name');?>:</td>

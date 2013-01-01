@@ -58,14 +58,10 @@ class CUser extends CDpObject {
 		if ($this->user_id) {
 		// save the old password
 			$perm_func = "updateLogin";
-			$q->addTable('users');
-			$q->addQuery('user_password');
-			$q->addWhere("user_id = $this->user_id");
-			$pwd = $q->loadResult();
-			if ($pwd != $this->user_password) {
+			if ($this->user_password) {
 				$this->user_password = md5($this->user_password);
 				addHistory($this->_tbl, $this->user_id, 'password changed', 
-						   'Password changed from IP ' . $_SERVER['REMOTE_ADDR']);
+						'Password changed from IP ' . $_SERVER['REMOTE_ADDR']);
 			} else {
 				$this->user_password = null;
 			}
