@@ -17,13 +17,23 @@ if (!defined('DP_BASE_DIR')) {
 
 class EventQueue {
 
-	var $table = 'event_queue';
-	var $update_list = array();
-	var $delete_list = array();
-	var $event_count = 0;
+	protected $table = 'event_queue';
+	protected $update_list = array();
+	protected $delete_list = array();
+	protected $batch_list = array();
+	protected $event_count = 0;
+	private static $_singleton = null;
 
-	function EventQueue()
+	private function __construct()
 	{
+	}
+
+	public static function getInstance()
+	{
+		if (! isset(self::$_singleton)) {
+			self::$_singleton = new self();
+		}
+		return self::$_singleton;
 	}
 
 	/**
@@ -41,43 +51,62 @@ class EventQueue {
 	 * @param integer $repeat_count number of times to repeat
 	 * @return integer queue id
 	 */
-	function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1)
+	public function add($caller, &$args, $method='execute', $opts = array())
 	{
 		global $AppUI;
 
-		if (! isset($AppUI))
+		if (! isset($AppUI)) {
 			$user_id = 0;
-		else
-			$user_id = $AppUI->user_id;
-
-		if (is_array($callback)) {
-			list($class, $method) = $callback;
-			if (is_object($class))
-				$class = get_class($class);
-			$caller = $class . '::' . $method;
 		} else {
-			$caller = $callback;
+			$user_id = $AppUI->user_id;
+		}
+
+		/* Simple expedient, caller should be the $this pointer of the
+		   calling class, and the class should provide the method getModuleName.
+		   This also is only a short-term solution, in reality we should align classes
+		   and modules so we can autoload */
+		$class = get_class($caller);
+		$full_method = 'EventQueue_' . $method;
+
+		// Set some default values that are overriden with $opts
+		$date = 0;
+		$repeat_interval = 0;
+		$repeat_count = 1;
+		$id = 0;
+		$type = '';
+		$batch = false;
+		extract ($opts);
+
+		/* Check that we have a callable string */
+		if ($batch) {
+			if (! is_callable(array($class, $full_method . '_batched')) &&
+			 ! is_callable(array($class, $full_method))) {
+				return false;
+			 }
+		} else {
+			if (! is_callable(array($class, $full_method . '_immediate')) &&
+			! is_callable(array($class, $full_method))) {
+				return false;
+			}
 		}
 
 		$q = new DBQuery;
 		$q->addTable($this->table);
 		$q->addInsert('queue_owner', $user_id);
 		$q->addInsert('queue_start', $date);
-		$q->addInsert('queue_callback', $caller);
+		$q->addInsert('queue_callback', $class . '::' . $method);
 		$q->addInsert('queue_data', serialize($args));
 		$q->addInsert('queue_repeat_interval', $repeat_interval);
 		$q->addInsert('queue_repeat_count', $repeat_count);
-		$q->addInsert('queue_module', $module);
+		$q->addInsert('queue_module', $caller->getModuleName());
 		$q->addInsert('queue_type', $type);
 		$q->addInsert('queue_origin_id', $id);
-		if ($sysmodule)
-			$q->addInsert('queue_module_type', 'system');
-		else
-			$q->addInsert('queue_module_type', 'module');
-		if ($q->exec())
+		$q->addInsert('queue_batched', $batch ? 1 : 0);
+		if ($q->exec()) {
 			$return =  db_insert_id();
-		else
+		} else {
 			$return =  false;
+		}
 		$q->clear();
 		return $return;
 	}
@@ -86,7 +115,7 @@ class EventQueue {
 	 * Remove the event from the queue. 
 	 * 
 	 */
-	function remove($id)
+	public function remove($id)
 	{
 		$q = new DBQuery;
 		$q->setDelete($this->table);
@@ -99,14 +128,20 @@ class EventQueue {
 	 * Find a queue record (or records) based upon the
 	 * 
 	 */
-	function find($module, $type, $id = null)
+	public function find($module, $type = null, $id = null, $batched = null)
 	{
 		$q = new DBQuery;
 		$q->addTable($this->table);
 		$q->addWhere("queue_module = '$module'");
-		$q->addWhere("queue_type = '$type'");
-		if (isset($id))
+		if (isset($type)) {
+			$q->addWhere("queue_type = '$type'");
+		}
+		if (isset($id)) {
 			$q->addWhere("queue_origin_id = '$id'");
+		}
+		if (isset($batched)) {
+			$q->addWhere('queue_batched = ' . ($batched ? '1' : '0'));
+		}
 		return $q->loadHashList('queue_id');
 	}
 
@@ -114,37 +149,69 @@ class EventQueue {
 	 * Execute a queue entry.  This involves resolving the
 	 * method to execute and passing the arguments to it.
 	 */
-	function execute(&$fields)
+	protected function execute(&$fields)
 	{
 		global $AppUI;
 
-		if (isset($fields['queue_module_type'])
-		&& $fields['queue_module_type'] == 'system')
-			include_once $AppUI->getSystemClass($fields['queue_module']);
-		else
-			include_once $AppUI->getModuleClass($fields['queue_module']);
+		if (! isset($this->batch_list[$fields['queue_callback']]) ) {
+			$modfile = $AppUI->getModuleClass($fields['queue_module']);
+			if (!file_exists($modfile)) {
+				$modfile = $AppUI->getSystemClass($fields['queue_module']);
+			}
+		} else {
+			$modfile = $this->batch_list[$fields['queue_callback']]['modfile'];
+		}
+		include_once $modfile;
 
-		$args = unserialize($fields['queue_data']);
-		if (mb_strpos($fields['queue_callback'], '::') !== false) {
+		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);
 			if (!class_exists($class)) {
 				dprint(__FILE__, __LINE__, 2, "Cannot process event: Class $class does not exist");
 				return false;
 			}
-			$object = new $class;
-			if (!method_exists($object, $method)) {
+			if (! isset($this->batch_list[$fields['queue_callback']])) {
+				$this->batch_list[$fields['queue_callback']] = array(
+					'object' => new $class,
+					'class' => $class,
+					'method' => $method,
+					'modfile' => $modfile,
+				);
+			}
+			$object =& $this->batch_list[$fields['queue_callback']]['object'];
+			$real_method = 'EventQueue_' . $method;
+			if ($fields['queue_batched'] && method_exists($object, $real_method . '_batched')) {
+				$real_method .= '_batched';
+			} else if ($fields['queue_batched'] == FALSE && method_exists($object, $real_method . '_immediate')) {
+				$real_method .= '_immediate';
+			} else if (!method_exists($object, $real_method)) {
 				dprint(__FILE__, __LINE__, 2, "Cannot process event: Method $class::$method does not exist");
 				return false;
 			}
-			return $object->$method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
-		} else {
-			$method = $fields['queue_callback'];
-			if (!function_exists($method)) {
-				dprint(__FILE__, __LINE__, 2, "Cannot process event: Function $method does not exist");
-				return false;
-			}
-			return $method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
+			return $object->$real_method($fields);
+		}  else {
+			return false;
 		}
+	}
+
+	/**
+	 * Utility function to separate the scans into batched
+	 * and immediate.  This means we can provide some measure
+	 * of control for modules to plan to handle batchable items.
+	 */
+	public function scan() {
+		$this->event_count = 0;
+		$this->_scan(false);
+		$this->_scan(true);
+	}
+
+	public function scanImmediate() {
+		$this->event_count = 0;
+		$this->_scan(false);
+	}
+
+	public function scanBatched() {
+		$this->event_count = 0;
+		$this->_scan(true);
 	}
 
 	/**
@@ -154,15 +221,15 @@ class EventQueue {
 	 * it is a repeatable event the repeat time is added to the
 	 * start time and the repeat count (if set) is decremented.
 	 */
-	function scan()
+	protected function _scan($batched = false)
 	{
 		$q = new DBQuery;
 		$q->addTable($this->table);
 		$now = time();
 		$q->addWhere('queue_start < ' . $now);
+		$q->addWhere('queue_batched = ' . ($batched ? '1' : '0'));
 		$rid = $q->exec();
 
-		$this->event_count = 0;
 		for ($rid; ! $rid->EOF; $rid->moveNext()) {
 			if ($this->execute($rid->fields)) {
 				$this->update_event($rid->fields);
@@ -171,10 +238,10 @@ class EventQueue {
 		}
 		$q->clear();
 
-		$this->commit_updates();
+		$this->commit_updates($batched);
 	}
 
-	function update_event(&$fields)
+	protected function update_event(&$fields)
 	{
 		if ($fields['queue_repeat_interval'] > 0 && $fields['queue_repeat_count'] > 0) {
 			$fields['queue_start'] += $fields['queue_repeat_interval'];
@@ -185,7 +252,7 @@ class EventQueue {
 		}
 	}
 
-	function commit_updates()
+	protected function commit_updates($batched = false)
 	{
 		$q = new DBQuery;
 		if (count($this->delete_list)) {
@@ -205,7 +272,28 @@ class EventQueue {
 			$q->clear();
 		}
 		$this->update_list = array();
+
+		/**
+		 * Finally notify the batch handlers that the batch has been terminated.
+		 * This is done by calling the method EventQueue_<method_name>_batchTerminate.
+		 * Note that at this stage we will have all of the classes loaded, as we will
+		 * have executed the class methods to handle the batch requests.
+		 */
+		if ($batched) {
+			foreach ($this->batch_list as $batcher) {
+				$method = 'EventQueue_' . $batcher['method'] . '_terminateBatch';
+				if (method_exists($batcher['class'], $method)) {
+					$batcher['object']->$method();
+				}
+			}
+		}
+		$this->batch_list = array();
+	}
+
+	public function eventCount() {
+		return $this->event_count;
 	}
 
 }
-?>
+
+

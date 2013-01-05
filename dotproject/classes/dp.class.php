@@ -11,6 +11,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 require_once $AppUI->getSystemClass('query');
+require_once $AppUI->getModuleClass('system');
 
 /**
  *	CDpObject Abstract Class.
@@ -44,6 +45,7 @@ class CDpObject {
 	 * @var object Query Handler
 	 */
 	protected $_query;
+
 	
 	/**
 	 *	Object constructor to set table and key field
@@ -53,10 +55,11 @@ class CDpObject {
 	 *	@param string $key name of the primary key field in the table
 	 *	@param string $perm_name permission module name relating to child class (default $table)
 	 */
-	public function __construct($table, $key, $perm_name='') {
+	public function __construct($table, $key, $perm_name='', $mod_dir='') {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
 		$this->_permission_name = (($perm_name) ? $perm_name : $table);
+		$this->_module_directory = $mod_dir;
 		$this->_query = new DBQuery;
 	}
 
@@ -479,5 +482,37 @@ class CDpObject {
 			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
+
+	/**
+	 * Utility function to return the current module name
+	 * It first tries to get the name based on the table name,
+	 * and infer the name from the class name.  If neither of these
+	 * are appropriate, children should implement this function themselves.
+	 * or set _module_directory after construction.
+	 */
+	public function getModuleName() {
+		/* If we've already done this, or our sub-class has set this,
+		   we are on a winner */
+		if (!empty($this->_module_directory)) {
+			return $this->_module_directory;
+		}
+		/* Now the guessing game begins */
+		$mods = new CModule;
+		if (!empty($this->_permission_name)) {
+			if (($mod_name = $mods->getModuleByName($this->_permission_name))) {
+				$this->_module_directory = $mod_name;
+				return $mod_name;
+			}
+		}
+		$class = get_class($this);
+		// Class usually includes an initial C and is camel case
+		// And never is multibyte, so we are safe to use the non mb_ functions.
+		$class = strtolower(substr($class, 1));
+		if (($mod_name = $mods->getModuleByName($class))) {
+			$this->_module_directory = $mod_name;
+			return $mod_name;
+		}
+		return 'unknown';
+	}
+
  }
- ?>

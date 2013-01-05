@@ -104,7 +104,7 @@ class Mail
 /**
  *  Mail constructor
  */
-function Mail() {
+public function __construct() {
 	$this->autoCheck(TRUE);
 	$this->boundary = '--' . md5(uniqid('dPboundary'));
 	// Grab the current mail handling options
@@ -606,9 +606,9 @@ function QueueMail() {
 	global $AppUI;
 	
 	require_once $AppUI->getSystemClass('event_queue');
-	$ec = new EventQueue;
+	$ec = EventQueue::getInstance();
 	$vars = get_object_vars($this);
-	return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'libmail', TRUE);
+	return $ec->add($this, 'SendQueuedMail', $vars);
 }
 
 /**
@@ -616,7 +616,8 @@ function QueueMail() {
  *  
  *  @access private
  */
-function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
+function EventQueue_SendQueuedMail($event) {
+	$args = unserialize($event['queue_data']);
 	foreach ($args as $k => $v) {
 		// Only set variables we know about.
 		if (isset($this->$k) || property_exists($this, $k)) { # See PHP manual.
@@ -635,6 +636,13 @@ function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
 		}
 		return @mail($this->xheaders['To'], $this->xheaders['Subject'], $this->fullBody, $headers);
 	}
+}
+
+/**
+ * Function to return the base name used to determine the class file to load.
+ */
+function getModuleName() {
+	return 'libmail';
 }
 
 /**
@@ -867,4 +875,3 @@ function _strlen($str) {
 
 } // class Mail
 
-?>

@@ -44,6 +44,31 @@ The full text of the GPL is in the COPYING file.
 	$perms =& $AppUI->acl();
 
 	echo "Scanning Queue ...\n";
-	$queue = new EventQueue;
-	$queue->scan();
-	echo 'Done, '.$queue->event_count.' events processed'."\n";
+	$queue = EventQueue::getInstance();
+	# Determine if we are called from the command line or from a web page,
+	# In either case we may have an argument telling us if we are scanning
+	# the batch or the immediate queue.  If no argument, scan everything.
+	$batch = null;
+	if (isset($_REQUEST['batch'])) {
+		$batch = strtolower($_REQUEST['batch']);
+	} else if (isset($argv) && !empty($argv[1])) {
+		$batch = strtolower($argv[1]);
+	}
+	if (!empty($batch)) {
+		if ( is_numeric($batch)) {
+			$batch = intval($batch);
+			if ($batch[0] == 'y' || $batch[0] == 't') {
+				$batch = 1;
+			} else {
+				$batch = 0;
+			}
+		}
+		if ($batch) {
+			$queue->scanBatched();
+		} else {
+			$queue->scanImmediate();
+		}
+	} else {
+		$queue->scan();
+	}
+	echo 'Done, '.$queue->eventCount().' events processed'."\n";

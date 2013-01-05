@@ -14,7 +14,7 @@ class CPreferences {
 	var $_default_prefs = NULL;
 	
 	function __construct() {
-		// empty constructor
+		$this->_module_directory = 'system';
 	}
 	
 	function get_defaults() {
@@ -89,6 +89,7 @@ class CModule extends CDpObject {
 	
 	function __construct() {
 		parent::__construct('modules', 'mod_id');
+		$this->_module_directory = 'system';
 	}
 	
 	function install() {
@@ -200,6 +201,16 @@ class CModule extends CDpObject {
 	function moduleUpgrade() {
 		return null;
 	}
+
+	// module finding methods
+	public function getModuleByName($name) {
+		$q = new DBQuery;
+		$name = $q->quote($name);
+		$q->addTable('modules');
+		$q->addQuery('mod_directory');
+		$q->addWhere("permissions_item_table = '" . $name . "' OR mod_directory = '" . $name . "'");
+		return $q->loadResult();
+	}
 }
 
 /**
@@ -211,6 +222,7 @@ class CConfig extends CDpObject {
 	
 	function __construct() {
 		parent::__construct('config', 'config_id');
+		$this->_module_directory = 'system';
 	}
 	
 	function check() {
@@ -269,6 +281,7 @@ class bcode extends CDpObject {
 	
 	function __construct() {
 		parent::__construct('billingcode', 'billingcode_id');
+		$this->_module_directory = 'system';
 	}
 	
 	function bind($hash) {

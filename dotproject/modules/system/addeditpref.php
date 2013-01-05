@@ -232,6 +232,18 @@ function submitIt() {
 	?>
 	</td>
 </tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Receive Digests where available');?>:</td>
+	<td>
+	<?php
+		$digest = array(
+			'0' => $AppUI->_('No, receive events as they happen'),
+			'1' => $AppUI->_('Yes, batch events that can be combined'),
+		);
+		echo arraySelect($digest, 'pref_name[USEDIGESTS]', 'class="text" size="1"', @$prefs['USEDIGESTS'], false);
+	?>
+	</td>
+</tr>
 
 <tr>
 	<td align="left"><input class="button"  type="button" value="<?php echo $AppUI->_('back');?>" onclick="javascript:history.back(-1);" /></td>

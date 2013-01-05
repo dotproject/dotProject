@@ -21,13 +21,13 @@ $GLOBALS['translate'] = array();
 define ('UI_CASE_MASK', 0x0F);
 define ('UI_CASE_UPPER', 1);
 define ('UI_CASE_LOWER', 2);
-define ('UI_CASE_UPPERFIRST', 3);
+define ('UI_CASE_UPPERFIRST', 4);
 
 define ('UI_OUTPUT_MASK', 0xF0);
 define ('UI_OUTPUT_HTML', 0);
 define ('UI_OUTPUT_JS', 0x10);
 define ('UI_OUTPUT_RAW', 0x20);
-define ('UI_OUTPUT_URI', 0x30);
+define ('UI_OUTPUT_URI', 0x40);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.

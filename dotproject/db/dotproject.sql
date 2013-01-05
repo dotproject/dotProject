@@ -129,9 +129,9 @@ CREATE TABLE `%dbprefix%event_queue` (
   `queue_owner` int(11) NOT NULL default '0',
   `queue_origin_id` int(11) NOT NULL default '0',
   `queue_module` varchar(40) NOT NULL default '',
-  `queue_module_type` varchar(20) NOT NULL default '',
+  `queue_batched` int(11) NOT NULL default '0',
   PRIMARY KEY  (`queue_id`),
-  KEY `queue_start` (`queue_start`),
+  KEY `queue_start` (`queue_batched`,`queue_start`),
   KEY `queue_module` (`queue_module`),
   KEY `queue_type` (`queue_type`),
   KEY `queue_origin_id` (`queue_origin_id`)
@@ -426,22 +426,23 @@ CREATE TABLE `%dbprefix%user_preferences` (
 # Recommended changes include:
 #   New admin username -> replace {admin}
 #   New admin password -> replace {passwd]
-#   New admin email -> replace {admin@localhost}
+#   New admin email -> replace {admin@example.com}
 #
 
 INSERT INTO `%dbprefix%users` VALUES (1,1,'admin',MD5('passwd'),0,1,0,0,0,'');
 INSERT INTO `%dbprefix%contacts` (contact_id, contact_first_name, contact_last_name, contact_email) 
   VALUES (1,'Admin','Person','admin@example.com');
 
-INSERT INTO `%dbprefix%permissions` VALUES (1,1,"all",-1, -1);
+INSERT INTO `%dbprefix%permissions` VALUES (1,1,'all',-1, -1);
 
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "LOCALE", "en");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "TABVIEW", "0");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "SHDATEFORMAT", "%d/%m/%Y");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "TIMEFORMAT", "%I:%M %p");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "UISTYLE", "default");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "TASKASSIGNMAX", "100");
-INSERT INTO `%dbprefix%user_preferences` VALUES("0", "USERFORMAT", "user");
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'LOCALE', 'en');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'TABVIEW', '0');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'SHDATEFORMAT', '%d/%m/%Y');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'TIMEFORMAT', '%I:%M %p');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'UISTYLE', 'default');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'TASKASSIGNMAX', '100');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'USERFORMAT', 'user');
+INSERT INTO `%dbprefix%user_preferences` VALUES('0', 'USEDIGESTS', '0');
 
 #
 # Table structure for table 'modules'
@@ -624,52 +625,52 @@ CREATE TABLE `%dbprefix%config` (
 # Dumping data for table `config`
 #
 
-INSERT INTO `%dbprefix%config` VALUES (0, 'host_locale', 'en', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'check_overallocation', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'currency_symbol', '$', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'host_style', 'default', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'company_name', 'My Company', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'page_title', 'dotProject', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'site_domain', 'example.com', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'email_prefix', '[dotProject]', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'admin_username', 'admin', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'username_min_len', '4', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'password_min_len', '4', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'enable_gantt_charts', 'true', '', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'host_locale', 'en', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'check_overallocation', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'currency_symbol', '$', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'host_style', 'default', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'company_name', 'My Company', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'page_title', 'dotProject', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'site_domain', 'example.com', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'email_prefix', '[dotProject]', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'admin_username', 'admin', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'username_min_len', '4', 'auth', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'password_min_len', '4', 'auth', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'enable_gantt_charts', 'true', 'tasks', 'checkbox');
 INSERT INTO `%dbprefix%config` VALUES (0, 'log_changes', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'check_task_dates', 'true', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'check_task_empty_dynamic', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'locale_warn', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'locale_alert', '^', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'daily_working_hours', '8.0', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'display_debug', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'link_tickets_kludge', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'show_all_task_assignees', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'direct_edit_assignment', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'restrict_color_selection', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_view_show_minical', 'true', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_start', '8', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_end', '17', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_increment', '15', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'cal_working_days', '1,2,3,4,5', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'restrict_task_time_editing', 'false', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_m', 'calendar', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_a', 'day_view', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_tab', '1', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'index_max_file_size', '-1', '', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'check_task_dates', 'true', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'check_task_empty_dynamic', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'locale_warn', 'false', 'ui', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'locale_alert', '^', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'daily_working_hours', '8.0', 'tasks', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'display_debug', 'false', 'ui', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'link_tickets_kludge', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'show_all_task_assignees', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'direct_edit_assignment', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'restrict_color_selection', 'false', 'ui', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_view_show_minical', 'true', 'calendar', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_start', '8', 'calendar', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_end', '17', 'calendar', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'cal_day_increment', '15', 'calendar', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'cal_working_days', '1,2,3,4,5', 'calendar', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'restrict_task_time_editing', 'false', 'tasks', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_m', 'calendar', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_a', 'day_view', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'default_view_tab', '1', 'ui', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'index_max_file_size', '-1', 'file', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'session_handling', 'app', 'session', 'select');
 INSERT INTO `%dbprefix%config` VALUES (0, 'session_idle_time', '2d', 'session', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'session_max_lifetime', '1m', 'session', 'text');
 INSERT INTO `%dbprefix%config` VALUES (0, 'debug', '1', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'parser_default', '/usr/bin/strings', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'parser_application/msword', '/usr/bin/strings', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'parser_text/html', '/usr/bin/strings', '', 'text');
-INSERT INTO `%dbprefix%config` VALUES (0, 'parser_application/pdf', '/usr/bin/pdftotext', '', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'parser_default', '/usr/bin/strings', 'file', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'parser_application/msword', '/usr/bin/strings', 'file', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'parser_text/html', '/usr/bin/strings', 'file', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'parser_application/pdf', '/usr/bin/pdftotext', 'file', 'text');
 
 # 20050222
 # moved new config variables by cyberhorse from config-php to a new table
-INSERT INTO `%dbprefix%config` VALUES (0, 'files_ci_preserve_attr', 'true', '', 'checkbox');
-INSERT INTO `%dbprefix%config` VALUES (0, 'files_show_versions_edit', 'false', '', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'files_ci_preserve_attr', 'true', 'file', 'checkbox');
+INSERT INTO `%dbprefix%config` VALUES (0, 'files_show_versions_edit', 'false', 'file', 'checkbox');
 
 # 20050302
 # ldap system config variables
@@ -720,7 +721,7 @@ INSERT INTO %dbprefix%config_list (`config_id`, `config_list_name`)
 	WHERE config_name = 'session_handling';
 
 # 20050405 - temporarily reset the memory limit for gantt charts
-INSERT INTO `%dbprefix%config` VALUES (0, 'reset_memory_limit', '32M', '', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'reset_memory_limit', '32M', 'tasks', 'text');
 
 # 20050303
 # New mail handling options
@@ -1225,4 +1226,7 @@ CREATE TABLE `%dbprefix%dotpermissions` (
 # Manage contacts properly
 INSERT INTO `%dbprefix%config` VALUES (0, 'user_contact_inactivate', 'true', 'auth', 'checkbox');
 INSERT INTO `%dbprefix%config` VALUES (0, 'user_contact_activate', 'false', 'auth', 'checkbox');
+
+# 20130105
+INSERT INTO `%dbprefix%config` VALUES (0, 'task_reminder_batch', 'false', 'task_reminder', 'checkbox');
 

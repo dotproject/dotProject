@@ -73,10 +73,15 @@ class CTask extends CDpObject
 	var $task_contacts = NULL;
 	var $task_custom = NULL;
 	var $task_type	 = NULL;
+
+	protected $_reminder_list = array();
+	protected $_reminder_sender = null;
+	protected $_default_batch_status = null;
 	
 	
 	public function __construct() {
 		parent::__construct('tasks', 'task_id');
+		$this->_module_directory = 'tasks';
 	}
 	
 	function __toString() {
@@ -2000,9 +2005,10 @@ class CTask extends CDpObject
 			return $this->clearReminder(true);
 		}
 		
-		$eq = new EventQueue;
+		$eq = EventQueue::getInstance();
 		$pre_charge = dPgetConfig('task_reminder_days_before', 1);
 		$repeat = dPgetConfig('task_reminder_repeat', 100);
+		$batched = dPgetConfig('task_reminder_batch', false);
 		
 		/*
 		 * If we don't need any arguments (and we don't) then we set this to null. 
@@ -2032,26 +2038,49 @@ class CTask extends CDpObject
 			$start_day -= ($day * $pre_charge);
 		}
 		
-		$eq->add(array($this, 'remind'), $args, 'tasks', false, $this->task_id, 'remind', 
-				 $start_day, $day, $repeat);
+		// If batched we add a batched request.
+		if ($batched) {
+			$eq->add($this, $args, 'remind', array(
+				'id' => $this->task_id,
+				'type' => 'remind',
+				'date' => $start_day,
+				'repeat_interval' => $day,
+				'repeat_count' => $repeat,
+				'batch' => $batched));
+		}
+		// We also add a non-batched version so that we can handle those
+		// who don't want digests - we handle that case within the send
+		// functions themselves.  This might need to be rethought at some
+		// stage.
+		$eq->add($this, $args, 'remind', array(
+			'id' => $this->task_id,
+			'type' => 'remind',
+			'date' => $start_day,
+			'repeat_interval' => $day,
+			'repeat_count' => $repeat));
 	}
 	
 	/**
 	 * Called by the Event Queue processor to process a reminder
 	 * on a task.
 	 * @access		  public
-	 * @param		 string		   $module		  Module name (not used)
-	 * @param		 string		   $type Type of event (not used)
-	 * @param		 integer		$id ID of task being reminded
-	 * @param		 integer		$owner		  Originator of event
-	 * @param		 mixed		  $args event-specific arguments.
+	 * @param		mixed		$data options controlling execution
 	 * @return		  mixed		   true, dequeue event, false, event stays in queue.
 	 -1, event is destroyed.
 	*/
-	function remind($module, $type, $id, $owner, &$args) {
+	function EventQueue_remind_immediate($data) {
 		global $locale_char_set, $AppUI;
 		$q = new DBQuery;
-		
+
+		if (! isset($this->_default_batch_status)) {
+			$q->addTable('user_preferences');
+			$q->addQuery('pref_value');
+			$q->addWhere('pref_user = 0 and pref_name = \'USEDIGESTS\'');
+			$this->_default_batch_status = $q->loadResult();
+			$q->clear();
+		}
+		$id = $data['queue_origin_id'];
+		$owner = $data['queue_owner'];
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$tf = $AppUI->getPref('TIMEFORMAT');
 		// If we don't have preferences set for these, use ISO defaults.
@@ -2084,7 +2113,9 @@ class CTask extends CDpObject
 		$q->addTable('user_tasks', 'ut');
 		$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->leftJoin('user_preferences', 'pr', 'pr.pref_user = u.user_id and pr.pref_name = \'USEDIGESTS\'');
 		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('pr.pref_value as batched, pr.pref_user');
 		$q->addWhere('ut.task_id = ' . $id);
 		$contacts = $q->loadHashList('contact_id');
 		$q->clear();
@@ -2094,17 +2125,21 @@ class CTask extends CDpObject
 		$owner_is_not_assignee = false;
 		$q->addTable('users', 'u');
 		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->leftJoin('user_preferences', 'pr', 'pr.pref_user = u.user_id and pr.pref_name = \'USEDIGESTS\'');
 		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('pr.pref_value as batched, pr.pref_user');
 		$q->addWhere('u.user_id = ' . $this->task_owner);
 		if ($q->exec(ADODB_FETCH_NUM)) {
-			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
+			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email, $owner_batched, $pref_user) = $q->fetchRow();
 			if (! isset($contacts[$owner_contact])) {
 				$owner_is_not_assignee = true;
 				$contacts[$owner_contact] = array(
 												  'contact_id' => $owner_contact,
 												  'contact_first_name' => $owner_first_name,
 												  'contact_last_name' => $owner_last_name,
-												  'contact_email' => $owner_email
+												  'contact_email' => $owner_email,
+												  'batched' => $owner_batched,
+												  'pref_user' => $pref_user,
 												);
 			}
 		}
@@ -2155,22 +2190,216 @@ class CTask extends CDpObject
 				  . $this->task_description . "\n");
 		
 		$mail = new Mail;
+		// Send out those that require an individual email for each event
+		$send_count = 0;
+		$batched = dPgetConfig('task_reminder_batch', false);
 		foreach ($contacts as $contact) {
 			if ($mail->ValidEmail($contact['contact_email'])) {
-				$mail->To($contact['contact_email']);
+				$contact_batched = $contact['pref_user'] ? $contact_batched : $this->_default_batch_status;
+				if (!$batched || !$contact_batched) {
+					$mail->To($contact['contact_email']);
+					$send_count++;
+				}
 			}
 		}
-		$mail->From ('"' . $owner_first_name . ' ' . $owner_last_name . '" <' . $owner_email . '>');
-		$mail->Subject($subject, $locale_char_set);
-		$mail->Body($body, $locale_char_set);
-		return $mail->Send();
+		if ($send_count) {
+			$mail->From ('"' . $owner_first_name . ' ' . $owner_last_name . '" <' . $owner_email . '>');
+			$mail->Subject($subject, $locale_char_set);
+			$mail->Body($body, $locale_char_set);
+			return $mail->Send();
+		} else {
+			return true; // Have to assume we sent it out OK.
+		}
+	}
+
+	/**
+	 * Called by the Event Queue processor to process a reminder marked as batched
+	 * This basically means we construct a digest for each user that requests it.
+	 *
+	 * @access		  public
+	 * @param		mixed		$data options controlling execution
+	 * @return		  mixed		   true, dequeue event, false, event stays in queue.
+	 -1, event is destroyed.
+	*/
+	function EventQueue_remind_batched($data) {
+		global $locale_char_set, $AppUI;
+		$q = new DBQuery;
+
+		if (! isset($this->_default_batch_status)) {
+			$q->addTable('user_preferences');
+			$q->addQuery('pref_value');
+			$q->addWhere('pref_user = 0 and pref_name = \'USEDIGESTS\'');
+			$this->_default_batch_status = $q->loadResult();
+			$q->clear();
+		}
+		$id = $data['queue_origin_id'];
+		$owner = $data['queue_owner'];
+		$df = $AppUI->getPref('SHDATEFORMAT');
+		$tf = $AppUI->getPref('TIMEFORMAT');
+		// If we don't have preferences set for these, use ISO defaults.
+		if (! $df) {
+			$df = '%Y-%m-%d';
+		}
+		if (! $tf) {
+			$tf = '%H:%m';
+		}
+		$df .= ' ' . $tf;
+		
+		// At this stage we won't have an object yet
+		if (! $this->load($id)) {
+			return -1; // No point it trying again later.
+		}
+		$this->htmlDecode();
+		
+		// Only remind on working days.
+		$today = new CDate();
+		if (! $today->isWorkingDay()) {
+			return true;
+		}
+		
+		// Check if the task is completed
+		if ($this->task_percent_complete == 100) {
+			return -1;
+		}
+		
+		// Grab the assignee list
+		$q->addTable('user_tasks', 'ut');
+		$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
+		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->leftJoin('user_preferences', 'pr', "pr.pref_user = u.user_id and pr.pref_name = 'USEDIGESTS'");
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('pr.pref_value as batched, pr.pref_user');
+		$q->addWhere('ut.task_id = ' . $id);
+		$contacts = $q->loadHashList('contact_id');
+		$q->clear();
+		
+		// Now we also check the owner of the task, as we will need
+		// to notify them as well.
+		$owner_is_not_assignee = false;
+		$q->addTable('users', 'u');
+		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->leftJoin('user_preferences', 'pr', "pr.pref_user = u.user_id and pr.pref_name = 'USEDIGESTS'");
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('pr.pref_value as batched, pr.pref_user');
+		$q->addWhere('u.user_id = ' . $this->task_owner);
+		if ($q->exec(ADODB_FETCH_NUM)) {
+			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email, $owner_batched, $pref_user) = $q->fetchRow();
+			if (! isset($contacts[$owner_contact])) {
+				$owner_is_not_assignee = true;
+				$contacts[$owner_contact] = array(
+												  'contact_id' => $owner_contact,
+												  'contact_first_name' => $owner_first_name,
+												  'contact_last_name' => $owner_last_name,
+												  'contact_email' => $owner_email,
+												  'batched' => $owner_batched,
+												  'pref_user' => $pref_user,
+												);
+			}
+		}
+		$q->clear();
+		
+		// build the subject line, based on how soon the
+		// task will be overdue.
+		$starts = new CDate($this->task_start_date);
+		$expires = new CDate($this->task_end_date);
+		$now = new CDate();
+		$diff = $expires->dateDiff($now);
+		
+		$prefix = $AppUI->_('Task Due', UI_OUTPUT_RAW);
+		if ($diff == 0) {
+			$msg = $AppUI->_('TODAY', UI_OUTPUT_RAW);
+		} else if ($diff == 1) {
+			$msg = $AppUI->_('TOMORROW', UI_OUTPUT_RAW);
+		} else if ($diff < 0) {
+			$msg = $AppUI->_(array('OVERDUE', abs($diff), 'DAYS'));
+			$prefix = $AppUI->_('Task', UI_OUTPUT_RAW);
+		} else {
+			$msg = $AppUI->_(array($diff, 'DAYS'));
+		}
+		
+		$q->addTable('projects');
+		$q->addQuery('project_name');
+		$q->addWhere('project_id = ' . $this->task_project);
+		$project_name = htmlspecialchars_decode($q->loadResult());
+		$q->clear();
+		
+		$subject = $prefix . ' ' .$msg . ' ' . $this->task_name . '::' . $project_name;
+		
+		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" 
+				 . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" 
+				 . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" 
+				 . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $starts->format($df) . "\n" 
+				 . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $expires->format($df) . "\n" 
+				 . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . DP_BASE_URL 
+				 . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" 
+				 . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
+		foreach ($contacts as $contact) {
+			if ($owner_is_not_assignee || $contact['contact_id'] != $owner_contact) {
+				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] 
+						  . ' <' . $contact['contact_email'] . ">\n");
+			}
+		}
+		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" 
+				  . $this->task_description . "\n");
+		
+		foreach ($contacts as $contact) {
+			$contact_batched = $contact['pref_user'] ? $contact['batched'] : $this->_default_batch_status;
+			if ($contact_batched) {
+				if (! isset($this->_reminder_list[$contact['contact_email']])) {
+					$this->_reminder_list[$contact['contact_email']] = array(
+						'contact' => $contact,
+						'email' => array(),
+					);
+				}
+				$this->_reminder_list[$contact['contact_email']]['email'][] = array(
+					'subject' => $subject,
+					'from' => $owner_first_name . ' ' . $owner_last_name,
+					'body' => $body,);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Handler function to terminate batched requests.  This allows us to
+	 * send out any digest style reminders that users have asked for.
+	 */
+	function EventQueue_remind_terminateBatch() {
+		global $locale_char_set, $AppUI;
+
+		$site = dPgetConfig('company_name', 'dotProject');
+		$domain = dPgetConfig('site_domain', 'example.com');
+		$from_name = dPgetConfig('admin_username', 'admin');
+		$from_mail = $site . ' Site Admin <'.$from_name.'@'.$domain.'>';
+		foreach ($this->_reminder_list as $reminder) {
+			$mail = new Mail();
+			$mail->From($from_mail);
+			$mail->Subject('Task Reminder Digest', $locale_char_set);
+			if (! $mail->ValidEmail($reminder['contact']['contact_email'])) {
+				continue;
+			}
+			$mail->To($reminder['contact']['contact_email']);
+			$body = '';
+			foreach ($reminder['email'] as $email) {
+				$body .= "================================================\n\n";
+				$body .= $email['subject'] . "\n\n";
+				$body .= $email['body'] . "\n\n";
+			}
+			$mail->Body($body, $locale_char_set);
+			$mail->Send();
+		}
+		$this->_reminder_list = array();
+	}
+
+	function EventQueue_remind_initiateBatch() {
+		$this->_reminder_list = array();
 	}
 	
 	/**
 	 *
 	 */
 	function clearReminder($dont_check = false) {
-		$ev = new EventQueue;
+		$ev = EventQueue::getInstance();
 		
 		$event_list = $ev->find('tasks', 'remind', $this->task_id);
 		if (count($event_list)) {
@@ -2203,8 +2432,8 @@ class CTaskLog extends CDpObject
 	var $task_log_related_url = NULL;
 	
 	
-	function CTaskLog() {
-		$this->CDpObject('task_log', 'task_log_id');
+	function __construct() {
+		parent::__construct('task_log', 'task_log_id');
 		
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = intval($this->task_log_problem);
@@ -2462,7 +2691,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			? ('onmouseover="javascript:return overlib(' . "'" 
 			   . $AppUI->showHTML('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
 														   $a['task_description'])
-								  ) . '</p></div>' . "', CAPTION, '" 
+								  . '</p></div>') . "', CAPTION, '" 
 			   . $AppUI->_('Description') . "'" . ', CENTER);" onmouseout="nd();"')
 			: ' ');
 	
@@ -2752,4 +2981,3 @@ function sort_by_item_title($title, $item_name, $item_type) {
 	echo dPsanitiseHTML($link);
 }
 
-?>

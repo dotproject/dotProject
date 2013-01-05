@@ -59,14 +59,14 @@ class DBQuery {
 	var $_query_id = null;
 	var $_old_style = null;
 	
-	function DBQuery($prefix = null) {
+	public function __construct($prefix = null) {
 		$this->_table_prefix = ((isset($prefix)) ? $prefix : dPgetConfig('dbprefix', ''));
 		$this->include_count = false;
 		$this->clear();
 	}
 	
 	
-	function clear() {
+	public function clear() {
 		global $ADODB_FETCH_MODE;
 		if (isset($this->_old_style)) {
 			$ADODB_FETCH_MODE = $this->_old_style;

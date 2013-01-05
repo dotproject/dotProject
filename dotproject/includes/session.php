@@ -151,7 +151,7 @@ function dPsessionGC($maxlifetime) {
 		// queue scanner.
 		if (! isset($AppUI)) {
 			$AppUI = new CAppUI;
-			$queue = new EventQueue;
+			$queue = EventQueue::getInstance();
 			$queue->scan();
 		}
 	}
