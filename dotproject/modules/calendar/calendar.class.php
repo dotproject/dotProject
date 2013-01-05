@@ -67,7 +67,7 @@ class CMonthCalendar {
 	/**
 	 * @param Date $date
 	 */
- function CMonthCalendar($date=null) {
+ public function __construct($date=null) {
 		$this->setDate($date);
 		
 		$this->classes = array();
@@ -473,8 +473,8 @@ class CEvent extends CDpObject {
 	var $event_notify = null;
 	var $event_cwd = null;
 	
-	function CEvent() {
-		$this->CDpObject('events', 'event_id');
+	public function __construct() {
+		parent::__construct('events', 'event_id');
 	}
 	
 	// overload check operation

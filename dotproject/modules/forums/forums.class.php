@@ -19,9 +19,9 @@ class CForum extends CDpObject {
 	var $forum_description = NULL;
 	var $forum_moderated = NULL;
 
-	function CForum() {
+	function __construct() {
 		// empty constructor
-		parent::CDpObject('forums', 'forum_id');
+		parent::__construct('forums', 'forum_id');
 	}
 
 	function bind($hash) {
@@ -103,7 +103,7 @@ class CForumMessage {
 	var $message_body = NULL;
 	var $message_published = NULL;
 
-	function CForumMessage() {
+	function __construct() {
 		// empty constructor
 	}
 

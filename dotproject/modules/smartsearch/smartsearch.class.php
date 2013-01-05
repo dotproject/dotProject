@@ -37,7 +37,7 @@ class smartsearch  {
 //	$search_options['all_words']==""			match any of the words /default/
 //	$search_options['all_words']=="on"			match all words
 
-	function smartsearch() {
+	function __construct() {
 		return null;
 	}
 	

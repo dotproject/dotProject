@@ -44,8 +44,8 @@ class CProject extends CDpObject {
 	var $project_priority = NULL;
 	var $project_type = NULL;
 
-	function CProject() {
-		$this->CDpObject('projects', 'project_id');
+	function __construct() {
+		parent::__construct('projects', 'project_id');
 	}
 
 	function check() {

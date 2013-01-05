@@ -49,8 +49,8 @@ class CContact extends CDpObject{
 	var $contact_owner = NULL;
 	var $contact_private = NULL;
 	
-	function CContact() {
-		$this->CDpObject('contacts', 'contact_id');
+	public function __construct() {
+		parent::__construct('contacts', 'contact_id');
 	}
 	
 	function check() {

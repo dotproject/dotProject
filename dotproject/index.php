@@ -312,4 +312,3 @@ if (!$suppressHeaders) {
 	require (DP_BASE_DIR . '/style/' . $uistyle . '/footer.php');
 }
 ob_end_flush();
-?>

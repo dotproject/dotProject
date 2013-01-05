@@ -13,7 +13,7 @@ class CPreferences {
 	
 	var $_default_prefs = NULL;
 	
-	function CPreferences() {
+	function __construct() {
 		// empty constructor
 	}
 	
@@ -87,8 +87,8 @@ class CModule extends CDpObject {
 	var $permissions_item_field=null;
 	var $permissions_item_table=null;
 	
-	function CModule() {
-		$this->CDpObject('modules', 'mod_id');
+	function __construct() {
+		parent::__construct('modules', 'mod_id');
 	}
 	
 	function install() {
@@ -209,8 +209,8 @@ class CConfig extends CDpObject {
 	var $config_name = NULL;
 	var $config_value = NULL;
 	
-	function CConfig() {
-		$this->CDpObject('config', 'config_id');
+	function __construct() {
+		parent::__construct('config', 'config_id');
 	}
 	
 	function check() {
@@ -267,8 +267,8 @@ class bcode extends CDpObject {
 	var $billingcode_value;
 	var $billingcode_status;
 	
-	function bcode() {
-		$this->CDpObject('billingcode', 'billingcode_id');
+	function __construct() {
+		parent::__construct('billingcode', 'billingcode_id');
 	}
 	
 	function bind($hash) {

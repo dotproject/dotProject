@@ -43,8 +43,8 @@ class CCompany extends CDpObject {
 	
 	var $company_custom = null;
 
-	function CCompany() {
-		$this->CDpObject('companies', 'company_id');
+	public function __construct() {
+		parent::__construct('companies', 'company_id');
 	}
     
 // overload check

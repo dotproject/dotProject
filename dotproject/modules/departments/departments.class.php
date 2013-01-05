@@ -23,7 +23,7 @@ class CDepartment extends CDpObject {
 	var $dept_desc = NULL;
 	var $dept_owner = NULL;
 
-	function CDepartment() {
+	public function __construct() {
 		// empty constructor
 	}
 

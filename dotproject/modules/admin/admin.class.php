@@ -34,8 +34,8 @@ class CUser extends CDpObject {
 	var $user_pic = NULL;
 	var $user_owner = NULL; */
 
-	function CUser() {
-		$this->CDpObject('users', 'user_id');
+	public function __construct() {
+		parent::__construct('users', 'user_id');
 	}
 
 	function check() {

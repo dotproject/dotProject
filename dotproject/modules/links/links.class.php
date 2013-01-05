@@ -23,8 +23,8 @@ class CLink extends CDpObject {
 	var $link_category = NULL;
 
 	
-	function CLink() {
-		$this->CDpObject('links', 'link_id');
+	function __construct() {
+		parent::__construct('links', 'link_id');
 	}
 
 	function check() {
