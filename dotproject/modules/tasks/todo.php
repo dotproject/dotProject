@@ -17,9 +17,10 @@ $tab = $AppUI->getState('ToDoTab') !== NULL ? $AppUI->getState('ToDoTab') : 0;
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 $date = (int)dPgetParam($_GET, 'date', 0);
 // Check this as the original logic was flawed
-if (!$date) {
+if ($date) {
 	$date = $this_day->format(FMT_TIMESTAMP_DATE);
 }
+
 $user_id = $AppUI->user_id;
 $no_modify = false;
 $other_users = false;
