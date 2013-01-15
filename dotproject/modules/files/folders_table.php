@@ -116,7 +116,7 @@ function displayFolders($folder_id=0, $level=0) {
 		          . '">') : '') . "\n");
 		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/folder5_small.png', '16', '16', 
 		                  'folder icon', $AppUI->_('show only this folder')) 
-		      . $row['file_folder_name'] . "\n");
+		      . $AppUI->___($row['file_folder_name']) . "\n");
 		echo ((($m=='files') ? '</a>' : ''). "\n");
 		
 		if ($file_count > 0) {
@@ -129,7 +129,7 @@ function displayFolders($folder_id=0, $level=0) {
 		
 		
 		if ($row['file_folder_description'] && !($folder_id && $level)) {
-			echo ('<p>' . $row['file_folder_description'] . '</p>');
+			echo $AppUI->___('<p>' . $row['file_folder_description'] . '</p>');
 		} else if ($level) { 
 			
 			if ($folder_id) {
@@ -477,14 +477,14 @@ function displayFiles($folder_id) {
 		$file_icon = getIcon($row['file_type']);
 ?>
 			<a href="./fileviewer.php?file_id=<?php echo $row['file_id']; ?>" title="<?php 
-		echo $row['file_description']; ?>"> 
+		echo $AppUI->___($row['file_description']); ?>"> 
 			<?php 
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16');
 ?>
 			&nbsp;<?php echo $row['file_name']; ?> 
 			</a>
 		</td>
-		<td width="20%"><?php echo $row['file_description'];?></td>
+		<td width="20%"><?php echo $AppUI->___($row['file_description']);?></td>
 		<td width="5%" nowrap="nowrap" align="center">
 			<?php
 		$hidden_table = '';
@@ -506,7 +506,7 @@ function displayFiles($folder_id) {
 			</a>
 		</td>
 		<td width="15%" nowrap="nowrap">
-			<?php echo ($row["contact_first_name"] . ' ' . $row["contact_last_name"]); ?>
+			<?php echo $AppUI->___($row["contact_first_name"] . ' ' . $row["contact_last_name"]); ?>
 		</td>
 		<td width="5%" nowrap="nowrap" align="right">
 			<?php echo file_size(intval($row['file_size'])); ?>
@@ -518,7 +518,7 @@ function displayFiles($folder_id) {
 			<?php echo $file_date->format($df . ' ' . $tf); ?>
 		</td>
 		<td width="15%">
-			<?php echo $row['file_co_reason']; ?> <?php 
+			<?php echo $AppUI->___($row['file_co_reason']); ?> <?php 
 	if (!(empty($row['file_checkout'])) 
 	    && ($row['file_checkout'] == $AppUI->user_id 
 	        || ($canEdit && ($canAdmin || $row['project_owner'] == $AppUI->user_id)))) {
@@ -655,21 +655,21 @@ function displayFiles($folder_id) {
 					echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', 
 					                 '16');
 ?>
-				<?php echo $file['file_name']; ?> 
+				<?php echo $AppUI->___($file['file_name']); ?> 
 				</a>
 			</td>
-			<td width="20%"><?php echo $file['file_description']; ?></td>
+			<td width="20%"><?php echo $AppUI->___($file['file_description']); ?></td>
 			<td width="5%" nowrap="nowrap" align="center"><?php echo $file['file_version']; ?></td>
 			<td width="10%" nowrap="nowrap" align="center">
 				<?php echo $file_types[$file['file_category']]; ?>
 			</td>
 			<td width="5%" align="center">
 				<a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $file['file_task']; ?>">
-				<?php echo $file['task_name']; ?>
+				<?php echo $AppUI->___($file['task_name']); ?>
 				</a>
 			</td>
 			<td width="15%" nowrap="nowrap">
-				<?php echo ($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
+				<?php echo $AppUI->___($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
 			</td>
 			<td width="5%" nowrap="nowrap" align="right">
 			  <?php echo file_size(intval($file['file_size'])); ?>

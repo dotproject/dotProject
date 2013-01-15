@@ -273,7 +273,7 @@ foreach ($files as $file_row) {
 <tr>
 	<td colspan="20" style="border: outset 2px #eeeeee;<?php echo $style; ?>">
 		<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $latest_file['file_project']; ?>">
-		<span style="<?php echo $style; ?>"><?php echo $latest_file['project_name']; ?></span>
+		<span style="<?php echo $style; ?>"><?php echo $AppUI->___($latest_file['project_name']); ?></span>
 		</a>
 	</td>
 </tr><?php
@@ -321,7 +321,7 @@ foreach ($files as $file_row) {
 ?>
 	</td>
 	<td width="10%">
-		<?php echo ($latest_file['file_co_reason']); ?> <?php 
+		<?php echo $AppUI->___($latest_file['file_co_reason']); ?> <?php 
 	if (!(empty($latest_file['file_checkout'])) 
 	    && ($latest_file['file_checkout'] == $AppUI->user_id 
 	        || ($canEdit && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id)))) {
@@ -347,14 +347,14 @@ foreach ($files as $file_row) {
 	$file_icon = getIcon($file_row['file_type']);
 ?>
 		<a href="./fileviewer.php?file_id=<?php 
-	echo $latest_file['file_id']; ?>" title="<?php echo $latest_file['file_description']; ?>">
+	echo $latest_file['file_id']; ?>" title="<?php echo $AppUI->___($latest_file['file_description']); ?>">
 		<?php
 	echo (dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16') . "\n" 
 	      . '&nbsp;' . $filename);
 ?>
 	  </a>
 	</td>
-	<td width="20%"><?php echo $latest_file['file_description']; ?></td>
+	<td width="20%"><?php echo $AppUI->___($latest_file['file_description']); ?></td>
 	<td width="5%" nowrap="nowrap" align="center">
 		<?php 
 	echo $file_row['file_lastversion'];
@@ -380,7 +380,7 @@ foreach ($files as $file_row) {
 		echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
 		                 '16', '16', 'folder icon', 'show only this folder');
 ?> 
-		<?php echo  $file_row['file_folder_name']; ?>
+		<?php echo  $AppUI->___($file_row['file_folder_name']); ?>
 		</a> <?php
 	} else {
 		echo $AppUI->_('Root');
@@ -395,7 +395,7 @@ foreach ($files as $file_row) {
 	</td>
 	<td width="15%" nowrap="nowrap">
 		<?php 
-	echo ($latest_file["contact_first_name"] . ' ' . $latest_file["contact_last_name"]); 
+	echo $AppUI->___($latest_file["contact_first_name"] . ' ' . $latest_file["contact_last_name"]); 
 ?>
 	</td>
 	<td width="5%" nowrap="nowrap" align="right">
@@ -453,14 +453,14 @@ foreach ($files as $file_row) {
 		</td>
 		<td nowrap="8%">
 			<a href="./fileviewer.php?file_id=<?php echo $file['file_id']; ?>" title="<?php 
-				echo $file['file_description']; ?>">
+				echo $AppUI->___($file['file_description']); ?>">
 			<?php 
 				echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16');
 ?>
-			<?php echo $file['file_name']; ?> 
+			<?php echo $AppUI->___($file['file_name']); ?> 
 			</a>
 		</td>
-		<td width="20%"><?php echo $file['file_description']; ?></td>
+		<td width="20%"><?php echo $AppUI->___($file['file_description']); ?></td>
 		<td width="5%" nowrap="nowrap" align="center"><?php echo $file['file_version']; ?></td>
 		<td width="10%" nowrap="nowrap" align="center">
 			<?php echo $file_types[$file['file_category']]; ?>
@@ -477,7 +477,7 @@ foreach ($files as $file_row) {
 					echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
 					                 '16', '16', 'folder icon', 'show only this folder');
 ?> 
-			<?php echo  $file['file_folder_name']; ?>
+			<?php echo  $AppUI->___($file['file_folder_name']); ?>
 			</a><?php
 				} else {
 					echo $AppUI->_('Root');
@@ -486,11 +486,11 @@ foreach ($files as $file_row) {
 		</td>
 		<td width="5%" align="center">
 			<a href="./index.php?m=tasks&amp;a=view&amp;task_id=<?php echo $file['file_task']; ?>">
-			<?php echo $file['task_name']; ?>
+			<?php echo $AppUI->___($file['task_name']); ?>
 			</a>
 		</td>
 		<td width="15%" nowrap="nowrap">
-			<?php echo ($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
+			<?php echo $AppUI->___($file["contact_first_name"] . ' ' . $file["contact_last_name"]); ?>
 		</td>
 		<td width="5%" nowrap="nowrap" align="right">
 			<?php echo file_size(intval($file['file_size'])); ?>
