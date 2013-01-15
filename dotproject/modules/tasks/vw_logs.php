@@ -99,17 +99,17 @@ foreach ($logs as $row) {
 		}
 	}
 	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
-	$s .= '<td width="30%" style="'.$style.'">' . @$row['task_log_name'] . '</td>';
+	$s .= '<td width="30%" style="'.$style.'">' . $AppUI->___(@$row['task_log_name']) . '</td>';
 	$s .= ((!(empty($row['task_log_related_url']))) 
 	       ? ('<td><a href="'.@$row['task_log_related_url'] . '" title="' 
 	          . @$row['task_log_related_url'].'">' . $AppUI->_('URL') . '</a></td>') 
 	       : '<td></td>');
-	$s .= '<td width="100">' . $row['user_username'] . '</td>';
+	$s .= '<td width="100">' . $AppUI->___($row['user_username']) . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
 	$minutes = (int) (($row['task_log_hours'] - ((int) $row['task_log_hours'])) * 60);
 	$minutes = ((mb_strlen($minutes) == 1) ? ('0' . $minutes) : $minutes);
 	$s .= (int) $row['task_log_hours'] . ':' . $minutes . ')</td>';
-	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td>';
+	$s .= '<td width="100">' . $AppUI->___($row['task_log_costcode']) . '</td>';
 	$s .= '<td><a name="tasklog' . @$row['task_log_id'] . '"></a>';
 
 // dylan_cuthbert: auto-transation system in-progress, leave these lines
@@ -117,14 +117,14 @@ foreach ($logs as $row) {
 	$descrip = str_replace("\n", '<br />', $row['task_log_description']);
 	$tranpos = mb_strpos($descrip, str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
-		$s .= $descrip;
+		$s .= $AppUI->___($descrip);
 	} else {
 		$descrip = mb_substr($descrip, 0, $tranpos);
 		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
 		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
 		$transla = trim(str_replace("'", '"', $transla));
-		$s .= ($descrip.'<div style="font-weight: bold; text-align: right"><a title="' . $transla 
-		       . '" class="hilite">["' . $AppUI->_('translation') . '"]</a></div>');
+		$s .= $AppUI->___($descrip) .'<div style="font-weight: bold; text-align: right"><a title="' . $AppUI->___($transla)
+		       . '" class="hilite">["' . $AppUI->_('translation') . '"]</a></div>';
 	}
 	// end auto-translation code
 	
