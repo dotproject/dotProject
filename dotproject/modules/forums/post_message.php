@@ -136,8 +136,8 @@ if ($message_parent >= 0) {
 ?>
 
 <tr><td align="right"><?php echo $AppUI->_('Author') ?>:</td><td align="left"><?php echo dPgetUsername($message_info['user_username']) ?> (<?php echo $date->format("$df $tf");?>)</td></tr>
-<tr><td align="right"><?php echo  $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
-<tr><td align="right" valign="top"><?php echo  $AppUI->_('Message') ?>:</td><td align="left"><textarea name="message_parent_body" cols="60" readonly="readonly" style="height:100px; font-size:8pt"><?php echo $message_info['message_body'];?></textarea></td></tr>
+<tr><td align="right"><?php echo  $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $AppUI->___($message_info['message_title']); ?></td></tr>
+<tr><td align="right" valign="top"><?php echo  $AppUI->_('Message') ?>:</td><td align="left"><textarea name="message_parent_body" cols="60" readonly="readonly" style="height:100px; font-size:8pt"><?php echo $AppUI->___($message_info['message_body']);?></textarea></td></tr>
 <tr><td colspan="2" align="left"><hr /></td></tr>
 <?php
 }
@@ -145,13 +145,13 @@ if ($message_parent >= 0) {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Subject');?>:</td>
 	<td>
-		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$message_info['message_title'];?>" size=50 maxlength=250 />
+		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$AppUI->___($message_info['message_title']);?>" size=50 maxlength=250 />
 	</td>
 </tr>
 <tr>
 	<td align="right" valign="top"><?php echo $AppUI->_('Message');?>:</td>
 	<td align="left" valign="top">
-       <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>"  .  $last_message_info['message_body'] . "\n" : $message_info['message_body'];?></textarea>
+       <textarea cols="60" name="message_body" style="height:200px"><?php echo $AppUI->___((($message_id == 0) and ($message_parent != -1)) ? "\n>"  .  $last_message_info['message_body'] . "\n" : $message_info['message_body']);?></textarea>
 	</td>
 </tr>
 <tr>

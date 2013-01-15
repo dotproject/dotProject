@@ -167,7 +167,7 @@ foreach ($messages as $row) {
 			if (!$hideEmail) {
 				$s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
 			}
-			$s .= ('<font size="1">' . $AppUI->___($editor[0]['contact_first_name']) . ' ' . $AppUI->___($editor[0]['contact_last_name']) 
+			$s .= ('<font size="1">' . $AppUI->___($editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name']) 
 			       . '</font>');
 			if (! $hideEmail) {
 				$s .= '</a>';

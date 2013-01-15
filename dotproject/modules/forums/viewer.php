@@ -50,21 +50,21 @@ $titleBlock->show();
 <table width="100%" cellspacing="0" cellpadding="2" border="0" class="std">
 <tr>
 	<td height="20" colspan="3" style="border: outset #D1D1CD 1px;background-color:#<?php echo $forum["project_color_identifier"];?>">
-		<font size="2" color=<?php echo bestColor($forum["project_color_identifier"]);?>><strong><?php echo @$forum["forum_name"];?></strong></font>
+		<font size="2" color=<?php echo bestColor($forum["project_color_identifier"]);?>><strong><?php echo $AppUI->___(@$forum["forum_name"]);?></strong></font>
 	</td>
 </tr>
 <tr>
 	<td align="left" nowrap><?php echo $AppUI->_('Related Project');?>:</td>
-	<td nowrap="nowrap"><strong><a href="?m=projects&amp;a=view&amp;project_id=<?php echo $forum['forum_project']; ?>"><strong><?php echo $forum["project_name"];?></a></strong></td>
+	<td nowrap="nowrap"><strong><a href="?m=projects&amp;a=view&amp;project_id=<?php echo $forum['forum_project']; ?>"><strong><?php echo $AppUI->___($forum["project_name"]);?></a></strong></td>
 	<td valign="top" width="50%" rowspan="99">
 		<strong><?php echo $AppUI->_('Description');?>:</strong>
-		<br /><?php echo @str_replace(chr(13), "&nbsp;<br />",$forum["forum_description"]);?>
+		<br /><?php echo $AppUI->___(@str_replace(chr(13), "&nbsp;<br />",$forum["forum_description"]));?>
 	</td>
 </tr>
 <tr>
 	<td align="left"><?php echo $AppUI->_('Owner');?>:</td>
 	<td nowrap><?php
-		echo $forum['contact_first_name'] . ' ' . $forum['contact_last_name'];
+		echo $AppUI->___($forum['contact_first_name'] . ' ' . $forum['contact_last_name']);
 		if (intval($forum["forum_id"]) <> 0) {
 			echo " (".$AppUI->_('moderated').") ";
 		}?>

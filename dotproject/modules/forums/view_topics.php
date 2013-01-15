@@ -112,10 +112,10 @@ foreach ($topics as $row) {
 		<span style="font-size:10pt;">
 		<a href="?m=forums&amp;a=viewer&amp;forum_id=<?php 
 		echo $forum_id . '&amp;message_id=' . $row['message_id']; ?>"><?php 
-		echo $row['message_title']; ?></a>
+		echo $AppUI->___($row['message_title']); ?></a>
 		</span>
 	</td>
-	<td bgcolor="#dddddd" width="10%"><?php echo $row['user_username']; ?></td>
+	<td bgcolor="#dddddd" width="10%"><?php echo $AppUI->___($row['user_username']); ?></td>
 	<td align="center" width="10%"><?php echo  $row['replies']; ?></td>
 	<td bgcolor="#dddddd" width="150" nowrap="nowrap">
 		<?php 
