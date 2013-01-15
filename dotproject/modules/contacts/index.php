@@ -184,12 +184,12 @@ for ($z = 0; $z < $carrWidth; $z++) {
 				<a href="?m=contacts&amp;a=view&amp;contact_id=<?php 
 		echo $contactid; 
 ?>"><strong><?php 
-		echo (($carr[$z][$x]['contact_order_by']) 
+		echo $AppUI->___(($carr[$z][$x]['contact_order_by']) 
 		      ? $carr[$z][$x]['contact_order_by'] 
 		      : ($carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name'])); 
 ?></strong></a>&nbsp;
 				&nbsp;<a title="<?php 
-		echo ($AppUI->_('Export vCard for') . ' ' . $carr[$z][$x]['contact_first_name'] . ' ' 
+		echo $AppUI->___($AppUI->_('Export vCard for') . ' ' . $carr[$z][$x]['contact_first_name'] . ' ' 
 		      . $carr[$z][$x]['contact_last_name']); 
 ?>" href="?m=contacts&amp;a=vcardexport&amp;suppressHeaders=true&amp;contact_id=<?php 
 		echo $contactid; ?>" >(vCard)</a>
