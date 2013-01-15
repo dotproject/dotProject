@@ -37,7 +37,7 @@ function filter_xss($string) {
   if (!validate_utf8($string)) {
     return '';
   }
-  $allowed_tags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd'));
+  $allowed_tags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'table', 'tr', 'td', 'tbody', 'thead', 'br', 'b', 'i'));
   // Store the input format
   _filter_xss_split($allowed_tags, TRUE);
   // Remove NUL characters (ignored by some browsers)
