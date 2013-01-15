@@ -7,7 +7,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-
+define('DATE_CALC_BEGIN_WEEKDAY', LOCALE_FIRST_DAY);
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
@@ -403,4 +403,3 @@ class CDate extends Date {
 		return $wd;
 	}
 }
-?>

@@ -1333,5 +1333,4 @@ class CTitleBlock_core {
 		echo "$s";
 	}
 }
-// !! Ensure there is no white space after this close php tag.
-?>
+

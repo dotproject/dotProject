@@ -7,7 +7,6 @@ if (!defined('DP_BASE_DIR')) {
 ## Calendar classes
 ##
 
-require_once ($AppUI->getLibraryClass('PEAR/Date'));
 require_once ($AppUI->getSystemClass ('dp'));
 require_once $AppUI->getSystemClass('libmail');
 require_once $AppUI->getSystemClass('date');

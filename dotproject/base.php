@@ -85,4 +85,3 @@ set_include_path('.'.PATH_SEPARATOR.$dpLib.PATH_SEPARATOR.$pear.PATH_SEPARATOR.g
 global $dPconfig;
 $dPconfig = array();
 
-?>

@@ -82,7 +82,6 @@ $last_insert_id =$AppUI->last_insert_id;
 $AppUI->checkStyle();
 
 // load the commonly used classes
-require_once($AppUI->getSystemClass('date'));
 require_once($AppUI->getSystemClass('dp'));
 require_once($AppUI->getSystemClass('query'));
 
@@ -168,6 +167,11 @@ if ($AppUI->doLogin()) {
 	exit;
 }
 $AppUI->setUserLocale();
+@include_once('./locales/' . $AppUI->user_locale . '/locales.php');
+@include_once('./locales/core.php');
+
+/* date class sets the default start day which comes from the locale */
+require_once($AppUI->getSystemClass('date'));
 
 
 // bring in the rest of the support and localisation files
