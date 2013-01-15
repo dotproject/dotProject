@@ -212,7 +212,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 	if (mb_substr($cookie_dir, -1) != '/') {
 		$cookie_dir .= '/';
 	}
-	session_set_cookie_params($max_time, $cookie_dir);
+	$domain = $url_parts[2];
+	$secure = ($url_parts[1] == 'https://');
+
+	session_set_cookie_params($max_time, $cookie_dir, $domain, $secure, true);
 	
 	if (is_array($start_vars)) {
 		foreach ($start_vars as $var) {
