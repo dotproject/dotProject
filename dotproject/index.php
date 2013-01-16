@@ -168,7 +168,6 @@ if ($AppUI->doLogin()) {
 }
 $AppUI->setUserLocale();
 @include_once('./locales/' . $AppUI->user_locale . '/locales.php');
-@include_once('./locales/core.php');
 
 /* date class sets the default start day which comes from the locale */
 require_once($AppUI->getSystemClass('date'));
@@ -200,7 +199,6 @@ $a = $AppUI->checkFileName(dPgetCleanParam($_GET, 'a', $def_a));
 $u = $AppUI->checkFileName(dPgetCleanParam($_GET, 'u', ''));
 
 // load module based locale settings
-@include_once (DP_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 @include_once (DP_BASE_DIR . '/locales/core.php');
 
 setlocale(LC_TIME, $AppUI->user_lang);
