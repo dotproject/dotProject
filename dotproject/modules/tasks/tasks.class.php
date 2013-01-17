@@ -2687,13 +2687,17 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$alt = str_replace("\r", ' ', $alt);
 	$alt = str_replace("\n", ' ', $alt);
 	*/
-	$alt = ((!empty($a['task_description']))
-			? ('onmouseover="javascript:return overlib(' . "'" 
-			   . $AppUI->___('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>', 
-														   $a['task_description'])
-								  . '</p></div>') . "', CAPTION, '" 
-			   . $AppUI->_('Description') . "'" . ', CENTER);" onmouseout="nd();"')
-			: ' ');
+	$alt = '';
+	if (!empty($a['task_description'])) {
+		$alt = ('onmouseover="javascript:return overlib(' . "'" 
+			. $AppUI->___('<div><p>' 
+			. str_replace(array("\r\n", "\n", "\r", '"', "'"),
+			   array('</p><p>','</p><p>','</p><p>',"&quot;", "\\'"),
+			   $a['task_description'])
+			. '</p></div>') . "', CAPTION, '" 
+			. $AppUI->_('Description')
+			. "'" . ', CENTER);" onmouseout="nd();"');
+	}
 	
 	if ($a['task_milestone'] > 0) {
 		$s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" ' 
