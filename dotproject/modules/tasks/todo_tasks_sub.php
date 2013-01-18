@@ -45,37 +45,37 @@ if ($other_users) {
 	</td>
 	<td align="right" width="50%"><?php echo $AppUI->_('Show'); ?>:</td>
 	<td>
-	  <input type="checkbox" name="show_pinned" id="show_pinned" onclick="javascript:document.form_buttons.submit()"<?php echo (($showPinned) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_pinned" id="show_pinned" value="1" onclick="javascript:document.form_buttons.submit()"<?php echo (($showPinned) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_pinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showArcProjs) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_arc_proj" id="show_arc_proj" value="1" onclick="javascript:document.form_buttons.submit()" <?php echo (($showArcProjs) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_arc_proj"><?php echo $AppUI->_('Archived Projects'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showHoldProjs) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_hold_proj" id="show_hold_proj" value="1" onclick="javascript:document.form_buttons.submit()" <?php echo (($showHoldProjs) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_hold_proj"><?php echo $AppUI->_('Projects on Hold'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showDynTasks) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_dyn_task" id="show_dyn_task" value="1" onclick="javascript:document.form_buttons.submit()" <?php echo (($showDynTasks) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_dyn_task"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
 	</td>
 	<td>
-	  <input type="checkbox" name="show_low_task" id="show_low_task" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showLowTasks) ? 'checked="checked"' : ''); ?> />
+	  <input type="checkbox" name="show_low_task" id="show_low_task" value="1" onclick="javascript:document.form_buttons.submit()" <?php echo (($showLowTasks) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 	  <label for="show_low_task"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
 	</td>
 	<td>
-		<input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="javascript:document.form_buttons.submit()" <?php echo (($$showEmptyDate) ? 'checked="checked"' : ''); ?> />
+		<input type="checkbox" name="show_empty_date" id="show_empty_date" value="1" onclick="javascript:document.form_buttons.submit()" <?php echo (($showEmptyDate) ? 'checked="checked"' : ''); ?> />
 	</td>
 	<td nowrap="nowrap">
 		<label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
