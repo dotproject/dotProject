@@ -2000,6 +2000,10 @@ class CTask extends CDpObject
 		if (! $this->task_end_date) { // No end date, can't do anything.
 			return $this->clearReminder(true); // Also no point if it is changed to null
 		}
+
+		if ( $this->task_status < 0) { // Inactive task, don't remind
+			return $this->clearReminder(true);
+		}
 		
 		if ($this->task_percent_complete >= 100) {
 			return $this->clearReminder(true);
@@ -2108,7 +2112,20 @@ class CTask extends CDpObject
 		if ($this->task_percent_complete == 100) {
 			return -1;
 		}
-		
+
+		if ($this->task_status < 0 ) {
+			return -1;
+		}
+
+		$q->addTable('projects');
+		$q->addQuery('project_name, project_status');
+		$q->addWhere('project_id = ' . $this->task_project);
+		$project_detail = $q->loadHash();
+		if ($project_detail['project_status'] == 4 || $project_detail['project_status'] == 7) {
+			return -1;
+		}
+		$project_name = htmlspecialchars_decode($project_detail['project_name']);
+
 		// Grab the assignee list
 		$q->addTable('user_tasks', 'ut');
 		$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
@@ -2163,13 +2180,7 @@ class CTask extends CDpObject
 		} else {
 			$msg = $AppUI->_(array($diff, 'DAYS'));
 		}
-		
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id = ' . $this->task_project);
-		$project_name = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
-		
+
 		$subject = $prefix . ' ' .$msg . ' ' . $this->task_name . '::' . $project_name;
 		
 		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" 
@@ -2261,6 +2272,20 @@ class CTask extends CDpObject
 		if ($this->task_percent_complete == 100) {
 			return -1;
 		}
+
+		// Task is inactive
+		if ($this->task_status < 0) {
+			return -1;
+		}
+
+		$q->addTable('projects');
+		$q->addQuery('project_name, project_status');
+		$q->addWhere('project_id = ' . $this->task_project);
+		$project_detail = $q->loadHash();
+		if ($project_detail['project_status'] == 4 || $project_detail['project_status'] == 7) {
+			return -1;
+		}
+		$project_name = htmlspecialchars_decode($project_detail['project_name']);
 		
 		// Grab the assignee list
 		$q->addTable('user_tasks', 'ut');
@@ -2316,12 +2341,6 @@ class CTask extends CDpObject
 		} else {
 			$msg = $AppUI->_(array($diff, 'DAYS'));
 		}
-		
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id = ' . $this->task_project);
-		$project_name = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
 		
 		$subject = $prefix . ' ' .$msg . ' ' . $this->task_name . '::' . $project_name;
 		
@@ -2404,7 +2423,7 @@ class CTask extends CDpObject
 		$event_list = $ev->find('tasks', 'remind', $this->task_id);
 		if (count($event_list)) {
 			foreach ($event_list as $id => $data) {
-				if ($dont_check || $this->task_percent_complete >= 100) {
+				if ($dont_check || $this->task_percent_complete >= 100 || $this->task_status < 0) {
 					$ev->remove($id);
 				}
 			}
