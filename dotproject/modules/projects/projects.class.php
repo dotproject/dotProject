@@ -687,7 +687,7 @@ function projects_list_data($user_id=false) {
 	//get list of all departments, filtered by the list of permitted companies.
 	$q->clear();
 	$q->addTable('companies', 'c');
-	$q->addQuery('c.company_id, c.company_name, dep.*');
+	$q->addQuery('distinct c.company_id, c.company_name, dep.*');
 	$q->addJoin('departments', 'dep', 'c.company_id = dep.dept_company');
 	$q->addJoin('projects', 'p', 'p.project_company = c.company_id');
 	$q->addWhere('p.project_status NOT IN (1, 4, 5, 6, 7)');
@@ -697,7 +697,7 @@ function projects_list_data($user_id=false) {
 
 	$q->clear();
 	$q->addTable('companies', 'c');
-	$q->addQuery('c.company_id, c.company_name, dep.*');
+	$q->addQuery('distinct c.company_id, c.company_name, dep.*');
 	$q->addJoin('departments', 'dep', 'c.company_id = dep.dept_company');
 	$q->addJoin('projects', 'p', 'p.project_company = c.company_id');
 	$q->addOrder('c.company_name, dep.dept_parent, dep.dept_name');
