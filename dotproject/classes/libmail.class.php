@@ -86,6 +86,9 @@ class Mail
 	var $charset;
 	var $ctencoding;
 	var $receipt = 0;
+
+	var $body;
+	var $fullBody;
 	
 	var $useRawAddress = TRUE;
 	
