@@ -116,7 +116,7 @@ if (dPgetParam($_POST, 'lostpass', 0)) {
 // and HTTP auth methods now supported.
 if (isset($_REQUEST['login'])) {
 	$username = dPgetCleanParam($_POST, 'username', '');
-	$password = dPgetCleanParam($_POST, 'password', '');
+	$password = dPgetParam($_POST, 'password', '');
 	$redirect = dPgetCleanParam($_REQUEST, 'redirect', '');
 	$AppUI->setUserLocale();
 	@include_once(DP_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
