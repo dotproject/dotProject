@@ -608,7 +608,7 @@ function QueueMail() {
 	require_once $AppUI->getSystemClass('event_queue');
 	$ec = EventQueue::getInstance();
 	$vars = get_object_vars($this);
-	return $ec->add($this, 'SendQueuedMail', $vars);
+	return $ec->add($this, $vars, 'SendQueuedMail');
 }
 
 /**
