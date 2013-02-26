@@ -40,7 +40,7 @@ class CDpObject {
 	/**
 	 *	@var string generic message
 	 */
-	protected $_message;
+	public $_message;
 	/**
 	 * @var object Query Handler
 	 */
