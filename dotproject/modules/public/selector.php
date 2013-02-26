@@ -135,6 +135,11 @@ switch ($table) {
 		$q->addTable("contacts", 'b');
 		$q->addWhere("user_contact = contact_id");
 		break;
+	case 'contacts':
+		$title = 'Contact';
+		$q->addQuery("contact_id, CONCAT_WS(' ',contact_first_name, contact_last_name)");
+		$q->addOrder('contact_first_name, contact_last_name');
+		break;
 	case 'SGD':
 		$title = 'Document';
 		$q->addQuery('SGD_id, SGD_name');
