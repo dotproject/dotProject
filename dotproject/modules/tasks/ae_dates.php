@@ -1,13 +1,12 @@
-<?php
+<?php // $Id$
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// $Id$
-
 global $AppUI, $dPconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $locale_char_set, $obj;
 global $durnTypes, $task_project, $task_id, $tab;
+global $project, $task_parent;
 
 //Time arrays for selects
 $start = intval(dPgetConfig('cal_day_start', 8));
@@ -36,9 +35,48 @@ for ($current = 0; $current < 60; $current += $inc) {
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = ((intval($obj->task_start_date)) ? new CDate($obj->task_start_date) 
-			   : (($task_id == 0) ? new CDate() : null));
-$end_date = ((intval($obj->task_end_date)) ? new CDate($obj->task_end_date) : null);
+if ($task_id == 0) {
+	$taskParentObj = new CTask();
+	if ($task_parent > 0) {
+		$taskParentObj->load($task_parent);
+	}
+}
+
+if (intval($obj->task_start_date)) {
+	$start_date = new CDate($obj->task_start_date);
+// For a new task, calculate the best start date to suggest
+} elseif ($task_id == 0) {
+	// Inherit task parent's start date if there is one
+	if (intval($taskParentObj->task_start_date)) {
+		$start_date = new CDate($taskParentObj->task_start_date);
+	// Inherit project's start date if there is one
+	} elseif (intval($project->project_start_date)) {
+		$start_date = new CDate($project->project_start_date);
+	// Fallback to today's date
+	} else {
+		$start_date = new CDate();
+	}
+} else {
+	$start_date = null;
+}
+
+// Calculate end date
+if (intval($obj->task_end_date)) {
+	$end_date = new CDate($obj->task_end_date);
+// For a new task, calculate the best end date to suggest
+} elseif ($task_id == 0) {
+	// Inherit task parent's end date if there is one
+	if (intval($taskParentObj->task_end_date)) {
+		$end_date = new CDate($taskParentObj->task_end_date);
+	// Inherit project's end date if there is one
+	} elseif (intval($project->project_end_date)) {
+		$end_date = new CDate($project->project_end_date);
+	} else {
+		$end_date = null;
+	}
+} else {
+	$end_date = null;
+}
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $dPconfig['cal_working_days']);
