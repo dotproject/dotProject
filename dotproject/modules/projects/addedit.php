@@ -73,8 +73,7 @@ $projectPriority = dPgetSysVal('ProjectPriority');
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = new CDate($row->project_start_date);
-
+$start_date = intval($row->project_start_date) ? new CDate($row->project_start_date) : null;
 $end_date = intval($row->project_end_date) ? new CDate($row->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
@@ -303,8 +302,8 @@ function setDepartment(department_id_string) {
  		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
-			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
-				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" />
+			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
 
 				<a href="#" onclick="javascript:popCalendar('start_date', 'start_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
