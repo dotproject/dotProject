@@ -465,7 +465,7 @@ echo $AppUI->_('Collapse All'); ?></a>
 	<tr>
 	  <td><?php echo $AppUI->_('Show');?>:</td>
 	  <td>
-	  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="javascript:document.task_list_options.submit();" 
+	  <input type="checkbox" name="show_incomplete" value="1" id="show_incomplete" onclick="javascript:document.task_list_options.submit();" 
 	   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
 	  </td>
 	  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
