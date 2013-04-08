@@ -626,7 +626,7 @@ function copyForm(form, to, extras) {
 				break;
 			case 'select-multiple':
 				var sel = h.addSelect(elem.name, false, true);
-				sel.style.visibility = "hidden";
+				sel.style.display = "none";
 				for (var x = 0; x < elem.options.length; x++) {
 					if (elem.options[x].selected) {
 						sel.appendChild(h.addOption(elem.options[x].value, '', true));
