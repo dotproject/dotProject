@@ -52,6 +52,9 @@ if (intval($obj->task_start_date)) {
 	// Inherit project's start date if there is one
 	} elseif (intval($project->project_start_date)) {
 		$start_date = new CDate($project->project_start_date);
+		if ($start_date < new CDate()) {
+			$start_date = new CDate();
+		}
 	// Fallback to today's date
 	} else {
 		$start_date = new CDate();
