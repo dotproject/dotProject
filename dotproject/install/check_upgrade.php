@@ -52,23 +52,30 @@ function dPcheckExistingDB($conf) {
 		$dbprefix = $conf['dbprefix'];
 	} else $dbprefix = '';
 	$ado = @NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysql');
-	if (empty($ado))
+	if (empty($ado)) {
+		error_log("DP Upgrade Check: ADODb failed to initialise {$conf['dbtype']} driver");
 		return false;
+	}
 	$db = @$ado->Connect($conf['dbhost'], $conf['dbuser'], $conf['dbpass']);
-	if (! $db)
+	if (! $db) {
+		error_log("DB Upgrade Check: Failed to connect to database");
 		return false;
+	}
 	$exists = @$ado->SelectDB($conf['dbname']);
-	if (! $exists)
+	if (! $exists) {
+		error_log("DB Upgrade Check: Failed to select db");
 		return false;
+	}
 
 	// Find the tables in the database, if there are none, or if the
 	// basic tables of project and task are missing, we are doing an
 	// install.
 
-	$table_list = $ado->MetaTables('TABLE',$conf['dbname'],$dbprefix.'%');
+	$table_list = $ado->MetaTables('TABLE');
 	if (count($table_list) < 10) {
 		// There are now more than 60 tables in a standard dP
 		// install, but this will at least cover the basics.
+		error_log("DB Upgrade Check: No tables in DB");
 		return false;
 	}
 
