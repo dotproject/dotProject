@@ -2709,11 +2709,10 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	$alt = '';
 	if (!empty($a['task_description'])) {
 		$alt = ('onmouseover="javascript:return overlib(' . "'" 
-			. $AppUI->___('<div><p>' 
-			. str_replace(array("\r\n", "\n", "\r", '"', "'"),
-			   array('</p><p>','</p><p>','</p><p>',"&quot;", "\\'"),
-			   $a['task_description'])
-			. '</p></div>') . "', CAPTION, '" 
+			. str_replace(array("\n", "\r"), '', 
+				$AppUI->___('<div><p>' 
+				. str_replace(array('"', "'"), array("&quot;", "\\'"), $a['task_description'])
+				. '</p></div>')) . "', CAPTION, '" 
 			. $AppUI->_('Description')
 			. "'" . ', CENTER);" onmouseout="nd();"');
 	}
