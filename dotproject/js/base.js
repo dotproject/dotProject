@@ -330,21 +330,17 @@ function _HTMLaddTextInput(id, value, size, maxlength)
 //{{{2 function _HTMLaddHidden
 function _HTMLaddHidden(id, value)
 {
-   if (window.navigator.userAgent.toLowerCase().match(/gecko/)) {navigator.family = "gecko"}
-   if (navigator.userAgent.toLowerCase().indexOf('opera') + 1 || window.opera) {navigator.family = "opera"}
    var c = new Comparable
+   type = 'TEXTAREA';
    c.add('id', id);
    c.add('name', id);
-   if (navigator.family == "gecko" || navigator.family == "opera"){
-         c.add('type', 'hidden');
-         type = 'INPUT';
-	 value = value.replace(/\n/g, '<br>');
-   } else {
-         type = 'TEXTAREA';
-         c.add('className', 'hidden');
-   }
    c.add('value', value);
-   return this.addNode(type, false, c);
+
+   var ret = this.addNode(type, false, c);
+   
+   // Hide (in any browser)
+   ret.style.display = 'none';
+   return ret;
 }
 //2}}}
 

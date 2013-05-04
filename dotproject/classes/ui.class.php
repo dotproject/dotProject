@@ -24,10 +24,11 @@ define ('UI_CASE_LOWER', 2);
 define ('UI_CASE_UPPERFIRST', 4);
 
 define ('UI_OUTPUT_MASK', 0xF0);
-define ('UI_OUTPUT_HTML', 0);
+define ('UI_OUTPUT_TEXT', 0);
 define ('UI_OUTPUT_JS', 0x10);
 define ('UI_OUTPUT_RAW', 0x20);
 define ('UI_OUTPUT_URI', 0x40);
+define ('UI_OUTPUT_HTML', 0x80);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
@@ -475,6 +476,10 @@ class CAppUI {
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_URI:
 				$str = str_replace(' ', '%20', $str);
+				break;
+			case UI_OUTPUT_TEXT:
+				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = filter_xss($str);
 				break;
 			case UI_OUTPUT_HTML:
 				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);

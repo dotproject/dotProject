@@ -341,7 +341,7 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php $newstr = str_replace(chr(10), '<br />', $obj->task_description);echo $AppUI->___($newstr);?>
+				<?php echo nl2br($AppUI->___($obj->task_description)); ?>
 		  </td>
 		</tr>
 <?php
