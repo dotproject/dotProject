@@ -472,6 +472,9 @@ function SMTPSend() {
 		}
 	}
 	if ($this->sasl && $this->username) {
+		$this->socketSend('HELO');
+		$this->socketReadPattern(250);
+		
 		$this->socketSend('AUTH LOGIN');
 		$this->socketReadPattern(334);
 		if (! $this->err) {
