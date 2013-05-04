@@ -480,6 +480,7 @@ class CAppUI {
 			case UI_OUTPUT_TEXT:
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 				$str = filter_xss($str);
+				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_HTML:
 				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);

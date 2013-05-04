@@ -114,8 +114,8 @@ foreach ($logs as $row) {
 
 // dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-	$descrip = str_replace("\n", '<br />', $row['task_log_description']);
-	$tranpos = mb_strpos($descrip, str_replace("\n", '<br />', $transbrk));
+	$descrip = $row['task_log_description'];
+	$tranpos = mb_strpos($descrip, $transbrk);
 	if ($tranpos === false) {
 		$s .= $AppUI->___($descrip);
 	} else {

@@ -178,7 +178,7 @@ if ($obj->canUserEditTimeInformation()) {
   <input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
   <input type="hidden" name="task_log_creator" value="<?php 
 echo(($log->task_log_creator == 0) ? $AppUI->user_id : $log->task_log_creator) ?>" />
-  <input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
+  <input type="hidden" name="task_log_name" value="Update :<?php echo $AppUI->___($log->task_log_name); ?>" />
 <table cellspacing="1" cellpadding="2" border="0" width="100%">
 <tr>
   <td width='40%' valign='top' align='center'>
@@ -278,7 +278,7 @@ if ($obj->canUserEditTimeInformation()) {
             <tr>
               <td align="left">
                 <input type="text" class="text" name="task_log_name" value="<?php 
-echo $log->task_log_name; ?>" maxlength="255" size="30" />
+echo $AppUI->___($log->task_log_name); ?>" maxlength="255" size="30" />
               </td>
               <td align="center">
                 <label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
