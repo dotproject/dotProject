@@ -2509,6 +2509,90 @@ function openClosedTaskRecursive($task_id) {
 	}
 }
 
+/**
+ * Find the first closed item within the supplied array
+ * and open it, walking down the hierarchy.
+ */
+function openFirstClosed(&$opened, $parent) {
+	global $tasks_opened;
+	if (empty($opened[$parent])) {
+		$tasks_opened[$parent] = $parent;
+	} else {
+		foreach ($opened[$parent] as $child) {
+			openFirstClosed($opened, $child);
+		}
+	}
+}
+
+/**
+ * Find the last opened and close it.
+ */
+function closeLastOpened(&$opened, $parent) {
+	global $tasks_opened;
+	// Check if any of the children are opened
+	$found = false;
+	// If not opened, return
+	if (empty($opened[$parent])) {
+		return;
+	}
+	foreach ($opened[$parent] as $child) {
+		if ($opened[$child]) {
+			closeLastOpened($opened, $child);
+			$found = true;
+		}
+	}
+	if ($found == false) {
+		$tasks_opened[$parent] = false;
+	}
+}
+
+/*
+ * This is far more complicated than it needs be.  The entire
+ * task array building and manipulating is overly complex and
+ * needs to be reviewed.
+ */
+function OpenCloseOneLevel(&$projects, $open = true) {
+	global $tasks_opened;
+	$children_of = array();
+	$opened = array();
+	$children = array();
+	$top_level = array();
+	// We are called before the children_of array is built,
+	// so we build it here.
+	foreach ($projects as $project) {
+		foreach ($project['tasks'] as $task) {
+			if ($task['task_parent'] != $task['task_id']) {
+				if (! isset($children_of[$task['task_parent']])) {
+					$children_of[$task['task_parent']] = array();
+				}
+				$children_of[$task['task_parent']][] = $task['task_id'];
+			}
+		}
+	}
+	foreach ($children_of as $parent => $wean) {
+		foreach ($wean as $child) {
+			$children[$child] = $parent;
+		}
+	}
+	foreach ($children_of as $parent => $wean) {
+		if (!empty($tasks_opened[$parent])) {
+			$opened[$parent] = $wean;
+		}
+		if (empty($children[$parent])) {
+			$top_level[$parent] = $wean;
+		}
+	}
+	if ($open) {
+		foreach ($top_level as $parent => $wean) {
+			openFirstClosed($opened, $parent);
+		}
+	} else {
+		foreach ($top_level as $parent => $wean) {
+			closeLastOpened($opened, $parent);
+		}
+	}
+}
+
 function closeOpenedTask($task) {
 	global $tasks_opened;
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
@@ -2523,7 +2607,7 @@ function closeOpenedTask($task) {
 			$task_id = $task;
 			$task_dynamic = $to_close_task->task_dynamic;
 		}
-		// don't "close" non-dynamic tasks or tasks without children
+		// don't "close" non-dynamic tasks or tasks without children - why?
 		if ($task_dynamic == 1 || count($to_close_task->getChildren())) {
 			$tasks_opened[$task_id] = false;
 		}
@@ -2543,7 +2627,6 @@ function closeOpenedTaskRecursive($task_id) {
 		foreach ($children_to_close as $to_close) {
 		  closeOpenedTaskRecursive($to_close);
 		}
-		
 	}
 }
 

@@ -73,6 +73,10 @@ if ($task_id > 0) {
 // shall all tasks be either opened or opened?
 $open_task_all = dPGetParam($_GET, 'open_task_all', 0);
 $close_task_all = dPGetParam($_GET, 'close_task_all', 0);
+// Open/close by level
+$open_one_level = dPGetParam($_GET, 'open_one_level', 0);
+$close_one_level = dPGetParam($_GET, 'close_one_level', 0);
+
 // Closing and opening tasks only applies to dynamic tasks or tasks with children
 $open_task_id = dPGetParam($_GET, 'open_task_id', 0);
 $close_task_id = dPGetParam($_GET, 'close_task_id', 0);
@@ -348,6 +352,10 @@ if ($open_task_all) {
 	$tasks_opened = $all_tasks;
 } else if ($close_task_all) {
 	$tasks_opened = array();
+} else if ($open_one_level) {
+	openCloseOneLevel($projects, true);
+} else if ($close_one_level) {
+	openCloseOneLevel($projects, false);
 } else if ($open_task_id) {
 	openClosedTask($open_task_id);
 } else if ($close_task_id) {
@@ -450,10 +458,8 @@ function chAssignment(project_id, rmUser, del) {
 <tr>
 	<?php if ($min_view) { ?>
 	<td>
-	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php 
-echo $AppUI->_('Expand All'); ?></a> : 
-	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1'; ?>"><?php 
-echo $AppUI->_('Collapse All'); ?></a> 
+	<?php echo $AppUI->_('Expand'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;open_one_level=1'; ?>"><?php echo $AppUI->_('One Level'); ?></a> : 
+	<?php echo $AppUI->_('Collapse'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;close_one_level=1';?>"><?php echo $AppUI->_('One Level'); ?></a>
 	  &nbsp;&nbsp;
 	  </td>
 	<?php } 
@@ -711,8 +717,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
-	<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1';?>"><?php echo $AppUI->_('Expand All'); ?></a> :
-	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('Collapse All'); ?></a>
+	<?php echo $AppUI->_('Expand'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;open_one_level=1'; ?>"><?php echo $AppUI->_('One Level'); ?></a> : 
+	<?php echo $AppUI->_('Collapse'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;close_one_level=1';?>"><?php echo $AppUI->_('One Level'); ?></a>
 	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;
 <!-- removed project-level report buttons per Mantis Report #2374
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>" 
@@ -750,10 +756,8 @@ $AppUI->savePlace();
   <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
 	<?php if ($min_view) { ?>
-	&nbsp;&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php 
-echo $AppUI->_('Expand All'); ?></a> : 
-	<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1'; ?>"><?php 
-echo $AppUI->_('Collapse All'); ?></a> 
+	<?php echo $AppUI->_('Expand'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;open_one_level=1'; ?>"><?php echo $AppUI->_('One Level'); ?></a> : 
+	<?php echo $AppUI->_('Collapse'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;close_one_level=1';?>"><?php echo $AppUI->_('One Level'); ?></a>
 	<?php } 
 ?>
 	</td>
