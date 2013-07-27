@@ -1185,7 +1185,7 @@ CREATE TABLE %dbprefix%dpversion (
 	last_code_update date not null default '0000-00-00'
 );
 
-INSERT INTO %dbprefix%dpversion VALUES ('2.1.7', 2, '2012-08-14', '2012-11-15');
+INSERT INTO %dbprefix%dpversion VALUES ('2.1.8', 2, '2013-01-05', '2013-07-27');
 
 # 20050307
 # Additional LDAP search user and search password fields for Active Directory compatible LDAP authentication

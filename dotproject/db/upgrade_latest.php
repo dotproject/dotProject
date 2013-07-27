@@ -163,6 +163,7 @@ function dPupgrade($from_version, $to_version, $last_updated) {
 		case '20101117':
 		case '20110106':
 		case '20120814':
+		case '20130727':
 		// TODO:  Add new versions here.  Keep this message above the default label.
 		default:
 			break;
