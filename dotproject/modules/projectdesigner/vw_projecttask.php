@@ -62,9 +62,7 @@ $cols = 13;
 */
 
 global $tasks_opened;
-global $tasks_closed;
 
-$tasks_closed = array();
 $tasks_opened = $AppUI->getState('tasks_opened');
 if(!$tasks_opened){
     $tasks_opened = array();
@@ -75,7 +73,7 @@ $q->addTable('tasks');
 $q->addWhere('task_project='.$project_id);
 $all_tasks = $q->loadList();
 foreach ($all_tasks as $key => $open_task) {
-        $tasks_opened[] = $open_task['task_id'];
+        $tasks_opened[$open_task['task_id']] = $open_task['task_id'];
 }
 
 $task_id = intval( dPgetParam( $_GET, 'task_id', 0 ) );
@@ -107,14 +105,13 @@ if (isset($_GET['pin'])) {
     $AppUI->redirect('', -1);
 }
 else if($task_id > 0) {
-    $tasks_opened[] = $task_id;
+    $tasks_opened[$task_id] = $task_id;
 }
 
 $AppUI->savePlace();
 
-if( ($open_task_id = dPGetParam($_GET, 'open_task_id', 0)) > 0
-    && !in_array($_GET['open_task_id'], $tasks_opened)) {
-    $tasks_opened[] = $_GET['open_task_id'];
+if( ($open_task_id = dPGetParam($_GET, 'open_task_id', 0)) > 0) {
+    $tasks_opened[$_GET['open_task_id']] = $_GET['open_task_id'];
 }
 
 // Closing tasks needs also to be within tasks iteration in order to
@@ -360,7 +357,7 @@ foreach ($projects as $k => $p) {
                         $t = $p['tasks'][$i];
 
                         if ($t["task_parent"] == $t["task_id"]) {
-                            $is_opened = in_array($t["task_id"], $tasks_opened);
+                            $is_opened = !empty($tasks_opened[$t["task_id"]]);
                                 showtask_pr( $t, 0, $is_opened );
                                 if($is_opened || $t["task_dynamic"] == 0){
                                     findchild_pr( $p['tasks'], $t["task_id"] );
@@ -372,10 +369,7 @@ foreach ($projects as $k => $p) {
 // check that any 'orphaned' user tasks are also display
                 for ($i=0; $i < $tnums; $i++) {
                         if ( !in_array( $p['tasks'][$i]["task_id"], $done ) ) {
-                            if($p['tasks'][$i]["task_dynamic"] && in_array( $p['tasks'][$i]["task_parent"], $tasks_closed)) {
-                                closeOpenedTask($p['tasks'][$i]["task_id"]);
-                            }
-                            if(in_array($p['tasks'][$i]["task_parent"], $tasks_opened)){
+                            if(!empty($tasks_opened[$p['tasks'][$i]["task_parent"]])){
                                     showtask_pr( $p['tasks'][$i], 1, false);
                             }
                         }

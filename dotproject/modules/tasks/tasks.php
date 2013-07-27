@@ -8,7 +8,7 @@ GLOBAL $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;
 GLOBAL $task_sort_item1, $task_sort_type1, $task_sort_order1;
 GLOBAL $task_sort_item2, $task_sort_type2, $task_sort_order2;
 GLOBAL $user_id, $dPconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
-global $tasks_opened, $tasks_closed;
+global $tasks_opened;
 
 if (!(isset($showEditCheckbox))) {
 	$showEditCheckbox = $dPconfig['direct_edit_assignment'];
@@ -43,7 +43,6 @@ $dbprefix = dPgetConfig('dbprefix','');
  * Let's figure out which tasks are selected
  */
 
-$tasks_closed = (($AppUI->getState('tasks_closed')) ? $AppUI->getState('tasks_closed') : array());
 $tasks_opened = (($AppUI->getState('tasks_opened')) ? $AppUI->getState('tasks_opened') : array());
 
 $task_id = intval(dPgetParam($_GET, 'task_id', 0));
@@ -77,19 +76,6 @@ $close_task_all = dPGetParam($_GET, 'close_task_all', 0);
 // Closing and opening tasks only applies to dynamic tasks or tasks with children
 $open_task_id = dPGetParam($_GET, 'open_task_id', 0);
 $close_task_id = dPGetParam($_GET, 'close_task_id', 0);
-
-if ($open_task_all) {
-	$tasks_opened = array_unique($tasks_closed);
-	$tasks_closed = array();
-} else if ($close_task_all) {
-	$tasks_closed = array_unique(array_merge($tasks_closed, $tasks_opened));
-	$tasks_opened = array();
-} else if ($open_task_id) {
-	openClosedTask($open_task_id);
-} else if ($close_task_id) {
-	closeOpenedTask($close_task_id);
-}
-
 
 $durnTypes = dPgetSysVal('TaskDurationType');
 $taskPriority = dPgetSysVal('TaskPriority');
@@ -334,6 +320,7 @@ else {
 }
 
 //pull the tasks into an array
+$all_tasks = array();
 for ($x=0; $x < $nums; $x++) {
 	$row = db_fetch_assoc($ptrc);
 	
@@ -354,6 +341,17 @@ for ($x=0; $x < $nums; $x++) {
 	}
 	//pull the final task row into array
 	$projects[$row['task_project']]['tasks'][] = $row;
+	$all_tasks[$row['task_id']] = $row['task_id'];
+}
+
+if ($open_task_all) {
+	$tasks_opened = $all_tasks;
+} else if ($close_task_all) {
+	$tasks_opened = array();
+} else if ($open_task_id) {
+	openClosedTask($open_task_id);
+} else if ($close_task_id) {
+	closeOpenedTask($close_task_id);
 }
 
 ?>
@@ -660,7 +658,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 					showtask($t1, -1, true, false, true);
 				} else {
 					if ($t1['task_parent'] == $t1['task_id']) {
-						$is_opened = (!(in_array($t1['task_id'], $tasks_closed)));
+						$is_opened = !empty($tasks_opened[$t1['task_id']]);
 						
 						//check for child
 						$no_children = empty($children_of[$t1['task_id']]);
@@ -679,7 +677,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 						  showtask($t1, 1, true, false, true); 
 						} else {
 							//display as close to "tree-like" as possible
-							$is_opened = (!(in_array($t1['task_id'], $tasks_closed)));
+							$is_opened = !empty($tasks_opened[$t1['task_id']]);
 							
 							//check for child
 							$no_children = empty($children_of[$t1['task_id']]);
@@ -733,7 +731,6 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 
 $AppUI->setState('tasks_opened', $tasks_opened);
-$AppUI->setState('tasks_closed', $tasks_closed);
 
 $AppUI->savePlace();
 
@@ -765,6 +762,5 @@ echo $AppUI->_('Collapse All'); ?></a>
 <?php 
 
 //echo '<pre>Opened ::'; print_r($tasks_opened); echo '</pre><br />';
-//echo '<pre>Closed ::'; print_r($tasks_closed); echo '</pre><br />';
 
 ?>

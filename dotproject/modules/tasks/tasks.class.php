@@ -2473,8 +2473,6 @@ class CTaskLog extends CDpObject
 
 function openClosedTask($task) {
 	global $tasks_opened;
-	global $tasks_closed;
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$to_open_task = new CTask();
 	
@@ -2490,24 +2488,13 @@ function openClosedTask($task) {
 		}
 		// don't "open" non-dynamic tasks or tasks without children
 		if ($task_dynamic == 1 || count($to_open_task->getChildren())) {
-			// only unset that which is set
-			$index = array_search($task_id, $tasks_closed);
-			if ($index !== false) {
-				unset($tasks_closed[$index]);
-			}
-			
-			//don't double open or we can't close properly
-			if (!in_array($task_id, $tasks_opened)) { 
-			$tasks_opened[] = $task_id;
-			}
+			$tasks_opened[$task_id] = $task_id;
 		}
 	}
 }
 
 function openClosedTaskRecursive($task_id) {
 	global $tasks_opened;
-	global $tasks_closed;
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$open_task = new CTask();
 	
@@ -2524,8 +2511,6 @@ function openClosedTaskRecursive($task_id) {
 
 function closeOpenedTask($task) {
 	global $tasks_opened;
-	global $tasks_closed;
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$to_close_task = new CTask();
 	
@@ -2540,24 +2525,13 @@ function closeOpenedTask($task) {
 		}
 		// don't "close" non-dynamic tasks or tasks without children
 		if ($task_dynamic == 1 || count($to_close_task->getChildren())) {
-			// only unset that which is set
-			$index = array_search($task_id, $tasks_opened);
-			if ($index !== false) {
-				unset($tasks_opened[$index]);
-			}
-			
-			//don't double close or we can't open properly
-			if (!in_array($task_id, $tasks_closed)) {
-				$tasks_closed[] = $task_id;
-			}
+			$tasks_opened[$task_id] = false;
 		}
 	}
 }
 
 function closeOpenedTaskRecursive($task_id) {
 	global $tasks_opened;
-	global $tasks_closed;
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$close_task = new CTask();
 	
@@ -2578,9 +2552,8 @@ function closeOpenedTaskRecursive($task_id) {
 function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOpenCloseLink=false
 				  , $allowRepeat = false) {
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $tasks_opened, $tasks_closed, $user_id;
+	global $tasks_opened, $user_id;
 	
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	$done = (($done) ? $done : array());
 	
@@ -2826,15 +2799,14 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 }
 
 function findchild(&$tarr, $parent, $level=0) {
-	global $tasks_opened, $tasks_closed, $tasks_filtered, $children_of;
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
+	global $tasks_opened, $tasks_filtered, $children_of;
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
 	
 	$level = $level+1;
 	
 	foreach ($tarr as $x => $task) {
 		if ($task['task_parent'] == $parent && $task['task_parent'] != $task['task_id']) {
-			$is_opened = (!(in_array($task['task_id'], $tasks_closed)));
+			$is_opened = !empty($tasks_opened[$task['task_id']]);
 			
 			//check for child
 			$no_children = empty($children_of[$task['task_id']]);

@@ -340,7 +340,7 @@ function findchild_pd( &$tarr, $parent, $level=0){
 
         for ($x=0; $x < $n; $x++) {
                 if($tarr[$x]["task_parent"] == $parent && $tarr[$x]["task_parent"] != $tarr[$x]["task_id"]){
-                    $is_opened = in_array($tarr[$x]["task_id"], $tasks_opened);
+                    $is_opened = !empty($tasks_opened[$tarr[$x]["task_id"]]);
                         showtask_pd( $tarr[$x], $level, $is_opened );
                         if($is_opened || !$tarr[$x]["task_dynamic"]){
                             findchild_pd( $tarr, $tarr[$x]["task_id"], $level);
@@ -457,7 +457,7 @@ function findchild_pr( &$tarr, $parent, $level=0){
 
         for ($x=0; $x < $n; $x++) {
                 if($tarr[$x]["task_parent"] == $parent && $tarr[$x]["task_parent"] != $tarr[$x]["task_id"]){
-                    $is_opened = in_array($tarr[$x]["task_id"], $tasks_opened);
+                    $is_opened = !empty($tasks_opened[$tarr[$x]["task_id"]]);
                         showtask_pr( $tarr[$x], $level, $is_opened );
                         if($is_opened || !$tarr[$x]["task_dynamic"]){
                             findchild_pr( $tarr, $tarr[$x]["task_id"], $level);
