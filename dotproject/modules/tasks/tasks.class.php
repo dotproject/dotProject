@@ -2560,6 +2560,9 @@ function OpenCloseOneLevel(&$projects, $open = true) {
 	// We are called before the children_of array is built,
 	// so we build it here.
 	foreach ($projects as $project) {
+		if (empty($project['tasks'])) {
+			continue;
+		}
 		foreach ($project['tasks'] as $task) {
 			if ($task['task_parent'] != $task['task_id']) {
 				if (! isset($children_of[$task['task_parent']])) {
