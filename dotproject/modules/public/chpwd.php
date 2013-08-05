@@ -9,9 +9,9 @@ if (! ($user_id = (int)dPgetParam($_REQUEST, 'user_id', 0))) {
 
 // check for a non-zero user id
 if ($user_id) {
-	$old_pwd = db_escape(trim(dPgetCleanParam($_POST, 'old_pwd', null)));
-	$new_pwd1 = db_escape(trim(dPgetCleanParam($_POST, 'new_pwd1', null)));
-	$new_pwd2 = db_escape(trim(dPgetCleanParam($_POST, 'new_pwd2', null)));
+	$old_pwd = db_escape(trim(dPgetParam($_POST, 'old_pwd', null)));
+	$new_pwd1 = db_escape(trim(dPgetParam($_POST, 'new_pwd1', null)));
+	$new_pwd2 = db_escape(trim(dPgetParam($_POST, 'new_pwd2', null)));
 
 	// has the change form been posted
 	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
