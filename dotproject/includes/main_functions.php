@@ -623,7 +623,7 @@ function format_backtrace($bt, $file, $line, $msg) {
 		}
 		echo ")\n";
 	}
-	echo "<\pre>\n";
+	echo "</pre>\n";
 }
 
 function dprint($file, $line, $level, $msg) {
