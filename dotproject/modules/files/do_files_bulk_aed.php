@@ -5,7 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 global $AppUI;
 $selected = dPgetCleanParam($_POST, 'bulk_selected_file', 0);
-$redirect = dPgetCleanParam($_POST, 'redirect', '');
+$redirect = urlencode(dPgetParam($_POST, 'redirect', ''));
 $bulk_file_project = dPgetCleanParam($_POST, 'bulk_file_project', 'O');
 $bulk_file_folder = dPgetCleanParam($_POST, 'bulk_file_folder', 'O');
 

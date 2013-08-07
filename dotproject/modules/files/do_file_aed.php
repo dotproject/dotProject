@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 $file_id = intval(dPgetParam($_POST, 'file_id', 0));
 $del = intval(dPgetParam($_POST, 'del', 0));
 $duplicate = intval(dPgetParam($_POST, 'duplicate', 0));
-$redirect = dPgetCleanParam($_POST, 'redirect', '');
+$redirect = urlencode(dPgetParam($_POST, 'redirect', ''));
 global $db;
 
 $not = (bool)dPgetParam($_POST, 'notify', '0');
