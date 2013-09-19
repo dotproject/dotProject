@@ -602,6 +602,12 @@ class CTask extends CDpObject
 			// Moving this task to another project?
 			if ($this->task_project != $oTsk->task_project) {
 				$this->updateSubTasksProject($this->task_project);
+				// Move any files
+				$nq = new DBQuery();
+				$nq->addTable('files');
+				$nq->addUpdate('file_project', $this->task_project);
+				$nq->addWhere("file_task = '{$this->task_id}'");
+				$nq->exec();
 			}
 			
 			if ($this->task_dynamic == 1) {
@@ -1941,7 +1947,15 @@ class CTask extends CDpObject
 		$q->addWhere("task_parent = '" . $task_id . "'");
 		$q->exec();
 		$q->clear();
-		
+
+		// Update any files associated with this task.
+		$q->addTable('files', 'f');
+		$q->innerJoin('tasks', 't', 't.task_id = f.file_task');
+		$q->addUpdate('file_project', $new_project);
+		$q->addWhere("t.task_parent = '" . $task_id . "'");
+		$q->exec();
+
+
 		foreach ($tasks_id as $id) {
 			if ($id != $task_id) {
 				$this->updateSubTasksProject($new_project, $id);

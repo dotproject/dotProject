@@ -466,10 +466,10 @@ class DBQuery {
 				}
 				$q .= ')'; // MySQL 5 compat.
 			} else {
-				$q .= $this->_table_prefix . $this->table_list;
+				$q .= '`' . $this->_table_prefix . $this->table_list . '`';
 			}
 		} else {
-    		return false;
+    			return false;
 		}
 		$q .= $this->make_join($this->join);
 		$q .= $this->make_where_clause($this->where);
@@ -479,20 +479,28 @@ class DBQuery {
 	}
 	
 	function prepareUpdate() {
-		// You can only update one table, so we get the table detail
 		$q = 'UPDATE ';
 		if (isset($this->table_list)) {
 			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($key, $table) = each ($this->table_list);
+				$intable = false;
+				foreach ($this->table_list as $table_id => $table) {
+					if ($intable) {
+						$q .= ",";
+					} else {
+						$intable = true;
+					}
+					$q .= '`' . $this->_table_prefix . $table . '`';
+					if (! is_numeric($table_id)) {
+						$q .= " as $table_id";
+					}
+				}
 			} else {
-				$table = $this->table_list;
+				$q .= '`' . $this->_table_prefix . $this->table_list . '`';
 			}
 		} else {
-			return false;
+    			return false;
 		}
-		$q .= '`' . $this->_table_prefix . $table . '`';
+		$q .= $this->make_join($this->join);
 		
 		$q .= ' SET ';
 		$sets = '';
