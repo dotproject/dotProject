@@ -56,7 +56,7 @@ $q->addJoin('companies', 'com_internal', 'com_internal.company_id = project_comp
 $q->addJoin('users', 'u', 'user_id = project_owner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact');
 if ($hasTasks) {
-    $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project');
+    $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project AND t1.task_id = t1.task_parent');
 	$q->addQuery('com.company_name AS company_name, com_internal.company_name' 
 				 . ' AS company_name_internal' 
 				 . ", CONCAT_WS(', ',contact_last_name,contact_first_name) user_name" 
@@ -64,7 +64,6 @@ if ($hasTasks) {
 				 ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" 
 				 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}," 
 				 . ' t1.task_duration_type)) AS project_percent_complete');
-    $q->addWhere('t1.task_id = t1.task_parent');
 } else {
 	$q->addQuery('com.company_name AS company_name, com_internal.company_name' 
 				 . ' AS company_name_internal' 
