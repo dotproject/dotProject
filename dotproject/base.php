@@ -84,5 +84,3 @@ set_include_path('.'.PATH_SEPARATOR.$dpLib.PATH_SEPARATOR.$pear.PATH_SEPARATOR.g
 // required includes for start-up
 global $dPconfig;
 $dPconfig = array();
-
-error_log("BaseURL: $baseUrl");
