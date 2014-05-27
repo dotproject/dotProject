@@ -872,12 +872,16 @@ class CAppUI {
 * @return array Named array list in the form 'module directory'=>'module name'
 */
 	function getActiveModules() {
-		$q = new DBQuery;
-		$q->addTable('modules');
-		$q->addQuery('mod_directory, mod_ui_name');
-		$q->addWhere('mod_active > 0');
-		$q->addOrder('mod_directory');
-		return ($q->loadHashList());
+		static $modlist = null;
+		if (! isset($modlist)) {
+			$q = new DBQuery;
+			$q->addTable('modules');
+			$q->addQuery('mod_directory, mod_ui_name');
+			$q->addWhere('mod_active > 0');
+			$q->addOrder('mod_directory');
+			$modlist = $q->loadHashList();
+		}
+		return $modlist;
 	}
 /**
 * Gets a list of the modules that should appear in the menu
@@ -895,13 +899,8 @@ class CAppUI {
 	}
 
 	function isActiveModule($module) {
-		$q = new DBQuery;
-		$q->addTable('modules');
-		$q->addQuery('mod_active');
-		$q->addWhere("mod_directory = '$module'");
-		$sql = $q->prepare();
-		$q->clear();
-		return db_loadResult($sql);
+		$modlist = $this->getActiveModules();
+		return !empty($modlist[$module]);
 	}
 
 /**
