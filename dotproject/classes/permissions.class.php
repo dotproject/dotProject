@@ -130,7 +130,7 @@ class dPacl extends gacl_api {
 		$arr = $q->loadHash();
 	    $result=$arr['allow'];
 		//If there is no acl_id then we default back to the parent lookup
-		if (!($result && $result['acl_id'])) {
+		if (!($result && isset($result['acl_id']))) {
 			dprint(__FILE__, __LINE__, 2, 
 			       "checkModuleItem($module, $op, $userid) did not return a record");
 			return $this->checkModule($module, $op, $userid);
