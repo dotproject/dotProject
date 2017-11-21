@@ -1,0 +1,34 @@
+table[name="table_form"] td{
+    vertical-align: top;
+}
+
+table [name="table_form"] td input[type="text"],textarea{
+    width: 97%;
+}
+
+table [name="table_form"] td select{
+    width: fit-content;
+}
+
+
+.td_label{
+    text-align: right;
+    font-weight: bold;
+    vertical-align: top;
+    text-wrap: none;
+    width:18%;
+}
+.span_mandatory{
+    color:red;
+}
+
+.td_section{
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    background-color: #CCC;
+    border: 1px solid #888;
+    height: 20px;
+    padding-top: 3px;
+}
+

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<script type="text/javascript" src="../../../jquery.min.js"></script>
+		<script type="text/javascript">
+$(function () {
+	$('#container').highcharts({
+	
+	    chart: {
+	        type: 'gauge',
+	        plotBorderWidth: 1,
+	        plotBackgroundColor: {
+	        	linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+	        	stops: [
+	        		[0, '#FFF4C6'],
+	        		[0.3, '#FFFFFF'],
+	        		[1, '#FFF4C6']
+	        	]
+	        },
+	        plotBackgroundImage: null,
+	        height: 200
+	    },
+	
+	    title: {
+	        text: 'Riscos'
+	    },
+	    
+	    pane: [{
+	        startAngle: -45,
+	        endAngle: 45,
+	        background: null,
+	        center: ['50%', '125%'],
+	        size: 300
+	    }/*, {
+	    	startAngle: -45,
+	    	endAngle: 45,
+	    	background: null,
+	        center: ['75%', '145%'],
+	        size: 300
+	    }*/],	    		        
+	
+	    yAxis: [{
+	        min: 0,
+	        max: 6,
+	       
+		    minorTickInterval: 'auto',
+	        minorTickWidth: 1,
+	        minorTickLength: 1,
+	        minorTickPosition: 'inside',
+	        minorTickColor: '#666',
+	
+	        tickPixelInterval: 10,
+	        tickWidth: 2,
+	        tickPosition: 'inside',
+	        tickLength: 1,
+	        tickColor: '#666',
+	        labels: {
+	            step: 4,
+	            rotation: 'auto',
+				distance:14
+	        },
+	        title: {
+	            text: 'Riscos'
+	        },
+
+		   
+	         plotBands: [{
+	            from: 0,
+	            to: 2,
+	            color: '#55BF3B' // green
+	        }, {
+	            from: 2,
+	            to: 4,
+	            color: '#DDDF0D' // yellow
+	        }, {
+	            from: 4,
+	            to: 6,
+	            color: '#DF5353' // red
+	        }],   
+	        pane: 0,
+	        title: {
+	        	text: '<span style="font-size:12px">Riscos ocorridos</span>',
+	        	y: -40
+	        }
+	    }],
+	    
+	    plotOptions: {
+	    	gauge: {
+	    		dataLabels: {
+	    			enabled: true
+	    		},
+	    		dial: {
+	    			radius: '100%'
+	    		}
+	    	}
+	    },
+	    	
+	    series: [{
+	        name: 'Riscos Ocorridos',
+	        data: [1],
+	        tooltip: {
+	            valueSuffix: ' Riscos Ocorridos'
+	        }
+
+	    }]
+	
+	},
+	
+	// Draw the chart
+	function(chart) {
+	    setTimeOut(function() {
+	        var left = chart.series[0].points[0];
+		    leftVal=1;
+	        left.update(leftVal, false);
+	        chart.redraw();
+	    }, 500);
+	});
+});
+
+		</script>
+	</head>
+	<body>
+<script src="../../js/highcharts.js"></script>
+<script src="../../js/highcharts-more.js"></script>
+<script src="../../js/modules/exporting.js"></script>
+
+<div id="container" style="width: 300px; height: 300px; margin: 0 auto"></div>
+
+	</body>
+</html>

@@ -1,0 +1,1 @@
+<?php require_once DP_BASE_DIR . "/modules/monitoringandcontrol/view/costs_monitoring.php"; ?>

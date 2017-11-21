@@ -1,0 +1,7 @@
+<Files "gateway.pl">
+	order deny,allow
+	deny from all
+</Files>
+<FilesMatch "\.(php|html?)$">
+php_value memory_limit 128M
+</FilesMatch>
