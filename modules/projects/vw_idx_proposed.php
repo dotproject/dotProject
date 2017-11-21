@@ -7,7 +7,7 @@ GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, 
 GLOBAL $priority;
 
 $show_all_projects = false;
-if ($currentTabId == 500) {
+if ($currentTabId == 8) {//originally equals to 500
 	$show_all_projects = true;
 }
 

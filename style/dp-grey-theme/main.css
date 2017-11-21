@@ -204,7 +204,7 @@ table.tbl TH {
 	padding: 2px 2px 2px 2px;
 	font: 11px verdana, arial, helvetica, sans-serif;
 	text-align:center;
-	color: #000000
+	color: #000000;
 	list-style-type: disc;
 	list-style-position: inside;
 }

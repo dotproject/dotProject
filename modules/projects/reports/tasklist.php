@@ -180,7 +180,7 @@ if ($do_report) {
 	if (count($allowedTasks)) {
 		$obj->getAllowedSQL($AppUI->user_id, $q);
 	}
-	$q->addOrder('project_start_date', 'task_project', 'task_parent');
+	$q->addOrder('project_start_date', 'task_project', 'task_parent', 'task_start_date');
 	$Task_List = $q->exec();
 ?>
 
@@ -203,7 +203,7 @@ if ($do_report) {
 <?php
 	
 	$pdfdata = array();
-	$tree = new CDpTree(array('project_start_date', 'task_start_date', 'task_id'));
+	$tree = new CDpTree();
 	
 	$columns = array(('<b>' . $AppUI->_('Task Name') . '</b>'), 
 	                 ('<b>' . $AppUI->_('Task Description') . '</b>'), 

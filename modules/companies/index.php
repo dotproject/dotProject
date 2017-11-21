@@ -26,7 +26,7 @@ $owner_filter_id = intval(dPgetParam($_REQUEST, 'owner_filter_id', 0));
 if ($owner_filter_id !== 0) {
 	$AppUI->setState('owner_filter_id', $owner_filter_id_pre);
 } else {
-	$owner_filter_id = $AppUI->getState('owner_filter_id', $AppUI->user_id);
+    $owner_filter_id = $AppUI->getState('owner_filter_id', -1);
 }
 // load the company types
 $types = dPgetSysVal('CompanyType');
