@@ -1,0 +1,454 @@
+/**
+ * dotProject stylesheet
+ * @theme "amp" 
+ * @author rodrigo brand�o (http://www.rodrigobrandao.com.br)
+ * @version v.1.0 07/06/2010
+ */
+body {
+	margin:0px;
+	padding:0px;
+	color:#333;
+	background-color:#111;
+	background-image:url('img/bg.jpg');
+	width:100%;
+	height:100%;
+}
+body, h1, h2, h3, td, th, tr, table, div, span, select, input, button, textarea {
+	font-family:"Trebuchet MS"; /* font */
+	font-size:12px; /* font size */
+}
+h1 {
+	letter-spacing:-1px;
+	font-size:23px;
+}
+button, input {
+	font-size:11px;
+}
+
+img{
+    border-style: none;
+}
+
+a, a:link, a:visited, a:active {
+	color:#333; /* link color */
+	text-decoration:none;
+}
+a:hover {
+	color:gold; /* link hover color */
+	text-decoration:none;
+}
+/* containers */
+#container_header {
+	width:100%;
+	background-image:url('img/menu.png');
+	height:51px;
+	min-width:980px;
+}
+#container_header ul {
+	margin:0px;
+	padding:0px;
+	height:51px;
+	padding-left:4%;
+}
+#container_header li {
+	list-style:none;
+	float:left;
+	height:51px;
+	cursor:pointer;
+	color:#ddd;
+}
+#container_header li:hover {
+	background-color:#333;
+	color:#FFCC00;
+	background-image:url('img/menu_hover.png');
+}
+#container_header li div.content {
+	margin:0px;
+	padding:15px 12px 15px 12px;
+	font-family:arial;
+	font-size:13px;
+}
+#container_header .open {
+	background-color:#222;
+        font-weight: bold;
+	color:#a2a2a2; /* theme color 1 */
+	background-image:url('img/menu_open.png');
+	cursor:default;
+}
+#container_header .open:hover {
+	background-color:#222;
+	color:#a2a2a2; /* theme color 1 */
+	background-image:url('img/menu_open.png');
+	cursor:default;
+}
+#container_new_item {
+	position:absolute;
+	right:0px;
+	height:50px;
+	background-image:url('img/newitem.png');
+	margin-top:-1px;
+}
+#container_new_item select {
+	margin:15px;
+	padding:3px;
+	border:0px;
+	background-color:#0a0a0a;
+	color:#FFF;
+	font-size:11px;
+}
+#container_login {
+	width:100%;
+	background-color:#FFCC00;
+	min-width:980px;
+	font-family:verdana;
+	font-size:10px;
+	color:#444;
+	text-align:right
+}
+#container_login .content {
+	padding:5px;
+}
+#container_login a, #container_login a:link, #container_login a:visited, #container a:active {
+	color:#555;
+}
+#container_login a:hover {
+	color:#ddd;
+}
+#container_login strong {
+	color:#a2a2a2; /* theme color 1 */
+}
+#container_company_name {
+	width:100%;
+}
+.company_name {
+	padding-top:17px;
+	padding-left:4%;
+	font-size:35px;
+	font-weight:bold;
+	color:#ccc;
+	letter-spacing:-4px;
+}
+.company_name a, .company_name a:link, .company_name a:visited {
+	color:#fff;
+}
+#container_company_name a:hover {
+	color:#a2a2a2; /* theme color 1 */
+}
+#container_content {
+	width:94%;
+	/*position:absolute;*/
+	left:50%;
+	margin-left:3%;
+        /*margin-right:10%;*/
+}
+#container_content .content {
+	padding:0px 5px 5px 5px;
+	background-color:#fff;
+}
+#container_footer {
+	color:#000000;
+	font-family:verdana;
+	font-size:11px;
+	
+}
+#container_footer a {
+	color:#a2a2a2; /* theme color 1 */
+}
+#container_footer a.author {
+	color:#ddd;
+}
+#container_footer a:hover {
+	color:#fff;
+}
+/* overrides */
+td.tabon {
+	background-color:#a2a2a2; /* theme color 1 */
+	padding:6px;
+	border-top:5px solid #a2a2a2; /* theme color 1 */
+}
+td.taboff {
+	padding:6px;
+	background-color:#4e4e4e; /* theme color 2 */
+	border-top:5px solid #fff;
+}
+td.tabox {
+	background-color:#a2a2a2; /* theme color 1 */
+	border:10px solid #a2a2a2; /* theme color 1 */
+	color:#fff;
+}
+td.tabon a, td.tabon a:link, td.tabon a:visited, td.tabon a:active {
+	color:#fff;
+	font-family:arial;
+}
+td.tabon a:hover {
+	color:#4e4e4e; /* theme color 2 */
+}
+td.taboff a {
+	color:#a2a2a2; /* theme color 1 */
+	font-family:arial;
+}
+td.taboff a:hover {
+	color:#fff;
+}
+/* tables */
+table.tbl th {
+	color:#111;
+	list-style-type:disc;
+	list-style-position:inside;
+	font-weight:normal;
+	background-color:#e6e6e6; /* theme color 4 */
+}
+table.tbl a, table.tbl a:link, table.tbl a:visited, table.tbl a:active {
+	color:#000;
+	font-size:12px;
+}
+table.tbl a:hover {
+	color: goldenrod;/*#4e4e4e; /* theme color 2 */
+}
+table.tbl td {
+	background-color:#fff;
+	color:#000;
+	
+}
+table.tbl {
+	background-color:#c8c8c8; /* theme color 3 */
+	color:#111;
+        border-width: 0px !important;
+        border-spacing: 1px;
+        /*border-collapse: collapse;*/
+}
+
+
+
+table.std {
+	background:#fff;
+	color: #000;
+}
+table.std th {
+	color:#333;
+	list-style-type:disc;
+	list-style-position:inside;
+}
+table.std strong {
+	font-size:12px;
+	color:#000; /* theme color 2 */
+}
+table.std table td {
+	border-bottom:1px solid #e6e6e6;
+	margin:3px;
+	font-size:11px;
+	color:#000; /* theme color 2 */
+}
+table.std td.hilite {
+	font-weight:bold;
+	color:#000;
+	font-size:12px;
+	padding:6px;
+	border-left:1px solid #eee;
+}
+/* contacts table */
+table.contacts {
+	background-color:#ccc;
+}
+table.contacts td {
+	background-color:#eee;
+}
+table.contacts td.hilite {
+	background-color:#fff;
+	padding:5px;
+}
+a.hdr:link, a.hdr:active, a.hdr:visited {
+	color:#333;
+}
+/* message styles */
+.item {
+	color:#333;
+}
+.ok {
+	color:#9C0;
+}
+.text {
+	border:1px #999 solid;
+	font-size:8pt;
+	margin-top:2px;
+}
+.warning {
+	color:#d00;
+}
+.error {
+	color:#d00;
+}
+.message {
+	color:#333;
+}
+.no_ {
+	color:#d00;
+}
+/* popup calendar */
+body.popcal {
+	background-color:#f0f0f0;
+}
+table.poptitle {
+	background-color:#fff;
+}
+table.poptitle td {
+	background-color:#fff;
+}
+table.poptitle th {
+	background-color:#fff;
+	color:#000;
+	font-size:10pt;
+	font-weight:bold;
+}
+table.popcal {
+	background-color:#ccc;
+}
+table.popcal th {
+	background-color:#fff;
+	color:#000;
+	font-size:9pt;
+	font-weight:normal;
+}
+table.popcal td {
+	background-color:#fff;
+	font-size:8pt;
+	text-align:center;
+}
+table.popcal td.empty {
+	background-color:#e0e0e0;
+}
+table.mocal td.day {
+	background-color:#fff;
+	text-align:center;
+}
+table.popcal td.today {
+}
+table.popcal td.weekend {
+	background-color:#f0f0f0;
+}
+table.popcal a:link, table.popcal a:visited {
+	color:#0000ff;
+	text-decoration:none;
+}
+table.popcal a.today:link, table.popcal a.today:visited {
+	color:#ff0000;
+	font-weight:bold;
+}
+table.popcal a.weekend:link, table.popcal a.weekend:visited {
+	color:#000;
+}
+table.popcal a.empty:link, table.popcal a.empty:visited {
+	color:#777;
+}
+/* month calendar - title area */
+table.motitle {
+	background-color:#ddd;
+}
+table.motitle td {
+	background-color:#eee;
+}
+table.motitle th {
+	font-size:16px;
+	color:#333;
+	font-weight:bold;
+	background-color:#eee;
+}
+table.mocal {
+	background-color:#aaa;
+}
+table.mocal th {
+	color:#333;
+	list-style-type:disc;
+	list-style-position:inside;
+	font-weight:bold;
+	text-align:center;
+	background-color:#bcbcbc;
+}
+table.mocal td {
+}
+table.mocal td.week {
+	vertical-align:top;
+	background-color:#d4d4d4;
+	height:80px;
+}
+table.mocal td.empty {
+	background-color:#e0e0e0;
+	color:#aaa;
+	text-align:left;
+	vertical-align:top;
+	height:80px;
+}
+table.mocal td.day {
+	background-color:#fff;
+	color:#333333;
+	text-align:left;
+	vertical-align:top;
+	height:80px;
+}
+table.mocal td.today {
+	background-color:#a2a2a2; /* theme color 1 */
+	color:#fff;
+	text-align:left;
+	vertical-align:top;
+}
+table.mocal td.today a {
+	color:#fff;
+	font-weight:bold;
+	font-size:16px;
+	padding-left:6px;
+}
+table.mocal td.weekend {
+	background-color:#f0f0f0;
+	text-align:left;
+	vertical-align:top;
+}
+table.mocal .event {
+}
+/* mini calendar */
+table.minititle {
+	border:0px;
+	margin-top:20px;
+}
+table.minititle td {
+}
+table.minititle th {
+	font-weight:bold;
+}
+table.minical {
+	background-color:#bbb;
+}
+table.minical th {
+	background-color:#eee;
+	font-weight:normal;
+}
+table.minical td {
+	background-color:#fff;
+}
+table.minical td.week {
+}
+table.minical td.empty {
+	color:#aaa;
+}
+table.minical td.day {
+	text-align:center;
+}
+table.minical td.today {
+	text-align:center;
+	background-color:#a2a2a2; /* theme color 1 */
+}
+table.minical td.today a {
+	color:#fff;
+}
+table.minical td.weekend {
+	text-align:center;
+	background-color:#ddd;
+}
+table.minical .event {
+}
+/* daily calendar */
+table.tbl td.event {
+	background-color:#ddd;
+}
+table.tbl td.event td {
+	background-color:#eee;
+}
