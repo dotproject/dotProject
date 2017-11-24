@@ -15,7 +15,7 @@ $mod_selection = dPgetCleanParam($_POST, 'modselection', '');
 $advanced_search = dPgetCleanParam($_POST, 'advancedsearch', '');
 
 if ($advanced_search == 'on') { 
-	$ignore_specchar = dPgetCleanParam($_POST, 'ignorespecchar', '');
+	// $ignore_specchar = dPgetCleanParam($_POST, 'ignorespecchar', '');
 	$ignore_case = dPgetCleanParam($_POST, 'ignorecase', '');
 	$display_all_flds = dPgetCleanParam($_POST, 'displayallflds', '');
 	$show_empty = dPgetCleanParam($_POST, 'showempty', '');
@@ -146,11 +146,13 @@ echo stripslashes($keyword3); ?>" />
 		<input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php 
 echo stripslashes($keyword4); ?>" />
 	</td>
+<?php /* Commented out due to requirement for UTF-8.
 	<td align="left">
 		<input name="ignorespecchar" id="ignorespecchar" type="checkbox" value="on"<?php 
 echo (($ignore_specchar == 'on') ? ' checked="checked"' : ''); ?> />
 		<label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label>
 	</td>
+*/ ?>
 	<td align="left">
 		<input name="ignorecase" id="ignorecase" type="checkbox" value="on"<?php 
 echo (($ignore_case == 'on') ? ' checked="checked"' : ''); ?> />

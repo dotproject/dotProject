@@ -28,7 +28,7 @@ $companies_internal = $row->listCompaniesByType(array('6'));
 $companies_internal = arrayMerge(array('0'=>''), $companies_internal);
 
 // pull users
-$q = new DBQuery();
+$q = new DBQuery;
 $q->addTable('users','u');
 $q->addTable('contacts','con');
 $q->addQuery('user_id');
@@ -79,14 +79,13 @@ $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criti
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
-/*
 $ttl = $project_id > 0 ? "Edit Project" : "New Project";
 $titleBlock = new CTitleBlock($ttl, 'applet3-48.png', $m, "$m.$a");
 $titleBlock->addCrumb("?m=projects", "projects list");
 if ($project_id != 0)
 $titleBlock->addCrumb("?m=projects&amp;a=view&amp;project_id=$project_id", "view this project");
 $titleBlock->show();
-*/
+
 //Build display list for departments
 $company_id = $row->project_company;
 $selected_departments = array();
@@ -263,105 +262,13 @@ function setDepartment(department_id_string) {
 	<input type="hidden" name="project_id" value="<?php echo $project_id;?>" />
 	<input type="hidden" name="project_creator" value="<?php echo $AppUI->user_id;?>" />
 	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
-
-<script>
-    function showProjectForm(){
-        var table=document.getElementById("table_project_form");
-        if(table.style.display=="none"){
-            table.style.display="table";
-        }else{
-            table.style.display="none";
-        }
-    }
-</script>
-
-<!-- New form -->
-<div style="background-color: #D8D8D8">
-<table align="center" width="95%">
-    <tr>
-            <td style="font-size: 14px;font-weight: bold;cursor:pointer;"  >
-    
-                <?php
-                $title = $row->project_name;
-                echo $title != "" ? dPformSafe($title) : ucfirst($AppUI->_("new project"));
-                ?>
-        </td>
-        <td style="text-align: right">
-            <?php if ( $project_id !=0 && $project_id !="") { ?>
-                <input type="button" onclick="window.location='index.php?m=projects&a=reports&project_id=<?php echo $project_id ?>';" value="<?php echo $AppUI->_("LBL_REPORT"); ?>" class="button" />
-            <?php } ?>
-        </td>
-    </tr>
-</table>
-<br />
-<table  border="0" cellpadding="4" cellspacing="0" width="95%" align="center" class="std" id="table_project_form">
-    <tr>
-        <td class="label_dpp"><?php echo $AppUI->_("LBL_NOME"); ?>*:</td>
-        <td><input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="40" maxlength="50" onblur="javascript:setShort();" class="text" /></td>
-        <td class="label_dpp"><?php echo $AppUI->_('Start Date'); ?>:</td>
-        <td>
-            <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-            <input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
-            <a href="#" onclick="javascript:popCalendar('start_date', 'start_date');">
-                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-            </a>
-        </td>
-        <td class="label_dpp"><?php echo $AppUI->_('Target End Date'); ?>:</td>
-        <td>
-            <input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-            <input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-            <a href="#" onclick="javascript:popCalendar('end_date', 'end_date');">
-                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-            </a>         
-        </td>
-    </tr>
-    <tr>
-        <td class="label_dpp"><?php echo $AppUI->_('Company'); ?>:</td>
-        <td>
-            <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company); ?>
-        </td>
-        <td class="label_dpp"> <?php echo $AppUI->_('Status'); ?>:</td>
-        <td>
-           <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>					
-        </td>   
-        <td class="label_dpp"><?php echo $AppUI->_('Priority'); ?>:</td>
-        <td>
-            <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true);?> 
-        </td>
-    </tr>
-
-    <tr> 
-        <td class="label_dpp"><?php echo $AppUI->_("LBL_OWNER"); ?>:</td>
-        <td>
-            <?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner? $row->project_owner : $AppUI->user_id) ?>
-        </td>
-
-        <td class="label_dpp"><?php //echo $AppUI->_('Scheduled Hours'); ?></td>
-        <td><?php //echo $total_hours ?></td>
-
-        <td class="label_dpp"><?php echo $AppUI->_('Target Budget'); ?>
-            (<?php echo $dPconfig['currency_symbol'] ?>):</td>
-        <td>
-            <input type="text" name="project_target_budget" value="<?php echo @$row->project_target_budget;?>" maxlength="10" class="text" />
-        </td>
-    </tr>
-
-</table>
-<br />
-<table style="width:95%;" align="center">
-    <td align="right">
-        <input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_("LBL_SAVE");?>" onclick="javascript:submitIt();" />
-        <input class="button" type="button" name="cancel" value="<?php echo ucfirst($AppUI->_("LBL_CANCEL"));?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = '?m=projects';}" />        
-    </td>
-</table>
-</div>
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std" style="display:none">
+<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td>
-            <input class="button" type="button" name="cancel2" value="<?php echo ucfirst($AppUI->_("LBL_CANCEL"));?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = '?m=projects';}" />
+		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('Are you sure you want to cancel.')) {location.href = '?m=projects';}" />
 	</td>
 	<td align="right">
-		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_("LBL_SAVE");?>" onclick="javascript:submitIt();" />
+		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit');?>" onclick="javascript:submitIt();" />
 	</td>
 </tr>
 <tr>
@@ -370,20 +277,20 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name');?></td>
 			<td width="100%" colspan="2">
-				<!-- <input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onblur="javascript:setShort();" class="text" /> * -->
+				<input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onblur="javascript:setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner');?></td>
 			<td colspan="2">
-<?php //echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner? $row->project_owner : $AppUI->user_id) ?>
+<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner? $row->project_owner : $AppUI->user_id) ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company');?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
 <?php
-		//echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company);
+		echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company);
 ?> *</td>
 		</tr>
 		<tr>
@@ -395,15 +302,12 @@ function setDepartment(department_id_string) {
  		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
-			<td nowrap="nowrap">
-                            <!--
-                            <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
 
 				<a href="#" onclick="javascript:popCalendar('start_date', 'start_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 				</a>
-                            -->
 			</td>
 			<td rowspan="6" valign="top">
 					<?php
@@ -422,21 +326,18 @@ function setDepartment(department_id_string) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date');?></td>
-			<td nowrap="nowrap">	
-                            <!--
-                            <input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
 				<input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 
 				<a href="#" onclick="javascript:popCalendar('end_date', 'end_date');">
 					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
 				</a>
-                            -->
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget');?> <?php echo $dPconfig['currency_symbol'] ?></td>
 			<td>
-				<!-- <input type="text" name="project_target_budget" value="<?php echo @$row->project_target_budget;?>" maxlength="10" class="text" /> -->
+				<input type="text" name="project_target_budget" value="<?php echo @$row->project_target_budget;?>" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -455,7 +356,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget');?> <?php echo $dPconfig['currency_symbol'] ?></td>
 			<td>
-				<!-- <input type="text" name="project_actual_budget" value="<?php echo @$row->project_actual_budget;?>" size="10" maxlength="10" class="text" /> -->
+				<input type="text" name="project_actual_budget" value="<?php echo @$row->project_actual_budget;?>" size="10" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -489,7 +390,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority');?></td>
 			<td nowrap="nowrap">
-				<?php// echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true);?> *
+				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true);?> *
 			</td>
 		</tr>
 		<tr>
@@ -525,7 +426,7 @@ function setDepartment(department_id_string) {
 				</tr>
 				<tr>
 					<td>
-						<?php //echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>
+						<?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>
 					</td>
 					<td>
 						<strong><?php echo sprintf("%.1f%%", @$row->project_percent_complete);?></strong>

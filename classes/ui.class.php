@@ -38,7 +38,7 @@ require_once DP_BASE_DIR.'/includes/filter.php';
 * The Application User Interface Class.
 *
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
-* @version $Revision: 6221 $
+* @version $Revision$
 */
 class CAppUI {
 /** @var array generic array for holding the state of anything */
@@ -751,6 +751,7 @@ class CAppUI {
 			dprint(__FILE__, __LINE__, 1, 'Failed to load user information');
 			return false;
 		}
+		
 // load the user preferences
 		$this->loadPrefs($this->user_id);
 		$this->setUserLocale();
@@ -871,12 +872,16 @@ class CAppUI {
 * @return array Named array list in the form 'module directory'=>'module name'
 */
 	function getActiveModules() {
-		$q = new DBQuery;
-		$q->addTable('modules');
-		$q->addQuery('mod_directory, mod_ui_name');
-		$q->addWhere('mod_active > 0');
-		$q->addOrder('mod_directory');
-		return ($q->loadHashList());
+		static $modlist = null;
+		if (! isset($modlist)) {
+			$q = new DBQuery;
+			$q->addTable('modules');
+			$q->addQuery('mod_directory, mod_ui_name');
+			$q->addWhere('mod_active > 0');
+			$q->addOrder('mod_directory');
+			$modlist = $q->loadHashList();
+		}
+		return $modlist;
 	}
 /**
 * Gets a list of the modules that should appear in the menu
@@ -894,13 +899,8 @@ class CAppUI {
 	}
 
 	function isActiveModule($module) {
-		$q = new DBQuery;
-		$q->addTable('modules');
-		$q->addQuery('mod_active');
-		$q->addWhere("mod_directory = '$module'");
-		$sql = $q->prepare();
-		$q->clear();
-		return db_loadResult($sql);
+		$modlist = $this->getActiveModules();
+		return !empty($modlist[$module]);
 	}
 
 /**
@@ -929,13 +929,14 @@ class CAppUI {
 			$root .= '/';
 		}
 		
-		$base = dPgetConfig('base_url')!="" ? dPgetConfig('base_url') : "/dotproject_plus/";//;
+		$base = dPgetConfig('base_url');
 		if (mb_substr($base, -1) != '/') {
 			$base .= '/';
 		}
 		
 		// Load the basic javascript used by all modules.
 		$jsdir = dir("{$root}js");
+		
 		$js_files = array();
 		while (($entry = $jsdir->read()) !== false) {
 			if (mb_substr($entry, -3) == '.js') {

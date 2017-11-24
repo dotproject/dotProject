@@ -128,17 +128,16 @@ class dPacl extends gacl_api {
 		$q->addOrder('priority ASC,acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
-               
-                $result=$arr['allow'];
+	    $result=$arr['allow'];
 		//If there is no acl_id then we default back to the parent lookup
-		if (!($result=="1" )) {/*&& $result['acl_id']=="1")*/
+		if (!($result && isset($result['acl_id']))) {
 			dprint(__FILE__, __LINE__, 2, 
 			       "checkModuleItem($module, $op, $userid) did not return a record");
 			return $this->checkModule($module, $op, $userid);
 		}
 		dprint(__FILE__, __LINE__, 2, 
-		       "checkModuleItem($module, $op, $userid) returned " . $result);
-		return $result;
+		       "checkModuleItem($module, $op, $userid) returned " . $result['allow']);
+		return $result['allow'];
 	}
 	
 	/**

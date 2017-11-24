@@ -199,7 +199,7 @@
 "Task added",
 "Task end date",
 "Task name",
-"Activities",
+"Tasks",
 "Tasks (In-Active)",
 "Tasks (Inactive)",
 "Tasks Completed Since",

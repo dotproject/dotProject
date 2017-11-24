@@ -71,7 +71,7 @@ class CDpObject {
 		$this->_tbl_key = $key;
 		$this->_permission_name = (($perm_name) ? $perm_name : $table);
 		$this->_query = new DBQuery;
-		//trigger_error('Calling CDpObject directly is no longer supported. Please update your module to support PHP5 style inheritance', E_USER_NOTICE);
+		trigger_error('Calling CDpObject directly is no longer supported. Please update your module to support PHP5 style inheritance', E_USER_NOTICE);
 	}
 
 	/**
