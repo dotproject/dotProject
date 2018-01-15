@@ -51,7 +51,7 @@ function dPcheckExistingDB($conf) {
 	if (isset($conf['dbprefix'])) {
 		$dbprefix = $conf['dbprefix'];
 	} else $dbprefix = '';
-	$ado = @NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysql');
+	$ado = @NewADOConnection($conf['dbtype'] ? $conf['dbtype'] : 'mysqli');
 	if (empty($ado)) {
 		error_log("DP Upgrade Check: ADODb failed to initialise {$conf['dbtype']} driver");
 		return false;

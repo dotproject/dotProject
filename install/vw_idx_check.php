@@ -99,7 +99,11 @@ if ($maxfileuploadsize > 1048576) {
 </tr>
 <tr>
  <td class="item"><li>MySQL Support</li></td>
-  <td align="left"><?php echo function_exists('mysql_connect') ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.@mysql_get_server_info().')</span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
+<?php /*
+   MySQLi doesn't support a default connection that allows us to determine the server info without valid connection, so
+   we just ignore the server information at this stage and hope that we can connect when we have valid credentials.
+*/ ?>
+  <td align="left"><?php echo function_exists('mysqli_connect') ? '<b class="ok">'.$okImg.'</b>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
 </tr>
 <tr>
             <td class="title" colspan="2"><br />Check for Directory and File Permissions</td>
@@ -211,8 +215,8 @@ if ($filemode & 2) {
 </tr>
 <tr>
             <td class="item">Supported Web Server?</td>
-            <td align="left"><?php echo (mb_stristr($_SERVER['SERVER_SOFTWARE'], 'apache') != false) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.$_SERVER['SERVER_SOFTWARE'].')</span>' : '<b class="error">'.$failedImg.'</b><span class="warning">
-            It seems you are using an unsupported web server.  Only Apache Web server is fully supported by dotProject, and using other web servers may result in unexpected problems.
+            <td align="left"><?php echo (mb_stristr($_SERVER['SERVER_SOFTWARE'], 'apache') != false || mb_stristr($_SERVER['SERVER_SOFTWARE'], 'nginx') != false) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.$_SERVER['SERVER_SOFTWARE'].')</span>' : '<b class="error">'.$failedImg.'</b><span class="warning">
+            It seems you are using an unsupported web server.  Only Apache or Nginx Web server is fully supported by dotProject, and using other web servers may result in unexpected problems.
             </span>';?></td>
 </tr>
 <tr>

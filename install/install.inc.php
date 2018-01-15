@@ -142,8 +142,10 @@ function InstallLoadSql($sqlfile, $last_update = null)
  if (! file_exists($sqlfile))
 	return;
 
- $mqr = @get_magic_quotes_runtime();
- @set_magic_quotes_runtime(0);
+ if (function_exists('set_magic_quotes_runtime')) {
+  $mqr = @get_magic_quotes_runtime();
+  @set_magic_quotes_runtime(0);
+ }
 
  $pieces = array();
  if ($sqlfile) {
@@ -151,7 +153,9 @@ function InstallLoadSql($sqlfile, $last_update = null)
   $pieces  = InstallSplitSql($query, $last_update);
  }
 
- @set_magic_quotes_runtime($mqr);
+ if (function_exists('set_magic_quotes_runtime')) {
+   @set_magic_quotes_runtime($mqr);
+ }
  $errors = 0;
  $piece_count = count($pieces);
 

@@ -931,7 +931,7 @@ class dPacl extends gacl_api {
 	   WHERE axo_g.value IS NOT NULL and aro.value IS NOT NULL";
 
       foreach ($query2 as $query) {
-          mysql_query($query);
+          $GLOBALS['db']->Execute($query);
       }
   }
 
