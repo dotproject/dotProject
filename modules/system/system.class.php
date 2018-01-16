@@ -39,7 +39,7 @@ class CPreferences {
 		return NULL; // object is ok
 	}
 	
-	function store() {
+	function store($updateNulls = false) {
 		if ($this->pref_user && ! isset($this->_default_prefs)) {
 			$this->get_defaults();
 		}
@@ -58,7 +58,7 @@ class CPreferences {
 		return NULL;
 	}
 	
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$q = new DBQuery;
 		$q->setDelete('user_preferences');
 		$q->addWhere('pref_user = ' . (int)$this->pref_user);
@@ -253,9 +253,9 @@ class CConfig extends CDpObject {
 		return NULL; // object is ok
 	}
 	
-	function store() {
+	function store($updateNulls = false) {
 		$msg = $this->check();
-		return (($msg) ? $msg : parent::store());
+		return (($msg) ? $msg : parent::store($updateNulls));
 	}
 	
 	function getChildren($id) {
@@ -293,7 +293,7 @@ class bcode extends CDpObject {
 		}
 	}
 	
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$q = new DBQuery;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
@@ -307,7 +307,7 @@ class bcode extends CDpObject {
 		}
 	}
 	
-	function store() {
+	function store($updateNulls = false) {
 		$q = new DBQuery;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');

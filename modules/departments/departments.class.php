@@ -27,7 +27,10 @@ class CDepartment extends CDpObject {
 		// empty constructor
 	}
 
-	function load($oid) {
+	function load($oid = NULL, $strip = true) {
+                if (! $oid) {
+                  return NULL;
+                }
 		$q  = new DBQuery;
 		$q->addTable('departments','dep');
 		$q->addQuery('dep.*');
@@ -57,7 +60,7 @@ class CDepartment extends CDpObject {
 		return NULL; // object is ok
 	}
 
-	function store() {
+	function store($updateNulls = false) {
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this)."::store-check failed - $msg";
@@ -74,7 +77,7 @@ class CDepartment extends CDpObject {
 		}
 	}
 
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$q  = new DBQuery;
 		$q->addTable('departments','dep');
 		$q->addQuery('dep.*');

@@ -146,7 +146,7 @@ class CDate extends Date {
 * @param Date The date to compare to
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 */
-	function dateDiff($when) {
+	function dateDiff($when, $ignoretime = false) {
 		return Date_calc::dateDiff($this->getDay(), $this->getMonth(), $this->getYear(),
 								   $when->getDay(), $when->getMonth(), $when->getYear());	
 	}

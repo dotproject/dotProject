@@ -492,7 +492,7 @@ class CEvent extends CDpObject {
      *	@author gregorerhardt
      *	@return null|string null if successful otherwise returns and error message
      */
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		global $AppUI;
 		// call default delete method first
 		$deleted = parent::delete($this->event_id);

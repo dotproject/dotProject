@@ -52,7 +52,7 @@ class CFile extends CDpObject {
 		parent::__construct('files', 'file_id');
 	}
 	
-	function store() {
+	function store($updateNulls = false) {
 		global $helpdesk_available;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
@@ -131,7 +131,7 @@ class CFile extends CDpObject {
 		return NULL;
 	}
 
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		global $helpdesk_available;
 		
 		// delete the main table reference
@@ -565,7 +565,7 @@ class CFileFolder extends CDpObject {
 		return null;
 	}
 	
-	function delete($oid=null) {
+	function delete($oid=null, $history_desc = '', $history_proj = 0) {
 		$oid = intval(($oid ? $oid : $this->file_folder_id));
 	    return parent :: delete($oid);
 	}

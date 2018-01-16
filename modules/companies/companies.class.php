@@ -61,7 +61,7 @@ class CCompany extends CDpObject {
 	}
 
 // overload canDelete
-	function canDelete(&$msg, $oid=null) {
+	function canDelete(&$msg, $oid=null, $joins = NULL) {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');

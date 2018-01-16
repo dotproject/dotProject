@@ -566,7 +566,7 @@ class CTask extends CDpObject
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	function store() {
+	function store($updateNulls = false) {
 		GLOBAL $AppUI;
 		$q = new DBQuery;
 		
@@ -724,7 +724,7 @@ class CTask extends CDpObject
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		if (!($this->task_id)) {
 			return 'invalid task id';
 		}

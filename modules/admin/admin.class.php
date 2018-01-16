@@ -49,7 +49,7 @@ class CUser extends CDpObject {
 		return NULL; // object is ok
 	}
 
-	function store() {
+	function store($updateNulls = FALSE) {
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this)."::store-check failed";
@@ -81,7 +81,7 @@ class CUser extends CDpObject {
 		}
 	}
 
-	function delete($oid = NULL) {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$id = $this->user_id;
 		$result = parent::delete($oid);
 		if (! $result) {

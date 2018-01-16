@@ -426,7 +426,13 @@ class CSS_Color extends PEAR
   }
 
   //--------------------------------------------------
-  function &raiseError($message, $method, $line)
+  /*
+    Seeing as our method signature is completely different to that for the parent class, we've added some
+    extra parameters to stop PHP 7 complaining.
+
+    TODO: Fix this properly
+  */
+  function &raiseError($message = NULL, $method = NULL, $line = NULL, $_a = NULL, $_b = NULL, $_c = NULL, $_d = false)
   {
     $error = PEAR::raiseError(sprintf("%s.%s() line %d: %s",
 				      get_class($this), $method, $line, $message),

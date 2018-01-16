@@ -41,7 +41,7 @@ class CForum extends CDpObject {
 		return NULL; // object is ok
 	}
 
-	function store() {
+	function store($updateNulls = FALSE) {
 		$msg = $this->check();
 		if ($msg) {
 			return "CForum::store-check failed<br />$msg";
@@ -64,7 +64,7 @@ class CForum extends CDpObject {
 		}
 	}
 
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$q  = new DBQuery;
 		$q->setDelete('forum_visits');
 		$q->addWhere('visit_forum = '.$this->forum_id);

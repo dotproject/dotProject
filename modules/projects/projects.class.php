@@ -86,7 +86,7 @@ class CProject extends CDpObject {
 	}
 
 	// overload canDelete
-	function canDelete(&$msg, $oid=null) {
+	function canDelete(&$msg, $oid=null, $joins = NULL) {
 		// TODO: check if user permissions are considered when deleting a project
 		global $AppUI;
 
@@ -104,7 +104,7 @@ class CProject extends CDpObject {
 		*/
 	}
 
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$this->load($this->project_id);
 		addHistory('projects', $this->project_id, 'delete', $this->project_name,
 		           $this->project_id);
@@ -305,7 +305,7 @@ class CProject extends CDpObject {
 
 	}
 
-	function getAllowedSQL($uid, $index=null) {
+	function getAllowedSQL($uid, $index=null, $alt_mod = NULL) {
 		$oCpy = new CCompany ();
 
 		$where = $oCpy->getAllowedSQL ($uid, 'project_company');
@@ -313,7 +313,7 @@ class CProject extends CDpObject {
 		return array_merge($where, $project_where);
 	}
 
-	function setAllowedSQL($uid, &$query, $index=null, $key=null) {
+	function setAllowedSQL($uid, &$query, $index=null, $key=null, $alt_mod = NULL) {
 		$oCpy = new CCompany;
 		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, ((($key) ? ($key . '.') : '') .'project_company'));
@@ -395,7 +395,7 @@ class CProject extends CDpObject {
 		return $q->loadList();
 	}
 
-	function store() {
+	function store($updateNulls = false) {
 		$this->dPTrimAll();
 
 		$msg = $this->check();
