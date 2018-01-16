@@ -5,7 +5,7 @@
 // Created:     2009-03-08
 // Ver:         $Id: jpgraph_contour.php 1870 2009-09-29 04:24:18Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 */
 require_once('jpgraph_meshinterpolate.inc.php');
@@ -502,12 +502,12 @@ class ContourPlot extends Plot {
 
         if( $this->invertLegend ) {
             for ($i = 0; $i < $this->nbrContours; $i++) {
-                $aGraph->legend->Add(sprintf('%.1F',$this->contourVal[$i]), $this->contourColor[$i]);
+                $aGraph->legend->Add(sprintf('%.1f',$this->contourVal[$i]), $this->contourColor[$i]);
             }
         }
         else {
             for ($i = $this->nbrContours-1; $i >= 0 ; $i--) {
-                $aGraph->legend->Add(sprintf('%.1F',$this->contourVal[$i]), $this->contourColor[$i]);
+                $aGraph->legend->Add(sprintf('%.1f',$this->contourVal[$i]), $this->contourColor[$i]);
             }
         }
     }

@@ -7,7 +7,7 @@
 // Created:     2001-01-08 (Refactored to separate file 2008-08-01)
 // Ver:         $Id: jpgraph_legend.inc.php 1926 2010-01-11 16:33:07Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 
 DEFINE('_DEFAULT_LPM_SIZE',8); // Default Legend Plot Mark size
@@ -21,10 +21,10 @@ DEFINE('_DEFAULT_LPM_SIZE',8); // Default Legend Plot Mark size
 
 class Legend {
     public $txtcol=array();
-    public $font_family=FF_FONT1,$font_style=FS_NORMAL,$font_size=12;
-    private $color=array(0,0,0); // Default fram color
-    private $fill_color=array(235,235,235); // Default fill color
-    private $shadow=true; // Shadow around legend "box"
+    public $font_family=FF_DEFAULT,$font_style=FS_NORMAL,$font_size=8; // old. 12
+    private $color=array(120,120,120); // Default frame color
+    private $fill_color=array(245,245,245); // Default fill color
+    private $shadow=false; // Shadow around legend "box"
     private $shadow_color='darkgray';
     private $mark_abs_hsize=_DEFAULT_LPM_SIZE,$mark_abs_vsize=_DEFAULT_LPM_SIZE;
     private $xmargin=10,$ymargin=0,$shadow_width=2;
@@ -170,6 +170,10 @@ class Legend {
         $this->bkg_gradto = $aTo;
     }
 
+    function HasItems() {
+        return (boolean)(count($this->txtcol));
+    }
+
     function Stroke($aImg) {
         // Constant
         $fillBoxFrameWeight=1;
@@ -209,7 +213,7 @@ class Legend {
                 $rows++;
                 $rowheight[$rows-1] = 0;
             }
-            $rowheight[$rows-1] = max($rowheight[$rows-1],$h);
+            $rowheight[$rows-1] = max($rowheight[$rows-1],$h)+1;
         }
 
         $abs_height = 0;
@@ -364,6 +368,11 @@ class Legend {
                     $aImg->StyleLine($x1-$this->mark_abs_hsize,$marky,$x1+$this->mark_abs_hsize,$marky);
                 }
 
+                // Stroke a mark using image
+                if( $p[2]->GetType() == MARK_IMG ) {
+                    $p[2]->Stroke($aImg,$x1,$marky);
+                }
+
                 // Stroke a mark with the standard size
                 // (As long as it is not an image mark )
                 if( $p[2]->GetType() != MARK_IMG ) {
@@ -426,9 +435,10 @@ class Legend {
                     }
                     else {
                         $aImg->SetColor($p[1]);
-                        $aImg->FilledRectangle($x1-$boxsize/2,$ym,
-                                               $x1+$boxsize/2,$ym+$boxsize);
+                        $aImg->FilledRectangle($x1-$boxsize/2,$ym, $x1+$boxsize/2,$ym+$boxsize);
                     }
+
+                    // Draw a plot frame line
                     $aImg->SetColor($this->color);
                     $aImg->SetLineWeight($fillBoxFrameWeight);
                     $aImg->Rectangle($x1-$boxsize/2,$ym,

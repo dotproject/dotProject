@@ -6,7 +6,7 @@
 // Created:     2001-01-08 (Refactored to separate file 2008-08-01)
 // Ver:         $Id: jpgraph_text.inc.php 1844 2009-09-26 17:05:31Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 
 
@@ -15,18 +15,22 @@
 // Description: Arbitrary text object that can be added to the graph
 //===================================================
 class Text {
-    public $t,$margin=0;
+    public $t;
     public $x=0,$y=0,$halign="left",$valign="top",$color=array(0,0,0);
     public $hide=false, $dir=0;
     public $iScalePosY=null,$iScalePosX=null;
     public $iWordwrap=0;
-    public $font_family=FF_FONT1,$font_style=FS_NORMAL,$font_size=12;
+    public $font_family=FF_DEFAULT,$font_style=FS_NORMAL; // old. FF_FONT1
     protected $boxed=false; // Should the text be boxed
     protected $paragraph_align="left";
     protected $icornerradius=0,$ishadowwidth=3;
     protected $fcolor='white',$bcolor='black',$shadow=false;
     protected $iCSIMarea='',$iCSIMalt='',$iCSIMtarget='',$iCSIMWinTarget='';
     private $iBoxType = 1; // Which variant of filled box around text we want
+
+    // for __get, __set
+    private $_margin;
+    private $_font_size=8; // old. 12
 
     //---------------
     // CONSTRUCTOR
@@ -171,28 +175,28 @@ class Text {
 
     // Total width of text
     function GetWidth($aImg) {
-        $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
+        $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $w = $aImg->GetTextWidth($this->t,$this->dir);
         return $w;
     }
 
     // Hight of font
     function GetFontHeight($aImg) {
-        $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
+        $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetFontHeight();
         return $h;
 
     }
 
     function GetTextHeight($aImg) {
-        $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
+        $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetTextHeight($this->t,$this->dir);
         return $h;
     }
 
     function GetHeight($aImg) {
     // Synonym for GetTextHeight()
-        $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
+        $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetTextHeight($this->t,$this->dir);
         return $h;
     }
@@ -246,7 +250,7 @@ class Text {
         if( $this->y < 1 && $this->y > 0 ) $this->y *= $aImg->height;
 
         $aImg->PushColor($this->color);
-        $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
+        $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $aImg->SetTextAlign($this->halign,$this->valign);
 
         if( $this->boxed ) {
@@ -295,6 +299,27 @@ class Text {
         $this->iCSIMarea .= " />\n";
 
         $aImg->PopColor($this->color);
+    }
+
+    function __get($name) {
+
+        if (strpos($name, 'raw_') !== false) {
+            // if $name == 'raw_left_margin' , return $this->_left_margin;
+            $variable_name = '_' . str_replace('raw_', '', $name);
+            return $this->$variable_name;
+        }
+
+        $variable_name = '_' . $name; 
+
+        if (isset($this->$variable_name)) {
+            return $this->$variable_name * SUPERSAMPLING_SCALE;
+        } else {
+            JpGraphError::RaiseL('25132', $name);
+        } 
+    }
+
+    function __set($name, $value) {
+        $this->{'_'.$name} = $value;
     }
 } // Class
 

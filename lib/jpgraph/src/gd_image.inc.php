@@ -5,11 +5,12 @@
 // Created:     2001-01-08, refactored 2008-03-29
 // Ver:         $Id: gd_image.inc.php 1922 2010-01-11 11:42:50Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 
 require_once 'jpgraph_rgb.inc.php';
 require_once 'jpgraph_ttf.inc.php';
+require_once 'imageSmoothArc.php';
 
 // Line styles
 define('LINESTYLE_SOLID',1);
@@ -33,19 +34,25 @@ if( !DEFINED("DEFAULT_GFORMAT") ) {
 //              rotation.
 //=========================================================================
 class Image {
-    public $left_margin=30,$right_margin=30,$top_margin=20,$bottom_margin=30;
     public $img=null;
-    public $plotwidth=0,$plotheight=0;
-    public $width=0, $height=0;
     public $rgb=null;
-    public $current_color,$current_color_name;
-    public $line_weight=1, $line_style=LINESTYLE_SOLID;
     public $img_format;
     public $ttf=null;
+    public $line_style=LINESTYLE_SOLID;
+    public $current_color,$current_color_name;
+    public $original_width=0, $original_height=0;
+    public $plotwidth=0,$plotheight=0;
+
+    // for __get, __set
+    private $_left_margin=30,$_right_margin=30,$_top_margin=20,$_bottom_margin=30;
+    //private $_plotwidth=0,$_plotheight=0;
+    private $_width=0, $_height=0;
+    private $_line_weight=1;
+
     protected $expired=true;
     protected $lastx=0, $lasty=0;
     protected $obs_list=array();
-    protected $font_size=12,$font_family=FF_FONT1, $font_style=FS_NORMAL;
+    protected $font_size=12,$font_family=FF_DEFAULT, $font_style=FS_NORMAL;
     protected $font_file='';
     protected $text_halign="left",$text_valign="bottom";
     protected $use_anti_aliasing=false;
@@ -55,11 +62,21 @@ class Image {
     protected $langconv = null ;
     protected $iInterlace=false;
     protected $bbox_cache = array(); // STore the last found tetx bounding box
+    protected $ff_font0;
+    protected $ff_font0_bold;
+    protected $ff_font1;
+    protected $ff_font1_bold;
+    protected $ff_font2;
+    protected $ff_font2_bold;
+
 
     //---------------
     // CONSTRUCTOR
     function __construct($aWidth=0,$aHeight=0,$aFormat=DEFAULT_GFORMAT,$aSetAutoMargin=true) {
-        $this->CreateImgCanvas($aWidth,$aHeight);
+
+        $this->original_width  = $aWidth;
+        $this->original_height = $aHeight;
+        $this->CreateImgCanvas($aWidth, $aHeight);
 
         if( $aSetAutoMargin ) {
             $this->SetAutoMargin();
@@ -70,6 +87,12 @@ class Image {
         }
         $this->ttf = new TTF();
         $this->langconv = new LanguageConv();
+
+        $this->ff_font0 =  imageloadfont(dirname(__FILE__) . "/fonts/FF_FONT0.gdf");
+        $this->ff_font1 =  imageloadfont(dirname(__FILE__) . "/fonts/FF_FONT1.gdf");
+        $this->ff_font2 =  imageloadfont(dirname(__FILE__) . "/fonts/FF_FONT2.gdf");
+        $this->ff_font1_bold =  imageloadfont(dirname(__FILE__) . "/fonts/FF_FONT1-Bold.gdf");
+        $this->ff_font2_bold =  imageloadfont(dirname(__FILE__) . "/fonts/FF_FONT2-Bold.gdf");
     }
 
     // Enable interlacing in images
@@ -93,6 +116,10 @@ class Image {
     }
 
     function CreateRawCanvas($aWidth=0,$aHeight=0) {
+
+        $aWidth  *= SUPERSAMPLING_SCALE;
+        $aHeight *= SUPERSAMPLING_SCALE;
+
         if( $aWidth <= 1 || $aHeight <= 1 ) {
             JpGraphError::RaiseL(25082,$aWidth,$aHeight);//("Illegal sizes specified for width or height when creating an image, (width=$aWidth, height=$aHeight)");
         }
@@ -146,7 +173,7 @@ class Image {
         // Set canvas color (will also be the background color for a
         // a pallett image
         $this->SetColor($this->canvascolor);
-        $this->FilledRectangle(0,0,$aWidth-1,$aHeight-1);
+        $this->FilledRectangle(0,0,$this->width-1,$this->height-1);
 
         return $old ;
     }
@@ -243,7 +270,7 @@ class Image {
     function SetFont($family,$style=FS_NORMAL,$size=10) {
         $this->font_family=$family;
         $this->font_style=$style;
-        $this->font_size=$size;
+        $this->font_size=$size*SUPERSAMPLING_SCALE;
         $this->font_file='';
         if( ($this->font_family==FF_FONT1 || $this->font_family==FF_FONT2) && $this->font_style==FS_BOLD ){
             ++$this->font_family;
@@ -252,9 +279,12 @@ class Image {
 
             // Check that this PHP has support for TTF fonts
             if( !function_exists('imagettfbbox') ) {
-                JpGraphError::RaiseL(25087);//('This PHP build has not been configured with TTF support. You need to recompile your PHP installation with FreeType support.');
+                // use internal font when php is configured without '--with-ttf'
+                $this->font_family = FF_FONT1;
+//                JpGraphError::RaiseL(25087);//('This PHP build has not been configured with TTF support. You need to recompile your PHP installation with FreeType support.');
+            } else {
+                $this->font_file = $this->ttf->File($this->font_family,$this->font_style);
             }
-            $this->font_file = $this->ttf->File($this->font_family,$this->font_style);
         }
     }
 
@@ -620,8 +650,10 @@ class Image {
             $y += $dir==0 ? $h/2 : $w/2;
         }
 
+        $use_font = $this->font_family;
+
         if( $dir==90 ) {
-            imagestringup($this->img,$this->font_family,$x,$y,$txt,$this->current_color);
+            imagestringup($this->img,$use_font,$x,$y,$txt,$this->current_color);
             $aBoundingBox = array(round($x),round($y),round($x),round($y-$w),round($x+$h),round($y-$w),round($x+$h),round($y));
             if( $aDebug ) {
                 // Draw bounding box
@@ -636,19 +668,19 @@ class Image {
                 for($i=0; $i < count($tmp); ++$i) {
                     $w1 = $this->GetTextWidth($tmp[$i]);
                     if( $paragraph_align=="left" ) {
-                        imagestring($this->img,$this->font_family,$x,$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
+                        imagestring($this->img,$use_font,$x,$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
                     }
                     elseif( $paragraph_align=="right" ) {
-                        imagestring($this->img,$this->font_family,$x+($w-$w1),$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
+                        imagestring($this->img,$use_font,$x+($w-$w1),$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
                     }
                     else {
-                        imagestring($this->img,$this->font_family,$x+$w/2-$w1/2,$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
+                        imagestring($this->img,$use_font,$x+$w/2-$w1/2,$y-$h+1+$i*$fh,$tmp[$i],$this->current_color);
                     }
                 }
             }
             else {
                 //Put the text
-                imagestring($this->img,$this->font_family,$x,$y-$h+1,$txt,$this->current_color);
+                imagestring($this->img,$use_font,$x,$y-$h+1,$txt,$this->current_color);
             }
             if( $aDebug ) {
                 // Draw the bounding rectangle and the bounding box
@@ -1075,12 +1107,15 @@ class Image {
     }
 
     function SetMargin($lm,$rm,$tm,$bm) {
+
         $this->left_margin=$lm;
         $this->right_margin=$rm;
         $this->top_margin=$tm;
         $this->bottom_margin=$bm;
-        $this->plotwidth=$this->width - $this->left_margin-$this->right_margin ;
-        $this->plotheight=$this->height - $this->top_margin-$this->bottom_margin ;
+
+        $this->plotwidth  = $this->width  - $this->left_margin - $this->right_margin;
+        $this->plotheight = $this->height - $this->top_margin  - $this->bottom_margin;
+
         if( $this->width  > 0 && $this->height > 0 ) {
             if( $this->plotwidth < 0  || $this->plotheight < 0 ) {
             	JpGraphError::RaiseL(25130, $this->plotwidth, $this->plotheight);
@@ -1126,7 +1161,7 @@ class Image {
 
 
     function SetLineWeight($weight) {
-    	$old = $this->line_weight;
+        $old = $this->line_weight;
         imagesetthickness($this->img,$weight);
         $this->line_weight = $weight;
         return $old;
@@ -1153,6 +1188,7 @@ class Image {
         $style=IMG_ARC_PIE;
         if( abs($s-$e) > 0 ) {
             imagefilledarc($this->img,round($xc),round($yc),round($w),round($h),$s,$e,$this->current_color,$style);
+//            $this->DrawImageSmoothArc($this->img,round($xc),round($yc),round($w),round($h),$s,$e,$this->current_color,$style);
         }
     }
 
@@ -1200,10 +1236,13 @@ class Image {
 
     function Circle($xc,$yc,$r) {
         imageellipse($this->img,round($xc),round($yc),$r*2,$r*2,$this->current_color);
+//        $this->DrawImageSmoothArc($this->img,round($xc),round($yc),$r*2+1,$r*2+1,0,360,$this->current_color);
+//        $this->imageSmoothCircle($this->img, round($xc),round($yc), $r*2+1, $this->current_color);
     }
 
     function FilledCircle($xc,$yc,$r) {
         imagefilledellipse($this->img,round($xc),round($yc),2*$r,2*$r,$this->current_color);
+//        $this->DrawImageSmoothArc($this->img, round($xc), round($yc), 2*$r, 2*$r, 0, 360, $this->current_color);
     }
 
     // Linear Color InterPolation
@@ -1240,11 +1279,16 @@ class Image {
     }
 
     // Same as Line but take the line_style into account
-    function StyleLine($x1,$y1,$x2,$y2,$aStyle='') {
+    function StyleLine($x1,$y1,$x2,$y2,$aStyle='', $from_grid_class = false) {
         if( $this->line_weight <= 0 ) return;
 
         if( $aStyle === '' ) {
             $aStyle = $this->line_style;
+        }
+
+        $dashed_line_method = 'DashedLine';
+        if ($from_grid_class) {
+            $dashed_line_method = 'DashedLineForGrid';
         }
 
         // Add error check since dashed line will only work if anti-alias is disabled
@@ -1265,13 +1309,13 @@ class Image {
 
             switch( $aStyle ) {
                 case 2: // Dotted
-                    $this->DashedLine($x1,$y1,$x2,$y2,2,6);
+                    $this->$dashed_line_method($x1,$y1,$x2,$y2,2,6);
                     break;
                 case 3: // Dashed
-                    $this->DashedLine($x1,$y1,$x2,$y2,5,9);
+                    $this->$dashed_line_method($x1,$y1,$x2,$y2,5,9);
                     break;
                 case 4: // Longdashes
-                    $this->DashedLine($x1,$y1,$x2,$y2,9,13);
+                    $this->$dashed_line_method($x1,$y1,$x2,$y2,9,13);
                     break;
                 default:
                     JpGraphError::RaiseL(25104,$this->line_style);//(" Unknown line style: $this->line_style ");
@@ -1291,19 +1335,55 @@ class Image {
         // Dashed line does not work with anti-alias enabled. This
         // is a limitation in GD.
         if( $this->use_anti_aliasing ) {
-            JpGraphError::RaiseL(25129); // Anti-alias can not be used with dashed lines. Please disable anti-alias or use solid lines.
+//            JpGraphError::RaiseL(25129); // Anti-alias can not be used with dashed lines. Please disable anti-alias or use solid lines.
         }
-
-
+        
         $x1 = round($x1);
         $x2 = round($x2);
         $y1 = round($y1);
         $y2 = round($y2);
 
+        $dash_length *= SUPERSAMPLING_SCALE;
+        $dash_space  *= SUPERSAMPLING_SCALE;
+
         $style = array_fill(0,$dash_length,$this->current_color);
         $style = array_pad($style,$dash_space,IMG_COLOR_TRANSPARENT);
         imagesetstyle($this->img, $style);
         imageline($this->img, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
+
+        $this->lastx = $x2;
+        $this->lasty = $y2;
+    }
+
+    function DashedLineForGrid($x1,$y1,$x2,$y2,$dash_length=1,$dash_space=4) {
+
+        if( $this->line_weight <= 0 ) return;
+
+        // Add error check to make sure anti-alias is not enabled.
+        // Dashed line does not work with anti-alias enabled. This
+        // is a limitation in GD.
+        if( $this->use_anti_aliasing ) {
+//            JpGraphError::RaiseL(25129); // Anti-alias can not be used with dashed lines. Please disable anti-alias or use solid lines.
+        }
+        
+        $x1 = round($x1);
+        $x2 = round($x2);
+        $y1 = round($y1);
+        $y2 = round($y2);
+        
+        /*
+        $dash_length *= $this->scale;
+        $dash_space  *= $this->scale;
+        */
+
+        $dash_length = 2;
+        $dash_length = 4;
+        imagesetthickness($this->img, 1);
+        $style = array_fill(0,$dash_length, $this->current_color); //hexdec('CCCCCC'));
+        $style = array_pad($style,$dash_space,IMG_COLOR_TRANSPARENT);
+        imagesetstyle($this->img, $style);
+        imageline($this->img, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
+
         $this->lastx = $x2;
         $this->lasty = $y2;
     }
@@ -1318,6 +1398,7 @@ class Image {
         $y2 = round($y2);
 
         imageline($this->img,$x1,$y1,$x2,$y2,$this->current_color);
+//        $this->DrawLine($this->img, $x1, $y1, $x2, $y2, $this->line_weight, $this->current_color);
         $this->lastx=$x2;
         $this->lasty=$y2;
     }
@@ -1579,13 +1660,24 @@ class Image {
     }
 
     // Stream image to browser or to file
-    function Stream($aFile="") {
+    function Stream($aFile=NULL) {
+        $this->DoSupersampling();
+
         $func="image".$this->img_format;
         if( $this->img_format=="jpeg" && $this->quality != null ) {
             $res = @$func($this->img,$aFile,$this->quality);
-        }
+			
+			if(!$res){
+				if($aFile != NULL){	
+                    JpGraphError::RaiseL(25107,$aFile);//("Can't write to file '$aFile'. Check that the process running PHP has enough permission.");
+				}else{
+                    JpGraphError::RaiseL(25108);//("Can't stream image. This is most likely due to a faulty PHP/GD setup. Try to recompile PHP and use the built-in GD library that comes with PHP.");
+				}
+		
+			}
+		}
         else {
-            if( $aFile != "" ) {
+            if( $aFile != NULL ) {
                 $res = @$func($this->img,$aFile);
                 if( !$res ) {
                     JpGraphError::RaiseL(25107,$aFile);//("Can't write to file '$aFile'. Check that the process running PHP has enough permission.");
@@ -1599,6 +1691,18 @@ class Image {
 
             }
         }
+    }
+
+    // Do SuperSampling using $scale
+    function DoSupersampling() {
+        if (SUPERSAMPLING_SCALE <= 1) {
+            return $this->img;
+        }
+
+        $dst_img = @imagecreatetruecolor($this->original_width, $this->original_height);
+        imagecopyresampled($dst_img, $this->img, 0, 0, 0, 0, $this->original_width, $this->original_height, $this->width, $this->height);
+        $this->Destroy();
+        return $this->img = $dst_img;
     }
 
     // Clear resources used by image (this is normally not used since all resources are/should be
@@ -1645,6 +1749,194 @@ class Image {
             }
         }
     }
+
+    /**
+    * Draw Line
+    */
+    function DrawLine($im, $x1, $y1, $x2, $y2, $weight, $color) {
+        if ($weight == 1) {
+            return imageline($im,$x1,$y1,$x2,$y2,$color);
+        }
+
+        $angle=(atan2(($y1 - $y2), ($x2 - $x1))); 
+
+        $dist_x = $weight * (sin($angle)) / 2;
+        $dist_y = $weight * (cos($angle)) / 2;
+        
+        $p1x=ceil(($x1 + $dist_x));
+        $p1y=ceil(($y1 + $dist_y));
+        $p2x=ceil(($x2 + $dist_x));
+        $p2y=ceil(($y2 + $dist_y));
+        $p3x=ceil(($x2 - $dist_x));
+        $p3y=ceil(($y2 - $dist_y));
+        $p4x=ceil(($x1 - $dist_x));
+        $p4y=ceil(($y1 - $dist_y));
+
+        $array=array($p1x,$p1y,$p2x,$p2y,$p3x,$p3y,$p4x,$p4y);
+        imagefilledpolygon ( $im, $array, (count($array)/2), $color );
+
+        // for antialias
+        imageline($im, $p1x, $p1y, $p2x, $p2y, $color);
+        imageline($im, $p3x, $p3y, $p4x, $p4y, $color);
+        return;
+
+
+
+          return imageline($this->img,$x1,$y1,$x2,$y2,$this->current_color);
+      $weight = 8;
+        if ($weight <= 1) {
+          return imageline($this->img,$x1,$y1,$x2,$y2,$this->current_color);
+        }
+
+        $pts = array();
+
+        $weight /= 2;
+
+        if ($y2 - $y1 == 0) {
+            // x line
+            $pts = array();
+            $pts[] = $x1; $pts[] = $y1 - $weight;
+            $pts[] = $x1; $pts[] = $y1 + $weight;
+            $pts[] = $x2; $pts[] = $y2 + $weight;
+            $pts[] = $x2; $pts[] = $y2 - $weight;
+
+        } elseif ($x2 - $x1 == 0) {
+            // y line
+            $pts = array();
+            $pts[] = $x1 - $weight; $pts[] = $y1;
+            $pts[] = $x1 + $weight; $pts[] = $y1;
+            $pts[] = $x2 + $weight; $pts[] = $y2;
+            $pts[] = $x2 - $weight; $pts[] = $y2;
+
+        } else {
+            
+            var_dump($x1, $x2, $y1, $y2);
+            $length = sqrt(pow($x2 - $x1, 2) + pow($y2 - $y1, 2));
+            var_dump($length);exit;
+            exit;
+  
+/*
+            $lean = ($y2 - $y1) / ($x2 - $x1);
+            $lean2 = -1 / $lean;
+            $sin = $lean / ($y2 - $y1);
+            $cos = $lean / ($x2 - $x1);
+
+            $pts[] = $x1 + (-$weight * $sin); $pts[] = $y1 + (-$weight * $cos);
+            $pts[] = $x1 + (+$weight * $sin); $pts[] = $y1 + (+$weight * $cos);
+            $pts[] = $x2 + (+$weight * $sin); $pts[] = $y2 + (+$weight * $cos);
+            $pts[] = $x2 + (-$weight * $sin); $pts[] = $y2 + (-$weight * $cos);
+*/
+        }
+
+//print_r($pts);exit;
+        if (count($pts)/2 < 3) {
+            return;
+        } 
+
+        imagesetthickness($im, 1);
+        imagefilledpolygon($im, $pts,count($pts)/2, $color);
+
+
+        $weight *= 2;
+
+//        $this->DrawImageSmoothArc($im, $x1, $y1, $weight, $weight, 0, 360, $color);
+//        $this->DrawImageSmoothArc($im, $x2, $y2, $weight, $weight, 0, 360, $color);
+    }
+
+
+    function DrawImageSmoothArc($im, $xc, $yc, $w, $h, $s, $e, $color, $style = null) {
+        $tmp = $s;
+        $s = (360 - $e) / 180 * M_PI;
+        $e = (360 - $tmp) / 180 * M_PI;
+        return imageSmoothArc($im, round($xc), round($yc), round($w), round($h), $this->CreateColorForImageSmoothArc($color), $s, $e);
+    }
+
+    function CreateColorForImageSmoothArc($color) {
+        $alpha = $color >> 24 & 0xFF; 
+        $red   = $color >> 16 & 0xFF;
+        $green = $color >> 8 & 0xFF;
+        $blue  = $color & 0xFF;
+
+//var_dump($alpha, $red, $green, $blue);exit;
+
+        return array($red, $green, $blue, $alpha);
+    }
+
+    function imageSmoothCircle( &$img, $cx, $cy, $cr, $color ) {
+        $ir = $cr;
+        $ix = 0;
+        $iy = $ir;
+        $ig = 2 * $ir - 3;
+        $idgr = -6;
+        $idgd = 4 * $ir - 10;
+        $fill = imageColorExactAlpha( $img, $color[ 'R' ], $color[ 'G' ], $color[ 'B' ], 0 );
+        imageLine( $img, $cx + $cr - 1, $cy, $cx, $cy, $fill );
+        imageLine( $img, $cx - $cr + 1, $cy, $cx - 1, $cy, $fill );
+        imageLine( $img, $cx, $cy + $cr - 1, $cx, $cy + 1, $fill );
+        imageLine( $img, $cx, $cy - $cr + 1, $cx, $cy - 1, $fill );
+        $draw = imageColorExactAlpha( $img, $color[ 'R' ], $color[ 'G' ], $color[ 'B' ], 42 );
+        imageSetPixel( $img, $cx + $cr, $cy, $draw );
+        imageSetPixel( $img, $cx - $cr, $cy, $draw );
+        imageSetPixel( $img, $cx, $cy + $cr, $draw );
+        imageSetPixel( $img, $cx, $cy - $cr, $draw );
+        while ( $ix <= $iy - 2 ) {
+            if ( $ig < 0 ) {
+                $ig += $idgd;
+                $idgd -= 8;
+                $iy--;
+            } else {
+                $ig += $idgr;
+                $idgd -= 4;
+            }
+            $idgr -= 4;
+            $ix++;
+            imageLine( $img, $cx + $ix, $cy + $iy - 1, $cx + $ix, $cy + $ix, $fill );
+            imageLine( $img, $cx + $ix, $cy - $iy + 1, $cx + $ix, $cy - $ix, $fill );
+            imageLine( $img, $cx - $ix, $cy + $iy - 1, $cx - $ix, $cy + $ix, $fill );
+            imageLine( $img, $cx - $ix, $cy - $iy + 1, $cx - $ix, $cy - $ix, $fill );
+            imageLine( $img, $cx + $iy - 1, $cy + $ix, $cx + $ix, $cy + $ix, $fill );
+            imageLine( $img, $cx + $iy - 1, $cy - $ix, $cx + $ix, $cy - $ix, $fill );
+            imageLine( $img, $cx - $iy + 1, $cy + $ix, $cx - $ix, $cy + $ix, $fill );
+            imageLine( $img, $cx - $iy + 1, $cy - $ix, $cx - $ix, $cy - $ix, $fill );
+            $filled = 0;
+            for ( $xx = $ix - 0.45; $xx < $ix + 0.5; $xx += 0.2 ) {
+                for ( $yy = $iy - 0.45; $yy < $iy + 0.5; $yy += 0.2 ) {
+                    if ( sqrt( pow( $xx, 2 ) + pow( $yy, 2 ) ) < $cr ) $filled += 4;
+                }
+            }
+            $draw = imageColorExactAlpha( $img, $color[ 'R' ], $color[ 'G' ], $color[ 'B' ], ( 100 - $filled ) );
+            imageSetPixel( $img, $cx + $ix, $cy + $iy, $draw );
+            imageSetPixel( $img, $cx + $ix, $cy - $iy, $draw );
+            imageSetPixel( $img, $cx - $ix, $cy + $iy, $draw );
+            imageSetPixel( $img, $cx - $ix, $cy - $iy, $draw );
+            imageSetPixel( $img, $cx + $iy, $cy + $ix, $draw );
+            imageSetPixel( $img, $cx + $iy, $cy - $ix, $draw );
+            imageSetPixel( $img, $cx - $iy, $cy + $ix, $draw );
+            imageSetPixel( $img, $cx - $iy, $cy - $ix, $draw );
+        }
+    }
+
+    function __get($name) {
+
+        if (strpos($name, 'raw_') !== false) {
+            // if $name == 'raw_left_margin' , return $this->_left_margin;
+            $variable_name = '_' . str_replace('raw_', '', $name);
+            return $this->$variable_name;
+        }
+
+        $variable_name = '_' . $name; 
+
+        if (isset($this->$variable_name)) {
+            return $this->$variable_name * SUPERSAMPLING_SCALE;
+        } else {
+            JpGraphError::RaiseL('25132', $name);
+        } 
+    }
+
+    function __set($name, $value) {
+        $this->{'_'.$name} = $value;
+    }
+
 } // CLASS
 
 //===================================================

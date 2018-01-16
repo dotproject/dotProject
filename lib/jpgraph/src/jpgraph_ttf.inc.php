@@ -5,7 +5,7 @@
 // Created:     2006-11-19
 // Ver:         $Id: jpgraph_ttf.inc.php 1858 2009-09-28 14:39:51Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 
 // TTF Font families
@@ -142,6 +142,11 @@ define('PGOTHIC_TTF_FONT','ipagp.ttf');
 // If this define is true then conversion from EUC-JP to UTF8 is done
 // automatically in the library using the mbstring module in PHP.
 define('ASSUME_EUCJP_ENCODING',false);
+
+
+// Default font family
+define('FF_DEFAULT', FF_DV_SANSSERIF);
+
 
 
 //=================================================================
@@ -467,37 +472,46 @@ class TTF {
         }
         $ff = @$fam[$style];
 
-        if( is_array($ff) ) {
-            // There are several optional file names. They are tried in order
-            // and the first one found is used
-            $n = count($ff);
-        } else {
-            $n = 1;
+        // There are several optional file names. They are tried in order
+        // and the first one found is used
+        if( !is_array($ff) ) {
             $ff = array($ff);
         }
-        $i = 0;
-        do {
-            $f = $ff[$i];
+
+        $jpgraph_font_dir = dirname(__FILE__).'/fonts/';
+
+        foreach ($ff as $font_file) {
             // All font families are guaranteed to have the normal style
 
-            if( $f==='' )
+            if( $font_file==='' )
                     JpGraphError::RaiseL(25047,$this->style_names[$style],$this->font_files[$family][FS_NORMAL]);//('Style "'.$this->style_names[$style].'" is not available for font family '.$this->font_files[$family][FS_NORMAL].'.');
-            if( !$f ) {
+            if( !$font_file ) {
                 JpGraphError::RaiseL(25048,$fam);//("Unknown font style specification [$fam].");
             }
 
-            if ($family >= FF_MINCHO && $family <= FF_PGOTHIC) {
-                $f = MBTTF_DIR.$f;
-            } else {
-                $f = TTF_DIR.$f;
+            // check jpgraph/src/fonts dir
+            $jpgraph_font_file = $jpgraph_font_dir . $font_file;
+            if (file_exists($jpgraph_font_file) === true && is_readable($jpgraph_font_file) === true) { 
+                $font_file = $jpgraph_font_file;
+                break;
             }
-            ++$i;
-        } while( $i < $n && (file_exists($f) === false || is_readable($f) === false) );
 
-        if( !file_exists($f) ) {
-        	JpGraphError::RaiseL(25049,$f);//("Font file \"$f\" is not readable or does not exist.");
+            // check OS font dir
+            if ($family >= FF_MINCHO && $family <= FF_PGOTHIC) {
+                $font_file = MBTTF_DIR.$font_file;
+            } else {
+                $font_file = TTF_DIR.$font_file;
+            }
+            if (file_exists($font_file) === true && is_readable($font_file) === true) { 
+                break;
+            }
         }
-        return $f;
+
+        if( !file_exists($font_file) ) {
+        	JpGraphError::RaiseL(25049,$font_file);//("Font file \"$font_file\" is not readable or does not exist.");
+        }
+
+        return $font_file;
     }
 
     function SetUserFont($aNormal,$aBold='',$aItalic='',$aBoldIt='') {

@@ -6,7 +6,7 @@
 // Created: 	2006-02-18
 // Ver:		$Id: prod.inc.php 1886 2009-10-01 23:30:16Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 */
 
@@ -120,6 +120,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 15009 => array(DEFAULT_ERROR_MESSAGE.'15009',0),
 15010 => array(DEFAULT_ERROR_MESSAGE.'15010',0),
 15011 => array(DEFAULT_ERROR_MESSAGE.'15011',0),
+15012 => array(DEFAULT_ERROR_MESSAGE.'15012',0),
 16001 => array(DEFAULT_ERROR_MESSAGE.'16001',0),
 16002 => array(DEFAULT_ERROR_MESSAGE.'16002',0),
 16003 => array(DEFAULT_ERROR_MESSAGE.'16003',0),
@@ -279,6 +280,8 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 25129 => array(DEFAULT_ERROR_MESSAGE.'25129',0),
 25130 => array(DEFAULT_ERROR_MESSAGE.'25130',0),
 25131 => array(DEFAULT_ERROR_MESSAGE.'25131',0),
+25132 => array(DEFAULT_ERROR_MESSAGE.'25132',0),
+25133 => array(DEFAULT_ERROR_MESSAGE.'25133',0),
 25500 => array(DEFAULT_ERROR_MESSAGE.'25500',0),
 24003 => array(DEFAULT_ERROR_MESSAGE.'24003',0),
 24004 => array(DEFAULT_ERROR_MESSAGE.'24004',0),

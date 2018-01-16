@@ -3,14 +3,14 @@
  // File:  		 JPGRAPH_PLOTLINE.PHP
  // Description: PlotLine extension for JpGraph
  // Created:  	 2009-03-24
- // Ver:  		 $Id: jpgraph_plotline.php 1881 2009-10-01 10:28:12Z ljp $
+ // Ver:  		 $Id: jpgraph_plotline.php 1931 2010-03-22 15:05:48Z ljp $
  //
  // CLASS PlotLine
  // Data container class to hold properties for a static
  // line that is drawn directly in the plot area.
  // Useful to add static borders inside a plot to show for example set-values
  //
- // Copyright (c) Aditus Consulting. All rights reserved.
+ // Copyright (c) Asial Corporation. All rights reserved.
  //========================================================================
  */
 
@@ -58,6 +58,10 @@ class PlotLine {
 
     function SetLineStyle($aStyle) {
         $this->iLineStyle = $aStyle;
+    }
+
+    function GetCSIMAreas() {
+        return '';
     }
 
     //---------------

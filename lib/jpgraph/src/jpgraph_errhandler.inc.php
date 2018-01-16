@@ -347,6 +347,7 @@ class JpGraphErrObjectImg extends JpGraphErrObject {
         $img->SetColor("black");
         $img->SetFont(FF_FONT1,FS_NORMAL);
         $txt = new Text($aMsg,52,25);
+        $txt->SetFont(FF_FONT1);
         $txt->Align("left","top");
         $txt->Stroke($img);
         if ($this->iDest) {

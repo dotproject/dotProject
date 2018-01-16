@@ -186,7 +186,8 @@ HTTP header wurden bereits gesendet.<br>Fehler in der Datei <b>%s</b> in der Zei
 15008 => array('PiePlot::SetLabelType() der Typ für Tortendiagramme muss entweder 0 or 1 sein (nicht %d).',1),
 15009 => array('Ungültiges Tortendiagramm. Die Summe aller Daten ist Null.',0),
 15010 => array('Die Summe aller Daten ist Null.',0),
-15011 => array('Um Bildtransformationen benutzen zu können, muss die Datei jpgraph_imgtrans.php eingefügt werden (per include).',0),
+15011 => array('Um Bildtransformationen benutzen zu können, muss die Datei jpgraph_imgtrans.php eingefügt werden (per include).',0), // @todo translate into German
+15012 => array('PiePlot::SetTheme() is no longer recommended. Use PieGraph::SetTheme()',0),
 
 /*
 **  jpgraph_plotband
@@ -405,6 +406,8 @@ HTTP header wurden bereits gesendet.<br>Fehler in der Datei <b>%s</b> in der Zei
 25130 => array('Too small plot area. (%d x %d). With the given image size and margins there is to little space left for the plot. Increase the plot size or reduce the margins.',2),
 
 25131 => array('StrokeBoxedText2() only supports TTF fonts and not built-in bitmap fonts.',0),
+25132 => array('Undefined property %s.',1), // @todo translate
+25133 => array('Use Graph::SetTheme() after Graph::SetScale().',0), // @todo translate
 
 /*
 **  jpgraph_led
@@ -536,6 +539,13 @@ HTTP header wurden bereits gesendet.<br>Fehler in der Datei <b>%s</b> in der Zei
 29208 => array('Unknown side specifiction for matrix labels "%s"',1),
 29209 => array('CSIM Target matrix must be the same size as the data matrix (csim=%d x %d, data=%d x %d)',4),
 29210 => array('CSIM Target for matrix labels does not match the number of labels (csim=%d, labels=%d)',2),
+
+
+/*
+* jpgraph_theme
+*/
+30001 => array("Theme::%s() is not defined. \nPlease make %s(\$graph) function in your theme classs.",2),
+
 
 );
 

@@ -3,9 +3,9 @@
 // File:     EN.INC.PHP
 // Description: English language file for error messages
 // Created:     2006-01-25
-// Ver:        $Id$
+// Ver:        $Id: en.inc.php 1886 2009-10-01 23:30:16Z ljp $
 //
-// Copyright (c) Aditus Consulting. All rights reserved.
+// Copyright (c) Asial Corporation. All rights reserved.
 //========================================================================
 */
 
@@ -187,6 +187,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 15009 => array('Illegal pie plot. Sum of all data is zero for Pie Plot',0),
 15010 => array('Sum of all data is 0 for Pie.',0),
 15011 => array('In order to use image transformation you must include the file jpgraph_imgtrans.php in your script.',0),
+15012 => array('PiePlot::SetTheme() is no longer supported. Use PieGraph::SetTheme()',0),
 
 /*
 **  jpgraph_plotband
@@ -404,6 +405,8 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 25130 => array('Too small plot area. (%d x %d). With the given image size and margins there is to little space left for the plot. Increase the plot size or reduce the margins.',2),
 
 25131 => array('StrokeBoxedText2() only supports TTF fonts and not built-in bitmap fonts.',0),
+25132 => array('Undefined property %s.',1),
+25133 => array('Use Graph::SetTheme() after Graph::SetScale().',0),
 
 /*
 **  jpgraph_led
@@ -530,6 +533,12 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 29208 => array('Unknown side specifiction for matrix labels "%s"',1),
 29209 => array('CSIM Target matrix must be the same size as the data matrix (csim=%d x %d, data=%d x %d)',4),
 29210 => array('CSIM Target for matrix labels does not match the number of labels (csim=%d, labels=%d)',2),
+
+
+/*
+* jpgraph_theme
+*/
+30001 => array("Theme::%s() is not defined. \nPlease make %s(\$graph) function in your theme classs.",2),
 
 );
 
