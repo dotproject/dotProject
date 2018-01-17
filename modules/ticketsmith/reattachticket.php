@@ -6,12 +6,13 @@ if (!defined('DP_BASE_DIR')) {
 //update task
 $newparent = (int)dPgetParam($_GET, 'newparent', 0);
 $ticket = (int)dPgetParam($_GET, 'ticket', 0);
-$dbprefix = dPgetConfig('dbprefix','');
 
-$sql1 = "update {$dbprefix}tickets set parent = $newparent,
-  assignment = 9999,
-  type = 'Client Followup'
-  where ticket = $ticket";
+$q = new DBQuery();
+$q->addTable('tickets');
+$q->addUpdate('parent,assignment,type',
+  array($newparent, 9999, 'Client Followup'), true);
+$q->addWhere("ticket = {$ticket}");
+$q->exec();
 
 header("Location: index.php?m=ticketsmith");
 if (isset($newparent) && isset($ticket) && $newparent != 0 && $ticket != 0) {

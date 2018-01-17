@@ -115,24 +115,27 @@ if ($search_pattern) {
     /* form search query */
     $select_columns = join(", ", $fields["columns"]);
     $search_pattern = "%" . escape_string($search_pattern) . "%";
-    $query = "SELECT $select_columns FROM {$dbprefix}tickets WHERE $search_field LIKE '$search_pattern'";
+    $q = new DBQuery();
+    $q->addQuery($fields['columns']);
+    $q->addTable('tickets');
+    $q->addWhere("{$search_field} LIKE '{$search_pattern}'");
     if ($search_depth == "Child") {
-        $query .= " AND parent != 0";
+        $q->addWhere('parent != 0');
     }
     else if ($search_depth != "All") {
-        $query .= " AND type = '$search_depth'";
+        $q->addWhere("type = '{$search_depth}'");
     }
-    $query .= " ORDER BY $sort_column $sort_direction";
-    
+    $q->addOrder("{$sort_column} {$sort_direction}");
+    $q->includeCount();
     
     /* perform search */
-    $result = do_query($query);
+    $result = $q->loadList();
     
     /* display results */
-    $result_count = number_rows($result);
+    $result_count = $q->foundRows();
     if ($result_count) {
         print("<tr><td colspan=\"5\">".$AppUI->_('There were')." ".$result_count." ".$AppUI->_('results')." ".$AppUI->_('in the given search').".</td></tr>\n");
-        while ($row = result2hash($result)) {
+        foreach ($result as $row) {
             print("<tr>");
             for ($loop = 0; $loop < count($fields["columns"]); $loop++) {
                 print("<td align=\"" . $fields["aligns"][$loop] . "\">");

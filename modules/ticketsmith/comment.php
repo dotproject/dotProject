@@ -31,27 +31,44 @@ $author_name = dPgetCleanParam($_POST, 'author_name', '');
 $author_email = dPgetCleanParam($_POST, 'author_email', '');
 $comment = dPgetCleanParam($_POST, 'comment', '');
 $body = dPgetCleanParam($_POST, 'body', '');
-$dbprefix = dPgetConfig('dbprefix','');
+
+$q = new DBQuery();
 
 if (@$comment) {
 
     /* prepare fields */
-    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts ON u.user_contact = contact_id WHERE user_id = '$AppUI->user_id'");
-    $subject = db_escape(query2result("SELECT subject FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'"));
-    $comment = db_escape($comment);
+    $q->addTable('users', 'u');
+    $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
+    $q->addQuery("contact_email as email");
+    $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+    $q->addWhere("user_id = '{$AppUI->user_id}'");
+
+    list($author_name, $author_email) = $q->fetchRow();
+
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addQuery('subject');
+    $q->addWhere("ticket = '{$ticket_parent}'");
+    $subject = $q->loadResult();
+
     $author = $author_name . " <" . $author_email . ">";
     $timestamp = time();
-    $body = escape_string($body);
 
     /* prepare query */
-    $query = "INSERT INTO {$dbprefix}tickets (author, subject, body, timestamp, type, parent, assignment) ";
-    $query .= "VALUES ('$author','$subject','$comment','$timestamp','Staff Comment','$ticket_parent','9999')";
+    
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addInsert('author,subject,body,timestamp,type,parent,assignment',
+      array($author, $subject, $comment, $timestamp, 'Staff Comment', $ticket_parent, '9999'), true);
 
-    /* insert comment */
-    do_query($query);
+    $q->exec();
+    $q->clear();
 
-    /* update parent ticket's timestamp */
-    do_query("UPDATE {$dbprefix}tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
+    $q->addTable('tickets');
+    $q->addUpdate('activity', $timestamp);
+    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->exec();
+    $q->clear();
 
     /* return to ticket view */
     echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
@@ -74,7 +91,14 @@ if (@$comment) {
     /* determine poster */
     print("<tr>\n");
     print("<td align=\"left\"><strong>".$AppUI->_('From')."</strong></td>");
-    list($author_name, $author_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    $q->clear();
+    $q->addTable('users', 'u');
+    $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+    $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
+    $q->addQuery("contact_email as email");
+    $q->addWhere("user_id = '{$AppUI->user_id}'");
+
+    list($author_name, $author_email) = $q->fetchRow();
     print("<td align=\"left\">" . $author_name . " &lt;" . $author_email . "&gt;</td>\n");
     print("</tr>");
 

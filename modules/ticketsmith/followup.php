@@ -39,16 +39,29 @@ $recipient = dPgetCleanParam($_POST, 'recipient', '');
 $subject = dPgetCleanParam($_POST, 'subject', '');
 $cc = dPgetCleanParam($_POST, 'cc', '');
 $followup = dPgetCleanParam($_POST, 'followup', '');
-$dbprefix = dPgetConfig('dbprefix','');
+
+$q = new DBQuery();
 
 if (@$followup) {
 
     /* prepare fields */
     $timestamp = time();
-    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    $q->addTable('users', 'u');
+    $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+    $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name");
+    $q->addQuery('contact_email as email');
+    $q->addWhere("user_id = '{$AppUI->user_id}'");
+
+    list($from_name, $from_email) = $q->fetchRow();
+
     $author = "$from_name <$from_email>";
     if (!$recipient) {
-        $recipient = query2result("SELECT author FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'");
+        $q->clear();
+        $q->addTable('tickets');
+        $q->addQuery('author');
+        $q->addWhere("ticket = '{$ticket_parent}'");
+
+        $recipient = $q->loadResult();
     }
 
     /* prepare posted stuff */
@@ -72,20 +85,19 @@ if (@$followup) {
 	$mail->Body($followup);
     $mail->Send() || fatal_error("Unable to mail followup.  Quit without recording followup to database.");
 
-    /* escape special characters */
-    $author = db_escape($author);
-    $recipient = db_escape($recipient);
-    $subject = db_escape($subject);
-    $followup = db_escape($followup);
-    $cc = db_escape($cc);
-
     /* do database insert */
-    $query = "INSERT INTO {$dbprefix}tickets (author, subject, recipient, body, cc, timestamp, type, assignment, parent) ";
-    $query .= "VALUES ('$author','$subject','$recipient','$followup','$cc','$timestamp','Staff Followup','9999','$ticket_parent')";
-    do_query($query);
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addInsert('author,subject,recipient,body,cc,timestamp,type,assignment,parent',
+      array($author, $subject, $recipient, $followup, $cc, $timestamp, 'Staff Followup', '9999', $ticket_parent), true);
+    $q->exec();
 
     /* update parent activity */
-    do_query("UPDATE {$dbprefix}tickets SET activity = '$timestamp' WHERE ticket = '$ticket_parent'");
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addUpdate('activity', $timestamp);
+    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->exec();
 
     /* redirect to parent */
     echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
@@ -105,20 +117,34 @@ if (@$followup) {
     /* start form */
     print("<form name='ticketform' action='?m=ticketsmith&amp;a=followup&amp;ticket=$ticket' method='post'>\n");
 
-    /* get ticket */
-    $ticket_info = query2hash("SELECT * FROM {$dbprefix}tickets WHERE ticket = $ticket");
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addWhere("ticket = {$ticket}");
+    $q->ticket_info = $q->loadHash();
 
     /* output From: line */
     print("<tr>\n");
     print("<td align='left'><strong>".$AppUI->_('From')."</strong></td>");
-    list($from_name, $from_email) = query2array("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id WHERE user_id = '$AppUI->user_id'");
+    $q->clear();
+    $q->addTable('users', 'u');
+    $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email");
+    list($from_name, $from_email) = $q->fetchRow();
+
     print("<td align='left'>" . $from_name . " &lt;" . $from_email . "&gt;</td>\n");
     print("</tr>\n");
 
     /* output To: line */
     print("<tr>\n");
     print("<td align='left'><strong>".$AppUI->_('To')."</strong></td>");
-    $recipient = query2result("SELECT author FROM {$dbprefix}tickets WHERE ticket = '$ticket_parent'");
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addQuery('author');
+    $q->addWhere("ticket = '{$ticket_parent}'");
+
+    $recipient = $q->loadResult();
+
     print("<td align='left'>" . format_field($recipient, "recipient") . "</td>\n");
     print("</tr>\n");
 

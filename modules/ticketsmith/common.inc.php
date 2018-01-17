@@ -18,79 +18,6 @@ function fatal_error ($reason) {
 }
 
 
-/* do a MySQL query */
-function do_query ($query) {
-	$result = @mysql_query($query);
-	if (!$result) {
-		fatal_error("A database query error has occurred!<br>".mysql_error());
-	} else {
-		return($result);
-	}
-	
-}
-
-/* get single result value */
-function query2result ($query) {
-
-	$result = do_query($query);
-	$row = @mysql_result($result, 0);
-	return($row);
-
-}
-
-/* get result in numeric array */
-function query2array ($query) {
-
-	$result = do_query($query);
-	$row = @mysql_fetch_row($result);
-	return($row);
-
-}
-
-/* get result in associative array */
-function query2hash ($query) {
-
-	$result = do_query($query);
-	$row = @mysql_fetch_array($result);
-	return($row);
-	
-}
-
-/* get row of result */
-function result2row ($result) {
-
-    $row = @mysql_fetch_row($result);
-    return($row);
-
-}
-
-/* get row of result in hash */
-function result2hash ($result) {
-
-    $row = @mysql_fetch_array($result);
-    return($row);
-
-}
-
-/* find number of rows in query result */
-function number_rows ($result) {
-
-    $number_rows = @mysql_num_rows($result);
-    return($number_rows);
-
-}
-
-/* put rows from a column into an array */
-function column2array ($query) {
-
-    $result = do_query($query);
-    while ($row = @mysql_fetch_array($result)) {
-        $array[] = $row[0];
-    }
-    return($array);
-
-}
-
 /* create read-only output of list values */
 function chooseSelectedValue ($name, $options, $selected) {
 	while (list($key, $val) = each($options)) {
@@ -324,12 +251,16 @@ function format_field ($value, $type, $ticket = NULL) {
     global $CONFIG;
     global $AppUI;
     global $canEdit;
-    $dbprefix = dPgetConfig('dbprefix','');
 
     switch ($type) {
         case "user":
             if ($value) {
-	    	$output = query2result("SELECT CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts ON u.user_contact = contact_id WHERE user_id = '$value'");
+                $q = new DBQuery();
+                $q->addQuery("CONCAT_WS(' ', contact_first_name, contact_last_name) as name");
+                $q->addTable('users', 'u');
+                $q->leftJoin('contacts','c', 'u.user_contact = c.contact_id');
+                $q->addWhere("user_id = '{$value}'");
+                $output = $q->loadResult();
             } else {
                 $output = "-";
             }
@@ -364,9 +295,14 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "assignment":
             $options[0] = "-";
-	    $query = "SELECT user_id as id, CONCAT_WS(' ',contact_first_name,contact_last_name) as name FROM {$dbprefix}users u LEFT JOIN {$dbprefix}contacts c ON u.user_contact = c.contact_id ORDER BY name";
-            $result = do_query($query);
-            while ($row = result2hash($result)) {
+            $q = new DBQuery();
+            $q->addQuery('user_id as id');
+            $q->addQUery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name");
+            $q->addTable('users', 'u');
+            $q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+            $q->addOrder('name');
+            $result = $q->loadList();
+            foreach ($result as $row) {
                 $options[$row["id"]] = $row["name"];
             }
 	    if ($canEdit) {
@@ -378,7 +314,13 @@ function format_field ($value, $type, $ticket = NULL) {
             break;
         case "view":
             if ($CONFIG["index_link"] == "latest") {
-                $latest_value = query2result("SELECT ticket FROM {$dbprefix}tickets WHERE parent = '$value' ORDER BY ticket DESC LIMIT 1");
+                $q = new DBQuery();
+                $q->addQuery('ticket');
+                $q->addTable('tickets');
+                $q->addWhere("parent = '{$value}'");
+                $q->addOrder('ticket DESC');
+                $q->setLimit(1);
+                $latest_value = $q->loadResult();
                 if ($latest_value) {
                     $value = $latest_value;
                 }
@@ -409,7 +351,13 @@ function format_field ($value, $type, $ticket = NULL) {
             else {
                 $output = get_time_ago($value);
             }
-            $latest_followup_type = query2result("SELECT type FROM {$dbprefix}tickets WHERE parent = '$ticket' ORDER BY timestamp DESC LIMIT 1");
+            $q = new DBQuery();
+            $q->addQuery('type');
+            $q->addTable('tickets');
+            $q->addWhere("parent = '{$ticket}'");
+            $q->addOrder('timestamp DESC');
+            $q->setLimit(1);
+            $latest_followup_type = $q->loadResult();
             if ($latest_followup_type) {
                 $latest_followup_type = preg_replace("/(\w+)\s.*/", "\\1", $latest_followup_type);
                 $output .= " [$latest_followup_type]";
@@ -437,7 +385,11 @@ function format_field ($value, $type, $ticket = NULL) {
         case "followup":
             $output = "\n<tt>\n";
             $output .= "<textarea style='font-family: monospace;' name=\"followup\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n";
-            $signature = query2result("SELECT user_signature FROM {$dbprefix}users WHERE user_id = '$AppUI->user_id'");
+            $q = new DBQuery();
+            $q->addQuery('user_signature');
+            $q->addTable('users');
+            $q->addWhere("user_id = '{$AppUI->user_id}'");
+            $signature = $q->loadResult();
             if ($signature) {
                 $output .= "\n";
                 $output .= "-- \n";
@@ -517,8 +469,12 @@ function format_field ($value, $type, $ticket = NULL) {
 
 /* figure out parent & type */
 if (isset($ticket)) {
-    $dbprefix = dPgetConfig('dbprefix','');
-    list($ticket_type, $ticket_parent) = query2array("SELECT type, parent FROM {$dbprefix}tickets WHERE ticket = '$ticket'");
+    $q = new DBQuery();
+    $q->addQuery('type, parent');
+    $q->addTable('tickets');
+    $q->addWhere("ticket = '{$ticket}'");
+
+    list($ticket_type, $ticket_parent) = $q->loadHash();
 }
 
 

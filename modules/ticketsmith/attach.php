@@ -39,11 +39,15 @@ $limit = @$limit ? $limit : $CONFIG["view_rows"];
 
 
 /* count tickets */
-$query = "SELECT COUNT(*) FROM {$dbprefix}tickets WHERE parent = '0' and ticket != $ticket";
+$q = new DBQuery();
+$q->addTable('tickets');
+$q->addQuery('COUNT(*) as rowcount');
+$q->addWhere("parent = '0'");
+$q->addWhere("ticket != {$ticket}");
 if ($type != 'All') {
-    $query .= " AND type = '$type'";
+  $q->addWhere("type = '{$type}'");
 }
-$ticket_count = query2result($query);
+$ticket_count = $q->loadResult();
 
 /* paging controls */
 if (($offset + $limit) < $ticket_count) {
@@ -86,20 +90,24 @@ if ($ticket_count > $limit) {
 </tr>
 <?php
 /* form query */
-$select_fields= join(", ", $fields["columns"]);
-$query = "SELECT $select_fields FROM {$dbprefix}tickets WHERE ";
+$q->clear();
+$q->addTable('tickets');
+$q->addQuery($fields['columns']);
 if ($type == "My") {
     $query .= "type = 'Open' AND (assignment = '$user_cookie' OR assignment = '0') AND ";
+    $q->addWhere("type = 'Open'");
+    $q->addWhere("(assignment = '{$user_cookie}}' OR assignment = '0')");
 }
 else if ($type != "All") {
-    $query .= "type = '$type' AND ";
+    $q->addWhere("type = '{$type}'");
 }
-$query .= "ticket != $ticket AND ";
-$query .= "parent = '0' ORDER BY " . urlencode($column) . " $direction LIMIT $offset, $limit";
-
-/* do query */
-$result = do_query($query);
-$parent_count = number_rows($result);
+$q->addWhere("ticket != {$ticket}");
+$q->addWhere("parent = '0'");
+$q->addOrder(urlencode($column) . " {$direction}");
+$q->setLimit($limit, $offset);
+$q->includeCount();
+$result = $q->loadList();
+$parent_count = $q->foundRows();
 
 /* output tickets */
 if ($parent_count) {
@@ -123,7 +131,7 @@ if ($parent_count) {
         print("'><b>" . $AppUI->_($fields["headings"][$loop]) . "</b></a></td>\n");
     }
     print("</tr>\n");
-    while ($row = result2hash($result)) {
+    foreach ($result as $row) {
         print("<tr height='25'>\n");
         for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
             print("<td  bgcolor='white' align='" . $fields["aligns"][$loop] . "'>\n");

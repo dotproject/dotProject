@@ -24,7 +24,6 @@ $column = $CONFIG["order_by"];
 $direction = $CONFIG["message_order"];
 $offset = 0;
 $limit = $CONFIG["view_rows"];
-$dbprefix = dPgetConfig('dbprefix','');
 
 $type = dPgetCleanParam($_GET, 'type', '');
 $column = dPgetCleanParam($_GET, 'column', $column);
@@ -44,11 +43,18 @@ if ($type == '') {
 
 
 /* expunge deleted tickets */
+$q = new DBQuery();
 if (@$action == "expunge") {
-    $deleted_parents = column2array("SELECT ticket FROM {$dbprefix}tickets WHERE type = 'Deleted'");
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addQuery('ticket');
+    $q->addWhere("type = 'Deleted'");
+    $deleted_parents = $q->loadColumn();
     for ($loop = 0; $loop < count($deleted_parents); $loop++) {
-        do_query("DELETE FROM ".$dbprefix."tickets WHERE ticket = '$deleted_parents[$loop]'");
-        do_query("DELETE FROM ".$dbprefix."tickets WHERE parent = '$deleted_parents[$loop]'");
+        $q->clear();
+        $q->setDelete('tickets');
+        $q->addWhere("ticket = '{$deleted_parents[$loop]}' OR parent = '{$deleted_parents[$loop]}'");
+        $q->exec();
     }
 }
 
@@ -87,11 +93,15 @@ if ($type == "my") {
 }
 
 /* count tickets */
-$query = "SELECT COUNT(*) FROM {$dbprefix}tickets WHERE parent = '0'";
+$q->clear();
+$q->addTable('tickets');
+$q->addQuery('COUNT(*) as rowcount');
+$q->addWhere("parent = '0'");
+
 if ($type != 'All') {
-    $query .= " AND type = '$type'";
+    $q->addWhere("type = '$type'");
 }
-$ticket_count = query2result($query);
+$ticket_count = $q->loadResult();
 
 /* paging controls */
 if (($offset + $limit) < $ticket_count) {
@@ -133,19 +143,24 @@ if ($ticket_count > $limit) {
 
 <?php
 /* form query */
-$select_fields= join(", ", $fields["columns"]);
-$query = "SELECT $select_fields FROM {$dbprefix}tickets WHERE ";
+$q->clear();
+$q->addTable('tickets');
+$q->addQuery($fields['columns']);
 if ($type == "My") {
-    $query .= "type = 'Open' AND (assignment = '$AppUI->user_id' OR assignment = '0') AND ";
+    $q->addWhere("type = 'Open'");
+    $q->addWhere("(assignment = '{$AppUI->user_id}' OR assignment = '0')");
 }
 else if ($type != "All") {
-    $query .= "type = '$type' AND ";
+    $q->addWhere("type = '{$type}'");
 }
-$query .= "parent = '0' ORDER BY " . urlencode($column) . " $direction LIMIT $offset, $limit";
+$q->addWhere("parent = '0'");
+$q->addOrder(urlencode($column) . " {$direction}");
+$q->setLimit($limit, $offset);
+$q->includeCount();
 
 /* do query */
-$result = do_query($query);
-$parent_count = number_rows($result);
+$result = $q->loadList();
+$parent_count = $q->foundRows();
 
 /* output tickets */
 if ($parent_count) {
@@ -169,7 +184,7 @@ if ($parent_count) {
         print('" class="hdr">' . $AppUI->_($fields["headings"][$loop]) . "</a></th>\n");
     }
     print("</tr>\n");
-    while ($row = result2hash($result)) {
+    foreach ($result as $row) {
         print("<tr style='height:25px;'>\n");
         for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
             print("<td  bgcolor='white' align=" . $fields["aligns"][$loop] . ">\n");

@@ -7,7 +7,6 @@ if (!$canRead) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
-$dbprefix = dPgetConfig('dbprefix','');
 $ticket = (int)dPgetParam($_GET, 'ticket', '');
 $ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
@@ -64,8 +63,14 @@ $author = dPgetCleanParam($_POST, 'author', '');
 $priority = dPgetCleanParam($_POST, 'priority', '');
 $subject = dPgetCleanParam($_POST, 'subject', '');
 
+$q = new DBQuery();
+
 if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
-    do_query("UPDATE {$dbprefix}tickets SET type = '$type_toggle', priority = '$priority_toggle', assignment = '$assignment_toggle' WHERE ticket = '$ticket'");
+    $q->clear();
+    $q->addTable('tickets');
+    $q->addUpdate('type,priority,assignment', array($type_toggle, $priority_toggle, $assignment_toggle), true);
+    $q->addWhere("ticket = '{$ticket}'");
+    $q->exec();
 
 	//Emailing notifications.
 	$change = ' ';
@@ -136,8 +141,12 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	if (@$assignment_toggle != @$orig_assignment)
 	{
 		
-		$mailinfo = query2hash("SELECT contact_first_name, contact_last_name, contact_email from "
-			."{$dbprefix}users u LEFT JOIN {$dbprefix}contacts ON u.user_contact = contact_id WHERE user_id = $assignment_toggle");
+                $q->clear();
+                $q->addQuery('contact_first_name, contact_last_name, contact_email');
+                $q->addTable('users', 'u');
+                $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+                $q->addWhere("user_id = {$assignment_toggle}");
+		$mailinfo = $q->loadHash();
 
 		if (@$mailinfo['contact_email']) {
 			$boundary = "_lkqwkASDHASK89271893712893";
@@ -216,7 +225,10 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 /* start form */
 
 /* get ticket */
-$ticket_info = query2hash("SELECT * FROM {$dbprefix}tickets WHERE ticket = $ticket");
+$q->clear();
+$q->addTable('tickets');
+$q->addWhere("ticket = '${ticket}'");
+$ticket_info = $q->loadHash();
 
 print("<input type=\"hidden\" name=\"orig_assignment\" value='" . $ticket_info["assignment"] . "' />\n");
 print("<input type=\"hidden\" name=\"author\" value='" . $ticket_info["author"] . "' />\n");
@@ -236,7 +248,11 @@ for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
 $ticket_info["assignment"];
 
 /* output attachment indicator */
-$attach_count = query2result("SELECT attachment FROM {$dbprefix}tickets WHERE ticket = '$ticket'");
+$q->clear();
+$q->addTable('tickets');
+$q->addQuery('attachment');
+$q->addWhere("ticket = '{$ticket}'");
+$attach_count = $q->loadResult();
 
 if ($attach_count == 1) {
     print("<tr>\n");
@@ -244,13 +260,20 @@ if ($attach_count == 1) {
     print("<td align=\"left\">This email had attachments which were removed.</td>\n");
     print("</tr>\n");
 } else if ($attach_count == 2) {
-  $result = do_query("SELECT file_id, file_name from {$dbprefix}files, {$dbprefix}tickets where ticket = '$ticket'
-  and file_task = ticket and file_project = 0");
-  if (number_rows($result)) {
+  $q->clear();
+  $q->addQuery('file_id, file_name');
+  $q->addTable('files', 'f');
+  $q->innerJoin('tickets','t', 't.ticket = f.file_task');
+  $q->addWhere("t.ticket = '{$ticket}'");
+  $q->addWhere("f.project = 0");
+  $q->includeCount();
+
+  $result = $q->loadList();
+  if ($q->foundRows()) {
        print("<tr>\n");
       print("<td align=\"left\"><b>Attachments</b></td>");
       print("<td align=\"left\">");
-		  while ($row = result2hash($result)) {
+		  foreach ($result as $row) {
 			  echo "<a href='fileviewer.php?file_id=" . $row["file_id"] . "'>";
 			  echo $row["file_name"];
 			echo "</a><br>\n";
@@ -269,14 +292,19 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
     print("<td align=\"left\" valign=\"top\">\n");
 
     /* grab followups */
-    $query = "SELECT ticket, type, timestamp, author FROM {$dbprefix}tickets WHERE parent = '$ticket' ORDER BY ticket " . $CONFIG["followup_order"];
-    $result = do_query($query);
+    $q->clear();
+    $q->addQuery('ticket,type,timestamp,author');
+    $q->addTable('tickets');
+    $q->addWhere("parent = '{$ticket}'");
+    $q->addOrder("ticket {$CONFIG['followup_order']}");
+    $q->includeCount();
+    $result = $q->loadList();
 
-    if (number_rows($result)) {
+    if ($q->foundRows()) {
 
         /* print followups */
         print("<table width=\"100%\" border=\"1\" cellspacing=\"5\" cellpadding=\"5\">\n");
-        while ($row = result2hash($result)) {
+        foreach ($result as $row) {
 
             /* determine row color */
             $color = (@$number++ % 2 == 0) ? "#d3dce3" : "#dddddd";
@@ -318,11 +346,18 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
 else {
 
     /* get peer followups */
-    $results = do_query("SELECT ticket, type FROM {$dbprefix}tickets WHERE parent = '$ticket_parent' ORDER BY ticket " . $CONFIG["followup_order"]);
+    $q->clear();
+    $q->addQuery('ticket, type');
+    $q->addTable('tickets');
+    $q->addWhere("parent = '{$ticket_parent}'");
+    $q->addOrder("ticket {$CONFIG['followup_order']}");
+    $results = $q->loadList();
 
     /* parse followups */
-    while ($row = result2hash($results)) {
+    if ($results) {
+      foreach ($results as $row) {
         $peer_tickets[] = $row["ticket"];
+      }
     }
 
     /* count peers */

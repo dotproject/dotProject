@@ -18,19 +18,19 @@ $ticket_company = (int)dPgetParam($_POST, 'ticket_company', 0);
 $ticket_project = (int)dPgetParam($_POST, 'ticket_project', 0);
 
 $author = $name . " <" . $email . ">";
-$tsql =
-"INSERT INTO ".dPgetConfig('dbprefix','')."tickets (author,subject,priority,body,timestamp,type, ticket_company, ticket_project) ".
-"VALUES('$author', '".addslashes($subject)."','$priority','".addslashes($description)."',UNIX_TIMESTAMP(),'Open', $ticket_company, $ticket_project)";
+$q = new DBQuery();
+$q->addTable('tickets');
+$q->addInsert('author,subject,priority,body,type,ticket_company,ticket_project', 
+  array($author, $subject, $priority, $description, 'Open', $ticket_company, $ticket_project), true);
+$q->addInsert('timestamp', 'UNIX_TIMESTAMP()', false, true);
 
-$rc = mysql_query($tsql);
 
-
-if (mysql_errno()) {
-	$AppUI->setMsg(mysql_error());
+if (! $q->exec()) {
+	$AppUI->setMsg('An error occured in saving your ticket');
 } else {
 	$AppUI->setMsg("Ticket added");
 	
-	$ticket = mysql_insert_id();
+	$ticket = db_insert_id();
 	//Emailing notifications.
 	$boundary = "_lkqwkASDHASK89271893712893";
 	$message = "--$boundary\n";
