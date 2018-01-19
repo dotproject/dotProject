@@ -2,7 +2,7 @@
 .settings
 .project
 .DS_Store
-dotproject/includes/config.php
-!dotproject/files/index.html
-!dotproject/files/temp/index.html
-dotproject/files/
+includes/config.php
+!files/index.html
+!files/temp/index.html
+files/
