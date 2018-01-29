@@ -38,7 +38,7 @@ class CLink extends CDpObject {
 		return NULL; // object is ok
 	}
 
-	function delete() {
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		global $dPconfig;
 		$this->_message = "deleted";
 
