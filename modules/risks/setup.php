@@ -46,7 +46,6 @@ class CSetupRisks {
         $q->dropTable('risks_management_plan');
         $q->exec();
         $q->clear();
-         ;
          
         $q->dropTable('risks');
         $q->exec();

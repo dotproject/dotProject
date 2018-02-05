@@ -35,31 +35,41 @@ class CRisks extends CDpObject {
         var $risk_is_contingency=NULL;
         var $risk_cause= NULL;
         var $risk_consequence= NULL;
-         
-	function CRisks() {
-            $this->CDpObject('risks', 'risk_id');
+
+	/**
+	 * Call the parent constructor for risks
+	 */
+	function __construct() {
+		parent::__construct('risks', 'risk_id');
 	}
 
+	/**
+	 * Check the risk object
+	 */
 	function check() {
-	// ensure the integrity of some variables
+		// ensure the integrity of some variables
 		$this->risk_id = intval($this->risk_id);
+		if ($this->risk_id == 0) {
+			return 0;
+		}
 		return NULL; // object is ok
 	}
 
-	/*
-	//Commented out to use the default delete method for now
-	function delete() {
-		global $dPconfig;
-		$this->_message = "deleted";
+	/**
+	 * Delete a risk
+	 */
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
+		$this->load($this->risk_id);
+		addHistory('risks', $this->risk_id, 'delete', $this->risk_name,
+		           $this->risk_id);
+		$q = new DBQuery;
 
-	// delete the main table reference
-		$q = new DBQuery();
 		$q->setDelete('risks');
-		$q->addWhere('risk_id = ' . $this->risk_id);
-		if (!$q->exec()) {
-			return db_error();
-		}
-		return NULL;
-	}*/
+		$q->addWhere('risk_id =' . $this->risk_id);
+
+		$result = ((!$q->exec()) ? db_error() : NULL);
+		$q->clear();
+		return $result;
+	}
 }
 ?>
