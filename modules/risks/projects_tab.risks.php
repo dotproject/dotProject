@@ -1,7 +1,15 @@
-<?php
+<?php /* PROJECTS $Id$ */
 if (!defined('DP_BASE_DIR')) {
-    die('You should not access this file directly.');
+	die('You should not access this file directly.');
 }
+
+GLOBAL $AppUI, $project_id, $deny, $canRead, $canEdit, $dPconfig, $cfObj, $m;
+require_once($AppUI->getModuleClass('risks'));
+
+global $allowed_folders_ary, $denied_folders_ary, $limited;
+
+$showProject = false;
+
 $AppUI->savePlace();
 //require_once (DP_BASE_DIR . "/modules/risks/translations.php");
 // retrieve any state parameters

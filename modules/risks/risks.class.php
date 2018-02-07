@@ -41,6 +41,7 @@ class CRisks extends CDpObject {
 	 */
 	function __construct() {
 		parent::__construct('risks', 'risk_id');
+		$this->_module_directory = 'risks';
 	}
 
 	/**
