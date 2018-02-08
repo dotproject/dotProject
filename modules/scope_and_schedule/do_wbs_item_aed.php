@@ -20,7 +20,7 @@ if (!$obj->bind($_POST)) {
     if (($msg = $obj->store())) {
         $AppUI->setMsg($msg, UI_MSG_ERROR);
     }else{
-        $AppUI->setMsg($AppUI->_("LBL_WBS_ITEM_SAVED"), UI_MSG_OK);	
+     //   $AppUI->setMsg($AppUI->_("LBL_WBS_ITEM_SAVED"), UI_MSG_OK);	
 	}
 }
 $AppUI->redirect('m=projects&a=view&project_id='.$project_id);
