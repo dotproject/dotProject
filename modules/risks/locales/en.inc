@@ -100,3 +100,4 @@
 "LBL_INCLUDE_IN_CONTINGENCY_RESERVE" => "Include in contingency reserve",
 "LBL_EAR_ITEM" => "RBS Item",
 "LBL_TRIGGER" => "Trigger",
+"LBL_CHECKLIST_ANALYSIS" => "Checklist Analysis",

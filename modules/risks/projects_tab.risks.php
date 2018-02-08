@@ -11,7 +11,7 @@ global $allowed_folders_ary, $denied_folders_ary, $limited;
 $showProject = false;
 
 $AppUI->savePlace();
-//require_once (DP_BASE_DIR . "/modules/risks/translations.php");
+require_once (DP_BASE_DIR . "/modules/risks/locale.php");
 // retrieve any state parameters
 if (isset($_REQUEST['project_id'])) {
     $AppUI->setState('RisksIdxProject', intval($_REQUEST['project_id']));
