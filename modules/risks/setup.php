@@ -121,7 +121,7 @@ class CSetupRisks {
         $q = new DBQuery();
         $q->createTable("risks_management_plan");
         $q->createDefinition(
-        "(risk_plan_id INT(11) DEFAULT NULL,
+        "(risk_plan_id INT(11) NOT NULL AUTO_INCREMENT,
         project_id INT(11) DEFAULT NULL,
         probability_super_low varchar(250) DEFAULT NULL,
         probability_low varchar(250) DEFAULT NULL,

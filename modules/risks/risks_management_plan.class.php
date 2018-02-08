@@ -53,9 +53,13 @@ class CRisksManagementPlan extends CDpObject {
     var $risk_contengency_reserve_protocol = NULL;
     var $risk_revision_frequency = NULL;
 
-    function CRisksManagementPlan() {
-        $this->CDpObject('risks_management_plan', 'risk_plan_id');
-    }
+    /**
+	 * Call the parent constructor for risks
+	 */
+	function __construct() {
+		parent::__construct('risks_management_plan', 'risk_plan_id');
+        $this->_module_directory = 'risks';     
+	}
 
     function check() {
         // ensure the integrity of some variables
@@ -105,19 +109,22 @@ class CRisksManagementPlan extends CDpObject {
         }
     }
 
-    function delete() {
-        global $dPconfig;
-        $this->_message = "deleted";
+    /**
+	 * Delete a risk management plan
+	 */
+	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
+		$this->load($this->risk_id);
+		addHistory('risks', $this->risk_id, 'delete', $this->risk_name,
+		           $this->risk_id);
+		$q = new DBQuery;
 
-        // delete the main table reference
-        $q = new DBQuery();
-        $q->setDelete('risks_management_plan');
-        $q->addWhere('risk_plan_id = ' . $this->risk_plan_id);
-        if (!$q->exec()) {
-            return db_error();
-        }
-        return NULL;
-    }
+		$q->setDelete('risks_management_plan');
+		$q->addWhere('risk_plan_id =' . $this->risk_plan_id);
+
+		$result = ((!$q->exec()) ? db_error() : NULL);
+		$q->clear();
+		return $result;
+	}
 
 }
 
