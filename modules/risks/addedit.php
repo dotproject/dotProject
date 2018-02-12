@@ -486,7 +486,7 @@ $titleBlock->show();
         <tr>
             <td colspan="2" align="right">
                  <input type="button" class="button" value="<?php echo $AppUI->_("LBL_SUBMIT"); ?>" onclick="submitIt()" />
-                 <?php require_once (DP_BASE_DIR . "/modules/timeplanning/view/subform_back_button_project.php"); ?>
+                 <?php require_once (DP_BASE_DIR . "/modules/risks/backbutton.php"); ?>
             </td>
         </tr>
 

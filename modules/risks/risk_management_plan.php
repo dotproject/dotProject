@@ -342,9 +342,10 @@ $obj->loadDefaultValues();
             <td align="right" colspan="2">
                 <input type="submit" class="button" value="<?php echo $AppUI->_("LBL_SUBMIT"); ?>" onclick="saveEAP();submitIt()" />
                 <script> var targetScreenOnProject="/modules/risks/projects_risks.php";</script>
-                 <?php require_once (DP_BASE_DIR . "/modules/timeplanning/view/subform_back_button_project.php"); ?>
+                <?php require_once (DP_BASE_DIR . "/modules/risks/backbutton.php"); ?>
             </td>
         </tr>
     </table>
 </form>
 <span class="span_mandatory">*</span>&nbsp;<?php echo $AppUI->_("LBL_REQUIRED_FIELD"); ?>
+<script src="./modules/risks/risks.js"></script>

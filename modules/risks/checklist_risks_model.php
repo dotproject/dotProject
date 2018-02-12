@@ -164,7 +164,7 @@ $activeList = $q->loadList();
         <?php } ?>
         <tr>
             <td>
-                <?php require_once (DP_BASE_DIR . "/modules/timeplanning/view/subform_back_button_project.php"); ?>        
+                <?php require_once (DP_BASE_DIR . "/modules/risks/backbutton.php"); ?>       
             </td>
             <td colspan="5" align="right">
                 <input type="submit" value="<?php echo $AppUI->_("LBL_RISKS_CHECKLIST_ACTION"); ?>" class="button" />
@@ -172,3 +172,4 @@ $activeList = $q->loadList();
         </tr>
     </table>
 </form>
+<script src="./modules/risks/risks.js"></script>

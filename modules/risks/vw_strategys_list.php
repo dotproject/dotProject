@@ -236,3 +236,4 @@ $inactiveList = $q->loadList();
         </tr>
 <?php } ?>
 </table>
+<script src="./modules/risks/risks.js"></script>

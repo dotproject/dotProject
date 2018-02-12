@@ -13,3 +13,4 @@ require (DP_BASE_DIR . "/modules/risks/addedit.php");
         } 
     }
 </script>
+<script src="./modules/risks/risks.js"></script>
