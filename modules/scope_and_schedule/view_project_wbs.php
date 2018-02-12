@@ -6,9 +6,16 @@ require_once DP_BASE_DIR . "/modules/scope_and_schedule/wbs_item.class.php";
 $project_id = dPgetParam($_GET, "project_id", 0);
 function printWBSItem($wbsItem){
 		global $project_id;
+		//get children
+		$listChildren=$wbsItem->loadWBSItems($project_id, $wbsItem->id);
+		//update is leaf/work package attribute
+		$wbsItem->is_leaf=sizeof($listChildren)==0?1:0;
+		$wbsItem->store();
+			
 		?>
 			<br />
-			<li>&nbsp;
+			
+			<li>  &nbsp;
 			
 			<form action="?m=scope_and_schedule" name="wbs_add_child_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
 				<input type="hidden" name="dosql" value="do_wbs_item_aed">
@@ -18,8 +25,15 @@ function printWBSItem($wbsItem){
 				<input type="hidden" name="is_leaf" value="0" />  	
 				<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id ?>" />
 				<input type="hidden" name="item_name" placeholder="Input item description..." /> 
-				<img src="modules/scope_and_schedule/images/add_green.png" style="cursor:pointer;height:15px;width:15px" onclick="saveScrollPosition();document.wbs_add_child_<?php echo $wbsItem->id ?>.submit();" />
+				<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.wbs_add_child_<?php echo $wbsItem->id ?>.submit();" />
 			</form>
+			<?php if ($wbsItem->id_wbs_item_parent!=0){?> 
+				<img src="modules/scope_and_schedule/images/reorder_icon.png" style="cursor:move;height:18px;width:18px" class="draggable_wbs" id="wbs_move_<?php echo $wbsItem->id ?>   onclick="saveScrollPosition();" />
+			<?php  } ?> 
+			<?php 
+			if ($wbsItem->is_leaf==1){ ?>
+				&nbsp;&nbsp;<img src="modules/scope_and_schedule/images/work_package_icon.png" style="cursor:pointer;height:15px;width:15px" onclick="saveScrollPosition();" />
+			<?php } ?>
 			<br />
 			<form action="?m=scope_and_schedule" name="wbs_delete_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
 				<input type="hidden" name="dosql" value="do_wbs_item_deletion">
@@ -45,13 +59,13 @@ function printWBSItem($wbsItem){
 				
 				<ol>
 					<?php
-						//get children
-						$listChildren=$wbsItem->loadWBSItems($project_id, $wbsItem->id);
-						//update is leaf/work package attribute
-						$wbsItem->is_leaf=sizeof($listChildren)==0?1:0;
-						$wbsItem->store();
+						$order=1;
 						foreach ($listChildren as $child){
+							$child->sort_order=$order;
+							$child->number=$wbsItem->number.".".$order;
+							$child->store();
 							printWBSItem($child);
+							$order++;
 						}
 					?>
 				</ol>
@@ -59,6 +73,9 @@ function printWBSItem($wbsItem){
 <?php
 }
 ?>
+<script src="modules/scope_and_schedule/js/jquery-3.2.1.min.js"></script>
+<script src="modules/scope_and_schedule/js/jquery-ui.js"></script>
+<script src="modules/scope_and_schedule/js/wbs-functions.js"></script>
 <script>
 //function should be called after any submit in wbs page
 function saveScrollPosition(){
@@ -71,6 +88,7 @@ function saveScrollPosition(){
 .wbs OL { counter-reset: item }
 .wbs LI { display: inline;}
 .wbs LI:before { content: counters(item, ".") " "; counter-increment: item }
+.draggable_wbs{}
 </style>
 
 
