@@ -198,10 +198,6 @@ $titleBlock->show();
     }
 
 </script>
-<link href="modules/timeplanning/css/table_form.css" type="text/css" rel="stylesheet" />
-<!-- calendar goodies -->
-<link type="text/css" rel="stylesheet" href="./modules/timeplanning/js/jsLibraries/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css?random=20051112" media="screen"></link>
-<script type="text/javascript" src="./modules/timeplanning/js/jsLibraries/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js?random=20060118"></script>
 
 <form name="uploadFrm" action="?m=risks" method="post">
     <input type="hidden" name="dosql" value="do_risks_aed" />
@@ -302,11 +298,8 @@ $titleBlock->show();
                 <label for="risk_period_start_date"><?php echo $AppUI->_("LBL_RISK_PERIOD"); ?></label>:
             </td>
             <td>
-                <input type="text" class="text" style="width:80px;" disabled="true" name="risk_period_start_date" value="<?php echo dPformSafe(@$obj->risk_period_start_date); ?>" id="risk_period_start_date" />
-                <img src="./modules/timeplanning/images/img.gif" id="calendar_trigger" style="cursor:pointer" onclick="displayCalendar(document.getElementById('risk_period_start_date'), 'yyyy-mm-dd', this)" />
-    
-                <input type="text" class="text" style="width:80px;" disabled="true" name="risk_period_end_date" value="<?php echo dPformSafe(@$obj->risk_period_end_date); ?>" id="risk_period_end_date" />
-                <img src="./modules/timeplanning/images/img.gif" id="calendar_trigger" style="cursor:pointer" onclick="displayCalendar(document.getElementById('risk_period_end_date'), 'yyyy-mm-dd', this)" />
+                <input type="date" name="risk_period_start_date" value="<?php echo dPformSafe(@$obj->risk_period_start_date); ?>" id="risk_period_start_date" />
+                <input type="date" name="risk_period_end_date" value="<?php echo dPformSafe(@$obj->risk_period_end_date); ?>" id="risk_period_end_date" />
             </td>
         </tr>
 
