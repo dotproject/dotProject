@@ -28,7 +28,7 @@ class RisksControlling {
             }
 
             if (sizeof($options) == 0) {
-                $options[0] = "Sem categoria (A EAR ainda não foi configurada para este projetos)";
+                $options[0] = $AppUI->_('LBL_EAR_UNCATEGORISED_NOT_CONFIGURED');
             }
         
         return $options;

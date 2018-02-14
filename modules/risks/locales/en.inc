@@ -101,3 +101,4 @@
 "LBL_EAR_ITEM" => "RBS Item",
 "LBL_TRIGGER" => "Trigger",
 "LBL_CHECKLIST_ANALYSIS" => "Checklist Analysis",
+"LBL_EAR_UNCATEGORISED_NOT_CONFIGURED" => "Uncategorised (EAR has not yet been configured for this project)",
