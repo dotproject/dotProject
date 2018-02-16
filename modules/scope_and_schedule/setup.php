@@ -35,7 +35,7 @@ class CSetup_ScopeSchedule {
         $sql = "(
 		  id INT NOT NULL auto_increment,
 		  project_id INT default NULL,
-		  sort_order INT default 1,
+		  sort_order FLOAT default 1,
 		  item_name text  default '',
 		  number text  default '',
 		  is_leaf INT  default 0,

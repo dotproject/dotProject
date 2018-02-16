@@ -39,7 +39,7 @@ class WBSItem extends CDpObject  {
         $q = new DBQuery();
         $q->addQuery("wbs.id");
         $q->addTable("project_wbs_items", "wbs");
-        $q->addWhere("project_id = $project_id and id_wbs_item_parent = $parent_id");
+        $q->addWhere("project_id = $project_id and id_wbs_item_parent = $parent_id order by sort_order asc");
         $results = db_loadHashList($q->prepare(true), "id");
         $list= array();
         $i=0;
