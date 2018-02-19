@@ -46,7 +46,7 @@ function printWBSItem($wbsItem){
 			
 			
 			
-				<form action="?m=scope_and_schedule" name="wbs_update_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
+				<form action="?m=scope_and_schedule" name="wbs_update_<?php echo $wbsItem->id ?>" id="wbs_update_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
 					<input type="hidden" name="dosql" value="do_wbs_item_aed">
 					<input type="hidden" name="project_id" value="<?php echo $project_id ?>" /> 
 					<input type="hidden" name="id" value="<?php echo $wbsItem->id ?>" /> 
@@ -54,9 +54,7 @@ function printWBSItem($wbsItem){
 					<input type="hidden" name="number" value="1" />
 					<input type="hidden" name="is_leaf" value="0" />  	
 					<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id_wbs_item_parent ?>" />
-					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" style="width:40%" maxlength="100" /> 
-					<img src="modules/scope_and_schedule/images/save_icon.png" style="cursor:pointer;height:20px;width:20px" onclick="saveScrollPosition();document.wbs_update_<?php echo $wbsItem->id ?>.submit();" />
-			
+					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" onblur="saveScrollPosition();ajaxFormSubmit('wbs_update_<?php echo $wbsItem->id ?>');" style="width:40%" maxlength="100" /> 			
 				</form>
 				
 				<ol>
@@ -73,11 +71,7 @@ function printWBSItem($wbsItem){
 				</ol>
 				
 			</li>
-			<?php if ($wbsItem->id_wbs_item_parent!=0){?>
-				<div class="droppable_wbs">&nbsp;</div>
-			<?php
-				}
-			?>
+			
 <?php
 }
 ?>

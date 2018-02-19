@@ -31,4 +31,8 @@ $(document).ready(function (){
   function closeMoveWBSItem(){
 	  dialog.dialog( "close" );
   }
+  
+  function ajaxFormSubmit(formId){
+	$.post($("#"+formId).attr('action'), $("#"+formId).serialize())
+  }
 	
