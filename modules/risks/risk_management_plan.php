@@ -323,14 +323,66 @@ $obj->loadDefaultValues();
                 <!-- Insert deafult values for RBS when it is a new risk managenment plan -->
                 <?php
                 if (sizeof($items) == 0 && $obj->risk_plan_id == "") {
+                    $defaultItems = array(
+                        //Label, index, indentation level
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_0"),
+                            "index" => 0,
+                            "indent" => 0
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_1"),
+                            "index" => 0,
+                            "indent" => 1
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_2"),
+                            "index" => 0,
+                            "indent" => 2
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_3"),
+                            "index" => 0,
+                            "indent" => 2
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_4"),
+                            "index" => 0,
+                            "indent" => 1
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_5"),
+                            "index" => 0,
+                            "indent" => 2
+                        ),
+                        array(
+                            "label" => $AppUI->_("LBL_RISK_DEFAULTRBS_6"),
+                            "index" => 0,
+                            "indent" => 2
+                        )
+                    );
+
                     ?>
-                    <script>addItem(1,"Riscos",0,"");</script>
-                    <script>addItem(2,"Interno",0,"&nbsp;&nbsp;&nbsp;");</script>
-                    <script>addItem(3,"Organizacional",0,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");</script>
-                    <script>addItem(4,"Tecnológico",0,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");</script>
-                    <script>addItem(5,"Externo",0,"&nbsp;&nbsp;&nbsp;");</script>
-                    <script>addItem(6,"Político",0,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");</script>
-                    <script>addItem(7,"Catastrofe",0,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");</script>
+                    <script>
+                        (function() {
+                            //Util function for the indent level
+                            var str_repeat = function(str, times) {
+                                var strReturn = "";
+                                for (var i = 0; i < times; i++) {
+                                    strReturn += str;
+                                }
+                                return strReturn;
+                            }
+
+                            //Render all the default items
+                            var items = <?php echo json_encode($defaultItems); ?>;
+                            console.log(items);
+                            for (var i in items) {
+                                var item = items[i];
+                                addItem(i+1, item.label, item.index, str_repeat('&nbsp;&nbsp;&nbsp;', item.indent));
+                            }
+                        })();
+                    </script>
                     <?php
                 }
                 ?>

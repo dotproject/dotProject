@@ -68,17 +68,18 @@ class CRisksManagementPlan extends CDpObject {
     }
 
     function loadDefaultValues() {
+        global $AppUI;
         if ($this->risk_plan_id == "") {
-            $this->probability_super_low = "Um evento similar ocorreu uma única vez em outra organização";
-            $this->probability_low = "Um evento similar ocorreu em uma organização similar.";
-            $this->probability_medium = "Um evento similar já ocorreu nesta organização.";
-            $this->probability_high = "Um evento similar já ocorreu diversas vezes nesta organização.";
-            $this->probability_super_high = "Um evento similar já ocorreu muitas vezes na mesa atividade ou operação.";
-            $this->impact_super_low = "O impacto pode ser ignorado.";
-            $this->impact_low = "Impacto mínimo que pode ser contornado por procedimentos padrão.";
-            $this->impact_medium = "Impacto maior, que pode ser contornado com algum esforço, utilizando procedimentos padrão.";
-            $this->impact_high = "Evento crítico, que pode gerar algum custo ou atrazo ao projeto, ou produtos não apropriados.";
-            $this->impact_super_high = "Evento extremo, que pode gerar custos ou atrasos, ou até deteriorar a imagem da organização.";
+            $this->probability_super_low = $AppUI->_('LBL_RISK_PROBABILITY_SUPERLOW');
+            $this->probability_low = $AppUI->_('LBL_RISK_PROBABILITY_LOW');
+            $this->probability_medium = $AppUI->_('LBL_RISK_PROBABILITY_MEDIUM');
+            $this->probability_high = $AppUI->_('LBL_RISK_PROBABILITY_HIGH');
+            $this->probability_super_high = $AppUI->_('LBL_RISK_PROBABILITY_SUPERHIGH');
+            $this->impact_super_low = $AppUI->_('LBL_RISK_IMPACT_SUPERLOW');
+            $this->impact_low = $AppUI->_('LBL_RISK_IMPACT_LOW');
+            $this->impact_medium = $AppUI->_('LBL_RISK_IMPACT_MEDIUM');
+            $this->impact_high = $AppUI->_('LBL_RISK_IMPACT_HIGH');
+            $this->impact_super_high = $AppUI->_('LBL_RISK_IMPACT_SUPERHIGH');
             $this->matrix_superlow_superlow = 0;
             $this->matrix_superlow_low = 0;
             $this->matrix_superlow_medium = 0;
@@ -104,7 +105,7 @@ class CRisksManagementPlan extends CDpObject {
             $this->matrix_superhigh_medium = 2;
             $this->matrix_superhigh_high = 2;
             $this->matrix_superhigh_superhigh = 2;
-            $this->risk_contengency_reserve_protocol = "A liberação dos recursos da reserva de contingência devem ser solicitados a administração com a comprovação da ocorrência do mesmo.";
+            $this->risk_contengency_reserve_protocol = $AppUI->_('LBL_RISK_CONTINGENCY_RESERVE_PROTOCOL');
             $this->risk_revision_frequency = 15;
         }
     }
