@@ -101,7 +101,7 @@
 "LBL_EAR_ITEM" => "Item da EAR",
 "LBL_TRIGGER" => "Gatilho",
 "LBL_CHECKLIST_ANALYSIS" => "Análise da lista de verificação",
-"LBL_EAR_UNCATEGORISED_NOT_CONFIGURED" => "Sem categoria (o EAR ainda não foi configurado para este projeto)",
+"LBL_EAR_UNCATEGORISED_NOT_CONFIGURED" => "Sem categoria (A EAR ainda não foi configurada para este projetos)",
 "LBL_RISK_PROBABILITY_SUPERLOW" => "Um evento similar ocorreu uma única vez em outra organização.",
 "LBL_RISK_PROBABILITY_LOW" => "Um evento similar ocorreu em uma organização similar.",
 "LBL_RISK_PROBABILITY_MEDIUM" => "Um evento similar já ocorreu nesta organização.",
