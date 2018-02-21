@@ -66,7 +66,7 @@ $activeList = $q->loadList();
 
 <table width="95%" align="center" border="0" cellpadding="2" cellspacing="1" class="tbl">
     <tr>
-        <th colspan="7" style="font-weight: bold"> Watchlist </th>
+        <th colspan="7" style="font-weight: bold"> Watch list </th>
     </tr>
     <tr>
         <th nowrap="nowrap" style="width:5%"><?php echo $AppUI->_('Id'); ?></th>
