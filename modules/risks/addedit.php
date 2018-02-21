@@ -489,3 +489,4 @@ $titleBlock->show();
 <script>
     updateRisksReponseFieldsBasedOnStartegy();
 </script>
+<script src="./modules/risks/risks.js"></script>
