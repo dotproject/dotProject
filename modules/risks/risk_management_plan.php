@@ -306,8 +306,8 @@ $obj->loadDefaultValues();
                 <table class="tbl" id="tb_eap" width="95%" align="center" cellpadding="2" cellspacing="1" border="0">
                     <tr>
                         <th class="shortTD"><?php echo $AppUI->_("LBL_ID"); ?> </th>
-                        <th width="20"><?php echo $AppUI->_("LBL_ORDER"); ?></th>
-                        <th width="20"><?php echo $AppUI->_("LBL_IDENTATION"); ?></th>
+                        <th width="20"><?php echo $AppUI->_("LBL_RISK_ORDER"); ?></th>
+                        <th width="20"><?php echo $AppUI->_("LBL_RISK_INDENTATION"); ?></th>
                         <th ><?php echo $AppUI->_("LBL_EAR_ITEM"); ?></th>
                         <th width="20"> &nbsp; </th>
                     </tr>

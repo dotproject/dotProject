@@ -120,3 +120,5 @@
 "LBL_RISK_DEFAULTRBS_4" => "Externo",
 "LBL_RISK_DEFAULTRBS_5" => "Político",
 "LBL_RISK_DEFAULTRBS_6" => "Catastrofe",
+"LBL_RISK_INDENTATION"=>"Indentação",
+"LBL_RISK_ORDER"=>"Ordem",
