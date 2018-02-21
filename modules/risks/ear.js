@@ -81,7 +81,7 @@ function addItem(id, itemName, index, identation) {
     td.width = "50";
     div = field = document.createElement("div");
 
-    div.innerHTML = "<img src='modules/timeplanning/images/stock_delete-16.png' border='0' style='cursor:pointer' onclick=deleteRole('" + row.id + "') /> <img src='modules/timeplanning/images/stock_new_small.png'  style='cursor:pointer' onclick=addItem('','','" + row.id + "','') />";
+    div.innerHTML = "<img src='modules/risks/images/stock_delete-16.png' border='0' style='cursor:pointer' onclick=deleteRole('" + row.id + "') /> <img src='modules/risks/images/stock_new_small.png'  style='cursor:pointer' onclick=addItem('','','" + row.id + "','') />";
     td.appendChild(div);
 
     updateEAPItemsNumbers();
