@@ -26,7 +26,7 @@
 "LBL_ADDED" => "added",
 "LBL_ALL" => "All",
 "LBL_ID" => "Id",
-"LBL_WATCHLIST" => "WatchList",
+"LBL_WATCHLIST" => "Watch List",
 "LBL_NEARTERM" => "Near-term Responses List",
 "LBL_LESSONS_LIST" => "Lessons Learned List",
 "LBL_NEW" => "New risk",
