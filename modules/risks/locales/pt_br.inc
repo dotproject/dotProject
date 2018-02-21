@@ -122,3 +122,7 @@
 "LBL_RISK_DEFAULTRBS_6" => "Catastrofe",
 "LBL_RISK_INDENTATION"=>"Indentação",
 "LBL_RISK_ORDER"=>"Ordem",
+"LBL_RISK_MANAGEMENT_PLAN_REGISTERED"=> "Plano de gerenciamento de riscos registrado!",
+"LBL_RISK_INCLUDED"=>"Risco registrado!",
+"LBL_RISK_UPDATE"=>"Risco atualizado!",
+"LBL_RISK_EXCLUDED"=>"Risco excluído!",
