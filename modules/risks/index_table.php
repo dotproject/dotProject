@@ -5,7 +5,7 @@ $q->addTable('risks');
 $q->addOrder('risk_id');
 $q->setLimit(100);
 $list1 = $q->loadList();
-//require_once (DP_BASE_DIR . "/modules/risks/translations.php");
+$q->clear();
 foreach ($list1 as $line) {
     $risk_id = $line['risk_id'];
     $Priority;
@@ -22,26 +22,29 @@ foreach ($list1 as $line) {
             }
         }
     }
-    $dbprefix = dPgetConfig('dbprefix', '');
-    $consulta = "UPDATE {$dbprefix}risks SET risk_priority = '$Priority' WHERE risk_id = '$risk_id'";
-    $resultado = mysql_query($consulta) or die($AppUI->_("LBL_QUERY_FAIL"));
+    $q->addUpdate('risk_priority', $Priority);
+    $q->addWhere('risk_id = '.$risk_id);
+    $q->addTable('risks');
+    if (! $q->exec()) {
+        die($AppUI->_("LBL_QUERY_FAIL"));
+    }
+    $q->clear();
 }
 
-$q->clear();
 $q->addQuery('user_id');
 $q->addQuery('CONCAT( contact_first_name, \' \', contact_last_name)');
 $q->addTable('users');
 $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
 $q->addOrder('contact_first_name, contact_last_name');
 $users = $q->loadHashList();
-
 $q->clear();
+
 $q->addQuery('project_id, project_name');
 $q->addTable('projects');
 $q->addOrder('project_name');
 $projects = $q->loadHashList();
-
 $q->clear();
+
 $q->addQuery('task_id, task_name');
 $q->addTable('tasks');
 $q->addOrder('task_name');

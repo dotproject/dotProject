@@ -21,9 +21,13 @@ foreach ($list1 as $line) {
             }
         }
     }
-    $dbprefix = dPgetConfig('dbprefix', '');
-    $consulta = "UPDATE {$dbprefix}risks SET risk_priority = '$Priority' WHERE risk_id = '$risk_id'";
-    $resultado = mysql_query($consulta) or die($AppUI->_("LBL_QUERY_FAIL"));
+    $q->addUpdate('risk_priority', $Priority);
+    $q->addWhere('risk_id = '.$risk_id);
+    $q->addTable('risks');
+    if (! $q->exec()) {
+        die($AppUI->_("LBL_QUERY_FAIL"));
+    }
+    $q->clear();
 }
 
 $q->clear();
