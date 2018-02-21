@@ -13,6 +13,6 @@ foreach($risks as $risk){
     $newRisk->risk_project=$projectId;
     $newRisk->store();
 }
-$AppUI->setMsg($AppUI->_("LBL_CHECKLIST_ANALYSIS_SUCCESS",UI_OUTPUT_JS), UI_MSG_OK, false);
+$AppUI->setMsg($AppUI->_("LBL_RISK_CHECKLIST_ANALYSIS_SUCCESS",UI_OUTPUT_JS), UI_MSG_OK, false);
 $AppUI->redirect($redirectPath);
 ?>

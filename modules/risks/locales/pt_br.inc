@@ -126,3 +126,4 @@
 "LBL_RISK_INCLUDED"=>"Risco registrado!",
 "LBL_RISK_UPDATE"=>"Risco atualizado!",
 "LBL_RISK_EXCLUDED"=>"Risco excluído!",
+"LBL_RISK_CHECKLIST_ANALYSIS_SUCCESS" => "Análise de checklist realizada com sucesso!",
