@@ -40,6 +40,7 @@ class CSetup_ScopeSchedule {
 		  number text  default '',
 		  is_leaf INT  default 0,
 		  id_wbs_item_parent INT default 0,
+		  wbs_dictionary TEXT default NULL,
 		  PRIMARY KEY  (id),
 		  CONSTRAINT fk_wbs_item_project FOREIGN KEY (project_id) REFERENCES " . $q->_table_prefix . "projects (project_id) on delete cascade on update cascade
 		)";

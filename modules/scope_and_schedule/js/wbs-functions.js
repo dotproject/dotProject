@@ -19,8 +19,9 @@ $(document).ready(function (){
  
   });  
   
-  function openMoveWBSItem(wbsItemId, projectId){
+  function openMoveWBSItem(wbsItemId, wbsItemName , projectId){
 	  document.move_wbs_item.id.value=wbsItemId;
+	  document.getElementById("move_wbs_item_name").innerHTML = wbsItemName;
 	  dialog.dialog( "open" );
   }
   
