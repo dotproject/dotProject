@@ -13,6 +13,7 @@
 class RisksControlling {
 
     function getRisksEARCategories($project_id) {
+        global $AppUI;
         $options = array();
 
             $q = new DBQuery();

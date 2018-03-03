@@ -42,10 +42,6 @@ class WBSItem {
         return $this->sortOrder;
     }
 
-    function WBSItem() {
-        
-    }
-
     function store($projectId, $description, $number, $sortOrder, $isLeaf, $identation, $id) {
         $q = new DBQuery();
         $q->addQuery('id');

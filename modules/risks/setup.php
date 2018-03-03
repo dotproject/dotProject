@@ -57,16 +57,15 @@ class CSetupRisks {
     }
 
     function upgrade($old_version) {
-// Place to put upgrade logic, based on the previously installed version.
-// Usually handled via a switch statement.
-// Since this is the first version of this module, we have nothing to update.
+        // Place to put upgrade logic, based on the previously installed version.
+        // Usually handled via a switch statement.
+        // Since this is the first version of this module, we have nothing to update.
         return true;
     }
 
     function install() {
-        //$this->installProjectsTranslationFile();        
-        
-         $q = new DBQuery();
+        //module table
+        $q = new DBQuery();
         $q->createTable('risks');
         $q->createDefinition("(
         risk_id int(11) NOT NULL AUTO_INCREMENT,
@@ -97,8 +96,7 @@ class CSetupRisks {
         PRIMARY KEY (risk_id))");
         $q->exec();
         
-        
-         //table to store ear items
+        //table to store ear items
         $q = new DBQuery();
         $sql = "(
                 id INT NOT NULL auto_increment,
@@ -111,13 +109,12 @@ class CSetupRisks {
                 PRIMARY KEY  (id),
                 CONSTRAINT fk_ear_item_project FOREIGN KEY (project_id) REFERENCES " . $q->_table_prefix . "projects (project_id) on delete cascade on update restrict
               )";
-
-        
         $q->createTable("project_ear_items");
         $q->createDefinition($sql);
         $q->exec();
         $q->clear();
 
+        //risk management plan table
         $q = new DBQuery();
         $q->createTable("risks_management_plan");
         $q->createDefinition(
@@ -163,9 +160,7 @@ class CSetupRisks {
         PRIMARY KEY (risk_plan_id))");
         $q->exec();
  
-       
-        
-
+        //Insert sysvals
         $q = new DBQuery();
         $q->addTable('sysvals');
         $q->addInsert('sysval_title', 'RiskImpact');
@@ -215,21 +210,6 @@ class CSetupRisks {
         $q->addInsert('sysval_value', "0|" . 'LBL_ACCEPT' . "\n1|" . 'LBL_ELIMINATE' . "\n2|" . 'LBL_MITIGATE' . "\n3|" . 'LBL_TRANSFER');
         $q->exec();
         return NULL;
-    }
-
-    private function installProjectsTranslationFile() {
-        /*
-        $translationFileUS = DP_BASE_DIR . "/modules/risks/locales/en.inc";
-        $translationFilePTBR = DP_BASE_DIR . "/modules/risks/locales/pt_br.inc";
-        
-          mkdir(DP_BASE_DIR . "/modules/projects/locales");
-          $us_contents = file_get_contents($translationFileUS);
-          $ptBR_contents = file_get_contents($translationFilePTBR);
-          $destFileUS = DP_BASE_DIR . "/modules/projects/locales/en.inc";
-          $destFilePTBR = DP_BASE_DIR . "/modules/projects/locales/pt_br.inc";
-          $this->updateFile($destFileUS, $us_contents);
-          $this->updateFile($destFilePTBR, $ptBR_contents);
-         */
     }
 
     private function updateFile($fileName, $content) {

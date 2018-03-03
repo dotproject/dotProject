@@ -127,8 +127,8 @@ if ($projectSelected == null || $projectSelected == "") {
         $href = "?m=projects&a=view&project_id=" . $projectSelected . "&tab=" . $t."&targetScreenOnProject=/modules/risks/projects_risks.php";
 }
 
-//$canDelete = getPermission($m, "delete", $risk_id);
-if (/*$canDelete &&*/ $risk_id > 0) {
+$canDelete = getPermission($m, "delete", $risk_id);
+if ($canDelete && $risk_id > 0) {
     $titleBlock->addCrumbDelete("LBL_DELETE", $canDelete, $msg);
 }
 
@@ -136,9 +136,6 @@ $titleBlock->show();
 ?>
 <script language="javascript">
     function submitIt() {
-
-        //    var f = document.uploadFrm;
-        //    f.submit();
         var f = document.uploadFrm;
         var msg = "";
         var foc = false;
@@ -157,8 +154,7 @@ $titleBlock->show();
             }
         }
         if (msg.length < 1) {
-            document.getElementById("risk_period_start_date").disabled = false;
-            document.getElementById("risk_period_end_date").disabled = false;
+            riskModule.dirty = false;
             f.submit();
         } else {
             alert(msg);
@@ -183,16 +179,12 @@ $titleBlock->show();
         if (riskStrategy == 0) {
             with (document.uploadFrm) {
                 risk_prevention_actions.disabled = true;
-                //risk_contingency_plan.disabled = true;
-                //risk_responsible.disabled = true;
-                //risk_triggers.disabled = true;
             }
         } else {
             with (document.uploadFrm) {
                 risk_prevention_actions.disabled = false;
                 risk_contingency_plan.disabled = false;
                 risk_responsible.disabled = false;
-                //risk_triggers.disabled = false;
             }
         }
     }
@@ -243,12 +235,6 @@ $titleBlock->show();
             </td>
         </tr>
 
-        <!--
-        <tr>
-            <td class="td_label">
-                <label for="risk_project"><?php echo $AppUI->_("LBL_PROJECT"); ?></label>:
-            </td>
-            <td>
         <?php
         $q = new DBQuery();
         $q->addQuery("project_id, project_name");
@@ -264,7 +250,6 @@ $titleBlock->show();
         ?>         
             </td>
         </tr>
-        -->
         <tr>
             <td class="td_label">
                 <label for="risk_task"><?php echo $AppUI->_("LBL_TASK"); ?></label>:
@@ -309,7 +294,7 @@ $titleBlock->show();
             </td>
             <td>
                 <?php
-                require_once DP_BASE_DIR . "/modules/risks/controlling/risks_controlling.php";
+                require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
                 $rcontrolling = new RisksControlling();
                 $options_ear = $rcontrolling->getRisksEARCategories($projectSelected);
                 echo arraySelect($options_ear, "risk_ear_classification", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_ear_classification));
@@ -455,17 +440,6 @@ $titleBlock->show();
             </td>
         </tr>
 
-
-        <!--
-        <tr>
-            <td class="td_label">
-                <label for="risk_lessons_learned"><?php echo $AppUI->_("LBL_LESSONS"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_lessons_learned" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="100"><?php echo dPformSafe(@$obj->risk_lessons_learned); ?></textarea>
-            </td>
-        </tr>
-        -->
         <tr>
             <td class="td_label">
                 <label for="risk_active"><?php echo $AppUI->_("LBL_ACTIVE"); ?></label>:

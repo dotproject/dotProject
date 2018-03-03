@@ -1,4 +1,8 @@
 <?php
+if (!defined("DP_BASE_DIR")) {
+    die("You should not access this file directly.");
+}
+
 require_once (DP_BASE_DIR . "/modules/risks/wbs_item.class.php");
 class ControllerWBSItem {
 	

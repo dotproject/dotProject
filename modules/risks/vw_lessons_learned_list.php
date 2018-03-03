@@ -1,4 +1,7 @@
 <?php
+if (!defined("DP_BASE_DIR")) {
+    die("You should not access this file directly.");
+}
 $projectSelected = intval(dPgetParam($_GET, 'project_id'));
 $whereProject ='';
 if ($projectSelected != null) {

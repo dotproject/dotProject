@@ -1,4 +1,8 @@
 <?php
+if (!defined("DP_BASE_DIR")) {
+    die("You should not access this file directly.");
+}
+
 $q = new DBQuery();
 $q->addQuery('*');
 $q->addTable('risks');
@@ -130,7 +134,7 @@ $activeList = $q->loadList();
             <th nowrap="nowrap"><?php echo $AppUI->_('LBL_STRATEGY'); ?></th>
         </tr>
         <?php
-        require_once DP_BASE_DIR . "/modules/risks/controlling/risks_controlling.php";
+        require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
         $rcontrolling = new RisksControlling();
         $options = $rcontrolling->getRisksEARCategories($projectSelected);
         $earClassification = "";

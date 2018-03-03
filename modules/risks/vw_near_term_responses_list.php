@@ -1,4 +1,7 @@
 <?php
+if (!defined("DP_BASE_DIR")) {
+    die("You should not access this file directly.");
+}
 $q = new DBQuery();
 $q->addQuery('user_id');
 $q->addQuery('CONCAT( contact_first_name, \' \', contact_last_name)');
