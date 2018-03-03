@@ -8,3 +8,4 @@ includes/config.php
 files/
 lib/ezpdf/fonts/php_*
 /nbproject/private/
+/nbproject
