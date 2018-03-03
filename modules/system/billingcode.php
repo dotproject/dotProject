@@ -36,7 +36,7 @@ $titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, "$m
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 <!--
 function submitIt() {
 	var form = document.changecode;

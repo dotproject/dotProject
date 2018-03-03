@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 var calendarField = '';
 var calWin = null;
 

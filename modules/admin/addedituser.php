@@ -70,7 +70,7 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 	}
 	$titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function submitIt() {
     var form = document.editFrm;
     var uid = new Number(form.user_id.value);
@@ -222,7 +222,7 @@ echo $AppUI->_('select dept');?>..." onclick="javascript:popDept()" />
 </tr>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
-    <td><input type="text" class="text" name="contact_email" value="<?php 
+    <td><input type="email" class="text" name="contact_email" value="<?php 
 echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 </tr>
 <tr>

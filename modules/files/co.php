@@ -67,7 +67,7 @@ $projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_nam
 $projects = arrayMerge(array('0'=>$AppUI->_('All')), $projects);
 ?>
 
-<script type="text/javascript" language='javascript'>
+<script  language='javascript'>
 function popFile(params) {
     fileloader = window.open("fileviewer.php?"+params,"mywindow",
 	                         "location=1,status=1,scrollbars=0,width=80,height=80");

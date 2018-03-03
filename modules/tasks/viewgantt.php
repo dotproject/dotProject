@@ -282,7 +282,7 @@ if ($cnt[0]['N'] > 0) {
 	        . '&amp;showDynTasks=' . $showDynTasks . '&amp;showLowTasks=' . $showLowTasks 
 	        . '&amp;caller=' . $a . '&amp;user_id=' . $user_id);
 ?>
-	<script type="text/javascript">document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
+	<script >document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
 <?php
 	//If we have a problem displaying this we need to display a warning.
 	//Put it at the bottom just in case

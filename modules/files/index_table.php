@@ -230,7 +230,7 @@ $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg
 shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 
 ?>
-<script type="text/JavaScript">
+<script >
 function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";

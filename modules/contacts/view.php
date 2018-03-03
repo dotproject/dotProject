@@ -58,7 +58,7 @@ $titleBlock->show();
         <input type="hidden" name="contact_id" value="<?php echo $contact_id;?>" />
         <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id;?>" />
 </form>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function delIt() {
         var form = document.changecontact;
         if (confirm("<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS);?>")) {
