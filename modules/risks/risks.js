@@ -10,17 +10,17 @@ riskModule.keyUp = function(e) {
     if (form == null) {
         return;
     }
-    if (form.riskModuleDirty) {
+    if (riskModule.dirty) {
+        //Already dirty, don't add listener
         return;
     }
     window.onbeforeunload = function() {
-        return true;
+        if (riskModule.dirty) {
+            return true;
+        }
+        return null;
     };
-    riskModule.addListener(form, 'submit', function(){
-        form.riskModuleDirty = false;
-        window.onbeforeunload = null;
-    });
-    form.riskModuleDirty = true;
+    riskModule.dirty = true;
 }
 
 riskModule.getParent = function(element, parentNodeName) {
