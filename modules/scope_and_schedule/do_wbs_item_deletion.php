@@ -19,5 +19,5 @@ $obj->load($id);
 $project_id=$obj->project_id;
 deleteChildren($obj);
 
-$AppUI->redirect('m=projects&a=view&project_id='.$project_id);
+$AppUI->redirect();//'m=projects&a=view&project_id='.$project_id
 ?>

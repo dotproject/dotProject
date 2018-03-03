@@ -2,8 +2,13 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+GLOBAL $AppUI;
+$AppUI->savePlace();
 require_once DP_BASE_DIR . "/modules/scope_and_schedule/wbs_item.class.php";
+require_once($AppUI->getModuleClass('projects'));
+$projectObj = new CProject();
 $project_id = dPgetParam($_GET, "project_id", 0);
+$projectObj->load($project_id);
 $_SESSION["wbsItemsArray"]= array();
 function printWBSItem($wbsItem){
 		global $project_id;
@@ -99,10 +104,12 @@ function saveScrollPosition(){
 .wbs LI:before { content: counters(item, ".") " "; counter-increment: item }
 </style>
 
-<ul style="list-style-type: none;">
+<span style="margin-left: 20px">
+	<br />
+	<b>Work Breakdown Structure - WBS</b> - 
+	<a href="index.php?m=projects&a=view&project_id=<?php echo $projectObj->project_id ?>"><?php echo $projectObj->project_name ?></a>
 	
-	<li><b>Work Breakdown Structure - WBS</b></li>
-</ul>
+</span>
 <span class="wbs">
 	<ol>
 	<?php

@@ -23,5 +23,5 @@ if (!$obj->bind($_POST)) {
      //   $AppUI->setMsg($AppUI->_("LBL_WBS_ITEM_SAVED"), UI_MSG_OK);	
 	}
 }
-$AppUI->redirect('m=projects&a=view&project_id='.$project_id);
+$AppUI->redirect(); //'m=projects&a=view&project_id='.$project_id
 ?>

@@ -23,5 +23,5 @@ if( substr( $wbsPosition->number, 0, strlen ($obj->number) ) !== $obj->number ){
 	$AppUI->setMsg($AppUI->_("A parent can not move to within its sublevel."), UI_MSG_ERROR);
 }
 	
-$AppUI->redirect('m=projects&a=view&project_id='.$project_id);
+$AppUI->redirect();//'m=projects&a=view&project_id='.$project_id
 ?>
