@@ -30,7 +30,7 @@ if (getPermission('system', 'edit')) {
 }
 $titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function submitIt() {
 	var form = document.changeuser;
 	// Collate the checked states of the task log stuff

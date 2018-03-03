@@ -65,7 +65,7 @@ if ($canDelete) {
 }
 $titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function submitIt() {
 	var form = document.changeforum;
 	if (form.forum_name.value.search(/^\s*$/) >= 0) {

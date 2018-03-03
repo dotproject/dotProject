@@ -67,7 +67,7 @@ if ($message_parent > -1) {
 	$crumbs["?m=forums&amp;a=viewer&amp;forum_id=$forum_id&amp;message_id=$message_parent"] = 'this topic';
 }
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

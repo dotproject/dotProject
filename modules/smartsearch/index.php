@@ -25,7 +25,7 @@ else {
 }
 
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 
 	function focusOnSearchBox() {
 		document.forms.frmSearch.keyword1.focus();

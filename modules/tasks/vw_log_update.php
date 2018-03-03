@@ -98,7 +98,7 @@ for ($req; !($req->EOF); $req->MoveNext()) {
 ?>
 
 <!-- TIMER RELATED SCRIPTS -->
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 	// please keep these lines on when you copy the source
 	// made by: Nicolas - http://www.javascript-page.com
 	// adapted by: Juan Carlos Gonzalez jcgonz@users.sourceforge.net

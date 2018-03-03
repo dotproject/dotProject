@@ -60,7 +60,7 @@ if ($company_id != 0) {
 $titleBlock->show();
 ?>
 
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 function submitIt() {
 	var form = document.changeclient;
 	if (form.company_name.value.length < 3) {
@@ -102,28 +102,28 @@ echo $AppUI->_('required'); ?>)
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_email" value="<?php 
+			<input type="email" class="text" name="company_email" value="<?php 
 echo dPformSafe(@$obj->company_email); ?>" size="30" maxlength="255" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_phone1" value="<?php 
+			<input type="tel" class="text" name="company_phone1" value="<?php 
 echo dPformSafe(@$obj->company_phone1); ?>" maxlength="30" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Phone'); ?>2:</td>
 		<td>
-			<input type="text" class="text" name="company_phone2" value="<?php 
+			<input type="tel" class="text" name="company_phone2" value="<?php 
 echo dPformSafe(@$obj->company_phone2); ?>" maxlength="50" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_fax" value="<?php 
+			<input type="tel" class="text" name="company_fax" value="<?php 
 echo dPformSafe(@$obj->company_fax); ?>" maxlength="30" />
 		</td>
 	</tr>

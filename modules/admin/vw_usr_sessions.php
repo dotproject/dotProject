@@ -83,7 +83,7 @@ $q->clear();
 $tab = (int)dPgetParam($_REQUEST, 'tab', 0);
 
 ?>
-<script language="JavaScript" type="text/javascript">
+<script language="JavaScript" >
 //<![CDATA[
   function logoutSession(sessionID, logID, userID, userName) {
   var frm;
