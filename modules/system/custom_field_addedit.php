@@ -91,7 +91,7 @@ foreach ($html_types as $k => $ht) {
 	$visible_state['div_'.$k] = 'display: ' . (($k == $field_htmltype) ? 'block' : 'none');
 }
 ?>
-<script type="text/javascript">
+<script >
 function hideAll() {
 	var selobj = document.getElementById('field_htmltype');
 	for (i = 0; i < selobj.options.length; i++) {

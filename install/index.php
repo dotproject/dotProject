@@ -34,7 +34,7 @@ $mode = dPcheckUpgrade();
 <head>
 	<title>dotProject Installer</title>
 	<meta name="Description" content="dotProject Installer">
- 	<link rel="stylesheet" type="text/css" href="../style/default/main.css">
+ 	<link rel="stylesheet" href="../style/default/main.css">
 </head>
 <body>
 <h1><img src="dp.png" align="middle" alt="dotProject Logo"/>&nbsp;dotProject Installer</h1>

@@ -1,7 +1,6 @@
 <?php /* STYLE/DEFAULT $Id$ */
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title><?php echo @dPgetConfig('page_title');?></title>
@@ -9,8 +8,8 @@
        	<title><?php echo $dPconfig['company_name'];?> :: dotProject Login</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-	<style type="text/css" media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
+	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
 </head>
 

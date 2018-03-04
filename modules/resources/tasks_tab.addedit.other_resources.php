@@ -59,7 +59,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 
 $AppUI->getModuleJS('resources', 'tabs');
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 <?php
 echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
@@ -124,6 +124,6 @@ for ($i = 5; $i <= 100; $i+=5) {
 </tr>
 </table>
 </form>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
   subForm.push(new FormDefinition(<?php echo $tab; ?>, document.otherFrm, checkOther, saveOther));
 </script>

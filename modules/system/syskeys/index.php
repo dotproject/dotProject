@@ -26,7 +26,7 @@ $titleBlock = new CTitleBlock('System Lookup Values', 'myevo-weather.png', $m, "
 $titleBlock->addCrumb("?m=system", "System Admin");
 $titleBlock->show();
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

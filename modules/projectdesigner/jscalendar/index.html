@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <!-- $Id: index.html,v 1.1 2007/03/15 18:16:43 pedroix Exp $ -->
 
 <head>
 <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
 <title>The Coolest DHTML Calendar - Online Demo</title>
-<link rel="stylesheet" type="text/css" media="all" href="skins/aqua/theme.css" title="Aqua" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-blue.css" title="winter" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-blue2.css" title="blue" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-brown.css" title="summer" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-green.css" title="green" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-win2k-1.css" title="win2k-1" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-win2k-2.css" title="win2k-2" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-win2k-cold-1.css" title="win2k-cold-1" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-win2k-cold-2.css" title="win2k-cold-2" />
-<link rel="alternate stylesheet" type="text/css" media="all" href="calendar-system.css" title="system" />
+<link rel="stylesheet"  media="all" href="skins/aqua/theme.css" title="Aqua" />
+<link rel="alternate stylesheet"  media="all" href="calendar-blue.css" title="winter" />
+<link rel="alternate stylesheet"  media="all" href="calendar-blue2.css" title="blue" />
+<link rel="alternate stylesheet"  media="all" href="calendar-brown.css" title="summer" />
+<link rel="alternate stylesheet"  media="all" href="calendar-green.css" title="green" />
+<link rel="alternate stylesheet"  media="all" href="calendar-win2k-1.css" title="win2k-1" />
+<link rel="alternate stylesheet"  media="all" href="calendar-win2k-2.css" title="win2k-2" />
+<link rel="alternate stylesheet"  media="all" href="calendar-win2k-cold-1.css" title="win2k-cold-1" />
+<link rel="alternate stylesheet"  media="all" href="calendar-win2k-cold-2.css" title="win2k-cold-2" />
+<link rel="alternate stylesheet"  media="all" href="calendar-system.css" title="system" />
 
 <!-- import the calendar script -->
-<script type="text/javascript" src="calendar.js"></script>
+<script  src="calendar.js"></script>
 
 <!-- import the language module -->
-<script type="text/javascript" src="lang/calendar-en.js"></script>
+<script  src="lang/calendar-en.js"></script>
 
 <!-- other languages might be available in the lang directory; please check
 your distribution archive. -->
 
 <!-- helper script that uses the calendar -->
-<script type="text/javascript">
+<script >
 
 var oldLink = null;
 // code to change the active stylesheet
@@ -148,7 +147,7 @@ function showFlatCalendar() {
 }
 </script>
 
-<style type="text/css">
+<style >
 .ex { font-weight: bold; background: #fed; color: #080 }
 .help { color: #080; font-style: italic; }
 body { background: #fea; font: 10pt tahoma,verdana,sans-serif; }
@@ -190,7 +189,7 @@ Theme:<br />
 <a href="#" onclick="return setActiveStyleSheet(this, 'win2k-cold-2');">win2k-cold-2</a>
 <br />
 <a href="#" onclick="return setActiveStyleSheet(this, 'system');">system</a>
-<script type="text/javascript">
+<script >
 setActiveStyleSheet(document.getElementById("defaultTheme"), "Aqua");
 </script>
 </div>

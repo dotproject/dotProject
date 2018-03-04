@@ -117,7 +117,7 @@ $projects = arrayMerge(array('0'=>$AppUI->_('None', UI_OUTPUT_RAW)), $projects);
 
 $folders = getFolderSelectList();
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 function submitIt() {
 	var f = document.uploadFrm;
 	f.submit();

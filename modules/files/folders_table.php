@@ -774,7 +774,7 @@ if ($folder > 0) {
 ?>
 
 
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";
