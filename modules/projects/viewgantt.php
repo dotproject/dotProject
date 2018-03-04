@@ -79,7 +79,7 @@ if (!@$min_view) {
 
 ?>
 
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 var calendarField = '';
 
 function popCalendar(field) {

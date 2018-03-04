@@ -72,7 +72,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 <?php
 // security improvement:
 // some javascript functions may not appear on client side

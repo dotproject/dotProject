@@ -364,7 +364,7 @@ if ($open_task_all) {
 
 ?>
 
-<script type="text/javaScript" language="javascript">
+<script  language="javascript">
 function toggle_users(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "inline" : "none";

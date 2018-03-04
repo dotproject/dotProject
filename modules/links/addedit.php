@@ -80,7 +80,7 @@ $projects = arrayMerge(array('0'=>$AppUI->_('All', UI_OUTPUT_JS)), $projects);
 //$sql = "SELECT project_id, project_name  FROM projects ORDER BY project_name";
 //$projects = arrayMerge(array('0'=>'- ALL PROJECTS -'), db_loadHashList($sql));
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 function submitIt() {
 	var f = document.uploadFrm;
 	f.submit();

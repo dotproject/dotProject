@@ -74,7 +74,7 @@ $titleBlock->show();
 
 <table border="1" cellpadding="4" cellspacing="0" width="98%" class="std" summary="project history">
 	
-<script type="text/javascript">
+<script >
 	function delIt() {
 		document.AddEdit.action.value = "del";
 		document.AddEdit.submit();

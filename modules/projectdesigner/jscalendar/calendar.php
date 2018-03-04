@@ -48,16 +48,16 @@ class DHTML_Calendar {
     }
 
     function get_load_files_code() {
-        $code  = ( '<link rel="stylesheet" type="text/css" media="all" href="' .
+        $code  = ( '<link rel="stylesheet" media="all" href="' .
                    $this->calendar_lib_path . $this->calendar_theme_file .
                    '" />' . NEWLINE );
-        $code .= ( '<script type="text/javascript" src="' .
+        $code .= ( '<script  src="' .
                    $this->calendar_lib_path . $this->calendar_file .
                    '"></script>' . NEWLINE );
-        $code .= ( '<script type="text/javascript" src="' .
+        $code .= ( '<script  src="' .
                    $this->calendar_lib_path . $this->calendar_lang_file .
                    '"></script>' . NEWLINE );
-        $code .= ( '<script type="text/javascript" src="' .
+        $code .= ( '<script  src="' .
                    $this->calendar_lib_path . $this->calendar_setup_file .
                    '"></script>' );
         return $code;
@@ -65,7 +65,7 @@ class DHTML_Calendar {
 
     function _make_calendar($other_options = array()) {
         $js_options = $this->_make_js_hash(array_merge($this->calendar_options, $other_options));
-        $code  = ( '<script type="text/javascript">Calendar.setup({' .
+        $code  = ( '<script >Calendar.setup({' .
                    $js_options .
                    '});</script>' );
         return $code;

@@ -203,7 +203,7 @@ if ($canEdit) {
 $titleBlock->addCrumb('?m=projects&amp;a=reports&amp;project_id=' . $project_id, 'reports');
 $titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 <?php
 //security improvement:
 //some javascript functions may not appear on client side in case of user not having write permissions

@@ -88,7 +88,7 @@ $titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_(
                      '</tr></table></form></td>');
 $titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function clickDay(idate, fdate) {
 		window.location = '?m=calendar&a=day_view&date='+idate+'&tab=0';
 }
