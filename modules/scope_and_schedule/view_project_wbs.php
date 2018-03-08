@@ -22,14 +22,14 @@ function printWBSItem($wbsItem){
 		
 		?>
 		<br />
-			<li>  &nbsp;			
+			<li>  <?php echo $wbsItem->number ?> &nbsp;			
 			<form action="?m=scope_and_schedule" name="wbs_add_child_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
 				<input type="hidden" name="dosql" value="do_wbs_item_aed">
 				<input type="hidden" name="project_id" value="<?php echo $project_id ?>" /> 
 				<input type="hidden" name="sort_order" value="1" />
 				<input type="hidden" name="number" value="1" />
 				<input type="hidden" name="is_leaf" value="0" />  	
-				<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id ?>" />
+				<input type="hidden" name="id_wbs_item_parent" value="
 				<input type="hidden" name="item_name" placeholder="Input item description..." /> 
 				<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.wbs_add_child_<?php echo $wbsItem->id ?>.submit();" />
 			</form>
@@ -39,9 +39,17 @@ function printWBSItem($wbsItem){
 			<?php 
 			if ($wbsItem->is_leaf==1){
 			?>
-				&nbsp;&nbsp; <img src="modules/scope_and_schedule/images/work_package_icon.png" style="cursor:not-allowed;height:15px;width:15px"  />
+				<ul id="menu" style="width:0px; border: 0px; display:inline-block; ">
+				  <li style="display: inline-block" > 
+				  <img src="modules/scope_and_schedule/images/work_package_icon.png" style="height:15px;width:15px"  />
+					<ul>
+					  <li><div>WBS dictionary</div></li>
+					  <li><div>New Actvity</div></li>
+					</ul>
+				  </li>
+				</ul>
 
-				
+	
 			<?php } ?>
 			<br />
 			<form action="?m=scope_and_schedule" name="wbs_delete_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
@@ -85,11 +93,14 @@ function printWBSItem($wbsItem){
 ?>
 <script src="modules/scope_and_schedule/js/jquery-3.2.1.min.js"></script>
 <script src="modules/scope_and_schedule/js/jquery-ui.js"></script>
-<script src="modules/scope_and_schedule/js/jquery-ui-contextmenu/jquery.ui-contextmenu.min.js"></script>
 <script src="modules/scope_and_schedule/js/wbs-functions.js"></script>
-
-
- <link rel="stylesheet" href="modules/scope_and_schedule/css/jquery-ui.css">
+<link rel="stylesheet" href="modules/scope_and_schedule/css/jquery-ui.css">
+<style>
+.wbs {}
+.wbs OL { list-style-type: none; }
+.wbs OL LI { display: inline;}
+</style>
+ 
 <script>
 //function should be called after any submit in wbs page
 function saveScrollPosition(){
@@ -97,12 +108,6 @@ function saveScrollPosition(){
 	    window.sessionStorage.setItem('wbsScrollY',y);
 }
 </script>
-<style>
-.wbs {}
-.wbs OL { counter-reset: item }
-.wbs LI { display: inline;}
-.wbs LI:before { content: counters(item, ".") " "; counter-increment: item }
-</style>
 
 <span style="margin-left: 20px">
 	<br />
@@ -164,7 +169,11 @@ function saveScrollPosition(){
 </form>
 </div>
 
-
+<script>
+  $( function() {
+    $( "[id=menu]" ).menu();
+  } );
+  </script>
 <script>
 	//keep the scroll position in the same position after user perform submit action in wbs
 	var y=window.sessionStorage.getItem('wbsScrollY');
