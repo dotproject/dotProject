@@ -43,12 +43,16 @@ function printWBSItem($wbsItem){
 				  <li style="display: inline-block" > 
 				  <img src="modules/scope_and_schedule/images/work_package_icon.png" style="height:15px;width:15px"  />
 					<ul>
-					  <li><div>WBS dictionary</div></li>
+					  <li onclick='openDialogWBSDictionary(<?php echo $wbsItem->id; ?>, "<?php echo $wbsItem->number . " ". addslashes($wbsItem->item_name); ?>", "<?php echo addslashes($wbsItem->wbs_dictionary); ?>")' style="cursor:pointer">
+						<div>WBS dictionary</div>
+					  </li>
 					  <li><div>New Actvity</div></li>
 					</ul>
 				  </li>
 				</ul>
 
+				
+				
 	
 			<?php } ?>
 			<br />
@@ -168,6 +172,19 @@ function saveScrollPosition(){
 	  <input type="button" value="Cancel" onclick="closeMoveWBSItem()" />
 </form>
 </div>
+
+<div id="dialog_wbs_dictionary" title="WBS Dictionary" style="background-color:FFF">
+	<form name="wbs_dictionary" action="?m=scope_and_schedule" method="post">
+		<input type="hidden" name="dosql" value="do_wbs_dictionary" />
+		<input type="hidden" name="id" value="<?php echo $wbsItem->id ?>" /> 
+		<b>Dictionary for item:</b> <i><span id="dictionary_wbs_item_name"></span></i><br /><br />
+		<textarea name="dictionary" maxlength="50" cols="40" rows="4"></textarea>
+		  <br /><br />
+		  <input type="submit" value="Confirm" />
+		  <input type="button" value="Cancel" onclick="closeDialogWBSDictionary()" />
+	</form>
+</div>
+
 
 <script>
   $( function() {

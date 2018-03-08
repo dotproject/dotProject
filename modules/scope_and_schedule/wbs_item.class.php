@@ -13,7 +13,8 @@ class WBSItem extends CDpObject  {
 	 var $number  = null;
 	 var $is_leaf = null;
 	 var $id_wbs_item_parent = null;
-		  
+	 var $wbs_dictionary = null;
+	  
 	function __construct() {
 		parent::__construct("project_wbs_items", "id");
 	}
