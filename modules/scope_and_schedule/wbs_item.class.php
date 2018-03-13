@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 require_once $AppUI->getSystemClass('dp');
-
+require_once (DP_BASE_DIR . '/modules/tasks/tasks.class.php');
 class WBSItem extends CDpObject  {
 	
 	 var $id = null;
@@ -52,4 +52,23 @@ class WBSItem extends CDpObject  {
         }
         return $list;
     }
+	
+	 public function loadActivities(){
+        $q = new DBQuery();
+        $q->addQuery("task_id");
+        $q->addTable("project_wbs_tasks");
+        $q->addWhere("wbs_item_id=".$this->id." order by activity_order asc");
+        $results = db_loadHashList($q->prepare(true), "id");
+        $list= array();
+        $i=0;
+        foreach ($results as $data) {
+		   $obj = new CTask();
+		   $obj->load($data[0]);
+           $list[$i]=$obj;
+           $i++;
+        }
+        return $list;
+    }
+	
+	
 }

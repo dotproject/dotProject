@@ -52,23 +52,23 @@ class CSetup_ScopeSchedule {
         $q->clear();
 
 		
-		/*
+		
         //table to store tasks x work packages relationhip
         $sql = "(
-		  task_id INT default NULL,
-		  eap_item_id INT default NULL,
-                  activity_order INT NULL DEFAULT 0, 
-		  PRIMARY KEY  (task_id),
-                  CONSTRAINT fk_task_eap_item FOREIGN KEY (task_id) REFERENCES " . $q->_table_prefix . "tasks (task_id) on delete cascade on update restrict
+		  task_id INT,
+		  wbs_item_id INT,
+          activity_order INT NULL DEFAULT 0, 
+		  PRIMARY KEY  (task_id, wbs_item_id),
+          CONSTRAINT fk_task_eap_item FOREIGN KEY (task_id) REFERENCES " . $q->_table_prefix . "tasks (task_id) on delete cascade on update cascade
 		)  ";
         $q = new DBQuery();
-        $q->createTable("tasks_workpackages");
+        $q->createTable("project_wbs_tasks");
         $q->createDefinition($sql);
         $q->exec();
         $q->clear();
+		//die("created table");
 		
-		
-		
+		/*
         //table for reports estimations (tasks minutes)
         $q = new DBQuery();
         $sql = "(

@@ -19,7 +19,10 @@ function printWBSItem($wbsItem){
 		$wbsItem->store();
 		//update global list: for dropdown and other on screen functions
 		array_push($_SESSION["wbsItemsArray"], $wbsItem);
-		
+		$tasks=array();
+		if($wbsItem->is_leaf){
+			$tasks=$wbsItem->loadActivities();
+		}
 		?>
 		<br />
 			<li>  <?php echo $wbsItem->number ?> &nbsp;			
@@ -29,9 +32,11 @@ function printWBSItem($wbsItem){
 				<input type="hidden" name="sort_order" value="1" />
 				<input type="hidden" name="number" value="1" />
 				<input type="hidden" name="is_leaf" value="0" />  	
-				<input type="hidden" name="id_wbs_item_parent" value="
+				<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id ?>" />
 				<input type="hidden" name="item_name" placeholder="Input item description..." /> 
-				<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.wbs_add_child_<?php echo $wbsItem->id ?>.submit();" />
+				<?php if (count($tasks)==0){ ?>
+					<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.wbs_add_child_<?php echo $wbsItem->id ?>.submit();" />
+				<?php } ?>
 			</form>
 			<?php if ($wbsItem->id_wbs_item_parent!=0){?> 
 				<img src="modules/scope_and_schedule/images/reorder_icon.png" style="cursor:pointer;height:18px;width:18px"  id="wbs_move_<?php echo $wbsItem->id ?>"   onclick="saveScrollPosition();openMoveWBSItem(<?php echo $wbsItem->id ?>, '<?php echo $wbsItem->number . ' - ' . $wbsItem->item_name ?>', <?php echo $project_id; ?>);" />
@@ -46,14 +51,19 @@ function printWBSItem($wbsItem){
 					  <li onclick='openDialogWBSDictionary(<?php echo $wbsItem->id; ?>, "<?php echo $wbsItem->number . " ". addslashes($wbsItem->item_name); ?>", "<?php echo addslashes($wbsItem->wbs_dictionary); ?>")' style="cursor:pointer">
 						<div>WBS dictionary</div>
 					  </li>
-					  <li><div>New Actvity</div></li>
+					  <li onclick="saveScrollPosition();document.wbs_new_activity_<?php echo $wbsItem->id ?>.submit();">
+						<div>New Actvity</div>
+							<form action="?m=scope_and_schedule" name="wbs_new_activity_<?php echo $wbsItem->id ?>" method="post" style="display:none">
+								<input type="hidden" name="dosql" value="do_new_activity">
+								<input type="hidden" name="project_id" value="<?php echo $project_id ?>" /> 
+								<input type="hidden" name="wbs_item_id" value="<?php echo $wbsItem->id ?>" /> 
+							</form>
+						</li>
+					  
+					  
 					</ul>
 				  </li>
 				</ul>
-
-				
-				
-	
 			<?php } ?>
 			<br />
 			<form action="?m=scope_and_schedule" name="wbs_delete_<?php echo $wbsItem->id ?>" method="post" style="display:inline">
@@ -77,6 +87,31 @@ function printWBSItem($wbsItem){
 					
 				</form>
 				
+				
+				<ol>
+				<?php if (count($tasks)>0){ ?>
+				<b><i> Activities </i></b>
+				<?php
+					$taskOrder=1;
+					foreach($tasks as $task){
+						?>
+						<li>
+							<div>
+								<form action="?m=scope_and_schedule" name="task_update_<?php echo $task->task_id  ?>" id="task_update_<?php echo $task->task_id  ?>" method="post" style="display:inline">
+								A.<?php echo $taskOrder++; ?>
+									<input type="hidden" name="dosql" value="do_update_task" />
+									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
+									
+								</form>
+							</div>		
+						</li>					
+						<?php
+						
+					}
+				}
+				?>
+				</ol>
 				<ol>
 					<?php
 						$order=1;
