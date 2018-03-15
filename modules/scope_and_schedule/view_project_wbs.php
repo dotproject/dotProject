@@ -52,7 +52,7 @@ function printWBSItem($wbsItem){
 						<div>WBS dictionary</div>
 					  </li>
 					  <li onclick="saveScrollPosition();document.wbs_new_activity_<?php echo $wbsItem->id ?>.submit();">
-						<div>New Actvity</div>
+						<div>New activity</div>
 							<form action="?m=scope_and_schedule" name="wbs_new_activity_<?php echo $wbsItem->id ?>" method="post" style="display:none">
 								<input type="hidden" name="dosql" value="do_new_activity">
 								<input type="hidden" name="project_id" value="<?php echo $project_id ?>" /> 
@@ -96,13 +96,19 @@ function printWBSItem($wbsItem){
 					foreach($tasks as $task){
 						?>
 						<li>
+							<br />
 							<div>
 								<form action="?m=scope_and_schedule" name="task_update_<?php echo $task->task_id  ?>" id="task_update_<?php echo $task->task_id  ?>" method="post" style="display:inline">
-								A.<?php echo $taskOrder++; ?>
+								A.<?php echo $wbsItem->number ?>.<?php echo $taskOrder++; ?>
 									<input type="hidden" name="dosql" value="do_update_task" />
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
 									
+								</form>
+								<form action="?m=scope_and_schedule" name="activity_delete_<?php echo $task->task_id ?>" method="post" style="display:inline">
+									<input type="hidden" name="dosql" value="do_activity_deletion">
+									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" /> 
+									<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_<?php echo $task->task_id ?>.submit();" />
 								</form>
 							</div>		
 						</li>					

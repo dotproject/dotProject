@@ -12,13 +12,14 @@ $obj = new CTask();
 
 
 if( $task_id == -1){
+	$obj->task_id=null;
 	$obj->task_project = $project_id;
 	$obj->task_name = $description;
 	$obj->task_start_date = date("Y-m-d");
 	$obj->task_end_date = date("Y-m-d");
 	$obj->task_creator=$AppUI->user_id;
-	$task_id=db_insertObject('tasks', $obj, 'task_id');
-	
+	db_insertObject('tasks', $obj, 'task_id');
+	$task_id=$obj->task_id;
 	$obj->load($task_id);
 	$obj->task_parent=$task_id;
 	$obj->store();

@@ -57,8 +57,8 @@ class WBSItem extends CDpObject  {
         $q = new DBQuery();
         $q->addQuery("task_id");
         $q->addTable("project_wbs_tasks");
-        $q->addWhere("wbs_item_id=".$this->id." order by activity_order asc");
-        $results = db_loadHashList($q->prepare(true), "id");
+        $q->addWhere("wbs_item_id=". $this->id ." order by activity_order asc");
+        $results = db_loadHashList($q->prepare(true), "task_id");
         $list= array();
         $i=0;
         foreach ($results as $data) {

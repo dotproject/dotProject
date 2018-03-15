@@ -21,6 +21,6 @@ if (!$obj->bind($_POST)) {
 		echo "Saved";
 	}
 }
-die();
+
 $AppUI->redirect();
 ?>
