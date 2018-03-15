@@ -11,6 +11,17 @@ function deleteChildren($wbsItem){
 		deleteChildren($child);
 	}
 	$wbsItem->delete($wbsItem->id);
+	
+	
+	//delete related activities
+	$tasks=$wbsItem->loadActivities();
+	foreach($tasks as $task){
+		$task->delete();
+	}
+	$q = new DBQuery();
+	$q->setDelete("project_wbs_tasks");
+	$q->addWhere("wbs_item_id=" . $wbsItem->id);
+	$q->exec();
 }
 
 $id=intval(dPgetParam($_POST, "id"));

@@ -12,7 +12,7 @@ $obj->load($id);
 $obj->delete();
 
 $q = new DBQuery();
-$q->setDelete("pproject_wbs_tasks");
+$q->setDelete("project_wbs_tasks");
 $q->addWhere("task_id=" . $id);
 $q->exec();
 
