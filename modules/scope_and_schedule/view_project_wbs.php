@@ -83,7 +83,7 @@ function printWBSItem($wbsItem){
 					<input type="hidden" name="number" value="1" />
 					<input type="hidden" name="is_leaf" value="0" />  	
 					<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id_wbs_item_parent ?>" />
-					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" onblur="saveScrollPosition();ajaxFormSubmit('wbs_update_<?php echo $wbsItem->id ?>');" style="width:40%" maxlength="100" /> 	
+					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" onblur="saveScrollPosition();ajaxFormSubmit('wbs_update_<?php echo $wbsItem->id ?>');" style="width:40%" maxlength="100" title="<?php echo addslashes($wbsItem->wbs_dictionary); ?>" /> 	
 					
 				</form>
 				
@@ -219,7 +219,7 @@ function saveScrollPosition(){
 		<input type="hidden" name="dosql" value="do_wbs_dictionary" />
 		<input type="hidden" name="id" value="<?php echo $wbsItem->id ?>" /> 
 		<b>Dictionary for item:</b> <i><span id="dictionary_wbs_item_name"></span></i><br /><br />
-		<textarea name="dictionary" maxlength="50" cols="40" rows="4"></textarea>
+		<textarea name="dictionary" maxlength="250" cols="40" rows="4"></textarea>
 		  <br /><br />
 		  <input type="submit" value="Confirm" />
 		  <input type="button" value="Cancel" onclick="closeDialogWBSDictionary()" />
@@ -230,6 +230,7 @@ function saveScrollPosition(){
 <script>
   $( function() {
     $( "[id=menu]" ).menu();
+    $( document ).tooltip();
   } );
   </script>
 <script>
