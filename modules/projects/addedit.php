@@ -133,14 +133,6 @@ if ($project_id == 0 && $contact_id > 0) {
 <script  src="<?php echo DP_BASE_URL;?>/lib/calendar/lang/calendar-<?php echo $AppUI->user_locale; ?>.js"></script>
 
 <script language="javascript" >
-function setColor(color) {
-var f = document.editFrm;
-if (color) {
-	f.project_color_identifier.value = color;
-}
-//test.style.background = f.project_color_identifier.value;
-document.getElementById('test').style.background = '#' + f.project_color_identifier.value; 		//fix for mozilla: does this work with ie? opera ok.
-}
 
 function setShort() {
 var f = document.editFrm;
@@ -402,14 +394,9 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier');?></td>
 			<td nowrap="nowrap">
-				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>" size="10" maxlength="6" onblur="javascript:setColor();" class="text" /> *
+				<input type="color" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : '#FFFFFF';?>" size="10" maxlength="7"/> *
 			</td>
-			<td nowrap="nowrap" align="right">
-				<a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
-			</td>
-			<td nowrap="nowrap">
-				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" alt="" /></a></span>
-			</td>
+						
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type');?></td>

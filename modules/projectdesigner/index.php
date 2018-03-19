@@ -611,7 +611,7 @@ var oldProj = "<?php echo $obj->project_name.':';?>";
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
             <table border="0" cellpadding="4" cellspacing="0" width="100%">
             <tr>
-            	<td style="background-color:#<?php echo $obj->project_color_identifier;?>" colspan="1">
+            	<td style="background-color:<?php echo $obj->project_color_identifier;?>" colspan="1">
            	<?php
                   echo '<a href="#fp" name="fp" style="display:block" onClick="expand_colapse(\'project\', \'tblProjects\')">'
            	?>
@@ -623,7 +623,7 @@ var oldProj = "<?php echo $obj->project_name.':';?>";
                   echo '</a>'
            	?>
             	</td>
-            	<td width="12" style="background-color:#<?php echo $obj->project_color_identifier;?>" align="right" colspan="1">
+            	<td width="12" style="background-color:<?php echo $obj->project_color_identifier;?>" align="right" colspan="1">
            	<?php
                   echo '<a href="#fp" name="fp" style="display:block" onClick="expand_colapse(\'project\', \'tblProjects\')">'
            	?>

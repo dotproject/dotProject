@@ -256,7 +256,7 @@ CREATE TABLE `%dbprefix%projects` (
   `project_end_date` datetime default NULL,
   `project_status` int(11) default '0',
   `project_percent_complete` tinyint(4) default '0',
-  `project_color_identifier` varchar(6) default 'eeeeee',
+  `project_color_identifier` varchar(7) default '#eeeeee',
   `project_description` text,
   `project_target_budget` decimal(10,2) default '0.00',
   `project_actual_budget` decimal(10,2) default '0.00',

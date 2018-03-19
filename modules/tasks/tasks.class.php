@@ -2812,7 +2812,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	
 	if ($today_view) { // Show the project name
 		$s .= ('<td width="50%"><a href="?m=projects&amp;a=view&amp;project_id=' 
-			   . $a['task_project'] . '">' . '<span style="padding:2px;background-color:#' 
+			   . $a['task_project'] . '">' . '<span style="padding:2px;background-color:' 
 			   . $a['project_color_identifier'] . ';color:' 
 			   . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>' 
 			   . '</a></td>');

@@ -264,10 +264,10 @@ foreach ($files as $file_row) {
 	if ($fp != $latest_file["file_project"]) {
 		if (!$latest_file["file_project"]) {
 			$latest_file["project_name"] = $AppUI->_('Not associated to projects');
-			$latest_file["project_color_identifier"] = 'f4efe3';
+			$latest_file["project_color_identifier"] = '#f4efe3';
 		}
 		if ($showProject) {
-			$style = ("background-color:#$latest_file[project_color_identifier];color:" 
+			$style = ("background-color:$latest_file[project_color_identifier];color:" 
 			          . bestColor($latest_file["project_color_identifier"]));
 ?>
 <tr>

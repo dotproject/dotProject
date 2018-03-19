@@ -104,7 +104,7 @@ foreach ($projects as $row) {
 	$end_date = (intval(@$row['project_end_date']) ? new CDate($row['project_end_date']) : null);
 ?>	
 <tr>
-	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#<?php
+	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:<?php
 	echo $row['project_color_identifier']; ?>">
 		<span style="font-color: <?php echo bestColor($row['project_color_identifier']); ?>">
 		<?php echo sprintf("%.1f%%", $row['project_percent_complete']); ?>

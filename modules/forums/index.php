@@ -119,7 +119,7 @@ foreach ($forums as $row) {
 		$create_date = intval($row['forum_create_date']) ? new CDate($row['forum_create_date']) : null;
 ?>
 <tr>
-	<td colspan="6" style="background-color:#<?php echo $row["project_color_identifier"];?>">
+	<td colspan="6" style="background-color:<?php echo $row["project_color_identifier"];?>">
 		<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $row["forum_project"];?>">
 			<font color=<?php echo bestColor($row["project_color_identifier"]);?>>
 			<strong><?php echo $AppUI->___($row["project_name"]);?></strong>

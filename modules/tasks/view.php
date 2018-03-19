@@ -186,7 +186,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
-			<td style="background-color:#<?php echo $obj->project_color_identifier;?>">
+			<td style="background-color:<?php echo $obj->project_color_identifier;?>">
 				<font color="<?php echo bestColor($obj->project_color_identifier); ?>">
 					<?php echo $AppUI->___(@$obj->project_name);?>
 				</font>
