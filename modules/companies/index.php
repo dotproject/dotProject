@@ -60,7 +60,7 @@ $titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string=' 
                       . dPformSafe($search_string) . '" method="post">' . "\n" 
                       . '<table><tr><td><strong>' . $AppUI->_('Search') 
-                      . '</strong><input autofocus class="text" type="text" name="search_string" value="' 
+                      . '</strong><input autofocus class="text" type="search" name="search_string" value="' 
                       .  dPformSafe($search_string) . '" /><br />' 
                       . '<a href="index.php?m=companies&amp;search_string=-1">' 
                       . $AppUI->_('Reset search') . '</a></td><td valign="top"><strong>' 
