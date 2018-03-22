@@ -265,7 +265,7 @@ echo @$project->project_name; ?></strong>
 <tr valign="top" width="50%">
 	<td>
 		<?php echo $AppUI->_('Task Name'); ?> *
-		<br /><input type="text" class="text" name="task_name" value="<?php 
+		<br /><input autofocus type="text" class="text" name="task_name" value="<?php 
 echo $AppUI->___($obj->task_name); ?>" size="40" maxlength="255" />
 	</td>
 	<td>

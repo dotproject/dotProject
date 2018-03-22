@@ -127,7 +127,7 @@ for ($c=65; $c < 91; $c++) {
 }
 $a2z .= ("\n</tr>\n<tr>" . '<td colspan="28">' 
          . '<form action="./index.php" method="get">' . $AppUI->_('Search for') 
-         . '<input type="text" name="search_string" value="' . $default_search_string . '" />' 
+         . '<input autofocus type="text" name="search_string" value="' . $default_search_string . '" />' 
          . '<input type="hidden" name="m" value="contacts" /><input type="submit" value=">" />'
          . '<a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search') 
 		 . '</a></form></td></tr>' 

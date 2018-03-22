@@ -159,7 +159,7 @@ function companyChange() {
 		<tr>
 			<td align="right"><?php echo $AppUI->_('First Name');?>:</td>
 			<td>
-				<input type="text" class="text" size="25" name="contact_first_name" value="<?php echo @$row->contact_first_name;?>" maxlength="50" />
+				<input autofocus type="text" class="text" size="25" name="contact_first_name" value="<?php echo @$row->contact_first_name;?>" maxlength="50" />
 			</td>
 		</tr>
 		<tr>
