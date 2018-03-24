@@ -3,7 +3,14 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 GLOBAL $AppUI;
+$userDateFormat=$AppUI->user_prefs["SHDATEFORMAT"]; 
+$userDateFormat=str_replace("%d", "dd", $userDateFormat);
+$userDateFormat=str_replace("%m", "mm", $userDateFormat); 
+$userDateFormat=str_replace("%Y", "YY", $userDateFormat);
+$userDateFormat=strtolower($userDateFormat); 
+$_SESSION["dateFormat"]=$userDateFormat;
 $AppUI->savePlace();
+
 require_once DP_BASE_DIR . "/modules/scope_and_schedule/wbs_item.class.php";
 require_once($AppUI->getModuleClass('projects'));
 $projectObj = new CProject();
@@ -47,7 +54,7 @@ function printWBSItem($wbsItem){
 				<ul id="menu" style="width:0px; border: 0px; display:inline-block; ">
 				  <li style="display: inline-block" > 
 				  <img src="modules/scope_and_schedule/images/work_package_icon.png" style="height:15px;width:15px"  />
-					<ul>
+					 <ul>
 					  <li onclick='openDialogWBSDictionary(<?php echo $wbsItem->id; ?>, "<?php echo $wbsItem->number . " ". addslashes($wbsItem->item_name); ?>", "<?php echo addslashes($wbsItem->wbs_dictionary); ?>")' style="cursor:pointer">
 						<div>WBS dictionary</div>
 					  </li>
@@ -103,14 +110,25 @@ function printWBSItem($wbsItem){
 									<input type="hidden" name="dosql" value="do_update_task" />
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
-									
+									<div>
+										<input type="text" name="start_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />
+										<input type="text" name="end_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />									
+										<script>
+											var form=$("#task_update_<?php echo $task->task_id ?>"); 
+											var startDate=form.find("[name='start_date']");
+											var endDate=form.find("[name='end_date']");
+											startDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>"} );
+											endDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>"});
+										</script>
+									</div>	
 								</form>
 								<form action="?m=scope_and_schedule" name="activity_delete_<?php echo $task->task_id ?>" method="post" style="display:inline">
 									<input type="hidden" name="dosql" value="do_activity_deletion">
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" /> 
 									<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_<?php echo $task->task_id ?>.submit();" />
 								</form>
-							</div>		
+							</div>	
+													
 						</li>					
 						<?php
 						

@@ -64,6 +64,9 @@ $(document).ready(function (){
   }
   
   function ajaxFormSubmit(formId){
-	$.post($("#"+formId).attr('action'), $("#"+formId).serialize())
+	
+	$.post($("#"+formId).attr('action'), $("#"+formId).serialize(), function( data ) {
+		console.log(data);
+	});
   }
 	
