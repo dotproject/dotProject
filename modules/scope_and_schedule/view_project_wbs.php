@@ -4,6 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 GLOBAL $AppUI;
 $userDateFormat=$AppUI->user_prefs["SHDATEFORMAT"]; 
+$_SESSION["dateFormatPHP"]=$userDateFormat;
 $userDateFormat=str_replace("%d", "dd", $userDateFormat);
 $userDateFormat=str_replace("%m", "mm", $userDateFormat); 
 $userDateFormat=str_replace("%Y", "YY", $userDateFormat);
@@ -18,7 +19,7 @@ $project_id = dPgetParam($_GET, "project_id", 0);
 $projectObj->load($project_id);
 $_SESSION["wbsItemsArray"]= array();
 function printWBSItem($wbsItem){
-		global $project_id;
+		global $project_id,$AppUI;
 		//get children
 		$listChildren=$wbsItem->loadWBSItems($project_id, $wbsItem->id);
 		//update is leaf/work package attribute
@@ -105,28 +106,33 @@ function printWBSItem($wbsItem){
 						<li>
 							<br />
 							<div>
-								<form action="?m=scope_and_schedule" name="task_update_<?php echo $task->task_id  ?>" id="task_update_<?php echo $task->task_id  ?>" method="post" style="display:inline">
-								A.<?php echo $wbsItem->number ?>.<?php echo $taskOrder++; ?>
-									<input type="hidden" name="dosql" value="do_update_task" />
-									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
-									<div>
-										<input type="text" name="start_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />
-										<input type="text" name="end_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />									
-										<script>
-											var form=$("#task_update_<?php echo $task->task_id ?>"); 
-											var startDate=form.find("[name='start_date']");
-											var endDate=form.find("[name='end_date']");
-											startDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>"} );
-											endDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>"});
-										</script>
-									</div>	
-								</form>
 								<form action="?m=scope_and_schedule" name="activity_delete_<?php echo $task->task_id ?>" method="post" style="display:inline">
 									<input type="hidden" name="dosql" value="do_activity_deletion">
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" /> 
 									<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_<?php echo $task->task_id ?>.submit();" />
 								</form>
+								<form action="?m=scope_and_schedule" name="task_update_<?php echo $task->task_id  ?>" id="task_update_<?php echo $task->task_id  ?>" method="post" style="display:inline">
+								A.<?php echo $wbsItem->number ?>.<?php echo $taskOrder++; ?>
+									<input type="hidden" name="dosql" value="do_update_task" />
+									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
+								
+									<div style="margin-top:5px;margin-left:15px">
+										
+										<label><?php echo $AppUI->_("Planned dates") ?>:</label>
+										<input size="8" type="text" value="<?php $date = new CDate($task->task_start_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="start_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />
+										&nbsp;<label><?php echo $AppUI->_("to") ?></label>&nbsp;
+										<input size="8" type="text" value="<?php $date = new CDate($task->task_end_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="end_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />									
+										<script>
+											var form=$("#task_update_<?php echo $task->task_id ?>"); 
+											var startDate=form.find("[name='start_date']");
+											var endDate=form.find("[name='end_date']");
+											startDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true} );
+											endDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true});
+										</script>
+									</div>	
+								</form>
+								
 							</div>	
 													
 						</li>					
