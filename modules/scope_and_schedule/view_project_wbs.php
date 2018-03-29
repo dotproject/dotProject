@@ -91,7 +91,7 @@ function printWBSItem($wbsItem){
 					<input type="hidden" name="number" value="1" />
 					<input type="hidden" name="is_leaf" value="0" />  	
 					<input type="hidden" name="id_wbs_item_parent" value="<?php echo $wbsItem->id_wbs_item_parent ?>" />
-					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" onblur="saveScrollPosition();ajaxFormSubmit('wbs_update_<?php echo $wbsItem->id ?>');" style="width:40%" maxlength="100" title="<?php echo addslashes($wbsItem->wbs_dictionary); ?>" /> 	
+					<input type="text" name="item_name" placeholder="Input item description..." value="<?php echo $wbsItem->item_name; ?>" onchange="saveScrollPosition();ajaxFormSubmit('wbs_update_<?php echo $wbsItem->id ?>');" style="width:40%" maxlength="100" title="<?php echo addslashes($wbsItem->wbs_dictionary); ?>" /> 	
 					
 				</form>
 				
@@ -115,7 +115,7 @@ function printWBSItem($wbsItem){
 								A.<?php echo $wbsItem->number ?>.<?php echo $taskOrder++; ?>
 									<input type="hidden" name="dosql" value="do_update_task" />
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onblur="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
+									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
 								
 									<div style="margin-top:5px;margin-left:15px">
 										
@@ -163,7 +163,13 @@ function printWBSItem($wbsItem){
 <script src="modules/scope_and_schedule/js/jquery-3.2.1.min.js"></script>
 <script src="modules/scope_and_schedule/js/jquery-ui.js"></script>
 <script src="modules/scope_and_schedule/js/wbs-functions.js"></script>
+<script src="modules/scope_and_schedule/js/jquery-datepicker-customizations.js"></script>
 <link rel="stylesheet" href="modules/scope_and_schedule/css/jquery-ui.css">
+<!-- include libraries for lightweight messages -->
+<link type="text/css" rel="stylesheet" href="modules/scope_and_schedule/js/alertify/alertify.css" media="screen"></link>
+<script type="text/javascript" src="modules/scope_and_schedule/js/alertify/alertify.js"></script>
+
+
 <style>
 .wbs {}
 .wbs OL { list-style-type: none; }
