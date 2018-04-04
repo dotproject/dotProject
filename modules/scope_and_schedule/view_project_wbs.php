@@ -183,7 +183,9 @@ function saveScrollPosition(){
 	    window.sessionStorage.setItem('wbsScrollY',y);
 }
 </script>
-
+<div style="text-align: center">
+	<input type="button" value="<?php echo $AppUI->_("Sequence activities"); ?>" onclick="window.location='index.php?m=scope_and_schedule&a=projects_activities_sequencing&project_id=<?php echo $projectObj->project_id ?>';" />
+</div>
 <span style="margin-left: 20px">
 	<br />
 	<b>Work Breakdown Structure - WBS</b> - 
