@@ -4,10 +4,14 @@ if (!defined('DP_BASE_DIR')) {
 }
 $AppUI->savePlace();
 require_once (DP_BASE_DIR . "/modules/scope_and_schedule/controller_activity_mdp.class.php");
+require_once (DP_BASE_DIR . "/modules/projects/projects.class.php");
+
 $projectId = dPgetParam($_GET, 'project_id', 0);
 $activitiesIdsForDisplay;//updated by /modules/timeplanning/view/export_project_plan/time_planning_initializing_logical_ids.php
 //require_once (DP_BASE_DIR . "/modules/timeplanning/view/export_project_plan/time_planning_initializing_logical_ids.php");
 $controllerActivityMDP = new ControllerActivityMDP();
+$project = new CProject();
+$project->load($projectId);
 ?>
 
 <script type="text/javascript" src="./modules/scope_and_schedule/js/mdp.js"></script>
@@ -21,6 +25,11 @@ $controllerActivityMDP = new ControllerActivityMDP();
     <br />
 </form>
 
+<b><?php echo $AppUI->_("Project") ?>: <a href="index.php?m=projects&a=view&project_id=<?php echo $projectId ?>"><?php echo $project->project_name  ?></a></b>
+<br />
+<br />
+<p align="center"><b>Activities Sequencing</b></p>
+<br />
 <table width="100%" class="tbl" style="border: 0px">
     <tr>
         <th><?php echo $AppUI->_("Task"); ?></th>
@@ -57,7 +66,7 @@ $controllerActivityMDP = new ControllerActivityMDP();
                                 ?>
                             </td>
                             <td width="15%">
-                                <form  action="?m=timeplanning&a=view" method="post" name="activity_dependency_delete_<?php echo $task->task_id . "_" . $dep_id; ?>">
+                                <form  action="?m=scope_and_schedule&a=view" method="post" name="activity_dependency_delete_<?php echo $task->task_id . "_" . $dep_id; ?>">
                                     <input name="dosql" type="hidden" value="do_project_activity_exclude_dependency" />
                                     <input type="hidden" name="project_id" value="<?php echo $projectId; ?>"/>
                                     <input type="hidden" name="activity_id" value="<?php echo $task->task_id; ?>" />
@@ -77,7 +86,7 @@ $controllerActivityMDP = new ControllerActivityMDP();
                 
             </td>
             <td valign="top" style="width:30%; max-width: 215px">
-                <form  action="?m=timeplanning&a=view" method="post" name="activity_dependency_add_<?php echo $task->task_id; ?>">
+                <form  action="?m=scope_and_schedule&a=view" method="post" name="activity_dependency_add_<?php echo $task->task_id; ?>">
                     <input name="dosql" type="hidden" value="do_project_activity_add_dependency" />
                     <input type="hidden" name="activity_id" value="<?php echo $task->task_id; ?>" /> 
                     <input type="hidden" name="project_id" value="<?php echo $projectId; ?>"/>
@@ -112,7 +121,7 @@ $controllerActivityMDP = new ControllerActivityMDP();
     </tr>
     <tr>
         <td align="center">
-            <?php //require_once (DP_BASE_DIR . "/modules/timeplanning/view/gantt_chart.php"); ?>
+            <?php require_once (DP_BASE_DIR . "/modules/tasks/viewgantt.php"); ?>
         </td>
     </tr>
 </table>

@@ -20,6 +20,6 @@
 	}
 
 	$controllerActivityMDP->updateDependencies($activity_id,$parameter);
-	//$AppUI->setMsg($AppUI->_("Atividade predecessora foi incluida com exito.",UI_OUTPUT_HTML), UI_MSG_OK, true);
+	$AppUI->setMsg($AppUI->_("Dependency included.",UI_OUTPUT_HTML), UI_MSG_OK, true);
 	$AppUI->redirect();
 ?>

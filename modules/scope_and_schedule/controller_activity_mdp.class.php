@@ -50,18 +50,6 @@ class ControllerActivityMDP {
 		$tasks = db_loadList($sql);
                 $activityMDP= new ActivityMDP();
 		foreach($tasks as $task){
-			$q = new DBQuery();
-			$q->addQuery("t.pos_x, t.pos_y");
-			$q->addTable("tasks_mdp", "t");
-			$q->addWhere("task_id = ".$task[0]);
-			$sql = $q->prepare();
-			$posXY = db_loadList($sql);
-			$x=-1;
-			$y=-1;
-			foreach ($posXY as $xy) {
-				$x=$xy[0];
-				$y=$xy[1];
-			}
 			$dependencies=array();
 			$q = new DBQuery();
 			$q->addQuery("t.task_id");
@@ -77,7 +65,7 @@ class ControllerActivityMDP {
 					}
 				}
 			}
-			$activityMDP->load($task[0],$task[1],$x,$y,$dependencies);
+			$activityMDP->load($task[0],$task[1],$dependencies);
 		}
 		return $activityMDP;
 	}

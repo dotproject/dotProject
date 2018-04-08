@@ -12,11 +12,15 @@ $userDateFormat=strtolower($userDateFormat);
 $_SESSION["dateFormat"]=$userDateFormat;
 $AppUI->savePlace();
 
+
+require_once DP_BASE_DIR . "/modules/scope_and_schedule/task_user_assigment.class.php";
 require_once DP_BASE_DIR . "/modules/scope_and_schedule/wbs_item.class.php";
 require_once($AppUI->getModuleClass('projects'));
 $projectObj = new CProject();
 $project_id = dPgetParam($_GET, "project_id", 0);
 $projectObj->load($project_id);
+$company_id=$projectObj->project_company;
+$_SESSION["company_id"]=$company_id;
 $_SESSION["wbsItemsArray"]= array();
 function printWBSItem($wbsItem){
 		global $project_id,$AppUI;
@@ -132,7 +136,41 @@ function printWBSItem($wbsItem){
 										</script>
 									</div>	
 								</form>
-								
+								<?php
+									$taskAssigment= new CTaskAssignement();
+									$users=$taskAssigment->getAllUsersFromCompany($_SESSION["company_id"]);
+									$assigned_users=$taskAssigment->getAssignedUsersToTask($task->task_id);
+								?>
+								<form action="?m=scope_and_schedule" name="activity_add_user_<?php echo $task->task_id ?>" method="post" style="display:inline" >
+									<input type="hidden" name="dosql" value="do_add_user_to_task" />
+									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+									<select name="user_id">
+									<?php
+									foreach($users as $user){
+									?>
+									<option value="<?php echo  $user['user_id'] ?>"> 
+										<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+									</option>
+									<?php
+										}
+									?>
+									</select>
+									<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.activity_add_user_<?php echo $task->task_id ?>.submit();" />
+								</form>
+								<?php
+								foreach ($assigned_users as $user){
+								?>
+									<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post">
+										<input type="hidden" name="dosql" value="do_delete_user_to_task" />
+										<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+										<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
+										<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_user_<?php echo $task->task_id ."_".$user['user_id']; ?>.submit();" />
+										<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+			
+									</form>
+								<?php
+								}
+								?>
 							</div>	
 													
 						</li>					
@@ -183,7 +221,7 @@ function saveScrollPosition(){
 	    window.sessionStorage.setItem('wbsScrollY',y);
 }
 </script>
-<div style="text-align: center">
+<div style="text-align: right">
 	<input type="button" value="<?php echo $AppUI->_("Sequence activities"); ?>" onclick="window.location='index.php?m=scope_and_schedule&a=projects_activities_sequencing&project_id=<?php echo $projectObj->project_id ?>';" />
 </div>
 <span style="margin-left: 20px">
