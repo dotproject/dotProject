@@ -102,6 +102,7 @@
 "LBL_TRIGGER" => "Trigger",
 "LBL_CHECKLIST_ANALYSIS" => "Checklist Analysis",
 "LBL_EAR_UNCATEGORISED_NOT_CONFIGURED" => "Uncategorised (RBS has not yet been configured for this project)",
+"LBL_EAR_CONFIGURE" => "Configure RBS",
 "LBL_RISK_PROBABILITY_SUPERLOW" => "A similar event occurred only once in another organization",
 "LBL_RISK_PROBABILITY_LOW" => "A similar event occurred in a similar organization.",
 "LBL_RISK_PROBABILITY_MEDIUM" => "A similar event has already occurred in this organization.",

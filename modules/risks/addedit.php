@@ -339,9 +339,11 @@ $titleBlock->show();
             <td>
                 <?php
                 require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
-                $rcontrolling = new RisksControlling();
-                $options_ear = $rcontrolling->getRisksEARCategories($projectSelected);
-                echo arraySelect($options_ear, "risk_ear_classification", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_ear_classification));
+                $rcontrolling = new RisksControlling($projectSelected);
+                echo arraySelect($rcontrolling->earOptions, "risk_ear_classification", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_ear_classification));
+                if (!$rcontrolling->earConfigured) {
+                    ?><input type="button" class="button" value="<?php echo $AppUI->_("LBL_EAR_CONFIGURE"); ?>" onclick="location.href='?m=risks&a=risk_management_plan&project_id=<?php echo $project_id; ?>'" /><?php
+                }
                 ?>
             </td>
         </tr>
