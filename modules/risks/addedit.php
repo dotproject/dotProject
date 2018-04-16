@@ -188,6 +188,30 @@ $titleBlock->show();
             }
         }
     }
+    var calendarField = '';
+    function popCalendar(field) {
+        calendarField = field;
+        idate = document.uploadFrm['risk_' + field].value;
+        window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
+    }
+    /**
+    *	@param string Input date in the format YYYYMMDD
+    *	@param string Formatted date
+    */
+    function setCalendar(idate, fdate) {
+        fld_date = document.uploadFrm['risk_' + calendarField];
+        fld_fdate = document.uploadFrm[calendarField];
+        fld_date.value = idate;
+        fld_fdate.value = fdate;
+
+        // set end date automatically with start date if start date is after end date
+        if (calendarField == 'start_date') {
+            if (document.uploadFrm.period_end_date.value < idate) {
+                document.uploadFrm.risk_period_end_date.value = idate;
+                document.uploadFrm.period_end_date.value = fdate;
+            }
+        }
+    }
 
 </script>
 
@@ -283,8 +307,28 @@ $titleBlock->show();
                 <label for="risk_period_start_date"><?php echo $AppUI->_("LBL_RISK_PERIOD"); ?></label>:
             </td>
             <td>
-                <input type="date" name="risk_period_start_date" value="<?php echo dPformSafe(@$obj->risk_period_start_date); ?>" id="risk_period_start_date" />
-                <input type="date" name="risk_period_end_date" value="<?php echo dPformSafe(@$obj->risk_period_end_date); ?>" id="risk_period_end_date" />
+                <?php
+                    $df = $AppUI->getPref('SHDATEFORMAT');
+                    $start_date = intval($obj->risk_period_start_date) ? new CDate(dPformSafe(@$obj->risk_period_start_date)) : null;
+                    $end_date = intval($obj->risk_period_end_date) ? new CDate(dPformSafe(@$obj->risk_period_end_date)) : null;
+                ?>                
+
+                <input type="hidden" name="risk_period_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+				<input type="text" class="text" name="period_start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
+
+				<a href="#" onclick="javascript:popCalendar('period_start_date');">
+					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+                </a>
+
+                to
+                
+                <input type="hidden" name="risk_period_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+				<input type="text" class="text" name="period_end_date" id="date1" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
+
+				<a href="#" onclick="javascript:popCalendar('period_end_date');">
+					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+				</a>
+			</td>
             </td>
         </tr>
 
