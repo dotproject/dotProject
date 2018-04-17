@@ -71,4 +71,46 @@ class WBSItem extends CDpObject  {
     }
 	
 	
+	  /**
+     *This function returns all project_wbs_items for a project.
+     *The return value is an array type composed of WBSItem objects
+     */
+    public function loadWorkpackages($project_id){
+        $q = new DBQuery();
+        $q->addQuery("wbs.id");
+        $q->addTable("project_wbs_items", "wbs");
+        $q->addWhere("project_id = $project_id and is_leaf=1 order by number asc");
+        $results = db_loadHashList($q->prepare(true), "id");
+        $list= array();
+        $i=0;
+        foreach ($results as $data) {
+           $wbsItem = new WBSItem();
+           $wbsItem->load($data[0]);
+           $list[$i]=$wbsItem;
+           $i++;
+        }
+        return $list;
+    }
+	
+	
+	public function loadAcivitiesNonInWBS($projectId){
+		
+		$q = new DBQuery();
+        $q->addQuery("t.task_id");
+        $q->addTable("tasks", "t");
+		$q->addJoin("project_wbs_tasks", "wpt","t.task_id= wpt.task_id","left");
+        $q->addWhere("t.task_project=". $projectId . " and wpt.task_id is NULL");
+        $results = db_loadHashList($q->prepare(true), "t.task_id");
+        $list= array();
+        $i=0;
+        foreach ($results as $data) {
+		   $obj = new CTask();
+		   $obj->load($data[0]);
+           $list[$i]=$obj;
+           $i++;
+        }
+        return $list;
+	}
+	
+	
 }

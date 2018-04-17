@@ -33,8 +33,40 @@ $(document).ready(function (){
         
       }
     });
+	
+	 dialogMoveActivity = $( "#dialog_move_project_activity" ).dialog({
+      autoOpen: false,
+      height: 200,
+      width: 350,
+      modal: true,
+      buttons: {
+		/*
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+		*/
+      },
+      close: function() {
+        
+      }
+    });
+	
+	
  
   });  
+  
+  
+  function openDialogMoveActivity(activityId, activityDescription){
+	  document.move_project_activity.task_id.value=activityId;
+	  document.getElementById("move_activity_description").innerHTML = activityDescription;
+	  dialogMoveActivity.dialog("open");
+  }
+  
+ 
+  
+  function closeMoveActivity(){
+	  dialogMoveActivity.dialog( "close" );
+  }
   
   function openDialogWBSDictionary(wbsItemId, wbsItemName, wbsDictionaryDescription){
 	  document.wbs_dictionary.id.value=wbsItemId;  

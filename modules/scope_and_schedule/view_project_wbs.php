@@ -284,6 +284,31 @@ function saveScrollPosition(){
 </form>
 </div>
 
+
+<div id="dialog_move_project_activity" title="Move WBS item" style="background-color:FFF">
+<form name="move_project_activity" action="?m=scope_and_schedule" method="post">
+	<input type="hidden" name="dosql" value="do_move_activity_to_wbs" />
+	<input type="hidden" name="project_id" value="<?php echo $project_id ?>" />
+	<input type="hidden" name="task_id" value="" /> 
+	 <b>Moving activity:</b> <i><span id="move_activity_description"></span></i>
+	 <br /><br />
+	  Work package:<br />
+	  <select name="wbs_item_id"> 
+	  <?php
+	  $wps=$wbsItem->loadWorkpackages($project_id);
+	  foreach ($wps as $wbsItem){
+		  ?>
+		  <option value="<?php echo $wbsItem->id  ?>"><?php echo $wbsItem->number  ?></option>
+	  <?php
+	  }
+	  ?>
+	  </select> 
+	  <br /><br />
+	  <input type="submit" value="Confirm" />
+	  <input type="button" value="Cancel" onclick="closeMoveActivity()" />
+</form>
+</div>
+
 <div id="dialog_wbs_dictionary" title="WBS Dictionary" style="background-color:FFF">
 	<form name="wbs_dictionary" action="?m=scope_and_schedule" method="post">
 		<input type="hidden" name="dosql" value="do_wbs_dictionary" />
@@ -296,6 +321,30 @@ function saveScrollPosition(){
 	</form>
 </div>
 
+<div id="non_wbs_tasks">
+<?php
+$wbsItem= new WBSItem ();
+$tasksOrpan=$wbsItem->loadAcivitiesNonInWBS($project_id);
+if( sizeof($tasksOrpan) >0){
+	?>
+	<br />
+	<b><?php echo $AppUI->_("Project activities out of WBS"); ?></b>
+	<br />
+<ul>
+	<?php
+	foreach($tasksOrpan as $task){
+?>
+<li onclick="openDialogMoveActivity(<?php echo $task->task_id; ?>, '<?php echo addslashes($task->task_name); ?>')" style="cursor:pointer">
+<?php echo $task->task_name; ?>
+</li>
+<?php
+}
+?>
+</ul>
+<?php
+}
+?>
+</div>
 
 <script>
   $( function() {
