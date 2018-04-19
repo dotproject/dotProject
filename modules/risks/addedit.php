@@ -220,289 +220,294 @@ $titleBlock->show();
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="risk_id" value="<?php echo $risk_id; ?>" />
     <input type="hidden" name="risk_project" value="<?php echo $projectSelected ?>" />
-    <table  width="100%" border="0" class="std" name="table_form">
+    <table width="100%" border="0" class="std" name="table_form">
         <tr>
-            <td colspan="2" class="td_section">
-                <?php echo $AppUI->_("LBL_RISK_IDENTIFICATION"); ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_name"><?php echo $AppUI->_("LBL_RISK_NAME"); ?></label><span class="span_mandatory">*</span>:
-            </td>
             <td>
-                <input type="text" name="risk_name" value="<?php echo $obj->risk_name; ?>"  maxlength="100" />
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_cause"><?php echo $AppUI->_("LBL_RISK_CAUSE"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_cause" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_cause; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_consequence"><?php echo $AppUI->_("LBL_RISK_CONSEQUENCE"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_consequence" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_consequence; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_description"><?php echo $AppUI->_("LBL_DESCRIPTION"); ?></label><span class="span_mandatory">*</span>:
-            </td>
-            <td>
-                <textarea name="risk_description" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_description; ?></textarea>
-            </td>
-        </tr>
+                <table style="margin:0 auto">
+                    <tr>
+                        <th colspan="2" class="td_section">
+                            <?php echo $AppUI->_("LBL_RISK_IDENTIFICATION"); ?>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_name"><?php echo $AppUI->_("LBL_RISK_NAME"); ?></label><span class="span_mandatory">*</span>:
+                        </td>
+                        <td>
+                            <input type="text" name="risk_name" value="<?php echo $obj->risk_name; ?>"  maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_cause"><?php echo $AppUI->_("LBL_RISK_CAUSE"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_cause" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_cause; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_consequence"><?php echo $AppUI->_("LBL_RISK_CONSEQUENCE"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_consequence" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_consequence; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_description"><?php echo $AppUI->_("LBL_DESCRIPTION"); ?></label><span class="span_mandatory">*</span>:
+                        </td>
+                        <td>
+                            <textarea name="risk_description" cols="50" rows="2" style="wrap:virtual;" maxlength="255" class="textarea"><?php echo $obj->risk_description; ?></textarea>
+                        </td>
+                    </tr>
 
-        <?php
-        $q = new DBQuery();
-        $q->addQuery("project_id, project_name");
-        $q->addTable("projects");
-        $q->addWhere("project_id = " . $projectSelected);
-        $project = $q->loadHashList();
-        if ($projectSelected == null) {
-            $projectSelected = @$obj->risk_project;
-            $projectName = $projects[@$obj->risk_project];
-            $project[@$obj->risk_project] = $projectName;
-        }
-        echo arraySelect($project, "risk_project", "size=\"1\" class=\"text\"", (@$obj->risk_project ? $obj->risk_project : $projectSelected));
-        ?>         
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_task"><?php echo $AppUI->_("LBL_TASK"); ?></label>:
-            </td>
-            <td>
-                <?php
-                $tasks = array();
-                $results = array();
-                $perms = $AppUI->acl();
-                if ($perms->checkModule("tasks", "view")) {
+                    <?php
                     $q = new DBQuery();
-                    $q->addQuery("t.task_id, t.task_name");
-                    $q->addTable("tasks", "t");
-                    $q->addWhere("task_project = " . (int) $projectSelected);
-                    $results = $q->loadHashList("task_id");
-                }
-                $taskList = $results;
+                    $q->addQuery("project_id, project_name");
+                    $q->addTable("projects");
+                    $q->addWhere("project_id = " . $projectSelected);
+                    $project = $q->loadHashList();
+                    if ($projectSelected == null) {
+                        $projectSelected = @$obj->risk_project;
+                        $projectName = $projects[@$obj->risk_project];
+                        $project[@$obj->risk_project] = $projectName;
+                    }
+                    echo arraySelect($project, "risk_project", "size=\"1\" class=\"text\"", (@$obj->risk_project ? $obj->risk_project : $projectSelected));
+                    ?>         
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_task"><?php echo $AppUI->_("LBL_TASK"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            $tasks = array();
+                            $results = array();
+                            $perms = $AppUI->acl();
+                            if ($perms->checkModule("tasks", "view")) {
+                                $q = new DBQuery();
+                                $q->addQuery("t.task_id, t.task_name");
+                                $q->addTable("tasks", "t");
+                                $q->addWhere("task_project = " . (int) $projectSelected);
+                                $results = $q->loadHashList("task_id");
+                            }
+                            $taskList = $results;
 
-                foreach ($taskList as $key => $value) {
-                    $tasks[$key] = $value["task_name"];
-                }
-                $tasks[-1] = $AppUI->_("LBL_ALL_TASKS");
-                $tasks[0] = str_replace("&atilde;", "ã", $AppUI->_("LBL_NOT_DEFINED"));
-                echo arraySelect($tasks, "risk_task", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_task));
-                ?>
-            </td>
-        </tr>
+                            foreach ($taskList as $key => $value) {
+                                $tasks[$key] = $value["task_name"];
+                            }
+                            $tasks[-1] = $AppUI->_("LBL_ALL_TASKS");
+                            $tasks[0] = str_replace("&atilde;", "ã", $AppUI->_("LBL_NOT_DEFINED"));
+                            echo arraySelect($tasks, "risk_task", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_task));
+                            ?>
+                        </td>
+                    </tr>
 
-        <tr>
-            <td class="td_label">
-                <label for="risk_period_start_date"><?php echo $AppUI->_("LBL_RISK_PERIOD"); ?></label>:
-            </td>
-            <td>
-                <?php
-                    $df = $AppUI->getPref('SHDATEFORMAT');
-                    $start_date = intval($obj->risk_period_start_date) ? new CDate(dPformSafe(@$obj->risk_period_start_date)) : null;
-                    $end_date = intval($obj->risk_period_end_date) ? new CDate(dPformSafe(@$obj->risk_period_end_date)) : null;
-                ?>                
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_period_start_date"><?php echo $AppUI->_("LBL_RISK_PERIOD"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                                $df = $AppUI->getPref('SHDATEFORMAT');
+                                $start_date = intval($obj->risk_period_start_date) ? new CDate(dPformSafe(@$obj->risk_period_start_date)) : null;
+                                $end_date = intval($obj->risk_period_end_date) ? new CDate(dPformSafe(@$obj->risk_period_end_date)) : null;
+                            ?>                
 
-                <input type="hidden" name="risk_period_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" class="text" name="period_start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
+                            <input type="hidden" name="risk_period_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+                            <input type="text" class="text" name="period_start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
 
-				<a href="#" onclick="javascript:popCalendar('period_start_date');">
-					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-                </a>
+                            <a href="#" onclick="javascript:popCalendar('period_start_date');">
+                                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+                            </a>
 
-                to
-                
-                <input type="hidden" name="risk_period_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" class="text" name="period_end_date" id="date1" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
+                            to
+                            
+                            <input type="hidden" name="risk_period_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
+                            <input type="text" class="text" name="period_end_date" id="date1" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
 
-				<a href="#" onclick="javascript:popCalendar('period_end_date');">
-					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-				</a>
-			</td>
-            </td>
-        </tr>
+                            <a href="#" onclick="javascript:popCalendar('period_end_date');">
+                                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
+                            </a>
+                        </td>
+                        </td>
+                    </tr>
 
-        <tr>
-            <td class="td_label">
-                <label for="risk_ear_classification"><?php echo $AppUI->_("LBL_RISK_EAR_CLASSIFICATION"); ?></label>:
-            </td>
-            <td>
-                <?php
-                require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
-                $rcontrolling = new RisksControlling($projectSelected);
-                echo arraySelect($rcontrolling->earOptions, "risk_ear_classification", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_ear_classification));
-                if (!$rcontrolling->earConfigured) {
-                    ?><input type="button" class="button" value="<?php echo $AppUI->_("LBL_EAR_CONFIGURE"); ?>" onclick="location.href='?m=risks&a=risk_management_plan&project_id=<?php echo $project_id; ?>'" /><?php
-                }
-                ?>
-            </td>
-        </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_ear_classification"><?php echo $AppUI->_("LBL_RISK_EAR_CLASSIFICATION"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
+                            $rcontrolling = new RisksControlling($projectSelected);
+                            echo arraySelect($rcontrolling->earOptions, "risk_ear_classification", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_ear_classification));
+                            if (!$rcontrolling->earConfigured) {
+                                ?><input type="button" class="button" value="<?php echo $AppUI->_("LBL_EAR_CONFIGURE"); ?>" onclick="location.href='?m=risks&a=risk_management_plan&project_id=<?php echo $project_id; ?>'" /><?php
+                            }
+                            ?>
+                        </td>
+                    </tr>
 
-        <tr>
-            <td class="td_label">
-                <label for="risk_notes"><?php echo $AppUI->_("LBL_NOTES"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_notes" cols="50" rows="2" maxlength="100" style="wrap:virtual;" class="textarea"><?php echo $obj->risk_notes; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_potential_other_projects"><?php echo $AppUI->_("LBL_POTENTIAL"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($riskPotential, "risk_potential_other_projects", "size=\"1\" class=\"text\"", $obj->risk_potential_other_projects);
-                ?>
-            </td>
-        </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_notes"><?php echo $AppUI->_("LBL_NOTES"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_notes" cols="50" rows="2" maxlength="100" style="wrap:virtual;" class="textarea"><?php echo $obj->risk_notes; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_potential_other_projects"><?php echo $AppUI->_("LBL_POTENTIAL"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($riskPotential, "risk_potential_other_projects", "size=\"1\" class=\"text\"", $obj->risk_potential_other_projects);
+                            ?>
+                        </td>
+                    </tr>
 
 
-        <tr>
-            <td colspan="2" class="td_section">
-                <?php echo $AppUI->_("LBL_QUALITATYVE_ANALYSIS"); ?>
-            </td>
-        </tr>
+                    <tr>
+                        <th colspan="2" class="td_section">
+                            <?php echo $AppUI->_("LBL_QUALITATYVE_ANALYSIS"); ?>
+                        </th>
+                    </tr>
 
-        <tr>
-            <td class="td_label">
-                <label for="risk_probability"><?php echo $AppUI->_("LBL_PROBABILITY"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($riskProbability, "risk_probability", "size=\"1\" class=\"text\"", $obj->risk_probability);
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_impact"><?php echo $AppUI->_("LBL_IMPACT"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($riskImpact, "risk_impact", "size=\"1\" class=\"text\"", $obj->risk_impact);
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_importance"><?php echo $AppUI->_("LBL_RISK_IMPORTANCE"); ?></label>:
-            </td>
-            <td>
-                <?php
-                $expositionImpact = $impactProbabilityMatrix[$obj->risk_probability][$obj->risk_impact];
-                echo $textExpositionFactor[$expositionImpact];
-                ?>
-            </td>
-        </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_probability"><?php echo $AppUI->_("LBL_PROBABILITY"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($riskProbability, "risk_probability", "size=\"1\" class=\"text\"", $obj->risk_probability);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_impact"><?php echo $AppUI->_("LBL_IMPACT"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($riskImpact, "risk_impact", "size=\"1\" class=\"text\"", $obj->risk_impact);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_importance"><?php echo $AppUI->_("LBL_RISK_IMPORTANCE"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            $expositionImpact = $impactProbabilityMatrix[$obj->risk_probability][$obj->risk_impact];
+                            echo $textExpositionFactor[$expositionImpact];
+                            ?>
+                        </td>
+                    </tr>
 
-        <tr>
-            <td colspan="2" class="td_section">
-                <?php echo $AppUI->_("LBL_RESPONSE_PLAN"); ?>
-            </td>
-        </tr>
-        <tr>
+                    <tr>
+                        <th colspan="2" class="td_section">
+                            <?php echo $AppUI->_("LBL_RESPONSE_PLAN"); ?>
+                        </th>
+                    </tr>
+                    <tr>
 
-            <td class="td_label">
-                <label for="risk_strategy"><?php echo $AppUI->_("LBL_STRATEGY"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($riskStrategy, "risk_strategy", "size=\"1\" class=\"text\" onchange=\"updateRisksReponseFieldsBasedOnStartegy()\"", $obj->risk_strategy);
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_prevention_actions"><?php echo $AppUI->_("LBL_PREVENTION_ACTIONS"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_prevention_actions" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_prevention_actions; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_is_contingency"><?php echo $AppUI->_("LBL_INCLUDE_IN_CONTINGENCY_RESERVE"); ?></label>:
-            </td>
-            <td>
-                <input type="radio" name="risk_is_contingency" value="1" <?php echo $obj->risk_is_contingency == 1 ? "checked=true" : "" ?> /> <?php echo $AppUI->_("LBL_YES"); ?>
-                <input type="radio" name="risk_is_contingency" value="0" <?php echo $obj->risk_is_contingency != 1 ? "checked=true" : "" ?> /> <?php echo $AppUI->_("LBL_NO"); ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_contingency_plan"><?php echo $AppUI->_("LBL_CONTINGENCY_PLAN"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_contingency_plan" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_contingency_plan; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_triggers"><?php echo $AppUI->_("LBL_TRIGGER"); ?></label>:
-            </td>
-            <td>
-                <textarea name="risk_triggers" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_triggers; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_responsible"><?php echo $AppUI->_("LBL_OWNER"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($owners, "risk_responsible", "size=\"1\" class=\"text\"", $obj->risk_responsible);
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" class="td_section">
-                <?php echo $AppUI->_("LBL_RISK_CONTROLING"); ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="td_label">
-                <label for="risk_status"><?php echo $AppUI->_("LBL_RISK_STATUS"); ?></label>:
-            </td>
-            <td>
-                <?php
-                $options = array();
-                $options[0] = $AppUI->_("LBL_RISK_STATUS_IDENTIFIED");
-                $options[1] = $AppUI->_("LBL_RISK_STATUS_MONITORED");
-                $options[2] = $AppUI->_("LBL_RISK_STATUS_MATERIALIZED");
-                $options[3] = $AppUI->_("LBL_RISK_STATUS_FINISHED");
-                echo arraySelect($options, "risk_status", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_status));
-                ?>
-            </td>
-        </tr>
+                        <td class="td_label">
+                            <label for="risk_strategy"><?php echo $AppUI->_("LBL_STRATEGY"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($riskStrategy, "risk_strategy", "size=\"1\" class=\"text\" onchange=\"updateRisksReponseFieldsBasedOnStartegy()\"", $obj->risk_strategy);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_prevention_actions"><?php echo $AppUI->_("LBL_PREVENTION_ACTIONS"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_prevention_actions" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_prevention_actions; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_is_contingency"><?php echo $AppUI->_("LBL_INCLUDE_IN_CONTINGENCY_RESERVE"); ?></label>:
+                        </td>
+                        <td>
+                            <input type="radio" name="risk_is_contingency" value="1" <?php echo $obj->risk_is_contingency == 1 ? "checked=true" : "" ?> /> <?php echo $AppUI->_("LBL_YES"); ?>
+                            <input type="radio" name="risk_is_contingency" value="0" <?php echo $obj->risk_is_contingency != 1 ? "checked=true" : "" ?> /> <?php echo $AppUI->_("LBL_NO"); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_contingency_plan"><?php echo $AppUI->_("LBL_CONTINGENCY_PLAN"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_contingency_plan" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_contingency_plan; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_triggers"><?php echo $AppUI->_("LBL_TRIGGER"); ?></label>:
+                        </td>
+                        <td>
+                            <textarea name="risk_triggers" cols="50" rows="4" style="wrap:virtual;" class="textarea" maxlength="255"><?php echo $obj->risk_triggers; ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_responsible"><?php echo $AppUI->_("LBL_OWNER"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($owners, "risk_responsible", "size=\"1\" class=\"text\"", $obj->risk_responsible);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="td_section">
+                            <?php echo $AppUI->_("LBL_RISK_CONTROLING"); ?>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_status"><?php echo $AppUI->_("LBL_RISK_STATUS"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            $options = array();
+                            $options[0] = $AppUI->_("LBL_RISK_STATUS_IDENTIFIED");
+                            $options[1] = $AppUI->_("LBL_RISK_STATUS_MONITORED");
+                            $options[2] = $AppUI->_("LBL_RISK_STATUS_MATERIALIZED");
+                            $options[3] = $AppUI->_("LBL_RISK_STATUS_FINISHED");
+                            echo arraySelect($options, "risk_status", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_status));
+                            ?>
+                        </td>
+                    </tr>
 
-        <tr>
-            <td class="td_label">
-                <label for="risk_active"><?php echo $AppUI->_("LBL_ACTIVE"); ?></label>:
-            </td>
-            <td>
-                <?php
-                echo arraySelect($riskActive, "risk_active", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_active));
-                ?>
+                    <tr>
+                        <td class="td_label">
+                            <label for="risk_active"><?php echo $AppUI->_("LBL_ACTIVE"); ?></label>:
+                        </td>
+                        <td>
+                            <?php
+                            echo arraySelect($riskActive, "risk_active", "size=\"1\" class=\"text\"", dPformSafe(@$obj->risk_active));
+                            ?>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
             <td colspan="2" align="right">
-                 <input type="button" class="button" value="<?php echo $AppUI->_("LBL_SUBMIT"); ?>" onclick="submitIt()" />
-                 <?php require_once (DP_BASE_DIR . "/modules/risks/backbutton.php"); ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_("LBL_SUBMIT"); ?>" onclick="submitIt()" />
+                <?php require_once (DP_BASE_DIR . "/modules/risks/backbutton.php"); ?>
             </td>
         </tr>
-
     </table>
 </form>
 <span class="span_mandatory">*</span>&nbsp;<?php echo $AppUI->_("LBL_REQUIRED_FIELD"); ?>
