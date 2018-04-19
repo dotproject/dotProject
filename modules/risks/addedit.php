@@ -370,7 +370,7 @@ $titleBlock->show();
 
         <tr>
             <td colspan="2" class="td_section">
-                <?php echo $AppUI->_("LBL_QUALITATYVE_ANALISYS"); ?>
+                <?php echo $AppUI->_("LBL_QUALITATYVE_ANALYSIS"); ?>
             </td>
         </tr>
 

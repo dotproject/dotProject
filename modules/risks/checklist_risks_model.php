@@ -120,7 +120,7 @@ $q->addWhere($whereProject);
 $q->addOrder($orderBy . " asc");
 $activeList = $q->loadList();
 ?>
-<form name="checklist_analisys" action="?m=risks" method="post">
+<form name="checklist_analysis" action="?m=risks" method="post">
     <input type="hidden" name="dosql" value="do_checklist_analysis" />
     <input type="hidden" name="project_id" value="<?php echo $projectSelected; ?>" />
     <table width="95%" align="center"  border="0" cellpadding="2" cellspacing="1" class="tbl">

@@ -66,7 +66,7 @@
 "LBL_CONTINGENCY_PLAN"=>"Contingency plan",
 "LBL_STRATEGYS_LIST"=>"Answers to risks list",
 "LBL_RESPONSE_PLAN"=>"Risk Response Plan",
-"LBL_QUALITATYVE_ANALISYS"=>"Risk Qualitative Analisys",
+"LBL_QUALITATYVE_ANALYSIS"=>"Risk Qualitative Analysis",
 "LBL_RISK_CONTROLING" => "Risk Monitoring and Controlling",
 "LBL_RISK_IDENTIFICATION" => "Risk Identification",
 "LBL_VALID_RISK_DESCRIPTION" => "Please fill out the description of this risk.",
