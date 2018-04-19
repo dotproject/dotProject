@@ -135,13 +135,12 @@ $activeList = $q->loadList();
         </tr>
         <?php
         require_once DP_BASE_DIR . "/modules/risks/risks_controlling.php";
-        $rcontrolling = new RisksControlling();
-        $options = $rcontrolling->getRisksEARCategories($projectSelected);
+        $rcontrolling = new RisksControlling($projectSelected);
         $earClassification = "";
         foreach ($activeList as $row) {
             ?>
             <?php if ($row["risk_ear_classification"] != $earClassification) { ?>
-                <tr><th colspan="6"><?php echo $options[$row["risk_ear_classification"]] ?></th></tr>
+                <tr><th colspan="6"><?php echo $rcontrolling->earOptions[$row["risk_ear_classification"]] ?></th></tr>
                 <?php
             }
             $earClassification = $row["risk_ear_classification"];
