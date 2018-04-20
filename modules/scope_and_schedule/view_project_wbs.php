@@ -119,7 +119,7 @@ function printWBSItem($wbsItem){
 								A.<?php echo $wbsItem->number ?>.<?php echo $taskOrder++; ?>
 									<input type="hidden" name="dosql" value="do_update_task" />
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:40%" maxlength="100"  onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
+									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:550px;" maxlength="100"  onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
 								
 									<div style="margin-top:5px;margin-left:15px">
 										
@@ -136,41 +136,48 @@ function printWBSItem($wbsItem){
 										</script>
 									</div>	
 								</form>
+								<div id="assigned_users_comp" style="width:550px;  margin-top: -25px; border:0px solid black;text-align:right;" >
 								<?php
 									$taskAssigment= new CTaskAssignement();
 									$users=$taskAssigment->getAllUsersFromCompany($_SESSION["company_id"]);
 									$assigned_users=$taskAssigment->getAssignedUsersToTask($task->task_id);
 								?>
-								<form action="?m=scope_and_schedule" name="activity_add_user_<?php echo $task->task_id ?>" method="post" style="display:inline" >
-									<input type="hidden" name="dosql" value="do_add_user_to_task" />
-									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-									<select name="user_id">
-									<?php
-									foreach($users as $user){
-									?>
-									<option value="<?php echo  $user['user_id'] ?>"> 
-										<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
-									</option>
-									<?php
-										}
-									?>
-									</select>
-									<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.activity_add_user_<?php echo $task->task_id ?>.submit();" />
-								</form>
-								<?php
-								foreach ($assigned_users as $user){
-								?>
-									<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post">
-										<input type="hidden" name="dosql" value="do_delete_user_to_task" />
+									<form action="?m=scope_and_schedule" name="activity_add_user_<?php echo $task->task_id ?>" method="post" style="display:inline" >
+										<input type="hidden" name="dosql" value="do_add_user_to_task" />
 										<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-										<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
-										<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_user_<?php echo $task->task_id ."_".$user['user_id']; ?>.submit();" />
-										<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
-			
+										<label><?php echo $AppUI->_("Resources") ?>:</label>
+										<select name="user_id" style="height:22px">
+										<?php
+										foreach($users as $user){
+										?>
+										<option value="<?php echo  $user['user_id'] ?>"> 
+											<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+										</option>
+										<?php
+											}
+										?>
+										</select>
+										<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.activity_add_user_<?php echo $task->task_id ?>.submit();" />
 									</form>
-								<?php
-								}
-								?>
+									
+										<?php
+										foreach ($assigned_users as $user){
+										?>
+											
+											<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post">
+												<input type="hidden" name="dosql" value="do_delete_user_to_task" />
+												<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+												<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
+												<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+												<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_user_<?php echo $task->task_id ."_".$user['user_id']; ?>.submit();" />
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											</form>
+											
+										<?php
+										}
+										?>
+									
+								</div>
 							</div>	
 													
 						</li>					
