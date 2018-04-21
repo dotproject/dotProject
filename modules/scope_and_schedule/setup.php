@@ -57,7 +57,7 @@ class CSetup_ScopeSchedule {
         $sql = "(
 		  task_id INT,
 		  wbs_item_id INT,
-          activity_order INT NULL DEFAULT 0, 
+          activity_order FLOAT NULL DEFAULT 0, 
 		  PRIMARY KEY  (task_id, wbs_item_id),
           CONSTRAINT fk_task_eap_item FOREIGN KEY (task_id) REFERENCES " . $q->_table_prefix . "tasks (task_id) on delete cascade on update cascade
 		)  ";

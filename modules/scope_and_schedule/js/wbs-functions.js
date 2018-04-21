@@ -34,6 +34,25 @@ $(document).ready(function (){
       }
     });
 	
+	
+	dialogMoveActivityOrder = $( "#dialog_move_activity" ).dialog({
+      autoOpen: false,
+      height: 240,
+      width: 450,
+      modal: true,
+      buttons: {
+		/*
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+		*/
+      },
+      close: function() {
+        
+      }
+    });
+	
+	
 	 dialogMoveActivity = $( "#dialog_move_project_activity" ).dialog({
       autoOpen: false,
       height: 200,
@@ -85,6 +104,17 @@ $(document).ready(function (){
 	  dialog.dialog( "open" );
   }
   
+  
+  function openMoveActivity(wbsItemId, activityId, activityName){
+	  document.move_activity.task_id.value=activityId;
+	  $("#move_activity_name").html(activityName);
+	  $("#move_activity_wbs_item_id").val(wbsItemId);
+	  dialogMoveActivityOrder.dialog( "open" );
+  }
+  
+  function closeMoveActivityOrder(){
+	  dialogMoveActivityOrder.dialog( "close" );
+  }
   
   
     function submitMoveItem(){

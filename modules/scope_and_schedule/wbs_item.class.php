@@ -68,8 +68,7 @@ class WBSItem extends CDpObject  {
            $i++;
         }
         return $list;
-    }
-	
+    }	
 	
 	  /**
      *This function returns all project_wbs_items for a project.
@@ -100,15 +99,17 @@ class WBSItem extends CDpObject  {
         $q->addTable("tasks", "t");
 		$q->addJoin("project_wbs_tasks", "wpt","t.task_id= wpt.task_id","left");
         $q->addWhere("t.task_project=". $projectId . " and wpt.task_id is NULL");
-        $results = db_loadHashList($q->prepare(true), "t.task_id");
+        $results = db_loadHashList($q->prepare(true), "task_id");
         $list= array();
         $i=0;
+
         foreach ($results as $data) {
 		   $obj = new CTask();
 		   $obj->load($data[0]);
            $list[$i]=$obj;
            $i++;
         }
+
         return $list;
 	}
 	

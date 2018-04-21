@@ -3,7 +3,9 @@ require_once DP_BASE_DIR . "/modules/scope_and_schedule/task_user_assigment.clas
 global $AppUI;
 $task_id = dPgetParam($_POST, 'task_id');
 $user_id = dPgetParam($_POST, 'user_id');
-$taskAssigment= new CTaskAssignement();
-$taskAssigment->addAssignedUsersToTask($task_id,$user_id);
-$AppUI->redirect();
+if( intval($user_id) != -1){
+	$taskAssigment= new CTaskAssignement();
+	$taskAssigment->addAssignedUsersToTask($task_id,$user_id);
+	$AppUI->redirect();
+}
 ?>

@@ -120,7 +120,7 @@ function printWBSItem($wbsItem){
 									<input type="hidden" name="dosql" value="do_update_task" />
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:550px;" maxlength="100"  onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
-								
+									<img src="modules/scope_and_schedule/images/reorder_icon.png" style="cursor:pointer;height:18px;width:18px"  id="wbs_move_<?php echo $wbsItem->id ?>"   onclick="saveScrollPosition();openMoveActivity(<?php echo $wbsItem->id ?>, <?php echo $task->task_id ?>, '<?php echo addslashes($task->task_name) ?>');" />
 									<div style="margin-top:5px;margin-left:15px">
 										
 										<label><?php echo $AppUI->_("Planned dates") ?>:</label>
@@ -147,6 +147,7 @@ function printWBSItem($wbsItem){
 										<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 										<label><?php echo $AppUI->_("Resources") ?>:</label>
 										<select name="user_id" style="height:22px">
+											<option value="-1"><?php echo $AppUI->_("-- Select a resource --") ?></option> 
 										<?php
 										foreach($users as $user){
 										?>
@@ -164,7 +165,7 @@ function printWBSItem($wbsItem){
 										foreach ($assigned_users as $user){
 										?>
 											
-											<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post">
+											<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post" style="margin-top:7px">
 												<input type="hidden" name="dosql" value="do_delete_user_to_task" />
 												<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 												<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
@@ -282,8 +283,8 @@ function saveScrollPosition(){
 	  <br /><br />
 	  Order: <br />
 	  <select name="order">
-		<option value="-0.1">Before</option> 
-		<option value="0.1">After </option>
+		<option value="-0.1"><?php echo $AppUI->_("Before") ?></option> 
+		<option value="0.1"><?php echo $AppUI->_("After") ?> </option>
 	  </select> 
 	  <br /><br />
 	  <input type="button" onclick="submitMoveItem()" value="Confirm" />
@@ -297,9 +298,9 @@ function saveScrollPosition(){
 	<input type="hidden" name="dosql" value="do_move_activity_to_wbs" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id ?>" />
 	<input type="hidden" name="task_id" value="" /> 
-	 <b>Moving activity:</b> <i><span id="move_activity_description"></span></i>
+	 <b><?php echo $AppUI->_("Moving activity") ?>:</b> <i><span id="move_activity_description"></span></i>
 	 <br /><br />
-	  Work package:<br />
+	  <?php echo $AppUI->_("Work package") ?>:<br />
 	  <select name="wbs_item_id"> 
 	  <?php
 	  $wps=$wbsItem->loadWorkpackages($project_id);
@@ -328,29 +329,62 @@ function saveScrollPosition(){
 	</form>
 </div>
 
+<div id="dialog_move_activity" title="<?php echo $AppUI->_("Move activity") ?>" style="background-color:FFF">
+	<form name="move_activity" action="?m=scope_and_schedule" method="post">
+		<input type="hidden" name="dosql" value="do_move_activity" />
+		<input type="hidden" name="task_id" value="" />
+		<?php echo $AppUI->_("Moving activity") ?>:
+		<span id="move_activity_name"></span>
+		<br /><br />
+		 <?php echo $AppUI->_("Work package") ?>:<br />
+		  <select name="wbs_item_id" id="move_activity_wbs_item_id"> 
+			  <?php
+			  $wps=$wbsItem->loadWorkpackages($project_id);
+			  foreach ($wps as $wbsItem){
+				  ?>
+				  <option value="<?php echo $wbsItem->id  ?>"><?php echo $wbsItem->number  ?> - <?php echo $wbsItem->item_name ?></option>
+			  <?php
+			  }
+			  ?>
+		  </select> 
+		  <br /><br />
+		  <?php echo $AppUI->_("Order") ?>: <br />
+		  <select name="order" />
+		  <?php for ($i=0;$i<=10;$i++){ ?>
+			<option value="<?php echo $i ?>"><?php echo $i ?></option>
+		  <?php } ?>
+		  </select>
+		  <br /><br />
+		  <input type="submit" value="Confirm" />
+		  <input type="button" value="Cancel" onclick="closeMoveActivityOrder()" />
+	</form>
+</div>
+
 <div id="non_wbs_tasks">
-<?php
-$wbsItem= new WBSItem ();
-$tasksOrpan=$wbsItem->loadAcivitiesNonInWBS($project_id);
-if( sizeof($tasksOrpan) >0){
+	<?php
+	$wbsItem= new WBSItem ();
+	$tasksOrpan=$wbsItem->loadAcivitiesNonInWBS($project_id);
+	if( sizeof($tasksOrpan) >0){
 	?>
 	<br />
-	<b><?php echo $AppUI->_("Project activities out of WBS"); ?></b>
+	<b>
+		<?php echo $AppUI->_("Project activities out of WBS"); ?>
+	</b>
 	<br />
-<ul>
-	<?php
-	foreach($tasksOrpan as $task){
-?>
-<li onclick="openDialogMoveActivity(<?php echo $task->task_id; ?>, '<?php echo addslashes($task->task_name); ?>')" style="cursor:pointer">
-<?php echo $task->task_name; ?>
-</li>
-<?php
-}
-?>
-</ul>
-<?php
-}
-?>
+		<ul>
+			<?php
+			foreach($tasksOrpan as $task){
+				?>
+					<li onclick="openDialogMoveActivity(<?php echo $task->task_id; ?>, '<?php echo addslashes($task->task_name); ?>')" style="cursor:pointer">
+						<?php echo $task->task_name; ?> (<i><u><?php echo $AppUI->_("click here to move it to WBS") ?></u></i>)
+					</li>
+					<?php
+				}
+				?>
+		</ul>
+			<?php
+			}
+			?>
 </div>
 
 <script>
