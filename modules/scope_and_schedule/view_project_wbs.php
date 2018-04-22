@@ -61,10 +61,10 @@ function printWBSItem($wbsItem){
 				  <img src="modules/scope_and_schedule/images/work_package_icon.png" style="height:15px;width:15px"  />
 					 <ul>
 					  <li onclick='openDialogWBSDictionary(<?php echo $wbsItem->id; ?>, "<?php echo $wbsItem->number . " ". addslashes($wbsItem->item_name); ?>", "<?php echo addslashes($wbsItem->wbs_dictionary); ?>")' style="cursor:pointer">
-						<div>WBS dictionary</div>
+						<div><?php echo $AppUI->_("WBS dictionary") ?></div>
 					  </li>
 					  <li onclick="saveScrollPosition();document.wbs_new_activity_<?php echo $wbsItem->id ?>.submit();">
-						<div>New activity</div>
+						<div><?php echo $AppUI->_("New activity") ?></div>
 							<form action="?m=scope_and_schedule" name="wbs_new_activity_<?php echo $wbsItem->id ?>" method="post" style="display:none">
 								<input type="hidden" name="dosql" value="do_new_activity">
 								<input type="hidden" name="project_id" value="<?php echo $project_id ?>" /> 
@@ -102,7 +102,7 @@ function printWBSItem($wbsItem){
 				
 				<ol>
 				<?php if (count($tasks)>0){ ?>
-				<b><i> Activities </i></b>
+				<b><i><?php echo $AppUI->_("Activities"); ?> </i></b>
 				<?php
 					$taskOrder=1;
 					foreach($tasks as $task){
@@ -229,12 +229,12 @@ function saveScrollPosition(){
 	    window.sessionStorage.setItem('wbsScrollY',y);
 }
 </script>
-<div style="text-align: right">
-	<input type="button" value="<?php echo $AppUI->_("Sequence activities"); ?>" onclick="window.location='index.php?m=scope_and_schedule&a=projects_activities_sequencing&project_id=<?php echo $projectObj->project_id ?>';" />
+<div style="text-align: right;margin-top:5px;margin-right:5px">
+	<input type="button" class="button" value="<?php echo $AppUI->_("Sequence activities"); ?>" onclick="window.location='index.php?m=scope_and_schedule&a=projects_activities_sequencing&project_id=<?php echo $projectObj->project_id ?>';" />
 </div>
 <span style="margin-left: 20px">
 	<br />
-	<b>Work Breakdown Structure - WBS</b> - 
+	<b><?php echo $AppUI->_("Work Breakdown Structure - WBS"); ?></b> - 
 	<a href="index.php?m=projects&a=view&project_id=<?php echo $projectObj->project_id ?>"><?php echo $projectObj->project_name ?></a>
 	
 </span>
@@ -266,9 +266,9 @@ function saveScrollPosition(){
 	<input type="hidden" name="dosql" value="do_wbs_item_move" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id ?>" />
 	<input type="hidden" name="id" value="" /> 
-	 <b>Moving item:</b> <i><span id="move_wbs_item_name"></span></i>
+	 <b><?php echo $AppUI->_("Moving item"); ?>:</b> <i><span id="move_wbs_item_name"></span></i>
 	 <br /><br />
-	  Move to position:<br />
+	  <?php echo $AppUI->_("Move to position"); ?>:<br />
 	  <select name="wbs_id_position"> 
 	  <?php
 	  foreach ($_SESSION["wbsItemsArray"] as $wbsItem){
@@ -281,14 +281,14 @@ function saveScrollPosition(){
 	  ?>
 	  </select>
 	  <br /><br />
-	  Order: <br />
+	  <?php echo $AppUI->_("Order"); ?>: <br />
 	  <select name="order">
 		<option value="-0.1"><?php echo $AppUI->_("Before") ?></option> 
 		<option value="0.1"><?php echo $AppUI->_("After") ?> </option>
 	  </select> 
 	  <br /><br />
-	  <input type="button" onclick="submitMoveItem()" value="Confirm" />
-	  <input type="button" value="Cancel" onclick="closeMoveWBSItem()" />
+	  <input type="button" onclick="submitMoveItem()" value="<?php echo $AppUI->_("Confirm"); ?>" />
+	  <input type="button" value="<?php echo $AppUI->_("Cancel"); ?>" onclick="closeMoveWBSItem()" />
 </form>
 </div>
 
@@ -312,8 +312,8 @@ function saveScrollPosition(){
 	  ?>
 	  </select> 
 	  <br /><br />
-	  <input type="submit" value="Confirm" />
-	  <input type="button" value="Cancel" onclick="closeMoveActivity()" />
+	  <input type="submit" value="<?php echo $AppUI->_("Confirm"); ?>" />
+	  <input type="button" value="<?php echo $AppUI->_("Cancel"); ?>" onclick="closeMoveActivity()" />
 </form>
 </div>
 
@@ -321,11 +321,11 @@ function saveScrollPosition(){
 	<form name="wbs_dictionary" action="?m=scope_and_schedule" method="post">
 		<input type="hidden" name="dosql" value="do_wbs_dictionary" />
 		<input type="hidden" name="id" value="<?php echo $wbsItem->id ?>" /> 
-		<b>Dictionary for item:</b> <i><span id="dictionary_wbs_item_name"></span></i><br /><br />
+		<b><?php echo $AppUI->_("Dictionary for item"); ?>:</b> <i><span id="dictionary_wbs_item_name"></span></i><br /><br />
 		<textarea name="dictionary" maxlength="250" cols="40" rows="4"></textarea>
 		  <br /><br />
-		  <input type="submit" value="Confirm" />
-		  <input type="button" value="Cancel" onclick="closeDialogWBSDictionary()" />
+		  <input type="submit" value="<?php echo $AppUI->_("Confirm"); ?>" />
+		  <input type="button" value="<?php echo $AppUI->_("Cancel"); ?>" onclick="closeDialogWBSDictionary()" />
 	</form>
 </div>
 
@@ -355,8 +355,8 @@ function saveScrollPosition(){
 		  <?php } ?>
 		  </select>
 		  <br /><br />
-		  <input type="submit" value="Confirm" />
-		  <input type="button" value="Cancel" onclick="closeMoveActivityOrder()" />
+		  <input type="submit" value="<?php echo $AppUI->_("Confirm"); ?>" />
+		  <input type="button" value="<?php echo $AppUI->_("Cancel"); ?>" onclick="closeMoveActivityOrder()" />
 	</form>
 </div>
 
