@@ -121,64 +121,72 @@ function printWBSItem($wbsItem){
 									<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
 									<input type="text" value="<?php echo $task->task_name ?>" name="task_name" style="width:550px;" maxlength="100"  onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />	
 									<img src="modules/scope_and_schedule/images/reorder_icon.png" style="cursor:pointer;height:18px;width:18px"  id="wbs_move_<?php echo $wbsItem->id ?>"   onclick="saveScrollPosition();openMoveActivity(<?php echo $wbsItem->id ?>, <?php echo $task->task_id ?>, '<?php echo addslashes($task->task_name) ?>');" />
-									<div style="margin-top:5px;margin-left:15px">
-										
-										<label><?php echo $AppUI->_("Planned dates") ?>:</label>
-										<input size="8" type="text" value="<?php $date = new CDate($task->task_start_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="start_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />
-										&nbsp;<label><?php echo $AppUI->_("to") ?></label>&nbsp;
-										<input size="8" type="text" value="<?php $date = new CDate($task->task_end_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="end_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />									
-										<script>
-											var form=$("#task_update_<?php echo $task->task_id ?>"); 
-											var startDate=form.find("[name='start_date']");
-											var endDate=form.find("[name='end_date']");
-											startDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true} );
-											endDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true});
-										</script>
-									</div>	
+									<table style="width:550px">
+										<tr>
+											<td style="vertical-align:top">
+												<div style="margin-top:5px;margin-left:15px">
+													
+													<label><?php echo $AppUI->_("Planned dates") ?>:</label>
+													<input size="8" type="text" value="<?php $date = new CDate($task->task_start_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="start_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />
+													&nbsp;<label><?php echo $AppUI->_("to") ?></label>&nbsp;
+													<input size="8" type="text" value="<?php $date = new CDate($task->task_end_date ); echo $date->format($_SESSION["dateFormatPHP"]);?>" name="end_date" onchange="saveScrollPosition();ajaxFormSubmit('task_update_<?php echo $task->task_id ?>');" />									
+													<script>
+														var form=$("#task_update_<?php echo $task->task_id ?>"); 
+														var startDate=form.find("[name='start_date']");
+														var endDate=form.find("[name='end_date']");
+														startDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true} );
+														endDate.datepicker({dateFormat: "<?php echo $_SESSION["dateFormat"] ?>",showButtonPanel: true, firstDay: 1, changeYear:true, changeMonth:true});
+													</script>
+												</div>	
 								</form>
-								<div id="assigned_users_comp" style="width:550px;  margin-top: -25px; border:0px solid black;text-align:right;" >
-								<?php
-									$taskAssigment= new CTaskAssignement();
-									$users=$taskAssigment->getAllUsersFromCompany($_SESSION["company_id"]);
-									$assigned_users=$taskAssigment->getAssignedUsersToTask($task->task_id);
-								?>
-									<form action="?m=scope_and_schedule" name="activity_add_user_<?php echo $task->task_id ?>" method="post" style="display:inline" >
-										<input type="hidden" name="dosql" value="do_add_user_to_task" />
-										<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-										<label><?php echo $AppUI->_("Resources") ?>:</label>
-										<select name="user_id" style="height:22px">
-											<option value="-1"><?php echo $AppUI->_("-- Select a resource --") ?></option> 
-										<?php
-										foreach($users as $user){
-										?>
-										<option value="<?php echo  $user['user_id'] ?>"> 
-											<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
-										</option>
-										<?php
-											}
-										?>
-										</select>
-										<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();document.activity_add_user_<?php echo $task->task_id ?>.submit();" />
-									</form>
-									
-										<?php
-										foreach ($assigned_users as $user){
-										?>
-											
-											<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post" style="margin-top:7px">
-												<input type="hidden" name="dosql" value="do_delete_user_to_task" />
-												<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
-												<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
-												<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
-												<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_user_<?php echo $task->task_id ."_".$user['user_id']; ?>.submit();" />
-												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											</form>
-											
-										<?php
-										}
-										?>
-									
-								</div>
+											</td>
+											<td style="vertical-align:top;text-align:right">
+												<div id="assigned_users_comp">
+												<?php
+													$taskAssigment= new CTaskAssignement();
+													$users=$taskAssigment->getAllUsersFromCompany($_SESSION["company_id"]);
+													$assigned_users=$taskAssigment->getAssignedUsersToTask($task->task_id);
+												?>
+													<form action="?m=scope_and_schedule" name="activity_add_user_<?php echo $task->task_id ?>" method="post" style="display:inline" >
+														<input type="hidden" name="dosql" value="do_add_user_to_task" />
+														<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+														<label><?php echo $AppUI->_("Resources") ?>:</label>
+														<select name="user_id" style="height:22px">
+															<option value="-1"><?php echo $AppUI->_("-- Select a resource --") ?></option> 
+														<?php
+														foreach($users as $user){
+														?>
+														<option value="<?php echo  $user['user_id'] ?>"> 
+															<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+														</option>
+														<?php
+															}
+														?>
+														</select>
+														<img src="modules/scope_and_schedule/images/add_button_icon.png" style="cursor:pointer;height:18px;width:18px" onclick="saveScrollPosition();if(verifyResourceSelection(document.activity_add_user_<?php echo $task->task_id ?>.user_id)){document.activity_add_user_<?php echo $task->task_id ?>.submit();}" />
+													</form>
+													
+														<?php
+														foreach ($assigned_users as $user){
+														?>
+															
+															<form action="?m=scope_and_schedule" name="activity_delete_user_<?php echo $task->task_id ."_".$user['user_id'];?>" method="post" style="margin-top:7px">
+																<input type="hidden" name="dosql" value="do_delete_user_to_task" />
+																<input type="hidden" name="task_id" value="<?php echo $task->task_id ?>" />
+																<input type="hidden" name="user_id" value="<?php echo  $user['user_id'] ?>" />
+																<?php echo  $user['contact_first_name'] ." " . $user['contact_last_name'] ?>
+																<img src="modules/scope_and_schedule/images/trash-icon.png" style="cursor:pointer;height:15px;width:12px" onclick="saveScrollPosition();document.activity_delete_user_<?php echo $task->task_id ."_".$user['user_id']; ?>.submit();" />
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+															</form>
+															
+														<?php
+														}
+														?>
+													
+													</div>
+											</td>
+										</tr>
+									</table>
 							</div>	
 													
 						</li>					

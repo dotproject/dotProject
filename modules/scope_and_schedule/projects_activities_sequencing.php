@@ -91,7 +91,7 @@ $project->load($projectId);
                     <input type="hidden" name="activity_id" value="<?php echo $task->task_id; ?>" /> 
                     <input type="hidden" name="project_id" value="<?php echo $projectId; ?>"/>
                     <select name="dependency_id" style="width:200px; max-width: 200px">
-                        <option>--<?php echo $AppUI->_("Add dependency"); ?>--</option>
+                        <option value="-1">--<?php echo $AppUI->_("Add dependency"); ?>--</option>
                         <?php
                         foreach ($tasks as $task_dependency) {
                             if ($task->task_id != $task_dependency->task_id) {

@@ -132,4 +132,13 @@ $(document).ready(function (){
 		console.log(data);
 	});
   }
+  
+  function verifyResourceSelection(field){
+	  var result=true;
+	  if(field.options[field.selectedIndex].value==-1){
+		alertify.error("Please select a resource to add."); 
+		result=false;
+	  }
+	  return result;
+  }
 	

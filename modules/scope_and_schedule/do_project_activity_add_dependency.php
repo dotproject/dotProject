@@ -7,6 +7,8 @@
 	$project_id = dPgetParam($_POST, 'project_id');
 	$dependency_id = dPgetParam($_POST, 'dependency_id');
    
+   
+	if($dependency_id!=-1){
 	$controllerActivityMDP= new ControllerActivityMDP();
 	
 	$activity=$controllerActivityMDP->getProjectActivity($activity_id);
@@ -21,5 +23,8 @@
 
 	$controllerActivityMDP->updateDependencies($activity_id,$parameter);
 	$AppUI->setMsg($AppUI->_("Dependency included",UI_OUTPUT_HTML), UI_MSG_OK, true);
+	}else{
+		$AppUI->setMsg($AppUI->_("No dependency included",UI_OUTPUT_HTML), UI_MSG_ERROR, true);
+	}
 	$AppUI->redirect();
 ?>

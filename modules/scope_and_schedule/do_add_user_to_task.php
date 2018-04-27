@@ -6,6 +6,6 @@ $user_id = dPgetParam($_POST, 'user_id');
 if( intval($user_id) != -1){
 	$taskAssigment= new CTaskAssignement();
 	$taskAssigment->addAssignedUsersToTask($task_id,$user_id);
-	$AppUI->redirect();
 }
+$AppUI->redirect();
 ?>
