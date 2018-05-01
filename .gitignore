@@ -7,3 +7,5 @@ includes/config.php
 !files/temp/index.html
 files/
 lib/ezpdf/fonts/php_*
+/nbproject/private/
+/nbproject

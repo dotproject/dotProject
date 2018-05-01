@@ -22,7 +22,7 @@ if (isset($_POST['clash_action'])) {
 } else {
 
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
   function set_clash_action(action) {
     var f = document.clash_form;
     f.clash_action.value = action;
@@ -106,7 +106,7 @@ function clash_suggest() {
 		$t->addSeconds($addMins);
 	}
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 var calendarField = '';
 
 function popCalendar(field) {

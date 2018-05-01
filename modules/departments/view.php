@@ -74,7 +74,7 @@ if ($dept_id > 0) {
 			$titleBlock->show();
 		}
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

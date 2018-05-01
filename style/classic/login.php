@@ -4,13 +4,12 @@ if (!defined('DP_BASE_DIR')) {
 }
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
 	<meta http-equiv="Pragma" content="no-cache">
-	<link href="./style/<?php echo $uistyle;?>/main.css" rel="STYLESHEET" type="text/css" />
+	<link href="./style/<?php echo $uistyle;?>/main.css" rel="STYLESHEET"/>
 </head>
 
 <body style="background-color: white" onload="document.loginform.username.focus();">

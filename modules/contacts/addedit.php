@@ -51,7 +51,7 @@ if ($contact_id == 0 && $company_id > 0) {
 
 ?>
 
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 <?php
 	echo "window.company_id=" . (int)dPgetParam($company_detail, 'company_id', 0) . ";\n";
 	echo "window.company_value='" . dPgetCleanParam($company_detail, 'company_name', "") . "';\n";
@@ -248,37 +248,37 @@ function companyChange() {
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Phone');?>:</td>
 			<td>
-				<input type="text" class="text" name="contact_phone" value="<?php echo @$row->contact_phone;?>" maxlength="30" size="25" />
+				<input type="tel" class="text" name="contact_phone" value="<?php echo @$row->contact_phone;?>" maxlength="30" size="25" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Phone');?>2:</td>
 			<td>
-				<input type="text" class="text" name="contact_phone2" value="<?php echo @$row->contact_phone2;?>" maxlength="30" size="25" />
+				<input type="tel" class="text" name="contact_phone2" value="<?php echo @$row->contact_phone2;?>" maxlength="30" size="25" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Fax');?>:</td>
 			<td>
-				<input type="text" class="text" name="contact_fax" value="<?php echo @$row->contact_fax;?>" maxlength="30" size="25" />
+				<input type="tel" class="text" name="contact_fax" value="<?php echo @$row->contact_fax;?>" maxlength="30" size="25" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Mobile Phone');?>:</td>
 			<td>
-				<input type="text" class="text" name="contact_mobile" value="<?php echo @$row->contact_mobile;?>" maxlength="30" size="25" />
+				<input type="tel" class="text" name="contact_mobile" value="<?php echo @$row->contact_mobile;?>" maxlength="30" size="25" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Email');?>:</td>
 			<td nowrap="nowrap">
-				<input type="text" class="text" name="contact_email" value="<?php echo @$row->contact_email;?>" maxlength="255" size="25" />
+				<input type="email" class="text" name="contact_email" value="<?php echo @$row->contact_email;?>" maxlength="255" size="25" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Email');?>2:</td>
 			<td>
-				<input type="text" class="text" name="contact_email2" value="<?php echo @$row->contact_email2;?>" maxlength="255" size="25" />
+				<input type="email" class="text" name="contact_email2" value="<?php echo @$row->contact_email2;?>" maxlength="255" size="25" />
 			</td>
 		</tr>
 		<tr>

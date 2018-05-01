@@ -63,7 +63,7 @@ $q->addOrder('u.user_username');
 $users = $q->loadHashList();
 
 ?>
-<script type="text/javascript">
+<script >
 function checkAllProjects()
 {
 	var sellist = document.getElementById('prjSelectList');

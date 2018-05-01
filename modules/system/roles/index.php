@@ -38,7 +38,7 @@ $crumbs['?m=system'] = 'System Admin';
 
 ?>
 
-<script type="text/javascript">
+<script >
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

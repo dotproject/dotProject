@@ -46,7 +46,7 @@ if ($canDelete_folder) {
 $titleBlock->show();
 
 ?>
-<script language="javascript" type="text/javascript">
+<script language="javascript" >
 function submitIt() {
 	var f = document.folderFrm;
 	var msg = '';

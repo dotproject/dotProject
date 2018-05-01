@@ -167,7 +167,7 @@ for ($minutes=0; $minutes < $check; $minutes++) {
 }
 ?>
 
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function submitIt() {
 	var form = document.editFrm;
 	if (form.event_title.value.length < 1) {

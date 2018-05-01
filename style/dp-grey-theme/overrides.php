@@ -102,7 +102,7 @@ class CTabBox extends CTabBox_core {
 					$currentTabName = $v[1];
 					require $this->baseInc.$v[0].'.php';
 					echo '</div>';
-					echo ('<script language="JavaScript" type="text/javascript">' . "\n" 
+					echo ('<script language="JavaScript" >' . "\n" 
 						  . '//<!--' . "\n" 
 						  . 'show_tab('.$this->active.');' . "\n" 
 						  . '//-->' . "\n" 

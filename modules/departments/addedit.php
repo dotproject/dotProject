@@ -76,7 +76,7 @@ if (!db_loadHash($sql, $drow) && $dept_id > 0) {
 	$titleBlock->addCrumb("?m=companies&amp;a=view&amp;company_id=$company_id", "view this company");
 	$titleBlock->show();
 ?>
-<script type="text/javascript" language="javascript">
+<script  language="javascript">
 function testURL(x) {
 	var test = "document.editFrm.dept_url.value";
 	test = eval(test);
@@ -116,13 +116,13 @@ function submitIt() {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone');?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_phone" value="<?php echo @$drow["dept_phone"];?>" maxlength="30" />
+		<input type="tel" class="text" name="dept_phone" value="<?php echo @$drow["dept_phone"];?>" maxlength="30" />
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax');?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_fax" value="<?php echo @$drow["dept_fax"];?>" maxlength="30" />
+		<input type="tel" class="text" name="dept_fax" value="<?php echo @$drow["dept_fax"];?>" maxlength="30" />
 	</td>
 </tr>
 <tr>

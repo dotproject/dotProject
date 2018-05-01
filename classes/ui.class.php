@@ -945,12 +945,12 @@ class CAppUI {
 		}
 		asort($js_files);
 		while (list(,$js_file_name) = each($js_files)) {
-			echo ('<script type="text/javascript" src="' . $base . 'js/' 
+			echo ('<script  src="' . $base . 'js/' 
 				  . $this->___($js_file_name) . '"></script>'."\n");
 		}
 		
 		// additionally load overlib
-		echo ('<script type="text/javascript" src="' . $base . 'lib/overlib/overlib.js"></script>' 
+		echo ('<script  src="' . $base . 'lib/overlib/overlib.js"></script>' 
 		      . "\n");
 		
 		$this->getModuleJS($m, $a, true);
@@ -969,14 +969,14 @@ class CAppUI {
 		
 		if ($load_all || !($file)) {
 			if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js')) {
-				echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
+				echo ('<script  src="' . $base . 'modules/' . $module . '/' 
 				      . $module . '.module.js"></script>' . "\n");
 			}
 		}
 		if (isset($file)) {
 			$file = $this->___($file);
 			if (file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
-				echo ('<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' 
+				echo ('<script  src="' . $base . 'modules/' . $module . '/' 
 				      . $file . '.js"></script>' . "\n");
 			}
 		}
