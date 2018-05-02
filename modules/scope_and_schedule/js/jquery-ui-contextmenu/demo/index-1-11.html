@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+	<title>jquery.ui-contextmenu.js - Demo</title>
+
+	<link href="demo.css" rel="stylesheet" />
+	<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+
+	<!-- <script src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
+	<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+	<!-- <script src="//code.jquery.com/jquery-3.0.0.min.js"></script> -->
+	<!-- <script src="//code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
+
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+	<!-- Optional custom library to enable 'taphold' events -->
+	<script src="../lib/jquery-taphold/taphold.js"></script>
+
+	<!-- Just for this demo: Custom library to add a dynamic themeroller switcher -->
+	<script src="../lib/Super-Theme-Switcher/jquery.themeswitcher.js"></script>
+
+	<!-- Finally this plugin itself -->
+	<script src="../jquery.ui-contextmenu.js"></script>
+
+<style type="text/css">
+
+body{
+	/* Prevent tablets from selecting text on taphold, etc:
+	   Note:
+	   If only the potential menu trigger elements should be protected, simply
+	   use the 'preventSelect: true' option.
+	   But we disable it more globally for tablet pc's, because the whole line
+	   or paragraph will still be selected otherwise.
+
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	*/
+}
+
+/* Only for the demo */
+.hasmenu, .hasmenu2 {
+	border: 1px solid #008;
+	margin: 3px;
+	padding: 5px;
+	width: 30px;
+}
+
+/* Optionally define a fixed width for menus */
+.ui-menu {
+	width: 220px;
+}
+/* Allow to use <kbd> elements inside the title to define shortcut hints. */
+.ui-menu kbd {
+	padding-left: 1em;
+	float: right;
+}
+
+/* Define a custom icon */
+.ui-icon.custom-icon-firefox {
+	background-image: url(application_firefox.gif);
+	background-position: 0 0;
+}
+</style>
+
+
+<script type="text/javascript">
+var CLIPBOARD = "";
+$(function(){
+	/* Enable a themeroller theme-switching using a combobox. */
+	$("#switcher").themeswitcher({
+		jqueryuiversion: "1.11.4",
+		themepath: "//code.jquery.com/ui/",
+		imgpath: "../lib/Super-Theme-Switcher/images/",
+		loadTheme: "smoothness"
+	});
+
+	/* Menu 1: init by passing an array of entries. */
+
+	$(document).contextmenu({
+		delegate: ".hasmenu",
+		autoFocus: true,
+		preventContextMenuForPopup: true,
+		preventSelect: true,
+		taphold: true,
+		menu: [
+			{title: "Menu Header", cmd: "cat1", isHeader: true},
+			{title: "Cut <kbd>Ctrl+X</kbd>", cmd: "cut", uiIcon: "ui-icon-scissors"},
+			{title: "Copy <kbd>Ctrl+C</kbd>", cmd: "copy", uiIcon: "ui-icon-copy"},
+			{title: "Paste <kbd>Ctrl+V</kbd>", cmd: "paste", uiIcon: "ui-icon-clipboard", disabled: true },
+			{title: "----"},
+			{title: "More", children: [
+				{title: "Sub 1 (callback)", action: function(event, ui) { alert("action callback sub1");} },
+				{title: "Edit <kbd>[F2]</kbd>", cmd: "sub2", tooltip: "Edit the title"},
+				]}
+			],
+		// Handle menu selection to implement a fake-clipboard
+		select: function(event, ui) {
+			var $target = ui.target;
+			switch(ui.cmd){
+			case "copy":
+				CLIPBOARD = $target.text();
+				break
+			case "paste":
+				CLIPBOARD = "";
+				break
+			}
+			alert("select " + ui.cmd + " on " + $target.text());
+			// Optionally return false, to prevent closing the menu now
+		},
+		// Implement the beforeOpen callback to dynamically change the entries
+		beforeOpen: function(event, ui) {
+			var $menu = ui.menu,
+				$target = ui.target,
+				extraData = ui.extraData; // passed when menu was opened by call to open()
+
+			// console.log("beforeOpen", event, ui, event.originalEvent.type);
+
+			ui.menu.zIndex( $(event.target).zIndex() + 1);
+
+			$(document)
+//				.contextmenu("replaceMenu", [{title: "aaa"}, {title: "bbb"}])
+//				.contextmenu("replaceMenu", "#options2")
+//				.contextmenu("updateEntry", "cut", {title: "Cuty", uiIcon: "ui-icon-heart", disabled: true})
+				.contextmenu("setTitle", "copy", "Copy '" + $target.text() + "'")
+				.contextmenu("setTitle", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : ""))
+				.contextmenu("enableEntry", "paste", (CLIPBOARD !== ""));
+
+			// Optionally return false, to prevent opening the menu now
+		}
+	});
+
+	/* Menu 2: init menu by passing an <ul> element. */
+
+	$("#container").contextmenu({
+		delegate: ".hasmenu2",
+		hide: { effect: "explode", duration: "slow" },
+		menu: "#options",
+//        position: {my: "left top", at: "left bottom"},
+		position: function(event, ui){
+			return {my: "left top", at: "left bottom", of: ui.target};
+		},
+		preventSelect: true,
+		show: { effect: "fold", duration: "slow"},
+		taphold: true,
+		uiMenuOptions: { // Additional options, used when UI Menu is created
+			position: { my: "left top", at: "right+10 top+10" }
+		},
+		focus: function(event, ui) {
+			var menuId = ui.item.find(">a").attr("href");
+			$("#info").text("focus " + menuId);
+			console.log("focus", ui.item);
+		},
+		blur: function(event, ui) {
+			$("#info").text("");
+			console.log("blur", ui.item);
+		},
+		beforeOpen: function(event, ui) {
+//			$("#container").contextmenu("replaceMenu", "#options2");
+//			$("#container").contextmenu("replaceMenu", [{title: "aaa"}, {title: "bbb"}]);
+		},
+		open: function(event, ui) {
+//          alert("open on " + ui.target.text());
+		},
+		select: function(event, ui) {
+			alert("select " + ui.cmd + " on " + ui.target.text());
+		}
+	});
+
+	/* Open and close an existing menu without programatically. */
+
+	$("#triggerPopup").click(function(){
+		// Trigger popup menu on the first target element
+		$(document).contextmenu("open", $(".hasmenu:first"), {foo: "bar"});
+		setTimeout(function(){
+			$(document).contextmenu("close");
+		}, 2000);
+	});
+});
+</script>
+</head>
+
+<body class="example">
+	<h1>jquery.ui-contextmenu.js</h1>
+	<iframe id="ghButton"
+		src="http://ghbtns.com/github-btn.html?user=mar10&repo=jquery-ui-contextmenu&type=watch&count=true"
+		allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20">
+		</iframe>
+
+	<p class="menu">
+		<a href="index.html">Demo Playground</a>
+		&mdash;
+		<a href="index-1-10.html">Demo with jQuery UI 1.10</a>
+		&mdash;
+		<b>Demo with jQuery UI 1.11</b>
+		&mdash;
+		<a href="index-1-12.html">Demo with jQuery UI 1.12</a>
+	</p>
+
+	<div>
+		<label for="switcher">Theme:</label> <div id="switcher"></div>
+	</div>
+
+	<h3>Sample 1</h3>
+	<ul>
+		<li>Initialized using a command-array.
+		<li>Entry 'More - Sub1' uses the callback syntax.
+		<li>The menu is modified in the `beforeOpen` event (disabling an renaming entries).
+		<li>`preventSelect: true` prevents accidential selection of the menu
+			targets (i.e. 'AAA') when double-clicking or dragging the mouse.
+		<li>`taphold: true` enables long-press to open the menu (useful on
+			tablet computers).
+		<li>Ctrl+Click or two-finger-click on the touchpad also works (MacBook).
+	</ul>
+	<p>Right-click in an element to open the context menu:</p>
+	<div>
+		<span class="hasmenu" tabindex="0">AAA</span>
+		<span class="hasmenu" tabindex="0">BBB</span>
+		<span class="hasmenu" tabindex="0">CCC</span>
+	</div>
+
+	<h3>Sample 2</h3>
+	<ul>
+		<li>Initialized by hidden &lt;ul> element.
+		<li>Use custom show/hide effects.
+		<li>Define custom position for initial popup.
+		<li>Define custom position for submenus.
+	</ul>
+	<div id="container">
+		<span class="hasmenu2">AAA</span>
+		<span class="hasmenu2">BBB</span>
+		<span class="hasmenu2">CCC</span>
+	</div>
+
+	<ul id="options" style="display: none;">
+		<li data-command="action1"><span class="ui-icon custom-icon-firefox"></span>Action 1</li>
+		<li data-command="action2"><span class="ui-icon ui-icon-heart"></span>Action 2</li>
+		<li data-command="action3" class="ui-state-disabled">Action 3</li>
+		<li>----</li>
+		<li>Extra
+			<ul>
+				<li data-command="action4">sub4</li>
+				<li data-command="action5">sub5</li>
+			</ul>
+		</li>
+	</ul>
+
+	<ul id="options2" class="ui-helper-hidden">
+		<li data-command="action2"><span class="ui-icon ui-icon-heart"></span>Action 2
+		<li data-command="action3" class="ui-state-disabled">Action 3
+	</ul>
+
+	<h3>Sample 3</h3>
+	<p>Open context menu using <code>$("#container").contextmenu("open", $(".hasmenu:first"))</code> and close after 2 sec.:</p>
+	<button id="triggerPopup">Trigger popup</button>
+
+	<a href="https://github.com/mar10/jquery-ui-contextmenu/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkmerightorange_ff7600.png"></a>
+</body>
+</html>
