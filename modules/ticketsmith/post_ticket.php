@@ -63,7 +63,7 @@ function submitIt() {
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
-	<td><input type="text" class="text" name="subject" value="" size="50" maxlength="50" /> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
+	<td><input autofocus type="text" class="text" name="subject" value="" size="50" maxlength="50" /> <span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Priority'); ?>:</td>

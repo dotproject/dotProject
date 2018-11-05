@@ -193,12 +193,12 @@ for ($i=($page-1)*$xpg_pagesize, $pmax=$page*$xpg_pagesize; $i<$pmax && $i<$xpg_
 	if ($fp != $row['link_project']) {
 		if (!$row['project_name']) {
 			$row['project_name'] = $AppUI->_('All Projects');
-			$row['project_color_identifier'] = 'f4efe3';
+			$row['project_color_identifier'] = '#f4efe3';
 		}
 		if ($showProject) {
 ?>
 	<tr>
-		<td colspan="10" style="background-color:#<?php 
+		<td colspan="10" style="background-color:<?php 
 			echo ($row['project_color_identifier']); ?>" style="border: outset 2px #eeeeee">
 			<font color="<?php 
 			echo (bestColor($row['project_color_identifier'])); ?>">

@@ -178,7 +178,7 @@ foreach ($projects as $row) {
 		          ? 'style="color:red; font-weight:bold"' : '');
 ?>
 <tr>
-	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#<?php 
+	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:<?php 
 echo ($row['project_color_identifier']); ?>">
 		<span style="color:<?php echo bestColor($row['project_color_identifier']); ?>">
 			<?php echo sprintf("%.1f%%", $row['project_percent_complete']); ?>

@@ -265,7 +265,7 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
         if ($today_view) { // Show the project name
                 $s .= '<td>';
                 $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $a['task_project'] . '">';
-                $s .= '<span style="padding:2px;background-color:#' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
+                $s .= '<span style="padding:2px;background-color:' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
                 $s .= '</a></td>';
         }
 // task description
@@ -435,7 +435,7 @@ function showtask_pr( &$a, $level=0, $is_opened = true, $today_view = false) {
         if ($today_view) { // Show the project name
                 $s .= '<td>';
                 $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $a['task_project'] . '">';
-                $s .= '<span style="padding:2px;background-color:#' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
+                $s .= '<span style="padding:2px;background-color:' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
                 $s .= '</a></td>';
         }
         if (! $today_view) {

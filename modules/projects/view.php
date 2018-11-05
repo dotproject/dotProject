@@ -226,7 +226,7 @@ echo ($AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT
 </form>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
-	<td style="border: outset #d1d1cd 1px;background-color:#<?php 
+	<td style="border: outset #d1d1cd 1px;background-color:<?php 
 echo $obj->project_color_identifier; ?>" colspan="2">
 	<?php
 echo ('<span style="color:' . bestColor($obj->project_color_identifier) . '; font-weight:bold">' 

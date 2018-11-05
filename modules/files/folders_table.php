@@ -443,10 +443,10 @@ function displayFiles($folder_id) {
 		if ($fp != $row['file_project']) {
 			if (!$row['file_project']) {
 				$row['project_name'] = $AppUI->_('Not associated to projects');
-				$row['project_color_identifier'] = 'f4efe3';
+				$row['project_color_identifier'] = '#f4efe3';
 			}
 			if ($showProject) {
-				$style = ('background-color:#' . $row['project_color_identifier'] 
+				$style = ('background-color:' . $row['project_color_identifier'] 
 						  . ';color:' . bestColor($row['project_color_identifier']));
 ?>
 <tr>

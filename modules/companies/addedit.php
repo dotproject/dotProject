@@ -94,7 +94,7 @@ function testURL(x) {
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Company Name'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_name" value="<?php 
+			<input autofocus type="text" class="text" name="company_name" value="<?php 
 echo dPformSafe(@$obj->company_name); ?>" size="50" maxlength="255" /> (<?php 
 echo $AppUI->_('required'); ?>)
 		</td>

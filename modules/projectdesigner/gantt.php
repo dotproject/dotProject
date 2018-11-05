@@ -45,7 +45,7 @@ if ($caller == 'todo') {
 	$user_id = defVal( @$_REQUEST['user_id'], 0 );
 
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for').' '.dPgetUsername($user_id);
-	$projects[$project_id]['project_color_identifier'] = 'ff6000';
+	$projects[$project_id]['project_color_identifier'] = '#ff6000';
 
 	$showLabels = (bool)dPgetParam($_REQUEST, 'showLabels', false);
 	$showPinned = (bool)dPgetParam( $_REQUEST, 'showPinned', false );
@@ -211,8 +211,8 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 $graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
-$graph->scale->SetTableTitleBackground('#'.$projects[$project_id]['project_color_identifier']);
-$font_color = bestColor('#'.$projects[$project_id]['project_color_identifier']);
+$graph->scale->SetTableTitleBackground($projects[$project_id]['project_color_identifier']);
+$font_color = bestColor($projects[$project_id]['project_color_identifier']);
 $graph->scale->tableTitle->SetColor($font_color);
 $graph->scale->tableTitle->Show(true);
 

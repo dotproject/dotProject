@@ -145,7 +145,7 @@ if ($message_parent >= 0) {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Subject');?>:</td>
 	<td>
-		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$AppUI->___($message_info['message_title']);?>" size=50 maxlength=250 />
+		<input autofocus type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') .$AppUI->___($message_info['message_title']);?>" size=50 maxlength=250 />
 	</td>
 </tr>
 <tr>

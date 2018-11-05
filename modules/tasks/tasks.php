@@ -533,7 +533,7 @@ echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only th
   <table width="100%" border="0">
   <tr>
 	<!-- patch 2.12.04 display company name next to project name -->
-	<td nowrap style="border: outset #eeeeee 2px;background-color:#<?php 
+	<td nowrap style="border: outset #eeeeee 2px;background-color:<?php 
 echo @$p['project_color_identifier']; ?>">
 	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $k;?>">
 	<span style="color:<?php 

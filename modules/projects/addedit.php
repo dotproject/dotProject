@@ -133,14 +133,6 @@ if ($project_id == 0 && $contact_id > 0) {
 <script  src="<?php echo DP_BASE_URL;?>/lib/calendar/lang/calendar-<?php echo $AppUI->user_locale; ?>.js"></script>
 
 <script language="javascript" >
-function setColor(color) {
-var f = document.editFrm;
-if (color) {
-	f.project_color_identifier.value = color;
-}
-//test.style.background = f.project_color_identifier.value;
-document.getElementById('test').style.background = '#' + f.project_color_identifier.value; 		//fix for mozilla: does this work with ie? opera ok.
-}
 
 function setShort() {
 var f = document.editFrm;
@@ -277,7 +269,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name');?></td>
 			<td width="100%" colspan="2">
-				<input type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onblur="javascript:setShort();" class="text" /> *
+				<input autofocus type="text" name="project_name" value="<?php echo dPformSafe($row->project_name);?>" size="25" maxlength="50" onblur="javascript:setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
@@ -303,11 +295,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
 			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
-
-				<a href="#" onclick="javascript:popCalendar('start_date', 'start_date');">
-					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-				</a>
+				<input type="date" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text"/>
 			</td>
 			<td rowspan="6" valign="top">
 					<?php
@@ -327,11 +315,7 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date');?></td>
 			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-
-				<a href="#" onclick="javascript:popCalendar('end_date', 'end_date');">
-					<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-				</a>
+				<input type="date" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text"/>
 			</td>
 		</tr>
 		<tr>
@@ -402,14 +386,9 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier');?></td>
 			<td nowrap="nowrap">
-				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>" size="10" maxlength="6" onblur="javascript:setColor();" class="text" /> *
+				<input type="color" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : '#FFFFFF';?>" size="10" maxlength="7"/> *
 			</td>
-			<td nowrap="nowrap" align="right">
-				<a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color');?></a>
-			</td>
-			<td nowrap="nowrap">
-				<span id="test" title="test" style="background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF';?>;"><a href="#" onclick="javascript:newwin=window.open('?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><img src="./images/shim.gif" border="1" width="40" height="20" alt="" /></a></span>
-			</td>
+						
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type');?></td>
