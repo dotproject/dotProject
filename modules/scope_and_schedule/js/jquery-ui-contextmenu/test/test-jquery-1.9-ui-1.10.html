@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jquery.ui-contextmenu Test Suite</title>
+
+	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.23.1.css">
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+	<script src="https://code.jquery.com/qunit/qunit-1.23.1.js"></script>
+
+	<script src="../jquery.ui-contextmenu.js"></script>
+	<script src="tests.js"></script>
+</head>
+<body>
+	<h1 id="qunit-header">jquery.ui-contextmenu Test Suite for older jQuery UI 1.10</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<hr>
+	<h3>Sample Markup</h3>
+	<div id="container">
+		<span class="hasmenu">AAA</span>
+		<span class="hasmenu">BBB</span>
+		<span class="hasmenu">CCC</span>
+	</div>
+
+	<!-- This element will be copied as #sampleMenu for every test: -->
+
+	<ul id="sampleMenuTemplate" style="display: none;">
+		<li data-command="cut"><a href="#"><span class="ui-icon ui-icon-scissors"></span>Cut</a>
+		<li data-command="copy"><a href="#"><span class="ui-icon ui-icon-copy"></span>Copy</a>
+		<li data-command="paste" class="ui-state-disabled ui-icon-clipboard"><a href="#">Paste</a>
+		<li>----
+		<li><a>More</a>
+			<ul>
+				<li data-command="sub1"><a href="#">Sub Item 1</a>
+				<li data-command="sub2"><a href="#">Sub Item 2</a>
+			</ul>
+	</ul>
+</body>
+</html>
