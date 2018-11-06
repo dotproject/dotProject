@@ -193,7 +193,7 @@ function displayFolders($folder_id=0, $level=0) {
 	$q->addTable('file_folders', 'ff');
 	$q->addQuery('ff.*');
 	$q->addWhere('ff.file_folder_parent = ' . $folder_id);
-	if (count($allowedFolderIDs)) {
+	if (!empty($allowedFolderIDs)) {
 		$q->addWhere($allowedFolderIDs);
 	}
 	$q->addOrder('ff.file_folder_name');

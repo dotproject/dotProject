@@ -298,6 +298,9 @@ class CProject extends CDpObject {
 		           ? ('(project_company IN (' . implode(',', array_keys($aCpies)) . '))')
 		           : '1 = 0');
 
+                if (empty($extra)) {
+                  $extra = array();
+                }
 		$extra['where'] = (((!empty($extra['where'])) ? ($extra['where'] . ' AND ') : '')
 		                   . $buffer);
 
@@ -605,7 +608,9 @@ function projects_list_data($user_id=false) {
 		$rows = $q->loadList();
 		addDeptId($rows, $department);
 		$dept_ids[] = $department;
-	}
+	} else {
+          $rows = array();
+        }
 	$q->clear();
 
 
