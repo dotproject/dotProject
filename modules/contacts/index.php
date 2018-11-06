@@ -26,6 +26,8 @@ if ($search_string) {
 	                      . " OR contact_email LIKE " . $get_search);
 } else if (isset($_GET['where'])) {
 	$AppUI->setState('ContIdxWhere', $_GET['where']);
+} else {
+        $AppUI->setState('ContIdxWhere', '');
 }
 
 $where = $q->quote_sanitised( $AppUI->getState('ContIdxWhere') ? ( $AppUI->getState('ContIdxWhere') . '%') : '%');
@@ -112,7 +114,7 @@ $tdw = floor(100 / $carrWidth);
 /**
 * Contact search form
 */
-$default_search_string = dPformSafe($AppUI->getState('ContIdxWhere'), true);
+$default_search_string = dPformSafe($search_string, true);
 
 $a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= "\n<tr>";
