@@ -35,7 +35,7 @@ class ControllerActivityMDP {
 		$list= array();
 		foreach($tasks as $task){
 			$taskObj= new CTask();
-			$taskObj->load($task[task_id]);
+			$taskObj->load($task["task_id"]);
 			array_push($list,$taskObj);
 		}
 		return $list;
