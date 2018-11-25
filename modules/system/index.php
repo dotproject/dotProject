@@ -86,5 +86,12 @@ $titleBlock->show();
 	</td>
 </tr>
 
+<tr>
+	<td>&nbsp;</td>
+	<td align="left">
+		<a href="?m=system&amp;a=sendmail"><?php echo $AppUI->_('Send Test Email');?></a>
+	</td>
+</tr>
+
 </table>
 </div>

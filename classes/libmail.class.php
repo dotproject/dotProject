@@ -103,6 +103,8 @@ class Mail
 	var $response;
 	var $err = false;
 	var $last_error = false;
+	var $recordTransaction = false;
+	var $transactionLog = array();
 
 /**
  *  Mail constructor
@@ -387,6 +389,9 @@ function Send() {
 		return $this->SMTPSend();
 	} else {
 		$headers = '';
+		if ($this->recordTransaction) {
+		  array_push($this->transactionLog, 'Cannot trace email - using PHP system mail - check error logs or switch to SMTP');
+		}
 		foreach ($this->xheaders as $k => $v) {
 			if ($k == 'To' || $k == 'Subject') {
 				continue;
@@ -472,7 +477,7 @@ function SMTPSend() {
 		}
 	}
 	if ($this->sasl && $this->username) {
-		$this->socketSend('HELO');
+		$this->socketSend('HELO ' . $this->getHostName());
 		$this->socketReadPattern(250);
 		
 		$this->socketSend('AUTH LOGIN');
@@ -496,7 +501,7 @@ function SMTPSend() {
 	
 	// Determine the mail from address.
 	if (! isset($headers['From'])) {
-		$from = dPgetConfig('admin_user') . '@' . dPgetConfig('site_domain');
+		$from = dPgetConfig('admin_username') . '@' . dPgetConfig('site_domain');
 	} else {
 		// Search for the parts of the email address
 		$from = ((preg_match('/.*<([^@]+@[a-z0-9\._-]+)>/i', $headers['From'], $matches)) 
@@ -555,6 +560,9 @@ function socketRead($timeout = null) {
 	}
 	$result = fgets($this->socket, 4096);
 	dprint(__FILE__, __LINE__, 12, 'server said: ' . $result);
+	if ($this->recordTransaction) {
+	  array_push($this->transactionLog, '< ' . $result);
+	}
 	$info = stream_get_meta_data($this->socket);
 	if (!empty($info['timed_out'])) {
 	$this->err = true;
@@ -593,6 +601,9 @@ function socketReadPattern($pattern, $timeout = null) {
 function socketSend($msg, $rcv = FALSE) {
 	dprint(__FILE__, __LINE__, 12, 'sending: ' . $msg);
 	$this->err = false;
+	if ($this->recordTransaction) {
+	  array_push($this->transactionLog, '> ' . $msg);
+	}
 	$sent = fputs($this->socket, $msg . "\r\n");
 	return (($rcv) ? $this->socketRead() : $sent);
 }
@@ -697,6 +708,21 @@ function CheckAdresses($aad) {
  */
 function CheckAddresses($aad) {
 	return $this->CheckAdresses($aad);
+}
+
+/**
+ * Enable tracking of responses and storing results for later display
+ */
+function RecordTransaction() {
+	$this->recordTransaction = TRUE;
+}
+
+
+/**
+ * Return the transaction log
+ */
+function GetTransactionLog() {
+	return $this->transactionLog;
 }
 
 /**
