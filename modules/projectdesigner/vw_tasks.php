@@ -109,7 +109,7 @@ if (isset($_POST['show_task_options'])) {
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
-$project =& new CProject;
+$project = new CProject;
 // $allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
@@ -197,7 +197,7 @@ $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'task_project');
 if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
-$obj =& new CTask;
+$obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
 if ( count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
@@ -231,7 +231,7 @@ foreach ($tasks as $row) {
 	$row['style'] = taskstyle_pd($row);
 	$row['canEdit'] = !getDenyEdit( 'tasks', $row['task_id'] );
 	$row['canViewLog'] = $perms->checkModuleItem('task_log', 'view', $row['task_id']);
-	$i = count($projects[$row['task_project']]['tasks']) + 1;
+	$i = $projects[$row['task_project']]['tasks'] ? count($projects[$row['task_project']]['tasks']) : 0 + 1;
 	$row['task_number'] = $i;
 	$row['node_id'] = 'node_'.$i.'-' . $row['task_id'];
 	if (strpos($row['task_duration'], '.') && $row['task_duration_type'] == 1) {
