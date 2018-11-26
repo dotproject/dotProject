@@ -34,8 +34,9 @@ if (!$ticket_parent) {
     $ticket_parent = $ticket;
 }
 
-//echo '<pre>';print_r($_POST);echo '</pre>';die;
-$recipient = dPgetCleanParam($_POST, 'recipient', '');
+// echo '<pre>';print_r($_POST);echo '</pre>';die;
+
+$recipient = dPgetEmailParam($_POST, 'recipient', '');
 $subject = dPgetCleanParam($_POST, 'subject', '');
 $cc = dPgetCleanParam($_POST, 'cc', '');
 $followup = dPgetCleanParam($_POST, 'followup', '');
@@ -51,6 +52,7 @@ if (@$followup) {
     $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery('contact_email as email');
     $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->exec();
 
     list($from_name, $from_email) = $q->fetchRow();
 
@@ -71,6 +73,7 @@ if (@$followup) {
     $cc = stripslashes($cc);
 
 	$mail = new Mail;
+	echo "</pre>\n";
 	if (isset($CONFIG['reply_name']) && $CONFIG["reply_name"] != "") {
 		$mail->From($CONFIG["reply_name"] . " <" . $CONFIG["reply_to"] . ">");
 	} else {
@@ -120,7 +123,7 @@ if (@$followup) {
     $q->clear();
     $q->addTable('tickets');
     $q->addWhere("ticket = {$ticket}");
-    $q->ticket_info = $q->loadHash();
+    $ticket_info = $q->loadHash();
 
     /* output From: line */
     print("<tr>\n");
@@ -130,6 +133,7 @@ if (@$followup) {
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
     $q->addWhere("user_id = '{$AppUI->user_id}'");
     $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email");
+    $q->exec();
     list($from_name, $from_email) = $q->fetchRow();
 
     print("<td align='left'>" . $from_name . " &lt;" . $from_email . "&gt;</td>\n");

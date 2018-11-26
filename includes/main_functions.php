@@ -308,6 +308,16 @@ function dPsanitiseHTML($text) {
 	return filter_xss($text);
 }
 
+function dPgetEmailParam($arr, $name, $def = null) {
+  $val = defVal($arr[$name], $def);
+  preg_match('/(([\w\s]+)?<)?(\w+)@([\w\d\.]+)>?/', $val, $matched);
+  $result = filter_xss($matched[3]) . '@' . filter_xss($matched[4]);
+  if ($matched[2]) {
+    $result = filter_xss($matched[2]) . ' <' . $result . '>';
+  }
+  return $result;
+}
+
 function dPlink($title, $href) {
 	return dPsanitiseHTML('<a href="' . $href . '">' . $title . '</a>');
 }
