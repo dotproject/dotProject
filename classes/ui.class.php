@@ -23,12 +23,13 @@ define ('UI_CASE_UPPER', 1);
 define ('UI_CASE_LOWER', 2);
 define ('UI_CASE_UPPERFIRST', 4);
 
-define ('UI_OUTPUT_MASK', 0xF0);
+define ('UI_OUTPUT_MASK', 0xFF0);
 define ('UI_OUTPUT_TEXT', 0);
 define ('UI_OUTPUT_JS', 0x10);
 define ('UI_OUTPUT_RAW', 0x20);
 define ('UI_OUTPUT_URI', 0x40);
 define ('UI_OUTPUT_HTML', 0x80);
+define ('UI_OUTPUT_FORM', 0x100);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
@@ -464,14 +465,8 @@ class CAppUI {
 		/* Altered to support multiple styles of output, to fix
 		 * bugs where the same output style cannot be used succesfully
 		 * for both javascript and HTML output.
-		 * PLEASE NOTE: The default is currently UI_OUTPUT_HTML,
-		 * which is different to the previous version (which was
-		 * effectively UI_OUTPUT_RAW).  If this causes problems,
-		 * and they are localised, then use UI_OUTPUT_RAW in the
-		 * offending call.  If they are widespread, change the
-		 * default to UI_OUTPUT_RAW and use the other options
-		 * where appropriate.
-		 * AJD - 2004-12-10
+		 *
+		 * Default is currently UI_OUTPUT_TEXT.
 		 */
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_URI:
@@ -481,6 +476,10 @@ class CAppUI {
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 				$str = filter_xss($str);
 				$str = nl2br($str);
+				break;
+			case UI_OUTPUT_FORM:
+				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = filter_xss($str);
 				break;
 			case UI_OUTPUT_HTML:
 				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);

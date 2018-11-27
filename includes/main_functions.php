@@ -487,7 +487,7 @@ function dPformSafe($txt, $flag_bits = 0) {
 			
 			if (!$isURI) {
 				$value = $isJSVars ? $AppUI->___($value, UI_OUTPUT_JS) : $value;
-				$value = $deslash ? htmlspecialchars($value) : $AppUI->___($value);
+				$value = $deslash ? htmlspecialchars($value) : $AppUI->___($value, UI_OUTPUT_FORM);
 			}
 			
 			if (is_object($txt)) {
@@ -503,7 +503,7 @@ function dPformSafe($txt, $flag_bits = 0) {
 		
 		if (!$isURI) {
 			$txt = $isJSVars ? $AppUI->___($txt, UI_OUTPUT_JS) : $txt;
-			$txt = $deslash ? htmlspecialchars($txt) : $AppUI->___($txt);
+			$txt = $deslash ? htmlspecialchars($txt) : $AppUI->___($txt, UI_OUTPUT_FORM);
 		}
 		
 		/*
