@@ -1757,6 +1757,8 @@ class CTask extends CDpObject
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
+		global $AppUI;
+
 		// if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
 		if (!dPgetConfig('direct_edit_assignment')) {
 			return array();
