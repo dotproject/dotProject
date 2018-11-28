@@ -62,6 +62,8 @@ class CAppUI {
 	var $user_prefs=null;
 /** @var int Unix time stamp */
 	var $day_selected=null;
+/** @var array */
+	var $system_prefs = array();
 	
 	// localisation
 /** @var string */
@@ -820,6 +822,14 @@ class CAppUI {
 	function getPref($name) {
 		return @$this->user_prefs[$name];
 	}
+
+/**
+ * Gets the value of the specified system preference
+ * @param string Name of the preference
+ */
+	function getSystemPref($name) {
+		return $this->system_prefs[$name] ? $this->system_prefs[$name] : NULL;
+	}
 /**
 * Sets the value of a user preference specified by name
 * @param string Name of the preference
@@ -839,18 +849,37 @@ class CAppUI {
 *
 * @param int User id number
 */
+        function isSystemPref($val) {
+		return $val['pref_user'] == 0;
+        }
+        function isUserPref($val) {
+		return $val['pref_user'] != 0;
+        }
+        function flattenPrefs($vals) {
+		$result = [];
+		foreach ($vals as $elem) {
+		  $result[$elem['pref_name']] = $elem['pref_value'];
+		}
+		return $result;
+        }
 	function loadPrefs($uid=0) {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
-		$q->addQuery('pref_name, pref_value');
+		$q->addQuery('pref_user, pref_name, pref_value');
 		if ($uid) {
 			$q->addWhere("pref_user in (0, $uid)");
 			$q->addOrder('pref_user');
 		} else {
 			$q->addWhere('pref_user = 0');
 		}
-		$prefs = $q->loadHashList();
-		$this->user_prefs = array_merge($this->user_prefs, $prefs);
+		$prefs = $q->loadList();
+                // Separate out system preferences from user preferences, but merge them together
+		$this->system_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isSystemPref' ]));
+		$user_prefs = [];
+		if ($uid) {
+			$user_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isUserPref' ]));
+		}
+		$this->user_prefs = array_merge($this->system_prefs, $this->user_prefs, $user_prefs);
 	}
 
 // --- Module connectors

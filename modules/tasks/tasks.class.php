@@ -1763,17 +1763,10 @@ class CTask extends CDpObject
 		}
 		$q = new DBQuery;
 		// retrieve the systemwide default preference for the assignment maximum
-		$q->addTable('user_preferences');
-		$q->addQuery('pref_value');
-		$q->addWhere("pref_user = 0 AND pref_name = 'TASKASSIGNMAX'");
-		$sql = $q->prepare();
-		$q->clear();
-		$result = db_loadHash($sql, $sysChargeMax);
-		if (! $result) {
-			$scm = 0;
-		} else {
-			$scm = $sysChargeMax['pref_value'];
-		}
+                $scm = $AppUI->getSystemPref('TASKASSIGNMAX');
+                if (! $scm) {
+                  $scm = 0;
+                }
 		
 		/*
 		 * provide actual assignment charge, individual chargeMax 
