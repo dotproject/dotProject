@@ -1758,46 +1758,58 @@ class CTask extends CDpObject
 	 */
 	function getAllocation($hash = NULL, $users = NULL) {
 		global $AppUI;
+		static $Allocations = array();
 
 		// if (! dPgetConfig('check_overallocation') && ! dPgetConfig('direct_edit_assignment')) {
 		if (!dPgetConfig('direct_edit_assignment')) {
 			return array();
 		}
-		$q = new DBQuery;
-		// retrieve the systemwide default preference for the assignment maximum
-                $scm = $AppUI->getSystemPref('TASKASSIGNMAX');
-                if (! $scm) {
-                  $scm = 0;
-                }
 		
-		/*
-		 * provide actual assignment charge, individual chargeMax 
-		 * and freeCapacity of users' assignments to tasks
-		*/
-		$q->addTable('users', 'u');
-		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-		$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
-		$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
-		$q->addQuery("u.user_id, CONCAT(CONCAT_WS(' [', CONCAT_WS(' '" 
-					 . ', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value' 
-					 . ', ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0' 
-					 . ', IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment))' 
-					 . ', up.pref_value), 0)), ' . "'%]')" . ' AS userFC' 
-					 . ', IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username' 
-					 . ', IFNULL(up.pref_value,' . $scm . ') AS chargeMax' 
-					 . ', IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') ' 
-					 . '- SUM(ut.perc_assignment)), up.pref_value) > 0' 
-					 . ', IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment))' 
-					 . ', up.pref_value), 0) AS freeCapacity');
-		if (!empty($users)) { // use userlist if available otherwise pull data for all users
-			$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
+		$hash_key = $hash ? $hash : '<NONE>';
+		$user_key = $users ? implode(',', $users) : '<NONE>';
+
+		if (! $Allocations[$hash_key] || ! $Allocations[$hash_key][$user_key]) {
+			if (! $Allocations[$hash_key]) {
+				$Allocations[$hash_key] = array();
+			}
+			if (! $Allocations[$hash_key][$user_key]) {
+				// retrieve the systemwide default preference for the assignment maximum
+				$scm = $AppUI->getSystemPref('TASKASSIGNMAX');
+				if (! $scm) {
+					$scm = 0;
+				}
+				/*
+				 * provide actual assignment charge, individual chargeMax 
+				 * and freeCapacity of users' assignments to tasks
+				*/
+				$q = new DBQuery;
+				$q->addTable('users', 'u');
+				$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+				$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
+				$q->leftJoin('user_preferences', 'up', "up.pref_user = u.user_id AND up.pref_name = 'TASKASSIGNMAX'");
+				$q->addQuery("u.user_id, CONCAT(CONCAT_WS(' [', CONCAT_WS(' '" 
+							 . ', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value' 
+							 . ', ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0' 
+							 . ', IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment))' 
+							 . ', up.pref_value), 0)), ' . "'%]')" . ' AS userFC' 
+							 . ', IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username' 
+							 . ', IFNULL(up.pref_value,' . $scm . ') AS chargeMax' 
+							 . ', IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') ' 
+							 . '- SUM(ut.perc_assignment)), up.pref_value) > 0' 
+							 . ', IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment))' 
+							 . ', up.pref_value), 0) AS freeCapacity');
+				if (!empty($users)) { // use userlist if available otherwise pull data for all users
+					$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
+				}
+				$q->addGroup('u.user_id');
+				$q->addOrder('contact_last_name, contact_first_name');
+				$sql = $q->prepare();
+				$q->clear();
+				//echo "<pre>$sql</pre>";
+				$Allocations[$hash_key][$user_key] = db_loadHashList($sql, $hash);
+			}
 		}
-		$q->addGroup('u.user_id');
-		$q->addOrder('contact_last_name, contact_first_name');
-		$sql = $q->prepare();
-		$q->clear();
-		//echo "<pre>$sql</pre>";
-		return db_loadHashList($sql, $hash);
+		return $Allocations[$hash_key][$user_key];
 	}
 	
 	function getUserSpecificTaskPriority($user_id = 0, $task_id = NULL) {
