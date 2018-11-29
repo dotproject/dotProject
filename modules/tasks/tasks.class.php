@@ -481,12 +481,14 @@ class CTask extends CDpObject
 		$q->clear();
 		
 		$fields = array('user_id', 'user_type', 'perc_assignment', 'user_task_priority', 'task_id');
+		$values = [];
 		foreach ($users as $user) {
 			$user['task_id'] = $newObj->task_id;
-			$values = array_values($user);
-			
+			$values[] = array_values($user);
+		}
+		if (count($values)) {
 			$q->addTable('user_tasks');
-			$q->addInsert($fields, $values, true);
+			$q->addInsertMulti($fields, $values);
 			$q->exec();
 			$q->clear();
 		}
@@ -663,13 +665,14 @@ class CTask extends CDpObject
 		// print_r($this->task_departments);
 		if (!empty($this->task_departments)) {
 			$departments = explode(',', $this->task_departments);
+			$values = [];
 			foreach ($departments as $department) {
-				$q->addTable('task_departments');
-				$q->addInsert('task_id', $this->task_id);
-				$q->addInsert('department_id', $department);
-				$q->exec();
-				$q->clear();
+			  $values[] = [ $this->task_id, $department ];
 			}
+			$q->addTable('task_departments');
+			$q->addInsertMulti([ 'task_id', 'department_id' ], $values);
+			$q->exec();
+			$q->clear();
 		}
 		
 		//split out related contacts and store them seperatly.
@@ -679,13 +682,14 @@ class CTask extends CDpObject
 		$q->clear();
 		if (!empty($this->task_contacts)) {
 			$contacts = explode(',', $this->task_contacts);
+			$values = [];
 			foreach ($contacts as $contact) {
-				$q->addTable('task_contacts');
-				$q->addInsert('task_id', $this->task_id);
-				$q->addInsert('contact_id', $contact);
-				$q->exec();
-				$q->clear();
+				$values[] = [ $this->task_id, $contact ];
 			}
+			$q->addTable('task_contacts');
+			$q->addInsertMulti(['task_id', 'contact_id'], $values);
+			$q->exec();
+			$q->clear();
 		}
 		
 		// if is child update parent task
@@ -861,14 +865,18 @@ class CTask extends CDpObject
 		
 		// process dependencies
 		$tarr = explode(',', $cslist);
+		$values = [];
+		$fields = [ 'dependencies_task_id', 'dependencies_req_task_id' ];
 		foreach ($tarr as $task_id) {
 			if (intval($task_id) > 0) {
-				$q->addTable('task_dependencies');
-				$q->addReplace('dependencies_task_id', $this->task_id);
-				$q->addReplace('dependencies_req_task_id', $task_id);
-				$q->exec();
-				$q->clear();
+				$values[] = [ $this->task_id, $task_id ];
 			}
+		}
+		if (count($values)) {
+			$q->addTable('task_dependencies');
+			$q->addInsertMulti($filelds, $values);
+			$q->exec();
+			$q->clear();
 		}
 	}
 	
@@ -1711,7 +1719,7 @@ class CTask extends CDpObject
 		}
 		
 		// get Allocation info in order to check if overAssignment occurs
-		$alloc = $this->getAllocation('user_id');
+		// $alloc = $this->getAllocation('user_id');
 		$overAssignment = false;
 		
 		foreach ($tarr as $user_id) {
