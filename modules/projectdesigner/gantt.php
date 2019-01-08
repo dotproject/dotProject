@@ -17,7 +17,7 @@ $f = defVal( @$_REQUEST['f'], 0 );
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 require_once $AppUI->getModuleClass('projects');
-$project =& new CProject;
+$project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : NULL;
 $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : NULL;
 
@@ -114,7 +114,7 @@ if ($caller == 'todo') {
 }
 
 // get any specifically denied tasks
-$task =& new CTask;
+$task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
 
 $proTasks = $q->loadHashList('task_id');
