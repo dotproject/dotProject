@@ -20,9 +20,17 @@ $q->addWhere('user_contact = contact_id');
 $q->addOrder('contact_first_name, contact_last_name');
 $q->exec();
 $users = array();
+$inactiveUsers = array();
+$activeUsers = array();
+$perms =& $AppUI->acl();
 while ( $row = $q->fetchRow()) {
-	$users[$row['user_id']] = $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+      if ($perms->checkLogin($row['user_id'])) {
+            $activeUsers[$row['user_id']] = $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+      } else {
+            $inactiveUsers[$row['user_id']] = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . " (".$AppUI->_('Inactive').")";
+      }
 }
+$users = $activeUsers + $inactiveUsers;
 $q->clear();
 $sowners = array(''=>'(Task Owner)') + $users;
 $sassign = array(''=>'(Assign User)') + $users;
