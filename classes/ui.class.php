@@ -100,6 +100,13 @@ class CAppUI {
 	
 /** @var integer for register log ID */
 	var $last_insert_id = null;	
+
+/** @var array list of external JS libraries */
+	var $_js = [];
+
+/** @var array list of external CSS libraries */
+	var $_css = [];
+
 /**
 * CAppUI Constructor
 */
@@ -982,8 +989,21 @@ class CAppUI {
 		      . "\n");
 		
 		$this->getModuleJS($m, $a, true);
+
+		// Finally add any external URLs
+		foreach ($this->_js as $href) {
+			echo '<script src="' . $href . '"></script>' . "\n";
+		}
+		// And any CSS scripts
+		foreach ($this->_css as $href) {
+			echo '<link rel="stylesheet" type="text/css" href="' . $href . '">' . "\n";
+		}
 	}
 	
+	function loadCSS() {
+
+	}
+
 	function getModuleJS($module, $file=null, $load_all = false) {
 		$root = DP_BASE_DIR;
 		if (mb_substr($root, -1) != '/') {
@@ -1007,6 +1027,26 @@ class CAppUI {
 				echo ('<script  src="' . $base . 'modules/' . $module . '/' 
 				      . $file . '.js"></script>' . "\n");
 			}
+		}
+	}
+
+	/**
+	 * Register loadable JS scripts
+	 */
+	function addJS($href) {
+		$sanitised = filter_xss($href);
+		if ($sanitised) {
+			array_push($sanitised, $this->_js);
+		}
+	}
+
+	/**
+	 * Register loadable CSS scripts
+	 */
+	function addCSS($href) {
+		$sanitised = filter_xss($href);
+		if ($sanitised) {
+			array_push($sanitised, $this->_css);
 		}
 	}
 }
