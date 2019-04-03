@@ -200,11 +200,8 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
         $s .= "\n\t<td align=\"right\">".intval( $a["task_percent_complete"] ).'%</td>';
 // priority
         $s .= "\n\t<td align='center' nowrap='nowrap'>";
-        if ($a["task_priority"] < 0 ) {
-                $s .= "\n\t\t<img src=\"./images/icons/priority-". -$a["task_priority"] .'.gif" width=13 height=16>';
-        } else if ($a["task_priority"] > 0) {
-                $s .= "\n\t\t<img src=\"./images/icons/priority+". $a["task_priority"] .'.gif" width=13 height=16>';
-        }
+	$s .= "\n\t\t<img src=\"./images/icons/priority" . ($a["task_priority"] < 0 ? '_down_' : '_up_')
+	   . abs($a["task_priority"]) . '.gif" width=13 height=16>';
         $s .= @$a["file_count"] > 0 ? "<img src=\"./images/clip.png\" alt=\"F\">" : "";
         $s .= "</td>";
 // access

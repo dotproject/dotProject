@@ -251,7 +251,7 @@ echo ($style); ?>><?php echo htmlspecialchars($actual_end_date->format($df)); ?>
 <?php 
 		} else if ($row['project_priority'] != 0) {
 			echo dPshowImage(('./images/icons/priority' 
-			                  . (($row['project_priority'] > 0) ? '+' : '-') 
+			                  . (($row['project_priority'] > 0) ? '_up_' : '_down_') 
 			                  . abs($row['project_priority']) . '.gif'), 13, 16, '', '');
 		} else {
 ?>

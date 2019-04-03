@@ -200,7 +200,7 @@ echo (dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Prob
 <?php 
 		} else if ($row['project_priority'] != 0) {
 			echo (dPshowImage(('./images/icons/priority' 
-			                   . (($row['project_priority'] > 0) ? '+' : '-') 
+			                   . (($row['project_priority'] > 0) ? '_up_' : '_down_') 
 			                   . abs($row['project_priority']) . '.gif'), 13, 16, '', ''));
 		} else {
 ?>

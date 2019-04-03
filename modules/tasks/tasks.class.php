@@ -2770,7 +2770,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			   . '</a>');
 	} else if ($a['task_priority'] != 0) {
 		$s .= "\n\t\t" . dPshowImage(('./images/icons/priority' . (($a['task_priority'] > 0) 
-																   ? '+' : '-') 
+																   ? '_up_' : '_down_') 
 									  . abs($a['task_priority']) . '.gif'), 13, 16, '', '');
 	}
 	$s .= ((@$a['file_count'] > 0) ? '<img src="./images/clip.png" alt="F" />' : '') . '</td>';
