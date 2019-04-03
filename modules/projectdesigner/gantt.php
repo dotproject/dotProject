@@ -211,7 +211,7 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 $graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
-$graph->scale->SetTableTitleBackground($projects[$project_id]['project_color_identifier']);
+$graph->scale->SetTableTitleBackground('#' . $projects[$project_id]['project_color_identifier']);
 $font_color = bestColor($projects[$project_id]['project_color_identifier']);
 $graph->scale->tableTitle->SetColor($font_color);
 $graph->scale->tableTitle->Show(true);
@@ -231,7 +231,8 @@ if ($start_date && $end_date){
         // find out DateRange from gant_arr
         $d_start = new CDate();
         $d_end = new CDate();
-        for($i = 0; $i < count(@$gantt_arr); $i++ ){
+	$gantt_count = is_array($gantt_arr) ? count($gantt_arr) : 0;
+        for($i = 0; $i < $gantt_count; $i++ ){
                 $a = $gantt_arr[$i][0];
                 $start = substr($a['task_start_date'], 0, 10);
                 $end = substr($a['task_end_date'], 0, 10);

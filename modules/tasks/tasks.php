@@ -502,10 +502,10 @@ function chAssignment(project_id, rmUser, del) {
 reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count(@$p['tasks']);
+	$tnums = array_key_exists('tasks', $p);
 	// don't show project if it has no tasks
 	// patch 2.12.04, show project if it is the only project in view
-	if ($tnums > 0 || $project_id == $p['project_id']) {
+	if ($tnums || $project_id == $p['project_id']) {
 		//echo '<pre>'; print_r($p); echo '</pre>';
 		if (!$min_view) {
 			// not minimal view

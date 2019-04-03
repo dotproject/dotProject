@@ -164,8 +164,8 @@ if (is_array($tasks)) {
 			$row++;
 			$barTmp = new GanttBar($row++, array($t['user_name'], '', '',' '), '0', '0;' , 0.6);
 			$barTmp->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-			$barTmp->title->SetColor($t['project_color_identifier']);
-			$barTmp->SetFillColor($t['project_color_identifier']);
+			$barTmp->title->SetColor('#' . $t['project_color_identifier']);
+			$barTmp->SetFillColor('#' . $t['project_color_identifier']);
 			if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
 				$barTmp->title ->SetFont(FF_CUSTOM, FF_BOLD);
 			}		
@@ -230,7 +230,7 @@ if (is_array($tasks)) {
 			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 				$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
 			}
-			$bar->SetFillColor(($t['project_color_identifier']));
+			$bar->SetFillColor('#' . $t['project_color_identifier']);
 			$bar->SetPattern(BAND_SOLID, ($t['project_color_identifier']));
 			
 			//adding captions
