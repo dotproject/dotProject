@@ -97,7 +97,7 @@ class dPacl extends gacl_api {
 	    $q->addQuery('allow');
 	    $q->addTable('dotpermissions', 'dp');
 	    $q->addWhere("permission='$op' AND axo='$module' AND user_id='$userid' and section='app'");
-	    $q->addOrder('priority DESC, acl_id DESC');
+	    $q->addOrder('priority ASC, acl_id DESC');
 	    $q->setLimit(1);
 	    $arr=$q->loadHash();
     
@@ -125,7 +125,7 @@ class dPacl extends gacl_api {
 		$q->addQuery('allow');
 		$q->addTable('dotpermissions');
 		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$userid' and section='$module'");
-		$q->addOrder('priority DESC,acl_id DESC');
+		$q->addOrder('priority ASC,acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
 	    $result=$arr['allow'];
@@ -155,7 +155,7 @@ class dPacl extends gacl_api {
 		$q->addQuery('allow');
 		$q->addTable('dotpermissions');
 		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$user_id' and section='$module'");
-		$q->addOrder('priority DESC, acl_id DESC');
+		$q->addOrder('priority ASC, acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
 		if($arr && !$arr['allow']) {
