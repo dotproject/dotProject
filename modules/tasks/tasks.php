@@ -290,7 +290,7 @@ if (count($allowedProjects)) {
 
 //
 $obj = new CTask;
-$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'task_id');
+$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tsk.task_id');
 if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);
 }
@@ -308,7 +308,7 @@ if (! $min_view && $f2 != 'all') {
 
 // patch 2.12.04 ADD GROUP BY clause for assignee count
 $tsql = ('SELECT ' . $select . ' FROM (' . $from . ') ' . $join 
-		 . ' WHERE ' . $where . ' GROUP BY task_id ORDER BY project_id, task_start_date');
+		 . ' WHERE ' . $where . ' GROUP BY tsk.task_id ORDER BY project_id, task_start_date');
 
 //echo "<pre>$tsql</pre>";
 
