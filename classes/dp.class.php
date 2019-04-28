@@ -81,6 +81,15 @@ class CDpObject {
 		return $this->_error;
 	}
 	/**
+	 *	Clears any existing data in the current object
+	 */
+	public function clear() {
+		foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(get_class($this)))) as $k) {
+			unset($this->$k);
+		}
+	}
+
+	/**
 	 *	Binds a named array/hash to this object
 	 *
 	 *	can be overloaded/supplemented by the child class
@@ -129,6 +138,7 @@ class CDpObject {
 		$this->_query->addWhere($this->_tbl_key . ' = ' . $oid);
 		$sql = $this->_query->prepare();
 		$this->_query->clear();
+		$this->clear();
 		return db_loadObject($sql, $this, false, $strip);
 	}
 	
