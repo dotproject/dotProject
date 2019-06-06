@@ -356,7 +356,7 @@ function BuildMail() {
 	
 	if (! empty($this->charset)) {
 		$this->xheaders['Mime-Version'] = '1.0';
-		$this->xheaders['Content-Type'] = 'text/plain; charset=' . $this->charset;
+		$this->xheaders['Content-Type'] = 'text/html; charset=' . $this->charset;
 		$this->xheaders['Content-Transfer-Encoding'] = $this->ctencoding;
 	}
 	
@@ -733,7 +733,7 @@ function _build_attachement() {
 	$this->xheaders['Content-Type'] = "multipart/mixed;\r\n boundary=\"" . $this->boundary .'"';
 
 	$this->fullBody = "This is a multi-part message in MIME format.\r\n--".$this->boundary."\r\n";
-	$this->fullBody .= ('Content-Type: text/plain; charset=' . $this->charset 
+	$this->fullBody .= ('Content-Type: text/html; charset=' . $this->charset 
 						."\r\nContent-Transfer-Encoding: " . $this->ctencoding . "\r\n\r\n");
 	
 	$sep= "\r\n";

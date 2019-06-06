@@ -28,6 +28,7 @@ if ($task_log_id) {
 	$log->task_log_name = $obj->task_name;
 }
 
+include ($AppUI->getLibraryClass('quilljs/richedit.class'));
 // Check that the user is at least assigned to a task
 $task = new CTask;
 $task->load($task_id);
@@ -306,8 +307,14 @@ echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...')
       </tr>
       <tr>
         <td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
-        <td><textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php 
-echo $log->task_log_description; ?></textarea></td>
+        <td>
+	    <!--<textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php 
+echo $log->task_log_description; ?></textarea>-->
+	    <?php
+		$richedit = new DpRichEdit('task_log_description', $log->task_log_description);
+		$richedit->render();
+	    ?>
+        </td>
       </tr>
       <tr>
         <td align="right" valign="top"><?php echo $AppUI->_('Email Log to'); ?>:</td>

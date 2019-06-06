@@ -320,7 +320,7 @@ echo @$obj->project_demo_url; ?></a></td>
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
 				<td class="hilite">
-					<?php echo str_replace(chr(10), "<br>", $obj->project_description); ?>
+					<?php echo str_replace(chr(10), "<br>", strip_tags($obj->project_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>')); ?>
 				</td>
 			</tr>
 			</table>
@@ -482,3 +482,31 @@ $min_view = true;
 
 $tabBox->show();
 ?>
+<style>
+.ql-size-large {
+    font-size: 1.5em;
+}
+.ql-size-small {
+    font-size: 0.75em;
+}
+.ql-size-huge {
+    font-size: 2.5em;
+}
+.ql-font-monospace {
+    font-family: Monaco, Courier New, monospace;
+}
+.ql-font-serif {
+    font-family: Georgia, Times New Roman, serif;
+}
+.ql-align-center {
+    text-align: center;
+}
+.ql-align-right {
+    text-align: right;
+}
+.ql-align-justify {
+    text-align: justify;
+}
+
+</style>
+
