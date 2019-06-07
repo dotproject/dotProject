@@ -2,6 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
+include ($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 $company_id = intval(dPgetParam($_GET, 'company_id', 0));
 
@@ -190,8 +191,13 @@ echo arraySelect($types, 'company_type', 'size="1" class="text"', @$obj->company
 	<tr>
 		<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
 		<td align="left">
-			<textarea cols="70" rows="10" class="textarea" name="company_description"><?php 
-echo htmlspecialchars(@$obj->company_description); ?></textarea>
+			<!--<textarea cols="70" rows="10" class="textarea" name="company_description"><?php 
+echo htmlspecialchars(@$obj->company_description); ?></textarea-->
+
+			<?php 
+				$richedit = new DpRichEdit("company_description", htmlspecialchars(@$obj->company_description));
+				$richedit->render();
+			?>
 		</td>
 	</tr>
 </table>
