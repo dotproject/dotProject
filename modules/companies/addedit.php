@@ -195,7 +195,7 @@ echo arraySelect($types, 'company_type', 'size="1" class="text"', @$obj->company
 echo htmlspecialchars(@$obj->company_description); ?></textarea-->
 
 			<?php 
-				$richedit = new DpRichEdit("company_description", htmlspecialchars(@$obj->company_description));
+				$richedit = new DpRichEdit("company_description", $obj->company_description);
 				$richedit->render();
 			?>
 		</td>
