@@ -174,8 +174,7 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" summary="company description">
 		<tr>
 			<td class="hilite">
-				<?php 
-echo str_replace(chr(10), '<br />', htmlspecialchars($obj->company_description)); ?>&nbsp;
+				<?php echo $obj->company_description ?>
 			</td>
 		</tr>
 		
