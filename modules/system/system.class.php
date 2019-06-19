@@ -208,7 +208,7 @@ class CModule extends CDpObject {
 		$name = $q->quote($name);
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
-		$q->addWhere("permissions_item_table = '" . $name . "' OR mod_directory = '" . $name . "'");
+		$q->addWhere("permissions_item_table = " . $name . " OR mod_directory = " . $name);
 		return $q->loadResult();
 	}
 }
