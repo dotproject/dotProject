@@ -174,7 +174,7 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" summary="company description">
 		<tr>
 			<td class="hilite">
-				<?php echo $obj->company_description ?>
+				<?php echo $AppUI->showHTML($obj->company_description) ?>
 			</td>
 		</tr>
 		

@@ -341,7 +341,7 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php echo $AppUI->___($obj->task_description); ?>
+				<?php echo $AppUI->showHtml($obj->task_description); ?>
 		  </td>
 		</tr>
 <?php
