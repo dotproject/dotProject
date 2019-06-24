@@ -2,6 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+include ($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 $company_id = intval(dPgetParam($_GET, 'company_id', 0));
@@ -453,8 +454,10 @@ function setDepartment(department_id_string) {
 		</tr>
 		<tr>
 			<td colspan="4">
-				<?php echo $AppUI->_('Description');?><br />
-				<textarea name="project_description" cols="50" rows="10" style="wrap:virtual;" class="textarea"><?php echo dPformSafe(@$row->project_description);?></textarea>
+			<?php
+                            $richedit = new DpRichEdit("project_description", dPformSafe(@$row->project_description));
+                            $richedit->render();
+			?>
 			</td>
 		</tr>
 		</table>

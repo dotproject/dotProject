@@ -148,16 +148,16 @@ foreach ($logs as $row) {
 			   . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
-	$s .= '<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>';
-	$s .= '<td width="30%"><a href="?m=tasks&amp;a=view&amp;task_id='.$row['task_id'].'&amp;tab=0">'.@$row["task_log_name"].'</a></td>';
-	$s .= '<td width="100">'.$row["user_username"].'</td>';
-	$s .= '<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>';
-	$s .= '<td width="100">'.$row["task_log_costcode"].'</td>';
+	$s .= $AppUI->showHTML('<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>');
+	$s .= $AppUI->showHTML('<td width="30%"><a href="?m=tasks&amp;a=view&amp;task_id='.$row['task_id'].'&amp;tab=0">'.@$row["task_log_name"].'</a></td>');
+	$s .= $AppUI->showHTML('<td width="100">'.$row["user_username"].'</td>');
+	$s .= $AppUI->showHTML('<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>');
+	$s .= $AppUI->showHTML('<td width="100">'.$row["task_log_costcode"].'</td>');
 	$s .= '<td>';
 
 // dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-	$descrip = str_replace("\n", "<br />", $row['task_log_description']);
+	$descrip = $AppUI->showHTML(str_replace("\n", "<br />", $row['task_log_description']));
 	$tranpos = mb_strpos($descrip, str_replace("\n", "<br />", $transbrk));
 	if ($tranpos === false) $s .= $descrip;
 	else
@@ -173,7 +173,7 @@ foreach ($logs as $row) {
 	$s .= '</td>';
 	$s .= "\n\t<td>";
 	if ($canDelete) {
-		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' 
+		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $AppUI->showHTML($row['task_log_id']) . ');" title="' 
 			   . $AppUI->_('delete log') . '">' . "\n\t\t\t" 
 		       . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
