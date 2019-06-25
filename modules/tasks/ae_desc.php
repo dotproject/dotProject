@@ -2,6 +2,8 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+include ($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 
 // $Id$
 global $AppUI, $task_id, $obj, $users, $task_access, $department_selection_list;
@@ -107,8 +109,12 @@ echo arraySelect($projects, 'new_task_project',
 		<table><tr><td align="left">
 			<?php echo $AppUI->_('Description');?>:
 			<br />
-			<textarea name="task_description" class="textarea" cols="60" rows="10" wrap="virtual"><?php 
-echo @$obj->task_description;?></textarea>
+			<!--<textarea name="task_description" class="textarea" cols="60" rows="10" wrap="virtual"><?php 
+echo @$obj->task_description;?></textarea>-->
+			<?php
+			  $richedit = new DpRichEdit("task_description", @$obj->task_description);
+			  $richedit->render();
+			?>
 		</td></tr></table><br />
 		<?php
 require_once($AppUI->getSystemClass('CustomFields'));

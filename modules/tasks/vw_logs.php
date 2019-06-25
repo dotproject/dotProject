@@ -117,13 +117,13 @@ foreach ($logs as $row) {
 	$descrip = $row['task_log_description'];
 	$tranpos = mb_strpos($descrip, $transbrk);
 	if ($tranpos === false) {
-		$s .= $AppUI->___($descrip);
+		$s .= $AppUI->showHTML($descrip);
 	} else {
 		$descrip = mb_substr($descrip, 0, $tranpos);
 		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
 		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
 		$transla = trim(str_replace("'", '"', $transla));
-		$s .= $AppUI->___($descrip) .'<div style="font-weight: bold; text-align: right"><a title="' . $AppUI->___($transla)
+		$s .= $AppUI->showHTML($descrip) .'<div style="font-weight: bold; text-align: right"><a title="' . $AppUI->showHTML($transla)
 		       . '" class="hilite">["' . $AppUI->_('translation') . '"]</a></div>';
 	}
 	// end auto-translation code
