@@ -615,6 +615,11 @@ function copyForm(form, to, extras) {
 		}
 		// Determine the node type, and determine the current value
 		switch (elem.type) {
+            case 'span':
+                if (elem.class === "ql-picker-label ql-active") {
+                    to.appendChild(h.addHidden(elem.name, elem.data-value));
+                }
+                break;
 			case 'text':
 			case 'textarea':
 			case 'hidden':
@@ -622,7 +627,12 @@ function copyForm(form, to, extras) {
 				break;
 			case 'select-one':
 				if (elem.options.length > 0)
-					to.appendChild(h.addHidden(elem.name, elem.options[elem.selectedIndex].value));
+                                    try {               
+			                to.appendChild(h.addHidden(elem.name, elem.options[elem.selectedIndex].value));
+                                    }
+                                    catch {
+                                        break;
+                                    }
 				break;
 			case 'select-multiple':
 				var sel = h.addSelect(elem.name, false, true);
@@ -639,7 +649,7 @@ function copyForm(form, to, extras) {
 				if (elem.checked) {
 					to.appendChild(h.addHidden(elem.name, elem.value));
 				}
-				break;
+			        break;
 		}
 	}
 	return true;
