@@ -3,6 +3,10 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+require_once DP_BASE_DIR . '/modules/projects/frappegantt.php';
+
+Gantt::WriteHeader();
+
 global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 global $m_orig, $a_orig;
 
@@ -139,9 +143,8 @@ function showFullProject() {
 	document.editFrm.display_option.value = "all";
 	document.editFrm.submit();
 }
-
 </script>
-<table class="tbl" width="100%" border="0" cellpadding="4" cellspacing="0" summary="projects view gantt">
+<table class="tbl" style="table-layout:fixed" width="100%" border="0" cellpadding="4" cellspacing="0" summary="projects view gantt">
 <tr>
 	<td>
 		<form name="editFrm" method="post" action="?<?php 
@@ -185,26 +188,6 @@ echo $end_date->format($df);?>" size="12" disabled="disabled" />
 				<?php 
 echo arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true);?>
 			</td>
-			<td valign="top">
-				<input type="checkbox" name="showLabels" id="showLabels" value='1' <?php 
-echo (($showLabels==1) ? 'checked="checked"' : "");?> /><label for="showLabels"><?php 
-echo $AppUI->_('Show captions');?></label>
-			</td>
-			<td valign="top">
-				<input type="checkbox" value='1' name="showInactive" id="showInactive" <?php 
-echo (($showInactive==1) ? 'checked="checked"' : "");?> /><label for="showInactive"><?php 
-echo $AppUI->_('Show Archived');?></label>
-			</td>
-			<td valign="top">
-				<input type="checkbox" value='1' name="showAllGantt" id="showAllGantt" <?php 
-echo (($showAllGantt==1) ? 'checked="checked"' : "");?> /><label for="showAllGantt"><?php 
-echo $AppUI->_('Show Tasks');?></label>
-			</td>
-			<td valign="top">
-				<input type="checkbox" value='1' name="sortTasksByName" id="sortTasksByName" <?php 
-echo (($sortTasksByName==1) ? 'checked="checked"' : "");?> /><label for="sortTasksByName"><?php 
-echo $AppUI->_('Sort Tasks By Name');?></label>
-			</td>
 			<td align="left">
 				<input type="button" class="button" value="<?php 
 echo $AppUI->_('submit');?>" onclick='document.editFrm.display_option.value="custom";submit();' />
@@ -219,40 +202,29 @@ echo $AppUI->_('next');?>" border="0" />
 			</td>
 		</tr>
 		<tr>
-			<td align="center" valign="bottom" colspan="12">
-				<?php 
-echo ("<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') 
-	. "</a> : <a href='javascript:showFullProject()'>" . $AppUI->_('show all') . "</a><br />"); 
-?>
+			<td align="center" valign="bottom" colspan="12"><?php
+				if ($display_option != "this_month") {
+					echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a>";
+				} else {
+					echo "<strong>" . $AppUI->_('show this month') . "</strong>";
+				}
+
+				echo " : ";
+				
+				if ($display_option != "all") {
+					echo "<a href='javascript:showFullProject()'>" . $AppUI->_('show all') . "</a>";
+				} else {
+					echo "<strong>" . $AppUI->_('show all') . "</strong>";
+				}
+				?><br />
 			</td>
 		</tr>
 		</table>
 		</form>
 
-		<table cellspacing="0" cellpadding="0" border="1" align="center" class="tbl" summary="show gantt">
-		<tr>
-			<td>
-				<?php
-$src = ("?m=projects&amp;a=gantt&amp;suppressHeaders=1" . 
-	(($display_option == 'all') ? '' 
-         : ('&amp;start_date=' . $start_date->format("%Y-%m-%d") 
-           . '&amp;end_date=' . $end_date->format("%Y-%m-%d"))) . "&amp;width='" 
-		. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)" 
-		. "+'&amp;showLabels=" . $showLabels . '&amp;sortTasksByName=' .$sortTasksByName 
-		. '&amp;proFilter=' .$proFilter . '&amp;showInactive=' . $showInactive 
-		. '&amp;company_id=' . $company_id . '&amp;department=' . $department . '&amp;dept_ids=' . $dept_ids 
-		. '&amp;showAllGantt=' . $showAllGantt . '&amp;user_id=' . $user_id . '&amp;addPwOiD=' . $addPwOiD 
-		. '&amp;m_orig=' . $m_orig . '&amp;a_orig=' . $a_orig);
-echo '<script>document.write(\'<img src="' . $src . '">\')</script>';
-if (!dPcheckMem(32*1024*1024)) {
-	echo '</td></tr><tr><td>';
-	echo ('<span style="color: red; font-weight: bold;">'  . $AppUI->_('invalid memory config') 
-	      . '</span>');
-}
-?>
-			</td>
-		</tr>
+		<?php Gantt::Projects()->render(); ?>
 		</table>
 	</td>
 </tr>
 </table>
+

@@ -1,9 +1,12 @@
-<?php      // create Date objects from the datetime fields
-      $df = $AppUI->getPref( 'SHDATEFORMAT' );
-      $start_date = intval( $obj->project_start_date ) ? new CDate( $obj->project_start_date ) : null;
-      $end_date = intval( $obj->project_end_date ) ? new CDate( $obj->project_end_date ) : null;
-      $actual_end_date = intval( $criticalTasks[0]['task_end_date'] ) ? new CDate( $criticalTasks[0]['task_end_date'] ) : null;
-      $style = (( $actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';		
+<?php      
+require_once DP_BASE_DIR . '/modules/projects/frappegantt.php';
+
+// create Date objects from the datetime fields
+$df = $AppUI->getPref( 'SHDATEFORMAT' );
+$start_date = intval( $obj->project_start_date ) ? new CDate( $obj->project_start_date ) : null;
+$end_date = intval( $obj->project_end_date ) ? new CDate( $obj->project_end_date ) : null;
+$actual_end_date = intval( $criticalTasks[0]['task_end_date'] ) ? new CDate( $criticalTasks[0]['task_end_date'] ) : null;
+$style = (( $actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';		
 ?>	
 	<td width="50%" valign="top">
 		<table class="tbl" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -387,8 +390,10 @@ global $st_projects_arr;
 $df = $AppUI->getPref('SHDATEFORMAT');
 $projectPriority = dPgetSysVal( 'ProjectPriority' );
 $projectStatus = dPgetSysVal( 'ProjectStatus' );
+
+Gantt::Projects()->render();
 ?>
-<table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
+<!--table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
 <td align="center">
 <?php echo '<strong>Gantt Chart</strong>' ?>
 </td>
@@ -399,4 +404,5 @@ $projectStatus = dPgetSysVal( 'ProjectStatus' );
       echo "<script>document.write('<img src=\"$src\">')</script>";
 ?>
 </td>
-</table>
+</table-->
+VW_PROJECTTASK

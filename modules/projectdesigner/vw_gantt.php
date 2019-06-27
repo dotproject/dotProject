@@ -1,12 +1,16 @@
 <?php
+require_once DP_BASE_DIR . '/modules/projects/frappegantt.php';
+
 global $project_id, $m;
 global $st_projects_arr;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $projectPriority = dPgetSysVal( 'ProjectPriority' );
 $projectStatus = dPgetSysVal( 'ProjectStatus' );
+
+Gantt::Projects()->render();
 ?>
-<table width="100%" border="0" cellpadding="5" cellspacing="1">
+<!--table width="100%" border="0" cellpadding="5" cellspacing="1">
 <tr>
     <td align="center" colspan="20">
 <?php
@@ -14,4 +18,4 @@ $projectStatus = dPgetSysVal( 'ProjectStatus' );
       echo "<script>document.write('<img src=\"$src\">')</script>";
 ?>
 </td>
-</table>
+</table-->

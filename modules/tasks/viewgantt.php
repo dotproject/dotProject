@@ -3,6 +3,8 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
+require_once DP_BASE_DIR . '/modules/projects/frappegantt.php';
+
 GLOBAL $min_view, $m, $a, $user_id, $tab, $tasks;
 
 $min_view = defVal(@$min_view, false);
@@ -148,7 +150,7 @@ function showFullProject() {
 echo ('m=' . $m . '&amp;a=' . $a . '&amp=tab=' . $tab . '&amp;project_id=' . $project_id); ?>">
 <input type="hidden" name="display_option" value="<?php echo $display_option;?>" />
 
-<table border="0" cellpadding="4" cellspacing="0">
+<table border="0" cellpadding="4" cellspacing="0" style="table-layout:fixed;">
 <tr>
 	<td align="left" valign="top" width="20">
 <?php if ($display_option != "all") { ?>
@@ -179,21 +181,6 @@ echo $end_date->format($df);?>" size="12" disabled="disabled" />
 		<a href="javascript:popCalendar('edate')">
 		<img src="./images/calendar.gif" width="24" height="12" alt="" border="0" />
 		</a>
-	<td valign="top">
-		<input type="checkbox" name="showLabels" id="showLabels" <?php 
-echo (($showLabels == 1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php 
-echo $AppUI->_('Show captions'); ?></label>
-	</td>
-	<td valign="top">
-		<input type="checkbox" name="showWork" id="showWork" <?php 
-echo (($showWork == 1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php 
-echo $AppUI->_('Show work instead of duration'); ?></label>
-	</td>	
-	<td valign="top">
-		<input type="checkbox" name="sortByName" id="sortByName" <?php 
-echo (($sortByName == 1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php 
-echo $AppUI->_('Sort by Task Name'); ?></label>
-	</td>	
 	<td align="left">
 		<input type="button" class="button" value="<?php 
 echo $AppUI->_('submit');?>" onclick='javascript:document.editFrm.display_option.value="custom";submit();'>
@@ -212,7 +199,7 @@ echo $AppUI->_('next');?>" border="0" />
 <tr>
 	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">
 		<input type="hidden" name="show_form" value="1" />
-		<table width="100%" border="0" cellpadding="1" cellspacing="0">
+		<table width="100%" border="0" cellpadding="1" cellspacing="0" style="table-layout:fixed;">
 			<tr>
 			<td align="center" valign="bottom" nowrap="nowrap">
 				<input type="checkbox" name="showPinned" id="showPinned" <?php 
@@ -246,17 +233,28 @@ echo $AppUI->_('Low Priority Tasks'); ?></label>
 </tr>
 <?php } ?>
 <tr>
-	<td align="center" valign="bottom" colspan="7">
-		<a href='javascript:showThisMonth()'><?php echo $AppUI->_('show this month'); ?></a> : 
-		<a href='javascript:showFullProject()'><?php 
-echo (($a == 'todo') ? $AppUI->_('show all') : $AppUI->_('show full project')); ?></a>
+<td align="center" valign="bottom" colspan="12"><?php
+		if ($display_option != "this_month") {
+			echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a>";
+		} else {
+			echo "<strong>" . $AppUI->_('show this month') . "</strong>";
+		}
+
+		echo " : ";
+		
+		if ($display_option != "all") {
+			echo "<a href='javascript:showFullProject()'>" . $AppUI->_('show all') . "</a>";
+		} else {
+			echo "<strong>" . $AppUI->_('show all') . "</strong>";
+		}
+		?><br />
 	</td>
 </tr>
 
 </table>
 </form>
 
-<table cellspacing="0" cellpadding="0" border="1" align="center">
+<table cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="table-layout:fixed;">
 <tr>
 	<td>
 <?php
@@ -282,8 +280,10 @@ if ($cnt[0]['N'] > 0) {
 	        . '&amp;showDynTasks=' . $showDynTasks . '&amp;showLowTasks=' . $showLowTasks 
 	        . '&amp;caller=' . $a . '&amp;user_id=' . $user_id);
 ?>
-	<script >document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
+	<!--<script >document.write('<img src="<?php echo $src; ?>" alt="" />')</script>-->
 <?php
+	Gantt::ProjectTasks($project_id)->render();
+
 	//If we have a problem displaying this we need to display a warning.
 	//Put it at the bottom just in case
 	if (! dPcheckMem(32*1024*1024)) {
