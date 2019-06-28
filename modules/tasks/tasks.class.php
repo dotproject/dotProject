@@ -2414,9 +2414,9 @@ class CTask extends CDpObject
 			$mail->To($reminder['contact']['contact_email']);
 			$body = '';
 			foreach ($reminder['email'] as $email) {
-				$body .= "================================================\n\n";
-				$body .= $email['subject'] . "\n\n";
-				$body .= $email['body'] . "\n\n";
+				$body .= "================================================\n\n<br><br>";
+				$body .= $email['subject'] . "\n\n<br><br>";
+				$body .= $email['body'] . "\n\n<br><br>";
 			}
 			$mail->Body($body, $locale_char_set);
 			$mail->Send();
