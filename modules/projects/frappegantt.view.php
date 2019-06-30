@@ -105,7 +105,7 @@
         Array.from(document.getElementsByClassName('bar-label')).forEach(function(labelItem) {
             try {
                 var barWidth = labelItem.previousSibling.previousSibling.getWidth();
-                var barX = labelItem.previousSiblinb.previousSibling.getX()
+                var barX = labelItem.previousSibling.previousSibling.getX()
             }
             catch {
                 var barWidth = labelItem.previousSibling.getBBox().width;
