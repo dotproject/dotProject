@@ -11,6 +11,7 @@ require_once DP_BASE_DIR . '/modules/projects/projects.class.php';
 class Gantt {
     const ListProjects = 1;
     const ListProjectTasks = 2;
+    const ListUserTasks = 3;
     private static $headerWritten = false;
     private $taskClickURL = "";
     private $viewID = null;
@@ -34,7 +35,17 @@ class Gantt {
     public static function ProjectTasks($projectid) {
         return new Gantt(Gantt::ListProjectTasks, ["projectid"=>$projectid]);
     }
+ 
+    /**
+     * Create gantt for tasks owned by specified user
+     *
+     * @param int $userid ID of the user
+     * @return Gantt
+     */
 
+    public static function UserTasks($userid) {
+        return new Gantt(Gantt::ListUserTasks, ["userid"=>$userid]);
+    }
     /**
      * Write the header required to display the gantt chart
      */
@@ -62,6 +73,10 @@ class Gantt {
                 $this->taskClickURL = "index.php?m=tasks&a=view&task_id=%id%";
                 $this->viewID = 'projectTasks'.$params["projectid"];
             break;
+            case Gantt::ListUserTasks:
+                $this->getUserTasks($params["userid"]);
+                $this->taskClickURL = "index.php?m=tasks&a=view&task_id=%id%";
+                $this->ViewID = 'usertasks'.$params["userid"];
         }
     }
 
@@ -213,6 +228,53 @@ class Gantt {
                 "start" => $project["project_start_date"],
                 "end" => $project["project_end_date"],
                 "progress" => $project["project_percent_complete"]
+            ));
+        }
+    }
+
+    /**
+     * Get User tasks from db and format for Gantt chart
+     */
+
+    private function getUserTasks($userID) {
+        global $AppUI;
+
+        $q = new DBQuery;
+        $q->addTable('tasks', 't');
+        $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, task_dynamic, task_owner');
+        $q->addWhere('task_owner = '.$AppUI->user_id);
+        
+        if ($this->filters['sdate'] != 0 && $this->filters['edate'] != 0) {
+            $sdate = (new CDate($this->filters['sdate']))->format(FMT_DATETIME_MYSQL);
+            $edate = (new CDate($this->filters['edate']))->format(FMT_DATETIME_MYSQL);
+            $q->addWhere("task_start_date <= '$edate'");
+            $q->addWhere("task_end_date >= '$sdate'");
+        }
+
+        
+        $task = new CTask;
+        $task->setAllowedSQL($AppUI->user_id, $q);
+        
+        $proTasks = $q->loadHashList('task_id');
+        $q->clear();
+
+        foreach ($proTasks as $task) {
+            if ($task["task_start_date"] == null || $task["task_end_date"] == null) {
+                continue;
+            }
+            $q->addTable('task_dependencies', 'td');
+            $q->addQuery('td.dependencies_req_task_id');
+            $q->addWhere('td.dependencies_task_id = ' . $task['task_id']);
+            $dependency = $q->loadResult();
+            $q->clear();
+
+            array_push($this->tasks, array(
+                "id" => $task["task_id"],
+                "name" => $task["task_name"],
+                "start" => $task["task_start_date"],
+                "end" => $task["task_end_date"],
+                "progress" => $task["task_percent_complete"],
+                "dependencies" => strval($dependency)
             ));
         }
     }

@@ -282,7 +282,11 @@ if ($cnt[0]['N'] > 0) {
 ?>
 	<!--<script >document.write('<img src="<?php echo $src; ?>" alt="" />')</script>-->
 <?php
-	Gantt::ProjectTasks($project_id)->render();
+        if ($a == 'todo') {
+            Gantt::UserTasks($user_id)->render();
+        } else {
+            Gantt::ProjectTasks($project_id)->render();
+        }
 
 	//If we have a problem displaying this we need to display a warning.
 	//Put it at the bottom just in case
