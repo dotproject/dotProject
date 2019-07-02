@@ -87,6 +87,41 @@ class CTask extends CDpObject
 	function __toString() {
 		return $this -> link . '/' . $this -> type . '/' . $this -> length;
 	}
+
+	function clear() {
+		$this->task_id = NULL;
+		$this->task_name = NULL;
+		$this->task_parent = NULL;
+		$this->task_milestone = NULL;
+		$this->task_project = NULL;
+		$this->task_owner = NULL;
+		$this->task_start_date = NULL;
+		$this->task_duration = NULL;
+		$this->task_duration_type = NULL;
+		$this->task_hours_worked = NULL;
+		$this->task_end_date = NULL;
+		$this->task_status = NULL;
+		$this->task_priority = NULL;
+		$this->task_percent_complete = NULL;
+		$this->task_description = NULL;
+		$this->task_target_budget = NULL;
+		$this->task_related_url = NULL;
+		$this->task_creator = NULL;
+
+		$this->task_order = NULL;
+		$this->task_client_publish = NULL;
+		$this->task_dynamic = NULL;
+		$this->task_access = NULL;
+		$this->task_notify = NULL;
+		$this->task_departments = NULL;
+		$this->task_contacts = NULL;
+		$this->task_custom = NULL;
+		$this->task_type   = NULL;
+
+		$this->_reminder_list = array();
+		$this->_reminder_sender = NULL;
+		$this->_default_batch_status = NULL;
+	}
 	
 	// overload check
 	function check() {
