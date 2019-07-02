@@ -43,7 +43,7 @@ $cost_code = dPgetCleanParam($_GET, 'cost_code', '0');
 if (isset($_GET['user_id'])) {
 	$AppUI->setState('ProjectsTaskLogsUserFilter', $_GET['user_id']);
 }
-$user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : $AppUI->user_id;
+$user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : -1;
 
 $AppUI->setState('ProjectsTaskLogsHideArchived', (isset($_GET['hide_inactive']) ? true : false));
 $hide_inactive = $AppUI->getState('ProjectsTaskLogsHideArchived');
