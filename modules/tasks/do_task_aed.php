@@ -108,7 +108,7 @@ if ($sub_form) {
 	
 	// convert dates to SQL format first
 	if ($obj->task_start_date) {
-		$date = new CDate($obj->task_start_date);
+		$date = new CDate($obj->task_start_date, FMT_DATEHTML5);
 		$obj->task_start_date = $date->format(FMT_DATETIME_MYSQL);
 	}
 	$end_date = null;
@@ -116,7 +116,7 @@ if ($sub_form) {
 		if (mb_strpos($obj->task_end_date, '2400') !== false) {
 		  $obj->task_end_date = str_replace('2400', '2359', $obj->task_end_date);
 		}
-		$end_date = new CDate($obj->task_end_date);
+		$end_date = new CDate($obj->task_end_date, FMT_DATEHTML5);
 		$obj->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 	}
 	

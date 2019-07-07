@@ -13,7 +13,9 @@ require_once $AppUI->getLibraryClass('PEAR/Date');
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
 define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
+define('FMT_DATETIME_HTML5', '%Y-%m-%dT%H:%M:%S');
 define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
+define('FMT_DATE_HTML5', '%Y-%m-%d');
 define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
 define('FMT_TIMESTAMP_DATE', '%Y%m%d');
 define('FMT_TIMESTAMP_TIME', '%H%M%S');
@@ -37,11 +39,16 @@ define('SEC_DAY',	  86400);
 */
 class CDate extends Date {
 
-	function CDate($date = null)
+	function CDate($date = null, $format = null)
 	{
-		if (!is_object($date) && strlen($date) == 12 && strpos($date, '-') === false && strpos($date, '/') === false) {
+		if ($format == null && !is_object($date) && strlen($date) == 12 && strpos($date, '-') === false && strpos($date, '/') === false) {
 			$date = $date.'00';
+		} else if ($format != null && !is_object($date)) {
+			$dateobj = new Date();
+			$dateobj->setDate($date, $format);
+			$date = $dateobj;
 		}
+		
 		return parent::Date($date);
 	}
 

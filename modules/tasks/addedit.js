@@ -380,7 +380,7 @@ function calcFinish(f) {
 	var int_st_date_time = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);	
 	var int_st_date = int_st_date_time;
 	var e = new Date(int_st_date_time.substring(0,4),(int_st_date_time.substring(4,6)-1),int_st_date_time.substring(6,8), int_st_date_time.substring(8,10), int_st_date_time.substring(10,12));
-
+	
 	// The task duration
 	var durn = parseFloat(f.task_duration.value);//hours
 	var durnType = parseFloat(f.task_duration_type.value); //1 or 24
@@ -579,11 +579,11 @@ function checkDates(form, id) {
 			return false;
 		}
 		//check if the start date is > then end date
-		var int_st_date = new String(form.task_start_date.value + form.start_hour.value + form.start_minute.value);
-		var int_en_date = new String(form.task_end_date.value + form.end_hour.value + form.end_minute.value);
+		var int_st_date = form.task_start_date.value;
+		var int_en_date = form.task_end_date.value;
 
-		var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
-		var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
+		var s = Date.UTC(int_st_date);
+		var e = Date.UTC(int_en_date);
 		if (s > e) {
 			alert('End date is before start date!');
 			return false;
@@ -646,16 +646,6 @@ function copyForm(form, to, extras) {
 }
 
 function saveDates(form, id) {
-	if (can_edit_time_information) {
-		if (form.task_start_date.value.length > 0) {
-			form.task_start_date.value += form.start_hour.value + form.start_minute.value;
-		}
-		if (form.task_end_date.value.length > 0) {
-			form.task_end_date.value += form.end_hour.value + form.end_minute.value;
-		}
-	}
-	
-
 	return new Array('task_start_date', 'task_end_date');
 }
 
