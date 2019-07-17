@@ -35,7 +35,23 @@ $q->addTable('users');
 $q->addQuery("user_id, concat(contact_first_name,' ',contact_last_name)");
 $q->addJoin('contacts', 'con', 'user_contact = contact_id');
 $q->addOrder('contact_first_name, contact_last_name');
-$users = array('-1' => $AppUI->_('All Users')) + $q->loadHashList();
+$q->exec();
+
+//Sort active from inactive
+$users = array();
+$inactiveUsers = array();
+$activeUsers = array();
+$perms =& $AppUI->acl();
+while ( $row = $q->fetchRow()) {
+	$users[$row['user_id']] = $row[0];
+	if ($perms->checkLogin($row['user_id'])) {
+		$activeUsers[$row['user_id']] = $row[1];
+	} else {
+		$inactiveUsers[$row['user_id']] = $row[1] . " (".$AppUI->_('Inactive').")";
+	}
+}
+$users = array(-1=>"All Users") + $activeUsers + $inactiveUsers;
+
 $q->clear();
 
 $cost_code = dPgetCleanParam($_GET, 'cost_code', '0');
@@ -43,7 +59,7 @@ $cost_code = dPgetCleanParam($_GET, 'cost_code', '0');
 if (isset($_GET['user_id'])) {
 	$AppUI->setState('ProjectsTaskLogsUserFilter', $_GET['user_id']);
 }
-$user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : $AppUI->user_id;
+$user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : -1;
 
 $AppUI->setState('ProjectsTaskLogsHideArchived', (isset($_GET['hide_inactive']) ? true : false));
 $hide_inactive = $AppUI->getState('ProjectsTaskLogsHideArchived');
