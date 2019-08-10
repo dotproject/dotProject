@@ -112,7 +112,7 @@ if ($can_edit_time_information) {
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
 	<td nowrap="nowrap">
 		<input type="datetime-local" name="task_start_date" id="task_start_date" value="<?php 
-	echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField">
+	echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 		
 		
 	</td>
@@ -123,7 +123,7 @@ if ($can_edit_time_information) {
 
 	<td nowrap="nowrap">
 		<input type="datetime-local" name="task_end_date" id="task_end_date" value="<?php 
-	echo $end_date ? $end_date->format(FMT_DATETIME_HTML5) : '';?>" class="dpDateField">
+	echo $end_date ? $end_date->format(FMT_DATETIME_HTML5) : '';?>" class="dpDateField text">
 		
 		
 	</td>

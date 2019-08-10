@@ -13,7 +13,7 @@ require_once $AppUI->getLibraryClass('PEAR/Date');
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
 define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
-define('FMT_DATETIME_HTML5', '%Y-%m-%dT%H:%M:%S');
+define('FMT_DATETIME_HTML5', '%Y-%m-%dT%H:%M');
 define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
 define('FMT_DATE_HTML5', '%Y-%m-%d');
 define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
@@ -103,7 +103,6 @@ class CDate extends Date {
 		} 
 		return dPsgn($comp_value);
 	}
-
 
 /**
 * Adds (+/-) a number of days to the current date.

@@ -578,13 +578,18 @@ function checkDates(form, id) {
 			}
 			return false;
 		}
+		if (!form.task_start_date.checkValidity()) {
+			alert(task_start_msg);
+			return false;
+		}
+		if (!form.task_end_date.checkValidity()) {
+			alert(task_end_msg);
+			return false;
+		}
 		//check if the start date is > then end date
-		var int_st_date = form.task_start_date.value;
-		var int_en_date = form.task_end_date.value;
-
-		var s = Date.UTC(int_st_date);
-		var e = Date.UTC(int_en_date);
-		if (s > e) {
+		var start = new Date(form.task_start_date.value);
+		var end = new Date(form.task_end_date.value);
+		if (start > end) {
 			alert('End date is before start date!');
 			return false;
 		}
@@ -616,6 +621,8 @@ function copyForm(form, to, extras) {
 		// Determine the node type, and determine the current value
 		switch (elem.type) {
 			case 'text':
+			case 'date':
+			case 'datetime-local':
 			case 'textarea':
 			case 'hidden':
 				to.appendChild(h.addHidden(elem.name, elem.value));
