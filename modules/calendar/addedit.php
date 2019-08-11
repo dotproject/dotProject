@@ -322,36 +322,17 @@ echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_start_date" value="<?php 
-echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="start_date" value="<?php 
-echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('start_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
+		<input type="datetime-local" name="event_start_date" value="<?php 
+echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-	<td><?php 
-echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S")); 
-?></td>
 </tr>
 
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_end_date" value="<?php 
-echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="end_date" value="<?php 
-echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('end_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
+		<input type="datetime-local" name="event_end_date" value="<?php 
+echo (($end_date) ? $end_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-	<td><?php 
-echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S")); ?></td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
