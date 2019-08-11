@@ -315,23 +315,9 @@ $titleBlock->show();
                                 $start_date = intval($obj->risk_period_start_date) ? new CDate(dPformSafe(@$obj->risk_period_start_date)) : null;
                                 $end_date = intval($obj->risk_period_end_date) ? new CDate(dPformSafe(@$obj->risk_period_end_date)) : null;
                             ?>                
-
-                            <input type="hidden" name="risk_period_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-                            <input type="text" class="text" name="period_start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text" disabled="disabled" />
-
-                            <a href="#" onclick="javascript:popCalendar('period_start_date');">
-                                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-                            </a>
-
+                            <input type="date" class="text" name="risk_period_start_date" value="<?php echo $start_date ? $start_date->format(FMT_DATE_HTML5) : '';?>" class="text" />
                             to
-                            
-                            <input type="hidden" name="risk_period_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-                            <input type="text" class="text" name="period_end_date" id="date1" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-
-                            <a href="#" onclick="javascript:popCalendar('period_end_date');">
-                                <img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-                            </a>
-                        </td>
+                            <input type="date" class="text" name="risk_period_end_date" value="<?php echo $end_date ? $end_date->format(FMT_DATE_HTML5) : '';?>" class="text" />
                         </td>
                     </tr>
 

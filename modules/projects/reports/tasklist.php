@@ -122,22 +122,10 @@ echo $AppUI->_('Next Month'); ?>" onClick="set(30)" /></td>
   <tr>
     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
     <td nowrap="nowrap">
-      <input type="hidden" name="list_start_date" value="<?php 
-echo $start_date->format(FMT_TIMESTAMP_DATE); ?>" />
-      <input type="text" name="start_date" value="<?php 
-echo $start_date->format($df); ?>" class="text" disabled="disabled" />
-      <a href="#" onclick="popCalendar('start_date')">
-        <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-      </a>
-      <input type="hidden" name="list_end_date" value="<?php 
-echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-      <input type="text" name="end_date" value="<?php 
-echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-      <a href="#" onclick="popCalendar('end_date')">
-        <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-      </a>
+      <input type="date" name="list_start_date" value="<?php 
+echo $start_date->format(FMT_DATE_HTML5); ?>" class="text" />
+      <input type="date" name="list_end_date" value="<?php 
+echo (($end_date) ? $end_date->format(FMT_DATE_HTML5) : ''); ?>" class="text" />
       <input type="checkbox" name="log_all" id="log_all" value="1"<?php 
 echo (($log_all) ? ' checked="checked"' : ''); ?> />
       <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>

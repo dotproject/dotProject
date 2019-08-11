@@ -186,14 +186,8 @@ echo(($log->task_log_creator == 0) ? $AppUI->user_id : $log->task_log_creator) ?
       <tr>
         <td align="right"><?php echo $AppUI->_('Date'); ?></td>
         <td nowrap="nowrap">
-          <input type="hidden" name="task_log_date" value="<?php 
-echo $log_date->format(FMT_DATETIME_MYSQL); ?>" />
-          <input type="text" name="log_date" value="<?php 
-echo $log_date->format($df); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('log_date')">
-          <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-          </a>
+          <input type="date" name="task_log_date" value="<?php
+echo $log_date->format(FMT_DATE_HTML5); ?>" class="text dpDateField">
         </td>
       </tr>
       <tr>
@@ -254,14 +248,8 @@ if ($obj->canUserEditTimeInformation()) {
       <tr>
         <td align='right'><?php echo $AppUI->_("Task end date"); ?></td>
         <td>
-          <input type="hidden" name="task_end_date" value="<?php 
-	echo (($end_date) ? $end_date->format(FMT_TIMESTAMP) : ''); ?>" />
-          <input type="text" name="end_date" value="<?php 
-	echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-			<a href="#" onclick="javascript:popCalendar('end_date')">
-          <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar'); ?>" border="0" />
-          </a>
+          <input type="date" name="task_end_date" value="<?php
+	echo (($end_date) ? $end_date->format(FMT_DATE_HTML5) : ''); ?>" class="text dpDateField">
         </td>
       </tr>
 <?php

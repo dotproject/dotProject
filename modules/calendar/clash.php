@@ -136,28 +136,16 @@ function set_clash_action(action) {
 <table width='100%' class='std'>
 <tr>
   <td width='50%' align='right'><?php echo $AppUI->_('Earliest Date'); ?>:</td>
-  <td width='50%' align='left' nowrap="nowrap">
-    <input type="hidden" name="event_start_date" value="<?php 
-echo $start_date->format(FMT_TIMESTAMP_DATE); ?>" />
-    <input type="text" name="start_date" value="<?php 
-echo $start_date->format($df);?>" class="text" disabled="disabled" />
-      <a href="#" onclick="javascript:popCalendar('start_date')">
-	<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar');?>" border="0" />
-      </a>
+  <td width="50%" align="left" nowrap="nowrap">
+    <input type="date" name="event_start_date" value="<?php
+echo $start_date->format(FMT_DATE_HTML5); ?>" class="text dpDateField">
   </td>
 </tr>
 <tr>
-  <td width='50%' align='right'><?php echo $AppUI->_('Latest Date'); ?>:</td>
-  <td width='50%' align='left' nowrap="nowrap">
-    <input type="hidden" name="event_end_date" value="<?php 
-echo $end_date->format(FMT_TIMESTAMP_DATE); ?>" />
-    <input type="text" name="end_date" value="<?php 
-echo $end_date->format($df);?>" class="text" disabled="disabled" />
-      <a href="#" onclick="javascript:popCalendar('end_date')">
-	<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar');?>" border="0" />
-      </a>
+  <td width="50%" align="right"><?php echo $AppUI->_('Latest Date'); ?>:</td>
+  <td width="50%" align="left" nowrap="nowrap">
+    <input type="date" name="event_end_date" value="<?php
+echo $end_date->format(FMT_DATE_HTML5); ?>" class="text dpDateField">
   </td>
 </tr>
 <tr>
