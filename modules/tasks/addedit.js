@@ -1,5 +1,4 @@
 // $Id$
-var calendarField = '';
 var calWin = null;
 
 function setMilestoneEndDate(checked){
@@ -61,33 +60,6 @@ function setTasksStartDate(form, datesForm) {
 
 function popContacts() {
 	window.open('?m=public&'+'a=contact_selector&'+'dialog=1&'+'call_back=setContacts&'+'selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
-}
-
-function popCalendar(field){
-	calendarField = field;
-	task_cal = document.getElementById('task_' + field.name);
-	idate = task_cal.value;
-	window.open('?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = document.getElementById('task_' + calendarField.name);
-	calendarField.value = fdate;
-	fld_date.value = idate;
-
-	// set end date automatically with start date if start date is after end date
-	e_date = document.getElementById('task_' + 'end_date');
-	e_fdate = document.getElementById('end_date');
-	if (calendarField.name == 'start_date') {
-		if(e_date.value < idate) {
-			e_date.value = idate;
-			e_fdate.value = fdate;
-		}
-	}
 }
 
 function setContacts(contact_id_string){

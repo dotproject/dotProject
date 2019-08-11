@@ -121,25 +121,6 @@ $task_types = dPgetSysVal('TaskType');
 ?>
 
 <script language="JavaScript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.task_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.task_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
-
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

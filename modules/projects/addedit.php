@@ -145,38 +145,6 @@ if (f.project_short_name.value.length == 0) {
 }
 }
 
-var calendarField = '';
-var calWin = null;
-
-function popCalendar(field) {
-//due to a bug in Firefox (where window.open, when in a function, does not properly unescape a url)
-// we CANNOT do a window open with &amp; separating the parameters
-//this bug does not occur if the window open occurs in an onclick event
-//this bug does NOT occur in Internet explorer
-calendarField = field;
-idate = eval('document.editFrm.project_' + field + '.value');
-window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
-}
-
-/**
-*	@param string Input date in the format YYYYMMDD
-*	@param string Formatted date
-*/
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.project_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-
-	// set end date automatically with start date if start date is after end date
-	if (calendarField == 'start_date') {
-		if (document.editFrm.end_date.value < idate) {
-			document.editFrm.project_end_date.value = idate;
-			document.editFrm.end_date.value = fdate;
-		}
-	}
-}
-
 function submitIt() {
 	var f = document.editFrm;
 	var msg = '';

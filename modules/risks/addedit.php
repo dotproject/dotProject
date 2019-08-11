@@ -188,31 +188,6 @@ $titleBlock->show();
             }
         }
     }
-    var calendarField = '';
-    function popCalendar(field) {
-        calendarField = field;
-        idate = document.uploadFrm['risk_' + field].value;
-        window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
-    }
-    /**
-    *	@param string Input date in the format YYYYMMDD
-    *	@param string Formatted date
-    */
-    function setCalendar(idate, fdate) {
-        fld_date = document.uploadFrm['risk_' + calendarField];
-        fld_fdate = document.uploadFrm[calendarField];
-        fld_date.value = idate;
-        fld_fdate.value = fdate;
-
-        // set end date automatically with start date if start date is after end date
-        if (calendarField == 'start_date') {
-            if (document.uploadFrm.period_end_date.value < idate) {
-                document.uploadFrm.risk_period_end_date.value = idate;
-                document.uploadFrm.period_end_date.value = fdate;
-            }
-        }
-    }
-
 </script>
 
 <form name="uploadFrm" action="?m=risks" method="post">

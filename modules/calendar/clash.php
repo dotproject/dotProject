@@ -107,24 +107,6 @@ function clash_suggest() {
 	}
 ?>
 <script  language="javascript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.event_' + field + '.value');
-	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.event_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
 
 function set_clash_action(action) {
 	document.editFrm.clash_action.value = action;

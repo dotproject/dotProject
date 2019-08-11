@@ -29,27 +29,6 @@ $end_date->setTime(23, 59, 59);
 
 ?>
 
-<script language="javascript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.log_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.log_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
-</script>
-
 <form name="editFrm" action="index.php?m=projects&a=reports" method="post">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
