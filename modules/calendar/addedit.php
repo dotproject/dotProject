@@ -322,7 +322,7 @@ echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="datetime-local" name="event_start_date" value="<?php 
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_start_date" value="<?php 
 echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
 </tr>
@@ -330,7 +330,7 @@ echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="datetime-local" name="event_end_date" value="<?php 
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_end_date" value="<?php 
 echo (($end_date) ? $end_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
 </tr>
