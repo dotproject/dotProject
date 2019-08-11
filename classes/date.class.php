@@ -294,7 +294,7 @@ class CDate extends Date {
 			// proceed the last day now
 			
 			// we prefer wed 16:00 over thu 08:00 as end date :)
-			if ($hoursRemaining == 0 && $full_working_day > 0) {
+			if ($hoursRemaining == 0 && $full_working_days > 0) {
 				$full_working_days--;
 				($sgn > 0) ? $this->setHour($cal_day_start+$dwh) : $this->setHour($cal_day_end-$dwh);
 			} else {
