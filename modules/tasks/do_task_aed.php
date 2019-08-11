@@ -101,7 +101,6 @@ if ($sub_form) {
 	$obj->task_departments = implode(',', dPgetCleanParam($_POST, 'dept_ids', array()));
 	
 	// convert dates to SQL format first
-/*DEBUG*/file_put_contents('dptaskaddedit.json', json_encode($_POST, JSON_PRETTY_PRINT));
 	if ($obj->task_start_date) {
 		$date = new CDate($obj->task_start_date.":00");
 		$obj->task_start_date = $date->format('%Y-%m-%d %H:%M:00');
