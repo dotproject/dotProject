@@ -54,7 +54,6 @@ function setTasksStartDate(form, datesForm) {
 			 //hardcoded date format Ymd
 			 datesForm.task_start_date.value = d.substring(6,10) + "" + d.substring(3,5) + "" + d.substring(0,2);	 
 		}	
-		setAMPM(datesForm.start_hour);
 	}
 }
 
@@ -198,17 +197,6 @@ function removeTaskDependency(form, datesForm) {
 	setTasksStartDate(form, datesForm);
 }
 
-function setAMPM(field) {
-	ampm_field = document.getElementById(field.name + "_ampm");
-	if (ampm_field) {
-		if (field.value > 11){
-			ampm_field.value = "pm";
-		} else {
-			ampm_field.value = "am";
-		}
-	}
-}
-
 var hourMSecs = 3600*1000;
 
 /**
@@ -229,21 +217,24 @@ function isInArray(myArray, intValue) {
 */
 function calcDuration(f) {
 
-	var int_st_date = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);
-	var int_en_date = new String(f.task_end_date.value + f.end_hour.value + f.end_minute.value);
+	//var int_st_date = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);
+	//var int_en_date = new String(f.task_end_date.value + f.end_hour.value + f.end_minute.value);
 
-	var sDate = new Date(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
-	var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
+	//var sDate = new Date(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
+	//var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
 	
-	var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
-	var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
+	var s = new Date(f.task_start_date.value);
+	var e = new Date(f.task_end_date.value);
+
+	//var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
+	//var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
 	var durn = (e - s) / hourMSecs; //hours absolute diff start and end
 	var durn_abs = durn;	
 
 	//now we should subtract non-working days from durn variable
 	var duration = durn  / 24;
 	var weekendDays = 0;
-		var myDate = new Date(int_st_date.substring(0,4), (int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10));
+	var myDate = new Date(s);
 	for (var i = 0; i < duration; i++) {
 		//var myDate = new Date(int_st_date.substring(0,4), (int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10));
 		var myDay = myDate.getDate();
@@ -259,8 +250,8 @@ function calcDuration(f) {
 	// check if the last day is a weekendDay
 	// if so we subtracted some hours too much before, 
 	// we have to fill up the last working day until cal_day_start + daily_working_hours
-	if (!isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
-		durn = durn + Math.max(0, (cal_day_start + daily_working_hours - eDate.getHours()));
+	if (!isInArray(working_days, e.getDay()) && e.getHours() != cal_day_start) {
+		durn = durn + Math.max(0, (cal_day_start + daily_working_hours - e.getHours()));
 	}
 	
 	//could be 1 or 24 (based on TaskDurationType value)
@@ -278,12 +269,12 @@ function calcDuration(f) {
 		} else { //otherwise we need to process first and end day different;
 	
 			// Hours worked on the first day
-			var first_day_hours = cal_day_end - sDate.getHours();
+			var first_day_hours = cal_day_end - s.getHours();
 			if (first_day_hours > daily_working_hours)
 				first_day_hours = daily_working_hours;
 
 			// Hours worked on the last day
-			var last_day_hours = eDate.getHours() - cal_day_start;
+			var last_day_hours = e.getHours() - cal_day_start;
 			if (last_day_hours > daily_working_hours)
 				last_day_hours = daily_working_hours;
 
@@ -299,8 +290,8 @@ function calcDuration(f) {
 			// check if the last day is a weekendDay
 			// if so we subtracted some hours too much before, 
 			// we have to fill up the last working day until cal_day_start + daily_working_hours
-			if (!isInArray(working_days, eDate.getDay()) && eDate.getHours() != cal_day_start) {
-				durn = durn + Math.max(0, (cal_day_start + daily_working_hours - eDate.getHours()));
+			if (!isInArray(working_days, e.getDay()) && e.getHours() != cal_day_start) {
+				durn = durn + Math.max(0, (cal_day_start + daily_working_hours - e.getHours()));
 			}
 		}
 
@@ -348,11 +339,8 @@ function next_working_day(dateObj) {
 * @modify reason calcFinish does not use time info and working_days array 
 */
 function calcFinish(f) {
-	//var int_st_date = new String(f.task_start_date.value);
-	var int_st_date_time = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);	
-	var int_st_date = int_st_date_time;
-	var e = new Date(int_st_date_time.substring(0,4),(int_st_date_time.substring(4,6)-1),int_st_date_time.substring(6,8), int_st_date_time.substring(8,10), int_st_date_time.substring(10,12));
-	
+	var e = new Date(f.task_start_date.value);
+
 	// The task duration
 	var durn = parseFloat(f.task_duration.value);//hours
 	var durnType = parseFloat(f.task_duration_type.value); //1 or 24
@@ -433,8 +421,8 @@ function calcFinish(f) {
 			e.setDate(e.getDate() + 1);
 			e.setHours(cal_day_start);
 		}
-			
-		f.end_minute.value = (e.getMinutes() < 10 ? "0"+e.getMinutes() : e.getMinutes());
+		
+		//f.end_minute.value = (e.getMinutes() < 10 ? "0"+e.getMinutes() : e.getMinutes());
 		
 		// boolean for setting later if we just found a non-working day
 		// and therefore do not have to add a day in the next loop
@@ -452,7 +440,8 @@ function calcFinish(f) {
 				g = true;
 			}
 		}
-		f.end_hour.value = (e.getHours() < 10 ? "0"+e.getHours() : e.getHours());
+		//f.end_hour.value = (e.getHours() < 10 ? "0"+e.getHours() : e.getHours());
+		f.task_end_date.value = e.toISOString().substring(0,19);
 	// }
 	
 	var tz1 = "";
@@ -470,13 +459,13 @@ function calcFinish(f) {
 	if (e.getDate() < 10) tz1 = "0";
 	if ((e.getMonth()+1) < 10) tz2 = "0";
 
-	f.task_end_date.value = e.getUTCFullYear()+tz2+(e.getMonth()+1)+tz1+e.getDate();
 	//f.end_date.value = tz2+(e.getMonth()+1)+"/"+tz1+e.getDate()+"/"+e.getUTCFullYear(); // MM/DD/YY
 	//f.end_date.value = tz1+e.getDate()+"/"+tz2+(e.getMonth()+1)+"/"+e.getUTCFullYear(); // DD/MM/YY
-	var url = '?m=public&a=date_format&dialog=1&field='+f.name+'.end_date&date=' + f.task_end_date.value;
-	thread = window.frames['thread']; //document.getElementById('thread');
-	thread.location = url;
-	setAMPM(f.end_hour);
+	//var url = '?m=public&a=date_format&dialog=1&field='+f.name+'.end_date&date=' + f.task_end_date.value;
+	//thread = window.frames['thread']; //document.getElementById('thread');
+	//thread.location = url;
+
+	f.task_end_date.value = e.toISOString().substring(0,19);
 }
 
 function changeRecordType(value){
