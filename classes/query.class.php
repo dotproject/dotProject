@@ -905,8 +905,12 @@ class DBQuery {
 		}
 		if (is_array($join_clause)) {
 			foreach ($join_clause as $join) {
-				$result .= (' ' . mb_strtoupper($join['type']) . ' JOIN `' 
-				            . $this->_table_prefix . $join['table'] . '`');
+				$result .= (' ' . mb_strtoupper($join['type']) . ' JOIN ' );
+				if (is_object($join['table'])) {
+					$result .= ( '(' . $join['table']->prepare() . ')' );
+			        } else {
+				        $result .= ( '`' . $this->_table_prefix . $join['table'] . '`');
+				}
 				if ($join['alias']) {
 					$result .= ' AS ' . $join['alias'];
 				}
