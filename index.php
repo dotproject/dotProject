@@ -117,7 +117,7 @@ if (dPgetParam($_POST, 'lostpass', 0)) {
 if (isset($_REQUEST['login'])) {
 	$username = dPgetCleanParam($_POST, 'username', '');
 	$password = dPgetParam($_POST, 'password', '');
-	$redirect = dPgetCleanParam($_REQUEST, 'redirect', '');
+	$redirect = dPgetParam($_REQUEST, 'redirect', '');
 	$AppUI->setUserLocale();
 	@include_once(DP_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 	@include_once DP_BASE_DIR . '/locales/core.php';
