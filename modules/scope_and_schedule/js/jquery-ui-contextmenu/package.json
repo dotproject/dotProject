@@ -1,0 +1,72 @@
+{
+  "name": "ui-contextmenu",
+  "filename": "jquery.ui-contextmenu.min.js",
+  "main": "jquery.ui-contextmenu.js",
+  "version": "1.18.2-0",
+  "title": "jQuery UI context menu plugin",
+  "description": "Turn a jQuery UI Menu widget into a contextmenu.",
+  "keywords": [
+    "context-menu",
+    "contextmenu",
+    "delegate",
+    "ecosystem:jquery",
+    "jquery-plugin",
+    "jquery-ui-menu",
+    "menu",
+    "navigation",
+    "popup",
+    "right-click",
+    "right-click-menu"
+  ],
+  "author": {
+    "name": "Martin Wendt",
+    "email": "jquery@wwwendt.de",
+    "url": "http://careers.stackoverflow.com/martin-wendt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mar10/jquery-ui-contextmenu"
+  },
+  "homepage": "https://github.com/mar10/jquery-ui-contextmenu",
+  "demo": "http://wwwendt.de/tech/demo/jquery-contextmenu/demo/",
+  "docs": "https://github.com/mar10/jquery-ui-contextmenu/blob/master/README.md",
+  "bugs": "https://github.com/mar10/jquery-ui-contextmenu/issues",
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/mar10/jquery-ui-contextmenu/master/LICENSE.txt"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-connect": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-qunit": "^1.3.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-exec": "^1.0.0",
+    "grunt-jscs": "^2.7.0",
+    "grunt-saucelabs": "^8.1.0",
+    "grunt-yabs": "^1.1.0",
+    "jquery-ui-dist": "^1.12.1"
+  },
+  "scripts": {
+    "test": "grunt ci --verbose"
+  },
+  "npmName": "ui-contextmenu",
+  "npmFileMap": [
+    {
+      "basePath": "/",
+      "files": [
+        "jquery.ui-contextmenu.js",
+        "jquery.ui-contextmenu.min.js",
+        "jquery.ui-contextmenu.min.js.map"
+      ]
+    }
+  ]
+}

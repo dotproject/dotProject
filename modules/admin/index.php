@@ -86,7 +86,7 @@ $titleBlock = new CTitleBlock('User Management', 'helix-setup-users.png', $m, "$
 $where = dPformSafe($where);
 
 $titleBlock->addCell(('<form action="index.php?m=admin" method="post">' 
-                      . '<input type="text" name="where" class="text" size="10" value="' . $where 
+                      . '<input autofocus type="search" name="where" class="text" size="10" value="' . $where 
                       . '" /> <input type="submit" value="' . $AppUI->_('search') 
                       . '" class="button" /></form>'),	'',	'', '');
 

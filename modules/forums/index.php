@@ -119,7 +119,7 @@ foreach ($forums as $row) {
 		$create_date = intval($row['forum_create_date']) ? new CDate($row['forum_create_date']) : null;
 ?>
 <tr>
-	<td colspan="6" style="background-color:#<?php echo $row["project_color_identifier"];?>">
+	<td colspan="6" style="background-color:<?php echo $row["project_color_identifier"];?>">
 		<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $row["forum_project"];?>">
 			<font color=<?php echo bestColor($row["project_color_identifier"]);?>>
 			<strong><?php echo $AppUI->___($row["project_name"]);?></strong>
@@ -151,7 +151,7 @@ foreach ($forums as $row) {
 		<span style="font-size:10pt;font-weight:bold">
 			<a href="?m=forums&amp;a=viewer&amp;forum_id=<?php echo $row["forum_id"];?>"><?php echo $AppUI->___($row["forum_name"]);?></a>
 		</span>
-		<br /><?php echo $row["forum_description"];?>
+		<br /><?php echo $AppUI->___($row["forum_description"]);?>
 		<br /><font color="#777777"><?php echo $AppUI->_('Owner').' '.$AppUI->___($row["user_username"]);?>,
 		<?php echo $AppUI->_('Started').' '.$create_date->format($df);?>
 		</font>

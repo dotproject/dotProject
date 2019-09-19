@@ -269,7 +269,7 @@ if (is_array($projects)) {
 			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         }
         $bar->SetFillColor('#' . $p['project_color_identifier']);
-        $bar->SetPattern(BAND_SOLID, ('#' . $p['project_color_identifier']));
+        $bar->SetPattern(BAND_SOLID, '#' . $p['project_color_identifier']);
 		
 		//adding captions
 		$bar->caption = new TextProperty($caption);
@@ -321,10 +321,10 @@ if (is_array($projects)) {
 					                                           ? 0.1 : 0.6));
 					
 					$bar2->title->SetColor(bestColor('#ffffff', 
-					                                 ('#' . $p['project_color_identifier']), 
+					                                 ($p['project_color_identifier']), 
 					                                 '#000000'));
 					$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-					$bar2->SetFillColor(('#' . $p['project_color_identifier']));
+					$bar2->SetFillColor('#' . $p['project_color_identifier']);
 					$graph->Add($bar2);
 				} else {
 					$bar2 = new MileStone ($row++, ('-- ' . $t['task_name']), 

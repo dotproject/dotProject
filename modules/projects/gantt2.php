@@ -230,8 +230,8 @@ if (is_array($tasks)) {
 			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 				$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
 			}
-			$bar->SetFillColor(('#' . $t['project_color_identifier']));
-			$bar->SetPattern(BAND_SOLID, ('#' . $t['project_color_identifier']));
+			$bar->SetFillColor('#' . $t['project_color_identifier']);
+			$bar->SetPattern(BAND_SOLID, ($t['project_color_identifier']));
 			
 			//adding captions
 			$bar->caption = new TextProperty($caption);

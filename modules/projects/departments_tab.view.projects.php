@@ -186,7 +186,7 @@ foreach ($projects as $row) {
 		          ? 'style="color:red; font-weight:bold"' : '');
 ?>
 <tr>
-	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#<?php 
+	<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:<?php 
 echo ($row['project_color_identifier']); ?>">
 		<span style="color:<?php echo bestColor($row['project_color_identifier']); ?>">
 			<?php echo sprintf("%.1f%%", $row['project_percent_complete']); ?>
@@ -251,7 +251,7 @@ echo ($style); ?>><?php echo htmlspecialchars($actual_end_date->format($df)); ?>
 <?php 
 		} else if ($row['project_priority'] != 0) {
 			echo dPshowImage(('./images/icons/priority' 
-			                  . (($row['project_priority'] > 0) ? '+' : '-') 
+			                  . (($row['project_priority'] > 0) ? '_up_' : '_down_') 
 			                  . abs($row['project_priority']) . '.gif'), 13, 16, '', '');
 		} else {
 ?>

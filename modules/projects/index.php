@@ -94,7 +94,21 @@ $q->addQuery('user_id');
 $q->addQuery("CONCAT(contact_last_name, ', ', contact_first_name, ' (', user_username, ')')" 
              . ' AS label');
 $q->addOrder('contact_last_name, contact_first_name, user_username');
-$userRows = array(0 => $AppUI->_('All Users', UI_OUTPUT_RAW)) + $q->loadHashList();
+$userRows = $q->loadHashList();
+$perms =& $AppUI->acl();
+$activeUsers = array();
+$inactiveUsers = array();
+foreach($userRows as $key => $value) {
+	if ( strlen(trim($value)) == 0 ) {
+		$value = $AppUI->_('Unnamed User') . " (id $key)";
+	}
+	if ( $perms->checkLogin($key) ) {
+		$activeUsers[$key] = $value;
+	} else {
+		$inactiveUsers[$key] = "$value (".$AppUI->_('Inactive').")";
+	}
+}
+$userRows = array(0 => $AppUI->_('All Users', UI_OUTPUT_RAW)) + $activeUsers + $inactiveUsers;
 $bufferUser = arraySelect($userRows, 'show_owner', 
                           'class="text" onchange="javascript:document.pickUser.submit()""', $owner);
 

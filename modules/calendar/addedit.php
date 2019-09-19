@@ -282,7 +282,7 @@ function removeUser() {
 <tr>
 	<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title');?>:</td>
 	<td width="20%">
-		<input type="text" class="text" size="25" name="event_title" value="<?php 
+		<input autofocus type="text" class="text" size="25" name="event_title" value="<?php 
 echo @$obj->event_title;?>" maxlength="255" />
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">

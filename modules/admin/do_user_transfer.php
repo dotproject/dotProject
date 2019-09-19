@@ -34,7 +34,7 @@ $q = new DBQuery();
 $q->addUpdate('project_owner', $user_id);
 $q->addTable('projects');
 $q->addWhere('project_owner =  ' . $from_user);
-$q->addWhere('project_id' . $project_where);
+$q->addWhere('project_id ' . $project_where);
 if (! $q->exec()) {
 	$AppUI->setMsg('failed to update project owner', UI_MSG_ERROR);
 	return;

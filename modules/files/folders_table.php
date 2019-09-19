@@ -193,7 +193,7 @@ function displayFolders($folder_id=0, $level=0) {
 	$q->addTable('file_folders', 'ff');
 	$q->addQuery('ff.*');
 	$q->addWhere('ff.file_folder_parent = ' . $folder_id);
-	if (count($allowedFolderIDs)) {
+	if (!empty($allowedFolderIDs)) {
 		$q->addWhere($allowedFolderIDs);
 	}
 	$q->addOrder('ff.file_folder_name');
@@ -443,10 +443,10 @@ function displayFiles($folder_id) {
 		if ($fp != $row['file_project']) {
 			if (!$row['file_project']) {
 				$row['project_name'] = $AppUI->_('Not associated to projects');
-				$row['project_color_identifier'] = 'f4efe3';
+				$row['project_color_identifier'] = '#f4efe3';
 			}
 			if ($showProject) {
-				$style = ('background-color:#' . $row['project_color_identifier'] 
+				$style = ('background-color:' . $row['project_color_identifier'] 
 						  . ';color:' . bestColor($row['project_color_identifier']));
 ?>
 <tr>

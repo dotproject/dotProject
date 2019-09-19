@@ -605,7 +605,7 @@ function displayTask($list,$task,$level,$display_week_hours,$fromPeriod,$toPerio
 	
 	$tmp .= '<td align="center">';
 	$tmp .=  ('<a href="?m=projects&amp;a=view&amp;project_id=' . $task->task_project 
-	        . '" style="background-color:#' . @$projects['project_color_identifier'] . '; color:' 
+	        . '" style="background-color:' . @$projects['project_color_identifier'] . '; color:' 
 	        . bestColor(@$projects['project_color_identifier']) . '">' 
 	        . $projects['project_short_name'] . '</a>');
 	$tmp .= '</td>';

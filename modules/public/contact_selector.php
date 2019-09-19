@@ -102,6 +102,34 @@ function remove_invalid($arr) {
 	return $result;
 }
 
+function renderContacts ($contacts, $contacts_id) {
+	foreach ($contacts as $contact_id => $contact_data) {
+		$contact_company = (($contact_data['company_name']) 
+							? $contact_data['company_name'] : $contact_data['contact_company']);
+		if ($contact_company  && $contact_company != $pointer_company) {
+			echo '<h4>'.$contact_company.'</h4>';
+			$pointer_company = $contact_company;
+		}
+		
+		$contact_department = (($contact_data['dept_name']) 
+							? $contact_data['dept_name'] : $contact_data['contact_department']);
+		if ($contact_department && $contact_department != $pointer_department) {
+			echo '<h5>'.$contact_department.'</h5>';
+			$pointer_department = $contact_department;
+		}
+
+		$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
+		
+		echo ('<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' 
+			. $contact_id . '" ' . $checked . ' />');
+		echo ('<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' 
+			. $contact_data['contact_last_name'] 
+			. (($contact_data['contact_extra']) ? ($contact_data['contact_extra']) : '') 
+			. '</label>');
+		echo ('<br />');
+	}
+}
+
 // Remove any empty elements
 $contacts_id = remove_invalid(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
@@ -168,12 +196,16 @@ $q->addOrder('company_name, contact_company, dept_name, contact_department'
              . ', contact_last_name');
 
 $contacts = $q->loadHashList('contact_id');
+$activeContacts = array();
+$inactiveContacts = array();
 
 global $task_id, $project_id;
 $perms =& $AppUI->acl();
 foreach ($contacts as $key => $row) {
-	if ($row['user_id'] && !($perms->checkLogin($row['user_id']))) {
-		$contacts[$key]['contact_extra'] .=  ' (' . $AppUI->_('Inactive') . ')';
+	if ($row['user_id'] && $perms->checkLogin($row['user_id'])) {
+		$activeContacts[$key] = $row;
+	} else {
+		$inactiveContacts[$key] = $row;
 	}
 }
 
@@ -200,31 +232,12 @@ echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : ''); ?>&show_all=1
 <hr />
 <h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
 <?php	
-foreach ($contacts as $contact_id => $contact_data) {
-	$contact_company = (($contact_data['company_name']) 
-	                    ? $contact_data['company_name'] : $contact_data['contact_company']);
-	if ($contact_company  && $contact_company != $pointer_company) {
-		echo '<h4>'.$contact_company.'</h4>';
-		$pointer_company = $contact_company;
-	}
-	
-	$contact_department = (($contact_data['dept_name']) 
-	                       ? $contact_data['dept_name'] : $contact_data['contact_department']);
-	if ($contact_department && $contact_department != $pointer_department) {
-		echo '<h5>'.$contact_department.'</h5>';
-		$pointer_department = $contact_department;
-	}
+renderContacts($activeContacts, $contacts_id);
 
-	$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
-	
-	echo ('<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' 
-	      . $contact_id . '" ' . $checked . ' />');
-	echo ('<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' 
-	      . $contact_data['contact_last_name'] 
-	      . (($contact_data['contact_extra']) ? ($contact_data['contact_extra']) : '') 
-	      . '</label>');
-	echo ('<br />');
-	}
+if (sizeof($inactiveContacts) > 0) {
+	echo "<h1><em>Inactive Contacts</em></h1>";
+	renderContacts($inactiveContacts, $contacts_id);
+}
 ?>
 <hr />
 <input name="contacts_submited" type="hidden" value="1" />

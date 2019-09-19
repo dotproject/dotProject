@@ -61,7 +61,7 @@ if ($caller == 'todo') {
  
  	$projects[$project_id]['project_name'] = ($AppUI->_('Todo for') . ' ' 
 	                                          . dPgetUsernameFromID($user_id));
- 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
+ 	$projects[$project_id]['project_color_identifier'] = '#ff6000';
 	
 
  	$q->addTable('tasks', 't');
@@ -246,7 +246,7 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 $graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
-$graph->scale->SetTableTitleBackground('#'.$projects[$project_id]['project_color_identifier']);
+$graph->scale->SetTableTitleBackground('#' . $projects[$project_id]['project_color_identifier']);
 $graph->scale->tableTitle->Show(true);
 
 //-----------------------------------------
@@ -327,7 +327,7 @@ reset($projects);
 foreach ($projects as $p) {
 	global $parents;
 	$parents = array();
-	$tnums = count($p['tasks']);
+	$tnums = array_key_exists('tasks', $p) ? count($p['tasks']) : 0;
 	
 	for ($i=0; $i < $tnums; $i++) {
 		$t = $p['tasks'][$i];

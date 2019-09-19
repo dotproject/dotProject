@@ -177,7 +177,18 @@ class DBQuery {
 		}
 		$this->type = 'insert';
 	}
-	
+
+	function addInsertMulti($fields, $values) {
+	  foreach ($fields as $k => $field) {
+		$vals = [];
+		foreach ($values[$k] as $value) {
+			$vals[] = $this->quote($value);
+		}
+	  	$this->addMap('value_list', $vals, $field);
+	  }
+	  $this->type = 'insertMulti';
+	}
+
 	// implemented addReplace() on top of addInsert()
 	
 	function addReplace($field, $value, $set = false, $func = false) {
@@ -392,6 +403,9 @@ class DBQuery {
 		case 'insert':
 	        $q = $this->prepareInsert();
 			break;
+		case 'insertmulti':
+			$q = $this->prepareInsertMulti();
+			break;
 		case 'replace':
 	        $q = $this->prepareReplace();
 			break;
@@ -527,13 +541,38 @@ class DBQuery {
 		}
 		$q .= '`' . $this->_table_prefix . $table . '`';
 		
-		$fieldlist = '';
-		$valuelist = '';
+		$fieldlist = [];
+		$valuelist = [];
 		foreach ($this->value_list as $field => $value) {
-			$fieldlist .= (($fieldlist) ? ',' : '') . '`' . trim($field) . '`';
-			$valuelist .= (($valuelist) ? ',' : '') . $value;
+			$fieldlist[] = '`' . trim($field) . '`';
+			$valuelist[] = $value;
 		}
-		$q .= "($fieldlist) values ($valuelist)";
+		$q .= '(' . implode(',',$fieldlist) . ') values (' . implode(',',$valuelist) . ')';
+		return $q;
+	}
+	
+	function prepareInsertMulti() {
+		$q = 'INSERT INTO ';
+		if (isset($this->table_list)) {
+			if (is_array($this->table_list)) {
+				reset($this->table_list);
+				// Grab the first record
+				list($key, $table) = each ($this->table_list);
+			} else {
+				$table = $this->table_list;
+			}
+		} else {
+			return false;
+		}
+		$q .= '`' . $this->_table_prefix . $table . '`';
+		
+		$fieldlist = [];
+		$valuelist = [];
+		foreach ($this->value_list as $field => $value) {
+			$fieldlist[] = '`' . trim($field) . '`';
+			$valuelist[] = '(' . implode(',', $value) . ')';
+		}
+		$q .= '(' . implode(',',$fieldlist) . ') values ' . implode(',',$valuelist);
 		return $q;
 	}
 	
@@ -866,8 +905,12 @@ class DBQuery {
 		}
 		if (is_array($join_clause)) {
 			foreach ($join_clause as $join) {
-				$result .= (' ' . mb_strtoupper($join['type']) . ' JOIN `' 
-				            . $this->_table_prefix . $join['table'] . '`');
+				$result .= (' ' . mb_strtoupper($join['type']) . ' JOIN ' );
+				if (is_object($join['table'])) {
+					$result .= ( '(' . $join['table']->prepare() . ')' );
+			        } else {
+				        $result .= ( '`' . $this->_table_prefix . $join['table'] . '`');
+				}
 				if ($join['alias']) {
 					$result .= ' AS ' . $join['alias'];
 				}

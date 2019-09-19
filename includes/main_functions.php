@@ -308,6 +308,16 @@ function dPsanitiseHTML($text) {
 	return filter_xss($text);
 }
 
+function dPgetEmailParam($arr, $name, $def = null) {
+  $val = defVal($arr[$name], $def);
+  preg_match('/(([\w\s]+)?<)?(\w+)@([\w\d\.]+)>?/', $val, $matched);
+  $result = filter_xss($matched[3]) . '@' . filter_xss($matched[4]);
+  if ($matched[2]) {
+    $result = filter_xss($matched[2]) . ' <' . $result . '>';
+  }
+  return $result;
+}
+
 function dPlink($title, $href) {
 	return dPsanitiseHTML('<a href="' . $href . '">' . $title . '</a>');
 }
@@ -477,7 +487,7 @@ function dPformSafe($txt, $flag_bits = 0) {
 			
 			if (!$isURI) {
 				$value = $isJSVars ? $AppUI->___($value, UI_OUTPUT_JS) : $value;
-				$value = $deslash ? htmlspecialchars($value) : $AppUI->___($value);
+				$value = $deslash ? htmlspecialchars($value) : $AppUI->___($value, UI_OUTPUT_FORM);
 			}
 			
 			if (is_object($txt)) {
@@ -493,7 +503,7 @@ function dPformSafe($txt, $flag_bits = 0) {
 		
 		if (!$isURI) {
 			$txt = $isJSVars ? $AppUI->___($txt, UI_OUTPUT_JS) : $txt;
-			$txt = $deslash ? htmlspecialchars($txt) : $AppUI->___($txt);
+			$txt = $deslash ? htmlspecialchars($txt) : $AppUI->___($txt, UI_OUTPUT_FORM);
 		}
 		
 		/*
