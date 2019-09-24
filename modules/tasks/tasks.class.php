@@ -2696,9 +2696,9 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	} else {
 		closeOpenedTask($a);
 	}
-	
-	$start_date = intval($a['task_start_date']) ? new CDate($a['task_start_date']) : null;
-	$end_date = intval($a['task_end_date']) ? new CDate($a['task_end_date']) : null;
+
+	$start_date = intval($a['task_start_date']) ? new CDate($a['task_start_date'], FMT_DATETIME_HTML5) : null;
+	$end_date = intval($a['task_end_date']) ? new CDate($a['task_end_date'], FMT_DATETIME_HTML5) : null;
 	$last_update = ((isset($a['last_update']) && intval($a['last_update'])) 
 					? new CDate($a['last_update']) : null);
 	

@@ -63,12 +63,17 @@ if ($start === null) $start = 8;
 if ($end === null) $end = 17;
 if ($inc === null) $inc = 15;
 
+function roundTimeTo($timestring, $to) {
+    $minutes = date('i', strtotime($timestring));
+    return $minutes - ($minutes % $to);
+}
+
 //display adjusted events
 $this_day->setTime($start, 0, 0);
 $events2 = array();
 foreach ($events as $row) {
-	$start_date = new CDate($row['event_start_date']);
-	$end_date = new CDate($row['event_end_date']);
+	$start_date = new CDate(roundTimeTo($row['event_start_date'], $inc));
+	$end_date = new CDate(roundTimeTo($row['event_end_date'], $inc));
 	if ($start_date->before($this_day)) {
 		$events2[$this_day->format('%H%M%S')][] = $row;
 	} else {
@@ -77,14 +82,13 @@ foreach ($events as $row) {
 	
 }
 
-
 // calculate colums per each time row
 $this_day->setTime($start, 0, 0);
 $disp_columns = array();
-for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
+for ($i=0, $n=round(($end-$start)*60/$inc); $i < $n; $i++) {
 	$disp_columns[$i] = 0;
 }
-for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
+for ($i=0, $n=round(($end-$start)*60/$inc); $i < $n; $i++) {
 	$timeStamp = $this_day->format('%H%M%S');
 	if (@$events2[$timeStamp]) {
 		$count = count($events2[$timeStamp]);
@@ -98,8 +102,8 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 			if ($et_date->after($this_day)) { 
 				$rows = $n - $i;
 			} else {
-				$rows = (($et->getHour()*60 + $et->getMinute()) 
-				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
+				$rows = round((($et->getHour()*60 + $et->getMinute()) 
+				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc);
 			}
 			
 			for ($k=$i; $k < ($i + $rows); $k++) {
@@ -146,15 +150,16 @@ $cal = new CMonthCalendar();
 $html .= $cal->_drawBirthdays($this_day->format('%Y%m%d'));
 
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
+$calls = 0;
 
 $this_day->setTime($start, 0, 0);
-for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
+for ($i=0, $n=round(($end-$start)*60/$inc); $i < $n; $i++) {
 	$html .= "\n<tr>";
 	
 	$tm = $this_day->format($tf);
 	$html .= ("\n\t" . '<td width="1%" align="right" nowrap="nowrap">' 
-			  . ($this_day->getMinute() ? $tm : ('<b>' . $tm . '</b>')) . '</td>');
-
+			  . ($this_day->getMinute() ? $tm : ('<b>' . $tm . '</b>')) . '</td>'); 
+	  
 	$timeStamp = $this_day->format('%H%M%S');
 	if (@$events2[$timeStamp]) {
 		$count = count($events2[$timeStamp]);
@@ -168,8 +173,8 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 			if ($et_date->after($this_day)) { 
 				$rows = $n - $i;
 			} else {
-				$rows = (($et->getHour()*60 + $et->getMinute()) 
-				         - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc;
+				$rows = round((($et->getHour()*60 + $et->getMinute()) 
+						 - ($this_day->getHour()*60 + $this_day->getMinute()))/$inc);
 			}
 			
 			$href = "?m=calendar&a=view&event_id=".$row['event_id'];
@@ -197,7 +202,7 @@ for ($i=0, $n=($end-$start)*60/$inc; $i < $n; $i++) {
 	for ($j = 0; $j < ($disp_max_cols - $disp_columns[$i]); $j++) {
 		$html .= "\n\t" . '<td></td>';
 	}
-	
+
 	$html .= "\n</tr>";
 
 	$this_day->addSeconds(60*$inc);

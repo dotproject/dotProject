@@ -29,27 +29,6 @@ $end_date->setTime(23, 59, 59);
 
 ?>
 
-<script language="javascript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.log_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.log_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
-</script>
-
 <form name="editFrm" action="index.php?m=projects&a=reports" method="post">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
@@ -59,14 +38,8 @@ function setCalendar(idate, fdate) {
 <tr>
 	<td align="right" width="1%" nowrap="nowrap">
 		<label for="start_date"><?php echo $AppUI->_('For period'); ?>:</label>
-		<input type="hidden" name="log_start_date" value="<?php 
-echo $start_date->format(FMT_TIMESTAMP_DATE); ?>" />
-		<input type="text" name="start_date" value="<?php 
-echo $start_date->format($df); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('start_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
+		<input type="date" name="log_start_date" value="<?php
+echo $start_date->format(FMT_DATE_HTML5); ?>" class="text dpDateField">
 	</td>
 	<td width="1%" nowrap="nowrap">
 		<?php
@@ -88,14 +61,8 @@ echo ($AppUI->_('submit')); ?>" />
 <tr>
 	<td align="right" width="1%" nowrap="nowrap">
 		<label for="end_date"><?php echo $AppUI->_('to'); ?>:</label>
-		<input type="hidden" name="log_end_date" value="<?php 
-echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="end_date" value="<?php 
-echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('end_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo ($AppUI->_('Calendar')); ?>" border="0" />
-		</a>
+		<input type="date" name="log_end_date" value="<?php
+echo (($end_date) ? $end_date->format(FMT_DATE_HTML5) : ''); ?>" class="text dpDateField">
 	</td>
 	<td width="1%">
 		<?php echo ($AppUI->_('Levels to display')); ?>

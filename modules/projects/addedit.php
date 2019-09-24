@@ -146,38 +146,6 @@ if (f.project_short_name.value.length == 0) {
 }
 }
 
-var calendarField = '';
-var calWin = null;
-
-function popCalendar(field) {
-//due to a bug in Firefox (where window.open, when in a function, does not properly unescape a url)
-// we CANNOT do a window open with &amp; separating the parameters
-//this bug does not occur if the window open occurs in an onclick event
-//this bug does NOT occur in Internet explorer
-calendarField = field;
-idate = eval('document.editFrm.project_' + field + '.value');
-window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=280, height=250, scrollbars=no, status=no');
-}
-
-/**
-*	@param string Input date in the format YYYYMMDD
-*	@param string Formatted date
-*/
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.project_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-
-	// set end date automatically with start date if start date is after end date
-	if (calendarField == 'start_date') {
-		if (document.editFrm.end_date.value < idate) {
-			document.editFrm.project_end_date.value = idate;
-			document.editFrm.end_date.value = fdate;
-		}
-	}
-}
-
 function submitIt() {
 	var f = document.editFrm;
 	var msg = '';
@@ -295,8 +263,8 @@ function setDepartment(department_id_string) {
  		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
-			<td nowrap="nowrap">	 <input type="hidden" name="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="date" class="text" name="start_date" id="date1" value="<?php echo $start_date ? $start_date->format($df) : '';?>" class="text"/>
+			<td nowrap="nowrap">
+				<input type="date" class="date text" name="project_start_date" id="date1" value="<?php echo $start_date ? $start_date->format(FMT_DATE_HTML5) : '';?>" class="text"/>
 			</td>
 			<td rowspan="6" valign="top">
 					<?php
@@ -315,8 +283,8 @@ function setDepartment(department_id_string) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date');?></td>
-			<td nowrap="nowrap">	<input type="hidden" name="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="date" class="text" name="end_date" id="date2" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text"/>
+			<td nowrap="nowrap">
+				<input type="date" class="date text" name="project_end_date" id="date2" value="<?php echo $end_date ? $end_date->format(FMT_DATE_HTML5) : '';?>" class="text"/>
 			</td>
 		</tr>
 		<tr>

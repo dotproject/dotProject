@@ -5,22 +5,7 @@ if (!defined('DP_BASE_DIR')) {
 
 ?>
 <script language="javascript" >
-var calendarField = '';
 var calWin = null;
-
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.frmDate.log_' + field + '.value');
-	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=251, height=220, scrollbars=no, status=no');
-}
-
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.frmDate.log_' + calendarField);
-	fld_fdate = eval('document.frmDate.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
 
 function checkDate() {
            if (document.frmDate.log_start_date.value == "" || document.frmDate.log_end_date.value== "") {
@@ -59,22 +44,15 @@ if ($a = dPgetCleanParam($_REQUEST, "a", "") == "") {
 <table align="center" width="100%">
 	<tr align="center">
 		<td align="right" width="45%" ><?php echo $AppUI->_('Start Date');?></td>
-			<td width="55%" align="left">
-				<input type="hidden" name="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : "" ;?>" />
-				<input type="text" name="start_date" value="<?php echo $start_date ? $start_date->format($df) : "" ;?>" class="text" readonly="readonly" disabled="disabled" />
-				<a href="#" onclick="javascript:popCalendar('start_date')">
-				<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" ></a>
-			</td>
+		<td width="55%" align="left">
+			<input type="date" name="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_DATE_HTML5) : "" ;?>" class="text" />
+		</td>
 	</tr>
 	<tr align="center">
 		<td align="right" width="45%"><?php echo $AppUI->_('End Date');?></td>
-			<td width="55%" align="left">
-				<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-				<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" readonly="readonly" disabled="disabled" />
-				<a href="#" onclick="javascript:popCalendar('end_date')">
-				<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0"></a>
+		<td width="55%" align="left">
+			<input type="date" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_DATE_HTML5) : '';?>" class="text" />
 		</td>
-	</tr>
 </table>
 <table align="center">
 	<tr align="center">

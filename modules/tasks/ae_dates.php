@@ -111,66 +111,23 @@ if ($can_edit_time_information) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="task_start_date" id="task_start_date" value="<?php 
-	echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="start_date" id="start_date" value="<?php 
-	echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar(document.datesFrm.start_date)">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar');?>" border="0" />
-					</a>
+		<input type="datetime-local" name="task_start_date" id="task_start_date" value="<?php 
+	echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
+		
+		
 	</td>
-	<td>
-		<table><tr>
-						
-	<?php
-	echo ('<td>' . arraySelect($hours, 'start_hour', 
-							   'size="1" onchange="setAMPM(this)" class="text"', 
-							   (($start_date) ? $start_date->getHour() : $start)) 
-		  . '</td><td> : </td>');
-	echo ('<td>' . arraySelect($minutes, 'start_minute', 'size="1" class="text"', 
-							   (($start_date) 
-								? ($start_date->getMinute() - ($start_date->getMinute() % $inc)) 
-								: '00')) . '</td>');
-	if (mb_stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
-		echo ('<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' 
-			  . (($start_date) ? $start_date->getAMPM() : (($start > 11) ? 'pm' : 'am')) 
-			  . '" disabled="disabled" class="text" size="2" /></td>');
-		}
-?>
-		</tr></table>
-	</td>
+	
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date');?></td>
+
 	<td nowrap="nowrap">
-		<input type="hidden" name="task_end_date" id="task_end_date" value="<?php 
-	echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-		<input type="text" name="end_date" id="end_date" value="<?php 
-	echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar(document.datesFrm.end_date)">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar');?>" border="0" />
-					</a>
+		<input type="datetime-local" name="task_end_date" id="task_end_date" value="<?php 
+	echo $end_date ? $end_date->format(FMT_DATETIME_HTML5) : '';?>" class="dpDateField text">
+		
+		
 	</td>
-        <td>
-<table><tr>
-	<?php
-	echo ('<td>' . arraySelect($hours, 'end_hour', 
-							   'size="1" onchange="setAMPM(this)" class="text"', 
-							   (($end_date) ? $end_date->getHour() : $end)) . '</td><td> : </td>');
-	echo ('<td>' .arraySelect($minutes, 'end_minute', 'size="1" class="text"', 
-							  (($end_date) 
-							   ? ($end_date->getMinute() - ($end_date->getMinute() % $inc)) 
-							   : '00')) . '</td>');
-	if (mb_stristr($AppUI->getPref('TIMEFORMAT'), "%p")) {
-		echo ('<td><input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' 
-			  . (($end_date) ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) 
-			  . '" disabled="disabled" class="text" size="2" /></td>');
-		}
-?>
-	</tr></table>
-	</td>
+       
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration');?>:</td>

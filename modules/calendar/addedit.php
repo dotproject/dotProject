@@ -205,33 +205,6 @@ function submitIt() {
 	form.submit();
 }
 
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.event_' + field + '.value');
-	window.open('?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=240,scrollbars=no,status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.event_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-
-	// set end date automatically with start date if start date is after end date
-	if (calendarField == 'start_date') {
-		if (document.editFrm.event_end_date.value < idate) {
-			document.editFrm.event_end_date.value = idate;
-			document.editFrm.end_date.value = fdate;
-		}
-	}
-}
-
 function addUser() {
 	var form = document.editFrm;
 	var fl = form.resources.length -1;
@@ -322,36 +295,17 @@ echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_start_date" value="<?php 
-echo (($start_date) ? $start_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="start_date" value="<?php 
-echo (($start_date) ? $start_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('start_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_start_date" value="<?php 
+echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-	<td><?php 
-echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format("%H%M%S")); 
-?></td>
 </tr>
 
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="event_end_date" value="<?php 
-echo (($end_date) ? $end_date->format(FMT_TIMESTAMP_DATE) : ''); ?>" />
-		<input type="text" name="end_date" value="<?php 
-echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('end_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_end_date" value="<?php 
+echo (($end_date) ? $end_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-	<td><?php 
-echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format("%H%M%S")); ?></td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
