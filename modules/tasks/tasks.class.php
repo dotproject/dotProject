@@ -1789,6 +1789,7 @@ class CTask extends CDpObject
 				 * provide actual assignment charge, individual chargeMax 
 				 * and freeCapacity of users' assignments to tasks
 				*/
+				$q = new DBQuery;
 				$subqC = new DBQuery;
 				$subqUT = new DBQuery;
 				$q->addTable('users', 'u');
