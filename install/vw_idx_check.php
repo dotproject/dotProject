@@ -55,6 +55,10 @@ function dPgetIniSize($val) {
  <td class="item"><li>Zlib compression Support</li></td>
   <td align="left"><?php echo extension_loaded('zlib') ? '<b class="ok">'.$okImg.'</b>' : '<b class="error">'.$failedImg.'</b> Some non-core modules such as Backup may have restricted operation.';?></td>
 </tr>
+<tr>
+  <td class="item"><li>UTF8 Decode Support</li></td>
+  <td align="left"><?php echo function_exists('utf8_decode') ? '<b class="ok">'.$okImg.'</b>' : '<b class="error">'.$failedImg.'</b> utf8_decode function not found, URL handling may be broken, check that the php-xml support is loaded (PHP < 7.2)</b>'; ?></td>
+</tr>
 <?php
 $maxfileuploadsize = min(dPgetIniSize(ini_get('upload_max_filesize')), dPgetIniSize(ini_get('post_max_size')));
 $memory_limit = dPgetIniSize(ini_get('memory_limit'));
