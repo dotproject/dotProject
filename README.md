@@ -8,6 +8,10 @@ since around December 2002.
 
 ## Installing/Upgrading
 
+**NOTE** The `devel` branch is where all the development happens.  If you want the latest and greatest with all relevent bug fixes between releases, then download from https://github.com/dotproject/dotProject/archive/devel.zip
+
+`master` tracks the current release.
+
 **The Quick Way**: Point your browser to the `install` directory.
 
 ## Support
