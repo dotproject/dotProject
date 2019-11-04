@@ -33,6 +33,11 @@ em {
 	font-style: normal;
 }
 
+.ql-editor em {
+	font-weight: normal;
+	font-style: italic;
+}
+
 A:link {
 	color: #08245b;
 	text-decoration: none;
