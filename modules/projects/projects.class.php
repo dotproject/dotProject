@@ -14,6 +14,7 @@ require_once ($AppUI->getSystemClass('date'));
 require_once ($AppUI->getModuleClass('tasks'));
 require_once ($AppUI->getModuleClass('companies'));
 require_once ($AppUI->getModuleClass('departments'));
+include_once("./modules/projects/config.php");
 
 /**
  * The Project Class
