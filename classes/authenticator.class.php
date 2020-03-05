@@ -188,7 +188,7 @@ if (!defined('DP_BASE_DIR')) {
 			return false;
 		}
 
-		function userId()
+		function userId($username)
 		{
 			return $this->user_id;
 		}
