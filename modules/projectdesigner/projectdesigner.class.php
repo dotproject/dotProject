@@ -11,33 +11,38 @@ require_once( $AppUI->getModuleClass( 'tasks' ) );
 /**
 * CProjectDesignerOptions Class
 */
-class CProjectDesignerOptions extends CDpObject {
-        var $pd_option_id = NULL;
-        var $pd_option_user = NULL;
-        var $pd_option_view_project = NULL;
-        var $pd_option_view_gantt = NULL;
-        var $pd_option_view_tasks = NULL;
-        var $pd_option_view_actions = NULL;
-        var $pd_option_view_addtasks = NULL;
-        var $pd_option_view_files = NULL;
+class CProjectDesignerOptions extends CDpObject 
+{
+    public $pd_option_id = NULL;
+    public $pd_option_user = NULL;
+    public $pd_option_view_project = NULL;
+    public $pd_option_view_gantt = NULL;
+    public $pd_option_view_tasks = NULL;
+    public $pd_option_view_actions = NULL;
+    public $pd_option_view_addtasks = NULL;
+    public $pd_option_view_files = NULL;
 
-        function __construct() {
-                parent::__construct( 'project_designer_options', 'pd_option_id' );
-        }                    
+    public function __construct() {
+        parent::__construct( 'project_designer_options', 'pd_option_id' );
+    }
 
-        function store($updateNulls = FALSE) {
-                  $q = new DBQuery;
-                  $q->addTable('project_designer_options');
-                  $q->addReplace('pd_option_user',$this->pd_option_user);
-                  $q->addReplace('pd_option_view_project',$this->pd_option_view_project);
-                  $q->addReplace('pd_option_view_gantt',$this->pd_option_view_gantt);
-                  $q->addReplace('pd_option_view_tasks',$this->pd_option_view_tasks);
-                  $q->addReplace('pd_option_view_actions',$this->pd_option_view_actions);
-                  $q->addReplace('pd_option_view_addtasks',$this->pd_option_view_addtasks);
-                  $q->addReplace('pd_option_view_files',$this->pd_option_view_files);
-                  $q->addWhere('pd_option_user = '.$this->pd_option_user);
-                  $q->exec();
-        }                    
+    /** 
+     * @param bool $updateNulls
+     */
+    public function store($updateNulls = FALSE) 
+    {
+        $q = new DBQuery;
+        $q->addTable('project_designer_options');
+        $q->addReplace('pd_option_user',$this->pd_option_user);
+        $q->addReplace('pd_option_view_project',$this->pd_option_view_project);
+        $q->addReplace('pd_option_view_gantt',$this->pd_option_view_gantt);
+        $q->addReplace('pd_option_view_tasks',$this->pd_option_view_tasks);
+        $q->addReplace('pd_option_view_actions',$this->pd_option_view_actions);
+        $q->addReplace('pd_option_view_addtasks',$this->pd_option_view_addtasks);
+        $q->addReplace('pd_option_view_files',$this->pd_option_view_files);
+        $q->addWhere('pd_option_user = '.$this->pd_option_user);
+        $q->exec();
+    }
 }
 
 /** Retrieve tasks with first task_end_dates within given project
@@ -465,4 +470,3 @@ function findchild_pr( &$tarr, $parent, $level=0){
                 }
         }
 }
-?>

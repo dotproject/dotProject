@@ -52,12 +52,12 @@ else
             <td class="item">Use Persistent Connection?</td>
             <td align="left"><input type="checkbox" name="dbpersist" value="1" <?php echo ($dPconfig['dbpersist']==true) ? 'checked="checked"' : ''; ?> title="Use a persistent Connection to your Database Server." /></td>
           </tr>
-<?php if ($_POST['mode'] == 'install') { ?>
+        <?php if ($_POST['mode'] == 'install') { ?>
           <tr>
             <td class="item">Drop Existing Database?</td>
             <td align="left"><input type="checkbox" name="dbdrop" value="1" title="Deletes an existing Database before installing a new one. This deletes all data in the given database. Data cannot be restored." /><span class="item"> If checked, existing Data will be lost!</span></td>
         </tr>
-<?php } ?>
+        <?php } ?>
         </tr>
           <tr>
             <td class="title" colspan="2">&nbsp;</td>
@@ -75,12 +75,19 @@ else
             <td align="left"><input class="button" type="submit" name="dobackup" value="Download XML" title="Click here to retrieve a XML file containing your data that can be stored on your local system." /></td>
         </tr>
           <tr>
-            <td align="left"><br /><input class="button" type="submit" name="do_db" value="<?php echo $_POST['mode']; ?> db only" title="Try to set up the database with the given information." />
-	    &nbsp;<input class="button" type="submit" name="do_cfg" value="write config file only" title="Write a config file with the details only." /></td>
-	  <td align="right" class="item"><br />(Recommended) &nbsp;<input class="button" type="submit" name="do_db_cfg" value="<?php echo $_POST['mode']; ?> db & write cfg" title="Write config file and setup the database with the given information." />
-   		</td>
-          </tr>
-        </table>
+            <td align="left">
+                <br>
+                <input class="button" type="submit" name="do_db" value="<?php echo $_POST['mode']; ?> db only" title="Try to set up the database with the given information.">
+                &nbsp;
+                <input class="button" type="submit" name="do_cfg" value="write config file only" title="Write a config file with the details only.">
+            </td>
+	        <td align="right" class="item">
+            <br>
+            (Recommended) &nbsp;
+            <input class="button" type="submit" name="do_db_cfg" value="<?php echo $_POST['mode']; ?> db & write cfg" title="Write config file and setup the database with the given information.">
+   	    </td>
+    </tr>
+    </table>
 </form>
 </body>
 </html>

@@ -11,16 +11,16 @@ require_once($AppUI->getModuleClass('projects'));
 */
 class CLink extends CDpObject {
 
-	var $link_id = NULL;
-	var $link_project = NULL;
-	var $link_url = NULL;
-	var $link_task = NULL;
-	var $link_name = NULL;
-	var $link_parent = NULL;
-	var $link_description = NULL;
-	var $link_owner = NULL;
-	var $link_date = NULL;
-	var $link_category = NULL;
+	public $link_id = NULL;
+	public $link_project = NULL;
+	public $link_url = NULL;
+	public $link_task = NULL;
+	public $link_name = NULL;
+	public $link_parent = NULL;
+	public $link_description = NULL;
+	public $link_owner = NULL;
+	public $link_date = NULL;
+	public $link_category = NULL;
 
 	
 	function __construct() {
@@ -52,4 +52,3 @@ class CLink extends CDpObject {
 		return NULL;
 	}
 }
-?>

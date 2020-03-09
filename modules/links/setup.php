@@ -49,7 +49,7 @@ class CSetupLinks {
   
   function upgrade($old_version) { return true; }
 
-  function install() {
+  public function install() {
   	$q = new DBQuery();
   	$q->createTable('links');
   	$q->createDefinition("(
@@ -83,4 +83,4 @@ KEY `idx_link_parent` (`link_parent`)
  }
 
 }
-?>
+
