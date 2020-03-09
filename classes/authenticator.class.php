@@ -49,7 +49,7 @@ if (!defined('DP_BASE_DIR')) {
 	class PostNukeAuthenticator extends SQLAuthenticator
 	{
 
-		function PostNukeAuthenticator()
+		function __construct()
 		{
 			global $dPconfig;
 			$this->fallback = isset($dPconfig['postnuke_allow_login']) ? $dPconfig['postnuke_allow_login'] : false;
@@ -160,10 +160,11 @@ if (!defined('DP_BASE_DIR')) {
 
 	class SQLAuthenticator
 	{
-		var $user_id;
-		var $username;
+		public $user_id;
+		public $username;
+		protected $_salt = '';
 
-		function authenticate($username, $password)
+		public function authenticate($username, $password)
 		{
 			GLOBAL $db, $AppUI;
 
@@ -188,7 +189,7 @@ if (!defined('DP_BASE_DIR')) {
 			return false;
 		}
 
-		function userId()
+		public function userId($username = null)
 		{
 			return $this->user_id;
 		}
@@ -196,18 +197,18 @@ if (!defined('DP_BASE_DIR')) {
 
 	class LDAPAuthenticator extends SQLAuthenticator
 	{
-		var $ldap_host;
-		var $ldap_port;
-		var $ldap_version;
-		var $base_dn;
-		var $ldap_search_user;
-		var $ldap_search_pass;	
-		var $filter;
+		public $ldap_host;
+		public $ldap_port;
+		public $ldap_version;
+		public $base_dn;
+		public $ldap_search_user;
+		public $ldap_search_pass;	
+		public $filter;
 
-		var $user_id;
-		var $username;
+		public $user_id;
+		public $username;
 
-		function LDAPAuthenticator()
+		public function __construct()
 		{
 			GLOBAL $dPconfig;
 
@@ -222,7 +223,7 @@ if (!defined('DP_BASE_DIR')) {
 			$this->filter = $dPconfig["ldap_user_filter"];
 		}
 
-		function authenticate($username, $password)
+		public function authenticate($username, $password)
 		{
 			GLOBAL $dPconfig;
 			$this->username = $username;
@@ -305,7 +306,7 @@ if (!defined('DP_BASE_DIR')) {
 			return $result;
 		}
 
-		function userId($username)
+		public function userId($username = null)
 		{
 			GLOBAL $db;
 			$q  = new DBQuery;

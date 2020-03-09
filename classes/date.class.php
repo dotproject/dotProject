@@ -37,7 +37,7 @@ define('SEC_DAY',	  86400);
 */
 class CDate extends Date {
 
-	function CDate($date = null)
+	function __construct ($date = null)
 	{
 		if (!is_object($date) && strlen($date) == 12 && strpos($date, '-') === false && strpos($date, '/') === false) {
 			$date = $date.'00';

@@ -440,5 +440,3 @@ class CSS_Color extends PEAR
   }
 
 }
-
-?>

@@ -5,23 +5,24 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 
-class CustomFieldsParser{
-	var $fields_array = array();
-	var $custom_record_type;
-	var $previous_data = array();
-	var $row_id = 0;
-	var $custom_record_types = array();
+class CustomFieldsParser 
+{
+	public $fields_array = array();
+	public $custom_record_type;
+	public $previous_data = array();
+	public $row_id = 0;
+	public $custom_record_types = array();
 	
-	var $table_name = 'tasks';
-	var $field_name = 'task_custom';
-	var $id_field_name = 'task_id';
+	public $table_name = 'tasks';
+	public $field_name = 'task_custom';
+	public $id_field_name = 'task_id';
 	
 	/**
 	* @return CustomFieldsParser
 	* @param char Field type: TaskCustomFields, CompanyCustomFields
 	* @desc Constructor
 	*/
-	function CustomFieldsParser($custom_record_type, $row_id = 0) {
+	function __construct ($custom_record_type, $row_id = 0) {
 		$this->custom_record_type = $custom_record_type;
 		
 		$this->_fetchFields();
@@ -275,4 +276,3 @@ class CustomFieldsParser{
 	}
 	
 }
-?>

@@ -6,7 +6,7 @@ if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
-require_once DP_BASE_DIR . '/includes/filter.php';
+require_once DP_BASE_DIR . DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'filter.php';
 
 $CR = "\n";
 define('SECONDS_PER_DAY', 60 * 60 * 24);
@@ -932,4 +932,3 @@ function safe_utf8_decode($string)
 		return $string;
 	}
 }
-?>

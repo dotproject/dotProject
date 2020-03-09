@@ -41,7 +41,7 @@ require_once DP_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
  */
 class dPacl extends gacl_api {
 	
-	function __construct($opts = null) {
+	public function __construct($opts = null) {
 		global $db;
 		
 		if (!(is_array($opts))) {
@@ -936,4 +936,3 @@ class dPacl extends gacl_api {
   }
 
 }
-?>

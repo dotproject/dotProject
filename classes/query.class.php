@@ -916,4 +916,3 @@ class DBQuery {
 //1}}}
 
 // vim600: fdm=marker sw=2 ts=8 ai:
-?>

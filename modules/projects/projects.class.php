@@ -18,33 +18,34 @@ require_once ($AppUI->getModuleClass('departments'));
 /**
  * The Project Class
  */
-class CProject extends CDpObject {
-	var $project_id = NULL;
-	var $project_company = NULL;
-	var $project_company_internal = NULL;
-	var $project_department = NULL;
-	var $project_name = NULL;
-	var $project_short_name = NULL;
-	var $project_owner = NULL;
-	var $project_url = NULL;
-	var $project_demo_url = NULL;
-	var $project_start_date = NULL;
-	var $project_end_date = NULL;
-	var $project_actual_end_date = NULL;
-	var $project_status = NULL;
-	var $project_percent_complete = NULL;
-	var $project_color_identifier = NULL;
-	var $project_description = NULL;
-	var $project_target_budget = NULL;
-	var $project_actual_budget = NULL;
-	var $project_creator = NULL;
-	var $project_private = NULL;
-	var $project_departments= NULL;
-	var $project_contacts = NULL;
-	var $project_priority = NULL;
-	var $project_type = NULL;
+class CProject extends CDpObject 
+{
+	public $project_id = NULL;
+	public $project_company = NULL;
+	public $project_company_internal = NULL;
+	public $project_department = NULL;
+	public $project_name = NULL;
+	public $project_short_name = NULL;
+	public $project_owner = NULL;
+	public $project_url = NULL;
+	public $project_demo_url = NULL;
+	public $project_start_date = NULL;
+	public $project_end_date = NULL;
+	public $project_actual_end_date = NULL;
+	public $project_status = NULL;
+	public $project_percent_complete = NULL;
+	public $project_color_identifier = NULL;
+	public $project_description = NULL;
+	public $project_target_budget = NULL;
+	public $project_actual_budget = NULL;
+	public $project_creator = NULL;
+	public $project_private = NULL;
+	public $project_departments= NULL;
+	public $project_contacts = NULL;
+	public $project_priority = NULL;
+	public $project_type = NULL;
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct('projects', 'project_id');
 	}
 
@@ -65,7 +66,7 @@ class CProject extends CDpObject {
 		return null; // object is ok
 	}
 
-	function load($oid=null, $strip=true) {
+	public function load($oid=null, $strip=true) {
 		$result = parent::load($oid, $strip);
 		if ($result && $oid) {
 			$working_hours = ((dPgetConfig('daily_working_hours'))
@@ -104,7 +105,8 @@ class CProject extends CDpObject {
 		*/
 	}
 
-	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
+	
+	public function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
 		$this->load($this->project_id);
 		addHistory('projects', $this->project_id, 'delete', $this->project_name,
 		           $this->project_id);
@@ -152,7 +154,7 @@ class CProject extends CDpObject {
 	*	@param	int		Project ID of the tasks come from.
 	*	@return	bool
 	**/
-	function importTasks($from_project_id, $scale_project=false) {
+	public function importTasks($from_project_id, $scale_project=false) {
 
 		// Load the original
 		$origProject = new CProject();
@@ -753,4 +755,3 @@ function projects_list_data($user_id=false) {
 	$cBuffer .= '</select>';
 
 }
-?>

@@ -1,0 +1,7 @@
+{
+    "name": "dotproject/dotproject",
+    "description": "dotProject is an open source project management system written in PHP",
+    "type": "project",
+    "license": "GPL",
+    "require": {}
+}

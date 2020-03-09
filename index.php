@@ -296,7 +296,8 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 	$all_tabs =& $_SESSION['all_tabs'][$m];
 }
 
-$module_file = (DP_BASE_DIR . '/modules/' . $m . '/' . (($u) ? ($u.'/') : '') . $a . '.php');
+$module_file = (DP_BASE_DIR . DIRECTORY_SEPARATOR.'modules' .DIRECTORY_SEPARATOR . $m . DIRECTORY_SEPARATOR . (($u) ? ($u.'/') : '') . $a . '.php');
+
 if (file_exists($module_file)) {
 	require $module_file;
 } else {

@@ -40,7 +40,8 @@ require_once DP_BASE_DIR.'/includes/filter.php';
 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 * @version $Revision$
 */
-class CAppUI {
+class CAppUI 
+{
 /** @var array generic array for holding the state of anything */
 	var $state=null;
 /** @var int */
@@ -100,7 +101,7 @@ class CAppUI {
 /**
 * CAppUI Constructor
 */
-	function CAppUI() {
+	public function __construct () {
 		$this->state = array();
 		
 		$this->user_id = -1;
@@ -121,45 +122,46 @@ class CAppUI {
 		$this->setUserLocale($this->base_locale);
 		$this->user_prefs = array();
 	}
-/**
-* Used to load a php class file from the system classes directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
- */
-	function getSystemClass($name=null) {
+
+	/**
+	* Used to load a php class file from the system classes directory
+	* @param string $name The class root file name (excluding .class.php)
+	* @return string The path to the include file
+	*/
+	public function getSystemClass($name=null) {
 		if ($name) {
-			return DP_BASE_DIR . '/classes/' . $name . '.class.php';
+			return DP_BASE_DIR . DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR . $name . '.class.php';
 		}
 	}
 
-/**
-* Used to load a php class file from the lib directory
-*
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
-*/
-	function getLibraryClass($name=null) {
+	/**
+	* Used to load a php class file from the lib directory
+	*
+	* @param string $name The class root file name (excluding .class.php)
+	* @return string The path to the include file
+	*/
+	public function getLibraryClass($name=null) {
 		if ($name) {
-			return DP_BASE_DIR . '/lib/' . $name. '.php';
+			return DP_BASE_DIR .DIRECTORY_SEPARATOR. 'lib'.DIRECTORY_SEPARATOR. $name. '.php';
 		}
 	}
 
-/**
-* Used to load a php class file from the module directory
-* @param string $name The class root file name (excluding .class.php)
-* @return string The path to the include file
- */
+	/**
+	* Used to load a php class file from the module directory
+	* @param string $name The class root file name (excluding .class.php)
+	* @return string The path to the include file
+	*/
 	function getModuleClass($name=null) {
 		if ($name) {
-			return (DP_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php');
+			return (DP_BASE_DIR .DIRECTORY_SEPARATOR. 'modules'. DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . $name . '.class.php');
 		}
 	}
 
-/**
-* Determines the version.
-* @return String value indicating the current dotproject version
-*/
-	function getVersion() {
+	/**
+	* Determines the version.
+	* @return String value indicating the current dotproject version
+	*/
+	public function getVersion() {
 		global $dPconfig;
 		if (!(isset($this->version_major))) {
 			include_once (DP_BASE_DIR . '/includes/version.php');

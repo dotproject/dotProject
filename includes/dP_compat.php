@@ -92,4 +92,3 @@ if (!function_exists('mb_substr')) {
 		return (($length == "undefined") ? substr($str, $start) : substr($str, $start, $length));
 	}
 }
-?>

@@ -127,8 +127,8 @@ echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 // tabbed information boxes
 $tabBox = new CTabBox(('?m=calendar&amp;a=day_view&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '', 
 					  $tab);
-$tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_events', 'Events');
-$tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_tasks', 'Tasks');
+$tabBox->add($dPconfig['root_dir'] . DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'calendar'.DIRECTORY_SEPARATOR.'vw_day_events', 'Events');
+$tabBox->add($dPconfig['root_dir'] . DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'calendar'.DIRECTORY_SEPARATOR.'vw_day_tasks', 'Tasks');
 $tabBox->loadExtras($m);
 $tabBox->show();
 ?>

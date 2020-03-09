@@ -13,26 +13,26 @@ require_once ($AppUI->getModuleClass('files'));
 
 class CustomField
 {
-	var $field_id;
+	public $field_id;
 	// TODO - Implement Field Order - some people like to change the order of fields
-	var $field_order;
-	var $field_name;
-	var $field_description;
-	var $field_htmltype;
+	public $field_order;
+	public $field_name;
+	public $field_description;
+	public $field_htmltype;
 	// TODO - data type, meant for validation if you just want numeric data in a text input
 	// but not yet implemented
-	var $field_datatype;
+	public $field_datatype;
 	
-	var $field_extratags;
+	public $field_extratags;
 	
-	var $object_id = NULL;
+	public $object_id = NULL;
 	
-	var $value_id = 0;
+	public $value_id = 0;
 	
-	var $value_charvalue;
-	var $value_intvalue;
+	public $value_charvalue;
+	public $value_intvalue;
 	
-	function CustomField($field_id, $field_name, $field_order, $field_description, 
+	public function __construct($field_id, $field_name, $field_order, $field_description, 
 	                     $field_extratags) {
 		$this->field_id = $field_id;
 		$this->field_name = $field_name;
@@ -159,7 +159,7 @@ class CustomField
 // CustomFieldCheckBox - Produces an INPUT Element of the CheckBox type in edit mode, view mode indicates 'Yes' or 'No'
 class CustomFieldCheckBox extends CustomField
 {
-	function CustomFieldCheckBox($field_id, $field_name, $field_order, $field_description, 
+	public function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                             $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
@@ -192,14 +192,14 @@ class CustomFieldCheckBox extends CustomField
 // CustomFieldText - Produces an INPUT Element of the TEXT type in edit mode
 class CustomFieldText extends CustomField
 {
-	function CustomFieldText($field_id, $field_name, $field_order, $field_description, 
+	public function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                         $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
 		$this->field_htmltype = 'textinput';
 	}
 	
-	function getHTML($mode) {
+	public function getHTML($mode) {
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
@@ -220,14 +220,14 @@ class CustomFieldText extends CustomField
 // CustomFieldTextArea - Produces a TEXTAREA Element in edit mode
 class CustomFieldTextArea extends CustomField
 {
-	function CustomFieldTextArea($field_id, $field_name, $field_order, $field_description, 
+	public function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                             $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
 		$this->field_htmltype = 'textarea';
 	}
 	
-	function getHTML($mode) {
+	public function getHTML($mode) {
 		$html = '<td nowrap="nowrap">';
 		switch($mode) {
 			case 'edit':
@@ -248,7 +248,7 @@ class CustomFieldTextArea extends CustomField
 // CustomFieldLabel - Produces just a non editable label
 class CustomFieldLabel extends CustomField 
 {
-    function CustomFieldLabel($field_id, $field_name, $field_order, $field_description, 
+    function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                          $field_extratags) {
     	$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
@@ -269,14 +269,14 @@ class CustomFieldLabel extends CustomField
 // CustomFieldSeparator - Produces just an horizontal line
 class CustomFieldSeparator extends CustomField 
 {
-    function CustomFieldSeparator($field_id, $field_name, $field_order, $field_description, 
+    public function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                              $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
 		$this->field_htmltype = 'separator';
     }
     
-    function getHTML($mode) {
+    public function getHTML($mode) {
     	// We don't really care about its mode
 		$html = '<td nowrap="nowrap">';
     	$html .= '<hr' . (($this->field_extratags) ? (' ' . $this->field_extratags) : '') . ' />';
@@ -288,9 +288,9 @@ class CustomFieldSeparator extends CustomField
 // CustomFieldSelect - Produces a SELECT list, extends the load method so that the option list can be loaded from a seperate table
 class CustomFieldSelect extends CustomField
 {
-	var $options;
+	public $options;
 	
-	function CustomFieldSelect($field_id, $field_name, $field_order, $field_description, 
+	public function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                           $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
@@ -331,7 +331,7 @@ class CustomFieldSelect extends CustomField
 
 class CustomFieldWeblink extends CustomField
 {
-	function CustomFieldWeblink ($field_id, $field_name, $field_order, $field_description, 
+	function __construct ($field_id, $field_name, $field_order, $field_description, 
 	                             $field_extratags) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, 
 		                   $field_extratags);
@@ -369,7 +369,7 @@ class CustomFieldWeblink extends CustomField
 
 class CustomFieldFilelink extends CustomField {
 
-	function CustomFieldFilelink ($field_id, $field_name, $field_order, $field_description, $field_extratags)	{
+	function __construct ($field_id, $field_name, $field_order, $field_description, $field_extratags)	{
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags);
 		$this->field_htmltype = 'file';
 	}
@@ -480,14 +480,14 @@ class CustomFieldFilelink extends CustomField {
 // eg. company_id for companies module
 class CustomFields
 {
-	var $m;
-	var $a;
-	var $mode;
-	var $obj_id;
+	public $m;
+	public $a;
+	public $mode;
+	public $obj_id;
 	
-	var $fields;
+	public $fields;
 	
-	function CustomFields($m, $a, $obj_id = NULL, $mode = 'edit') {
+	function __construct($m, $a, $obj_id = NULL, $mode = 'edit') {
 		$this->m = $m;
 		$this->a = 'addedit'; // only addedit pages can carry the custom field for now
 		$this->obj_id = $obj_id;
@@ -795,4 +795,3 @@ class CustomOptionList
 		return $html;
 	}
 }
-?>

@@ -9,8 +9,10 @@ class CTitleBlock extends CTitleBlock_core {
 ##
 ##  This overrides the show function of the CTabBox_core function
 ##
-class CTabBox extends CTabBox_core {
-	function show($extra='', $js_tabs = false) {
+class CTabBox extends CTabBox_core 
+{
+	function show($extra='', $js_tabs = false) 
+	{
 		GLOBAL $AppUI, $dPconfig, $currentTabId, $currentTabName;
 		$uistyle = ($AppUI->getPref('UISTYLE') 
 		            ? $AppUI->getPref('UISTYLE') 
@@ -92,7 +94,10 @@ class CTabBox extends CTabBox_core {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
 				if (!$js_tabs)
+				{
 					require $this->baseInc.$this->tabs[$this->active][0].'.php';
+				}
+					
 			}
 			if ($js_tabs)
 			{
@@ -114,4 +119,4 @@ class CTabBox extends CTabBox_core {
 		}
 	}
 }
-?>
+

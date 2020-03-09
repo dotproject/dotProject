@@ -233,7 +233,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
  $config .= '$dPconfig[\'dbpersist\'] = ' . ($dbpersist ? 'true' : 'false') . ";\n";
  $config .= '$dPconfig[\'root_dir\'] = $baseDir;'."\n";
  $config .= '$dPconfig[\'base_url\'] = $baseUrl;'."\n";
- $config .= '?>';
+ 
  $config = trim($config);
 
 if ($do_cfg || $do_db_cfg) {

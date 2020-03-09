@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 /*
-Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
+Copyright (c) 2003-2020 The dotProject Development Team <core-developers@dotproject.net>
 
     This file is part of dotProject.
 
@@ -33,6 +33,10 @@ The full text of the GPL is in the COPYING file.
 	the web server cannot write to the includes directory.
 
 */
+
+$baseDir = dirname(__DIR__);
+$baseUrl = (!empty( $_SERVER['SERVER_NAME'])) ?  $_SERVER['SERVER_NAME']: '';
+
 
 // DATABASE ACCESS INFORMATION [DEFAULT example]
 // Modify these values to suit your local settings
@@ -67,4 +71,3 @@ $dPconfig['root_dir'] = $baseDir;
 // is now set in top-level files index.php and fileviewer.php.
 // All code should start to use $baseUrl instead of base_url.
 $dPconfig['base_url'] = $baseUrl;
-?>

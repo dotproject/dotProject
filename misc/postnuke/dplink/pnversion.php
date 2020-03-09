@@ -15,4 +15,4 @@ $modversion['author'] = 'Adam Donnison';
 $modversion['contact'] = 'adam@saki.com.au';
 $modversion['admin'] = 1;
 $modversion['securityschema'] = array('dplink::' => '::');
-?>
+
