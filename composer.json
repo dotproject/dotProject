@@ -3,5 +3,7 @@
     "description": "dotProject is an open source project management system written in PHP",
     "type": "project",
     "license": "GPL",
-    "require": {}
+    "require": {
+        "php" : "7.0.*"
+    }
 }
