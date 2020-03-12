@@ -14,11 +14,11 @@ if (!$obj->bind($_POST)) {
 require_once($AppUI->getSystemClass('CustomFields'));
 // convert dates to SQL format first
 if ($obj->project_start_date) {
-	$date = new CDate($obj->project_start_date);
+	$date = new CDate($obj->project_start_date, FMT_DATE_HTML5);
 	$obj->project_start_date = $date->format(FMT_DATETIME_MYSQL);
 }
 if ($obj->project_end_date) {
-	$date = new CDate($obj->project_end_date);
+	$date = new CDate($obj->project_end_date, FMT_DATE_HTML5);
 	$date->setTime(23, 59, 59);
 	$obj->project_end_date = $date->format(FMT_DATETIME_MYSQL);
 }

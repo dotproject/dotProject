@@ -26,6 +26,8 @@ if ($search_string) {
 	                      . " OR contact_email LIKE " . $get_search);
 } else if (isset($_GET['where'])) {
 	$AppUI->setState('ContIdxWhere', $_GET['where']);
+} else {
+        $AppUI->setState('ContIdxWhere', '');
 }
 
 $where = $q->quote_sanitised( $AppUI->getState('ContIdxWhere') ? ( $AppUI->getState('ContIdxWhere') . '%') : '%');
@@ -112,7 +114,7 @@ $tdw = floor(100 / $carrWidth);
 /**
 * Contact search form
 */
-$default_search_string = dPformSafe($AppUI->getState('ContIdxWhere'), true);
+$default_search_string = dPformSafe($search_string, true);
 
 $a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= "\n<tr>";
@@ -127,7 +129,7 @@ for ($c=65; $c < 91; $c++) {
 }
 $a2z .= ("\n</tr>\n<tr>" . '<td colspan="28">' 
          . '<form action="./index.php" method="get">' . $AppUI->_('Search for') 
-         . '<input type="text" name="search_string" value="' . $default_search_string . '" />' 
+         . '<input autofocus type="search" name="search_string" value="' . $default_search_string . '" />' 
          . '<input type="hidden" name="m" value="contacts" /><input type="submit" value=">" />'
          . '<a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search') 
 		 . '</a></form></td></tr>' 

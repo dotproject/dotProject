@@ -163,7 +163,7 @@ function setDept(key, val) {
 		      . $user['user_username'] . '" />');
 		echo '<strong>' . $AppUI->showHTML($user['user_username']) . '</strong>';
 	} else {
-		echo ('<input type="text" class="text" name="user_username"  maxlength="255" size="40" />');
+		echo ('<input autofocus type="text" class="text" name="user_username"  maxlength="255" size="40" />');
 	}
 ?>
 	</td></tr>

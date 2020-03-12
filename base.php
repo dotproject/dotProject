@@ -62,6 +62,10 @@ $baseUrl = (((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
              || $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') 
              ? 'https://' : 'http://');
 $baseUrl .= safe_get_env('HTTP_HOST');
+// check if webserver is not running on default port                
+if ($_SERVER['SERVER_PORT'] != 80 || $_SERVER['SERVER_PORT'] != 443) {
+  $baseUrl .= ':' . safe_get_env('SERVER_PORT');
+}
 $pathInfo = safe_get_env('PATH_INFO');
 if (@$pathInfo) {
   $baseUrl .= str_replace('\\','/',dirname($pathInfo));

@@ -256,7 +256,7 @@ CREATE TABLE `%dbprefix%projects` (
   `project_end_date` datetime default NULL,
   `project_status` int(11) default '0',
   `project_percent_complete` tinyint(4) default '0',
-  `project_color_identifier` varchar(6) default 'eeeeee',
+  `project_color_identifier` varchar(7) default '#eeeeee',
   `project_description` text,
   `project_target_budget` decimal(10,2) default '0.00',
   `project_actual_budget` decimal(10,2) default '0.00',
@@ -602,7 +602,7 @@ CREATE TABLE `%dbprefix%user_task_pin` (
 `task_id` int(10) NOT NULL default '0',
 `task_pinned` tinyint(2) NOT NULL default '1',
 PRIMARY KEY (`user_id`,`task_id`)
-) ;
+);
 
 #
 # Table structure for TABLE `config`
@@ -613,7 +613,7 @@ PRIMARY KEY (`user_id`,`task_id`)
 
 CREATE TABLE `%dbprefix%config` (
   `config_id` int(11) NOT NULL auto_increment,
-  `config_name` varchar(255) NOT NULL default '',
+  `config_name` varchar(127) NOT NULL default '',
   `config_value` varchar(255) NOT NULL default '',
   `config_group` varchar(255) NOT NULL default '',
   `config_type` varchar(255) NOT NULL default '',
@@ -1136,7 +1136,7 @@ CREATE TABLE `%dbprefix%gacl_groups_axo_map` (
 
 DROP TABLE IF EXISTS `%dbprefix%gacl_phpgacl`;
 CREATE TABLE `%dbprefix%gacl_phpgacl` (
-  `name` varchar(230) NOT NULL default '',
+  `name` varchar(127) NOT NULL default '',
   `value` varchar(230) NOT NULL default '',
   PRIMARY KEY  (`name`)
 ) ;

@@ -52,7 +52,7 @@ $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext'):'
 $search_text = dPformSafe($search_text);
 
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
-$titleBlock->addCell(('<input type="text" class="text" size="20" name="searchtext"' 
+$titleBlock->addCell(('<input autofocus type="search" class="text" size="20" name="searchtext"' 
                       . ' onchange="javascript:document.searchfilter.submit();" value="' . $search_text 
                       . '"title="' . $AppUI->_('Search in name and description fields') 
                       . '"/><!--<input type="submit" class="button" value=">" title="' 

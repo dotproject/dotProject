@@ -290,7 +290,7 @@ if (count($allowedProjects)) {
 
 //
 $obj = new CTask;
-$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'task_id');
+$allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tsk.task_id');
 if (count($allowedTasks)) {
 	$where .= ' AND ' . implode(' AND ', $allowedTasks);
 }
@@ -308,7 +308,7 @@ if (! $min_view && $f2 != 'all') {
 
 // patch 2.12.04 ADD GROUP BY clause for assignee count
 $tsql = ('SELECT ' . $select . ' FROM (' . $from . ') ' . $join 
-		 . ' WHERE ' . $where . ' GROUP BY task_id ORDER BY project_id, task_start_date');
+		 . ' WHERE ' . $where . ' GROUP BY tsk.task_id ORDER BY project_id, task_start_date');
 
 //echo "<pre>$tsql</pre>";
 
@@ -502,10 +502,10 @@ function chAssignment(project_id, rmUser, del) {
 reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count(@$p['tasks']);
+	$tnums = array_key_exists('tasks', $p);
 	// don't show project if it has no tasks
 	// patch 2.12.04, show project if it is the only project in view
-	if ($tnums > 0 || $project_id == $p['project_id']) {
+	if ($tnums || $project_id == $p['project_id']) {
 		//echo '<pre>'; print_r($p); echo '</pre>';
 		if (!$min_view) {
 			// not minimal view
@@ -533,7 +533,7 @@ echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only th
   <table width="100%" border="0">
   <tr>
 	<!-- patch 2.12.04 display company name next to project name -->
-	<td nowrap style="border: outset #eeeeee 2px;background-color:#<?php 
+	<td nowrap style="border: outset #eeeeee 2px;background-color:<?php 
 echo @$p['project_color_identifier']; ?>">
 	<a href="?m=projects&amp;a=view&amp;project_id=<?php echo $k;?>">
 	<span style="color:<?php 

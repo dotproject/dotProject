@@ -112,7 +112,7 @@ function delIt() {
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Forum Name');?>:</td>
 			<td>
-				<input type="text" class="text" size="25" name="forum_name" value="<?php echo @$forum_info["forum_name"];?>" maxlength="50" style="width:200px;" />
+				<input autofocus type="text" class="text" size="25" name="forum_name" value="<?php echo @$forum_info["forum_name"];?>" maxlength="50" style="width:200px;" />
 			</td>
 		</tr>
 		<tr>

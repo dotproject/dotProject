@@ -253,7 +253,7 @@ var daily_working_hours = <?php echo intval(dPgetConfig('daily_working_hours'));
 echo $obj->task_contacts; ?>" />
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
-	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php 
+	<td colspan="2" style="border: outset #eeeeee 1px;background-color:<?php 
 echo $project->project_color_identifier; ?>" >
 		<font color="<?php echo bestColor($project->project_color_identifier); ?>">
 			<strong><?php echo $AppUI->_('Project'); ?>: <?php 
@@ -265,7 +265,7 @@ echo @$project->project_name; ?></strong>
 <tr valign="top" width="50%">
 	<td>
 		<?php echo $AppUI->_('Task Name'); ?> *
-		<br /><input type="text" class="text" name="task_name" value="<?php 
+		<br /><input autofocus type="text" class="text" name="task_name" value="<?php 
 echo $AppUI->___($obj->task_name); ?>" size="40" maxlength="255" />
 	</td>
 	<td>

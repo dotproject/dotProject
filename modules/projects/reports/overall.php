@@ -24,26 +24,6 @@ $end_date->setTime(23, 59, 59);
 
 $fullaccess = ($AppUI->user_type == 1);
 ?>
-<script language="javascript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.log_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'top=250,left=250,width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.log_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
-</script>
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 
@@ -54,19 +34,11 @@ function setCalendar(idate, fdate) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period');?>:</td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" value="<?php echo $start_date->format(FMT_TIMESTAMP_DATE);?>" />
-		<input type="text" name="start_date" value="<?php echo $start_date->format($df);?>" class="text" disabled="disabled" style="width: 80px" />
-		<a href="#" onclick="javascript:popCalendar('start_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-		</a>
+		<input type="date" name="log_start_date" value="<?php echo $start_date->format(FMT_DATE_HTML5);?>" class="text dpDateField">
 	</td>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to');?></td>
 	<td nowrap="nowrap">
-		<input type="hidden" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : '';?>" />
-		<input type="text" name="end_date" value="<?php echo $end_date ? $end_date->format($df) : '';?>" class="text" disabled="disabled" style="width: 80px"/>
-		<a href="#" onclick="javascript:popCalendar('end_date')">
-			<img src="./images/calendar.gif" width="24" height="12" alt="<?php echo $AppUI->_('Calendar');?>" border="0" />
-		</a>
+		<input type="date" name="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_DATE_HTML5) : '';?>" class="text dpDateField">
 	</td>
 
 	<td nowrap="nowrap">

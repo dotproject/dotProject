@@ -3,9 +3,11 @@
 .project
 .DS_Store
 includes/config.php
+files/*
 !files/index.html
 !files/temp/index.html
-files/
 lib/ezpdf/fonts/php_*
 /nbproject/private/
 /nbproject
+/dotProject/
+!/modules/files/

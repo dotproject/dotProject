@@ -28,6 +28,7 @@ if ($task_log_id) {
 	$log->task_log_name = $obj->task_name;
 }
 
+include ($AppUI->getLibraryClass('quilljs/richedit.class'));
 // Check that the user is at least assigned to a task
 $task = new CTask;
 $task->load($task_id);
@@ -154,18 +155,6 @@ echo $AppUI->_('minutes elapsed'); ?>)";
 	function timerSet() {
 		total_minutes = Math.round(document.editFrm.task_log_hours.value * 60) -1;
 	}
-	<?php
-if ($obj->canUserEditTimeInformation()) {
-?>
-	function popCalendar(field) {
-		calendarField = field;
-		idate = eval('document.editFrm.task_' + field + '.value');
-		window.open('index.php?m=public&'+'a=calendar&'+'dialog=1&'+'callback=setCalendar&'+'date='
-					+ idate, 'calwin', 'width=251, height=220, scrollbars=no, status=no');
-	}
-<?php 
-}
-?>
 </script>
 <!-- END OF TIMER RELATED SCRIPTS -->
 
@@ -186,14 +175,8 @@ echo(($log->task_log_creator == 0) ? $AppUI->user_id : $log->task_log_creator) ?
       <tr>
         <td align="right"><?php echo $AppUI->_('Date'); ?></td>
         <td nowrap="nowrap">
-          <input type="hidden" name="task_log_date" value="<?php 
-echo $log_date->format(FMT_DATETIME_MYSQL); ?>" />
-          <input type="text" name="log_date" value="<?php 
-echo $log_date->format($df); ?>" class="text" disabled="disabled" />
-		<a href="#" onclick="javascript:popCalendar('log_date')">
-          <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-echo $AppUI->_('Calendar'); ?>" border="0" />
-          </a>
+          <input type="date" name="task_log_date" value="<?php
+echo $log_date->format(FMT_DATE_HTML5); ?>" class="text dpDateField">
         </td>
       </tr>
       <tr>
@@ -254,14 +237,8 @@ if ($obj->canUserEditTimeInformation()) {
       <tr>
         <td align='right'><?php echo $AppUI->_("Task end date"); ?></td>
         <td>
-          <input type="hidden" name="task_end_date" value="<?php 
-	echo (($end_date) ? $end_date->format(FMT_TIMESTAMP) : ''); ?>" />
-          <input type="text" name="end_date" value="<?php 
-	echo (($end_date) ? $end_date->format($df) : ''); ?>" class="text" disabled="disabled" />
-			<a href="#" onclick="javascript:popCalendar('end_date')">
-          <img src="./images/calendar.gif" width="24" height="12" alt="<?php 
-	echo $AppUI->_('Calendar'); ?>" border="0" />
-          </a>
+          <input type="date" name="task_end_date" value="<?php
+	echo (($end_date) ? $end_date->format(FMT_DATE_HTML5) : ''); ?>" class="text dpDateField">
         </td>
       </tr>
 <?php
@@ -306,8 +283,14 @@ echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...')
       </tr>
       <tr>
         <td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
-        <td><textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php 
-echo $log->task_log_description; ?></textarea></td>
+        <td>
+	    <!--<textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php 
+echo $log->task_log_description; ?></textarea>-->
+	    <?php
+		$richedit = new DpRichEdit('task_log_description', $log->task_log_description);
+		$richedit->render();
+	    ?>
+        </td>
       </tr>
       <tr>
         <td align="right" valign="top"><?php echo $AppUI->_('Email Log to'); ?>:</td>

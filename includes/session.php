@@ -192,6 +192,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 		session_write_close();
 	}
 	if (dPgetConfig('session_handling') == 'app') {
+    // Seems user session handler is not a real thing in php 7
+    if (version_compare(phpversion(), '7.0.0', '<')) {
+      ini_set('session.save_handler', 'user');
+    }
 	// PHP 5.2 workaround
     if (version_compare(phpversion(), '5.0.0', '>=')) {
         register_shutdown_function('session_write_close');
@@ -203,7 +207,7 @@ function dpSessionStart($start_vars = 'AppUI') {
 		$max_time = 0; // Browser session only.
 	}
 	// Try and get the correct path to the base URL.
-	preg_match('_^(https?://)([^:/]+)(:[0-9]+)?(/.*)?$_i', dPgetConfig('base_url'), $url_parts);
+	preg_match('_^(https?://)([^/:]+)(:[0-9]+)?(/.*)?$_i', dPgetConfig('base_url'), $url_parts);
 	$cookie_dir = $url_parts[4];
 	if (mb_substr($cookie_dir, 0, 1) != '/') {
 		$cookie_dir = '/' . $cookie_dir;

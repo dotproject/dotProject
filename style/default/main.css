@@ -33,6 +33,11 @@ em {
 	font-style: normal;
 }
 
+.ql-editor em {
+	font-weight: normal;
+	font-style: italic;
+}
+
 A:link {
 	color: #08245b;
 	text-decoration: none;
@@ -124,7 +129,6 @@ bordertable {
 TEXTAREA {
 	font-family: Osaka,verdana,helvetica,arial,sans-serif;
 	font-size: 9pt;
-	background-color: #ffffff;
 }
 
 .textarea {

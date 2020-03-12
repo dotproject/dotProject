@@ -23,12 +23,13 @@ define ('UI_CASE_UPPER', 1);
 define ('UI_CASE_LOWER', 2);
 define ('UI_CASE_UPPERFIRST', 4);
 
-define ('UI_OUTPUT_MASK', 0xF0);
+define ('UI_OUTPUT_MASK', 0xFF0);
 define ('UI_OUTPUT_TEXT', 0);
 define ('UI_OUTPUT_JS', 0x10);
 define ('UI_OUTPUT_RAW', 0x20);
 define ('UI_OUTPUT_URI', 0x40);
 define ('UI_OUTPUT_HTML', 0x80);
+define ('UI_OUTPUT_FORM', 0x100);
 
 // DP_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the dotproject installation.
@@ -61,6 +62,8 @@ class CAppUI {
 	var $user_prefs=null;
 /** @var int Unix time stamp */
 	var $day_selected=null;
+/** @var array */
+	var $system_prefs = array();
 	
 	// localisation
 /** @var string */
@@ -97,6 +100,13 @@ class CAppUI {
 	
 /** @var integer for register log ID */
 	var $last_insert_id = null;	
+
+/** @var array list of external JS libraries */
+	var $_js = [];
+
+/** @var array list of external CSS libraries */
+	var $_css = [];
+
 /**
 * CAppUI Constructor
 */
@@ -464,14 +474,8 @@ class CAppUI {
 		/* Altered to support multiple styles of output, to fix
 		 * bugs where the same output style cannot be used succesfully
 		 * for both javascript and HTML output.
-		 * PLEASE NOTE: The default is currently UI_OUTPUT_HTML,
-		 * which is different to the previous version (which was
-		 * effectively UI_OUTPUT_RAW).  If this causes problems,
-		 * and they are localised, then use UI_OUTPUT_RAW in the
-		 * offending call.  If they are widespread, change the
-		 * default to UI_OUTPUT_RAW and use the other options
-		 * where appropriate.
-		 * AJD - 2004-12-10
+		 *
+		 * Default is currently UI_OUTPUT_TEXT.
 		 */
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_URI:
@@ -481,6 +485,10 @@ class CAppUI {
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 				$str = filter_xss($str);
 				$str = nl2br($str);
+				break;
+			case UI_OUTPUT_FORM:
+				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = filter_xss($str);
 				break;
 			case UI_OUTPUT_HTML:
 				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
@@ -821,6 +829,14 @@ class CAppUI {
 	function getPref($name) {
 		return @$this->user_prefs[$name];
 	}
+
+/**
+ * Gets the value of the specified system preference
+ * @param string Name of the preference
+ */
+	function getSystemPref($name) {
+		return $this->system_prefs[$name] ? $this->system_prefs[$name] : NULL;
+	}
 /**
 * Sets the value of a user preference specified by name
 * @param string Name of the preference
@@ -840,18 +856,37 @@ class CAppUI {
 *
 * @param int User id number
 */
+        function isSystemPref($val) {
+		return $val['pref_user'] == 0;
+        }
+        function isUserPref($val) {
+		return $val['pref_user'] != 0;
+        }
+        function flattenPrefs($vals) {
+		$result = [];
+		foreach ($vals as $elem) {
+		  $result[$elem['pref_name']] = $elem['pref_value'];
+		}
+		return $result;
+        }
 	function loadPrefs($uid=0) {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
-		$q->addQuery('pref_name, pref_value');
+		$q->addQuery('pref_user, pref_name, pref_value');
 		if ($uid) {
 			$q->addWhere("pref_user in (0, $uid)");
 			$q->addOrder('pref_user');
 		} else {
 			$q->addWhere('pref_user = 0');
 		}
-		$prefs = $q->loadHashList();
-		$this->user_prefs = array_merge($this->user_prefs, $prefs);
+		$prefs = $q->loadList();
+                // Separate out system preferences from user preferences, but merge them together
+		$this->system_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isSystemPref' ]));
+		$user_prefs = [];
+		if ($uid) {
+			$user_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isUserPref' ]));
+		}
+		$this->user_prefs = array_merge($this->system_prefs, $this->user_prefs, $user_prefs);
 	}
 
 // --- Module connectors
@@ -954,8 +989,21 @@ class CAppUI {
 		      . "\n");
 		
 		$this->getModuleJS($m, $a, true);
+
+		// Finally add any external URLs
+		foreach ($this->_js as $href) {
+			echo '<script src="' . $href . '"></script>' . "\n";
+		}
+		// And any CSS scripts
+		foreach ($this->_css as $href) {
+			echo '<link rel="stylesheet" type="text/css" href="' . $href . '">' . "\n";
+		}
 	}
 	
+	function loadCSS() {
+
+	}
+
 	function getModuleJS($module, $file=null, $load_all = false) {
 		$root = DP_BASE_DIR;
 		if (mb_substr($root, -1) != '/') {
@@ -979,6 +1027,26 @@ class CAppUI {
 				echo ('<script  src="' . $base . 'modules/' . $module . '/' 
 				      . $file . '.js"></script>' . "\n");
 			}
+		}
+	}
+
+	/**
+	 * Register loadable JS scripts
+	 */
+	function addJS($href) {
+		$sanitised = filter_xss($href);
+		if ($sanitised) {
+			array_push($sanitised, $this->_js);
+		}
+	}
+
+	/**
+	 * Register loadable CSS scripts
+	 */
+	function addCSS($href) {
+		$sanitised = filter_xss($href);
+		if ($sanitised) {
+			array_push($sanitised, $this->_css);
 		}
 	}
 }

@@ -485,7 +485,7 @@ class CustomFields
 	var $mode;
 	var $obj_id;
 	
-	var $fields;
+	var $fields = array();
 	
 	function CustomFields($m, $a, $obj_id = NULL, $mode = 'edit') {
 		$this->m = $m;

@@ -51,13 +51,7 @@ if ($sub_form) {
 		$obj->load($task_id);
 		$task_end_date = new CDate($obj->task_end_date);
 	}
-	if ($_POST['task_start_date'] === '') {
-		$_POST['task_start_date'] = '000000000000';
-	}
-	if ($_POST['task_end_date'] === '') {
-		$_POST['task_end_date'] = '000000000000';
-	}
-	
+
 	if (isset($_POST) && !($obj->bind($_POST))) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();
@@ -108,16 +102,16 @@ if ($sub_form) {
 	
 	// convert dates to SQL format first
 	if ($obj->task_start_date) {
-		$date = new CDate($obj->task_start_date);
-		$obj->task_start_date = $date->format(FMT_DATETIME_MYSQL);
+		$date = new CDate($obj->task_start_date.":00");
+		$obj->task_start_date = $date->format('%Y-%m-%d %H:%M:00');
 	}
 	$end_date = null;
 	if ($obj->task_end_date) {
 		if (mb_strpos($obj->task_end_date, '2400') !== false) {
 		  $obj->task_end_date = str_replace('2400', '2359', $obj->task_end_date);
 		}
-		$end_date = new CDate($obj->task_end_date);
-		$obj->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
+		$end_date = new CDate($obj->task_end_date.":00");
+		$obj->task_end_date = $end_date->format('%Y-%m-%d %H:%M:00');
 	}
 	
 	require_once($AppUI->getSystemClass('CustomFields'));

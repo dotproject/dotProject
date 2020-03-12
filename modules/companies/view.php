@@ -174,8 +174,7 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" summary="company description">
 		<tr>
 			<td class="hilite">
-				<?php 
-echo str_replace(chr(10), '<br />', htmlspecialchars($obj->company_description)); ?>&nbsp;
+				<?php echo strip_tags($obj->company_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>') ?>
 			</td>
 		</tr>
 		
@@ -203,3 +202,31 @@ $tabBox->loadExtras($m, 'view');
 $tabBox->show();
 
 ?>
+<style>
+.ql-size-large {
+    font-size: 1.5em;
+}
+.ql-size-small {
+    font-size: 0.75em;
+}
+.ql-size-huge {
+    font-size: 2.5em;
+}
+.ql-font-monospace {
+    font-family: Monaco, Courier New, monospace;
+}
+.ql-font-serif {
+    font-family: Georgia, Times New Roman, serif;
+}
+.ql-align-center {
+    text-align: center;
+}
+.ql-align-right {
+    text-align: right;
+}
+.ql-align-justify {
+    text-align: justify;
+}
+
+</style>
+

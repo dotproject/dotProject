@@ -121,25 +121,6 @@ $task_types = dPgetSysVal('TaskType');
 ?>
 
 <script language="JavaScript">
-var calendarField = '';
-
-function popCalendar(field) {
-	calendarField = field;
-	idate = eval('document.editFrm.task_' + field + '.value');
-	window.open('index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=' + idate, 'calwin', 'width=250, height=220, scrollbars=no, status=no');
-}
-
-/**
- *	@param string Input date in the format YYYYMMDD
- *	@param string Formatted date
- */
-function setCalendar(idate, fdate) {
-	fld_date = eval('document.editFrm.task_' + calendarField);
-	fld_fdate = eval('document.editFrm.' + calendarField);
-	fld_date.value = idate;
-	fld_fdate.value = fdate;
-}
-
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -186,7 +167,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
-			<td style="background-color:#<?php echo $obj->project_color_identifier;?>">
+			<td style="background-color:<?php echo $obj->project_color_identifier;?>">
 				<font color="<?php echo bestColor($obj->project_color_identifier); ?>">
 					<?php echo $AppUI->___(@$obj->project_name);?>
 				</font>
@@ -231,7 +212,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked');?>:</td>
-			<td class="hilite" width="300"><?php echo (@$obj->task_hours_worked + @rtrim($obj->log_hours_worked, '0'));?></td>
+			<td class="hilite" width="300"><?php echo ltrim( (float)$obj->task_hours_worked + (float)$obj->log_hours_worked, '0');?></td>
 		</tr>
 		<tr>
 			<td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets');?></strong></td>
@@ -341,7 +322,7 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php echo $AppUI->___($obj->task_description); ?>
+				<?php echo strip_tags($obj->task_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'); ?>
 		  </td>
 		</tr>
 <?php
@@ -509,3 +490,31 @@ if ($tabBox_show == 1) {
 	$tabBox->show();
 }
 ?>
+<style>
+.ql-size-large {
+    font-size: 1.5em;
+}
+.ql-size-small {
+    font-size: 0.75em;
+}
+.ql-size-huge {
+    font-size: 2.5em;
+}
+.ql-font-monospace {
+    font-family: Monaco, Courier New, monospace;
+}
+.ql-font-serif {
+    font-family: Georgia, Times New Roman, serif;
+}
+.ql-align-center {
+    text-align: center;
+}
+.ql-align-right {
+    text-align: right;
+}
+.ql-align-justify {
+    text-align: justify;
+}
+
+</style>
+
