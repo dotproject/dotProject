@@ -3,6 +3,7 @@
 .project
 .DS_Store
 includes/config.php
+files/*
 !files/index.html
 !files/temp/index.html
 lib/ezpdf/fonts/php_*
