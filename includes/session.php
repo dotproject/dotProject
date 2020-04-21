@@ -231,4 +231,3 @@ function dpSessionStart($start_vars = 'AppUI') {
 	session_start();
 }
 
-?>
