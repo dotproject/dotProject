@@ -78,7 +78,7 @@ if (is_array($selected) && count($selected)) {
 		if ($task_priority == 'c') {
 			// mark task as completed
 			$q->addTable('tasks');
-			$q->addUpdate('task_percent_complete', "'100'");
+			$q->addUpdate('task_percent_complete', '100');
 			$q->addWhere('task_id='.$val);
 		} else if ($task_priority == 'd') {
 			// delete task
