@@ -181,8 +181,8 @@ class DBQuery {
 	function addInsertMulti($fields, $values) {
 	  foreach ($fields as $k => $field) {
 		$vals = [];
-		foreach ($values[$k] as $value) {
-			$vals[] = $this->quote($value);
+		foreach ($values as $value) {
+			$vals[] = $this->quote($value[$k]);
 		}
 	  	$this->addMap('value_list', $vals, $field);
 	  }
@@ -403,7 +403,7 @@ class DBQuery {
 		case 'insert':
 	        $q = $this->prepareInsert();
 			break;
-		case 'insertmulti':
+		case 'insertMulti':
 			$q = $this->prepareInsertMulti();
 			break;
 		case 'replace':
@@ -566,12 +566,28 @@ class DBQuery {
 		}
 		$q .= '`' . $this->_table_prefix . $table . '`';
 		
+		// There is probably a better way of doing this.
+		$fields = array_keys($this->value_list);
+		$values = array_values($this->value_list);
+
 		$fieldlist = [];
 		$valuelist = [];
-		foreach ($this->value_list as $field => $value) {
+
+		foreach ($fields as $field) {
 			$fieldlist[] = '`' . trim($field) . '`';
-			$valuelist[] = '(' . implode(',', $value) . ')';
 		}
+		// $k = field index
+		// $ix = row index
+		$inverted_values = [];
+		foreach ($values as $k => $value) {
+		  foreach($value as $ix => $data) {
+		    $inverted_values[$ix][$k] = $data;
+		  }
+		}
+		foreach ($inverted_values as $val) {
+		  $valuelist[] = '(' . implode(',', $val) . ')';
+		}
+
 		$q .= '(' . implode(',',$fieldlist) . ') values ' . implode(',',$valuelist);
 		return $q;
 	}

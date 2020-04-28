@@ -874,7 +874,7 @@ class CTask extends CDpObject
 		}
 		if (count($values)) {
 			$q->addTable('task_dependencies');
-			$q->addInsertMulti($filelds, $values);
+			$q->addInsertMulti($fields, $values);
 			$q->exec();
 			$q->clear();
 		}
