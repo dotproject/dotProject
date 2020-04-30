@@ -110,7 +110,10 @@ if ($sub_form) {
 		if (mb_strpos($obj->task_end_date, '2400') !== false) {
 		  $obj->task_end_date = str_replace('2400', '2359', $obj->task_end_date);
 		}
-		$end_date = new CDate($obj->task_end_date.":00");
+		if (!preg_match('/[T ][0-9]{2}:[0-9]{2}:[0-9]{2}/', $obj->task_end_date)) {
+		  $obj->task_end_date .= ':00';
+		}
+		$end_date = new CDate($obj->task_end_date);
 		$obj->task_end_date = $end_date->format('%Y-%m-%d %H:%M:00');
 	}
 	
