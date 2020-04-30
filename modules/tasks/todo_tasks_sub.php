@@ -108,6 +108,7 @@ sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
 /*** Tasks listing ***/
 $now = new CDate();
 $df = $AppUI->getPref('SHDATEFORMAT');
+$showEditCheckbox = dPgetConfig('direct_edit_assignment');
 
 // generate the 'due in' value
 foreach ($tasks as $tId=>$task) {
