@@ -47,7 +47,7 @@ if (is_array($selected) && count( $selected )) {
 		}
 
 //Action: Modify Percent Complete
-		if ( isset($_POST['bulk_task_percent_complete']) && $bulk_task_percent_complete!='' && $bulk_task_percent_complete) {
+		if ( isset($_POST['bulk_task_percent_complete']) && $bulk_task_percent_complete !== '') {
 			if ($upd_task->task_id) {
 				$upd_task->task_percent_complete = $bulk_task_percent_complete;
 				$upd_task->store();
