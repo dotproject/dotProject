@@ -11,3 +11,5 @@ lib/ezpdf/fonts/php_*
 /nbproject
 /dotProject/
 !/modules/files/
+
+/vendor/

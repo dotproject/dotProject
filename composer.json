@@ -1,0 +1,22 @@
+{
+    "name": "jeffphilapy/dot-project",
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Classes\\": "classes/",
+            "Includes\\": "includes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.1",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0",
+        "codeception/module-db": "^1.0"
+    }
+}
