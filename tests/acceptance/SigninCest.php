@@ -9,7 +9,18 @@ class SigninCest
     }
 
     // tests
-    public function weAreAbleToLoginIn(AcceptanceTester $I)
+    public function canSeeLoginForm(AcceptanceTester $I)
+    {
+        // TODO: Add to this test the ability to auto-create a test user
+        $I->amOnPage('/index.php');
+
+        $I->see('Username');
+        $I->see('Password');
+        $I->see('login');
+    }
+
+
+    public function canLoginIn(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
@@ -19,8 +30,17 @@ class SigninCest
         $I->see('My Project');// if text not found, test fails
     }
 
+    public function canSeeErrorIfUserNotInSystem(AcceptanceTester $I)
+    {
+        // TODO: Add to this test the ability to auto-create a test user
+        $I->amOnPage('/index.php');
+        $I->fillField('username', 'ogooakkkablahblah');
+        $I->fillField('password', 'ogooakkkablahblah');
+        $I->click(['class' => 'button']);
+        $I->see('Login Failed');// if text not found, test fails
+    }
 
-    public function weDontSeeErrorsOnPage(AcceptanceTester $I)
+    public function cantSeeErrorsOnPage(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
