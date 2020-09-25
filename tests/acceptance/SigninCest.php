@@ -39,7 +39,7 @@ class SigninCest
         $I->see('Login Failed');// if text not found, test fails
     }
 
-    public function cantSeeErrorsOnPage(AcceptanceTester $I)
+    public function shouldntSeeErrorsOnPage(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
