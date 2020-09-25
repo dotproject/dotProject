@@ -32,7 +32,6 @@ class SigninCest
 
     public function canSeeErrorIfUserNotInSystem(AcceptanceTester $I)
     {
-        // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
         $I->fillField('username', 'ogooakkkablahblah');
         $I->fillField('password', 'ogooakkkablahblah');
