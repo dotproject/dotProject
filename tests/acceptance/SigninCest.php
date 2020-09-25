@@ -9,7 +9,7 @@ class SigninCest
     }
 
     // tests
-    public function tryToTest(AcceptanceTester $I)
+    public function weAreAbleToLoginIn(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php');
         $I->fillField('username', 'admin');
