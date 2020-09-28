@@ -229,7 +229,7 @@ switch ($f) {
 		// patch 2.12.04 finish date required to be consider finish
 		$where .= (' AND task_project = prj.project_id AND ut3.user_id = ' . $user_id 
 		           . ' AND ut3.task_id = tsk.task_id ' 
-		           . "AND (task_percent_complete < 100 OR task_end_date = '') "
+		           . "AND (task_percent_complete < 100 OR task_end_date = null) "
 		           . 'AND prj.project_status <> 7 AND prj.project_status <> 4 ' 
 		           . 'AND prj.project_status <> 5');
 		break;
@@ -237,7 +237,7 @@ switch ($f) {
 		// patch 2.12.04 finish date required to be consider finish
 		// patch 2.12.04 2, also show unassigned tasks
 		$where .= (' AND task_project = prj.project_id ' 
-		           . "AND (task_percent_complete < 100 OR task_end_date = '') " 
+		           . "AND (task_percent_complete < 100 OR task_end_date = null) " 
 		           . 'AND prj.project_status <> 7 AND prj.project_status <> 4 ' 
 		           . 'AND prj.project_status <> 5');
 		break;
@@ -310,7 +310,7 @@ if (! $min_view && $f2 != 'all') {
 $tsql = ('SELECT ' . $select . ' FROM (' . $from . ') ' . $join 
 		 . ' WHERE ' . $where . ' GROUP BY tsk.task_id ORDER BY project_id, task_start_date');
 
-//echo "<pre>$tsql</pre>";
+// echo "<pre>$tsql</pre>";
 
 if ($canAccessTask) {
 	$ptrc = db_exec($tsql);
