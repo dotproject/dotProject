@@ -1,16 +1,31 @@
 <?php
+/**
+ * Check user against the database
+ */
 class SQLAuthenticator
 {
-    var $user_id;
-    var $username;
+    public $user_id;
+    public $username;
 
-    function __construct($username, $password)
+    public function SQLAuthenticator($username, $password)
     {
-        GLOBAL $db, $AppUI;
+        $this->checkUser($username, $password);
+    }
+
+    /**
+     * Verify credentials sent, match those in the database
+     *
+     * @param [string] $username
+     * @param [string] $password
+     * @return boolean
+     */
+    private function checkUser($username, $password)
+    {
+        global $db, $AppUI;
 
         $this->username = $username;
 
-        $q  = new DBQuery;
+        $q = new DBQuery;
         $q->addTable('users');
         $q->addQuery('user_id, user_password');
         $q->addWhere("user_username = '$username'");
@@ -25,13 +40,17 @@ class SQLAuthenticator
 
         $this->user_id = $row["user_id"];
         $q->clear();
-        if (MD5($password) == $row["user_password"]) return true;
+        if (MD5($password) == $row["user_password"]) {
+            return true;
+        }
+
         return false;
     }
 
-    function userId($username)
+
+    public function userId($username)
     {
-         // We ignore the username provided
+        // We ignore the username provided
         return $this->user_id;
     }
 }
