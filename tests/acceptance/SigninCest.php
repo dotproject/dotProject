@@ -11,7 +11,6 @@ class SigninCest
     // tests
     public function canSeeLoginForm(AcceptanceTester $I)
     {
-        // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
 
         $I->see('Username');
