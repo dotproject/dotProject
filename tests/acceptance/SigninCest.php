@@ -24,7 +24,7 @@ class SigninCest
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
         $I->fillField('username', 'admin');
-        $I->fillField('password', 'passwd');
+        $I->fillField('password', 'pass');
         $I->click(['class' => 'button']);
         $I->see('My Project');// if text not found, test fails
     }
