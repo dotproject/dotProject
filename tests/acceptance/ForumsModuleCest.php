@@ -11,12 +11,18 @@ class ForumsModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfForumsPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=forums');
         $I->see('Forums');// if text not found, test fails
     }
 
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfForumsPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=forums');

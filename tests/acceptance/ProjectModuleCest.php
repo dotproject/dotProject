@@ -11,12 +11,18 @@ class ProjectModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfProjectsPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=projects');
         $I->see('Projects');// if text not found, test fails
     }
 
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfProjectsPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=projects');

@@ -11,12 +11,17 @@ class SystemAdminModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfSystemAdminPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=system');
         $I->see('System Administration');// if text not found, test fails
     }
-
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfSystemAdminPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=system');

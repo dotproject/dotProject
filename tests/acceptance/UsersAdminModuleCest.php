@@ -11,12 +11,17 @@ class UsersAdminModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfUsersAdminPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=admin');
         $I->see('User Management');// if text not found, test fails
     }
-
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfUsersAdminPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=admin');

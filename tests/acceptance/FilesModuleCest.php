@@ -11,12 +11,18 @@ class FilesModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfFilesPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=files');
         $I->see('Files');// if text not found, test fails
     }
-
+    
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfFilesPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=files');

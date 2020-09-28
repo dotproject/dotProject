@@ -11,12 +11,18 @@ class CalendarModuleCest
     }
 
     // tests
+    /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfCalendarPageLoads(AcceptanceTester $I)
     { 
         $I->amOnPage('/index.php?m=calendar');
         $I->see('calendar');// if text not found, test fails
     }
 
+    /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfCalendarPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=calendar');

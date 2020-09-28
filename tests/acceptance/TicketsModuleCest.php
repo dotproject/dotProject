@@ -11,12 +11,17 @@ class TicketsModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfTicketsPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=ticketsmith');
         $I->see('Trouble Ticket Management');// if text not found, test fails
     }
-
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfTicketsPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=ticketsmith');

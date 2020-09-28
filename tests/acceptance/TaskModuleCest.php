@@ -11,12 +11,17 @@ class TaskModuleCest
     }
 
     // tests
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfTaskPageLoads(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=tasks');
         $I->see('Tasks');// if text not found, test fails
     }
-
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function seeIfProjectsPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=tasks');
