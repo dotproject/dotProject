@@ -29,6 +29,9 @@ class SigninCest
         $I->see('My Project');// if text not found, test fails
     }
 
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function canSeeErrorIfUserNotInSystem(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php');
@@ -37,7 +40,10 @@ class SigninCest
         $I->click(['class' => 'button']);
         $I->see('Login Failed');// if text not found, test fails
     }
-
+    
+     /**
+     * @depends SigninCest:canLoginIn
+     */
     public function shouldntSeeErrorsOnPage(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
