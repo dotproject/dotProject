@@ -10,4 +10,11 @@ modules:
         - PhpBrowser:
             url: http://localhost/dotproject
         - \Helper\Acceptance
+        - Db:
+            dsn: 'mysql:host=127.0.0.1;dbname=dotproject_testing'
+            user: 'root'
+            password: 'mysql'
+            dump: 'Tests/_data/dotproject.sql'
+            populate: true
+            cleanup: true
 step_decorators: ~        
