@@ -1,5 +1,5 @@
 <?php 
-define('DP_BASE_DIR', true); // need to set this, or files can't be referenced.
+define('DP_BASE_DIR', '.'); // need to set this, or files can't be referenced.
 
 
 require_once('./tests/autoload.php');
