@@ -179,7 +179,7 @@ if (!defined('DP_BASE_DIR')) {
 
 			$this->username = $username;
 
-			$q  = $this->getDBQuery();
+			$q  = $this->getDBQueryObj();
 			$q->addTable('users');
 			$q->addQuery('user_id, user_password');
 			$q->addWhere("user_username = '$username'");
@@ -213,7 +213,7 @@ if (!defined('DP_BASE_DIR')) {
 		/**
 		 * separated out so that authenticate() can be unit tested
 		 */
-		function getDBQuery() {
+		function getDBQueryObj() {
 			return new DBQuery;
 		}
 
