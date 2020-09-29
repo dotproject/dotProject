@@ -10,8 +10,10 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once $AppUI->getSystemClass('query');
-require_once $AppUI->getModuleClass('system');
+if (!defined('UNIT_TEST')) {
+	require_once $AppUI->getSystemClass('query');
+	require_once $AppUI->getModuleClass('system');
+}
 
 /**
  *	CDpObject Abstract Class.
