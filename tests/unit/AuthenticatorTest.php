@@ -22,7 +22,7 @@ class AuthenticatorTest extends \Codeception\Test\Unit
     }
 
     // tests
-    public function testThePasswordsAreTheSame()
+    public function testIfThePasswordsAreTheSameTrueIsReturned()
     {
 
         $test = $this->makeEmptyExcept('SQLAuthenticator', 'comparePasswords');
