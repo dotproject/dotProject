@@ -14,7 +14,7 @@ require './base.php';
 // call file to test
 // require './classes/dp.class.php';
 
-require './includes/main_functions.php';
+// require './includes/main_functions.php';
 require './classes/csscolor.class.php';
 
 class ExampleTest extends \Codeception\Test\Unit
