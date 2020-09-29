@@ -1,5 +1,11 @@
 
+### creating tests
 
+Acceptance tests:
+php vendor/bin/codecept generate:cest acceptance TestName
+
+Unit tests:
+php vendor/bin/codecept generate:test unit TestName
 
 ### running tests
 
