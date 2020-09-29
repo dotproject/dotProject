@@ -43,4 +43,30 @@ class AuthenticatorTest extends \Codeception\Test\Unit
          $this->assertFalse($actual);
 
     }
+
+
+    /** @test */
+    public function testTheGetAuthFunctionCanSetLdapAuth()
+    {
+        $actual = getAuth('ldap');
+        $this->assertInstanceOf('LDAPAuthenticator', $actual);
+    }
+
+    public function testTheGetAuthFunctionCanSetPostNukeAuth()
+    {
+        $actual = getAuth('pn');
+        $this->assertInstanceOf('PostNukeAuthenticator', $actual);
+    }
+
+    public function testTheGetAuthFunctionCanSetIPAuth()
+    {
+        $actual = getAuth('ip');
+        $this->assertInstanceOf('IPAuthenticator', $actual);
+    }
+
+    public function testTheGetAuthFunctionCallsSQLAuthenticatorWhenBogusClassNamePassed()
+    {
+        $actual = getAuth('googoodedo');
+        $this->assertInstanceOf('SQLAuthenticator', $actual);
+    }
 }
