@@ -48,7 +48,18 @@ class AuthenticatorTest extends \Codeception\Test\Unit
     /** @test */
     public function testTheGetAuthFunctionCanSetLdapAuth()
     {
+        GLOBAL $dPconfig;
+        $dPconfig = array(
+            'ldap_host'=>'',
+            'ldap_port'=>'',
+            'ldap_version'=>'',
+            'ldap_base_dn'=>'',
+            'ldap_search_user'=>'',
+            'ldap_search_pass'=>'',
+            'ldap_user_filter'=>'',
+        );
         $actual = getAuth('ldap');
+        
         $this->assertInstanceOf('LDAPAuthenticator', $actual);
     }
 
