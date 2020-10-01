@@ -11,5 +11,5 @@ extensions:
 coverage:
     enabled: true
     include:
-        - Classes/*
-        - Includes/*
+        - classes/*
+        - includes/*
