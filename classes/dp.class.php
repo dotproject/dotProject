@@ -509,7 +509,7 @@ class CDpObject {
 			return $this->_module_directory;
 		}
 		/* Now the guessing game begins */
-		$mods = new CModule;
+		$mods = $this->getCModule();
 		if (!empty($this->_permission_name)) {
 			if (($mod_name = $mods->getModuleByName($this->_permission_name))) {
 				$this->_module_directory = $mod_name;
@@ -525,6 +525,17 @@ class CDpObject {
 			return $mod_name;
 		}
 		return 'unknown';
+	}
+
+	/**
+	 * Temp fix for the purpose of unit testing classes
+	 * that originally initialized this object within the
+	 * method being tested.
+	 *
+	 * @return object
+	 */
+	private function getCModule() {
+		return new CModule;
 	}
 
  }
