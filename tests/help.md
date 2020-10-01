@@ -21,3 +21,16 @@ reset && php vendor/bin/codecept run functional
 
 - ./vendor/bin/codecept clean
 - ./vendor/bin/codecept build
+
+
+### Run code coverage
+
+First you will need to have a debugger installed.
+
+then run the following command
+
+vendor/bin/codecept run unit --coverage --coverage-xml --coverage-html
+
+if you just want an html report:
+
+vendor/bin/codecept run unit --coverage --coverage-html
