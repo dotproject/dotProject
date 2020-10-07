@@ -8,13 +8,6 @@ actor: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://localhost/dotproject
+            url: http://localhost:8000
         - \Helper\Acceptance
-        - Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=dotproject_testing'
-            user: 'webdev'
-            password: 'pass'
-            dump: 'tests/_data/dotproject.sql'
-            populate: true
-            cleanup: true
 step_decorators: ~        
