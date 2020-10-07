@@ -18,7 +18,9 @@ class SigninCest
         $I->see('login');
     }
 
-
+     /**
+     * @depends SigninCest:canSeeLoginForm
+     */
     public function canLoginIn(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
