@@ -13,7 +13,7 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
--- Database: `dotp420`
+-- Database: `dotproject_testing`
 --
 
 -- --------------------------------------------------------
