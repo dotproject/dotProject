@@ -15,11 +15,7 @@ been under the watchful eye of the current dotProject team since around December
 
 ## Support
 
-Support forums are at http://forums.dotproject.net/index.php
-
 Bug reports and other issues can be lodged on GitHub at https://github.com/dotproject/dotProject/issues
-
-IRC channel is irc://irc.freenode.net/dotproject on `#dotproject` on `irc.freenode.net`
 
 ## License
 
