@@ -3,7 +3,7 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $cBuffer;
+global $cBuffer, $PROJECTS_CONFIG;
 
 $AppUI->savePlace();
 $q = new DBQuery();
@@ -156,6 +156,9 @@ $project_types = dPgetSysVal('ProjectStatus');
 // count number of projects per project_status
 $q->addTable('projects', 'p');
 $q->addQuery('p.project_status, COUNT(p.project_id) as count');
+if ($PROJECTS_CONFIG['always_show_archived'] == 0) {
+	$q->addWhere('NOT p.project_status=7');
+}
 $obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');
 if ($owner > 0) {
 	$q->addWhere('p.project_owner = ' . $owner);

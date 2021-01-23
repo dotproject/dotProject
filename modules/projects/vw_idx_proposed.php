@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 GLOBAL $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName;
-GLOBAL $priority;
+GLOBAL $priority, $PROJECTS_CONFIG;
 
 $show_all_projects = false;
 if ($currentTabId == 500) {
@@ -115,6 +115,9 @@ $project_status_filter = $currentTabId;
 
 foreach ($projects as $row) {
 	if (! getPermission('projects', 'view', $row['project_id'])) {
+		continue;
+	}
+	if ($show_all_projects && $PROJECTS_CONFIG['always_show_archived'] == 0 && $row['project_status'] == 7) {
 		continue;
 	}
 	if ($show_all_projects || $row['project_status'] == $project_status_filter) {

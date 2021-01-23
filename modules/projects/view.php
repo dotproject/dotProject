@@ -15,7 +15,7 @@ $canEdit = getPermission($m, 'edit', $project_id);
 
 $canAuthorTask = getPermission('tasks', 'add');
 
-//Check if the proect is viewable.
+//Check if the project is viewable.
 if (!($canRead)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
