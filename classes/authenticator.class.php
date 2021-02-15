@@ -219,7 +219,7 @@ if (!defined('DP_BASE_DIR')) {
 
 		function userId($username)
 		{
-            // We ignore the username provided
+			// We ignore the username provided
 			return $this->user_id;
 		}
 	}	
