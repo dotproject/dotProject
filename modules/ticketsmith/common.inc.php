@@ -55,8 +55,8 @@ function create_selectbox ($name, $options, $selected) {
 
 /* escape special characters */
 function escape_string ($string) {
-    
-    if (!get_magic_quotes_gpc()) {
+
+    if (function_exists('get_magic_quotes_gpc') || !get_magic_quotes_gpc()) {  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
         $string = addslashes($string);
     }
     return($string);
@@ -102,7 +102,7 @@ function get_time_ago ($timestamp) {
         $interval = round($elapsed_seconds / 29030400);
         $output = "year";
     }
-    
+
     if ($interval > 1) {
         $output .= "s";
     }
@@ -140,7 +140,7 @@ function smart_wrap ($text, $width) {
  * line. Allows for optional prefix string for each line. (Was written to
  * easily format replies to e-mails, prefixing each line with "> ".
  *
- * Puts words that do not fit at the end of the line to the 
+ * Puts words that do not fit at the end of the line to the
  * beginning of the next line (keeping in mind prefixes) and not on a line
  * by themselves.
  *
@@ -150,9 +150,9 @@ function smart_wrap ($text, $width) {
  * parameter $prefix 		-- prefix used in message (nice_prefix but w/o spaces)
  * parameter $nice_prefix	-- prefix that is easier to read (i.e. "> " instead of ">").
  *
- * $nice_prefix is actually written to the message (if $quote_old), but $prefix is used for 
+ * $nice_prefix is actually written to the message (if $quote_old), but $prefix is used for
  * backward compatibility
- * 
+ *
  * Please note that though quote_old may be false, prefix and nice_prefix are still used to maintain
  * the existing structure of a message (in case the message is a reply or etc...)
  *
@@ -185,17 +185,17 @@ while (list(, $thisline) = each($t_lines)) {
 		// Subtract all prefixes from the beginning of this line.
 		while (mb_substr($thisline, 0, mb_strlen($prefix)) == $prefix) {
 			$counter++;
-			
+
 			if (mb_substr($thisline, 0, mb_strlen($nice_prefix)) == $nice_prefix) {
 				$thisline = mb_substr($thisline, mb_strlen($nice_prefix));
 			} else {
 				$thisline = mb_substr($thisline, mb_strlen($prefix));
 			}
 		}
-		
+
 		// Add the leftover to the beginning of this line.
 		$thisline = $leftover . $thisline;
-		
+
 		// Add all the prefixes back on to the beginning of the line.
 		for ($i = 0; $i < $counter; $i++) {
 			$thisline = $nice_prefix . $thisline;
@@ -235,7 +235,7 @@ while (list(, $thisline) = each($t_lines)) {
 		else $outlines .= $thisline."\n";
 		$leftover = "";
 	}
-	
+
 	// If we're processing the last line and there's leftover text, add a blank line to hold the leftover
 	if (key($t_lines) == count($t_lines) - 1 && mb_strlen($leftover) > 0) {
 		$t_lines[] = "";

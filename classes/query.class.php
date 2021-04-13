@@ -58,14 +58,14 @@ class DBQuery {
 	var $_table_prefix;
 	var $_query_id = null;
 	var $_old_style = null;
-	
+
 	public function __construct($prefix = null) {
 		$this->_table_prefix = ((isset($prefix)) ? $prefix : dPgetConfig('dbprefix', ''));
 		$this->include_count = false;
 		$this->clear();
 	}
-	
-	
+
+
 	public function clear() {
 		global $ADODB_FETCH_MODE;
 		if (isset($this->_old_style)) {
@@ -97,7 +97,7 @@ class DBQuery {
 		}
 		$this->_query_id = null;
 	}
-	
+
 	/**
 	 * Add a hash item to an array.
 	 *
@@ -110,14 +110,14 @@ class DBQuery {
 		if (!isset($this->$varname)) {
 		  $this->$varname = array();
 		}
-		
+
 		if (isset($id)) {
 			$this->{$varname}[$id] = $name;
 		} else {
 			$this->{$varname}[] = $name;
 		}
 	}
-	
+
 	/**
 	 * Adds a table to the query.  A table is normally addressed by an
 	 * alias.  If you don't supply the alias chances are your code will
@@ -132,7 +132,7 @@ class DBQuery {
 	function addTable($name, $id = null) {
 	  $this->addMap('table_list', $name, $id);
 	}
-	
+
 	/**
 	 * Add a clause to an array.  Checks to see variable exists first.
 	 * then pushes the new data onto the end of the array.
@@ -150,7 +150,7 @@ class DBQuery {
 		  array_push($this->$clause, $value);
 		}
 	}
-	
+
 	/**
 	 * Add the actual select part of the query.  E.g. '*', or 'a.*'
 	 * or 'a.field, b.field', etc.  You can call this multiple times
@@ -161,12 +161,12 @@ class DBQuery {
 	function addQuery($query) {
 		$this->addClause('query', $query);
 	}
-	
+
 	function addInsert($field, $value, $set = false, $func = false) {
 		if ($set) {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
 			$values = ((is_array($value)) ? $value : explode(',', $value));
-			
+
 			for ($i = 0, $fc=count($fields); $i < $fc; $i++) {
 				$this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
 			}
@@ -190,13 +190,13 @@ class DBQuery {
 	}
 
 	// implemented addReplace() on top of addInsert()
-	
+
 	function addReplace($field, $value, $set = false, $func = false) {
 		$this->addInsert($field, $value, $set, $func);
 		$this->type = 'replace';
 	}
-	
-	
+
+
 	function addUpdate($field, $value, $set = false) {
 		if ($set) {
 			$fields = ((is_array($field)) ? $field : explode(',', $field));
@@ -210,32 +210,32 @@ class DBQuery {
 		}
 		$this->type = 'update';
 	}
-	
+
 	function createTable($table) {
 		$this->type = 'createPermanent';
 		$this->create_table = $table;
 	}
-	
+
 	function createTemp($table) {
 		$this->type = 'create';
 		$this->create_table = $table;
 	}
-	
+
 	function dropTable($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
-	
+
 	function dropTemp($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
-	
+
 	function alterTable($table) {
 		$this->create_table = $table;
 		$this->type = 'alter';
 	}
-	
+
 	function addField($name, $type) {
 		if (! is_array($this->create_definition))
 			$this->create_definition = array();
@@ -243,7 +243,7 @@ class DBQuery {
 			'type' => '',
 			'spec' => $name . ' ' . $type);
 	}
-	
+
 	function alterField($name, $type) {
 		if (! is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -252,7 +252,7 @@ class DBQuery {
 		                                   'type' => '',
 		                                   'spec' => $name . ' ' . $name . ' ' . $type);
 	}
-	
+
 	function dropField($name) {
 		if (! is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -261,7 +261,7 @@ class DBQuery {
 		                                   'type' => '',
 		                                   'spec' => $name);
 	}
-	
+
 	function addIndex($name, $type)	{
 		if (! is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -270,7 +270,7 @@ class DBQuery {
 		                                   'type' => 'INDEX',
 		                                   'spec' => $name . ' ' . $type);
 	}
-	
+
 	function dropIndex($name) {
 		if (! is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -279,7 +279,7 @@ class DBQuery {
 		                                   'type' => 'INDEX',
 		                                   'spec' => $name);
 	}
-	
+
 	function dropPrimary() {
 		if (! is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -288,17 +288,17 @@ class DBQuery {
 		                                   'type' => 'PRIMARY KEY',
 		                                   'spec' => '');
 	}
-	
+
 	function createDefinition($def) {
 		$this->create_definition = $def;
 	}
-	
+
 	function setDelete($table) {
 		$this->type = 'delete';
 		$this->addMap('table_list', $table, null);
 	}
-	
-	/** 
+
+	/**
 	 * Add where sub-clauses.  The where clause can be built up one
 	 * part at a time and the resultant query will put in the 'and'
 	 * between each component.
@@ -312,7 +312,7 @@ class DBQuery {
 			$this->addClause('where', $query);
 		}
 	}
-	
+
 	/**
 	 * Add a join condition to the query.  This only implements
 	 * left join, however most other joins are either synonymns or
@@ -329,22 +329,22 @@ class DBQuery {
 		              'alias' => $alias,
 		              'condition' => $join,
 		              'type' => $type);
-		
+
 		$this->addClause('join', $var, false);
 	}
-	
+
 	function leftJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'left');
 	}
-	
+
 	function rightJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'right');
 	}
-	
+
 	function innerJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'inner');
 	}
-	
+
 	/**
 	 * Add an order by clause.  Again, only the fieldname is required, and
 	 * it should include an alias if a table has been added.
@@ -357,7 +357,7 @@ class DBQuery {
 			$this->addClause('order_by', $order);
 		}
 	}
-	
+
 	/**
 	 * Add a group by clause.  Only the fieldname is required.
 	 * May be called multiple times.  Use table aliases as required.
@@ -379,7 +379,7 @@ class DBQuery {
 		$this->limit = $limit;
 		$this->offset = $start;
 	}
-	
+
 	/**
 	 * Set include count feature, grabs the count of rows that
 	 * would have been returned had no limit been set.
@@ -387,7 +387,7 @@ class DBQuery {
 	function includeCount() {
 		$this->include_count = true;
 	}
-	
+
 	/**
 	 * Prepare a query for execution via db_exec.
 	 *
@@ -446,7 +446,7 @@ class DBQuery {
 		return $q;
 		dprint(__FILE__, __LINE__, 2, $q);
 	}
-	
+
 	function prepareSelect() {
 		$q = 'SELECT ';
 		if ($this->include_count) {
@@ -491,7 +491,7 @@ class DBQuery {
 		$q .= $this->make_order_clause($this->order_by);
 		return $q;
 	}
-	
+
 	function prepareUpdate() {
 		$q = 'UPDATE ';
 		if (isset($this->table_list)) {
@@ -515,7 +515,7 @@ class DBQuery {
     			return false;
 		}
 		$q .= $this->make_join($this->join);
-		
+
 		$q .= ' SET ';
 		$sets = '';
 		foreach ($this->update_list as $field => $value) {
@@ -525,7 +525,7 @@ class DBQuery {
 		$q .= $this->make_where_clause($this->where);
 		return $q;
 	}
-	
+
 	function prepareInsert() {
 		$q = 'INSERT INTO ';
 		if (isset($this->table_list)) {
@@ -540,7 +540,7 @@ class DBQuery {
 			return false;
 		}
 		$q .= '`' . $this->_table_prefix . $table . '`';
-		
+
 		$fieldlist = [];
 		$valuelist = [];
 		foreach ($this->value_list as $field => $value) {
@@ -550,7 +550,7 @@ class DBQuery {
 		$q .= '(' . implode(',',$fieldlist) . ') values (' . implode(',',$valuelist) . ')';
 		return $q;
 	}
-	
+
 	function prepareInsertMulti() {
 		$q = 'INSERT INTO ';
 		if (isset($this->table_list)) {
@@ -565,7 +565,7 @@ class DBQuery {
 			return false;
 		}
 		$q .= '`' . $this->_table_prefix . $table . '`';
-		
+
 		// There is probably a better way of doing this.
 		$fields = array_keys($this->value_list);
 		$values = array_values($this->value_list);
@@ -591,7 +591,7 @@ class DBQuery {
 		$q .= '(' . implode(',',$fieldlist) . ') values ' . implode(',',$valuelist);
 		return $q;
 	}
-	
+
 	function prepareReplace() {
 		$q = 'REPLACE INTO ';
 		if (isset($this->table_list)) {
@@ -606,10 +606,10 @@ class DBQuery {
 			return false;
 		}
 		$q .= '`' . $this->_table_prefix . $table . '`';
-		
+
 		$fieldlist = '';
 		$valuelist = '';
-		
+
 		foreach ($this->value_list as $field => $value) {
 			$fieldlist .= (($fieldlist) ? ',' : '') . '`' . trim($field) . '`';
 			$valuelist .= (($valuelist) ? ',' : '') . $value;
@@ -617,7 +617,7 @@ class DBQuery {
 		$q .= "($fieldlist) values ($valuelist)";
 		return $q;
 	}
-	
+
 	function prepareDelete() {
 		$q = 'DELETE FROM ';
 		if (isset($this->table_list)) {
@@ -643,7 +643,7 @@ class DBQuery {
 			$alters = '';
 			if (is_array($this->create_definition)) {
 				foreach ($this->create_definition as $def) {
-					$alters .= ((($alters) ? ', ' : ' ') . $def['action'] . ' ' . $def['type'] 
+					$alters .= ((($alters) ? ', ' : ' ') . $def['action'] . ' ' . $def['type']
 					            . ' ' . $def['spec']);
 				}
 			} else {
@@ -651,21 +651,21 @@ class DBQuery {
 			}
 			$q .= $alters;
 		}
-		
-		return $q; 
+
+		return $q;
 	}
-	
+
 	/**
 	 * Execute the query and return a handle.  Supplants the db_exec query
 	 */
 	function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
 		global $db;
 		global $ADODB_FETCH_MODE;
-		
+
 		if (! isset($this->_old_style)) {
 			$this->_old_style = $ADODB_FETCH_MODE;
 		}
-		
+
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
 		if ($q = $this->prepare()) {
@@ -682,17 +682,17 @@ class DBQuery {
 					$qid->Close();
 				}
 			}
-			$this->_query_id = ((isset($this->limit)) 
+			$this->_query_id = ((isset($this->limit))
 			                    ? $db->SelectLimit($q, $this->limit, $this->offset)
 			                    : $db->Execute($q));
-			
+
 			if (! $this->_query_id) {
 				$error = $db->ErrorMsg();
 				dprint(__FILE__, __LINE__, 0, "query failed($q) - error was: " . $error);
 				return $this->_query_id;
 			}
 		}
-		
+
 		return $this->_query_id;
 	}
 
@@ -702,9 +702,9 @@ class DBQuery {
 		}
 		return $this->_query_id->FetchRow();
 	}
-	
+
 	/**
-	 * loadList - replaces dbLoadList on 
+	 * loadList - replaces dbLoadList on
 	 */
 	function loadList($maxrows = null) {
 		global $db;
@@ -727,7 +727,7 @@ class DBQuery {
 		$this->clear();
 		return $list;
 	}
-	
+
 	function loadHashList($index = null) {
 		global $db;
 
@@ -811,7 +811,7 @@ class DBQuery {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Using an XML string, build or update a table.
 	 */
@@ -829,7 +829,7 @@ class DBQuery {
 			$AppUI->setMsg(array('Error in XML Schema', 'Error', $db->ErrorMsg()), UI_MSG_ERR);
 			return false;
 		}
-		
+
 		return (($schema->ExecuteSchema($sql, true)) ? true : false);
 	}
 
@@ -838,9 +838,9 @@ class DBQuery {
 	 */
 	function loadResult() {
 		global $AppUI, $db;
-		
+
 		$result = false;
-		
+
 		if (! $this->exec(ADODB_FETCH_NUM)) {
 			$AppUI->setMsg($db->ErrorMsg(), UI_MSG_ERROR);
 		} else if ($data = $this->fetchRow()) {
@@ -873,7 +873,7 @@ class DBQuery {
 		return $result;
 	}
 	//2}}}
-	
+
 	/** {{{2 function make_order_clause
 	 * Create an order by clause based upon supplied field.
 	 *
@@ -890,19 +890,19 @@ class DBQuery {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
 		} else if (mb_strlen($order_clause) > 0) {
-			$result = " ORDER BY $order_clause";	
+			$result = " ORDER BY $order_clause";
 		}
 		return $result;
 	}
 	//2}}}
-	
+
 	//{{{2 function make_group_clause
 	function make_group_clause($group_clause) {
 		$result = "";
 		if (! isset($group_clause)) {
 			return $result;
 		}
-		
+
 		if (is_array($group_clause)) {
 			$started = false;
 			$result = ' GROUP BY ' . implode(',', $group_clause);
@@ -912,7 +912,7 @@ class DBQuery {
 		return $result;
 	}
 	//2}}}
-	
+
 	//{{{2 function make_join
 	function make_join($join_clause) {
 		$result = "";
@@ -930,8 +930,8 @@ class DBQuery {
 				if ($join['alias']) {
 					$result .= ' AS ' . $join['alias'];
 				}
-				$result .= ((is_array($join['condition'])) 
-				            ? ' USING (' . implode(',', $join['condition']) . ')' 
+				$result .= ((is_array($join['condition']))
+				            ? ' USING (' . implode(',', $join['condition']) . ')'
 				            : ' ON ' . $join['condition']);
 			}
 		} else {
@@ -940,7 +940,7 @@ class DBQuery {
 		return $result;
 	}
 	//2}}}
-	
+
 	function foundRows() {
 		global $db;
 		$result = false;
@@ -952,10 +952,13 @@ class DBQuery {
 		}
 		return $result;
 	}
-	
+
 	function quote($string) {
 		global $db;
-		return $db->qstr($string, get_magic_quotes_runtime());
+    if (function_exists('get_magic_quotes_runtime')) {  // without this, PHP 8 throws fatal error (gwyneth 20210413)
+  		return $db->qstr($string, get_magic_quotes_runtime());
+    }
+    return $db->qstr($string, false);
 	}
 
 	/**
