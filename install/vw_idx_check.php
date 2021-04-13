@@ -17,7 +17,7 @@ $chmod = 0777;
 function dPgetIniSize($val) {
    $val = trim($val);
    if (mb_strlen($val <= 1)) return $val;
-   $last = $val{mb_strlen($val)-1};
+   $last = $val[mb_strlen($val)-1];
    switch($last) {
        case 'k':
        case 'K':
@@ -78,7 +78,7 @@ if ($maxfileuploadsize > 1048576) {
 <tr>
             <td class="item"><li>Session Save Path writable?</li></td>
             <td align="left">
-<?php 
+<?php
 	$sspath = ini_get('session.save_path');
 	if (! $sspath) {
 		echo "<b class='error'>$failedImg Fatal:</b> <span class='item'>session.save_path</span> <b class='error'> is not set</b>";
