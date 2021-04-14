@@ -206,7 +206,7 @@ class Date_TimeZone
      * @param string $id the id to test
      * @return boolean true if the supplied ID is valid
      */
-    function isValidID($id)
+    static function isValidID($id)  // PHP 8 requires this to be static! (gwyneth 20210414)
     {
         if(isset($GLOBALS['_DATE_TIMEZONE_DATA'][$id])) {
             return true;
