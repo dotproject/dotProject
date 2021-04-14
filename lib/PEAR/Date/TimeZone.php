@@ -187,7 +187,7 @@ class Date_TimeZone
      * @access public
      * @param string $id the time zone id to use
      */
-    function setDefault($id)
+    static function setDefault($id) // another one which requires staticness for PHP 8 (gwyneth 20210414)
     {
         if(Date_TimeZone::isValidID($id)) {
             $GLOBALS['_DATE_TIMEZONE_DEFAULT'] = $id;
