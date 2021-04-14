@@ -313,7 +313,11 @@ function dPsanitiseHTML($text) {
 }
 
 function dPgetEmailParam($arr, $name, $def = null) {
-  $val = defVal($arr[$name], $def);
+  if (isset($arr[$name])) {  // apparently, this _can_ happen (gwyneth 20210415)
+    $val = defVal($arr[$name], $def);
+  } else {
+    return null;
+  }
   preg_match('/(([\w\s]+)?<)?(\w+)@([\w\d\.]+)>?/', $val, $matched);
   $result = filter_xss($matched[3]) . '@' . filter_xss($matched[4]);
   if ($matched[2]) {
