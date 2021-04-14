@@ -502,7 +502,7 @@ function bindHashToObject($hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindA
 
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {
-			$obj->$k = (($checkSlashes && $check_magic_quotes ? stripslashes($hash[$k])
+			$obj->$k = (($checkSlashes && $check_magic_quotes) ? stripslashes($hash[$k])
 			            : $hash[$k]);
 		}
 	} else if ($prefix) {
@@ -515,7 +515,7 @@ function bindHashToObject($hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindA
 	} else {
 		foreach (get_object_vars($obj) as $k => $v) {
 			if (isset($hash[$k])) {
-				$obj->$k = (($checkSlashes && $check_magic_quotes()) ? stripslashes($hash[$k])
+				$obj->$k = (($checkSlashes && $check_magic_quotes) ? stripslashes($hash[$k])
 				            : $hash[$k]);
 			}
 		}

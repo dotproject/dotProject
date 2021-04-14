@@ -1971,7 +1971,7 @@ class adoSchema {
 							$content[] = '<NOTNULL/>';
 						}
 
-						if( $details->has_default ) {
+						if (isset($details->has_default) && isset($details->default_value)) {
 							$content[] = '<DEFAULT value="' . $details->default_value . '"/>';
 						}
 
