@@ -231,10 +231,10 @@ function dpSessionStart($start_vars = 'AppUI') {
 
 	if (is_array($start_vars)) {
 		foreach ($start_vars as $var) {
-			$_SESSION[$var] =  $GLOBALS[$var];
+			$_SESSION[$var] =  $GLOBALS[$var] ?? "";  // catches missing key! (gwyneth 20210414)
 		}
 	} else if (!(empty($start_vars))) {
-		$_SESSION[$start_vars] =  $GLOBALS[$start_vars];
+		$_SESSION[$start_vars] =  $GLOBALS[$start_vars] ?? "";  // catches missing key! (gwyneth 20210414)
 	}
 
 	session_start();
