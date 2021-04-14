@@ -311,8 +311,9 @@ class CAppUI {
 			}
 			$lang = $LANGUAGES[$loc];
 		}
-    if (!empty($lang)) {
+    if (!empty($lang)) {  // in this case, all assignments made by list() will also be empty (gwyneth 20210414)
 //    if (version_compare(phpversion(), '7.0.0', 'ge')) {
+      error_log("DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»" . PHP_EOL);
 		  list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
 //    } else {
       // The assignment order in PHP 7.0 and greater is now the reverse of what it was in 5+
@@ -986,7 +987,8 @@ class CAppUI {
 			}
 		}
 		asort($js_files);
-		while (list(,$js_file_name) = each($js_files)) {
+		// while (list(,$js_file_name) = each($js_files)) {  // each() is obsolete in PHP 8 (gwyneth 20210414)
+    foreach ($js_files as $js_file_name) {  // $key will be discarded
 			echo ('<script  src="' . $base . 'js/'
 				  . $this->___($js_file_name) . '"></script>'."\n");
 		}
