@@ -67,11 +67,12 @@ class dPacl extends gacl_api {
 		if (dPgetConfig('debug', 0) > 10) {
 			$this->_debug = true;
 		}
-		if (method_exists('parent', 'gacl_api') && is_callable('parent', 'gacl_api')) {
+		if (method_exists(get_parent_class(), 'gacl_api') && is_callable(get_parent_class(), 'gacl_api')) {
       parent::gacl_api($opts);
-    } else if (method_exists('parent', 'gacl') && is_callable('parent', 'gacl')) {
+    } else if (method_exists(get_parent_class(), 'gacl') && is_callable(get_parent_class(), 'gacl')) {
       parent::gacl($opts);
     }
+    // else do nothing, don't call anything (gwyneth 20210414)
 	}
 
 	function checkLogin($login) {
