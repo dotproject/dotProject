@@ -133,7 +133,7 @@ class Date_TimeZone
      * @param string $id the time zone id
      * @return object Date_TimeZone the new Date_TimeZone object
      */
-    function Date_TimeZone($id)
+    static function Date_TimeZone($id)  // seems that it has to be static for PHP 8 (gwyneth 20210414)
     {
         $_DATE_TIMEZONE_DATA =& $GLOBALS['_DATE_TIMEZONE_DATA'];
         if(Date_TimeZone::isValidID($id)) {

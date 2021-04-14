@@ -187,7 +187,9 @@ function dPsessionConvertTime($key) {
 }
 
 function dpSessionStart($start_vars = 'AppUI') {
-	session_name('dotproject');
+	if (session_status() == PHP_SESSION_NONE) {
+    session_name('dotproject');   // create new session if none exists (gwyneth 20210414)
+  }
 	if (ini_get('session.auto_start') > 0) {
 		session_write_close();
 	}
@@ -200,8 +202,10 @@ function dpSessionStart($start_vars = 'AppUI') {
     if (version_compare(phpversion(), '5.0.0', '>=')) {
         register_shutdown_function('session_write_close');
     }
-		session_set_save_handler('dPsessionOpen', 'dPsessionClose', 'dPsessionRead',
+    if (session_status() == PHP_SESSION_NONE) {  // cannot change handlers if session already open (gwyneth 20210414)
+		  session_set_save_handler('dPsessionOpen', 'dPsessionClose', 'dPsessionRead',
 		                         'dPsessionWrite', 'dPsessionDestroy', 'dPsessionGC');
+    }
 		$max_time = dPsessionConvertTime('max_lifetime');
 	} else {
 		$max_time = 0; // Browser session only.

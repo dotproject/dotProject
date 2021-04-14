@@ -286,7 +286,7 @@ function dPgetParam(&$arr, $name, $def=null) {
   if (isset($arr[$name])) {  // sometimes nulls are passed here (gwyneth 20210414)
 	  return defVal($arr[$name], $def);
   }
-  dprint(__FILE__, __LINE__, 0, __FUNCTION__ . ": $name is not a defined value");
+  dprint(__FILE__, __LINE__, 8, __FUNCTION__ . ": $name is not a defined value");
   return null;
 }
 
