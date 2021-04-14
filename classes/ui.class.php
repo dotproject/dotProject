@@ -313,7 +313,7 @@ class CAppUI {
 		}
     if (!empty($lang)) {  // in this case, all assignments made by list() will also be empty (gwyneth 20210414)
 //    if (version_compare(phpversion(), '7.0.0', 'ge')) {
-      error_log("DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»" . PHP_EOL);
+//      error_log("DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»" . PHP_EOL);
 		  list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
 //    } else {
       // The assignment order in PHP 7.0 and greater is now the reverse of what it was in 5+
@@ -671,14 +671,13 @@ class CAppUI {
 * @return mixed
 */
 	function getState($label, $default_value = null) {
-		if (array_key_exists($label, $this->state)) {
+		if (!empty($this->state) && is_array($this->state) && array_key_exists($label, $this->state)) {
 			return $this->state[$label];
 		} else if (isset($default_value)) {
 			$this->setState($label, $default_value);
 			return $default_value;
-		} else  {
-			return NULL;
 		}
+		return NULL;  // to make sure we return _something_, and that _something_ really is NULL (gwyneth 20210414)
 	}
 
 	function checkPrefState($label, $value, $prefname, $default_value = null) {
@@ -686,7 +685,7 @@ class CAppUI {
 		if (isset($value)) {
 			$result = $value;
 			$this->state[$label] = $value;
-		} else if (array_key_exists($label, $this->state)) {
+		} else if (!empty($this->state) && is_array($this->state) && array_key_exists($label, $this->state)) {
 			$result = $this->state[$label];
 		} else if (($pref = $this->getPref($prefname)) !== null) {
 			$this->state[$label] = $pref;
