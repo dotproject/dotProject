@@ -294,14 +294,20 @@ function dPgetParam(&$arr, $name, $def=null) {
  * Alternative to protect from XSS attacks.
  */
 function dPgetCleanParam(&$arr, $name, $def=null) {
-	if (is_array($arr[$name])) {
-	  $val = array();
-	  foreach (array_keys($arr[$name]) as $key) {
-	     $val[$key] = dPgetCleanParam($arr[$name], $key, $def);
-	  }
-	  return $val;
-	}
-	$val = defVal($arr[$name], $def);
+	if (isset($arr[$name])) {  // we cannot assume blindingly that this is true... (gwyneth 20210415)
+    if (is_array($arr[$name])) {
+  	  $val = array();
+  	  foreach (array_keys($arr[$name]) as $key) {
+  	     $val[$key] = dPgetCleanParam($arr[$name], $key, $def);
+  	  }
+  	  return $val;
+  	}
+    // $arr[$name] is not an array, so:
+	  $val = defVal($arr[$name], $def);
+  } else {
+    return null;
+  }
+  // Code review: I have no idea how the code can end up here! (gwyneth 20210415)
 	if (empty($val)) {
 		return $val;
 	}
