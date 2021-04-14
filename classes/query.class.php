@@ -532,7 +532,8 @@ class DBQuery {
 			if (is_array($this->table_list)) {
 				reset($this->table_list);
 				// Grab the first record
-				list($key, $table) = each ($this->table_list);
+				// list($key, $table) = each ($this->table_list); // DEPRECATED and REMOVED in PHP 8 (gwyneth 20210414)
+        $table = current($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
@@ -557,7 +558,8 @@ class DBQuery {
 			if (is_array($this->table_list)) {
 				reset($this->table_list);
 				// Grab the first record
-				list($key, $table) = each ($this->table_list);
+				// list($key, $table) = each ($this->table_list);  // DEPRECATED and REMOVED in PHP 8 (gwyneth 20210414)
+        $table = current($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
@@ -598,7 +600,8 @@ class DBQuery {
 			if (is_array($this->table_list)) {
 				reset($this->table_list);
 				// Grab the first record
-				list($key, $table) = each ($this->table_list);
+				// list($key, $table) = each ($this->table_list);  // DEPRECATED and REMOVED in PHP 8 (gwyneth 20210414)
+        $table = current($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
@@ -623,7 +626,8 @@ class DBQuery {
 		if (isset($this->table_list)) {
 			if (is_array($this->table_list)) {
 				// Grab the first record
-				list($key, $table) = each ($this->table_list);
+				// list($key, $table) = each ($this->table_list);  // DEPRECATED and REMOVED in PHP 8 (gwyneth 20210414)
+        $table = current($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
