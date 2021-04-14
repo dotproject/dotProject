@@ -47,8 +47,8 @@ function dPsessionRead($id) {
 	} else {
 		$max = dPsessionConvertTime('max_lifetime');
 		$idle = dPsessionConvertTime('idle_time');
-		dprint(__FILE__, __LINE__, 11, 
-		       ("Found session $id, max=$max/" . $qid->fields['session_lifespan'] 
+		dprint(__FILE__, __LINE__, 11,
+		       ("Found session $id, max=$max/" . $qid->fields['session_lifespan']
 		        . ", idle=$idle/" . $qid->fields['session_idle']));
 		// If the idle time or the max lifetime is exceeded, trash the
 		// session.
@@ -66,12 +66,12 @@ function dPsessionRead($id) {
 
 function dPsessionWrite($id, $data) {
     global $AppUI;
-    
+
 	$q = new DBQuery;
 	$q->addQuery('count(*) as row_count');
 	$q->addTable('sessions');
 	$q->addWhere("session_id = '$id'");
-	
+
 	if ($qid =& $q->exec() && (@$qid->fields['row_count'] > 0 || @$qid->fields[0] > 0)) {
 		dprint(__FILE__, __LINE__, 11, "Updating session $id");
 		$q->query = null;
@@ -94,7 +94,7 @@ function dPsessionWrite($id, $data) {
 
 function dPsessionDestroy($id, $user_access_log_id=0) {
  	global $AppUI;
-    
+
 	$q = new DBQuery;
     $q->addTable('sessions'); // Alias not required
     $q->addQuery('session_user');
@@ -104,29 +104,29 @@ function dPsessionDestroy($id, $user_access_log_id=0) {
 	dprint(__FILE__, __LINE__, 11, "Killing session $id");
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q->addWhere('user_access_log_id = ' 
+	$q->addWhere('user_access_log_id = '
 	             . (($user_access_log_id) ? $user_access_log_id
 	                : '('.$sql2.')'));
 	$q->exec();
 	$q->clear();
-	
+
 	$q->setDelete('sessions');
 	$q->addWhere("session_id = '$id'");
 	$q->exec();
 	$q->clear();
-    
+
 	return true;
 }
 
 function dPsessionGC($maxlifetime) {
 	global $AppUI;
-	
+
 	dprint(__FILE__, __LINE__, 11, 'Session Garbage collection running');
 	$now = time();
 	$max = dPsessionConvertTime('max_lifetime');
 	$idle = dPsessionConvertTime('idle_time');
 	// First pass is to kill any users that are logged in at the time of the session.
-	$where = ('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle 
+	$where = ('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle
 	          . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max);
 	$q = new DBQuery;
     $q->addTable('sessions');
@@ -139,7 +139,7 @@ function dPsessionGC($maxlifetime) {
 	$q->addWhere('user_access_log_id IN ('. $sql2 .')');
 	$q->exec();
 	$q->clear();
-	
+
 	// Now we simply delete the expired sessions.
 	$q->setDelete('sessions');
 	$q->addWhere($where);
@@ -160,11 +160,11 @@ function dPsessionGC($maxlifetime) {
 
 function dPsessionConvertTime($key) {
 	$key = 'session_' . $key;
-	
+
 	// If the value isn't set, then default to 1 day.
 	if (dPgetConfig($key) == null || dPgetConfig($key) == null)
 		return 86400;
-	
+
 	$numpart = (int) dPgetConfig($key);
 	$modifier = mb_substr(dPgetConfig($key), -1);
 	if (! is_numeric($modifier)) {
@@ -199,16 +199,21 @@ function dpSessionStart($start_vars = 'AppUI') {
 	// PHP 5.2 workaround
     if (version_compare(phpversion(), '5.0.0', '>=')) {
         register_shutdown_function('session_write_close');
-    } 
-		session_set_save_handler('dPsessionOpen', 'dPsessionClose', 'dPsessionRead', 
+    }
+		session_set_save_handler('dPsessionOpen', 'dPsessionClose', 'dPsessionRead',
 		                         'dPsessionWrite', 'dPsessionDestroy', 'dPsessionGC');
 		$max_time = dPsessionConvertTime('max_lifetime');
 	} else {
 		$max_time = 0; // Browser session only.
 	}
 	// Try and get the correct path to the base URL.
-	preg_match('_^(https?://)([^/:]+)(:[0-9]+)?(/.*)?$_i', dPgetConfig('base_url'), $url_parts);
-	$cookie_dir = $url_parts[4];
+  $dP_base_url = dPgetConfig('base_url');  // just to check that this worked (gwyneth 20210414)
+  if (empty($dP_base_url)) {
+    $dP_base_url = safe_get_env('HTTP_HOST');  // attempt to fix it
+    dprint(__FILE__, __LINE__, 0, "dPgetConfig returned empty dP_base_url, we'll improvise with <$dP_base_url>");
+  }
+	preg_match('_^(https?://)([^/:]+)(:[0-9]+)?(/.*)?$_i', $dP_base_url, $url_parts);
+	$cookie_dir = $url_parts[4] ?? '/';  // regex matching may _not_ return group 4 (gwyneth 20210414)
 	if (mb_substr($cookie_dir, 0, 1) != '/') {
 		$cookie_dir = '/' . $cookie_dir;
 	}
@@ -219,7 +224,7 @@ function dpSessionStart($start_vars = 'AppUI') {
 	$secure = ($url_parts[1] == 'https://');
 
 	session_set_cookie_params($max_time, $cookie_dir, $domain, $secure, true);
-	
+
 	if (is_array($start_vars)) {
 		foreach ($start_vars as $var) {
 			$_SESSION[$var] =  $GLOBALS[$var];
@@ -227,7 +232,7 @@ function dpSessionStart($start_vars = 'AppUI') {
 	} else if (!(empty($start_vars))) {
 		$_SESSION[$start_vars] =  $GLOBALS[$start_vars];
 	}
-	
+
 	session_start();
 }
 

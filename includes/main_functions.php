@@ -286,6 +286,7 @@ function dPgetParam(&$arr, $name, $def=null) {
   if (isset($arr[$name])) {  // sometimes nulls are passed here (gwyneth 20210414)
 	  return defVal($arr[$name], $def);
   }
+  dprint(__FILE__, __LINE__, 0, __FUNCTION__ . ": $name is not a defined value");
   return null;
 }
 
@@ -641,7 +642,7 @@ function format_backtrace($bt, $file, $line, $msg) {
 
 function dprint($file, $line, $level, $msg) {
 	$max_level = 0;
-	$max_level = (int) dPgetConfig('debug');
+	$max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20219414)
 	$display_debug = dPgetConfig('display_debug', false);
 	if ($level <= $max_level) {
 		error_log("$file($line): $msg");
