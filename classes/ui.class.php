@@ -311,10 +311,17 @@ class CAppUI {
 			}
 			$lang = $LANGUAGES[$loc];
 		}
-    if (!empty($lang)) {  // in this case, all assignments made by list() will also be empty (gwyneth 20210414)
+    if (!empty($lang)) {  // in this case, all assignments made below will also be empty (gwyneth 20210414)
 //    if (version_compare(phpversion(), '7.0.0', 'ge')) {
 //      error_log("DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»" . PHP_EOL);
-		  list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
+		  // list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
+
+      // The code below is more 'wordy', but at least it catches the empty cases so much better (gwyneth 20210415)
+      $base_locale      = $lang[0];
+      $english_string   = $lang[1];  // not used? (gwyneth 20210415)
+      $native_string    = $lang[2];  // not used? (gwyneth 20210415)
+      $default_language = $lang[3];
+      if (!empty($lang[4])) { $lcs = $lang[4]; }  // often comes out empty, which is dealt with below (gwyneth 20210415)
 //    } else {
       // The assignment order in PHP 7.0 and greater is now the reverse of what it was in 5+
       // So we do a reverse assignment (gwyneth 20210414)
@@ -325,11 +332,11 @@ class CAppUI {
 		}
 
 		if (version_compare(phpversion(), '4.3.0', 'ge')) {
-			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
+			$user_lang = array(($loc ?? '???') . '.' . $lcs, $default_language, $loc, $base_locale);
 		}
 		else {
 			$user_lang = ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? $default_language
-						  : ($loc . '.' . $lcs));
+						  : (($loc ?? '???') . '.' . $lcs));
 		}
 
 		if ($set) {
