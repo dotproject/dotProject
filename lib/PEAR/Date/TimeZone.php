@@ -133,7 +133,7 @@ class Date_TimeZone
      * @param string $id the time zone id
      * @return object Date_TimeZone the new Date_TimeZone object
      */
-    static function Date_TimeZone($id)  // seems that it has to be static for PHP 8 (gwyneth 20210414)
+    function Date_TimeZone($id)  // deprecated, using __construct() instead
     {
         $_DATE_TIMEZONE_DATA =& $GLOBALS['_DATE_TIMEZONE_DATA'];
         if(Date_TimeZone::isValidID($id)) {
@@ -157,6 +157,11 @@ class Date_TimeZone
             $this->hasdst = $_DATE_TIMEZONE_DATA[$this->id]['hasdst'];
             $this->offset = $_DATE_TIMEZONE_DATA[$this->id]['offset'];
         }
+    }
+
+    function __constructor($id)
+    {
+        self::Date_TimeZone($id);
     }
 
     // }}}

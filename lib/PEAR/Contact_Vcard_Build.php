@@ -1,21 +1,21 @@
 <?php
-/* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */ 
-// +----------------------------------------------------------------------+ 
-// | PHP version 4                                                        | 
-// +----------------------------------------------------------------------+ 
-// | Copyright (c) 1997-2002 The PHP Group                                | 
-// +----------------------------------------------------------------------+ 
+/* vim: set expandtab tabstop=4 softtabstop=4 shiftwidth=4: */
+// +----------------------------------------------------------------------+
+// | PHP version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2002 The PHP Group                                |
+// +----------------------------------------------------------------------+
 // | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        | 
-// | available at through the world-wide-web at                           | 
-// | http://www.php.net/license/2_02.txt.                                 | 
-// | If you did not receive a copy of the PHP license and are unable to   | 
-// | obtain it through the world-wide-web, please send a note to          | 
-// | license@php.net so we can mail you a copy immediately.               | 
-// +----------------------------------------------------------------------+ 
-// | Authors: Paul M. Jones <pjones@ciaweb.net>                           | 
-// +----------------------------------------------------------------------+ 
-// 
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Authors: Paul M. Jones <pjones@ciaweb.net>                           |
+// +----------------------------------------------------------------------+
+//
 // $Id$
 
 //dP dotproject | gregorerhardt 20030909:
@@ -27,26 +27,26 @@
 //dP				contact the author mentioned above
 
 /**
-* 
+*
 * This class builds a single vCard (version 3.0 or 2.1).
 *
 * General note: we use the terms "set" "add" and "get" as function
 * prefixes.
-* 
+*
 * "Set" means there is only one iteration of a component, and it has
 * only one value repetition, so you set the whole thing at once.
-* 
+*
 * "Add" means eith multiple iterations of a component are allowed, or
 * that there is only one iteration allowed but there can be multiple
 * value repetitions, so you add iterations or repetitions to the current
 * stack.
-* 
+*
 * "Get" returns the full vCard line for a single iteration.
-* 
+*
 * @author Paul M. Jones <pjones@ciaweb.net>
 * @package Contact_Vcard
 * @version $Revision$
-* 
+*
 */
 
 
@@ -72,32 +72,32 @@ define('VCARD_GEO_LON',      1);
 
 
 class Contact_Vcard_Build {
-    
-    
+
+
     /**
-    * 
+    *
     * Values for vCard components.
-    * 
+    *
     * @access public
     * @var array
-    * 
+    *
     */
-    
+
     var $value = array();
-    
-    
+
+
     /**
-    * 
+    *
     * Parameters for vCard components.
-    * 
+    *
     * @access public
     * @var array
-    * 
+    *
     */
-    
+
     var $param = array();
-    
-    
+
+
     /**
     *
     * Tracks which component (N, ADR, TEL, etc) value was last set or added.
@@ -106,10 +106,10 @@ class Contact_Vcard_Build {
     * @var string
     *
     */
-    
+
     var $autoparam = null;
-    
-    
+
+
     /**
     *
     * Constructor.
@@ -119,20 +119,24 @@ class Contact_Vcard_Build {
     * @param string $version The vCard version to build; affects which
     * parameters are allowed and which components are returned by
     * fetch().
-    * 
+    *
     * @return void
-    * 
+    *
     * @see Contact_Vcard_Build::fetch()
     *
     */
-    
-    function Contact_Vcard_Build($version = '3.0')
+
+    function Contact_Vcard_Build($version = '3.0')  // deprecated
     {
        //dP $this->PEAR();
        //dP $this->setErrorHandling(PEAR_ERROR_PRINT);
         $this->reset($version);
     }
 
+    function __construct($version = '3.0')
+    {
+        $this->reset($version);
+    }
 
     /**
     *
@@ -310,10 +314,10 @@ class Contact_Vcard_Build {
                 'WAVE', 'AIFF', 'PCM',
                 'X509', 'PGP'
             );
-            
-            
+
+
             switch ($name) {
-            
+
             case 'TYPE':
                 if (! in_array($text, $types)) {
                 //dP   $result = $this->raiseError("vCard 2.1 [$comp] [$iter]: $text is not a recognized TYPE.");
@@ -427,40 +431,40 @@ class Contact_Vcard_Build {
     * @param int $iter The vCard component iteration to get the param
     * list for.  E.g., if you have more than one ADR component, 0 refers
     * to the first ADR, 1 to the second ADR, and so on.
-    * 
+    *
     * @return string
-    * 
+    *
     */
 
     function getParam($comp, $iter = 0)
     {
         $comp = strtoupper($comp);
         $text = '';
-        
+
         if (is_array($this->param[$comp][$iter])) {
-            
+
             // loop through the array of parameters for
             // the component
-            
+
             foreach ($this->param[$comp][$iter] as $param_name => $param_val) {
-                
+
                 // if there were previous parameter names, separate with
                 // a semicolon
                 if ($text != '') {
                     $text .= ';';
                 }
-                
+
                 if ($param_val === null) {
-                    
+
                     // no parameter value was specified, which is typical
                     // for vCard version 2.1 -- the name is the value.
                     $this->escape($param_name);
                     $text .= $param_name;
-                    
+
                 } else {
                     // set the parameter name...
                     $text .= strtoupper($param_name) . '=';
-                    
+
                     // ...then escape and comma-separate the parameter
                     // values.
                     $this->escape($param_val);
@@ -468,64 +472,64 @@ class Contact_Vcard_Build {
                 }
             }
         }
-        
+
         // if there were no parameters, this will be blank.
         return $text;
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Resets the vCard values and params to be blank.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $version The vCard version to reset to ('2.1' or
     * '3.0' -- default is the same version as previously set).
     *
     * @return void
-    * 
+    *
     */
-    
+
     function reset($version = null)
     {
         $prev = $this->value['VERSION'][0][0][0];
-        
+
         $this->value = array();
         $this->param = array();
         $this->autoparam = null;
-        
+
         if ($version === null) {
             $this->setVersion($prev);
         } else {
             $this->setVersion($version);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets the left-side/prefix/before-the-colon (metadata) part of a
     * vCard line, including the component identifier, the parameter
     * list, and a colon.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $comp The component to get metadata for (ADR, TEL,
     * etc).
-    * 
+    *
     * @param int $iter The vCard component iteration to get the metadata
     * for.  E.g., if you have more than one ADR component, 0 refers to
     * the first ADR, 1 to the second ADR, and so on.
-    * 
+    *
     * @return string The line prefix metadata.
-    * 
+    *
     */
-    
+
     function getMeta($comp, $iter = 0)
     {
         $params = $this->getParam($comp, $iter);
-        
+
         if (trim($params) == '') {
             // no parameters
             $text = $comp . ':';
@@ -533,33 +537,33 @@ class Contact_Vcard_Build {
             // has parameters.  put an extra semicolon in.
             $text = $comp . ';' . $params . ':';
         }
-        
+
         return $text;
     }
-    
-    
+
+
     /**
     *
     * Generic, all-purpose method to store a string or array in
     * $this->value, in a way suitable for later output as a vCard
     * element.  This forces the value to be the passed text or array
     * value, overriding any prior values.
-    * 
+    *
     * @access public
     *
     * @param string $comp The component to set the value for ('N',
     * 'ADR', etc).
-    * 
+    *
     * @param int $iter The component-iteration to set the value for.
-    * 
+    *
     * @param int $part The part number of the component-iteration to set
     * the value for.
-    * 
+    *
     * @param mixed $text A string or array; the set of repeated values
     * for this component-iteration part.
-    * 
+    *
     * @return void
-    * 
+    *
     */
 
     function setValue($comp, $iter, $part, $text)
@@ -569,32 +573,32 @@ class Contact_Vcard_Build {
         $this->value[$comp][$iter][$part] = $text;
         $this->autoparam = $comp;
     }
-    
-    
+
+
     /**
     *
     * Generic, all-purpose method to add a repetition of a string or
     * array in $this->value, in a way suitable for later output as a
     * vCard element.  This appends the value to be the passed text or
     * array value, leaving any prior values in place.
-    * 
+    *
     * @access public
     *
     * @param string $comp The component to set the value for ('N',
     * 'ADR', etc).
-    * 
+    *
     * @param int $iter The component-iteration to set the value for.
-    * 
+    *
     * @param int $part The part number of the component-iteration to set
     * the value for.
-    * 
+    *
     * @param mixed $text A string or array; the set of repeated values
     * for this component-iteration part.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function addValue($comp, $iter, $part, $text)
     {
         $comp = strtoupper($comp);
@@ -604,82 +608,82 @@ class Contact_Vcard_Build {
         }
         $this->autoparam = $comp;
     }
-    
-    
+
+
     /**
     *
     * Generic, all-purpose method to get back the data stored in $this->value.
-    * 
+    *
     * @access public
     *
     * @param string $comp The component to set the value for ('N',
     * 'ADR', etc).
-    * 
+    *
     * @param int $iter The component-iteration to set the value for.
-    * 
+    *
     * @param int $part The part number of the component-iteration to get
     * the value for.
-    * 
+    *
     * @param mixed $rept The repetition number within the part to get;
     * if null, get all repetitions of the part within the iteration.
-    * 
+    *
     * @return string The value, escaped and delimited, of all
     * repetitions in the component-iteration part (or specific
     * repetition within the part).
-    * 
+    *
     */
-    
+
     function getValue($comp, $iter = 0, $part = 0, $rept = null)
     {
         if ($rept === null &&
             is_array($this->value[$comp][$iter][$part]) ) {
-            
+
             // get all repetitions of a part
             $list = array();
             foreach ($this->value[$comp][$iter][$part] as $key => $val) {
                 $list[] = trim($val);
             }
-            
+
             $this->escape($list);
             return implode(',', $list);
-            
+
         } else {
-            
+
             // get a specific repetition of a part
             $text = trim($this->value[$comp][$iter][$part][$rept]);
             $this->escape($text);
             return $text;
-            
+
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the full N component of the vCard.  Will replace all other
     * values.  There can only be one N component per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param mixed $family Single (string) or multiple (array)
     * family/last name.
-    * 
+    *
     * @param mixed $given Single (string) or multiple (array)
     * given/first name.
-    * 
+    *
     * @param mixed $addl Single (string) or multiple (array)
     * additional/middle name.
-    * 
+    *
     * @param mixed $prefix Single (string) or multiple (array) honorific
     * prefix such as Mr., Miss, etc.
-    * 
+    *
     * @param mixed $suffix Single (string) or multiple (array) honorific
     * suffix such as III, Jr., Ph.D., etc.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setName($family, $given, $addl, $prefix, $suffix)
     {
         $this->autoparam = 'N';
@@ -689,19 +693,19 @@ class Contact_Vcard_Build {
         $this->setValue('N', 0, VCARD_N_PREFIX, $prefix);
         $this->setValue('N', 0, VCARD_N_SUFFIX, $suffix);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the full N component (first iteration only, since there
     * can only be one N component per vCard).
-    * 
+    *
     * @access public
     *
     * @return string The first N component-interation of the vCard.
-    * 
+    *
     */
-    
+
     function getName()
     {
         return $this->getMeta('N', 0) .
@@ -711,98 +715,98 @@ class Contact_Vcard_Build {
             $this->getValue('N', 0, VCARD_N_PREFIX) . ';' .
             $this->getValue('N', 0, VCARD_N_SUFFIX);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Sets the FN component of the card.  If no text is passed as the
     * FN value, constructs an FN automatically from N components.  There
     * is only one FN iteration per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text Override the automatic generation of FN from N
     * elements with the specified text.
-    * 
+    *
     * @return mixed Void on success, or a PEAR_Error object on failure.
-    * 
+    *
     */
-    
+
     function setFormattedName($text = null)
     {
         $this->autoparam = 'FN';
-        
+
         if ($text === null) {
-            
+
             // no text was specified for the FN, so build it
             // from the current N components if an N exists
             if (is_array($this->value['N'])) {
-                
+
                 // build from N.
                 // first (given) name, first iteration, first repetition
                 $text .= $this->getValue('N', 0, VCARD_N_GIVEN, 0);
-            
+
                 // add a space after, if there was text
                 if ($text != '') {
                     $text .= ' ';
                 }
-                
+
                 // last (family) name, first iteration, first repetition
                 $text .= $this->getValue('N', 0, VCARD_N_FAMILY, 0);
-                
+
                 // add a space after, if there was text
                 if ($text != '') {
                     $text .= ' ';
                 }
-                
+
                 // last-name suffix, first iteration, first repetition
                 $text .= $this->getValue('N', 0, VCARD_N_SUFFIX, 0);
-                
-                
+
+
             } else {
-                
+
                 // no N exists, and no FN was set, so return.
              //dP   return $this->raiseError('FN not specified and N not set; cannot set FN.');
-                
+
             }
-        
+
         }
-        
+
         $this->setValue('FN', 0, 0, $text);
-        
+
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the full FN component value.  Only ever returns iteration
     * zero, because only one FN component is allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The FN value of the vCard.
-    * 
+    *
     */
-    
+
     function getFormattedName()
     {
         return $this->getMeta('FN', 0) . $this->getValue('FN', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the version of the the vCard.  Only one iteration.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The text value of the verson text ('3.0' or '2.1').
-    * 
+    *
     * @return mixed Void on success, or a PEAR_Error object on failure.
-    * 
+    *
     */
-    
+
     function setVersion($text = '3.0')
     {
         $this->autoparam = 'VERSION';
@@ -812,79 +816,79 @@ class Contact_Vcard_Build {
             $this->setValue('VERSION', 0, 0, $text);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the version of the the vCard.  Only one iteration.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The data-source of the vCard.
-    * 
+    *
     */
-    
+
     function getVersion()
     {
         return $this->getMeta('VERSION', 0) .
             $this->getValue('VERSION', 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the data-source of the the vCard.  Only one iteration.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The text value of the data-source text.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setSource($text)
     {
         $this->autoparam = 'SOURCE';
         $this->setValue('SOURCE', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the data-source of the the vCard.  Only one iteration.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The data-source of the vCard.
-    * 
+    *
     */
-    
+
     function getSource()
     {
         return $this->getMeta('SOURCE', 0) .
             $this->getValue('SOURCE', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the displayed name of the vCard data-source.  Only one iteration.
     * If no name is specified, copies the value of SOURCE.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The text value of the displayed data-source
     * name.  If null, copies the value of SOURCE.
-    * 
+    *
     * @return mixed Void on success, or a PEAR_Error object on failure.
-    * 
+    *
     */
-    
+
     function setSourceName($text = null)
     {
         $this->autoparam = 'NAME';
-        
+
         if ($text === null) {
             if (is_array($this->value['SOURCE'])) {
                 $text = $this->getValue('SOURCE', 0, 0);
@@ -892,479 +896,479 @@ class Contact_Vcard_Build {
            //dP     return $this->raiseError('NAME not specified and SOURCE not set; cannot set NAME.');
             }
         }
-        
+
         $this->setValue('NAME', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the displayed data-source name of the the vCard.  Only
     * one iteration.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The data-source name of the vCard.
-    * 
+    *
     */
-    
+
     function getSourceName()
     {
         return $this->getMeta('NAME', 0) .
             $this->getValue('NAME', 0, 0);
     }
-    
-    
-    
-    
+
+
+
+
     /**
-    * 
+    *
     * Sets the value of the PHOTO component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setPhoto($text)
     {
         $this->autoparam = 'PHOTO';
         $this->setValue('PHOTO', 0, 0, $text);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Gets back the value of the PHOTO component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getPhoto()
     {
         return $this->getMeta('PHOTO') .
             $this->getValue('PHOTO', 0, 0);
     }
-    
-    
-    
+
+
+
 
     /**
-    * 
+    *
     * Sets the value of the LOGO component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setLogo($text)
     {
         $this->autoparam = 'LOGO';
         $this->setValue('LOGO', 0, 0, $text);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Gets back the value of the LOGO component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getLogo()
     {
         return $this->getMeta('LOGO') . $this->getValue('LOGO', 0, 0);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Sets the value of the SOUND component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setSound($text)
     {
         $this->autoparam = 'SOUND';
         $this->setValue('SOUND', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the SOUND component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
     *
     */
-    
+
     function getSound()
     {
         return $this->getMeta('SOUND') .
             $this->getValue('SOUND', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the KEY component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setKey($text)
     {
         $this->autoparam = 'KEY';
         $this->setValue('KEY', 0, 0, $text);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Gets back the value of the KEY component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getKey()
     {
         return $this->getMeta('KEY') . $this->getValue('KEY', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the BDAY component.  There is only one allowed
     * per vCard. Date format is "yyyy-mm-dd[Thh:ii[:ss[Z|-06:00]]]".
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
-    
+
+
     function setBirthday($text)
     {
         $this->autoparam = 'BDAY';
         $this->setValue('BDAY', 0, 0, $text);
     }
-    
+
 
     /**
-    * 
+    *
     * Gets back the value of the BDAY component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getBirthday()
     {
         return $this->getMeta('BDAY') . $this->getValue('BDAY', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the TZ component.  There is only one allowed per
     * vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setTZ($text)
     {
         $this->autoparam = 'TZ';
         $this->setValue('TZ', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the TZ component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getTZ()
     {
         return $this->getMeta('TZ') . $this->getValue('TZ', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the MAILER component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setMailer($text)
     {
         $this->autoparam = 'MAILER';
         $this->setValue('MAILER', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the MAILER component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getMailer()
     {
         return $this->getMeta('MAILER') .
             $this->getValue('MAILER', 0, 0);
     }
-    
+
     /**
-    * 
+    *
     * Sets the value of the NOTE component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setNote($text)
     {
         $this->autoparam = 'NOTE';
         $this->setValue('NOTE', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the NOTE component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getNote()
     {
         return $this->getMeta('NOTE') . $this->getValue('NOTE', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the TITLE component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setTitle($text)
     {
         $this->autoparam = 'TITLE';
         $this->setValue('TITLE', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the TITLE component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getTitle()
     {
         return $this->getMeta('TITLE') .
             $this->getValue('TITLE', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the ROLE component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setRole($text)
     {
         $this->autoparam = 'ROLE';
         $this->setValue('ROLE', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the ROLE component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getRole()
     {
         return $this->getMeta('ROLE') . $this->getValue('ROLE', 0, 0);
     }
-    
-    
+
+
 
 
     /**
-    * 
+    *
     * Sets the value of the URL component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setURL($text)
     {
         $this->autoparam = 'URL';
         $this->setValue('URL', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the URL component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getURL()
     {
         return $this->getMeta('URL') . $this->getValue('URL', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the CLASS component.  There is only one allowed
     * per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setClass($text)
     {
         $this->autoparam = 'CLASS';
         $this->setValue('CLASS', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the CLASS component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
 
     function getClass()
@@ -1372,134 +1376,134 @@ class Contact_Vcard_Build {
         return $this->getMeta('CLASS') .
             $this->getValue('CLASS', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the SORT-STRING component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function setSortString($text)
     {
         $this->autoparam = 'SORT-STRING';
         $this->setValue('SORT-STRING', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the SORT-STRING component.  There is only
     * one allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getSortString()
     {
         return $this->getMeta('SORT-STRING') .
             $this->getValue('SORT-STRING', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the PRODID component.  There is only one allowed
     * per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setProductID($text)
     {
         $this->autoparam = 'PRODID';
         $this->setValue('PRODID', 0, 0, $text);
     }
-    
-    
+
+
     /**
     *
     * Gets back the value of the PRODID component.  There is only one
     * allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getProductID()
     {
         return $this->getMeta('PRODID') .
             $this->getValue('PRODID', 0, 0);
     }
-    
-    
-    
-    
+
+
+
+
     /**
-    * 
+    *
     * Sets the value of the REV component.  There is only one allowed
     * per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setRevision($text)
     {
         $this->autoparam = 'REV';
         $this->setValue('REV', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the REV component.  There is only one
     * allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getRevision()
     {
         return $this->getMeta('REV') . $this->getValue('REV', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the UID component.  There is only one allowed
     * per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
-    * 
+    *
     * @return void
-    * 
+    *
     */
 
     function setUniqueID($text)
@@ -1507,133 +1511,133 @@ class Contact_Vcard_Build {
         $this->autoparam = 'UID';
         $this->setValue('UID', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the UID component.  There is only one
     * allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getUniqueID()
     {
         return $this->getMeta('UID') . $this->getValue('UID', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of the AGENT component.  There is only one allowed
     * per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setAgent($text)
     {
         $this->autoparam = 'AGENT';
         $this->setValue('AGENT', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the AGENT component.  There is only one
     * allowed per vCard.
-    * 
+    *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getAgent()
     {
         return $this->getMeta('AGENT') .
             $this->getValue('AGENT', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of both parts of the GEO component.  There is only
     * one GEO component allowed per vCard.
-    * 
+    *
     * @access public
     *
     * @param string $lat The value to set for the longitude part
     * (decimal, + or -).
-    * 
+    *
     * @param string $lon The value to set for the latitude part
     * (decimal, + or -).
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function setGeo($lat, $lon)
     {
         $this->autoparam = 'GEO';
         $this->setValue('GEO', 0, VCARD_GEO_LAT, $lat);
         $this->setValue('GEO', 0, VCARD_GEO_LON, $lon);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the GEO component.  There is only one
     * allowed per vCard.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getGeo()
     {
         return $this->getMeta('GEO', 0) .
             $this->getValue('GEO', 0, VCARD_GEO_LAT, 0) . ';' .
             $this->getValue('GEO', 0, VCARD_GEO_LON, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of one entire ADR iteration.  There can be zero,
     * one, or more ADR components in a vCard.
     *
     * @access public
-    * 
+    *
     * @param mixed $pob String (one repetition) or array (multiple
     * reptitions) of the p.o. box part of the ADR component iteration.
-    * 
+    *
     * @param mixed $extend String (one repetition) or array (multiple
     * reptitions) of the "extended address" part of the ADR component
     * iteration.
-    * 
+    *
     * @param mixed $street String (one repetition) or array (multiple
     * reptitions) of the street address part of the ADR component
     * iteration.
-    * 
+    *
     * @param mixed $locality String (one repetition) or array (multiple
     * reptitions) of the locailty (e.g., city) part of the ADR component
     * iteration.
-    * 
+    *
     * @param mixed $region String (one repetition) or array (multiple
     * reptitions) of the region (e.g., state, province, or governorate)
     * part of the ADR component iteration.
-    * 
+    *
     * @param mixed $postcode String (one repetition) or array (multiple
     * reptitions) of the postal code (e.g., ZIP code) part of the ADR
     * component iteration.
@@ -1641,11 +1645,11 @@ class Contact_Vcard_Build {
     * @param mixed $country String (one repetition) or array (multiple
     * reptitions) of the country-name part of the ADR component
     * iteration.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function addAddress($pob, $extend, $street, $locality, $region,
         $postcode, $country)
     {
@@ -1659,30 +1663,30 @@ class Contact_Vcard_Build {
         $this->setValue('ADR', $iter, VCARD_ADR_POSTCODE,  $postcode);
         $this->setValue('ADR', $iter, VCARD_ADR_COUNTRY,   $country);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of one ADR component iteration.
     *
     * @access public
-    * 
+    *
     * @param int $iter The component iteration-number to get the value
     * for.
-    * 
+    *
     * @return mixed The value of this component iteration, or a
     * PEAR_Error if the iteration is not valid.
-    * 
+    *
     */
-    
+
     function getAddress($iter)
     {
         if (! is_integer($iter) || $iter < 0) {
-            
+
           //dP  return $this->raiseError('ADR iteration number not valid.');
-        
+
         } else {
-            
+
             return $this->getMeta('ADR', $iter) .
                 $this->getValue('ADR', $iter, VCARD_ADR_POB) . ';' .
                 $this->getValue('ADR', $iter, VCARD_ADR_EXTEND) . ';' .
@@ -1693,44 +1697,44 @@ class Contact_Vcard_Build {
                 $this->getValue('ADR', $iter, VCARD_ADR_COUNTRY);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of one LABEL component iteration.  There can be
     * zero, one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
     *
     */
-    
+
     function addLabel($text)
     {
         $this->autoparam = 'LABEL';
         $iter = count($this->value['LABEL']);
         $this->setValue('LABEL', $iter, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
-    * Gets back the value of one iteration of the LABEL component. 
+    *
+    * Gets back the value of one iteration of the LABEL component.
     * There can be zero, one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param int $iter The component iteration-number to get the value
     * for.
     *
     * @return mixed The value of this component, or a PEAR_Error if
     * the iteration number is not valid.
-    * 
+    *
     */
-    
+
     function getLabel($iter)
     {
         if (! is_integer($iter) || $iter < 0) {
@@ -1740,44 +1744,44 @@ class Contact_Vcard_Build {
                 $this->getValue('LABEL', $iter, 0);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the value of one TEL component iteration.  There can be zero,
     * one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function addTelephone($text)
     {
         $this->autoparam = 'TEL';
         $iter = count($this->value['TEL']);
         $this->setValue('TEL', $iter, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of one iteration of the TEL component.  There
     * can be zero, one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param int $iter The component iteration-number to get the value
     * for.
     *
     * @return mixed The value of this component, or a PEAR_Error if the
     * iteration number is not valid.
-    * 
+    *
     */
-    
+
     function getTelephone($iter)
     {
         if (! is_integer($iter) || $iter < 0) {
@@ -1787,43 +1791,43 @@ class Contact_Vcard_Build {
                 $this->getValue('TEL', $iter, 0);
         }
     }
-    
+
     /**
-    * 
+    *
     * Sets the value of one EMAIL component iteration.  There can be zero,
     * one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param string $text The value to set for this component.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function addEmail($text)
     {
         $this->autoparam = 'EMAIL';
         $iter = count($this->value['EMAIL']);
         $this->setValue('EMAIL', $iter, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of one iteration of the EMAIL component.  There can
     * be zero, one, or more component iterations in a vCard.
     *
     * @access public
-    * 
+    *
     * @param int $iter The component iteration-number to get the value
     * for.
     *
     * @return mixed The value of this component, or a PEAR_Error if the
     * iteration number is not valid.
-    * 
+    *
     */
-    
+
     function getEmail($iter)
     {
         if (! is_integer($iter) || $iter < 0) {
@@ -1833,21 +1837,21 @@ class Contact_Vcard_Build {
                 $this->getValue('EMAIL', $iter, 0);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the full value of the NICKNAME component.  There is only one
     * component iteration allowed per vCard, but there may be multiple
     * value repetitions in the iteration.
     *
     * @access public
-    * 
+    *
     * @param mixed $text String (one repetition) or array (multiple
     * reptitions) of the component iteration value.
     *
     * @return void
-    * 
+    *
     */
 
     function addNickname($text)
@@ -1855,74 +1859,74 @@ class Contact_Vcard_Build {
         $this->autoparam = 'NICKNAME';
         $this->addValue('NICKNAME', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the NICKNAME component.  There is only one
     * component allowed per vCard, but there may be multiple value
     * repetitions in the iteration.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getNickname()
     {
         return $this->getMeta('NICKNAME') .
             $this->getValue('NICKNAME', 0, 0);
     }
-    
-    
-    
+
+
+
     /**
-    * 
+    *
     * Sets the full value of the CATEGORIES component.  There is only
     * one component iteration allowed per vCard, but there may be
     * multiple value repetitions in the iteration.
     *
     * @access public
-    * 
+    *
     * @param mixed $text String (one repetition) or array (multiple
     * reptitions) of the component iteration value.
     *
     * @return void
-    * 
+    *
     */
-    
+
     function addCategories($text, $append = true)
     {
         $this->autoparam = 'CATEGORIES';
         $this->addValue('CATEGORIES', 0, 0, $text);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the CATEGORIES component.  There is only
     * one component allowed per vCard, but there may be multiple value
     * repetitions in the iteration.
     *
     * @access public
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
-    
+
     function getCategories()
     {
         return $this->getMeta('CATEGORIES', 0) .
             $this->getValue('CATEGORIES', 0, 0);
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Sets the full value of the ORG component.  There can be only one
     * ORG component in a vCard.
-    * 
+    *
     * The ORG component can have one or more parts (as opposed to
     * repetitions of values within those parts).  The first part is the
     * highest-level organization, the second part is the next-highest,
@@ -1930,113 +1934,113 @@ class Contact_Vcard_Build {
     * number of parts in one ORG iteration.  (This is different from
     * other components, such as NICKNAME, where an iteration has only
     * one part but may have many repetitions within that part.)
-    * 
+    *
     * @access public
-    * 
+    *
     * @param mixed $text String (one ORG part) or array (of ORG
     * parts) to use as the value for the component iteration.
-    * 
+    *
     * @return void
-    * 
+    *
     */
-    
+
     function addOrganization($text)
     {
         $this->autoparam = 'ORG';
-        
+
         settype($text, 'array');
-        
+
         $base = count($this->value['ORG'][0]);
-        
+
         // start at the original base point, and add
         // new parts
         foreach ($text as $part => $val) {
             $this->setValue('ORG', 0, $base + $part, $val);
         }
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Gets back the value of the ORG component.
-    * 
+    *
     * @return string The value of this component.
-    * 
+    *
     */
 
     function getOrganization()
     {
         $text = $this->getMeta('ORG', 0);
-        
+
         $k = count($this->value['ORG'][0]);
         $last = $k - 1;
-        
+
         for ($part = 0; $part < $k; $part++) {
-        
+
             $text .= $this->getValue('ORG', 0, $part);
-            
+
             if ($part != $last) {
                 $text .= ';';
             }
 
         }
-        
+
         return $text;
     }
-    
-    
+
+
     /**
-    * 
+    *
     * Builds a vCard from a Contact_Vcard_Parse result array.  Only send
     * one vCard from the parse-results.
     *
     * Usage (to build from first vCard in parsed results):
-    * 
+    *
     * $parse = new Contact_Vcard_Parse(); // new parser
     * $info = $parse->fromFile('sample.vcf'); // parse file
-    * 
+    *
     * $vcard = new Contact_Vcard_Build(); // new builder
     * $vcard->setFromArray($info[0]); // [0] is the first card
-    * 
-    * 
+    *
+    *
     * @access public
-    * 
+    *
     * @param array $src One vCard entry as parsed using
     * Contact_Vcard_Parse.
-    * 
+    *
     * @return void
-    * 
+    *
     * @see Contact_Vcard_Parse::fromFile()
-    * 
+    *
     * @see Contact_Vcard_Parse::fromText()
-    * 
+    *
     */
-    
+
     function setFromArray($src)
     {
         // reset to a blank values and params
         $this->value = array();
         $this->param = array();
-        
+
         // loop through components (N, ADR, TEL, etc)
         foreach ($src AS $comp => $comp_val) {
-            
+
             // set the autoparam property. not really needed, but let's
             // behave after an expected fashion, shall we?  ;-)
-            $this->autoparam = $comp; 
-            
+            $this->autoparam = $comp;
+
             // iteration number of each component
             foreach ($comp_val AS $iter => $iter_val) {
-                
+
                 // value or param?
                 foreach ($iter_val AS $kind => $kind_val) {
-                
+
                     // part number
                     foreach ($kind_val AS $part => $part_val) {
-                        
+
                         // repetition number and text value
                         foreach ($part_val AS $rept => $text) {
-                            
+
                             // ignore data when $kind is neither 'value'
                             // nor 'param'
                             if (strtolower($kind) == 'value') {
@@ -2044,15 +2048,15 @@ class Contact_Vcard_Build {
                             } elseif (strtolower($kind) == 'param') {
                                 $this->param[strtoupper($comp)][$iter][$part][$rept] = $text;
                             }
-                            
+
                         }
                     }
                 }
             }
         }
     }
-    
-    
+
+
     /**
     *
     * Fetches a full vCard text block based on $this->value and
@@ -2065,7 +2069,7 @@ class Contact_Vcard_Build {
     * @return string A properly formatted vCard text block.
     *
     */
-    
+
     function fetch()
     {
         // vCard version is required
@@ -2203,89 +2207,89 @@ class Contact_Vcard_Build {
         if (is_array($this->value['LOGO'])) {
             $lines[] = $this->getLogo();
         }
-        
+
         // agent
         // available in both 2.1 and 3.0
         if (is_array($this->value['AGENT'])) {
             $lines[] = $this->getAgent();
         }
-        
+
         // org
         // available in both 2.1 and 3.0
         if (is_array($this->value['ORG'])) {
             $lines[] = $this->getOrganization();
         }
-        
+
         // categories (3.0 only)
         if (is_array($this->value['CATEGORIES']) &&
             $this->value['VERSION'][0][0][0] == '3.0') {
             $lines[] = $this->getCategories();
         }
-        
+
         // note
         // available in both 2.1 and 3.0
         if (is_array($this->value['NOTE'])) {
             $lines[] = $this->getNote();
         }
-        
+
         // prodid (3.0 only)
         if (is_array($this->value['PRODID']) &&
             $this->value['VERSION'][0][0][0] == '3.0') {
             $lines[] = $this->getProductID();
         }
-        
+
         // rev
         // available in both 2.1 and 3.0
         if (is_array($this->value['REV'])) {
             $lines[] = $this->getRevision();
         }
-        
+
         // sort-string (3.0 only)
         if (is_array($this->value['SORT-STRING']) &&
             $this->value['VERSION'][0][0][0] == '3.0') {
             $lines[] = $this->getSortString();
         }
-        
+
         // name-pronounciation sound
         // available in both 2.1 and 3.0
         if (is_array($this->value['SOUND'])) {
             $lines[] = $this->getSound();
         }
-        
+
         // uid
         // available in both 2.1 and 3.0
         if (is_array($this->value['UID'])) {
             $lines[] = $this->getUniqueID();
         }
-        
+
         // url
         // available in both 2.1 and 3.0
         if (is_array($this->value['URL'])) {
             $lines[] = $this->getURL();
         }
-        
+
         // class (3.0 only)
         if (is_array($this->value['CLASS']) &&
             $this->value['VERSION'][0][0][0] == '3.0') {
             $lines[] = $this->getClass();
         }
-        
+
         // key
         // available in both 2.1 and 3.0
         if (is_array($this->value['KEY'])) {
             $lines[] = $this->getKey();
         }
-        
+
         // required
         $lines[] = "END:VCARD";
-        
+
         // version 3.0 uses \n for new lines,
         // version 2.1 uses \r\n
         $newline = "\n";
         if ($this->value['VERSION'][0][0][0] == '2.1') {
             $newline = "\r\n";
         }
-        
+
         // fold lines at 75 characters
         $regex = "(.{1,75})";
            foreach ($lines as $key => $val) {
@@ -2295,12 +2299,12 @@ class Contact_Vcard_Build {
                 $lines[$key] = trim(preg_replace("/$regex/i", "\\1$newline ", $val));
             }
         }
-        
+
         // compile the array of lines into a single text block
         // and return
         return implode($newline, $lines);
     }
-    
+
 
     /**
     *
@@ -2310,7 +2314,7 @@ class Contact_Vcard_Build {
     * @return boolean true
     *
     */
-    
+
     function _Contact_Vcard_Build()
     {
         return true;

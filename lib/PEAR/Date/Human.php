@@ -101,7 +101,7 @@ class Date_Human
      *  Since 0 is a valid month number under the Human Calendar, I have left
      *  the month as -1 for New Years Day.
      */
-    function gregorianToHuman($day=0, $month=0, $year=0)
+    static function gregorianToHuman($day=0, $month=0, $year=0)
     {
         /*
          * Check to see if any of the arguments are empty
@@ -196,7 +196,7 @@ class Date_Human
      *
      * @return int unix timestamp of date
      */
-    function humanToGregorian($day, $month, $year=0)
+    static function humanToGregorian($day, $month, $year=0)
     {
         /*
          * Check to see if the year has been passed through.

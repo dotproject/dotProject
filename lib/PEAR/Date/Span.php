@@ -150,7 +150,12 @@ class Date_Span
      * @see    set()
      * @access public
      */
-    function Date_Span($time = 0, $format = null)
+    function Date_Span($time = 0, $format = null)  // deprecated
+    {
+        $this->set($time, $format);
+    }
+
+    function __construct($time = 0, $format = null)
     {
         $this->set($time, $format);
     }
@@ -957,7 +962,7 @@ class Date_Span
      * @static
      * @access public
      */
-    function compare($time1, $time2)
+    static function compare($time1, $time2)
     {
         if ($time1->equal($time2)) {
             return 0;
@@ -993,7 +998,7 @@ class Date_Span
      *
      * @static
      */
-    function setDefaultInputFormat($format)
+    static function setDefaultInputFormat($format)
     {
         $old = $GLOBALS['_DATE_SPAN_INPUT_FORMAT'];
         $GLOBALS['_DATE_SPAN_INPUT_FORMAT'] = $format;
@@ -1010,7 +1015,7 @@ class Date_Span
      *
      * @static
      */
-    function getDefaultInputFormat()
+    static function getDefaultInputFormat()
     {
         return $GLOBALS['_DATE_SPAN_INPUT_FORMAT'];
     }
@@ -1027,7 +1032,7 @@ class Date_Span
      *
      * @static
      */
-    function setDefaultFormat($format)
+    static function setDefaultFormat($format)
     {
         $old = $GLOBALS['_DATE_SPAN_FORMAT'];
         $GLOBALS['_DATE_SPAN_FORMAT'] = $format;
@@ -1044,7 +1049,7 @@ class Date_Span
      *
      * @static
      */
-    function getDefaultFormat()
+    static function getDefaultFormat()
     {
         return $GLOBALS['_DATE_SPAN_FORMAT'];
     }

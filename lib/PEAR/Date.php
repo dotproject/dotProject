@@ -196,7 +196,7 @@ class Date
      * @param mixed $date optional - date/time to initialize
      * @return object Date the new Date object
      */
-    function Date($date = null)
+    function Date($date = null)  // deprecated
     {
         $this->tz = Date_TimeZone::getDefault();
         if (is_null($date)) {
@@ -206,6 +206,11 @@ class Date
         } else {
             $this->setDate($date);
         }
+    }
+
+    function __construct($date = null)
+    {
+        self::Date($date);
     }
 
     // }}}
