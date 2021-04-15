@@ -388,7 +388,13 @@ class CAppUI {
 
 		$LANGUAGES = $this->loadLanguages();
 
-		list($locale, $en_name, $local_name, $win_locale, $lcs) = $LANGUAGES['en_AU'];
+//		list($locale, $en_name, $local_name, $win_locale, $lcs) = $LANGUAGES['en_AU'];
+// See comments for setUserLocale (gwyneth 20210415)
+    $locale     = $LANGUAGES['en_AU'][0];
+    $en_name    = $LANGUAGES['en_AU'][1];
+    $local_name = $LANGUAGES['en_AU'][2];
+    $win_locale = $LANGUAGES['en_AU'][3];
+    if (!empty($LANGUAGES['en_AU'][4])) { $lcs = $LANGUAGES['en_AU'][4]; }  // if empty, deal with it below (gwyneth 20210415)
 		$real_locale = 'en_AU';
 		if (strtoupper(substr(PHP_OS,0,3)) == 'WIN') {
 			$real_locale = $win_locale;
