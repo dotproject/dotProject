@@ -172,10 +172,8 @@ $AppUI->setUserLocale();
 /* date class sets the default start day which comes from the locale */
 require_once($AppUI->getSystemClass('date'));
 
-
 // bring in the rest of the support and localisation files
 require_once (DP_BASE_DIR . '/includes/permissions.php');
-
 
 $def_a = 'index';
 if (!(isset($_GET['m']) || empty($dPconfig['default_view_m']))) {
@@ -188,6 +186,9 @@ if (!(isset($_GET['m']) || empty($dPconfig['default_view_m']))) {
 }
 // set the action from the url
 $a = $AppUI->checkFileName(dPgetCleanParam($_GET, 'a', $def_a));
+// Apparently, this _may_ fail, especially if the user is not correctly logged in (?), so
+//  we 'force' a reversion to the default:
+if (empty($a)) $a = $def_a;  // that way, we *will* call, at least, index.php, which is better than nothing
 
 /* This check for $u implies that a file located in a subdirectory of higher depth than 1
  * in relation to the module base can't be executed. So it would'nt be possible to
@@ -297,8 +298,10 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 }
 
 $module_file = (DP_BASE_DIR . '/modules/' . $m . '/' . (($u) ? ($u.'/') : '') . $a . '.php');
+// Note that if $a is 'empty', we have now assigned it to be 'index', so that at least *something*
+//  works in the code below (gwyneth 20210415)
 $exists = file_exists($module_file);
-error_log(__FILE__ . "(" . __LINE__ . "'): [DEBUG] Calling now module $m with path $module_file " . $exists ? "(exists)" : ("(could not find it)"));
+dprint(__FILE__, __LINE__, 2, "[DEBUG] Calling '" . $m  . "' on '" . $u . "' action: '" . $a . "' with path: '" . $module_file . "' " . ($exists ? "(exists)" : "(could not find $module_file)"));
 if ($exists) {
 	require $module_file;
 } else {
@@ -315,4 +318,4 @@ if (!$suppressHeaders) {
 	      . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>');
 	require (DP_BASE_DIR . '/style/' . $uistyle . '/footer.php');
 }
-ob_end_flush();
+

@@ -137,8 +137,12 @@ class dPacl extends gacl_api {
 		$q->addOrder('priority ASC,acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
-	        $result=$arr['allow'];
-		if (!$result) {
+    if (isset($arr['allow'])) {
+      $result=$arr['allow'];
+    } else {
+      $result = null;  // no record returned, so it will be called below (gwyneth 20210415)
+    }
+		if (empty($result)) {  // it's better to check for empty() since it catches a lot more things (gwyneth 20210415)
 			dprint(__FILE__, __LINE__, 2,
 			       "checkModuleItem($module, $op, $userid) did not return a record");
 			return $this->checkModule($module, $op, $userid);

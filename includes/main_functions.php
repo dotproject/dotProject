@@ -282,7 +282,7 @@ function defVal($var, $def) {
 /**
 * Utility function to return a value from a named array or a specified default
 */
-function dPgetParam(&$arr, $name, $def=null) {
+function dPgetParam($arr, $name, $def=null) {
   if (isset($arr[$name])) {  // sometimes nulls are passed here (gwyneth 20210414)
 	  return defVal($arr[$name], $def);
   }
@@ -293,7 +293,7 @@ function dPgetParam(&$arr, $name, $def=null) {
 /**
  * Alternative to protect from XSS attacks.
  */
-function dPgetCleanParam(&$arr, $name, $def=null) {
+function dPgetCleanParam($arr, $name, $def=null) {
 	if (isset($arr[$name])) {  // we cannot assume blindingly that this is true... (gwyneth 20210415)
     if (is_array($arr[$name])) {
   	  $val = array();
