@@ -1367,14 +1367,16 @@ class CTitleBlock_core {
 		}
 		$s .= ("\n" . '<td align="left" width="100%" nowrap="nowrap"><h1>'
 		       . $AppUI->_($this->title) . '</h1></td>');
-		foreach ($this->cells1 as $c) {
-			$s .= "\n" . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
-			$s .= $c[2] ? "\n" . $c[2] : '';
-			$s .= $c[1] ? "\n\t" . $c[1] : '&nbsp;';
-			$s .= $c[3] ? "\n" . $c[3] : '';
-			$s .= "\n" . '</td>';
-		}
-		if ($this->showhelp) {
+    if (!empty($this->cells1)) {
+  		foreach ($this->cells1 as $c) {
+  			$s .= "\n" . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' '.$c[0]): '') . '>';
+  			$s .= $c[2] ? "\n" . $c[2] : '';
+  			$s .= $c[1] ? "\n\t" . $c[1] : '&nbsp;';
+  			$s .= $c[3] ? "\n" . $c[3] : '';
+  			$s .= "\n" . '</td>';
+  		}
+    }
+		if (!empty($this->showhelp)) {
 			$s .= '<td nowrap="nowrap" width="20" align="right">';
 			/*
 			$s .= ("\n\t"
@@ -1409,13 +1411,15 @@ class CTitleBlock_core {
 			$s .= "\n\t\t" . '<strong>' . implode(' : ', $crumbs) . '</strong>';
 			$s .= "\n\t" . '</td>';
 
-			foreach ($this->cells2 as $c) {
-				$s .= $c[2] ? "\n$c[2]" : '';
-				$s .= "\n\t" . '<td align="right" nowrap="nowrap"' . ($c[0] ? " $c[0]" : '') . '>';
-				$s .= $c[1] ? "\n\t$c[1]" : '&nbsp;';
-				$s .= "\n\t" . '</td>';
-				$s .= $c[3] ? "\n\t".$c[3] : '';
-			}
+      if (!empty($this->cells2)) {
+  			foreach ($this->cells2 as $c) {
+  				$s .= $c[2] ? "\n$c[2]" : '';
+  				$s .= "\n\t" . '<td align="right" nowrap="nowrap"' . ($c[0] ? " $c[0]" : '') . '>';
+  				$s .= $c[1] ? "\n\t$c[1]" : '&nbsp;';
+  				$s .= "\n\t" . '</td>';
+  				$s .= $c[3] ? "\n\t".$c[3] : '';
+  			}
+      }
 			$s .= "\n</tr>\n</table>";
 		}
 		echo "$s";
