@@ -34,6 +34,9 @@ function validate_utf8($string) {
 function filter_xss($string) {
   // Only operate on valid UTF-8 strings. This is necessary to prevent cross
   // site scripting issues on Internet Explorer 6.
+
+  // Note: instead of using Drupal's code, which is not bad by itself,
+  //  consider using HTML Purifier (http://htmlpurifier.org/download#Standalone) (gwyneth 20210415)
   if (!validate_utf8($string)) {
     return '';
   }
@@ -303,7 +306,7 @@ function decode_entities($text, $exclude = array()) {
   // Flip the exclude list so that we can do quick lookups later.
   $exclude = array_flip($exclude);
 
-  // Use a regexp to select all entities in one pass, to avoid decoding 
+  // Use a regexp to select all entities in one pass, to avoid decoding
   // double-escaped entities twice.
   return preg_replace_callback('/&(#x?)?([A-Za-z0-9]+);/', function($m) {
     return _decode_entities($m[1], $m[2], $m[0], $html_entities, $exclude);
