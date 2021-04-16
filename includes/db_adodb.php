@@ -20,13 +20,13 @@ $GLOBALS['ADODB_OUTP'] = 'db_dprint';
 
 function db_connect($host='localhost', $dbname, $user='root', $passwd='', $persist=false) {
 	global $db, $ADODB_FETCH_MODE;
-	
-	$ret_val = (($persist) ? $db->PConnect($host, $user, $passwd, $dbname) 
+
+	$ret_val = (($persist) ? $db->PConnect($host, $user, $passwd, $dbname)
 	            : $db->Connect($host, $user, $passwd, $dbname));
 	if (!($ret_val)) {
 		die('FATAL ERROR: Connection to database server failed');
 	}
-	
+
 	$ADODB_FETCH_MODE=ADODB_FETCH_BOTH;
 }
 
@@ -56,7 +56,7 @@ function db_insert_id() {
 
 function db_exec($sql) {
 	global $db;
-	
+
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
 	}
@@ -65,7 +65,7 @@ function db_exec($sql) {
 	if ($msg = db_error()) {
 		global $AppUI;
 		dprint(__FILE__, __LINE__, 0, "Error executing: <pre>$sql</pre> ($msg)");
-		// Useless statement, but it is being executed only on error, 
+		// Useless statement, but it is being executed only on error,
 		// and it stops infinite loop.
 		$db->Execute($sql);
 		if (!(db_error())) {
@@ -149,7 +149,7 @@ function db_unix2dateTime($time) {
 function db_dateTime2unix($time) {
 	global $db;
 	return $db->UnixDate($time);
-	
+
 	// TODO - check if it's used anywhere...
 	/*
 	if ($time == '0000-00-00 00:00:00') {

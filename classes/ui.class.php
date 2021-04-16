@@ -108,7 +108,7 @@ class CAppUI {
 	var $_css = [];
 
 /**
-* CAppUI Constructor
+* CAppUI Constructor (deprecated call)
 */
 	function CAppUI() {
 		$this->state = array();
@@ -131,6 +131,10 @@ class CAppUI {
 		$this->setUserLocale($this->base_locale);
 		$this->user_prefs = array();
 	}
+  // Modern-style constructor
+  function __construct() {
+    self::CAppUI();
+  }
 /**
 * Used to load a php class file from the system classes directory
 * @param string $name The class root file name (excluding .class.php)
@@ -876,13 +880,13 @@ class CAppUI {
 *
 * @param int User id number
 */
-        function isSystemPref($val) {
+  function isSystemPref($val) {
 		return $val['pref_user'] == 0;
         }
-        function isUserPref($val) {
+  function isUserPref($val) {
 		return $val['pref_user'] != 0;
         }
-        function flattenPrefs($vals) {
+  function flattenPrefs($vals) {
 		$result = [];
 		foreach ($vals as $elem) {
 		  $result[$elem['pref_name']] = $elem['pref_value'];
@@ -1096,6 +1100,7 @@ class CTabBox_core {
 	 * @param int The active tab
 	 * @param string Optional javascript method to be used to execute tabs.
 	 *	Must support 2 arguments, currently active tab, new tab to activate.
+   * @note Deprecated style of call
 	 */
 	function CTabBox_core($baseHRef='', $baseInc='', $active=0, $javascript = null) {
 		$baseHRef = str_replace('&amp;', '&', $baseHRef);
@@ -1107,6 +1112,9 @@ class CTabBox_core {
 		$this->javascript = $javascript;
 		$this->baseInc = $baseInc;
 	}
+  function __construct($baseHRef='', $baseInc='', $active=0, $javascript = null) {
+    self::CTabBox_core($baseHRef, $baseInc, $active, $javascript);
+  }
 
 	/**
 	 * Gets the name of a tab
@@ -1303,6 +1311,8 @@ class CTitleBlock_core {
 	 * Assigns the title, icon, module and help reference.  If the user does not
 	 * have permission to view the help module, then the context help icon is
 	 * not displayed.
+   *
+   * @note Deprecated constructor style
 	 */
 	function CTitleBlock_core($title, $icon='', $module='', $helpref='') {
 		$this->title = $title;
@@ -1314,6 +1324,12 @@ class CTitleBlock_core {
 		$this->crumbs = array();
 		$this->showhelp = getPermission('help', 'view');
 	}
+  // Modern style of calling
+  function __construct($title, $icon='', $module='', $helpref='') {
+    self::CTitleBlock_core($title, $icon, $module, $helpref);
+  }
+
+
 	/**
 	 * Adds a table 'cell' beside the Title string
 	 *

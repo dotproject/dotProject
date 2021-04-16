@@ -44,7 +44,7 @@ class dPacl extends gacl_api {
 	function __construct($opts = null) {
 		global $db;
 
-		if (!(is_array($opts))) {
+		if (empty($opts) || !(is_array($opts))) {
 			$opts = array();
 		}
 		$opts['db_type'] = dPgetConfig('dbtype');
@@ -112,7 +112,7 @@ class dPacl extends gacl_api {
         $result=null;
       }
 	    //echo $result;
-	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result");
+	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result" . PHP_EOL);
 	    return $result;
 	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);
@@ -864,7 +864,7 @@ class dPacl extends gacl_api {
 	//Some function overrides.
 	function debug_text($text) {
 		$this->_debug_msg = $text;
-		dprint(__FILE__, __LINE__, 9, $text);
+		dprint(__FILE__, __LINE__, 9, $text . PHP_EOL);
 	}
 
 	function msg() {

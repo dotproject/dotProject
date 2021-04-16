@@ -67,7 +67,7 @@ function delIt(id) {
 
 function showRow($role=null) {
 	global $canEdit, $canDelete, $role_id, $AppUI, $modules;
-	$CR = "\n";
+	$CR = "\n";  // could use PHP_EOL, a more standard way of dealing with Windows/Unix CRLF/CR issues (gwyneth 20210416)
 	$id = $role['id'];
 	$name = $role['value'];
 	$description = $role['name'];
@@ -81,11 +81,11 @@ function showRow($role=null) {
 		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />' . $CR;
 
 		$s .= '&nbsp;</td>';
-		$s .= ('<td valign="top"><input type="text" name="role_name" value="' . $name 
+		$s .= ('<td valign="top"><input type="text" name="role_name" value="' . $name
 		       . '" class="text" /></td>');
-		$s .= ('<td valign="top"><input type="text" name="role_description" class="text" value="' 
+		$s .= ('<td valign="top"><input type="text" name="role_description" class="text" value="'
 		       . $description . '" /></td>');
-		$s .= ('<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') 
+		$s .= ('<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add')
 		       . '" class="button" /></td>');
 	} else {
 		$s .= '<td width="50" valign="top">';
@@ -126,5 +126,5 @@ if ($role_id == 0) {
 </form>
 <?php
  // Do all the tab stuff.
- 
+
 ?>

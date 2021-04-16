@@ -8,7 +8,7 @@ if (!(defined('DP_BASE_DIR'))) {
 
 require_once DP_BASE_DIR . '/includes/filter.php';
 
-$CR = "\n";
+$CR = "\n";  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
 ##
@@ -651,15 +651,11 @@ function format_backtrace($bt, $file, $line, $msg) {
 }
 
 function dprint($file, $line, $level, $msg) {
-	$max_level = 0;
-  $garbage = dPgetConfig('debug');
-  error_log("[DEBUG]: getting dPgetConfig('debug'): '" . print_r($garbage, true) . "'\t");
-
-	$max_level = (int) dPgetConfig('debug', 12);  // provide a reasonable default (gwyneth 20219414)
+	$max_level = /* 0; */ 12;  // temporarily forcefully-set to get it to display SOMEthing! (gwyneth 20210416)
+	// $max_level = (int) dPgetConfig('debug', 12);  // provide a reasonable default (gwyneth 20219414)
 	$display_debug = (int) dPgetConfig('display_debug', 0);  // weird
-  error_log(sprintf("[DEBUG]: dprint - level: '%d' max_level: '%d' display_debug: '%d'\n", $level, $max_level, $display_debug));
 	if ($level <= $max_level) {
-		error_log("$file($line): $msg");
+		error_log("$file($line): $msg" . (dPgetConfig('eol_debug_log', 1) ?? PHP_EOL));
 		if ($display_debug) {
 			echo "$file($line): $msg <br />";
 		}
