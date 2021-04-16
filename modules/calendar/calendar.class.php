@@ -863,16 +863,22 @@ class CEvent extends CDpObject {
 		}
 	}
 
+  /**
+   * Checks if a scheduled event clashes with another
+   *
+   * @param $userlist array of users to check for clashes
+   * @return boolean
+   */
 	function checkClash($userlist = null) {
 		global $AppUI;
 		require_once($AppUI->getModuleClass('projects'));
 
-		if (!(isset($userlist))) {
+		if (empty($userlist)) {  // default: null, so it will be empty (gwyneth 20210416)
 			return false;
 		}
 
 		$users = explode(',', $userlist);
-		if (!(count($users))) {
+		if (empty($users) || !(count($users))) {
 			return false;
 		}
 		$users = array_unique($users);
@@ -881,8 +887,9 @@ class CEvent extends CDpObject {
 		$end_date = new CDate($this->event_end_date);
 
 		$concurrent_events = array();
-		$concurrent_events = $this->getEventsForPeriod($start_date, $end_date);
-		if (!(count($concurrent_events))) {
+//		$concurrent_events = $this->getEventsForPeriod($start_date, $end_date);
+    $concurrent_events = self::getEventsForPeriod($start_date, $end_date);  // PHP 8 needs to call this statically (gwyneth 20210416)
+		if (empty($concurrent_events) || !(count($concurrent_events))) {
 			return false;
 		}
 
@@ -917,9 +924,7 @@ class CEvent extends CDpObject {
 		} else {
 			return false;
 		}
-
 	}
-
 }
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');

@@ -183,7 +183,7 @@ class Date
     // {{{ Constructor
 
     /**
-     * Constructor
+     * Constructor (old-style, deprecated way)
      *
      * Creates a new Date Object initialized to the current date/time in the
      * system-default timezone by default.  A date optionally
@@ -196,7 +196,7 @@ class Date
      * @param mixed $date optional - date/time to initialize
      * @return object Date the new Date object
      */
-    function Date($date = null)  // deprecated
+    function Date($date = null)
     {
         $this->tz = Date_TimeZone::getDefault();
         if (is_null($date)) {
@@ -208,6 +208,13 @@ class Date
         }
     }
 
+    /**
+     * New modern-style constructor
+     *
+     * @access public
+     * @param mixed $date optional - date/time to initialize
+     * @return object Date the new Date object
+     */
     function __construct($date = null)
     {
         self::Date($date);

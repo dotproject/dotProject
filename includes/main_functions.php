@@ -634,33 +634,65 @@ function formatCurrency($number, $format) {
 	return $result;
 }
 
+/**
+ * Backtracing formatter for error logging
+ *
+ * Wrapper to place a few `<PRE>`s around the backtracing code, so that it can be properly
+ * output on a webpage
+ * (documented by gwyneth 20210417)
+ *
+ * @param array $bt    Backtrace result, as dumped by `debug_backtrace()`
+ * @param string $file Usually `__FILE__` but can be empty
+ * @param int $line    Usually `__LINE__` but can be 0
+ * @param string $msg  message to print to logs
+ */
 function format_backtrace($bt, $file, $line, $msg) {
-	echo "<pre>\n";
-	echo "ERROR: $file($line): $msg\n";
-	echo "Backtrace:\n";
-	foreach ($bt as $level => $frame) {
-		echo "$level $frame[file]:$frame[line] $frame[function](";
-		$in = false;
-		foreach ($frame['args'] as $arg) {
-			echo ((($in) ? ',' :'') . var_export($arg, true));
-			$in = true;
-		}
-		echo ")\n";
-	}
-	echo "</pre>\n";
+  echo "<pre>\n";
+  echo "ERROR: " . dPrefix($file, $line) . "$msg\n";
+  if (!empty($bt) && is_array($bt)) {
+  	echo "Backtrace:\n";
+  	foreach ($bt as $level => $frame) {
+  		echo "$level $frame[file]:$frame[line] $frame[function](";
+  		$in = false;
+  		foreach ($frame['args'] as $arg) {
+  			echo ((($in) ? ',' : '') . var_export($arg, true));
+  			$in = true;
+  		}
+  		echo ")\n";
+  	}
+  } else {
+    // No valid backtracing array
+    echo "(Backtrace requested but not found)\n";
+  }
+  echo "</pre>\n";
 }
 
-function dprint($file, $line, $level, $msg) {
-	$max_level = /* 0; */ 2;  // temporarily forcefully-set to get it to display SOMEthing! (gwyneth 20210416)
+/**
+ * General-purpose logging function
+ *
+ * Takes as arguments the current file and line of where happened the issue to be logged;
+ * the log level (0 means ignore; usually levels go from 0-12; 10 or above display on-screen
+ * Caveats: side-effects come from dPgetConfig('debug') or dPgetConfig('display_debug')
+ * (documented by gwyneth 20210416)
+ *
+ * @param string $file Usually `__FILE__` but can be empty
+ * @param int $line    Usually `__LINE__` but can be empty
+ * @param int $level   Debug level (usually 0-12)
+ * @param string $msg  message to print to logs
+ */
+function dprint($file = null, $line = 0, $level = 0, $msg = "") {
+	$max_level = /* 0; */ 2;  // temporarily (forcefully) set to get it to display SOMEthing! (gwyneth 20210416)
 	// $max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20210414)
 	$display_debug = (int) dPgetConfig('display_debug', 0);
-  if (!empty($_SERVER['DOCUMENT_ROOT']) {  // this will get us shorter error logs! (gwyneth 20210416)
+  if (!empty($_SERVER['DOCUMENT_ROOT'])) {  // this will get us shorter error logs! (gwyneth 20210416)
     $file = str_replace($_SERVER['DOCUMENT_ROOT'] . "/", "", $file);
   }
+  // Figure out if we have file _and_ line to print; if not, suppress the prefix
+  $prefix = dPrefix($file, $line);
 	if ($level <= $max_level) {
-		error_log("$file($line): $msg" . (dPgetConfig('eol_debug_log', 1) ?? PHP_EOL)); // new config option, will work at some point when I figure out how (gwyneth 20210416)
+		error_log($prefix . $msg . PHP_EOL); // PHP_EOL should be a configurable option (gwyneth 20210416)
 		if ($display_debug) {
-			echo "$file($line): $msg <br />";
+			echo $prefix . $msg . " <br />";
 		}
 		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), "4.3.0") >=0) {
 			format_backtrace(debug_backtrace(), $file, $line, $msg);
@@ -669,11 +701,34 @@ function dprint($file, $line, $level, $msg) {
 }
 
 /**
+ * Create a prefix for writing out a line on the logs.
+ *
+ * Usually: `"$file($line): "` where `$file = __FILE__` and `$line = __LINE__`
+ * but this ought to deal with the case when `$file` is empty/invalid
+ *
+ * @param string $file Usually `__FILE__` but can be empty
+ * @param int $line    Usually `__LINE__`
+ * @return string      `"$file($line): "` if both `$file` and `$line` are valid
+ *
+ */
+function dPrefix($file = null, $line = 0) {
+//  return $file . (empty($line) ? "" : "(" . $line . ")") . (empty($line) && empty($file) ? "" : ": ");
+  if (!empty($file)) {
+    return ("$file($line): ");
+  } else {
+    return "Line $line: ";
+  }
+}
+
+/**
  * Function to wrap the ADODB debug print so we can direct it via our normal debug processes.
+ *
+ * @param string $msg message to print to logs
+ * @param boolean? $newline Ignored anyway; just required for valid function signature
  */
 function db_dprint($msg, $newline)
 {
-	dprint('adodb', 0, 12, $msg);
+	dprint('adodb', 0, 12, $msg);  // newline can be safely ignored as it will be added by dprint
 }
 
 /**
@@ -708,7 +763,7 @@ function findTabModules($module, $file = null) {
  * @return void
  * @param mixed $var
  * @param char $title
- * @desc Show an estructure (array/object) formatted
+ * @desc Show a formatted structure (array/object)
 */
 function showFVar(&$var, $title = "") {
 	echo '<h1>' . $title . '</h1><pre>' . print_r($var, true) . '</pre>';
@@ -742,7 +797,7 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
 }
 
 /*
- * Moved modified version from files.class.php as pagation could be useful in any module
+ * Moved modified version from files.class.php as pagination could be useful in any module
  */
 function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder = false) {
 
@@ -834,16 +889,26 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 
 /**
  * PHP doesn't come with a signum function
+ *
+ * @param integer $x value to check
+ * @return integer -1, 0, 1 - the signum of $x
+ *
+ * @note There is gmp_sign() from the maths GMP package
+ *       In PHP 7, the spaceship operator makes this much simpler
+ * @see https://www.php.net/manual/en/function.gmp-sign.php#121393
  */
 function dPsgn($x) {
-   return $x ? ($x>0 ? 1 : -1) : 0;
+  return $x ? ($x>0 ? 1 : -1) : 0;
+  // return $x <=> 0;  // a much simpler PHP 7 version (gwyneth 20210416)
 }
 
-/*
-** Create the Required Fields (From Sysvals) JavaScript Code
-** For instance implemented in projects and tasks addedit.php
-** @param array required field array from SysVals
-*/
+/**
+ * Create the Required Fields (From Sysvals) JavaScript Code
+ * For instance implemented in projects and tasks addedit.php
+ *
+ * @param array $requiredFields required field array from SysVals
+ * @return string created required fields
+ */
 function dPrequiredFields($requiredFields) {
 	global $AppUI, $m;
 	$buffer = 'var foc=false;'."\n";
@@ -874,9 +939,12 @@ function dPrequiredFields($requiredFields) {
 	return $buffer;
 }
 
-/*
+/**
  * Make function htmlspecialchar_decode for older PHP versions
-*/
+ *
+ * @param string $str string to decode
+ * @return string decoded string
+ */
 if (!function_exists('htmlspecialchars_decode')) {
 	function htmlspecialchars_decode($str) {
 		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
@@ -885,6 +953,11 @@ if (!function_exists('htmlspecialchars_decode')) {
 
 /**
  * Return the number of bytes represented by a PHP.INI value
+ *
+ * @param string $str A PHP.INI byte value which can include the suffixes  K (KiloBytes), M (MegaBytes), or G (GigaBytes)
+ * @return int Actual number of bytes
+ * @note This is an internal calculation which has never been exposed as a function by the PHP team
+ * @see https://www.php.net/manual/en/function.ini-get.php#refsect1-function.ini-get-examples Example #1
  */
 function dPgetBytes($str) {
 	$val = $str;
@@ -908,6 +981,7 @@ function dPgetBytes($str) {
 
 /**
  * Check for a memory limit, if we can't generate it then we fail.
+ *
  * @param int $min minimum amount of memory needed
  * @param bool $revert revert back to original config after test.
  * @return bool true if we have the minimum amount of RAM and if we can modify RAM

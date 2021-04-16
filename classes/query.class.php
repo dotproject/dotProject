@@ -127,7 +127,7 @@ class DBQuery {
 	 * Where {PREFIX} is the system defined table prefix.
 	 *
 	 * @param	string	$name	Name of table, without prefix.
-	 * @parem	string	$id	Alias for use in query/where/group clauses.
+	 * @param	string	$id	Alias for use in query/where/group clauses.
 	 */
 	function addTable($name, $id = null) {
 	  $this->addMap('table_list', $name, $id);

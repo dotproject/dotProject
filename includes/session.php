@@ -229,9 +229,9 @@ function dpSessionStart($start_vars = 'AppUI') {
 
 	if (session_set_cookie_params($max_time, $cookie_dir, $domain, $secure, true) !== true) {
     // this will work only on PHP 7+, I think (gwyneth 20210415)
-    dprint(__FILE__, __LINE__, 2, "[WARN] Failed to set cookie parameters on session");
+    dprint(__FILE__, __LINE__, 2, "[WARN] Failed to set cookie parameters on session!");
   } else {
-    dprint(__FILE__, __LINE__, 2, "[INFO] Cookie parameters set: Max Time: $max_time, Cookie Dir: $cookie_dir, Domain: $domain, Secure: $secure");
+    dprint(__FILE__, __LINE__, 2, "[INFO] Cookie parameters set: Max Time: $max_time, Cookie Dir: $cookie_dir, Domain: $domain, Secure: $secure .");
   }
 
 	if (is_array($start_vars)) {
