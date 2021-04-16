@@ -42,7 +42,7 @@ $baseDir = dirname(__FILE__);
 //$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1 , 1) == 0) ? '' : DIRECTORY_SEPERATOR);
 // Define to deprecate the global baseDir
 define('DP_BASE_DIR', $baseDir);
-// error_log(__FILE__ . "(" . __LINE__ . "): [DEBUG] Base dir is '" . DP_BASE_DIR . "'" . PHP_EOL);
+// dprint(__FILE__, __LINE__, 8, "[DEBUG] Base dir is '" . DP_BASE_DIR . "'");
 
 require_once ($baseDir . '/includes/dP_compat.php');
 

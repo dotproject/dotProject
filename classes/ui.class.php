@@ -317,7 +317,7 @@ class CAppUI {
 		}
     if (!empty($lang)) {  // in this case, all assignments made below will also be empty (gwyneth 20210414)
 //    if (version_compare(phpversion(), '7.0.0', 'ge')) {
-//      error_log("DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»" . PHP_EOL);
+//      dprint(__FILE__, __LINE__, "DEBUG: [" . __FUNCTION__ . "] here goes lang: «" . print_r($lang, true) . "»");
 		  // list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
 
       // The code below is more 'wordy', but at least it catches the empty cases so much better (gwyneth 20210415)

@@ -95,7 +95,7 @@ class dPacl extends gacl_api {
 
 	function checkModule($module, $op, $userid = null) {
 		if (empty($userid)) {
-			$userid = $GLOBALS['AppUI']->user_id ?? -1; // hope that -1 doesn't exist... (gwyneth 20210414)
+			$userid = $GLOBALS['AppUI']->user_id ?? 0; // zero seems to be "safer"... (gwyneth 20210416)
 		}
 
 	    $q = new DBQuery;
@@ -106,13 +106,13 @@ class dPacl extends gacl_api {
 	    $q->setLimit(1);
 	    $arr=$q->loadHash();
 
-	    if (is_array($arr) && isset($arr['allow'])) {
+	    if (!empty($arr) && is_array($arr) && isset($arr['allow'])) {  // extra check for null! (gwyneth 20210416)
         $result=$arr['allow'];
       } else {
         $result=null;
       }
 	    //echo $result;
-	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result" . PHP_EOL);
+	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result");
 	    return $result;
 	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);
@@ -864,7 +864,7 @@ class dPacl extends gacl_api {
 	//Some function overrides.
 	function debug_text($text) {
 		$this->_debug_msg = $text;
-		dprint(__FILE__, __LINE__, 9, $text . PHP_EOL);
+		dprint(__FILE__, __LINE__, 9, $text);
 	}
 
 	function msg() {

@@ -138,7 +138,7 @@ class DBQuery {
 	 * then pushes the new data onto the end of the array.
 	 */
 	function addClause($clause, $value, $check_array = true) {
-		dprint(__FILE__, __LINE__, 8, "Adding '" . print_r($value, true) . "' to '" . print_r($clause, true) . "' clause" . PHP_EOL);
+		dprint(__FILE__, __LINE__, 8, "Adding '" . print_r($value, true) . "' to '" . print_r($clause, true) . "' clause");
 		if (!isset($this->$clause)) {
 			$this->$clause = array();
 		}
