@@ -41,7 +41,7 @@ function dPsessionRead($id) {
 	$q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) as session_idle');
 	$q->addWhere("session_id = '$id'");
 	$qid =& $q->exec();
-	if (! $qid || $qid->EOF) {
+	if (empty($qid) || $qid->EOF) {  // replacing ! with empty, works better under PHP 8 (gwyneth 20210416)
 		dprint(__FILE__, __LINE__, 11, "Failed to retrieve session $id");
 		$data =  "";
 	} else {
