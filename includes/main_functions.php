@@ -651,11 +651,11 @@ function format_backtrace($bt, $file, $line, $msg) {
 }
 
 function dprint($file, $line, $level, $msg) {
-	$max_level = /* 0; */ 12;  // temporarily forcefully-set to get it to display SOMEthing! (gwyneth 20210416)
-	// $max_level = (int) dPgetConfig('debug', 12);  // provide a reasonable default (gwyneth 20219414)
-	$display_debug = (int) dPgetConfig('display_debug', 0);  // weird
+	$max_level = /* 0; */ 2;  // temporarily forcefully-set to get it to display SOMEthing! (gwyneth 20210416)
+	// $max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20219414)
+	$display_debug = (int) dPgetConfig('display_debug', 0);
 	if ($level <= $max_level) {
-		error_log("$file($line): $msg" . (dPgetConfig('eol_debug_log', 1) ?? PHP_EOL));
+		error_log("$file($line): $msg" . (dPgetConfig('eol_debug_log', 1) ?? PHP_EOL)); // new config option, will work at some point when I figure out how (gwyneth 20210416)
 		if ($display_debug) {
 			echo "$file($line): $msg <br />";
 		}
