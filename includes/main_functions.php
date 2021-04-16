@@ -652,8 +652,12 @@ function format_backtrace($bt, $file, $line, $msg) {
 
 function dprint($file, $line, $level, $msg) {
 	$max_level = 0;
-	$max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20219414)
-	$display_debug = dPgetConfig('display_debug', false);
+  $garbage = dPgetConfig('debug');
+  error_log("[DEBUG]: getting dPgetConfig('debug'): '" . print_r($garbage, true) . "'\t");
+
+	$max_level = (int) dPgetConfig('debug', 12);  // provide a reasonable default (gwyneth 20219414)
+	$display_debug = (int) dPgetConfig('display_debug', 0);  // weird
+  error_log(sprintf("[DEBUG]: dprint - level: '%d' max_level: '%d' display_debug: '%d'\n", $level, $max_level, $display_debug));
 	if ($level <= $max_level) {
 		error_log("$file($line): $msg");
 		if ($display_debug) {
