@@ -214,7 +214,7 @@ function dpSessionStart($start_vars = 'AppUI') {
   $dP_base_url = dPgetConfig('base_url');  // just to check that this worked (gwyneth 20210414)
   if (empty($dP_base_url)) {
     $dP_base_url = safe_get_env('HTTP_HOST');  // attempt to fix it
-    dprint(__FILE__, __LINE__, 0, "dPgetConfig returned empty dP_base_url, we'll improvise with <$dP_base_url>");
+    dprint(__FILE__, __LINE__, 2, "dPgetConfig returned empty dP_base_url, we'll improvise with <$dP_base_url>");
   }
 	preg_match('_^(https?://)([^/:]+)(:[0-9]+)?(/.*)?$_i', $dP_base_url, $url_parts);
 	$cookie_dir = $url_parts[4] ?? '/';  // regex matching may _not_ return group 4 (gwyneth 20210414)
@@ -227,7 +227,12 @@ function dpSessionStart($start_vars = 'AppUI') {
 	$domain = $url_parts[2];
 	$secure = ($url_parts[1] == 'https://');
 
-	session_set_cookie_params($max_time, $cookie_dir, $domain, $secure, true);
+	if (session_set_cookie_params($max_time, $cookie_dir, $domain, $secure, true) !== true) {
+    // this will work only on PHP 7+, I think (gwyneth 20210415)
+    dprint(__FILE__, __LINE__, 2, "[WARN] Failed to set cookie parameters on session");
+  } else {
+    dprint(__FILE__, __LINE__, 2, "[INFO] Cookie parameters set: Max Time: $max_time, Cookie Dir: $cookie_dir, Domain: $domain, Secure: $secure")
+  }
 
 	if (is_array($start_vars)) {
 		foreach ($start_vars as $var) {
@@ -237,6 +242,7 @@ function dpSessionStart($start_vars = 'AppUI') {
 		$_SESSION[$start_vars] =  $GLOBALS[$start_vars] ?? "";  // catches missing key! (gwyneth 20210414)
 	}
 
+  dprint(__FILE__, __LINE__, 2, "[DEBUG]: $_SESSION: " . print_r($_SESSION, true));
 	session_start();
 }
 
