@@ -102,14 +102,15 @@ $project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 
 if (!empty($allowedProjects)) {
-    if (is_array($allowedProjects)) {  // PHP 7.2+ handles count() differently; also see https://www.php.net/manual/en/function.count.php#123669 (gwyneth 20210416)
-      $where_list = implode(' AND ', $allowedProjects);  // implode fails if not an array (gwyneth 20210417)
-      } else {
-      $where_list = $allowedProjects;  // this means that count == 0 (gwyneth 20210417)
+  if (is_array($allowedProjects)) {  // PHP 7.2+ handles count() differently; also see https://www.php.net/manual/en/function.count.php#123669 (gwyneth 20210416)
+    $where_list = implode(' AND ', $allowedProjects);  // implode fails if not an array (gwyneth 20210417)
     } else {
-        $where_list = "";  // this way, $where_list will _not_ be an array! (gwyneth 20210417)
-    }
+    $where_list = $allowedProjects;  // this means that count == 0 (gwyneth 20210417)
+  }
+} else {
+  $where_list = "";  // this way, $where_list will _not_ be an array! (gwyneth 20210417)
 }
+
 $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
 
 $q = new DBQuery;
