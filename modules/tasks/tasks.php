@@ -149,7 +149,7 @@ if ($canAccessTask) {
 	$prc2 = db_exec($psql2);
 	echo db_error();
 	while ($row2 = db_fetch_assoc($prc2)) {
-		if ($projects[$row2['project_id']]) {
+		if (!empty($projects[$row2['project_id']])) {  // perhaps needs even more error checking... (gwyneth 20210417)
 			array_push($projects[$row2['project_id']], $row2);
 		}
 	}
