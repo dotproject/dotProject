@@ -147,7 +147,7 @@ class dPacl extends gacl_api {
 			       "checkModuleItem($module, $op, $userid) did not return a record");
 			return $this->checkModule($module, $op, $userid);
 		}
-		dprint(__FILE__, __LINE__, 2,
+		dprint(__FILE__, __LINE__, 8,
 		       "checkModuleItem($module, $op, $userid) returned " . $result);
 		return $result;
 	}
