@@ -143,7 +143,7 @@ class dPacl extends gacl_api {
       $result = null;  // no record returned, so it will be called below (gwyneth 20210415)
     }
 		if (empty($result)) {  // it's better to check for empty() since it catches a lot more things (gwyneth 20210415)
-			dprint(__FILE__, __LINE__, 2,
+			dprint(__FILE__, __LINE__, 8,
 			       "checkModuleItem($module, $op, $userid) did not return a record");
 			return $this->checkModule($module, $op, $userid);
 		}
