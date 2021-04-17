@@ -214,6 +214,7 @@ if (!defined('DP_BASE_DIR')) {
 		var $user_id;
 		var $username;
 
+    // deprecated constructor style
 		function LDAPAuthenticator()
 		{
 			GLOBAL $dPconfig;
@@ -228,6 +229,11 @@ if (!defined('DP_BASE_DIR')) {
 			$this->ldap_search_pass = $dPconfig["ldap_search_pass"];
 			$this->filter = $dPconfig["ldap_user_filter"];
 		}
+
+    // new constructor style
+    function __construct() {
+      self::LDAPAuthenticator();
+    }
 
 		function authenticate($username, $password)
 		{
