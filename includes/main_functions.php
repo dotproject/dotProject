@@ -681,12 +681,17 @@ function format_backtrace($bt, $file, $line, $msg) {
  * @param string $msg  message to print to logs
  */
 function dprint($file = null, $line = 0, $level = 0, $msg = "") {
+  global $baseDir;  // assuming it exists...
+
 	$max_level = /* 0; */ 2;  // temporarily (forcefully) set to get it to display SOMEthing! (gwyneth 20210416)
 	// $max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20210414)
 	$display_debug = (int) dPgetConfig('display_debug', 0);
-  if (!empty($_SERVER['DOCUMENT_ROOT'])) {  // this will get us shorter error logs! (gwyneth 20210416)
-    $file = str_replace($_SERVER['DOCUMENT_ROOT'] . "/", "", $file);
-  }
+  // this will get us shorter error logs! (gwyneth 20210416)
+  if (!empty($baseDir)) {
+    $file = str_replace($baseDir, "", $file);
+  } else if (!empty($_SERVER['DOCUMENT_ROOT'])) {
+    $file = str_replace($_SERVER['DOCUMENT_ROOT'], "", $file);
+  } // we have no clue where we are, so let the $file remain with its full path...
   // Figure out if we have file _and_ line to print; if not, suppress the prefix
   $prefix = dPrefix($file, $line);
 	if ($level <= $max_level) {
