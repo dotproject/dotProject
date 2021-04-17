@@ -150,8 +150,8 @@ if (empty($df)) {
 }
 
 //create Date objects from the datetime fields
-$start_date = (!empty($obj->project_start_date) && intval($obj->project_start_date)) ? new CDate($obj->project_start_date) : null);
-$end_date = (!empty($obj->project_end_date) && intval($obj->project_end_date)) ? new CDate($obj->project_end_date) : null);
+$start_date = ((!empty($obj->project_start_date) && intval($obj->project_start_date)) ? new CDate($obj->project_start_date) : null);
+$end_date = ((!empty($obj->project_end_date) && intval($obj->project_end_date)) ? new CDate($obj->project_end_date) : null);
 $actual_end_date = ((!empty($criticalTasks) && is_array($criticalTasks) && intval($criticalTasks[0]['task_end_date']))
                     ? new CDate($criticalTasks[0]['task_end_date']) : null);
 $style = ((!empty($end_date) && ($actual_end_date > $end_date))  // PHP lazily evaluates binary operators from left to right (gwyneth 20210417)
