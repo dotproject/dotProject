@@ -410,7 +410,7 @@ class dPacl extends gacl_api {
 		$q->addWhere("allow=0 AND user_id=$uid AND section='$module' AND enabled=1");
 		$items = $q->loadColumn();
 
-		dprint(__FILE__,__LINE__, 2,
+		dprint(__FILE__,__LINE__, 8,
 		       "getDeniedItems($module, $uid) returning " . count($items) . ' items');
 		return $items;
 	}
