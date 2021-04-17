@@ -18,7 +18,7 @@ require_once(DP_BASE_DIR.'/lib/adodb/adodb.inc.php');
 $db = NewADOConnection(dPgetConfig('dbtype'));
 $GLOBALS['ADODB_OUTP'] = 'db_dprint';
 
-function db_connect($host='localhost', $dbname, $user='root', $passwd='', $persist=false) {
+function db_connect($host='localhost', $dbname='', $user='root', $passwd='', $persist=false) {
 	global $db, $ADODB_FETCH_MODE;
 
 	$ret_val = (($persist) ? $db->PConnect($host, $user, $passwd, $dbname)
@@ -34,6 +34,7 @@ function db_error() {
 	global $db;
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+    return null;
 	}
 	return $db->ErrorMsg();
 }
@@ -42,6 +43,7 @@ function db_errno() {
 	global $db;
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+    return null;
 	}
 	return $db->ErrorNo();
 }
@@ -50,6 +52,7 @@ function db_insert_id() {
 	global $db;
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+    return null;
 	}
 	return $db->Insert_ID();
 }
@@ -59,6 +62,7 @@ function db_exec($sql) {
 
 	if (!(is_object($db))) {
 		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+    return null;
 	}
 	$qid = $db->Execute($sql);
 	dprint(__FILE__, __LINE__, 10, $sql);
@@ -73,7 +77,8 @@ function db_exec($sql) {
 		}
 	}
 	if (!($qid) && preg_match('/^\<select\>/i', $sql)) {
-		dprint(__FILE__, __LINE__, 0, $sql);
+		dprint(__FILE__, __LINE__, 8, $sql);
+    return null;  // execution failed, so we won't return the created object... (gwyneth 20210417)
 	}
 	return $qid;
 }
@@ -84,6 +89,7 @@ function db_free_result($cur) {
 	// Maybe it's done my Adodb
 	if (!(is_object($cur))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_free_result.');
+    return null;
 	}
 	$cur->Close();
 }
@@ -91,6 +97,7 @@ function db_free_result($cur) {
 function db_num_rows($qid) {
 	if (!(is_object($qid))) {
 	  dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_num_rows.');
+    return null;
 	}
 	return $qid->RecordCount();
 	//return $db->Affected_Rows();
@@ -99,6 +106,7 @@ function db_num_rows($qid) {
 function db_fetch_row(&$qid) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_row.');
+    return null;
 	}
 	return $qid->FetchRow();
 }
@@ -106,6 +114,7 @@ function db_fetch_row(&$qid) {
 function db_fetch_assoc(&$qid) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_assoc.');
+    return null;
 	}
 	return $qid->FetchRow();
 }
@@ -113,6 +122,7 @@ function db_fetch_assoc(&$qid) {
 function db_fetch_array(&$qid ) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_array.');
+    return null;
 	}
 	$result = $qid->FetchRow();
 	// Ensure there are numerics in the result.
@@ -128,6 +138,7 @@ function db_fetch_array(&$qid ) {
 function db_fetch_object($qid ) {
 	if (!(is_object($qid))) {
 		dprint(__FILE__, __LINE__, 0, 'Invalid object passed to db_fetch_object.');
+    return null;
 	}
 	return $qid->FetchNextObject(false);
 }
