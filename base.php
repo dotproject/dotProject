@@ -38,7 +38,7 @@ global $baseDir;
 global $baseUrl;
 
 $baseDir = dirname(__FILE__);
-//Make sure directoy seperator is at the end so that paths are well formed
+//Make sure directoy separator is at the end so that paths are well-formed
 //$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1 , 1) == 0) ? '' : DIRECTORY_SEPERATOR);
 // Define to deprecate the global baseDir
 define('DP_BASE_DIR', $baseDir);
