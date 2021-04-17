@@ -848,21 +848,29 @@ class CAppUI {
 	}
 /**
 * Gets the value of the specified user preference
+*
 * @param string Name of the preference
+* @return mixed Value of the preference, or NULL if it doesn't exist
 */
 	function getPref($name) {
-		return @$this->user_prefs[$name];
+    if (isset($this->user_prefs[$name])) {  // check first if it exists ar all
+		  return @$this->user_prefs[$name];
+    }
+    return null;
 	}
 
 /**
  * Gets the value of the specified system preference
+ *
  * @param string Name of the preference
+ * @return mixed Value of the preference, or NULL if it doesn't exist
  */
 	function getSystemPref($name) {
-		return $this->system_prefs[$name] ? $this->system_prefs[$name] : NULL;
+		return ((!empty($this->system_prefs[$name])) ? $this->system_prefs[$name] : NULL);
 	}
 /**
 * Sets the value of a user preference specified by name
+*
 * @param string Name of the preference
 * @param mixed The value of the preference
 */
@@ -881,18 +889,21 @@ class CAppUI {
 * @param int User id number
 */
   function isSystemPref($val) {
-		return $val['pref_user'] == 0;
+		return !empty($val) && $val['pref_user'] == 0;
         }
   function isUserPref($val) {
-		return $val['pref_user'] != 0;
+		return !empty($val) && $val['pref_user'] != 0;
         }
   function flattenPrefs($vals) {
 		$result = [];
+    if (empty($vals)) {  // better safe than sorry
+      return null;
+    }
 		foreach ($vals as $elem) {
 		  $result[$elem['pref_name']] = $elem['pref_value'];
 		}
 		return $result;
-        }
+  }
 	function loadPrefs($uid=0) {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
