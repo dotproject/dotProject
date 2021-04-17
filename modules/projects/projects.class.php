@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
  *	@version $Revision$
 */
 
-require_once ($AppUI->getSystemClass ('dp'));
+require_once ($AppUI->getSystemClass('dp'));
 require_once ($AppUI->getSystemClass('date'));
 require_once ($AppUI->getModuleClass('tasks'));
 require_once ($AppUI->getModuleClass('companies'));
