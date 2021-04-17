@@ -242,7 +242,7 @@ function dpSessionStart($start_vars = 'AppUI') {
 		$_SESSION[$start_vars] =  $GLOBALS[$start_vars] ?? "";  // catches missing key! (gwyneth 20210414)
 	}
 
-  dprint(__FILE__, __LINE__, 2, "[DEBUG]: SESSION: " . print_r($_SESSION, true));
+  dprint(__FILE__, __LINE__, 8, "[DEBUG]: SESSION: " . print_r($_SESSION, true));
 	session_start();
 }
 
