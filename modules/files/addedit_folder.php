@@ -8,7 +8,7 @@ $folder = intval(dPgetParam($_GET, 'folder', 0));
 
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'] . $referrerArray['fragment'];
+$referrer = $referrerArray['query'] . (isset($referrerArray['fragment']) ?? "");
 
 $obj = new CFileFolder();
 // load the record data
