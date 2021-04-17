@@ -301,7 +301,7 @@ $module_file = (DP_BASE_DIR . '/modules/' . $m . '/' . (($u) ? ($u.'/') : '') . 
 // Note that if $a is 'empty', we have now assigned it to be 'index', so that at least *something*
 //  works in the code below (gwyneth 20210415)
 $exists = file_exists($module_file);
-dprint(__FILE__, __LINE__, 2, "[DEBUG] Calling '" . $m  . "' on '" . $u . "' action: '" . $a . "' with path: '" . $module_file . "' " . ($exists ? "(exists)" : "(could not find $module_file)"));
+dprint(__FILE__, __LINE__, 8, "[DEBUG] Calling '" . $m  . "' on '" . $u . "' action: '" . $a . "' with path: '" . $module_file . "' " . ($exists ? "(exists)" : "(could not find $module_file)"));
 if ($exists) {
 	require $module_file;
 } else {
