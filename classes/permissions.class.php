@@ -112,7 +112,7 @@ class dPacl extends gacl_api {
         $result=null;
       }
 	    //echo $result;
-	    dprint(__FILE__, __LINE__, 2, "checkModule( $module, $op, $userid) returned $result");
+	    dprint(__FILE__, __LINE__, 8, "checkModule( $module, $op, $userid) returned $result");
 	    return $result;
 	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);
