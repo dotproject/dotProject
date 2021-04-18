@@ -231,7 +231,11 @@ class CFile extends CDpObject {
 		return $res;
 	}
 
-	// parse file for indexing
+	/**
+   * parse file for indexing
+   *
+   * @return int number of words indexed
+   **/
 	function indexStrings() {
 		GLOBAL $AppUI, $dPconfig;
 		// get the parser application
@@ -296,7 +300,7 @@ class CFile extends CDpObject {
 		}
 
 		db_exec('UNLOCK TABLES;');	//TODO: use DBQuery?  What about other sql engines?
-		return nwords;
+		return $nwords;  // I'm pretty sure this is supposed to be `$nwords`! (gwyneth 20210419)
 	}
 
 	//function notifies about file changing
