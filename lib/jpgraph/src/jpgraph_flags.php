@@ -301,7 +301,7 @@ class FlagImages {
         }
         else {
             JpGraphError::RaiseL(5002,$aIdx);
-            //("Flag index \"�$aIdx\" does not exist.");
+            //("Flag index \"$aIdx\" does not exist.");
         }
     }
 
@@ -312,13 +312,14 @@ class FlagImages {
             reset($this->iCountryNameMap);
             $this->iOrdIdx=array();
             $i=0;
-            while( list($key,$val) = each($this->iCountryNameMap) ) {
+//            while( list($key,$val) = each($this->iCountryNameMap) ) {  // deprecated in PHP 8
+              foreach($this->iCountryNameMap as $key => $val) {
                 $this->iOrdIdx[$i++] = array($val,$key);
             }
             $tmp=$this->iOrdIdx[$aOrd];
             $outFullName = $tmp[1];
             return $tmp[0];
-             
+
         }
         elseif( $aOrd >= 0 && $aOrd < $n ) {
             $tmp=$this->iOrdIdx[$aOrd];

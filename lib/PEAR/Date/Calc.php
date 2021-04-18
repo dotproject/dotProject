@@ -687,7 +687,8 @@ class Date_Calc
     {
         $month = strtolower($month);
         $months = Date_Calc::getMonthNames();
-        while(list($id, $name) = each($months)) {
+//        while(list($id, $name) = each($months)) {  // deprecated in PHP 8
+          foreach($months as $id => $name) {
             if (ereg($month, strtolower($name))) {
                 return $id;
             }

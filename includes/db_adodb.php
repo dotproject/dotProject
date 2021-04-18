@@ -24,6 +24,7 @@ function db_connect($host='localhost', $dbname='', $user='root', $passwd='', $pe
 	$ret_val = (($persist) ? $db->PConnect($host, $user, $passwd, $dbname)
 	            : $db->Connect($host, $user, $passwd, $dbname));
 	if (!($ret_val)) {
+    dprint(__FILE__, __LINE__, 0, 'FATAL ERROR: Connection to database server failed!');
 		die('FATAL ERROR: Connection to database server failed');
 	}
 
@@ -33,7 +34,7 @@ function db_connect($host='localhost', $dbname='', $user='root', $passwd='', $pe
 function db_error() {
 	global $db;
 	if (!(is_object($db))) {
-		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+		dprint(__FILE__, __LINE__, 0, 'Database object does not exist.');
     return null;
 	}
 	return $db->ErrorMsg();
@@ -42,7 +43,7 @@ function db_error() {
 function db_errno() {
 	global $db;
 	if (!(is_object($db))) {
-		dprint(__FILE__,__LINE__, 0, 'Database object does not exist.');
+		dprint(__FILE__, __LINE__, 0, 'Database object does not exist.');
     return null;
 	}
 	return $db->ErrorNo();

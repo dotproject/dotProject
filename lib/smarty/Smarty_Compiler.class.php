@@ -522,7 +522,8 @@ class Smarty_Compiler extends Smarty {
 
             case 'php':
                 /* handle folded tags replaced by {php} */
-                list(, $block) = each($this->_folded_blocks);
+                // list(, $block) = each($this->_folded_blocks);  // deprecated in PHP 7.2+
+                $block = current($this->_folded_blocks);
                 $this->_current_line_no += substr_count($block[0], "\n");
                 /* the number of matched elements in the regexp in _compile_file()
                    determins the type of folded tag that was found */
@@ -551,7 +552,7 @@ class Smarty_Compiler extends Smarty {
                 } else if ($this->_compile_block_tag($tag_command, $tag_args, $tag_modifier, $output)) {
                     return $output;
                 } else if ($this->_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output)) {
-                    return $output;                    
+                    return $output;
                 } else {
                     $this->_syntax_error("unrecognized tag '$tag_command'", E_USER_ERROR, __FILE__, __LINE__);
                 }

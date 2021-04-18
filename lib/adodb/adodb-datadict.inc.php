@@ -516,11 +516,12 @@ class ADODB_DataDict {
 	function RenameColumnSQL($tabname,$oldcolumn,$newcolumn,$flds='')
 	{
 		$tabname = $this->TableName ($tabname);
-		if ($flds) {
+		if (!empty($flds)) {
 			list($lines,$pkey,$idxs) = $this->_GenFields($flds);
 			// genfields can return FALSE at times
 			if ($lines == null) $lines = array();
-			list(,$first) = each($lines);
+			//list(,$first) = each($lines);  // deprecated; we need to change all of this (gwyneth 20210417)
+      $first = current($lines);
 			list(,$column_def) = preg_split("/[\t ]+/",$first,2);
 		}
 		return array(sprintf($this->renameColumn,$tabname,$this->NameQuote($oldcolumn),$this->NameQuote($newcolumn),$column_def));
