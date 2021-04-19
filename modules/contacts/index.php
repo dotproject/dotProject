@@ -178,16 +178,21 @@ for ($z = 0; $z < $carrWidth; $z++) {
 ?>
 	<td valign="top" align="left" bgcolor="#f4efe3" width="<?php echo $tdw;?>%">
 	<?php
-	for ($x = 0; $x < @count($carr[$z]); $x++) {
+  if (!empty($carr[$z]) && is_countable($carr[$z])) {
+    $countCarr = count($carr[$z]);
+  } else {
+    $countCarr = 0;
+  }
+	for ($x = 0; $x < $countCarr; $x++) {
 	?>
 		<table width="100%" cellspacing="1" cellpadding="1" summary="contact info">
 		<tr>
 			<td width="100%">
-				<?php $contactid = $carr[$z][$x]['contact_id']; ?>
+				<?php $contactid = $carr[$z][$x]['contact_id'] ?? 0; ?>
 				<a href="?m=contacts&amp;a=view&amp;contact_id=<?php
 		echo $contactid;
 ?>"><strong><?php
-		echo $AppUI->___(($carr[$z][$x]['contact_order_by'])
+		echo $AppUI->___((!empty($carr[$z][$x]['contact_order_by']))
 		      ? $carr[$z][$x]['contact_order_by']
 		      : ($carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']));
 ?></strong></a>&nbsp;
