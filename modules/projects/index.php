@@ -201,7 +201,7 @@ $tabBox = new CTabBox('?m=projects', DP_BASE_DIR . '/modules/projects/', $tab);
 $tabBox->add('vw_idx_proposed', $AppUI->_('All') . ' (' . $all_projects . ')' , true,  500);
 foreach ($project_types as $psk => $project_status) {
 		$tabBox->add($project_status_file[$psk],
-					 ((!empty($project_status_tabs[$psk]) ? $project_status_tabs[$psk] : $AppUI->_($project_status)), true, $psk);
+					 (!empty($project_status_tabs[$psk]) ? $project_status_tabs[$psk] : $AppUI->_($project_status)), true, $psk);
 }
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');
