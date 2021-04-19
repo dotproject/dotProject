@@ -181,7 +181,7 @@ function displayFolders($folder_id=0, $level=0) {
 
 		if ($file_count > 0) {
 			echo ('<div class="files-list" id="files_' . $folder_id . '" style="display:'
-			      . (($level || $open_folder) ? 'none' : 'block') . ';">');
+			      . ((empty($level) || empty($open_folder)) ? 'none' : 'block') . ';">');
 			displayFiles($folder_id);
 			echo '</div>';
 		} else if (!empty($folder) && !($folder_id && $level)) {
@@ -604,7 +604,7 @@ function displayFiles($folder_id) {
 						. ') : removeBulkComponent(' . $row['file_id'] . ')"');
 ?>
 			<input type="checkbox" <?php echo $bulk_op; ?> name="chk_sub_sel_file_<?php
-			echo $file_row['file_id']; ?>" /><?php
+			echo $file_row['file_id'] ?? ""; ?>" /><?php
 		}
 ?>
 		</td>
