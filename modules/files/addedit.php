@@ -293,7 +293,7 @@ function file_show_attr() {
 	$file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
 
 
-	if ($ci) {
+	if (!empty($ci)) {
 		$str_out = ('<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision')
 					. '</td><td>'
 		            . '<input type="Radio" name="revision_type" value="minor" checked="checked" />'
@@ -307,12 +307,12 @@ function file_show_attr() {
 
 	$str_out .= '<td align="left">';
 
-	if (empty($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) {
+	if (empty($file_id) || !empty($ci) || (!empty($canAdmin) && !empty($obj->file_checkout) && $obj->file_checkout == 'final')) {
 		$str_out .= ('<input type="hidden" name="file_checkout" value="" />'
 		             . '<input type="hidden" name="file_co_reason" value="" />');
 	}
 
-	if ($ci) {
+	if (!empty($ci)) {
 		$the_value = (mb_strlen($obj->file_version) > 0 ? $obj->file_version+0.01 : "1");
 		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
 	} else {
