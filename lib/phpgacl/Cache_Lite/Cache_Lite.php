@@ -4,7 +4,7 @@
 * Fast, light and safe Cache Class
 *
 * Cache_Lite is a fast, light and safe cache system. It's optimized
-* for file containers. It is fast and safe (because it uses file 
+* for file containers. It is fast and safe (because it uses file
 * locking and/or anti-corruption tests).
 *
 * There are some examples in the 'docs/examples' file
@@ -22,7 +22,7 @@ class Cache_Lite
 {
 
     // --- Private properties ---
-    
+
     /**
     * Directory where to put the cache files
     * (make sure to add a trailing slash)
@@ -30,7 +30,7 @@ class Cache_Lite
     * @var string $_cacheDir
     */
     var $_cacheDir = '/tmp/';
-    
+
     /**
     * Enable / disable caching
     *
@@ -39,30 +39,30 @@ class Cache_Lite
     * @var boolean $_caching
     */
     var $_caching = true;
-    
+
     /**
     * Cache lifetime (in seconds)
     *
     * @var int $_lifeTime
     */
     var $_lifeTime = 3600;
-    
+
     /**
     * Enable / disable fileLocking
     *
-    * (can avoid cache corruption under bad circumstances)  
+    * (can avoid cache corruption under bad circumstances)
     *
     * @var boolean $_fileLocking
     */
     var $_fileLocking = true;
-    
+
     /**
     * Timestamp of the last valid cache
     *
     * @var int $_refreshTime
     */
     var $_refreshTime;
-    
+
     /**
     * File name (with path)
     *
@@ -74,22 +74,22 @@ class Cache_Lite
     * Enable / disable write control (the cache is read just after writing to detect corrupt entries)
     *
     * Enable write control will lightly slow the cache writing but not the cache reading
-    * Write control can detect some corrupt cache files but maybe it's not a perfect control 
+    * Write control can detect some corrupt cache files but maybe it's not a perfect control
     *
     * @var boolean $_writeControl
     */
     var $_writeControl = true;
 
     /**
-    * Enable / disable read control 
-    * 
+    * Enable / disable read control
+    *
     * If enabled, a control key is embeded in cache file and this key is compared with the one
     * calculated after the reading.
     *
     * @var boolean $_writeControl
     */
     var $_readControl = true;
-    
+
     /**
     * Type of read control (only if read control is enabled)
     *
@@ -101,33 +101,33 @@ class Cache_Lite
     * @var boolean $_readControlType
     */
     var $_readControlType = 'crc32';
-    
+
     /**
-    * Pear error mode (when raiseError is called) 
-    * 
+    * Pear error mode (when raiseError is called)
+    *
     * (see PEAR doc)
     *
     * @see setToDebug()
     * @var int $_pearErrorMode
     */
     var $_pearErrorMode = CACHE_LITE_ERROR_RETURN;
-    
+
     /**
     * Current cache id
     *
     * @var string $_id
     */
     var $_id;
-    
+
     /**
     * Current cache group
     *
     * @var string $_group
     */
     var $_group;
-    
+
     // --- Public methods ---
-    
+
     /**
     * Constructor
     *
@@ -149,7 +149,8 @@ class Cache_Lite
     function Cache_Lite($options = NULL)
     {
         $availableOptions = '{cacheDir}{caching}{lifeTime}{fileLocking}{writeControl}{readControl}{readControlType}{pearErrorMode}';
-        while (list($key, $value) = each($options)) {
+        // while (list($key, $value) = each($options)) {  // deprecated in PHP 7.2+
+        foreach ($options as $key => $value) {
             if (strpos('>'.$availableOptions, '{'.$key.'}')) {
                 $property = '_'.$key;
                 $this->$property = $value;
@@ -157,7 +158,7 @@ class Cache_Lite
         }
         $this->_refreshTime = time() - $this->_lifeTime;
     }
-    
+
     /**
     * Test if a cache is available and (if yes) return it
     *
@@ -185,7 +186,7 @@ class Cache_Lite
         }
         return false;
     }
-    
+
     /**
     * Save some data in a cache file
     *
@@ -195,7 +196,7 @@ class Cache_Lite
     * @return boolean true if no problem
     * @access public
     */
-    function save($data, $id = NULL, $group = 'default') 
+    function save($data, $id = NULL, $group = 'default')
     {
         if ($this->_caching) {
             if (isset($id)) {
@@ -214,7 +215,7 @@ class Cache_Lite
         }
         return false;
     }
-    
+
     /**
     * Remove a cache file
     *
@@ -227,12 +228,12 @@ class Cache_Lite
     {
         $this->_setFileName($id, $group);
         if (!@unlink($this->_file)) {
-            Cache_Lite::raiseError('Cache_Lite : Unable to remove cache !', -3);   
+            Cache_Lite::raiseError('Cache_Lite : Unable to remove cache !', -3);
             return false;
         }
         return true;
     }
-    
+
     /**
     * Clean the cache
     *
@@ -243,11 +244,11 @@ class Cache_Lite
     * @return boolean true if no problem
     * @access public
     */
-    function clean($group = false)     
+    function clean($group = false)
     {
         $motif = ($group) ? "cache_{$group}_" : 'cache_';
         if (!($dh = opendir($this->_cacheDir))) {
-            Cache_Lite::raiseError('Cache_Lite : Unable to open cache directory !', -4);   
+            Cache_Lite::raiseError('Cache_Lite : Unable to open cache directory !', -4);
             return false;
         }
         while ($file = readdir($dh)) {
@@ -256,7 +257,7 @@ class Cache_Lite
                 if (is_file($file)) {
                     if (strpos($file, $motif, 0)) {
                         if (!@unlink($file)) {
-                            Cache_Lite::raiseError('Cache_Lite : Unable to remove cache !', -3);   
+                            Cache_Lite::raiseError('Cache_Lite : Unable to remove cache !', -3);
                             return false;
                         }
                     }
@@ -265,7 +266,7 @@ class Cache_Lite
         }
         return true;
     }
-    
+
     /**
     * Set to debug mode
     *
@@ -284,7 +285,7 @@ class Cache_Lite
     *
     * To improve performances, the PEAR.php file is included dynamically.
     * The file is so included only when an error is triggered. So, in most
-    * cases, the file isn't included and perfs are much better. 
+    * cases, the file isn't included and perfs are much better.
     *
     * @param string $msg error message
     * @param int $code error code
@@ -297,7 +298,7 @@ class Cache_Lite
     }
 
     // --- Private methods ---
-    
+
     /**
     * Make a file name (with path)
     *
@@ -309,7 +310,7 @@ class Cache_Lite
     {
         $this->_file = ($this->_cacheDir.'cache_'.$group.'_'.md5($id));
     }
-    
+
     /**
     * Read the cache file and return the content
     *
@@ -325,23 +326,23 @@ class Cache_Lite
             if ($this->_readControl) {
                 $hashControl = @fread($fp, 32);
                 $length = $length - 32;
-            } 
+            }
             $data = @fread($fp, $length);
             if ($this->_fileLocking) @flock($fp, LOCK_UN);
             @fclose($fp);
             if ($this->_readControl) {
                 $hashData = $this->_hash($data, $this->_readControlType);
                 if ($hashData != $hashControl) {
-                    @touch($this->_file, time() - 2*abs($this->_lifeTime)); 
+                    @touch($this->_file, time() - 2*abs($this->_lifeTime));
                     return false;
                 }
             }
             return $data;
         }
-        Cache_Lite::raiseError('Cache_Lite : Unable to read cache !', -2);   
+        Cache_Lite::raiseError('Cache_Lite : Unable to read cache !', -2);
         return false;
     }
-    
+
     /**
     * Write the given data in the cache file
     *
@@ -366,7 +367,7 @@ class Cache_Lite
         Cache_Lite::raiseError('Cache_Lite : Unable to write cache !', -1);
         return false;
     }
-    
+
     /**
     * Write the given data in the cache file and control it just after to avoir corrupted cache entries
     *
@@ -380,7 +381,7 @@ class Cache_Lite
         $dataRead = $this->_read($data);
         return ($dataRead==$data);
     }
-    
+
     /**
     * Make a control key with the string containing datas
     *
@@ -402,7 +403,7 @@ class Cache_Lite
             $this->raiseError('Unknown controlType ! (available values are only \'md5\', \'crc32\', \'strlen\')', -5);
         }
     }
-    
-} 
+
+}
 
 ?>
