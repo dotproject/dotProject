@@ -6,8 +6,14 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-
-define('DATE_CALC_BEGIN_WEEKDAY', LOCALE_FIRST_DAY);
+if (!empty($AppUI->user_locale)) {
+  @include_once(DP_BASE_DIR.'/locales/'.$AppUI->user_locale.'/locales.php');  // LOCALE_FIRST_DAY gets defined here (gwyneth 20210419)
+  @include_once(DP_BASE_DIR.'/locales/core.php');
+  setlocale(LC_TIME, $AppUI->user_locale);
+  define('DATE_CALC_BEGIN_WEEKDAY', LOCALE_FIRST_DAY);
+} else {
+  define('DATE_CALC_BEGIN_WEEKDAY', 1);  // reasonable default
+}
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');

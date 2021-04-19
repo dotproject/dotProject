@@ -194,7 +194,7 @@ if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File "Name'); ?>:</td>
 			<td align="left" class="hilite"><?php
-	echo mb_strlen($obj->file_name)== 0 ? "n/a" : ($obj->file_name ?? ; ?></td>
+	echo (empty($obj->file_name) || mb_strlen($obj->file_name)== 0) ? "n/a" : $obj->file_name; ?></td>
 			<td>
 				<a href="./fileviewer.php?file_id=<?php echo $obj->file_id; ?>"><?php
 	echo dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', '16', '16',

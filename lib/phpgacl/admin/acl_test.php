@@ -28,22 +28,22 @@ $rows = $rs->GetRows();
 
 $total_rows = count($rows);
 
-while (list(,$row) = @each(&$rows)) {
-    list(	$aco_section_value,
+//  while (list(,$row) = @each(&$rows)) {  // deprecated in PHP 7.2, removed in 8
+  foreach($rows as $row) {
+    list($aco_section_value,
 			$aco_section_name,
 			$aco_value,
 			$aco_name,
-
 			$aro_section_value,
 			$aro_section_name,
 			$aro_value,
 			$aro_name
 		) = $row;
-	
+
 	$acl_check_begin_time = $profiler->getMicroTime();
 	$acl_result = $gacl->acl_query($aco_section_value, $aco_value, $aro_section_value, $aro_value);
 	$acl_check_end_time = $profiler->getMicroTime();
-	
+
 	$access = &$acl_result['allow'];
 	$return_value = &$acl_result['return_value'];
 
@@ -53,27 +53,27 @@ while (list(,$row) = @each(&$rows)) {
 	if ($aco_section_name != $tmp_aco_section_name OR $aco_name != $tmp_aco_name) {
 		$display_aco_name = "$aco_section_name > $aco_name";
 	} else {
-		$display_aco_name = "<br>";	
+		$display_aco_name = "<br>";
 	}
-	
+
 	$acls[] = array(
 						'aco_section_value' => $aco_section_value,
 						'aco_section_name' => $aco_section_name,
 						'aco_value' => $aco_value,
 						'aco_name' => $aco_name,
-						
+
 						'aro_section_value' => $aro_section_value,
 						'aro_section_name' => $aro_section_name,
 						'aro_value' => $aro_value,
 						'aro_name' => $aro_name,
-						
+
 						'access' => $access,
 						'return_value' => $return_value,
 						'acl_check_time' => number_format($acl_check_time, 2),
-						
+
 						'display_aco_name' => $display_aco_name,
 					);
-	
+
 	$tmp_aco_section_name = $aco_section_name;
 	$tmp_aco_name = $aco_name;
 }
