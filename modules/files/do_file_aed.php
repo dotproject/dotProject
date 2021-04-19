@@ -192,7 +192,7 @@ if (($msg = $obj->store())) {
 	*/
 	$index_max_file_size = dPgetConfig('index_max_file_size', 0);
 	if ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size*1024) {
-		$obj->indexStrings();
+		$indexed = $obj->indexStrings();  // `$indexed` seems to be calculated here (gwyneth 20210419)
 		$AppUI->setMsg('; ' . ($indexed ?? 'unknown number of') . ' words indexed', UI_MSG_OK, true);
 	}
 }
