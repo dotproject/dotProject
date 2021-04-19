@@ -18,7 +18,7 @@ $canAdmin = getPermission('system', 'edit');
 
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'] . (isset($referrerArray['fragment'] ?? "");
+$referrer = $referrerArray['query'] . (isset($referrerArray['fragment']) ?? "");
 
 // load the companies class to retrieved denied companies
 require_once($AppUI->getModuleClass('companies'));
