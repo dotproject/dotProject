@@ -103,10 +103,11 @@ if ($obj->file_task) {
 } else {
 	$task_name = '';
 }
-if ($obj->file_helpdesk_item) {
+if (!empty($obj->file_helpdesk_item)) {
 	$file_helpdesk_item = $obj->file_helpdesk_item;
+} else {
+  $file_helpdesk_item = "";
 }
-
 $extra = array(
 	'where'=>'project_status <> 7'
 );
@@ -191,9 +192,9 @@ echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"
 		</tr><?php
 if ($file_id) { ?>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?>:</td>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File "Name'); ?>:</td>
 			<td align="left" class="hilite"><?php
-	echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name; ?></td>
+	echo mb_strlen($obj->file_name)== 0 ? "n/a" : ($obj->file_name ?? ; ?></td>
 			<td>
 				<a href="./fileviewer.php?file_id=<?php echo $obj->file_id; ?>"><?php
 	echo dPshowImage(DP_BASE_URL . '/modules/files/images/filesaveas.png', '16', '16',
@@ -237,7 +238,7 @@ echo $obj->file_description; ?></textarea>
 			<td align="left"><input type="File" class="button" name="formfile" style="width:270px" /></td>
 		</tr>
 		<?php
-if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
+if (empty($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
@@ -251,14 +252,14 @@ if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
 			<td align="left">
 				<input type="checkbox" name="notify" id="notify" checked="checked" />
 				<label for="notify"><?php
-if (!($file_helpdesk_item)) {
+if (empty($file_helpdesk_item)) {
 	echo $AppUI->_('Notify Assignees of Task or Project Owner by Email');
 } else {
 	echo $AppUI->_('Notify helpdesk item assignees by email');
 }	?></label>
 			</td>
 		</tr>
-<?php if (!($file_helpdesk_item)) { ?>
+<?php if (empty($file_helpdesk_item)) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
