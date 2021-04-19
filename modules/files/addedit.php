@@ -307,7 +307,7 @@ function file_show_attr() {
 
 	$str_out .= '<td align="left">';
 
-	if (!($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) {
+	if (empty($file_id) || $ci || ($canAdmin && $obj->file_checkout == 'final')) {
 		$str_out .= ('<input type="hidden" name="file_checkout" value="" />'
 		             . '<input type="hidden" name="file_co_reason" value="" />');
 	}
