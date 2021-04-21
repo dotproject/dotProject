@@ -65,7 +65,6 @@ class DBQuery {
 		$this->clear();
 	}
 
-
 	public function clear() {
 		global $ADODB_FETCH_MODE;
 		if (isset($this->_old_style)) {
@@ -353,7 +352,7 @@ class DBQuery {
 	 * @param	string	$order	Order by field.
 	 */
 	function addOrder($order) {
-		if (isset($order)) {
+		if (!empty($order)) {
 			$this->addClause('order_by', $order);
 		}
 	}
@@ -768,7 +767,6 @@ class DBQuery {
 
 	function loadArrayList($index = 0) {
 		global $db;
-
 		if (! $this->exec(ADODB_FETCH_NUM)) {
 			exit ($db->ErrorMsg());
 		}
@@ -883,18 +881,27 @@ class DBQuery {
 	 *
 	 * @param	mixed	$clause	Either string or array of subclauses.
 	 * @return	string
+   * @note Added a bit of edge-case checking (gwyneth 20210419)
 	 */
 	function make_order_clause($order_clause) {
 		$result = "";
-		if (! isset($order_clause)) {
+//		if (! isset($order_clause)) {
+    if (empty($order_clause)) {
 			return $result;
 		}
-
+    // dprint(__FILE__, __LINE__, 2, "Order clause is `" . print_r($order_clause, true) . "`");
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
-		} else if (mb_strlen($order_clause) > 0) {
-			$result = " ORDER BY $order_clause";
+		} else {
+      // I _think_ that sometimes the string comes with whitespace, so make sure to
+      // trim it, the Unicode way! (gwyneth 20210419)
+      // @see https://stackoverflow.com/a/4167053/1035977
+      $order_clause = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u','',$order_clause);
+      // see if there is something left!
+      if (mb_strlen($order_clause) > 0) {
+			  $result = " ORDER BY $order_clause";
+      }
 		}
 		return $result;
 	}
