@@ -660,8 +660,10 @@ class DBQuery {
 
 	/**
 	 * Execute the query and return a handle.  Supplants the db_exec query
+   *
+   * @note Removed & from &exec() to see what happens
 	 */
-	function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
+	function exec($style = ADODB_FETCH_BOTH, $debug = false) {
 		global $db;
 		global $ADODB_FETCH_MODE;
 
@@ -672,7 +674,7 @@ class DBQuery {
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
 		if ($q = $this->prepare()) {
-        	dprint(__FILE__, __LINE__, 7, "executing query($q)");
+        dprint(__FILE__, __LINE__, 7, "executing query($q)");
 			if ($debug) {
 				// Before running the query, explain the query and return the details.
 				$qid = $db->Execute('EXPLAIN ' . $q);
@@ -681,7 +683,7 @@ class DBQuery {
 					while ($row = $this->fetchRow()) {
 						$res[] = $row;
 					}
-					dprint(__FILE__, __LINE__, 0, "QUERY DEBUG: " . var_export($res, true));
+					dprint(__FILE__, __LINE__, 2, "QUERY DEBUG: " . print_r($res, true));
 					$qid->Close();
 				}
 			}
@@ -695,7 +697,7 @@ class DBQuery {
 				return $this->_query_id;
 			}
 		}
-
+    dprint(__FILE__, __LINE__, 7, "_query_id is now: " . print_r($this->_query_id, true));
 		return $this->_query_id;
 	}
 
@@ -889,10 +891,11 @@ class DBQuery {
     if (empty($order_clause)) {
 			return $result;
 		}
-    // dprint(__FILE__, __LINE__, 2, "Order clause is `" . print_r($order_clause, true) . "`");
+    // dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'");
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
+      dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'; result is '" . print_r($result, true) . "'.");
 		} else {
       // I _think_ that sometimes the string comes with whitespace, so make sure to
       // trim it, the Unicode way! (gwyneth 20210419)

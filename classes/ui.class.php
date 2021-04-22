@@ -908,7 +908,7 @@ class CAppUI {
 		$q  = new DBQuery;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_user, pref_name, pref_value');
-		if ($uid) {
+		if (!empty($uid)) {
 			$q->addWhere("pref_user in (0, $uid)");
 			$q->addOrder('pref_user');
 		} else {
@@ -918,10 +918,10 @@ class CAppUI {
                 // Separate out system preferences from user preferences, but merge them together
 		$this->system_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isSystemPref' ]));
 		$user_prefs = [];
-		if ($uid) {
+		if (!empty($uid)) {
 			$user_prefs = $this->flattenPrefs(array_filter($prefs, [ $this, 'isUserPref' ]));
 		}
-		$this->user_prefs = array_merge($this->system_prefs, $this->user_prefs, $user_prefs);
+		$this->user_prefs = array_merge($this->system_prefs, $this->user_prefs, $user_prefs ?? array());
 	}
 
 // --- Module connectors
