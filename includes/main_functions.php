@@ -697,9 +697,9 @@ function dprint($file = null, $line = 0, $level = 0, $msg = "") {
 	if ($level <= $max_level) {
 		error_log($prefix . $msg . PHP_EOL); // PHP_EOL should be a configurable option (gwyneth 20210416)
 		if ($display_debug) {
-			echo $prefix . $msg . " <br />";
+			echo $prefix . $msg . " <br />" . PHP_EOL;
 		}
-		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), "4.3.0") >=0) {
+		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), "4.3.0") >=0 && $display_debug) {
 			format_backtrace(debug_backtrace(), $file, $line, $msg);
 		}
 	}
