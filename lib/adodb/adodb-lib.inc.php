@@ -1164,7 +1164,7 @@ function _adodb_backtrace($printOrArr=true,$levels=9999,$skippy=0,$ishtml=null)
 
 	$MAXSTRLEN = 128;
 
-	$s = ($html) ? '<pre align=left>' : '';
+	$s = ($html) ? '<div class="backtrace"><pre align=left>' : '';
 
 	if (is_array($printOrArr)) $traceArr = $printOrArr;
 	else $traceArr = debug_backtrace();
@@ -1202,7 +1202,7 @@ function _adodb_backtrace($printOrArr=true,$levels=9999,$skippy=0,$ishtml=null)
 
 		$s .= "\n";
 	}
-	if ($html) $s .= '</pre>';
+	if ($html) $s .= '</pre></div>';
 	if ($printOrArr) print $s;
 
 	return $s;
