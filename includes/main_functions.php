@@ -664,7 +664,7 @@ function format_backtrace($bt, $file, $line, $msg) {
     // No valid backtracing array
     echo "(Backtrace requested but not found)" . PHP_EOL;
   }
-  echo "</pre>" . PHP_EOL . "</div>" . PHP_EOL;
+  echo "</pre></div>" . PHP_EOL;
 }
 
 /**
@@ -771,7 +771,7 @@ function findTabModules($module, $file = null) {
  * @desc Show a formatted structure (array/object)
 */
 function showFVar(&$var, $title = "") {
-	echo '<h1>' . $title . '</h1><pre>' . print_r($var, true) . '</pre>';
+	echo '<h1>' . $title . '</h1><pre class="lang-php">' . print_r($var, true) . '</pre>';
 }
 
 function getUsersArray() {
