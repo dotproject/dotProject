@@ -691,9 +691,9 @@ class DBQuery {
 			                    ? $db->SelectLimit($q, $this->limit, $this->offset)
 			                    : $db->Execute($q));
 
-			if (! $this->_query_id) {
+			if (!empty($this->_query_id) && $this->_query_id === false) {
 				$error = $db->ErrorMsg();
-				dprint(__FILE__, __LINE__, 0, "query failed($q) - error was: " . $error);
+				dprint(__FILE__, __LINE__, 2, "query failed($q); this->limit was: " . ($this->limit ?? "[not set]") . "; this->offset was: " . ($this->offset ?? "[no offset]") . "; this->_query_id was: " . ($this->_query_id ?? "[inaccesible]") . "; - and error was: " . ($error ?? "[invaiid error received (?)]"));
 				return $this->_query_id;
 			}
 		}
@@ -888,21 +888,22 @@ class DBQuery {
 	function make_order_clause($order_clause) {
 		$result = "";
 //		if (! isset($order_clause)) {
-    if (empty($order_clause)) {
+    if (empty($order_clause)) {  // empty clause? then return ""!
 			return $result;
 		}
     // dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'");
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
-      dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'; result is '" . print_r($result, true) . "'.");
-		} else {
+      // dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'; result is '" . print_r($result, true) . "'.");
+		} else {  // not an array, i. e. just a string
       // I _think_ that sometimes the string comes with whitespace, so make sure to
       // trim it, the Unicode way! (gwyneth 20210419)
       // @see https://stackoverflow.com/a/4167053/1035977
       $order_clause = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u','',$order_clause);
       // see if there is something left!
       if (mb_strlen($order_clause) > 0) {
+        dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "' (length: " . mb_strlen($order_clause) . "); result is '" . print_r($result, true) . "'.");
 			  $result = " ORDER BY $order_clause";
       }
 		}

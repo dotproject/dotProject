@@ -31,7 +31,7 @@ $direction = dPgetCleanParam($_GET, 'direction', $direction);
 $offset = dPgetCleanParam($_GET, 'offset', $offset);
 $action = dPgetCleanParam($_REQUEST, 'action', null);
 
-dprint(__FILE__, __LINE__, 2, "Column is `$column`");
+dprint(__FILE__, __LINE__, 11, "[DEBUG] Column is `$column`");
 
 if (empty($type) || $type == '') {  // better safe than sorry (gwyneth 20210420)
 	if ($AppUI->getState("ticket_type")) {
@@ -103,7 +103,7 @@ if ($type != 'All') {
     $q->addWhere("type = '$type'");
 }
 $ticket_count = $q->loadResult();
-dprint(__FILE__, __LINE__, 2, "Ticket count: #$ticket_count.");
+dprint(__FILE__, __LINE__, 11, "[DEBUG] Ticket count: #$ticket_count.");
 /* paging controls */
 if (($offset + $limit) < $ticket_count) {
     $page_string = ($offset + 1) . " to " . ($offset + $limit) . " of $ticket_count";
@@ -155,7 +155,9 @@ else if ($type != "All") {
     $q->addWhere("type = '{$type}'");
 }
 $q->addWhere("parent = '0'");
-$q->addOrder(urlencode($column) . " {$direction}");
+if (!empty($column)) {
+  $q->addOrder(urlencode($column) . " {$direction}");
+}
 $q->setLimit($limit, $offset);
 $q->includeCount();
 

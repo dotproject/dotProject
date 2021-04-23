@@ -29,8 +29,8 @@ function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 ##
 function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate=false) {
 	GLOBAL $AppUI;
-	if (! is_array($arr)) {
-		dprint(__FILE__, __LINE__, 0, 'arraySelect called with no array');
+	if (empty($arr) || !is_array($arr)) {
+		dprint(__FILE__, __LINE__, 2, 'arraySelect called with no array');
 		return '';
 	}
 	reset($arr);
