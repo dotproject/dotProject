@@ -8,7 +8,7 @@ if (!(defined('DP_BASE_DIR'))) {
 
 require_once DP_BASE_DIR . '/includes/filter.php';
 
-$CR = "\n";  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
+$CR = "" . PHP_EOL;  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
 ##
@@ -34,7 +34,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 		return '';
 	}
 	reset($arr);
-	$s = ("\n" . '<select name="' . $select_name . '" ' . $select_attribs . '>');
+	$s = ("" . PHP_EOL . '<select name="' . $select_name . '" ' . $select_attribs . '>');
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
@@ -55,7 +55,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 			$did_selected = 1;
 		}
 	}
-	$s .= "\n</select>\n";
+	$s .= "\n</select>" . PHP_EOL;
 	return $s;
 }
 
@@ -118,7 +118,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	$proj->setAllowedSQL($user_id, $q);
 	$q->addOrder('co.company_name, project_name');
 	$projects = $q->loadList();
-	$s = ("\n" . '<select name="' . $select_name . '"'
+	$s = ("" . PHP_EOL . '<select name="' . $select_name . '"'
 		  . (($select_attribs) ? (' ' . $select_attribs) : '') . '>');
 	$s .= ("\n\t" . '<option value="0"' . ($selected == 0 ? ' selected="selected"' : '') . ' >'
 	       . $AppUI->_('None') . '</option>');
@@ -126,14 +126,14 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	foreach ($projects as $p) {
 		if ($p['company_name'] != $current_company) {
 			$current_company = $AppUI->___($p['company_name']);
-			$s .= ("\n" . '<optgroup label="' . $current_company . '" >' . $current_company
+			$s .= ("" . PHP_EOL . '<optgroup label="' . $current_company . '" >' . $current_company
 			       . '</optgroup>');
 		}
 		$s .= ("\n\t" . '<option value="' . $p['project_id'] . '"'
 		       . ($selected == $p['project_id'] ? ' selected="selected"' : '')
 			   . '>&nbsp;&nbsp;&nbsp;' . $AppUI->___($p['project_name']) . '</option>');
 		}
-	$s .= "\n</select>\n";
+	$s .= "\n</select>" . PHP_EOL;
 	return $s;
 }
 
@@ -417,7 +417,7 @@ function dPgetSysVal($title) {
 	// is properly treated as a numeric
 	foreach ($temp as $item) {
 		if ($item) {
-			$sep2 = empty($sep2) ? "\n" : $sep2;
+			$sep2 = empty($sep2) ? "" . PHP_EOL : $sep2;
 			$temp2 = explode($sep2, $item);
 			$arr[trim($temp2[0])] = trim(((isset($temp2[1])) ? $temp2[1] : $temp2[0]));
 		}
@@ -647,10 +647,10 @@ function formatCurrency($number, $format) {
  * @param string $msg  message to print to logs
  */
 function format_backtrace($bt, $file, $line, $msg) {
-  echo "<pre>\n";
-  echo "ERROR: " . dPrefix($file, $line) . "$msg\n";
+  echo "<div class=\"backtrace\"><pre>" . PHP_EOL;
+  echo "ERROR: " . dPrefix($file, $line) . "$msg" . PHP_EOL;
   if (!empty($bt) && is_array($bt)) {
-  	echo "Backtrace:\n";
+  	echo "Backtrace:" . PHP_EOL;
   	foreach ($bt as $level => $frame) {
   		echo "$level $frame[file]:$frame[line] $frame[function](";
   		$in = false;
@@ -658,13 +658,13 @@ function format_backtrace($bt, $file, $line, $msg) {
   			echo ((($in) ? ',' : '') . var_export($arg, true));
   			$in = true;
   		}
-  		echo ")\n";
+  		echo ")" . PHP_EOL;
   	}
   } else {
     // No valid backtracing array
-    echo "(Backtrace requested but not found)\n";
+    echo "(Backtrace requested but not found)" . PHP_EOL;
   }
-  echo "</pre>\n";
+  echo "</pre>" . PHP_EOL . "</div>" . PHP_EOL;
 }
 
 /**
@@ -812,35 +812,35 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 
 	$xpg_prev_page = $xpg_next_page = 1;
 
-	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>' . "\n";
+	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>' . PHP_EOL;
 	// more than a page of results
 	if ($xpg_totalrecs > $xpg_pagesize) {
 		$xpg_prev_page = $page - 1;
 		$xpg_next_page = $page + 1;
 
 		// left buttons, if applicable
-		echo '<td align="left" width="15%">' . "\n";
+		echo '<td align="left" width="15%">' . PHP_EOL;
 		if ($xpg_prev_page > 0) {
 			echo ('<a href="./index.php?m=' . $m
 			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '')
 			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=1">'
 			      . '<img src="images/navfirst.gif" border="0" Alt="'
-			      . $AppUI->_('First Page') .'"></a>' . "\n");
-			echo ('&nbsp;&nbsp;' . "\n");
+			      . $AppUI->_('First Page') .'"></a>' . PHP_EOL);
+			echo ('&nbsp;&nbsp;' . PHP_EOL);
 			echo ('<a href="./index.php?m=' . $m
 				  . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '')
 				  . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_prev_page . '">'
 				  . '<img src="images/navleft.gif" border="0" Alt="'
-				  . $AppUI->_('Previous Page') .': ' . $xpg_prev_page .'"></a>' . "\n");
+				  . $AppUI->_('Previous Page') .': ' . $xpg_prev_page .'"></a>' . PHP_EOL);
 		} else {
-			echo ("&nbsp;\n");
+			echo ("&nbsp;" . PHP_EOL);
 		}
-		echo "</td>\n";
+		echo "</td>" . PHP_EOL;
 
 		// central text (files, total pages, and page selectors)
-		echo '<td align="center" width="70%">' . "\n";
+		echo '<td align="center" width="70%">' . PHP_EOL;
 		echo ($xpg_totalrecs . ' ' . $AppUI->_('Result(s)')
-			  . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')' . "<br />\n");
+			  . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')' . "<br />" . PHP_EOL);
 
 		$start_page_range = (($page > $RANGE_LIMITS) ? ($page - $RANGE_LIMITS) : 1) ;
 		$end_page_range = (($start_page_range - 1) + $NUM_PAGES_TO_DISPLAY);
@@ -859,35 +859,35 @@ function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $fol
 			                 . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $n . '">'));
 			echo ($n);
 			echo (($n == $page) ? '</b>' : '</a>');
-			echo (($n < $end_page_range) ? ' | ' : " ]\n");
+			echo (($n < $end_page_range) ? ' | ' : " ]" . PHP_EOL);
 		}
 
-		echo "</td>\n";
+		echo "</td>" . PHP_EOL;
 
 		// right buttons, if applicable
-		echo '<td align="left" width="15%">' . "\n";
+		echo '<td align="left" width="15%">' . PHP_EOL;
 		if ($xpg_next_page <= $xpg_total_pages) {
 			echo ('<a href="./index.php?m=' . $m
 			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '')
 			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_next_page . '">'
 			      . '<img src="images/navright.gif" border="0" Alt="'
-			      . $AppUI->_('Next Page') .': ' . $xpg_next_page .'"></a>' . "\n");
-			echo "&nbsp;&nbsp;\n";
+			      . $AppUI->_('Next Page') .': ' . $xpg_next_page .'"></a>' . PHP_EOL);
+			echo "&nbsp;&nbsp;" . PHP_EOL;
 			echo ('<a href="./index.php?m=' . $m
 			      . (($a) ? ('&amp;a=' . $a) : '') . (($tab) ? ('&amp;tab=' . $tab) : '')
 			      . (($folder) ? ('&amp;folder=' . $folder) : '') . '&amp;page=' . $xpg_total_pages . '">'
 			      . '<img src="images/navlast.gif" border="0" Alt="'
-			      . $AppUI->_('Last Page') .'"></a>' . "\n");
+			      . $AppUI->_('Last Page') .'"></a>' . PHP_EOL);
 		} else {
-			echo ("&nbsp;\n");
+			echo ("&nbsp;" . PHP_EOL);
 		}
-		echo "</td>\n";
+		echo "</td>" . PHP_EOL;
 	} else { // we dont have enough results for more than a page
 	  echo ('<td align="center">'
 			. (($xpg_totalrecs)
 			   ? ($xpg_totalrecs . ' ' . $AppUI->_('Result(s)'))
 			   : ($AppUI->_('No Result(s)')))
-			. "</td>\n");
+			. "</td>" . PHP_EOL);
 	}
 	echo "</tr></table>";
 }
@@ -916,13 +916,13 @@ function dPsgn($x) {
  */
 function dPrequiredFields($requiredFields) {
 	global $AppUI, $m;
-	$buffer = 'var foc=false;'."\n";
+	$buffer = 'var foc=false;'."" . PHP_EOL;
 
 	if (!empty($requiredFields)) {
 		foreach ($requiredFields as $rf => $comparator) {
-			$buffer.= 'if (' . $rf . html_entity_decode($comparator, ENT_QUOTES) . ') {' . "\n";
+			$buffer.= 'if (' . $rf . html_entity_decode($comparator, ENT_QUOTES) . ') {' . PHP_EOL;
 			$buffer.= ("\t" . 'msg += "\n' . $AppUI->_('required_field_' . $rf, UI_OUTPUT_JS)
-			           . '";' . "\n");
+			           . '";' . PHP_EOL);
 
 			/* MSIE cannot handle the focus command for some disabled or hidden
 			 * fields like the start/end date fields. Another workaround would be
@@ -934,11 +934,11 @@ function dPrequiredFields($requiredFields) {
 			$r = mb_strstr($rf, '.');
 			$buffer .= ("\t"
 			            . 'if ((foc==false) && (navigator.userAgent.indexOf(\'MSIE\')== -1)) {'
-			            ."\n");
-			$buffer.= "\t\t" . 'f.' . mb_substr($r, 1, mb_strpos($r,'.',1) - 1) . '.focus();' . "\n";
-			$buffer.= "\t\t" . 'foc=true;' . "\n";
-			$buffer.= "\t}\n";
-			$buffer.= "}\n";
+			            ."" . PHP_EOL);
+			$buffer.= "\t\t" . 'f.' . mb_substr($r, 1, mb_strpos($r,'.',1) - 1) . '.focus();' . PHP_EOL;
+			$buffer.= "\t\t" . 'foc=true;' . PHP_EOL;
+			$buffer.= "\t}" . PHP_EOL;
+			$buffer.= "}" . PHP_EOL;
 		}
 	}
 	return $buffer;
