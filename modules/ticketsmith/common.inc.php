@@ -12,30 +12,28 @@ $xmailer = "dotproject (http://dotproject.net/)";
 
 /* error handler */
 function fatal_error ($reason) {
-
-    die($reason);
-
+  die($reason);
 }
 
 
 /* create read-only output of list values */
 function chooseSelectedValue ($name, $options, $selected) {
-	while (list($key, $val) = each($options)) {
-			if ($key == $selected) {
-				$output = "$val\n";
-			}
+//	while (list($key, $val) = each($options)) {  // deprecated and obsolete in PHP 8.0 (gwyneth 20210424)
+  foreach ($options as $key => $val) {
+		if ($key == $selected) {
+			$output = "$val\n";
 		}
- return($output);
-
+	}
+  return($output);
 }
 
 /* create drop-down box */
 function create_selectbox ($name, $options, $selected) {
-
 	$output= "";
 	$output .= '<select name="'.$name.'" onchange="javascript:document.ticketform.submit()" class="text">'."\n";
 
-	while (list($key, $val) = each($options)) {
+//	while (list($key, $val) = each($options)) {  // see above
+  foreach ($options as $key => $val) {
 		$output .= "<option value=\"$key\"";
 
 		if ($key == $selected) {
@@ -48,9 +46,7 @@ function create_selectbox ($name, $options, $selected) {
 
 	$output .= "</select>\n";
 
-
-    return($output);
-
+  return($output);
 }
 
 /* escape special characters */
@@ -177,7 +173,8 @@ $outlines = "";
 $leftover = "";
 
 // Loop through each line of message
-while (list(, $thisline) = each($t_lines)) {
+// while (list(, $thisline) = each($t_lines)) {  // see above
+foreach ($t_lines as $thisline) {
 	// Process Leftover
 	if (mb_strlen($leftover) > 0) {
 		$counter = 0;
@@ -206,7 +203,8 @@ while (list(, $thisline) = each($t_lines)) {
 		$newline = '';
 		$t_l_lines = mb_split(' ', $thisline);
 		// This line is too big.  Break it up into words and add them one by one.
-		while (list(, $thisword) = each($t_l_lines)) {
+//		while (list(, $thisword) = each($t_l_lines)) {  // ... but *not* with this! (gwyneth 20210424)
+    foreach ($t_l_lines as $thisword) {
 			// Process words that are longer than $cols
 			while ((mb_strlen($thisword) + mb_strlen($nice_prefix)) > $cols) {
 				$cur_pos = 0;
@@ -247,7 +245,6 @@ return $outlines;
 
 /* format display field */
 function format_field ($value, $type, $ticket = NULL) {
-
     global $CONFIG;
     global $AppUI;
     global $canEdit;
