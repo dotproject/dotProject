@@ -57,14 +57,14 @@ function arraySelect($arr, $select_name, $select_attribs, $selected, $translate=
 		} else {
 			$v = $AppUI->___($v);
 		}
-		$s .= ("\n\t" . '<option value="' . $AppUI->___($k) . '"'
+		$s .= (PHP_EOL . "\t" . '<option value="' . $AppUI->___($k) . '"'
 		       . (($k == $selected && !$did_selected) ? ' selected="selected"' : '') . ">"
 		       . $v . '</option>');
 		if ($k == $selected) {
 			$did_selected = 1;
 		}
 	}
-	$s .= "\n</select>" . PHP_EOL;
+	$s .= PHP_EOL . "</select>" . PHP_EOL;
 	return $s;
 }
 
