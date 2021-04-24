@@ -24,13 +24,22 @@ function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 	return '#' . $base->calcFG($bg,$dk);
 }
 
-##
-## returns a select box based on an key,value array where selected is based on key
-##
-function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate=false) {
+/*
+ * Returns a select box based on an key,value array where selected is based on key
+ *
+ * @param $arr array
+ *
+ * @note Temporarily remove passing by reference
+ */
+//function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate=false) {
+function arraySelect($arr, $select_name, $select_attribs, $selected, $translate=false) {
 	GLOBAL $AppUI;
-	if (empty($arr) || !is_array($arr)) {
-		dprint(__FILE__, __LINE__, 2, 'arraySelect called with no array');
+	if (empty($arr)) {
+    dprint(__FILE__, __LINE__, 2, __FUNCTION__ . ' called with empty array');
+    return '';
+  }
+  if (!is_array($arr)) {
+		dprint(__FILE__, __LINE__, 2, __FUNCTION__ . ' called with no array');
 		return '';
 	}
 	reset($arr);
