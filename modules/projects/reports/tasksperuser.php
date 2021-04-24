@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 $do_report = dPgetParam($_POST, 'do_report', 0);
 $log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
 $log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);
-$log_all = $_POST['log_all'] ? (int)dPgetParam($_POST['log_all'], 0) : 0;
+$log_all = !empty($_POST['log_all']) ? (int)dPgetParam($_POST['log_all'], 0) : 0;
 $use_period	= (int)dPgetParam($_POST,'use_period',0);
 $display_week_hours = (int)dPgetParam($_POST,'display_week_hours',0);
 $max_levels = dPgetCleanParam($_POST,'max_levels', '');
