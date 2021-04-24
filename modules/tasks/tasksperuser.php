@@ -27,6 +27,9 @@ $titleBlock->addCell(
 	'<form action="?m=tasks&a=tasksperuser" method="post" name="companyFilter">', '</form>'
 );
 $titleBlock->addCrumb("?m=tasks", "tasks list");
+if (empty($user_id)) {
+  $user_id = $AppUI->user_id;  // probably wrong, but better than nothing (gwyneth 20210424)
+}
 $titleBlock->addCrumb("?m=tasks&a=todo&user_id=$user_id", "my todo");
 $titleBlock->show();
 
