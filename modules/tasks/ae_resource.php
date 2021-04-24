@@ -11,7 +11,7 @@ global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $t
 $q = new DBQuery;
 if ($task_id == 0) {
 	// Add task creator to assigned users by default
-	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));	
+	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
 } else {
 	// Pull users on this task
 	$q->addQuery("ut.user_id, perc_assignment, concat_ws(', ', contact_last_name, contact_first_name) as contact_name");
@@ -32,13 +32,13 @@ foreach ($assigned_perc as $user_id => $data) {
 ?>
 <script language="javascript">
 <?php
-echo "var projTasksWithEndDates=new Array();\n";
+echo "var projTasksWithEndDates=new Array();\n";  // this is UGLY and breaks JS parsing (gwyneth 20210424)
 $keys = array_keys($projTasksWithEndDates);
 for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 	//array[task_is] = end_date, end_hour, end_minutes
-	echo ('projTasksWithEndDates[' . $keys[$i] . ']=new Array("' 
-	      . $projTasksWithEndDates[$keys[$i]][1] . '", "' 
-	      . $projTasksWithEndDates[$keys[$i]][2] . '", "' 
+	echo ('projTasksWithEndDates[' . $keys[$i] . ']=new Array("'
+	      . $projTasksWithEndDates[$keys[$i]][1] . '", "'
+	      . $projTasksWithEndDates[$keys[$i]][2] . '", "'
 	      . $projTasksWithEndDates[$keys[$i]][3] ."\");\n");
 }
 ?>
@@ -73,15 +73,15 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 						<td align="right"><input type="button" class="button" value="&gt;" onclick="javascript:addUser(document.resourceFrm)" /></td>
 						<td>
 							<select name="percentage_assignment" class="text">
-							<?php 
+							<?php
 								for ($i = 5; $i <= 100; $i+=5) {
-									echo ('<option ' . (($i==100) ? 'selected="true"' : '') 
+									echo ('<option ' . (($i==100) ? 'selected="true"' : '')
 									      . ' value="' . $i . '">' . $i . '%</option>');
 								}
 							?>
 							</select>
-						</td>				
-						<td align="left"><input type="button" class="button" value="&lt;" onclick="javascript:removeUser(document.resourceFrm)" /></td>					
+						</td>
+						<td align="left"><input type="button" class="button" value="&lt;" onclick="javascript:removeUser(document.resourceFrm)" /></td>
 					</tr>
 					</table>
 				</td>
@@ -90,12 +90,12 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 	</td>
 	<td valign="top" align="center">
 		<table><tr><td align="left">
-		<?php echo $AppUI->_('Additional Email Comments');?>:		
+		<?php echo $AppUI->_('Additional Email Comments');?>:
 		<br />
 		<textarea name="email_comment" class="textarea" cols="60" rows="10" wrap="virtual"></textarea><br />
 		<input type="checkbox" name="task_notify" id="task_notify" value="1"<?php if ($obj->task_notify != 0) { echo ' checked="checked"'; } ?> /> <label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
 		</td></tr></table><br />
-		
+
 	</td>
 </tr>
 </table>
