@@ -284,7 +284,7 @@ if ($do_report) {
 
 		}
 
-		//Display Users and thier related Tasks.
+		//Display Users and their related Tasks.
 ?>
 <center>
 	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="std">
