@@ -63,7 +63,7 @@ if (!db_loadHash($sql, $drow) && $dept_id > 0) {
 	$q->addTable('users','u');
 	$q->addTable('contacts','con');
 	$q->addQuery('user_id');
-	$q->addQuery('CONCAT_WS(", ",contact_last_name, contact_first_name)'); 
+	$q->addQuery('CONCAT_WS(", ",contact_last_name, contact_first_name)');
 	$q->addOrder('contact_first_name');
 	$q->addWhere('u.user_contact = con.contact_id');
 	$q->addOrder('contact_last_name, contact_first_name');
@@ -172,7 +172,7 @@ if (count($depts)) {
 	<td align="right"><?php echo $AppUI->_('Owner');?>:</td>
 	<td>
 <?php
-	echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $drow["dept_owner"]);
+	echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $drow["dept_owner"] ?? "");
 ?>
 	</td>
 </tr>

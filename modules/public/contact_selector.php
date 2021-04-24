@@ -106,14 +106,14 @@ function renderContacts ($contacts, $contacts_id) {
 	foreach ($contacts as $contact_id => $contact_data) {
 		$contact_company = (($contact_data['company_name'])
 							? $contact_data['company_name'] : $contact_data['contact_company']);
-		if ($contact_company  && $contact_company != $pointer_company) {
+		if (!empty($contact_company) && !empty($pointer_company) && $contact_company != $pointer_company) {
 			echo '<h4>'.$contact_company.'</h4>';
 			$pointer_company = $contact_company;
 		}
 
 		$contact_department = (($contact_data['dept_name'])
 							? $contact_data['dept_name'] : $contact_data['contact_department']);
-		if ($contact_department && $contact_department != $pointer_department) {
+		if (!empty($contact_department) && !empty($pointer_department) && $contact_department != $pointer_department) {
 			echo '<h5>'.$contact_department.'</h5>';
 			$pointer_department = $contact_department;
 		}
@@ -230,7 +230,7 @@ echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : ''); ?>&show_all=1
 <?php echo $AppUI->_('View all allowed companies'); ?>
 </a></h4>
 <hr />
-<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
+<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?? "[unknown]"; ?></h2>
 <?php
 renderContacts($activeContacts, $contacts_id);
 
