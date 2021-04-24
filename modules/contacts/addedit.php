@@ -122,7 +122,7 @@ if ($userDeleteProtect) {
 		form.submit();
 	}
 <?php
-} 
+}
 ?>
 }
 
@@ -139,7 +139,7 @@ function companyChange() {
 	var f = document.changecontact;
 	if (f.contact_company.value != window.company_value) {
 		f.contact_department.value = "";
-	} 
+	}
 }
 
 </script>
@@ -196,7 +196,7 @@ function companyChange() {
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Company');?>:</td>
 			<td nowrap="nowrap">
-				<input type="text" class="text" name="contact_company_name" value="<?php 
+				<input type="text" class="text" name="contact_company_name" value="<?php
 					echo $company_detail['company_name'];
 					?>" maxlength="100" size="25" />
 				<input type="button" class="button" value="<?php echo $AppUI->_('select company...');?>..." onclick="popCompany()" />
@@ -327,6 +327,7 @@ function companyChange() {
 	</td>
 	<td valign="top" width="50%">
 		<strong><?php echo $AppUI->_('Contact Notes');?></strong><br />
+    <!-- quill it -->
 		<textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo @$row->contact_notes;?></textarea>
 	</td>
 </tr>
