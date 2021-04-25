@@ -423,6 +423,7 @@ class PolarAxis extends Axis {
                         $this->img->Line($x1,$y1,$x2,$y2);
                     }
                 }
+                $a = (int) $a;
                 $a += $this->angle_step;
             }
         }
@@ -487,6 +488,7 @@ class PolarAxis extends Axis {
                 if( $this->show_angle_tick ) {
                     $this->img->Line($x1,$y1,$x2,$y2);
                 }
+                $a = (int) $a;
                 $a += $this->angle_step;
             }
         }

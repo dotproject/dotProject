@@ -39,8 +39,6 @@
 // define('TTF_DIR','/usr/share/fonts/TrueType/');
 // define('MBTTF_DIR','/usr/share/fonts/TrueType/');
 
-define('TTF_DIR', DP_BASE_DIR . '/lib/fonts/vera/');
-define('FF_CUSTOM', 18);
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are
 // using the cache.

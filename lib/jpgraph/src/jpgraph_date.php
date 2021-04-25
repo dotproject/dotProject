@@ -406,9 +406,15 @@ class DateScale extends LinearScale {
         // identical to LinearScale::AutoScale
         if( $aStartTime == $aEndTime ) {
             // Special case when we only have one data point.
-            // Create a small artifical intervall to do the autoscaling
+            // Create a small artificial interval to do the autoscaling
             $aStartTime -= 10;
             $aEndTime += 10;
+        }
+        if( abs($aEndTime - $aStartTime) <= 1 ) {
+            // Special case when we only have one second.
+            // Create a small artificial interval to do the autoscaling
+            $aStartTime -= 1;
+            $aEndTime += 1;
         }
         $done=false;
         $i=0;

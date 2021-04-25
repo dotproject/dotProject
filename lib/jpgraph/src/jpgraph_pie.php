@@ -296,14 +296,16 @@ class PiePlot {
 
         // Make sure we don't plot more values than data points
         // (in case the user added more legends than data points)
-        $n = min(count($this->legends),count($this->data));
+        $legendsCount = is_array($this->legends) ? count($this->legends) : 0;
+        $n = min($legendsCount,count($this->data));
         if( $this->legends != "" ) {
             $this->legends = array_reverse(array_slice($this->legends,0,$n));
         }
         for( $i=$n-1; $i >= 0; --$i ) {
             $l = $this->legends[$i];
             // Replace possible format with actual values
-            if( count($this->csimalts) > $i ) {
+            $count = is_array($this->csimalts) ? count($this->csimalts) : 0;
+            if( $count > $i ) {
                 $fmt = $this->csimalts[$i];
             }
             else {
@@ -332,10 +334,12 @@ class PiePlot {
             }
 
             if( $this->setslicecolors==null ) {
-                $graph->legend->Add($l,$colors[$ta[$i%$numcolors]],"",0,$this->csimtargets[$i],$alt,$wintarg);
+                $csimtarget = isset($this->csimtargets[$i]) ? $this->csimtargets[$i] : null;
+                $graph->legend->Add($l,$colors[$ta[$i%$numcolors]],"",0,$csimtarget,$alt,$wintarg);
             }
             else {
-                $graph->legend->Add($l,$this->setslicecolors[$i%$numcolors],"",0,$this->csimtargets[$i],$alt,$wintarg);
+                $csimtarget = isset($this->csimtargets[$i]) ? $this->csimtargets[$i] : null;
+                $graph->legend->Add($l,$this->setslicecolors[$i%$numcolors],"",0,$csimtarget,$alt,$wintarg);
             }
         }
     }

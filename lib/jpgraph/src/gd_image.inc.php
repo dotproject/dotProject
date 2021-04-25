@@ -11,6 +11,7 @@
 require_once 'jpgraph_rgb.inc.php';
 require_once 'jpgraph_ttf.inc.php';
 require_once 'imageSmoothArc.php';
+require_once 'jpgraph_errhandler.inc.php';
 
 // Line styles
 define('LINESTYLE_SOLID',1);
@@ -219,17 +220,11 @@ class Image {
         }
     }
 
-    static function GetWidth($aImg=null) {
-        if( $aImg === null ) {
-            $aImg = $this->img;
-        }
+    static function GetWidth($aImg) {
         return imagesx($aImg);
     }
 
-    static function GetHeight($aImg=null) {
-        if( $aImg === null ) {
-            $aImg = $this->img;
-        }
+    static function GetHeight($aImg) {
         return imagesy($aImg);
     }
 
@@ -1951,8 +1946,8 @@ class RotImage extends Image {
 
     function __construct($aWidth,$aHeight,$a=0,$aFormat=DEFAULT_GFORMAT,$aSetAutoMargin=true) {
         parent::__construct($aWidth,$aHeight,$aFormat,$aSetAutoMargin);
-        $this->dx=$this->left_margin+$this->plotwidth/2;
-        $this->dy=$this->top_margin+$this->plotheight/2;
+        $this->dx=$this->width/2;
+        $this->dy=$this->height/2;
         $this->SetAngle($a);
     }
 
@@ -2019,8 +2014,6 @@ class RotImage extends Image {
 
     function SetMargin($lm,$rm,$tm,$bm) {
         parent::SetMargin($lm,$rm,$tm,$bm);
-        $this->dx=$this->left_margin+$this->plotwidth/2;
-        $this->dy=$this->top_margin+$this->plotheight/2;
         $this->UpdateRotMatrice();
     }
 
@@ -2271,7 +2264,7 @@ class ImgStreamCache {
     // image file doesn't exist or exists but is to old
     function GetAndStream($aImage,$aCacheFileName) {
         if( $this->Isvalid($aCacheFileName) ) {
-            $this->StreamImgFile($aImage,$aCacheFileName);
+            return $this->StreamImgFile($aImage,$aCacheFileName);
         }
         else {
             return false;
