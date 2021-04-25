@@ -11,9 +11,14 @@ require_once DP_BASE_DIR . '/includes/filter.php';
 $CR = "" . PHP_EOL;  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
-##
-## Returns the best color based on a background color (x is cross-over)
-##
+/**
+ * Returns the best color based on a background color (x is cross-over)
+ *
+ * @param  string $bg Hex value of background colour
+ * @param  string $lt Hex value
+ * @param  string $dk Hex value
+ * @return string Hex value
+ */
 function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 	if (empty($bg)) {
 		$bg = $lt;
@@ -27,19 +32,24 @@ function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 /*
  * Returns a select box based on an key,value array where selected is based on key
  *
- * @param $arr array
+ * @param  array  $arr              Probably a list of options to be selected
+ * @param  string $select_name      Name of option to be selected
+ * @param  string $select_attribs   Extra attributes for this select box
+ * @param  int    $selected         Number of selected option
+ * @param  bool   $translate        Flag to see if things need to be translated (default: false, no translation
+ * @return string                   HTML-Formatted <select> box
  *
- * @note Temporarily remove passing by reference
+ * @note Temporarily remove passing by reference (seems to work better) (gwyneth 20210420)
  */
 //function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate=false) {
 function arraySelect($arr, $select_name, $select_attribs, $selected, $translate=false) {
 	GLOBAL $AppUI;
 	if (empty($arr)) {
-    dprint(__FILE__, __LINE__, 2, __FUNCTION__ . ' called with empty array');
+    dprint(__FILE__, __LINE__, 2, '[INFO]:' . __FUNCTION__ . ' called with empty array');
     return '';
   }
   if (!is_array($arr)) {
-		dprint(__FILE__, __LINE__, 2, __FUNCTION__ . ' called with no array');
+		dprint(__FILE__, __LINE__, 2, '[INFO]:' . __FUNCTION__ . ' called with no array');
 		return '';
 	}
 	reset($arr);
