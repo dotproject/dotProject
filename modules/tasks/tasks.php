@@ -650,26 +650,27 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 				}
 			}
 		}
-
-		//start displaying tasks
-		if (is_array($p['tasks'])) {
+		// start displaying tasks
+    // @note: Added a bit more error fencing (gwyneth 20210425)
+		if (!empty($p['tasks']) && is_array($p['tasks'])) {
 			$summaries = array('duration' => 0, 'start_date' => date('Y-m-d'), 'end-date' => '');
 			foreach ($p['tasks'] as $i => $t1) {
 				// Record summaries
-				if (!$t1['task_dynamic']) {
+				if (!empty($t1['task_dynamic'])) {
 					$summaries['duration'] += $t1['task_duration'];
 				}
-				if ($t1['task_start_date'] < $summaries['start_date']) {
+				if (!empty($t1['task_start_date']) && $t1['task_start_date'] < $summaries['start_date']) {
 					$summaries['start_date'] = $t1['task_start_date'];
 				}
-				if ($t1['task_end_date'] > $summaries['end_date']) {
+				if (!empty($t1['task_end_date']) && $t1['task_end_date'] > $summaries['end_date']) {
 					$summaries['end_date'] = $t1['task_end_date'];
 				}
-				if ($task_sort_item1) {
+				if (!empty($task_sort_item1)) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
 					showtask($t1, -1, true, false, true);
 				} else {
-					if ($t1['task_parent'] == $t1['task_id']) {
+					if (!empty($t1['task_parent']) && !empty($t1['task_id'])
+           && $t1['task_parent'] == $t1['task_id']) {
 						$is_opened = !empty($tasks_opened[$t1['task_id']]);
 
 						//check for child
