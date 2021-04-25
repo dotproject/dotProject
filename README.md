@@ -5,6 +5,8 @@ dotProject is an open source project management system written in PHP.
 It originally started in 2001 by dotMarketing on SourceForge and has
 been under the watchful eye of the current dotProject team since around December 2002.
 
+(This is Gwyneth Llewelyn's fork, to provide PHP 8.0 support and a few extra goodies.)
+
 ## Installing/Upgrading
 
 **NOTE** The `devel` branch is where all the development happens.  If you want the latest and greatest with all relevent bug fixes between releases, then download from https://github.com/dotproject/dotProject/archive/devel.zip
@@ -23,13 +25,13 @@ IRC channel is irc://irc.freenode.net/dotproject on `#dotproject` on `irc.freeno
 
 ## License
 
-As of version 2.0, dotProject is released under GPL.
+As of version 2.0, dotProject is released under [GPL](LICENSE.md).
 1.0.2 and previous versions were released under BSD license.
 Parts of dotProject include libraries from other projects which are used and re-released under their original licence.
 
 ## Docker composer support
 
-The latest devel branch now includes a simple docker-compose.yml file and support files.  These will allow you to run dotProject by running:
+The latest devel branch now includes a simple `docker-compose.yml` file and support files.  These will allow you to run dotProject by running:
 
 `docker-compose up`
 
