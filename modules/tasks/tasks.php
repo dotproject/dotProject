@@ -712,9 +712,9 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <tr>
 	<td colspan="<?php echo $cols - 4 ?>"><?php echo $AppUI->_('Summaries'); ?>: </td>
-	<td><?php $summary_date = new CDate($summaries['start_date']); echo $summary_date->format($df); ?></td>
-	<td align="center"><?php echo $summaries['duration'] ?> <?php echo $AppUI->_('hours'); ?></td>
-	<td><?php $summary_date = new CDate($summaries['end_date']); echo $summary_date->format($df); ?></td>
+	<td><?php if (!empty($summaries['start_date'])) { $summary_date = new CDate($summaries['start_date']); echo $summary_date->format($df); } else { echo "--"; } ?></td>
+	<td align="center"><?php echo $summaries['duration'] ?? ''; ?> <?php echo $AppUI->_('hours') ?? ''; ?></td>
+	<td><?php if (!empty($summaries['end_date'])) { $summary_date = new CDate($summaries['end_date']); echo $summary_date->format($df); } else { echo "--"; } ?></td>
 	<td></td>
 </tr>
 <?php
