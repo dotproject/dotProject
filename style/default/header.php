@@ -13,8 +13,8 @@ else
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<meta name="Description" content="dotProject Default Style" />
-	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
+	<meta name="Version" content="<?php echo @$AppUI->getVersion() ?? 'unknown'; ?>" />
+	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $locale_char_set ?? 'UTF-8'; ?>" />
 	<title><?php echo @dPgetConfig('page_title');?></title>
 	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
@@ -32,16 +32,16 @@ else
 	<?php if (getPermission('smartsearch', 'access')): ?>
 	<form name="frmHeaderSearch" action="?m=smartsearch"  method="post">
 		<input class="text" type="text" id="keyword1" name="keyword1" value="<?php echo dPgetCleanParam($_POST, 'keyword1', ''); ?>" accesskey="k" />
-		<input class="button" type="submit" value="<?php echo $AppUI->_('Search')?>" />
+		<input class="button" type="submit" value="<?php echo $AppUI->_('Search') ?? 'Search'; ?>" />
 	</form>
 	<?php endif; ?>
 	</th>
-	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if ($dialog) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle;?>/images/dp_icon.gif" border="0" alt="http://dotproject.net/" /></a></th>
+	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if (!empty($dialog)) echo "target='_blank'"; ?>><img src="style/<?php echo !empty($uistyle) ?? '';?>/images/dp_icon.gif" border="0" alt="http://dotproject.net/" /></a></th>
 	</tr></table></td>
 </tr>
-<?php if (!$dialog) {
+<?php if (!empty($dialog)) {
 	// top navigation menu
-	$nav = $AppUI->getMenuModules();
+	$nav = $AppUI->getMenuModules() ?? array();
 ?>
 <tr>
 	<td class="nav" align="left">
@@ -82,13 +82,13 @@ else
 	echo "        <input type=\"hidden\" name=\"a\" value=\"addedit\" />\n";
 
 //build URI string
-	if (isset($company_id)) {
+	if (!empty($company_id)) {  // !empty(x) means isset(x) and x is _not_ null/''/0/false/[]
 		echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 	}
-	if (isset($task_id)) {
+	if (!empty($task_id)) {
 		echo '<input type="hidden" name="task_parent" value="'.$task_id.'" />';
 	}
-	if (isset($file_id)) {
+	if (!empty($file_id)) {
 		echo '<input type="hidden" name="file_id" value="'.$file_id.'" />';
 	}
 ?>
@@ -111,7 +111,7 @@ else
 <?php
 	if (getPermission('calendar', 'access')) {
 		$now = new CDate();
-?>                              <b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
+?>         <b><a href="./index.php?m=tasks&amp;a=todo"><?php echo $AppUI->_('Todo');?></a></b> |
 				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> |
 <?php } ?>
 				<a href="?logout=-1"><?php echo $AppUI->_('Logout');?></a>
@@ -127,5 +127,5 @@ else
 <tr>
 <td valign="top" align="left" width="98%">
 <?php
-	echo $AppUI->getMsg();
+	echo $AppUI->getMsg() ?? '';
 ?>
