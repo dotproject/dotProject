@@ -885,7 +885,7 @@ class Date
      * @param object Date $d2 the second date
      * @return int 0 if the dates are equal, -1 if d1 is before d2, 1 if d1 is after d2
      */
-    function compare($d1, $d2)
+    static function compare($d1, $d2)
     {
         $d1->convertTZ(new Date_TimeZone('UTC'));
         $d2->convertTZ(new Date_TimeZone('UTC'));
