@@ -612,7 +612,11 @@ function saveDates(form, id) {
 
 function saveDepend(form, id) {
   if (form != null) {
-    var dl = form.task_dependencies.length - 1;
+    if (form.task_dependencies != null) {
+      var dl = form.task_dependencies.length - 1; // no dependencies (gwyneth 20210425)
+    } else {
+      var dl = -1;
+    }
     var hd = form.hdependencies;
     hd.value = "";
     for (dl; dl > -1; dl--) {
