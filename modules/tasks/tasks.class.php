@@ -2857,37 +2857,37 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				*/
 				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $val['user_id'] . '"'
 						  . 'title="' . $AppUI->_('Extent of Assignment') . ':'
-						  . $userAlloc[$val['user_id']]['charge'] . '%; '
+						  . ($userAlloc[$val['user_id']]['charge'] ?? '--'). '%; '
 						  . $AppUI->_('Free Capacity') . ':'
-						  . $userAlloc[$val['user_id']]['freeCapacity'] . '%' . '">'
-						  . $AppUI->___($val['user_username']) . ' (' . $val['perc_assignment'] . '%)</a>');
+						  . ($userAlloc[$val['user_id']]['freeCapacity'] ?? '--') . '%' . '">'
+						  . $AppUI->___($val['user_username']) . ' (' . ($val['perc_assignment'] ?? '--') . '%)</a>');
 			}
 			$s .= join (', ', $a_u_tmp_array) . '</td>';
 		} else {
 			$s .= ('<td align="center" nowrap="nowrap">'
 				   .'<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id']
 				   . '" title="' . $AppUI->_('Extent of Assignment') . ':'
-				   . $userAlloc[$assigned_users[0]['user_id']]['charge']. '%; '
+				   . ($userAlloc[$assigned_users[0]['user_id']]['charge'] ?? '--') . '%; '
 				   . $AppUI->_('Free Capacity') . ':'
-				   . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%">'
-				   . $AppUI->___($assigned_users[0]['user_username'] )
-				   .' (' . $assigned_users[0]['perc_assignment'] .'%)</a>');
-			if ($a['assignee_count'] > 1) {
+				   . ($userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] ?? '--') . '%">'
+				   . $AppUI->___($assigned_users[0]['user_username'] ?? '[unknown username]')
+				   .' (' . ($assigned_users[0]['perc_assignment'] ?? '--') .'%)</a>');
+			if (!empty($a['assignee_count']) && $a['assignee_count'] > 1) {
 				$s .= (' <a href="javascript: void(0);" onclick="javascript:toggle_users('
 					   . "'users_" . $a['task_id'] . "'" . ');" title="'
 					   . join (', ', $a_u_tmp_array) .'">(+' . ($a['assignee_count'] - 1) . ')</a>'
 					   . '<span style="display: none" id="users_' . $a['task_id'] . '">');
 				$a_u_tmp_array[] = $AppUI->___($assigned_users[0]['user_username']);
-				for ($i = 1, $xi = count($assigned_users); $i < $xi; $i++) {
+				for ($i = 1, $xi = count($assigned_users) ?? 0; $i < $xi; $i++) {
 					$a_u_tmp_array[] = $AppUI->___($assigned_users[$i]['user_username']);
 					$s .= ('<br /><a href="?m=admin&amp;a=viewuser&amp;user_id='
 						   . $assigned_users[$i]['user_id'] . '" title="'
 						   . $AppUI->_('Extent of Assignment') . ':'
-						   . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; '
+						   . ($userAlloc[$assigned_users[$i]['user_id']]['charge']) ?? '--') . '%; '
 						   . $AppUI->_('Free Capacity') . ':'
-						   . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%">'
-						   . $AppUI->___($assigned_users[$i]['user_username']) . ' ('
-						   . $assigned_users[$i]['perc_assignment'] . '%)</a>');
+						   . ($userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] ?? '--') . '%">'
+						   . $AppUI->___(($assigned_users[$i]['user_username'] ?? '[unknown username]')  . ' ('
+						   . ($assigned_users[$i]['perc_assignment'] ?? '--') . '%)</a>');
 				}
 				$s .= '</span>';
 			}
@@ -2899,17 +2899,17 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	}
 	// duration or milestone
 	$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">'
-		   . ($start_date ? $start_date->format($df) : '-') . '</td>'
+		   . (!empty($start_date) ? $start_date->format($df) : '-') . '</td>'
 		   . '<td align="center" nowrap="nowrap" style="' . $style . '">' . $a['task_duration']
 		   . ' ' . $AppUI->_($durnTypes[$a['task_duration_type']]) . '</td>'
 		   . '<td nowrap="nowrap" align="center" style="' . $style . '">'
-		   . ($end_date ? $end_date->format($df) : '-') . '</td>');
+		   . (!empty($end_date) ? $end_date->format($df) : '-') . '</td>');
 	if (!empty($today_view)) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">'
 			   . $a['task_due_in'] . '</td>');
 	} else if (!empty($AppUI->isActiveModule('history')) && getPermission('history', 'view')) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style.'">'
-			   . ($last_update ? $last_update->format($df) : '-') . '</td>');
+			   . (!empty($last_update) ? $last_update->format($df) : '-') . '</td>');
 	}
 
 	// Assignment checkbox

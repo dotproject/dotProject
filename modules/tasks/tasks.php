@@ -642,9 +642,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 		if (is_array($p['tasks'])) {
 			foreach ($p['tasks'] as $i => $t) {
 				$tasks_filtered[] = $t['task_id'];
-				$children_of[$t['task_parent']] = (($children_of[$t['task_parent']])
-												   ?$children_of[$t['task_parent']]:
-												   array());
+				$children_of[$t['task_parent']] = (($children_of[$t['task_parent']]) ?? array());
 				if ($t['task_parent'] != $t['task_id']) {
 					array_push($children_of[$t['task_parent']], $t['task_id']);
 				}
@@ -659,10 +657,10 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 				if (!empty($t1['task_dynamic'])) {
 					$summaries['duration'] += $t1['task_duration'];
 				}
-				if (!empty($t1['task_start_date']) && $t1['task_start_date'] < $summaries['start_date']) {
+				if (!empty($t1['task_start_date']) && !empty($summaries['start_date']) && $t1['task_start_date'] < $summaries['start_date']) {
 					$summaries['start_date'] = $t1['task_start_date'];
 				}
-				if (!empty($t1['task_end_date']) && $t1['task_end_date'] > $summaries['end_date']) {
+				if (!empty($t1['task_end_date']) && !empty($summaries['end_date']) && $t1['task_end_date'] > $summaries['end_date']) {
 					$summaries['end_date'] = $t1['task_end_date'];
 				}
 				if (!empty($task_sort_item1)) {
