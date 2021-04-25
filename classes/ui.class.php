@@ -637,7 +637,11 @@ class CAppUI {
 	function getMsg($reset=true) {
 		$img = '';
 		$class = '';
-		$msg = $this->msg;
+		$msg = $this->msg ?? null;  // better safe than sorry! (gwyneth 20210425)
+
+    if (empty($this->msgNo)) {  // short-circuit and return if message information is missing or not even set — saves us a few warnings under PHP 8 (gwyneth 20210425)
+      return '';
+    }
 
 		switch($this->msgNo) {
 		case UI_MSG_OK:
@@ -664,7 +668,7 @@ class CAppUI {
 			$this->msg = '';
 			$this->msgNo = 0;
 		}
-		return (($msg) ? ('<table cellspacing="0" cellpadding="1" border="0"><tr>'
+		return ((!empty($msg)) ? ('<table cellspacing="0" cellpadding="1" border="0"><tr>'
 		                  . '<td>' . $img . '</td><td class="' . $class . '">' . $msg . '</td>'
 		                  . '</tr></table>')
 		        : '');
