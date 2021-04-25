@@ -301,6 +301,11 @@ function dPgetParam($arr, $name, $def=null) {
 
 /**
  * Alternative to protect from XSS attacks.
+ *
+ * @param mixed $arr This may be either an array of values to clean up, or a single value
+ * @param string $name Key into array (if it's an array!) for the value to be cleaned up
+ * @param mixed $def Default value to apply to the innermost loop (function is recursive)
+ * @return mixed Returns cleaned up array or string, or the default value if not set
  */
 function dPgetCleanParam($arr, $name, $def=null) {
 	if (isset($arr[$name])) {  // we cannot assume blindingly that this is true... (gwyneth 20210415)
@@ -314,11 +319,11 @@ function dPgetCleanParam($arr, $name, $def=null) {
     // $arr[$name] is not an array, so:
 	  $val = defVal($arr[$name], $def);
   } else {
-    return null;
+    return $def;  // BUG(gwyneth): this was a mistake due to lack of documentation!! We _have_ to return the default value (corrected 20210425)
   }
   // Code review: I have no idea how the code can end up here! (gwyneth 20210415)
 	if (empty($val)) {
-		return $val;
+		return $val;  // shouldn't it return $def instead?... (gwyneth 20210425)
 	}
 	return filter_xss($val);
 }
