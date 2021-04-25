@@ -36,8 +36,8 @@
 //
 //------------------------------------------------------------------------
 // define('CACHE_DIR','/tmp/jpgraph_cache/');
-// define('TTF_DIR','/usr/share/fonts/truetype/');
-// define('MBTTF_DIR','/usr/share/fonts/truetype/');
+// define('TTF_DIR','/usr/share/fonts/TrueType/');
+// define('MBTTF_DIR','/usr/share/fonts/TrueType/');
 
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are
@@ -130,7 +130,7 @@ define('CACHE_FILE_GROUP','www');
 define('CACHE_FILE_MOD',0664);
 
 // Default theme class name
-define('DEFAULT_THEME_CLASS', 'FusionTheme');
+define('DEFAULT_THEME_CLASS', 'UniversalTheme');
 
 define('SUPERSAMPLING', true);
 define('SUPERSAMPLING_SCALE', 1);
