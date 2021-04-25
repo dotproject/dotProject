@@ -976,8 +976,11 @@ class CAppUI {
 /**
  * Returns the global dpACL class or creates it as neccessary.
  * @return object dPacl
+ *
+ * @note Temporarily removing & (discouraged under PHP 8 — gwyneth 20210425)
  */
-	function &acl() {
+//	function &acl() {
+  function acl() {
 		if (!(isset($GLOBALS['acl']))) {
 			$GLOBALS['acl'] = new dPacl;
 	  	}
