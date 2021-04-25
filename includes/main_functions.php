@@ -756,22 +756,32 @@ function db_dprint($msg, $newline)
  */
 function findTabModules($module, $file = null) {
 	$modlist = array();
-	if (!isset($_SESSION['all_tabs']) || ! isset($_SESSION['all_tabs'][$module])) {
+	if (empty($_SESSION['all_tabs']) || empty($_SESSION['all_tabs'][$module])) {
 		return $modlist;
 	}
+  // TODO: Review the logic of this check:
+  //  If we pass a valid $file, check if there is a file for the module on this tab;
+  //   if not, return an empty list of modules
+  //  If we pass null, well, then return the list of module _names_ instead (if _these_ exist at all!)
+  // Now rewind the list of modules we got, and construct a new array of either module names (if $file wasn't null)
+  //  or valid module names (if passed $file was null)
+  // Finally, remove all duplicates of the array
+  // Does this make any sense? (question asked by gwyneth 20210425)
 
-	if (isset($file)) {
-		if (isset($_SESSION['all_tabs'][$module][$file])
+	if ($file) {
+		if (!empty($_SESSION['all_tabs'][$module][$file])
 		    && is_array($_SESSION['all_tabs'][$module][$file])) {
-			$tabs_array =& $_SESSION['all_tabs'][$module][$file];
+			// $tabs_array =& $_SESSION['all_tabs'][$module][$file];
+      $tabs_array = $_SESSION['all_tabs'][$module][$file];  // PHP 8 dislikes =&
 		} else {
 			return $modlist;
 		}
 	} else {
-		$tabs_array =& $_SESSION['all_tabs'][$module];
+		// $tabs_array =& $_SESSION['all_tabs'][$module];
+    $tabs_array = $_SESSION['all_tabs'][$module] ?? array();  // uh... this check was skipped? (gwyneth 20210425)
 	}
 	foreach ($tabs_array as $tab) {
-		if (isset($tab['module'])) {
+		if (!empty($tab['module'])) {
 			$modlist[] = $tab['module'];
 		}
 	}
