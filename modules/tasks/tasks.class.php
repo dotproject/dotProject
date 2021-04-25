@@ -717,7 +717,7 @@ class CTask extends CDpObject
 			// print_r($this);
 		}
 
-		if (!$ret) {
+		if (empty($ret)) {
 			return get_class($this) . '::store failed <br />' . db_error();
 		} else {
 			return NULL;
@@ -729,7 +729,7 @@ class CTask extends CDpObject
 	 * @todo Can't delete a task with children
 	 */
 	function delete($oid = NULL, $history_desc = '', $history_proj = 0) {
-		if (!($this->task_id)) {
+		if (empty($this->task_id)) {
 			return 'invalid task id';
 		}
 		$q = new DBQuery;
@@ -2677,7 +2677,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $tasks_opened, $user_id;
 
-	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
+	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());  // does this write _globally_? Is that a good idea? (gwyneth 20210425)
 	$done = (($done) ? $done : array());
 
 	$now = new CDate();
@@ -2724,7 +2724,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			$style = 'background-color:#cc6666;color:#ffffff';
 		}
 
-		if (!$end_date) {
+		if (empty($end_date)) {
 			/*
 			 ** end date calc has been moved to calcEndByStartAndDuration()-function
 			 ** called from array_csort and tasks.php
@@ -2813,7 +2813,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			. "'" . ', CENTER);" onmouseout="nd();"');
 	}
 
-	if ($a['task_milestone'] > 0) {
+	if (!empty($a['task_milestone'])) { // changed as above; it was: $a['task_milestone'] > 0 (gwyneth 20210425)
 		$s .= ('&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $a['task_id'] . '" '
 			   . $alt . '>' . '<b>' . $a['task_name'] . '</b></a>'
 			   . '<img src="./images/icons/milestone.gif" border="0" alt="Milestone" /></td>');
@@ -2833,7 +2833,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			 . $alt . '>' . $AppUI->___($a['task_name']) . '</a></td>');
 	}
 
-	if ($today_view) { // Show the project name
+	if (!empty($today_view)) { // Show the project name
 		$s .= ('<td width="50%"><a href="?m=projects&amp;a=view&amp;project_id='
 			   . $a['task_project'] . '">' . '<span style="padding:2px;background-color:'
 			   . $a['project_color_identifier'] . ';color:'
@@ -2841,12 +2841,12 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			   . '</a></td>');
 	}
 	// task owner
-	if (! $today_view) {
+	if (empty($today_view)) {
 		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id='
 			   . $a['user_id'] . '">' . $a['user_username'] . '</a>' . '</td>');
 	}
 	// $s .= '<td nowrap="nowrap" align="center">' . $a['user_username'] . '</td>';
-	if (isset($a['task_assigned_users']) && ($assigned_users = $a['task_assigned_users'])) {
+	if (!empty($a['task_assigned_users']) && ($assigned_users = $a['task_assigned_users'])) {
 		$a_u_tmp_array = array();
 		if ($show_all_assignees) {
 			$s .= '<td align="center">';
@@ -2893,7 +2893,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 			}
 			$s .= '</td>';
 		}
-	} else if (! $today_view) {
+	} else if (empty($today_view)) {
 		// No users asigned to task
 		$s .= '<td align="center">-</td>';
 	}
@@ -2904,16 +2904,16 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 		   . ' ' . $AppUI->_($durnTypes[$a['task_duration_type']]) . '</td>'
 		   . '<td nowrap="nowrap" align="center" style="' . $style . '">'
 		   . ($end_date ? $end_date->format($df) : '-') . '</td>');
-	if ($today_view) {
+	if (!empty($today_view)) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">'
 			   . $a['task_due_in'] . '</td>');
-	} else if ($AppUI->isActiveModule('history') && getPermission('history', 'view')) {
+	} else if (!empty($AppUI->isActiveModule('history')) && getPermission('history', 'view')) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style.'">'
 			   . ($last_update ? $last_update->format($df) : '-') . '</td>');
 	}
 
 	// Assignment checkbox
-	if ($showEditCheckbox) {
+	if (!empty($showEditCheckbox)) {
 		$s .= ("\n\t" . '<td align="center">' . '<input type="checkbox" name="selected_task['
 			   . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>');
 	}
