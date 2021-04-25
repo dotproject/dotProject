@@ -19,7 +19,7 @@ else
 	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
-	<!-- <?php // @$AppUI->loadJS(); // moving it to the end (gwyneth 20210425) ?> -->
+	<?php @$AppUI->loadJS(); // reverted the move to the end, breaks display (gwyneth 20210425) ?>
 </head>
 
 <body onload="this.focus();">
