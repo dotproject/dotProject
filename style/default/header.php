@@ -19,7 +19,7 @@ else
 	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
-	<?php @$AppUI->loadJS(); ?>
+	<!-- <?php // @$AppUI->loadJS(); // moving it to the end (gwyneth 20210425) ?> -->
 </head>
 
 <body onload="this.focus();">
@@ -69,7 +69,7 @@ else
 							  'calendar' => 'Event',
 							  'files' => 'File',
 							  'projects' => 'Project');
-	
+
 	$newItem = array(0=>'- New Item -');
 	foreach ($newItemPermCheck as $mod_check => $mod_check_title) {
 		if (getPermission($mod_check, 'add')) {
