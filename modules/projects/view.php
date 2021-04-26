@@ -323,7 +323,9 @@ echo @$obj->project_demo_url; ?></a></td>
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
 				<td class="hilite">
-					<?php echo str_replace(chr(10), "<br>", strip_tags($obj->project_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>')); ?>
+					<?php // echo str_replace(chr(10), "<br>", strip_tags($obj->project_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'));
+            // why str_replace() and not nl2br()? [for consistency's sake] (gwyneth 20210426)
+            echo str_replace(chr(10), "<br>", $AppUI->showHTML($obj->project_description)); ?>
 				</td>
 			</tr>
 			</table>

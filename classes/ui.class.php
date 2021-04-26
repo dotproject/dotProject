@@ -506,7 +506,7 @@ class CAppUI {
 			case UI_OUTPUT_URI:
 				$str = str_replace(' ', '%20', $str);
 				break;
-			case UI_OUTPUT_TEXT:
+			case UI_OUTPUT_TEXT:  // $flags == 0 : this is the default! (gwyneth 20260426)
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 //				$str = filter_xss($str);
         $str = dPsanitiseHTML($str);
