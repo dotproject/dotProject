@@ -26,11 +26,10 @@ dd {
 	margin-bottom: 0px; margin-left: 1.5em;
 }
 
-
-em {
-	font-weight: bold;
-	text-decoration: none;
-	font-style: normal;
+em, i {
+  font-weight: normal;
+  text-decoration: none;
+  font-style: italic;
 }
 
 .ql-editor em {

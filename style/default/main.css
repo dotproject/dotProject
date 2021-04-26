@@ -27,10 +27,10 @@ dd {
 }
 
 
-em {
-	font-weight: bold;
+em, i {
+	font-weight: normal;
 	text-decoration: none;
-	font-style: normal;
+	font-style: italic;
 }
 
 .ql-editor em {
