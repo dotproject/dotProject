@@ -247,7 +247,7 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 // try commenting out the following two lines if gantt charts do not display
 $graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
 $graph->scale->SetTableTitleBackground(/* '#' .*/ $projects[$project_id]['project_color_identifier']);  // now the project color identifier already includes a '#' (gwyneth 20210426)
-$graph->scale->tableTitle->SetColor(bestColor($obj->project_color_identifier)); // contrasting colour (gwyneth 20210426)
+$graph->scale->tableTitle->SetColor(bestColor($projects[$project_id]['project_color_identifier'])); // contrasting colour (gwyneth 20210426)
 $graph->scale->tableTitle->Show(true);
 
 //-----------------------------------------
