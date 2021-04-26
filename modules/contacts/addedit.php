@@ -328,7 +328,11 @@ function companyChange() {
 	<td valign="top" width="50%">
 		<strong><?php echo $AppUI->_('Contact Notes');?></strong><br />
     <!-- quill it -->
-		<textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo @$row->contact_notes;?></textarea>
+		<!-- <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php // echo @$row->contact_notes;?></textarea> -->
+    <?php
+      $richedit = new DpRichEdit('contact_notes', $row->contact_notes);
+      $richedit->render();
+    ?>
 	</td>
 </tr>
 <tr>
