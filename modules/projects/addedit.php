@@ -99,7 +99,7 @@ if ($project_id) {
 }
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if ($department_selection_list!='' || $project_id) {
+if ((!empty($department_selection_list) && $department_selection_list != '') || $project_id) {
 	$department_selection_list = ($AppUI->_('Departments')."<br />\n"
 	                              . '<select name="dept_ids[]" class="text">' . "\n"
 	                              . '<option value="0"></option>' . "\n"
