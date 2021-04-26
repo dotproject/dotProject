@@ -5,6 +5,8 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 
 if ($user_id == 0) {
@@ -221,18 +223,18 @@ echo $AppUI->_('select dept');?>..." onclick="javascript:popDept()" />
     </td>
 </tr>
 <tr>
-    <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
-    <td><input type="email" class="text" name="contact_email" value="<?php
+  <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
+  <td><input type="email" class="text" name="contact_email" value="<?php
 echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 </tr>
 <tr>
-    <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
-<?php
+  <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
+  <td colspan="4"><?php
   $richedit = new DpRichEdit("user_signature", dPsanitiseHTML(@$user['user_signature']));
   $richedit->render();
   //  <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php
-  //echo @$user['user_signature'];?></textarea>
-</td>
+  //echo @$user['user_signature']; ?\></textarea> ?>
+  </td>
 </tr>
 <tr>
 	<td align="right"><?php if ($user['user_contact']) { ?>
