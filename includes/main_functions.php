@@ -353,7 +353,7 @@ function dPgetCleanParam($arr, $name, $def=null) {
  */
 function dPsanitiseHTML($text, $allowedTags = null) {
   if ($allowedTags == null) {
-    $allowedTags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'table', 'tr', 'td', 'tbody', 'thead', 'br', 'b', 'i', 'h1', 'h2', 's', 'u', 'p', 'q', 'blockquote', 'sub', 'sup', 'abbr', 'kbd', 'var', 'samp', 'hr', 'address', 'caption', 'del', 'ins', 'dfn', 'mark', 'small', 'wbr'));
+    $allowedTags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'table', 'tr', 'td', 'tbody', 'thead', 'br', 'b', 'i', 'h1', 'h2', 's', 'u', 'p', 'q', 'blockquote', 'sub', 'sup', 'abbr', 'kbd', 'var', 'samp', 'hr', 'address', 'caption', 'del', 'ins', 'dfn', 'small'));
   }
 //	return filter_xss($text);  // replacing filter_xss with HTML Purifier (gwyneth 20210426)
   $config = HTMLPurifier_Config::createDefault();
