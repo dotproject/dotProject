@@ -16,7 +16,11 @@ setTasksStartDate sets new task's start date value which is maximum end date of 
 to do: date format should be taken from config
 */
 function setTasksStartDate(form, datesForm) {
-  var td = form.task_dependencies.length - 1;
+  if (form.task_dependencies != null) {
+    var td = form.task_dependencies.length - 1; // no dependencies (gwyneth 20210425)
+  } else {
+    var td = -1;
+  }
   var max_date = new Date("1970", "01", "01");
   var max_id = -1;
 
@@ -164,7 +168,11 @@ function clearExceptFor(obj, id) {
 
 function addTaskDependency(form, datesForm) {
   var at = form.all_tasks.length - 1;
-  var td = form.task_dependencies.length - 1;
+  if (form.task_dependencies != null) {
+    var td = form.task_dependencies.length - 1; // no dependencies (gwyneth 20210425)
+  } else {
+    var td = -1;
+  }
   var tasks = "x";
 
   //Check to see if None is currently in the dependencies list, and if so, remove it.
@@ -193,7 +201,11 @@ function addTaskDependency(form, datesForm) {
 }
 
 function removeTaskDependency(form, datesForm) {
-  var td = form.task_dependencies.length - 1;
+  if (form.task_dependencies != null) {
+    var td = form.task_dependencies.length - 1; // no dependencies (gwyneth 20210425)
+  } else {
+    var td = -1;
+  }
 
   for (td; td > -1; td--) {
     if (form.task_dependencies.options[td].selected) {
