@@ -380,16 +380,17 @@ if (count($depts) > 0) {
 			<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
 		</tr>
 		<tr>
-			<td colspan='3' class="hilite">
-				<?php
-	foreach ($depts as $dept_id => $dept_info) {
-		echo ('<div>' . $dept_info['dept_name']);
-		if ($dept_info['dept_phone'] != '') {
-			echo ('(' . $dept_info['dept_phone'] . ')');
-		}
-		echo '</div>';
-	}
-?>
+      <td colspan='3' class="hilite">
+        <?php
+          foreach ($depts as $dept_id => $dept_info) {
+            $op = '<div>' . $dept_info['dept_name'];
+            if ($dept_info['dept_phone'] != '') {
+              $op .= '(' . $dept_info['dept_phone'] . ')';
+            }
+            $op .= '</div>';
+            echo $AppUI->showHTML($op);  /// was ___($op) but this makes things clearer (gwyneth 20210426)
+          }
+        ?>
 			</td>
 		</tr>
 		<?php
