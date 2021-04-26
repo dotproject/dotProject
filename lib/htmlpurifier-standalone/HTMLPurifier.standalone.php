@@ -2443,7 +2443,7 @@ class HTMLPurifier_Config
     {
         return $this->getDefinition('HTML', true, true);
     }
-    
+
     /**
      * @return HTMLPurifier_CSSDefinition|null
      */
@@ -2451,7 +2451,7 @@ class HTMLPurifier_Config
     {
         return $this->getDefinition('CSS', true, true);
     }
-    
+
     /**
      * @return HTMLPurifier_URIDefinition|null
      */
