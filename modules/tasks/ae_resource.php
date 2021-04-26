@@ -4,6 +4,8 @@ if (!defined('DP_BASE_DIR')) {
   die('You should not access this file directly.');
 }
 
+include_once ($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // $Id$
 global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $tab, $loadFromTab;
 
@@ -92,7 +94,12 @@ for ($i = 1, $xi = sizeof($keys); $i < $xi; $i++) {
 		<table><tr><td align="left">
 		<?php echo $AppUI->_('Additional Email Comments');?>:
 		<br />
-		<textarea name="email_comment" class="textarea" cols="60" rows="10" wrap="virtual"></textarea><br />
+		<!-- <textarea name="email_comment" class="textarea" cols="60" rows="10" wrap="virtual"></textarea> -->
+    <?php
+      $richedit = new DpRichEdit('email_comment', '');  // where is the content?... (gwyneth 20210426)
+      $richedit->render();
+    ?>
+    <br />
 		<input type="checkbox" name="task_notify" id="task_notify" value="1"<?php if ($obj->task_notify != 0) { echo ' checked="checked"'; } ?> /> <label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
 		</td></tr></table><br />
 

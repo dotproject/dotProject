@@ -32,6 +32,9 @@ if (!$row->load($contact_id) && $contact_id > 0) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// Now it's safe to include this...
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // setup the title block
 $ttl = $contact_id > 0 ? "Edit Contact" : "Add Contact";
 $titleBlock = new CTitleBlock($ttl, 'monkeychat-48.png', $m, "$m.$a");

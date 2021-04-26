@@ -28,7 +28,8 @@ if ($task_log_id) {
 	$log->task_log_name = $obj->task_name;
 }
 
-include ($AppUI->getLibraryClass('quilljs/richedit.class'));
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // Check that the user is at least assigned to a task
 $task = new CTask;
 $task->load($task_id);
