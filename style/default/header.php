@@ -39,7 +39,7 @@ else
 	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if (!empty($dialog)) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle ?? 'default';?>/images/dp_icon.gif" border="0" alt="http://dotproject.net/" /></a></th>
 	</tr></table></td>
 </tr>
-<?php if (!empty($dialog)) {
+<?php if (empty($dialog)) {
 	// top navigation menu
 	$nav = $AppUI->getMenuModules() ?? array();
 ?>
