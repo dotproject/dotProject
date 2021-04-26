@@ -177,7 +177,7 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task');?>:</td>
 			<td class="hilite"><strong><?php echo $AppUI->___(@$obj->task_name);?></strong></td>
 		</tr>
-		<?php if ($obj->task_parent != $obj->task_id) { 
+		<?php if ($obj->task_parent != $obj->task_id) {
 			$obj_parent = new CTask();
 			$obj_parent->load($obj->task_parent);
 		?>
@@ -194,7 +194,7 @@ function delIt() {
 			<td class="hilite">
 		<?php
 			$task_priotities = dPgetSysVal('TaskPriority');
-            echo $AppUI->_($task_priotities[$obj->task_priority]); 
+            echo $AppUI->_($task_priotities[$obj->task_priority]);
 		?>
 			</td>
 		</tr>
@@ -269,7 +269,7 @@ function delIt() {
 			$q->addTable('task_dependencies', 'td');
 			$q->addWhere('td.dependencies_req_task_id = t.task_id');
 			$q->addWhere('td.dependencies_task_id = ' . $task_id);
-			
+
 			$taskDep = $q->loadHashList();
 			$q->clear();
 		?>
@@ -278,7 +278,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td colspan="3">
-			<?php 
+			<?php
 				$s = count($taskDep) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach ($taskDep as $key => $value) {
 					$s .= '<tr><td class="hilite">';
@@ -290,7 +290,7 @@ function delIt() {
 			</td>
 		</tr>
                 <?php
-			// Pull the tasks depending on this Task 
+			// Pull the tasks depending on this Task
 			$q->addQuery('td.dependencies_task_id, t.task_name');
 			$q->addTable('tasks', 't');
 			$q->addTable('task_dependencies', 'td');
@@ -348,14 +348,14 @@ function delIt() {
 		    					$op .= '('.$dept_info['dept_phone'].')';
 		    				}
 		    				$op .= '</div>';
-						echo $AppUI->___($op);
+						echo $AppUI->showHTML($op);  /// was ___($op) but this makes things clearer (gwyneth 20210426)
 		    			}
 		    		?>
 		    	</td>
 		    </tr>
 	 		<?php
 		}
-		
+
 		if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 			$q->addTable('contacts', 'c');
 			$q->leftJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id');
@@ -441,7 +441,7 @@ function delIt() {
 </tr>
 </table>
 
-<?php 
+<?php
 $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
 
