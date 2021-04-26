@@ -104,7 +104,7 @@ class CDate extends Date {
 * @param boolean $convertTZ Deal with timezone conversion or not
 * @return int Returns (-1 | 0 | 1) if first date is lower than; equal; or greater than second date
 */
-	function compare($d1, $d2, $convertTZ=false)
+	static function compare($d1, $d2, $convertTZ=false)
 	{
 		if (!is_object($d1)) {
 			$d1 = new CDate($d1);
