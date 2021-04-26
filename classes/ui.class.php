@@ -508,17 +508,20 @@ class CAppUI {
 				break;
 			case UI_OUTPUT_TEXT:
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
-				$str = filter_xss($str);
+//				$str = filter_xss($str);
+        $str = dPsanitiseHTML($str);
 				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_FORM:
 				$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
-				$str = filter_xss($str);
+//				$str = filter_xss($str);
+        $str = dPsanitiseHTML($str);
 				break;
 			case UI_OUTPUT_HTML:
 				#$str = htmlentities(stripslashes($str), ENT_COMPAT, $locale_char_set);
 				#$str = str_replace('&#039;', '&apos;', $str);
-				$str = filter_xss($str);
+//				$str = filter_xss($str);
+        $str = dPsanitiseHTML($str);
 				break;
 			case UI_OUTPUT_JS:
 				$str = addslashes(stripslashes($str));
@@ -1077,7 +1080,8 @@ class CAppUI {
 	 * Register loadable JS scripts
 	 */
 	function addJS($href) {
-		$sanitised = filter_xss($href);
+//		$sanitised = filter_xss($href);
+    $sanitised = dPsanitiseHTML($href);
 		if ($sanitised) {
 			array_push($sanitised, $this->_js);
 		}
@@ -1087,7 +1091,8 @@ class CAppUI {
 	 * Register loadable CSS scripts
 	 */
 	function addCSS($href) {
-		$sanitised = filter_xss($href);
+//		$sanitised = filter_xss($href);
+    $sanitised = dPsanitiseHTML($href);
 		if ($sanitised) {
 			array_push($sanitised, $this->_css);
 		}

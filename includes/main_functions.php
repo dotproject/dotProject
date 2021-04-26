@@ -6,7 +6,8 @@ if (!(defined('DP_BASE_DIR'))) {
 	die('You should not access this file directly.');
 }
 
-require_once DP_BASE_DIR . '/includes/filter.php';
+// require_once DP_BASE_DIR . '/includes/filter.php';  // now using HTML Purifier 4.13.0 (gwyneth 20210426)
+require_once DP_BASE_DIR . '/includes/htmlpurifier-standalone/HTMLPurifier.standalone.php';
 
 $CR = "" . PHP_EOL;  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
 define('SECONDS_PER_DAY', 60 * 60 * 24);
@@ -335,11 +336,34 @@ function dPgetCleanParam($arr, $name, $def=null) {
 	if (empty($val)) {
 		return $val;  // shouldn't it return $def instead?... (gwyneth 20210425)
 	}
-	return filter_xss($val);
+	return dPsanitiseHTML($val);  // replacing filter_xss with HTML Purifier (gwyneth 20210426)
 }
 
-function dPsanitiseHTML($text) {
-	return filter_xss($text);
+/**
+ * Encapsulation of HTML Purifier code to filter out XSS
+ *
+ * The old dPsanitiseHTML relied upon old Drupal 6 code; this one uses HTML Purifier, slower but safer
+ *
+ * @param string   $text to sanitise
+ * @param array    $allowedTags  Array of valid tags to allow on HTML Purifier; null retrieves defaults stored on the filter_allowed_tags configuration
+ * @return string  Sanitised input, safe for display
+ *
+ * @author Gwyneth Llewelyn
+ * @see https://htmlpurifier.org/
+ */
+function dPsanitiseHTML($text, $allowedTags = null) {
+  if ($allowedTags == null) {
+    $allowedTags = dPgetConfig('filter_allowed_tags', array('a', 'em', 'strong', 'cite', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'table', 'tr', 'td', 'tbody', 'thead', 'br', 'b', 'i'));
+  }
+//	return filter_xss($text);  // replacing filter_xss with HTML Purifier (gwyneth 20210426)
+  $config = HTMLPurifier_Config::createDefault();
+  // collapse allowedTags array into comma-separated string, since that's what HTML Purifier expects
+  //  (gwyneth 20210426)
+  $purifiedAllowedTags = implode(",", $allowedTags);
+  $config->set('HTML.Allowed', $purifiedAllowedTags);
+  $purifier = new HTMLPurifier($config);
+  $clean_html = $purifier->purify($text);
+  return $clean_html;
 }
 
 function dPgetEmailParam($arr, $name, $def = null) {
