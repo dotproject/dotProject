@@ -333,7 +333,7 @@ function delIt() {
 		$q->addQuery('dept_id, dept_name, dept_phone');
 		$depts = $q->loadHashList('dept_id');
 		$q->clear();
-		if (count($depts)) {
+		if (!empty(depts) && count($depts)) {  // if this company doesn't have any departments, skip this (gwyneth 20210426)
 			?>
 		    <tr>
 		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
@@ -342,13 +342,12 @@ function delIt() {
 		    	<td colspan='3' class="hilite">
 		    		<?php
 		    			foreach ($depts as $dept_id => $dept_info) {
-						$op = '<div>'
-		    				.$dept_info['dept_name'];
+						    $op = '<div>' . $dept_info['dept_name'];
 		    				if ($dept_info['dept_phone'] != '') {
-		    					$op .= '('.$dept_info['dept_phone'].')';
+		    					$op .= '(' . $dept_info['dept_phone'] . ')';
 		    				}
 		    				$op .= '</div>';
-						echo $AppUI->showHTML($op);  /// was ___($op) but this makes things clearer (gwyneth 20210426)
+						    echo $AppUI->showHTML($op);  /// was ___($op) but this makes things clearer (gwyneth 20210426)
 		    			}
 		    		?>
 		    	</td>
