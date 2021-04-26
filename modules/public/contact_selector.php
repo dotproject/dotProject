@@ -230,7 +230,7 @@ echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : ''); ?>&show_all=1
 <?php echo $AppUI->_('View all allowed companies'); ?>
 </a></h4>
 <hr />
-<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?? "[unknown]"; ?></h2>
+<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?? ' ' . strtolower($AppUI->_("All Companies")); ?></h2>
 <?php
 renderContacts($activeContacts, $contacts_id);
 
