@@ -50,7 +50,7 @@ if ($a == 'todo') {
 	$showDynTasks = (($showDynTasks != '0') ? '1' : $showDynTasks);
 	$showLowTasks = (int)dPgetParam($_POST, 'showLowTasks', '0');
 	$showLowTasks = (($showLowTasks != '0') ? '1' : $showLowTasks);
-	
+
 }
 
 // months to scroll
@@ -85,7 +85,7 @@ if (!@$min_view) {
 function scrollPrev() {
 	f = document.editFrm;
 <?php
-	$new_start = new CDate($start_date);	
+	$new_start = new CDate($start_date);
 	$new_start->day = 1;
 	$new_end = new CDate($end_date);
 	$new_start->addMonths(-$scroll_date);
@@ -100,7 +100,7 @@ function scrollPrev() {
 function scrollNext() {
 	f = document.editFrm;
 <?php
-	$new_start = new CDate($start_date);	
+	$new_start = new CDate($start_date);
 	$new_start->day = 1;
 	$new_end = new CDate($end_date);
 	$new_start->addMonths($scroll_date);
@@ -124,7 +124,7 @@ function showFullProject() {
 
 </script>
 
-<form name="editFrm" method="post" action="?<?php 
+<form name="editFrm" method="post" action="?<?php
 echo ('m=' . $m . '&amp;a=' . $a . '&amp=tab=' . $tab . '&amp;project_id=' . $project_id); ?>">
 <input type="hidden" name="display_option" value="<?php echo $display_option;?>" />
 
@@ -133,7 +133,7 @@ echo ('m=' . $m . '&amp;a=' . $a . '&amp=tab=' . $tab . '&amp;project_id=' . $pr
 	<td align="left" valign="top" width="20">
 <?php if ($display_option != "all") { ?>
 		<a href="javascript:scrollPrev()">
-			<img src="./images/prev.gif" width="16" height="16" alt="<?php 
+			<img src="./images/prev.gif" width="16" height="16" alt="<?php
 	echo $AppUI->_('previous');?>" border="0">
 		</a>
 <?php } ?>
@@ -151,29 +151,29 @@ echo $start_date->format(FMT_DATE_HTML5);?>" class="text dpDateField">
 echo $end_date->format(FMT_DATE_HTML5);?>" class="text dpDateField">
 	</td>
 	<td valign="top">
-		<input type="checkbox" name="showLabels" id="showLabels" <?php 
-echo (($showLabels == 1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php 
+		<input type="checkbox" name="showLabels" id="showLabels" <?php
+echo (($showLabels == 1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php
 echo $AppUI->_('Show captions'); ?></label>
 	</td>
 	<td valign="top">
-		<input type="checkbox" name="showWork" id="showWork" <?php 
-echo (($showWork == 1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php 
+		<input type="checkbox" name="showWork" id="showWork" <?php
+echo (($showWork == 1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php
 echo $AppUI->_('Show work instead of duration'); ?></label>
-	</td>	
+	</td>
 	<td valign="top">
-		<input type="checkbox" name="sortByName" id="sortByName" <?php 
-echo (($sortByName == 1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php 
+		<input type="checkbox" name="sortByName" id="sortByName" <?php
+echo (($sortByName == 1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php
 echo $AppUI->_('Sort by Task Name'); ?></label>
-	</td>	
+	</td>
 	<td align="left">
-		<input type="button" class="button" value="<?php 
+		<input type="button" class="button" value="<?php
 echo $AppUI->_('submit');?>" onclick='javascript:document.editFrm.display_option.value="custom";submit();'>
 	</td>
 
 	<td align="right" valign="top" width="20">
 <?php if ($display_option != "all") { ?>
 	  <a href="javascript:scrollNext()">
-	  	<img src="./images/next.gif" width="16" height="16" alt="<?php 
+	  	<img src="./images/next.gif" width="16" height="16" alt="<?php
 echo $AppUI->_('next');?>" border="0" />
 	  </a>
 <?php } ?>
@@ -186,29 +186,29 @@ echo $AppUI->_('next');?>" border="0" />
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
 			<tr>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showPinned" id="showPinned" <?php 
+				<input type="checkbox" name="showPinned" id="showPinned" <?php
 echo $showPinned ? 'checked="checked"' : ''; ?> />
 				<label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php 
+				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php
 echo $showArcProjs ? 'checked="checked"' : ''; ?> />
 				<label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php 
+				<input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php
 echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
 				<label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showDynTasks" id="showDynTasks" <?php 
+				<input type="checkbox" name="showDynTasks" id="showDynTasks" <?php
 echo $showDynTasks ? 'checked="checked"' : ''; ?> />
 				<label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php 
+				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php
 echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-				<label for="showLowTasks"><?php 
+				<label for="showLowTasks"><?php
 echo $AppUI->_('Low Priority Tasks'); ?></label>
 			</td>
 			</tr>
@@ -218,8 +218,8 @@ echo $AppUI->_('Low Priority Tasks'); ?></label>
 <?php } ?>
 <tr>
 	<td align="center" valign="bottom" colspan="7">
-		<a href='javascript:showThisMonth()'><?php echo $AppUI->_('show this month'); ?></a> : 
-		<a href='javascript:showFullProject()'><?php 
+		<a href='javascript:showThisMonth()'><?php echo $AppUI->_('show this month'); ?></a> :
+		<a href='javascript:showFullProject()'><?php
 echo (($a == 'todo') ? $AppUI->_('show all') : $AppUI->_('show full project')); ?></a>
 	</td>
 </tr>
@@ -242,18 +242,18 @@ if ($a != 'todo') {
 	$cnt[0]['N'] = ((empty($tasks)) ? 0 : 1);
 }
 if ($cnt[0]['N'] > 0) {
-	$src = ('?m=tasks&amp;a=gantt&amp;suppressHeaders=1&amp;project_id=' . $project_id 
-	        . (($display_option == 'all') ? '' 
-	           : ('&amp;start_date=' . $start_date->format('%Y-%m-%d') 
-	              . '&amp;end_date=' . $end_date->format('%Y-%m-%d'))) . "&width='" 
-			. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)" 
-			. "+'&amp;showLabels=" . $showLabels . '&amp;showWork=' . $showWork 
-	        . '&amp;sortByName=' . $sortByName . '&amp;showPinned=' . $showPinned 
-	        . '&amp;showArcProjs=' . $showArcProjs . '&amp;showHoldProjs=' . $showHoldProjs 
-	        . '&amp;showDynTasks=' . $showDynTasks . '&amp;showLowTasks=' . $showLowTasks 
+	$src = ('?m=tasks&amp;a=gantt&amp;suppressHeaders=1&amp;project_id=' . $project_id
+	        . (($display_option == 'all') ? ''
+	           : ('&amp;start_date=' . $start_date->format('%Y-%m-%d')
+	              . '&amp;end_date=' . $end_date->format('%Y-%m-%d'))) . "&width='"
+			. "+((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95)"
+			. "+'&amp;showLabels=" . $showLabels . '&amp;showWork=' . $showWork
+	        . '&amp;sortByName=' . $sortByName . '&amp;showPinned=' . $showPinned
+	        . '&amp;showArcProjs=' . $showArcProjs . '&amp;showHoldProjs=' . $showHoldProjs
+	        . '&amp;showDynTasks=' . $showDynTasks . '&amp;showLowTasks=' . $showLowTasks
 	        . '&amp;caller=' . $a . '&amp;user_id=' . $user_id);
 ?>
-	<script >document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
+	<script>document.write('<img src="<?php echo $src; ?>" alt="" />')</script>
 <?php
 	//If we have a problem displaying this we need to display a warning.
 	//Put it at the bottom just in case
@@ -263,7 +263,7 @@ if ($cnt[0]['N'] > 0) {
 </tr>
 <tr>
 	<td>
-		<span style="color: red; font-weight: bold;"><?php 
+		<span style="color: red; font-weight: bold;"><?php
 		echo $AppUI->_('invalid memory config'); ?></span>
 <?php
 	}

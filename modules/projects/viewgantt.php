@@ -131,7 +131,7 @@ function showFullProject() {
 	<td>
 		<form name="editFrm" method="post" action="?<?php
 foreach ($_GET as $key => $val) {
-	$url_query_string .= (($url_query_string) ? '&amp;' : '') . $key . '=' . $val;
+	$url_query_string .= (!empty($url_query_string) ? '&amp;' : '') . $key . '=' . $val;
 }
 echo ($url_query_string);
 ?>">
