@@ -63,7 +63,7 @@ $q->leftJoin('billingcode','bc','bc.billingcode_id = tl.task_log_costcode');
 $q->leftJoin('users', 'u', 'u.user_id = tl.task_log_creator');
 $q->addWhere('task_log_task=' . $task_id . (($problem) ? ' AND task_log_problem > 0' : ''));
 $q->addOrder('tl.task_log_date');
- 
+
 $logs = (($canView) ? $q->loadList() : array());
 
 $s = '';
@@ -75,24 +75,24 @@ foreach ($logs as $row) {
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
 	if ($canEdit) {
-		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $task_id . '&tab=' 
-		       . (($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1') 
-		       . '&amp;task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t" 
+		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $task_id . '&tab='
+		       . ((!empty($tab) && $tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1') // just making sure we avoid a stupid warning when $tab doesn't exist (gwyneth 20210426)
+		       . '&amp;task_log_id='.@$row['task_log_id'].'#log">' . "\n\t\t\t"
 		       . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">' . (($task_log_date) ? $task_log_date->format($df) : '-') . '</td>';
 	/*
-	$s .= ('<td align="center" valign="middle">' 
-	       . (($row['task_log_problem'] ?  dPshowImage('./images/icons/mark-as-important-16.png', 
-	                                                   16, 16, 'Problem', 'Problem') : '')) 
+	$s .= ('<td align="center" valign="middle">'
+	       . (($row['task_log_problem'] ?  dPshowImage('./images/icons/mark-as-important-16.png',
+	                                                   16, 16, 'Problem', 'Problem') : ''))
 	       . '</td>');
 	*/
 	$reference_image = '-';
 	if ($row['task_log_reference'] > 0) {
 		if (isset($taskLogReferenceImage[$row['task_log_reference']])) {
-			$reference_image = dPshowImage($taskLogReferenceImage[$row['task_log_reference']], 16, 
-			                               16, $taskLogReference[$row['task_log_reference']], 
+			$reference_image = dPshowImage($taskLogReferenceImage[$row['task_log_reference']], 16,
+			                               16, $taskLogReference[$row['task_log_reference']],
 										   $taskLogReference[$row['task_log_reference']]);
 		} else if (isset($taskLogReference[$row['task_log_reference']])) {
 			$reference_image = $taskLogReference[$row['task_log_reference']];
@@ -100,9 +100,9 @@ foreach ($logs as $row) {
 	}
 	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
 	$s .= '<td width="30%" style="'.$style.'">' . $AppUI->___(@$row['task_log_name']) . '</td>';
-	$s .= ((!(empty($row['task_log_related_url']))) 
-	       ? ('<td><a href="'.@$row['task_log_related_url'] . '" title="' 
-	          . @$row['task_log_related_url'].'">' . $AppUI->_('URL') . '</a></td>') 
+	$s .= ((!(empty($row['task_log_related_url'])))
+	       ? ('<td><a href="'.@$row['task_log_related_url'] . '" title="'
+	          . @$row['task_log_related_url'].'">' . $AppUI->_('URL') . '</a></td>')
 	       : '<td></td>');
 	$s .= '<td width="100">' . $AppUI->___($row['user_username']) . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
@@ -111,12 +111,12 @@ foreach ($logs as $row) {
 	$s .= (int) $row['task_log_hours'] . ':' . $minutes . ')</td>';
 	$s .= '<td width="100">' . $AppUI->___($row['task_log_costcode']) . '</td>';
 	$s .= '<td><a name="tasklog' . @$row['task_log_id'] . '"></a>';
-        $s .= strip_tags($row['task_log_description'], '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>');	
+        $s .= strip_tags($row['task_log_description'], '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>');
 	$s .= '</td>';
 	$s .= "\n\t<td>";
 	if ($canDelete) {
-		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' 
-		       . $AppUI->_('delete log') . '">' . "\n\t\t\t" 
+		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="'
+		       . $AppUI->_('delete log') . '">' . "\n\t\t\t"
 		       . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, '') . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
@@ -126,7 +126,7 @@ foreach ($logs as $row) {
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= '<td align="right">' . sprintf("%.2f", $hrs) . '</td>';
-$s .= ('<td align="right" colspan="3"><form action="?m=tasks&amp;a=view&amp;tab=1&amp;task_id=' 
+$s .= ('<td align="right" colspan="3"><form action="?m=tasks&amp;a=view&amp;tab=1&amp;task_id='
        . $task_id . '" method="post">');
 if (getPermission('tasks', 'edit', $task_id)) {
 	$s .= '<input type="submit" class="button" value="' . $AppUI->_('new log') . '" />';
@@ -145,6 +145,7 @@ echo $s;
 	<td>=<?php echo $AppUI->_('Problem Report'); ?></td>
 </tr>
 </table>
+<!-- why is this here? we don't even call Quill here... (gwyneth 20210426) -->
 <style>
 .ql-size-large {
     font-size: 1.5em;
@@ -156,10 +157,10 @@ echo $s;
     font-size: 2.5em;
 }
 .ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
+    font-family: Monaco, "Courier New", monospace;
 }
 .ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
+    font-family: Georgia, "Times New Roman", serif;
 }
 .ql-align-center {
     text-align: center;
