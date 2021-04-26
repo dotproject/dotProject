@@ -628,13 +628,22 @@ function formatCurrency($number, $format) {
 	// Money_format only exists on non-windows 4.3.x sites.
 	// This uses localeconv to get the information required
 	// to format the money.	 It tries to set reasonable defaults.
+  // Note 2: It has also been deprecated in PHP 7 and _removed_ in PHP 8! (gwyneth 20210426)
 	$mondat = localeconv();
 	if (! isset($mondat['int_frac_digits']) || $mondat['int_frac_digits'] > 100) {
 		$mondat['int_frac_digits'] = 2;
 	}
 	if (! isset($mondat['int_curr_symbol'])) {
 		$mondat['int_curr_symbol'] = '';
-	}
+	} else {
+    if (!is_string($mondat['int_curr_symbol'])) {
+      // this should NOT be the case! But apparently sometimes it comes out as array()?? *baffled*
+      // so we have to deal with it (gwyneth 20210426)
+      $first_curr_symbol = $mondat['int_curr_symbol'][0] ?? '';  // just get the first element IF it's an array; or else, do as before (set it to empty)
+      unset($mondat['int_curr_symbol']);  // get rid of it, array or not!
+      $mondat['int_curr_symbol'] = $first_curr_symbol;
+    }
+  }
 	if (! isset($mondat['mon_decimal_point'])) {
 		$mondat['mon_decimal_point'] = '.';
 	}
@@ -649,6 +658,7 @@ function formatCurrency($number, $format) {
 	$currency_suffix="";
 	$prefix="";
 	$suffix="";
+  $currency = "";  // no reason to set it to "", but it's better to make sure (gwyneth 20210426)
 	if ($number < 0) {
 		$sign = $mondat['negative_sign'];
 		$letter = 'n';
