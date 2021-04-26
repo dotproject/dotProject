@@ -56,7 +56,7 @@ if ($obj->task_log_date) {
 	$obj->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 }
 $dot = mb_strpos($obj->task_log_hours, ':');  // this should actually be the locale's hour separator (gwyneth 20210426)
-// From here onwards, we have to make sure that $obj->task_log_hours is used as a float, or else this 503s on us (gwyneth 20210426)
+// From here onwards, we have to make sure that $obj->task_log_hours is used as a float for the calculations, or else this 503s on us — it gets converted back into a string (gwyneth 20210426)
 //  @see modules/tasks/tasks.class.php, function check()
 //  TODO: there _are_ standard classes/methods to handle these issues, why are we reinventing the wheel?
 if ($dot > 0) {  // Ex. turn 02h30 into 2.500 (float) (gwyneth 20210426)
