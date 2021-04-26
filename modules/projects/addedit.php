@@ -402,8 +402,9 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td colspan="4">
 			<?php
-                            $richedit = new DpRichEdit("project_description", dPformSafe(@$row->project_description));
-                            $richedit->render();
+//        $richedit = new DpRichEdit("project_description", dPformSafe(@$row->project_description));
+        $richedit = new DpRichEdit("project_description", @$row->project_description);
+        $richedit->render();
 			?>
 			</td>
 		</tr>

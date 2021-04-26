@@ -525,7 +525,9 @@ function dPgetMicroDiff() {
 }
 
 /**
-* Make text safe to output into double-quote enclosed attirbutes of an HTML tag
+* Make text safe to output into double-quote enclosed attributes of an HTML tag
+*
+* @note Seems to break Quill... (gwyneth 20210426)
 */
 define ('DP_FORM_DESLASH', 1);
 define ('DP_FORM_URI', 2);
