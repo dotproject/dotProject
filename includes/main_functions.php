@@ -613,8 +613,8 @@ function formatCurrency($number, $format) {
 	}
 	// If the requested locale doesn't work, don't fail,
 	// revert to the system default.
-	if (($locale_char_set != 'utf-8' || ! setlocale(LC_MONETARY, $format . '.UTF8'))
-	    && !(setlocale(LC_MONETARY, $format))) {
+	if (($locale_char_set != 'utf-8' || setlocale(LC_MONETARY, $format . '.UTF8') !== false)
+	    && setlocale(LC_MONETARY, $format) !== false) {
 		setlocale(LC_MONETARY, '');
 	}
 	// Technically this should be acheivable with the following, however
@@ -671,7 +671,7 @@ function formatCurrency($number, $format) {
 				break;
 		}
 	}
-	$currency .= $currency_prefix . $mondat['int_curr_symbol'] . $currency_suffix;
+	$currency = $currency_prefix . $mondat['int_curr_symbol'] . $currency_suffix;  // $currency cannot be set via URL, so we can drop the ancient '.=' convention (gwyneth 20210426)
 	$space = "";
 	if ($mondat[$letter . '_sep_by_space']) {
 		$space = " ";

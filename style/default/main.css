@@ -38,6 +38,10 @@ em, i {
 	font-style: italic;
 }
 
+.ql-container {
+  font-family: Osaka, Verdana, sans-serif;
+}
+
 A:link {
 	color: #08245b;
 	text-decoration: none;
