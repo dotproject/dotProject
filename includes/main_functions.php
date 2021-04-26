@@ -7,7 +7,7 @@ if (!(defined('DP_BASE_DIR'))) {
 }
 
 // require_once DP_BASE_DIR . '/includes/filter.php';  // now using HTML Purifier 4.13.0 (gwyneth 20210426)
-require_once DP_BASE_DIR . '/includes/htmlpurifier-standalone/HTMLPurifier.standalone.php';
+require_once DP_BASE_DIR . '/lib/htmlpurifier-standalone/HTMLPurifier.standalone.php';
 
 $CR = "" . PHP_EOL;  // dP should use PHP_EOL, which is more standard... and will work both on Windows and Unix (20210416)
 define('SECONDS_PER_DAY', 60 * 60 * 24);
