@@ -4,7 +4,7 @@
     <span class="ql-formats">
       <select class="ql-font"></select>
       <select class="ql-size"></select>
-      <select class="ql-align"></select>
+<!--      <select class="ql-align"></select> -->
     </span>
     <span class="ql-formats">
       <button class="ql-bold"></button>
