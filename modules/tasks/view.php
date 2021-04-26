@@ -322,7 +322,8 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php echo strip_tags($obj->task_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'); ?>
+				<?php echo $AppUI->showHTML($obj->task_description);
+        // echo strip_tags($obj->task_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'); ?>
 		  </td>
 		</tr>
 <?php
