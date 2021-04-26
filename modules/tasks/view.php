@@ -334,7 +334,7 @@ function delIt() {
 		$q->addQuery('dept_id, dept_name, dept_phone');
 		$depts = $q->loadHashList('dept_id');
 		$q->clear();
-		if (!empty(depts) && count($depts)) {  // if this company doesn't have any departments, skip this (gwyneth 20210426)
+		if (!empty($depts) && count($depts)) {  // if this company doesn't have any departments, skip this (gwyneth 20210426)
 			?>
 		    <tr>
 		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
