@@ -157,7 +157,7 @@ $graph->scale->tableTitle->Show(true);
 // if diff(end_date,start_date) > 240 days it shows only
 //month number
 //-----------------------------------------
-if ($start_date && $end_date) {
+if (!empty($start_date) && !empty($end_date)) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
 	$graph->SetDateRange($start_date, $end_date);
@@ -166,8 +166,8 @@ if ($start_date && $end_date) {
 	$d_start = new CDate();
 	$d_end = new CDate();
 	for ($i = 0, $xi = count(@$projects); $i < $xi; $i++) {
-		$start = mb_substr($p['project_start_date'], 0, 10);
-		$end = mb_substr($p['project_end_date'], 0, 10);
+		$start = mb_substr($projects[$i]['project_start_date'], 0, 10);  // confusing... (gwyneth 20210427)
+		$end = mb_substr($projects[$i]['project_end_date'], 0, 10);
 
 		$d_start->Date($start);
 		$d_end->Date($end);
