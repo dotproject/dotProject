@@ -111,6 +111,7 @@ input, select {
   color: #d8dee9;  /* nord1 */
   background-color: #3b4252;  /* nord1 */
   border-radius: 0.1rem;
+  cursor: pointer;
 }
 
 TD {
@@ -157,6 +158,7 @@ button, .button {
   border: 1px #4c566a solid; /* nord3 */
   font-size: 0.8rem;
   /*width: 100px; too small for some translations*/
+  cursor: pointer;
 }
 
 .item {
@@ -404,7 +406,7 @@ table.popcal td.weekend {
 
 table.popcal a:link,
 table.popcal a:visited {
-  color: #5e81ac; /* nord10 */, but also see the defaults for <a> above
+  color: #5e81ac; /* nord10, but also see the defaults for <a> above */
   text-decoration: none;
 }
 
@@ -427,6 +429,7 @@ table.popcal a.empty:visited {
 /* month calendar - title area */
 table.motitle {
   background-color: #3b4252; /* nord1 */
+  border: 1px #4c566a solid; /* nord3 */
 }
 table.motitle td {
   background-color: #434c5e; /* nord2 */
@@ -444,6 +447,7 @@ table.mocal th {
   color: #eceff4; /* nord6 */
 }
 table.mocal td {
+  border: 1px #4c566a solid; /* nord3 */
 }
 table.mocal td.week {
   vertical-align: top;
@@ -482,6 +486,7 @@ table.mocal .event {
 
 /* mini calendar - title area */
 table.minititle {
+  border: 1px #4c566a solid; /* nord3 */
 }
 table.minititle td {
 }
