@@ -191,16 +191,24 @@ class dPacl extends gacl_api {
 		if (!($id)) {
 			return $this->addLogin($login, $username);
 		}
-		//Check if the details have changed.
-		list ($osec, $val, $oord, $oname, $ohid) = $this->get_object_data($id, 'aro');
-		if ($oname != $username) {
-			$res = $this->edit_object( $id, 'user', $username, $login, 1, 0, 'aro');
+		// Check if the details have changed.
+    // Note: this _can_ return false, so we check first: (gwyneth 20210427)
+    $oPermissions = $this->get_object_data($id, 'aro');
+    // As result, we get either an object, or false, so we'll check for false first: (gwyneth 20210427)
+    if ($oPermissions === false) {
+      return false;  // I have no idea if this is correct (gwyneth 20210427)
+    }
+		// list ($osec, $val, $oord, $oname, $ohid) = $oPermissions;
+    //  I personally hate list (...) because it's hard to debug; I'm getting errors on some fields
+    //  but have no idea why. Allegedly, we want to check if the username is to be changed? (gwyneth 20210427)
+		if (!empty($oPermissions["name"]) && $oPermissions["name"] != $username) {
+			$res = $this->edit_object( $id, 'user', $username, $login, 1, 0, 'aro');  // It seems that this always returns true or false (gwyneth 202210427)
 			if (!($res)) {
 				dprint(__FILE__, __LINE__, 0, 'Failed to change user permission object');
 			}
 			$this->regeneratePermissions(); //this line was outside of this if (after the next bracket
 		}
-		return $res;
+		return $res ?? false;
 	}
 
 	function deleteLogin($login) {
