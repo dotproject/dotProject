@@ -28,11 +28,12 @@ class DpRichEdit {
     static function WriteHeader() {
         if (!DpRichEdit::$HeaderWritten) {
             if (empty($uistyle)) {
+              global $AppUI;
               $uistyle = ($AppUI->getPref('UISTYLE') ?? ($dPconfig['host_style'] ?? 'default'));
             }
             echo '<script src="./lib/quilljs/src/quill.min.js"></script>' . PHP_EOL .
             '<link rel="stylesheet" href="./lib/quilljs/src/quill.snow.css" />' . PHP_EOL .
-            '<link rel="stylesheet" href="./style/$uistyle/css/overrides.css" />' . PHP_EOL;
+            '<link rel="stylesheet" href="./style/' . $uistyle . '/css/overrides.css" />' . PHP_EOL;
             DpRichEdit::$HeaderWritten = true;
         }
     }
