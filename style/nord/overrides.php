@@ -1,5 +1,8 @@
-<?php /* STYLE/DEFAULT $Id$ */
-
+<?php /* STYLE/NORD $Id$ */
+/**
+ *  Overrides for the Nord Theme
+ *  @author Gwyneth Llewelyn (20210427)
+ */
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
@@ -12,9 +15,7 @@ class CTitleBlock extends CTitleBlock_core {
 class CTabBox extends CTabBox_core {
 	function show($extra='', $js_tabs = false) {
 		GLOBAL $AppUI, $dPconfig, $currentTabId, $currentTabName;
-		$uistyle = ($AppUI->getPref('UISTYLE')
-		            ? $AppUI->getPref('UISTYLE')
-		            : (($dPconfig['host_style']) ? $dPconfig['host_style'] : 'default'));
+		$uistyle = ($AppUI->getPref('UISTYLE') ?? ($dPconfig['host_style'] ?? 'default'));
 		reset($this->tabs);
 		$s = '';
 

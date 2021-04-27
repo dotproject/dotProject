@@ -189,30 +189,3 @@ $s .= '</tr>';
 echo $s;
 ?>
 </table>
-<style>
-.ql-size-large {
-    font-size: 1.5em;
-}
-.ql-size-small {
-    font-size: 0.75em;
-}
-.ql-size-huge {
-    font-size: 2.5em;
-}
-.ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
-}
-.ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-justify {
-    text-align: justify;
-}
-
-</style>

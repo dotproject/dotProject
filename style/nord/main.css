@@ -1,4 +1,7 @@
-/*
+/**
+ *  CSS for the Nord Theme
+ *  @author Gwyneth Llewelyn (20210427)
+ *
  * Copyright (c) 2016-present Arctic Ice Studio <development@arcticicestudio.com>
  * Copyright (c) 2016-present Sven Greb <development@svengreb.de>
  *
@@ -104,9 +107,9 @@ A:active {
   text-decoration: none;
 }
 
-input {
-  color: #d8dee9;  // nord1
-  background-color: #3b4252;  // nord1
+input, select {
+  color: #d8dee9;  /* nord1 */
+  background-color: #3b4252;  /* nord1 */
   border-radius: 0.1rem;
 }
 
@@ -536,73 +539,5 @@ th form {
 }
 
 .disabled {
-  color: #3b4252;
-} /* nord1 */
-
-/* Quill JS editor overrides (gwyneth 20210427) */
-
-.ql-container {
-  font-family: Inter, Sans-Serif;
-  font-weight: normal;
-  border-radius: 0.1rem;
-  font-size: 0.9rem;
-  color: #d8dee9;  // nord1
-  background-color: #3b4252;  // nord1
-  border-radius: 0.1rem;
-}
-
-.ql-editor i,
-em {
-  font-weight: normal;
-  text-decoration: none;
-  font-style: italic;
-}
-
-.ql-editor .ql-bg-black {
-  background-color: #2e3440;
-}
-.ql-editor .ql-bg-red {
-  background-color: #bf616a;
-}
-.ql-editor .ql-bg-orange {
-  background-color: #d08770;
-}
-.ql-editor .ql-bg-yellow {
-  background-color: #ebcb8b;
-}
-.ql-editor .ql-bg-green {
-  background-color: #a3be8c;
-}
-.ql-editor .ql-bg-blue {
-  background-color: #5e81ac;
-}
-.ql-editor .ql-bg-purple {
-  background-color: #b48ead;
-}
-.ql-editor .ql-color-white {
-  color: #e5e9f0;
-}
-.ql-editor .ql-color-red {
-  color: #bf616a;
-}
-.ql-editor .ql-color-orange {
-  color: #d08770;
-}
-.ql-editor .ql-color-yellow {
-  color: #ebcb8b;
-}
-.ql-editor .ql-color-green {
-  color: #a3be8c;
-}
-.ql-editor .ql-color-blue {
-  color: #5e81ac;
-}
-.ql-editor .ql-color-purple {
-  color: #b48ead;
-}
-.ql-editor .ql-font-serif {
-  font-family: Georgia, serif;
-}
-.ql-editor .ql-font-monospace {
-  font-family: "Fira Code", monospace;
+  color: #3b4252; /* nord1 */
 }

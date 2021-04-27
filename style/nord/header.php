@@ -18,10 +18,9 @@ else
 	<title><?php echo @dPgetConfig('page_title');?></title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-<!--	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style> -->
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
 	<?php @$AppUI->loadJS(); // reverted the move to the end, breaks display (gwyneth 20210425) ?>
+  <link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 </head>
 
 <body onload="this.focus();">
@@ -29,7 +28,7 @@ else
 <tr>
 	<td><table width="100%" cellpadding="3" cellspacing="0" border="0"><tr>
 	<th style="background: url(style/<?php echo $uistyle;?>/images/titlegrad.jpg);" class="banner" align="left"><strong><?php
-		echo "<a style='color: white' href='{$dPconfig['base_url']}'>$page_title</a>";
+		echo "<a style='color: #eceff4' href='{$dPconfig['base_url']}'>$page_title</a>";
 	?></strong>
 	<?php if (getPermission('smartsearch', 'access')): ?>
 	<form name="frmHeaderSearch" action="?m=smartsearch"  method="post">
