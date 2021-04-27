@@ -1,13 +1,63 @@
+/*
+ * Copyright (c) 2016-present Arctic Ice Studio <development@arcticicestudio.com>
+ * Copyright (c) 2016-present Sven Greb <development@svengreb.de>
+ *
+ * Project:	Nord
+ * Version:	0.2.0
+ * Repository: https://github.com/arcticicestudio/nord
+ * License:	MIT
+ * References:
+ *   https://www.w3.org/TR/css-variables
+ *   https://www.w3.org/TR/selectors/#root-pseudo
+ *   https://drafts.csswg.org/css-variables
+ *   https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
+ *   http://warpspire.com/kss
+ *   https://github.com/kss-node/kss-node
+ */
+/*
+An arctic, north-bluish color palette.
+Created for the clean- and minimal flat design pattern to achieve a optimal focus
+and readability for code syntax highlighting and UI.
+It consists of a total of sixteen, carefully selected, dimmed pastel colors for a
+eye-comfortable, but yet colorful ambiance.
+*/
+
+/* Reference colours from the official Nord palette (v0.2.0)
+:root {
+  // Polar Night
+  --nord0:  #2e3440;  // background and area coloring
+  --nord1:  #3b4252;  // elevated, more prominent or focused UI elements like status bars and text editor gutters; panels, modals and floating popups like notifications or auto completion; user interaction/form components like buttons, text/select fields or checkboxes; more inconspicuous and passive elements like borders or as dropshadow between different components
+  --nord2:  #434c5e;  // currently active text editor line as well as selection- and text highlighting color
+  --nord3:  #4c566a;  // UI elements like indent- and wrap guide marker. In the context of code syntax highlighting it is used for comments and invisible/non-printable characters.
+  // Snow Storm
+  --nord4:  #d8dee9;  // UI elements like the text editor caret. In the context of syntax highlighting it is used as text color for variables, constants, attributes and fields.
+  --nord5:  #e5e9f0;  // more subtle/inconspicuous UI text elements that do not need so much visual attention. Other use cases are also state animations like a more brighter text color when a button is hovered, active or focused.
+  --nord6:  #eceff4;  // elevated UI text elements that require more visual attention. In the context of syntax highlighting it is used as text color for plain text as well as reserved and structuring syntax characters like curly- and square brackets.
+  // Frost
+  --nord7:  #8fbcbb;  // UI elements that should, next to the primary accent color nord8, stand out and get more visual attention. In the context of syntax highlighting it is used for classes, types and primitives.
+  --nord8:  #88c0d0;  // primary UI elements with main usage purposes that require the most visual attention. In the context of syntax highlighting it is used for declarations, calls and execution statements of functions, methods and routines.
+  --nord9:  #81a1c1;  // secondary UI elements that also require more visual attention than other elements.
+  In the context of syntax highlighting it is used for language specific, syntactic and reserved keywords as well as: support characters; operators; tags; units; punctuations like (semi)colons, points and commas
+  --nord10: #5e81ac;  // tertiary UI elements that require more visual attention than default elements. In the context of syntax highlighting it is used for pragmas, comment keywords and pre-processor statements.
+  // Aurora
+  --nord11: #bf616a;  // UI elements that are rendering error states like linter markers and the highlighting of Git diff deletions. In the context of syntax highlighting it is used to override the highlighting of syntax elements that are detected as errors.
+  --nord12: #d08770;  // more advanced or dangerous functionality. In the context of syntax highlighting it is used for special syntax elements like annotations and decorators.
+  --nord13: #ebcb8b;  // UI elements that are rendering warning states like linter markers and the highlighting of Git diff modifications. In the context of syntax highlighting it is used to override the highlighting of syntax elements that are detected as warnings as well as escape characters and within regular expressions.
+  --nord14: #a3be8c;  // UI elements that are rendering success states and visualizations and the highlighting of Git diff additions. In the context of syntax highlighting it is used as main color for strings of any type like double/single quoted or interpolated.
+  --nord15: #b48ead;  // Rarely used for UI elements, but it may indicate a more uncommon functionality. In the context of syntax highlighting it is used as main color for numbers of any type like integers and floating point numbers.
+}
+*/
+
 /* dotPROJECT REQUIRED CLASSES */
 BODY {
-	background-color: #f0f0f0;
-	color: #000000;
+	background-color: #2e3440;   // nord0
+	color: #e5e9f0;              // nord5
 	margin-top: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
 	margin-bottom: 10px;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	font-size: 10pt;
+	font-family: Inter,Sans-Serif;
+	font-size: 10px;
 }
 
 ul {
@@ -19,7 +69,7 @@ dl {
 }
 dt {
 	margin-top: 0.5em;
-	color: #000099;
+	color: #8fbcbb;    // nord7
 	font-weight: bold;
 }
 dd {
@@ -32,59 +82,48 @@ em, i {
   font-style: italic;
 }
 
-.ql-editor em {
-	font-weight: normal;
-	font-style: italic;
-}
-
-.ql-container {
-  font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-}
-
-A:link {
-	color: #08245b;
-	text-decoration: none;
-}
-
-A:visited {
-	color: #08245b;
-	text-decoration: none;
-}
-
-A:active {
-	color: red;
-	text-decoration: none;
+A {
+  color: #88c0d0;  // nord8
+  cursor: pointer;
+  text-decoration: none;
 }
 
 A:hover {
-	color: #666666;
-	text-decoration: underline;
+	color: #88c0d0;  // nord8
+	text-decoration: none;
+  border-radius: 0.25em;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+}
+
+A:visited, A:link, A:active {
+	color: #88c0d0;  // nord8
+	text-decoration: none;
 }
 
 TD {
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	font-size: 8pt
+/*	font-family: Inter,Sans-Serif; */
+	font-size: 8px
 }
 
 TR {
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	font-size: 8pt
+	/* font-family: Inter,Sans-Serif; */
+	font-size: 8px
 }
 
 h1, .title {
 	font-size: 16px;
 	font-weight: bold;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	color: #08245b;
+	/* font-family: Inter,Sans-Serif; */
+	color: #eceff4;  // nord6
 	margin-bottom: 0px;
 	margin-top: 5px;
 }
 
 h2, .subtitle {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: bold;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	color: #666;
+	/* font-family: Inter,Sans-Serif; */
+	color: #eceff4;  // nord6
 	margin-bottom: 0px;
 	margin-top: 15px;
 }
@@ -92,69 +131,64 @@ h2, .subtitle {
 h3 {
 	font-size: 12px;
 	font-weight: bold;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	color: #08245b;
+	/* font-family: Inter,Sans-Serif; */
+	color: #eceff4;  // nord6
 	margin-bottom: 0px;
 	margin-top: 35px;
 }
 
 bordertable {
-	border: 1px black solid;
+	border: 1px #4c566a solid;  // nord3
 }
 
 .bordertable{
- border: 1px black solid;
+ border: 1px #4c566a solid;  // nord3
 }
 
 .button{
-	border: 1px black solid;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+	border: 1px #4c566a solid;  // nord3
+	/* font-family: Inter,Sans-Serif; */
 	font-size: 8pt;
 	/*width: 100px; too small for some translations*/
 }
 
 .item {
-	color: #08245b;
+	color: #5e81ac;  // nord10
 }
 
 .ok {
-	color: green;
+	color: #a3be8c;  // nord14
 }
 
-.text{
-	border: 1px black solid;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+.text {
+	border: 1px #4c566a solid;  // nord3
+	font-family: Inter,Sans-Serif;
 	font-size: 8pt;
-	color: #000009;
+	color: #e5e9f0;  // nord5
 	/*height: 12pt; Select boxes are too small in Mozilla */
 }
 
-TEXTAREA {
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
-	font-size: 9pt;
-}
-
-.textarea {
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+TEXTAREA, .textarea {
+	font-family: Inter,Sans-Serif;
 	font-size: 9pt;
 }
 
 textarea.small {
-	border: 1px black solid;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+	border: 1px #4c566a solid;  // nord3
+	font-family: Inter,Sans-Serif;
 	font-size: 8pt;
 }
 
 /* dotProject Top Banner and Top Nav Customization */
 TH.banner {
-	background-color: #08245b;
-	color: #fff
+	background-color: #5e81ac;  // nord10
+	color: #eceff4;  // nord6
 }
 
 TD.nav {
-	border: 1px solid #848284;
-	background-color: #d5d3ce;
-	color: #000
+	border: 1px solid #4c566a;  // nord3
+	background-color: #3b4252;  // nord1
+	color:  #eceff4;  // nord6
 }
 
 /*
@@ -165,100 +199,100 @@ Begin IE TD buttonizing
 
 TD.clsBtnUp {
 	cursor: hand;
-	color: #FFFFFF;
+	color: #3b4252;  // nord1
 	padding: 0 3;
 	border: inset 2px;
 }
 
 TD.clsBtnDown {
 	cursor: hand;
-	color: #FFFFFF;
+	color: #2e3440;  // nord0
 	padding: 0 3;
 	border: inset 2px;
 }
 
 TD.clsBtnOn {
 	cursor: hand;
-	color: #FFFFFF;
+	color: #2e3440;  // nord0
 	padding: 0 3;
-	border: outset #eeeeee 2px;
+	border: outset #4c566a 2px;  // nord3
 }
 
 TD.clsBtnOff {
-	color: #FFFFFF;
+	color: #eceff4;  // nord6
 	padding: 0 3;
 	/* tab-index: 0; //not valid for TD */
-	border: solid #559999 2px;
+	border: solid #8fbcbb 2px;  // nord7
 }
 
 TD.topBtnOff {
-	color: #FFFFFF;
+	color: #2e3440;  // nord0
 	padding: 0 3;
 	/* tab-index: 0; //not valid for TD */
-	border: solid #cccccc 2px;
+	border: solid #3b4252 2px;  // nord1
 }
 
 TD.nav {
-	color: #FFFFFF;
+	color: #3b4252;  // nord1
 }
 
 /* Standard table 'spreadsheet' style */
 table.tbl {
-	background: #a5cbf7;
+	background: #8fbcbb;  // nord7
 }
 
 table.tbl TH {
-	background-color: #08245b;
-	color: #ffffff;
+	background-color: #5e81ac;  // nord10
+	color: #eceff4;  // nord6
 	list-style-type: disc;
 	list-style-position: inside;
-	border: outset #D1D1CD 1px;
+	border: outset #e5e9f0 1px;  // nord5
 	font-weight: normal;
 	text-align:center;
 }
 
 table.tbl td {
-	background-color: #ffffff;
+	background-color: #2e3440;  // nord0
 }
 
 /* a 'standard' table */
 table.std {
-	border: solid #08245b 2px;
-	background: #d6ebff;
+	border: solid #5e81ac 2px;  // nord10
+	background: #2e3440;  // nord0
 }
 table.std TH {
-	background-color: #08245b;
-	color: white;
+	background-color: #5e81ac;  // nord10
+	color: #eceff4;  // nord6
 	list-style-type: disc;
 	list-style-position: inside;
-	border: outset #D1D1CD 1px;
+	border: outset #e5e9f0 1px;  // nord5
 }
 
 table.std td.hilite {
-	background-color: #ffffff;
+	background-color: #3b4252;  // nord1
 }
 
 /* contacts table */
 table.contacts {
-	background-color: #08245b;
+	background-color: #5e81ac;  // nord10
 }
 
 table.contacts td {
-	background-color: #d6ebff;
+	background-color: #3b4252;  // nord1
 }
 
 table.contacts td.hilite {
-	background-color: #ffffff;
+	background-color: #434c5e;  // nord2
 }
 
 /* links in header blocks */
 A.hdr:link, A.hdr:active, A.hdr:visited {
-	color: #ffffff;
+	color: #88c0d0;  // nord8
 }
 
 /* tabbed boxes */
 td.tabon {
-	background: #a5cbf7;
+	background: #a5cbf7;  // TBD
 	/*
 	border-top: outset #ffffff 2px;
 	border-left: outset #ffffff 2px;
@@ -266,10 +300,10 @@ td.tabon {
 	border-bottom: none;
 	*/
 	/* background-image: url('./style/default/images/tabSelectedBg.png');*/
-	 background-image: url('images/tabSelectedBg.png');
+	background-image: url('images/tabSelectedBg.png');   // TBD (probably can be a fill)
 }
 td.taboff {
-	background: #d6ebff;
+	background: #d6ebff;  // TBD
 	/*
 	border-top: solid #cccccc 1px;
 	border-left: solid #cccccc 1px;
@@ -277,76 +311,76 @@ td.taboff {
 	border-bottom: solid #cccccc 2px;
 	*/
 	/* background-image: url('./style/default/images/tabBg.png'); */
-	background-image: url('images/tabBg.png');
+	background-image: url('images/tabBg.png');   // TBD (probably can be a fill)
 }
 td.tabsp {
 	border-bottom: solid #cccccc 2px;
 }
 td.tabox {
-	background-color: #a5cbf7;
-	border-left: solid #cccccc 2px;
+	background-color: #8fbcbb;  // nord7
+	border-left: solid #5e81ac 2px;
 	border-right: solid #cccccc 2px;
 	border-bottom: solid #cccccc 2px;
 }
 
 /* Message styles */
 .warning {
-	color: red
+	color: #d08770;  // nord12
 }
 .error {
-	color: red
+	color: #bf616a;  // nord11
 }
 .message {
-	color: #08245b;
+	color: #b48ead;  // nord15
 }
 
 .no_ {
-	color: red
+	color: #bf616a;  // nord11
 }
 
 /* popup calendar */
 body.popcal {
-	background-color: #f0f0f0;
+	background-color: #2e3440;  // nord0
 }
 
 table.poptitle {
-	background-color: #ffffff;
+	background-color: #3b4252;  // nord0
 }
 table.poptitle td {
-	background-color: #ffffff;
+	background-color: #3b4252;  // nord0
 }
 table.poptitle th {
-	background-color: #ffffff;
-	color: #000000;
+	background-color: #3b4252;  // nord0
+	color: #eceff4;  // nord6
 	font-size: 10pt;
 	font-weight: bold;
 }
 
 table.popcal {
-	background-color: #cccccc;
+	background-color: #3b4252;  // nord0
 }
 
 table.popcal th {
-	background-color: #ffffff;
-	color: #000000;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+	background-color: #3b4252;  // nord0
+	color: #eceff4;  // nord6
+	/* font-family: Inter,Sans-Serif; */
 	font-size: 9pt;
 	font-weight: normal;
 }
 
 table.popcal td {
-	background-color: #ffffff;
-	font-family: Cantarell,Verdana,Helvetica,Arial,Sans-Serif;
+	background-color: #3b4252;  // nord0
+	/* font-family: Inter,Sans-Serif; */
 	font-size: 8pt;
 	text-align: center;
 }
 
 table.popcal td.empty {
-	background-color: #e0e0e0;
+	background-color: #3b4252;  //nord1
 }
 
 table.mocal td.day  {
-	background-color: #ffffff;
+	background-color: #3b4252;  // nord1
 	text-align: center;
 }
 
@@ -354,80 +388,80 @@ table.popcal td.today {
 }
 
 table.popcal td.weekend {
-	background-color: #f0f0f0;
+	background-color: #bf616a;  // nord11
 }
 
 table.popcal a:link,
 table.popcal a:visited {
-	color: #0000ff;
+	color: #5e81ac;  // nord10, but also see the defaults for <a> above
 	text-decoration: none;
 }
 
 table.popcal a.today:link,
 table.popcal a.today:visited {
-	color: #ff0000;
+	color: #81a1c1;  // nord9
 	font-weight: bold;
 }
 
 table.popcal a.weekend:link,
 table.popcal a.weekend:visited {
-	color: #0000aa;
+	color: #bf616a;  // nord11
 }
 
 table.popcal a.empty:link,
 table.popcal a.empty:visited {
-	color: #777777;
+	color: #d08770;  // nord12
 }
 
 /* month calendar - title area */
 table.motitle {
-	background-color: #777777;
+	background-color: #3b4252;  // nord1
 }
 table.motitle td {
-	background-color: #f0f0f0;
+	background-color: #434c5e;  // nord2
 }
 table.motitle th {
-	background-color: #f0f0f0;
+	background-color: #434c5e;  // nord2
 	font-size: 10pt;
 }
 
 table.mocal {
-	background-color: #777777;
+	background-color: #3b4252;  // nord1
 }
 table.mocal th {
-	background-color: #08245b;
-	color: #ffffff;
+	background-color: #434c5e;  // nord2
+	color: #eceff4;  // nord6
 }
 table.mocal td {
 }
 table.mocal td.week {
 	vertical-align: top;
-	background-color: #08245b;
+	background-color: #3b4252;  // nord1
 	height: 80px;
 }
 table.mocal td.empty {
-	background-color: #e0e0e0;
-	color: #aaaaaa;
+	background-color: #3b4252;  //nord1
+	color: #d8dee9;  // nord4
 	text-align: left;
 	vertical-align: top;
 	height: 80px;
 }
 table.mocal td.day  {
-	background-color: #ffffff;
-	color: #333366;
+	background-color: #2e3440;  // nord0
+	color: #8fbcbb;  // nord7
 	text-align: left;
 	vertical-align: top;
 	height: 80px;
 }
 table.mocal td.today {
-	background-color: #a5cbf7;
-	color: #ffffff;
+	background-color: #3b4252;  // nord1
+	color: #88c0d0;  // nord8
 	text-align: left;
 	vertical-align: top;
 }
 
 table.mocal td.weekend {
-	background-color: #f0f0f0;
+	background-color: #bf616a;  // nord11
 	text-align: left;
 	vertical-align: top;
 }
@@ -454,13 +488,13 @@ table.minical td {
 table.minical td.week {
 }
 table.minical td.empty {
-	color: #aaaaaa;
+	color: #3b4252;  // nord1
 }
 table.minical td.day  {
 	text-align: center;
 }
 table.minical td.today {
-	background-color: #e0e0e0;
+	background-color: #3b4252;  // nord1
 	text-align: center;
 }
 table.minical td.weekend {
@@ -471,11 +505,11 @@ table.minical .event {
 
 /* daily calendar */
 table.tbl td.event {
-        background-color: #fff0b0;
+  background-color: #ebcb8b;  // nord13
 }
 
 table.tbl td.event td {
-	background-color: #fff0b0;
+	background-color: #ebcb8b;  // nord13
 }
 
 .hidden {display:none;}
@@ -491,4 +525,64 @@ th form {
   margin-top: 1px;
 }
 
-.disabled { color: #000000; }
+.disabled { color: #3b4252; }  // nord1
+
+/* Quill JS editor overrides (gwyneth 20210427) */
+
+.ql-editor i, em {
+  font-weight: normal;
+  font-style: italic;
+}
+
+.ql-container {
+  font-family: Inter,Sans-Serif;
+}
+
+.ql-editor .ql-bg-black {
+  background-color: #2e3440;
+}
+.ql-editor .ql-bg-red {
+  background-color: #bf616a;
+}
+.ql-editor .ql-bg-orange {
+  background-color: #d08770;
+}
+.ql-editor .ql-bg-yellow {
+  background-color: #ebcb8b;
+}
+.ql-editor .ql-bg-green {
+  background-color: #a3be8c;
+}
+.ql-editor .ql-bg-blue {
+  background-color: #5e81ac;
+}
+.ql-editor .ql-bg-purple {
+  background-color: #b48ead;
+}
+.ql-editor .ql-color-white {
+  color: #e5e9f0;
+}
+.ql-editor .ql-color-red {
+  color: #bf616a;
+}
+.ql-editor .ql-color-orange {
+  color: #d08770;
+}
+.ql-editor .ql-color-yellow {
+  color: #ebcb8b;
+}
+.ql-editor .ql-color-green {
+  color: #a3be8c;
+}
+.ql-editor .ql-color-blue {
+  color: #5e81ac;
+}
+.ql-editor .ql-color-purple {
+  color: #b48ead;
+}
+.ql-editor .ql-font-serif {
+  font-family: Georgia, serif;
+}
+.ql-editor .ql-font-monospace {
+  font-family: "Fira Code", monospace;
+}

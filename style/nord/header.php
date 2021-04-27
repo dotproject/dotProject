@@ -12,12 +12,12 @@ else
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-	<meta name="Description" content="dotProject Default Style" />
+	<meta name="Description" content="dotProject Nord Style" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion() ?? 'unknown'; ?>" />
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $locale_char_set ?? 'UTF-8'; ?>" />
 	<title><?php echo @dPgetConfig('page_title');?></title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cantarell:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
 	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
