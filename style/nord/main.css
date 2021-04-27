@@ -50,8 +50,8 @@ eye-comfortable, but yet colorful ambiance.
 
 /* dotPROJECT REQUIRED CLASSES */
 BODY {
-  background-color: #2e3440; // nord0
-  color: #e5e9f0; // nord5
+  background-color: #2e3440; /* nord0 */
+  color: #e5e9f0; /* nord5 */
   margin-top: 0px;
   margin-left: 0px;
   margin-right: 0px;
@@ -70,7 +70,7 @@ dl {
 }
 dt {
   margin-top: 0.5rem;
-  color: #8fbcbb; // nord7
+  color: #8fbcbb; /* nord7 */
   font-weight: bold;
 }
 dd {
@@ -86,13 +86,13 @@ i {
 }
 
 A {
-  color: #88c0d0; // nord8
+  color: #88c0d0; /* nord8 */
   cursor: pointer;
   text-decoration: none;
 }
 
 A:hover {
-  color: #88c0d0; // nord8
+  color: #88c0d0; /* nord8 */
   text-decoration: none;
   border-radius: 0.25rem;
   transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
@@ -101,17 +101,16 @@ A:hover {
 A:visited,
 A:link,
 A:active {
-  color: #88c0d0; // nord8
+  color: #88c0d0; /* nord8 */
   text-decoration: none;
 }
 
 TD {
-  /*	font-family: Inter,Sans-Serif; */
   font-size: 0.8rem;
+  color: #e5e9f0; /* nord5 */
 }
 
 TR {
-  /* font-family: Inter,Sans-Serif; */
   font-size: 0.8rem;
 }
 
@@ -119,8 +118,7 @@ h1,
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  /* font-family: Inter,Sans-Serif; */
-  color: #eceff4; // nord6
+  color: #eceff4; /* nord6 */
   margin-bottom: 0px;
   margin-top: 5px;
 }
@@ -129,8 +127,7 @@ h2,
 .subtitle {
   font-size: 1.25rem;
   font-weight: bold;
-  /* font-family: Inter,Sans-Serif; */
-  color: #eceff4; // nord6
+  color: #eceff4; /* nord6 */
   margin-bottom: 0px;
   margin-top: 15px;
 }
@@ -138,40 +135,38 @@ h2,
 h3 {
   font-size: 1.1rem;
   font-weight: bold;
-  /* font-family: Inter,Sans-Serif; */
-  color: #eceff4; // nord6
+  color: #eceff4; /* nord6 */
   margin-bottom: 0px;
   margin-top: 35px;
 }
 
 bordertable {
-  border: 1px #4c566a solid; // nord3
+  border: 1px #4c566a solid; /* nord3 */
 }
 
 .bordertable {
-  border: 1px #4c566a solid; // nord3
+  border: 1px #4c566a solid; /* nord3 */
 }
 
 .button {
-  border: 1px #4c566a solid; // nord3
-  /* font-family: Inter,Sans-Serif; */
+  border: 1px #4c566a solid; /* nord3 */
   font-size: 0.8rem;
   /*width: 100px; too small for some translations*/
 }
 
 .item {
-  color: #5e81ac; // nord10
+  color: #5e81ac; /* nord10 */
 }
 
 .ok {
-  color: #a3be8c; // nord14
+  color: #a3be8c; /* nord14 */
 }
 
 .text {
-  border: 1px #4c566a solid; // nord3
+  border: 1px #4c566a solid; /* nord3 */
   font-family: Inter, Sans-Serif;
   font-size: 0.8rem;
-  color: #e5e9f0; // nord5
+  color: #e5e9f0; /* nord5 */
   /*height: 12pt; Select boxes are too small in Mozilla */
 }
 
@@ -182,21 +177,21 @@ TEXTAREA,
 }
 
 textarea.small {
-  border: 1px #4c566a solid; // nord3
+  border: 1px #4c566a solid; /* nord3 */
   font-family: Inter, Sans-Serif;
   font-size: 0.8rem;
 }
 
 /* dotProject Top Banner and Top Nav Customization */
 TH.banner {
-  background-color: #5e81ac; // nord10
-  color: #eceff4; // nord6
+  background-color: #5e81ac; /* nord10 */
+  color: #eceff4; /* nord6 */
 }
 
 TD.nav {
-  border: 1px solid #4c566a; // nord3
-  background-color: #3b4252; // nord1
-  color: #eceff4; // nord6
+  border: 1px solid #4c566a; /* nord3 */
+  background-color: #3b4252; /* nord1 */
+  color: #eceff4; /* nord6 */
 }
 
 /*
@@ -207,102 +202,102 @@ Begin IE TD buttonizing
 
 TD.clsBtnUp {
   cursor: hand;
-  color: #3b4252; // nord1
+  color: #3b4252; /* nord1 */
   padding: 0 3;
   border: inset 2px;
 }
 
 TD.clsBtnDown {
   cursor: hand;
-  color: #2e3440; // nord0
+  color: #2e3440; /* nord0 */
   padding: 0 3;
   border: inset 2px;
 }
 
 TD.clsBtnOn {
   cursor: hand;
-  color: #2e3440; // nord0
+  color: #2e3440; /* nord0 */
   padding: 0 3;
-  border: outset #4c566a 2px; // nord3
+  border: outset #4c566a 2px; /* nord3 */
 }
 
 TD.clsBtnOff {
-  color: #eceff4; // nord6
+  color: #eceff4; /* nord6 */
   padding: 0 3;
-  /* tab-index: 0; //not valid for TD */
-  border: solid #8fbcbb 2px; // nord7
+  /* tab-index: 0; /* not valid for TD */
+  border: solid #8fbcbb 2px; /* nord7 */
 }
 
 TD.topBtnOff {
-  color: #2e3440; // nord0
+  color: #2e3440; /* nord0 */
   padding: 0 3;
-  /* tab-index: 0; //not valid for TD */
-  border: solid #3b4252 2px; // nord1
+  /* tab-index: 0; /* not valid for TD */
+  border: solid #3b4252 2px; /* nord1 */
 }
 
 TD.nav {
-  color: #3b4252; // nord1
+  color: #3b4252; /* nord1 */
 }
 
 /* Standard table 'spreadsheet' style */
 table.tbl {
-  background: #8fbcbb; // nord7
+  background: #8fbcbb; /* nord7 */
 }
 
 table.tbl TH {
-  background-color: #5e81ac; // nord10
-  color: #eceff4; // nord6
+  background-color: #5e81ac; /* nord10 */
+  color: #eceff4; /* nord6 */
   list-style-type: disc;
   list-style-position: inside;
-  border: outset #e5e9f0 1px; // nord5
+  border: outset #e5e9f0 1px; /* nord5 */
   font-weight: normal;
   text-align: center;
 }
 
 table.tbl td {
-  background-color: #2e3440; // nord0
+  background-color: #2e3440; /* nord0 */
 }
 
 /* a 'standard' table */
 table.std {
-  border: solid #5e81ac 2px; // nord10
-  background: #2e3440; // nord0
+  border: solid #5e81ac 2px; /* nord10 */
+  background: #2e3440; /* nord0 */
 }
 table.std TH {
-  background-color: #5e81ac; // nord10
-  color: #eceff4; // nord6
+  background-color: #5e81ac; /* nord10 */
+  color: #eceff4; /* nord6 */
   list-style-type: disc;
   list-style-position: inside;
-  border: outset #e5e9f0 1px; // nord5
+  border: outset #e5e9f0 1px; /* nord5 */
 }
 
 table.std td.hilite {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
 }
 
 /* contacts table */
 table.contacts {
-  background-color: #5e81ac; // nord10
+  background-color: #5e81ac; /* nord10 */
 }
 
 table.contacts td {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
 }
 
 table.contacts td.hilite {
-  background-color: #434c5e; // nord2
+  background-color: #434c5e; /* nord2 */
 }
 
 /* links in header blocks */
 A.hdr:link,
 A.hdr:active,
 A.hdr:visited {
-  color: #88c0d0; // nord8
+  color: #88c0d0; /* nord8 */
 }
 
 /* tabbed boxes */
 td.tabon {
-  background: #3b4252; // nord1
+  background: #3b4252; /* nord1 */
   /*
 	border-top: outset #ffffff 2px;
 	border-left: outset #ffffff 2px;
@@ -310,10 +305,10 @@ td.tabon {
 	border-bottom: none;
 	*/
   /* background-image: url('./style/default/images/tabSelectedBg.png');*/
-  // background-image: url('images/tabSelectedBg.png');   // TBD (probably can be a fill)
+  /* background-image: url('images/tabSelectedBg.png');   /* TBD (probably can be a fill) */
 }
 td.taboff {
-  background: #434c5e; // nord2
+  background: #434c5e; /* nord2 */
   /*
 	border-top: solid #cccccc 1px;
 	border-left: solid #cccccc 1px;
@@ -321,13 +316,13 @@ td.taboff {
 	border-bottom: solid #cccccc 2px;
 	*/
   /* background-image: url('./style/default/images/tabBg.png'); */
-  // background-image: url('images/tabBg.png');   // TBD (probably can be a fill)
+  /* background-image: url('images/tabBg.png');   /* TBD (probably can be a fill) */
 }
 td.tabsp {
   border-bottom: solid #cccccc 2px;
 }
 td.tabox {
-  background-color: #8fbcbb; // nord7
+  background-color: #8fbcbb; /* nord7 */
   border-left: solid #5e81ac 2px;
   border-right: solid #cccccc 2px;
   border-bottom: solid #cccccc 2px;
@@ -335,62 +330,60 @@ td.tabox {
 
 /* Message styles */
 .warning {
-  color: #d08770; // nord12
+  color: #d08770; /* nord12 */
 }
 .error {
-  color: #bf616a; // nord11
+  color: #bf616a; /* nord11 */
 }
 .message {
-  color: #b48ead; // nord15
+  color: #b48ead; /* nord15 */
 }
 
 .no_ {
-  color: #bf616a; // nord11
+  color: #bf616a; /* nord11 */
 }
 
 /* popup calendar */
 body.popcal {
-  background-color: #2e3440; // nord0
+  background-color: #2e3440; /* nord0 */
 }
 
 table.poptitle {
-  background-color: #3b4252; // nord0
+  background-color: #3b4252; /* nord0 */
 }
 table.poptitle td {
-  background-color: #3b4252; // nord0
+  background-color: #3b4252; /* nord0 */
 }
 table.poptitle th {
-  background-color: #3b4252; // nord0
-  color: #eceff4; // nord6
+  background-color: #3b4252; /* nord0 */
+  color: #eceff4; /* nord6 */
   font-size: 1rem;
   font-weight: bold;
 }
 
 table.popcal {
-  background-color: #3b4252; // nord0
+  background-color: #3b4252; /* nord0 */
 }
 
 table.popcal th {
-  background-color: #3b4252; // nord0
-  color: #eceff4; // nord6
-  /* font-family: Inter,Sans-Serif; */
+  background-color: #3b4252; /* nord0 */
+  color: #eceff4; /* nord6 */
   font-size: 0.9rem;
   font-weight: normal;
 }
 
 table.popcal td {
-  background-color: #3b4252; // nord0
-  /* font-family: Inter,Sans-Serif; */
+  background-color: #3b4252; /* nord0 */
   font-size: 0.8rem;
   text-align: center;
 }
 
 table.popcal td.empty {
-  background-color: #3b4252; //nord1
+  background-color: #3b4252; /* nord1 */
 }
 
 table.mocal td.day {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
   text-align: center;
 }
 
@@ -398,80 +391,80 @@ table.popcal td.today {
 }
 
 table.popcal td.weekend {
-  background-color: #bf616a; // nord11
+  background-color: #bf616a; /* nord11 */
 }
 
 table.popcal a:link,
 table.popcal a:visited {
-  color: #5e81ac; // nord10, but also see the defaults for <a> above
+  color: #5e81ac; /* nord10 */, but also see the defaults for <a> above
   text-decoration: none;
 }
 
 table.popcal a.today:link,
 table.popcal a.today:visited {
-  color: #81a1c1; // nord9
+  color: #81a1c1; /* nord9 */
   font-weight: bold;
 }
 
 table.popcal a.weekend:link,
 table.popcal a.weekend:visited {
-  color: #bf616a; // nord11
+  color: #bf616a; /* nord11 */
 }
 
 table.popcal a.empty:link,
 table.popcal a.empty:visited {
-  color: #d08770; // nord12
+  color: #d08770; /* nord12 */
 }
 
 /* month calendar - title area */
 table.motitle {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
 }
 table.motitle td {
-  background-color: #434c5e; // nord2
+  background-color: #434c5e; /* nord2 */
 }
 table.motitle th {
-  background-color: #434c5e; // nord2
+  background-color: #434c5e; /* nord2 */
   font-size: 0.9rem;
 }
 
 table.mocal {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
 }
 table.mocal th {
-  background-color: #434c5e; // nord2
-  color: #eceff4; // nord6
+  background-color: #434c5e; /* nord2 */
+  color: #eceff4; /* nord6 */
 }
 table.mocal td {
 }
 table.mocal td.week {
   vertical-align: top;
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
   height: 80px;
 }
 table.mocal td.empty {
-  background-color: #3b4252; //nord1
-  color: #d8dee9; // nord4
+  background-color: #3b4252; /* nord1 */
+  color: #d8dee9; /* nord4 */
   text-align: left;
   vertical-align: top;
   height: 80px;
 }
 table.mocal td.day {
-  background-color: #2e3440; // nord0
-  color: #8fbcbb; // nord7
+  background-color: #2e3440; /* nord0 */
+  color: #8fbcbb; /* nord7 */
   text-align: left;
   vertical-align: top;
   height: 80px;
 }
 table.mocal td.today {
-  background-color: #3b4252; // nord1
-  color: #88c0d0; // nord8
+  background-color: #3b4252; /* nord1 */
+  color: #88c0d0; /* nord8 */
   text-align: left;
   vertical-align: top;
 }
 
 table.mocal td.weekend {
-  background-color: #bf616a; // nord11
+  background-color: #bf616a; /* nord11 */
   text-align: left;
   vertical-align: top;
 }
@@ -498,13 +491,13 @@ table.minical td {
 table.minical td.week {
 }
 table.minical td.empty {
-  color: #3b4252; // nord1
+  color: #3b4252; /* nord1 */
 }
 table.minical td.day {
   text-align: center;
 }
 table.minical td.today {
-  background-color: #3b4252; // nord1
+  background-color: #3b4252; /* nord1 */
   text-align: center;
 }
 table.minical td.weekend {
@@ -515,11 +508,11 @@ table.minical .event {
 
 /* daily calendar */
 table.tbl td.event {
-  background-color: #ebcb8b; // nord13
+  background-color: #ebcb8b; /* nord13 */
 }
 
 table.tbl td.event td {
-  background-color: #ebcb8b; // nord13
+  background-color: #ebcb8b; /* nord13 */
 }
 
 .hidden {
@@ -539,7 +532,7 @@ th form {
 
 .disabled {
   color: #3b4252;
-} // nord1
+} /* nord1 */
 
 /* Quill JS editor overrides (gwyneth 20210427) */
 
