@@ -264,8 +264,15 @@ table.tbl TH {
   text-align: center;
 }
 
-table.tbl td {
+table.tbl tr:nth-child(odd) {
   background-color: #2e3440; /* nord0 */
+}
+table.tbl tr:nth-child(even) {
+  background-color: #3b4252; /* nord1 */
+}
+
+table.tbl td {
+  background-color: transparent;
 }
 
 /* a 'standard' table */
@@ -332,9 +339,9 @@ td.tabsp {
   border-bottom: solid #cccccc 2px;
 }
 td.tabox {
-  background-color: #8fbcbb; /* nord7 */
+  background-color: #5e81ac; /* nord10 */
   border-left: solid #5e81ac 2px;
-  border-right: solid #cccccc 2px;
+  border-right: solid #5e81ac 2px;
   border-bottom: solid #cccccc 2px;
 }
 
