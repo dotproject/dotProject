@@ -628,7 +628,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 			 ** as it is normally done in array_csort function in order to economise
 			 ** cpu time as we have to go through the array there anyway
 			 */
-			if (is_array($p['tasks'])) {
+			if (!empty($p['tasks']) && is_array($p['tasks'])) {
 				foreach ($p['tasks'] as $j => $task_change_end_date) {
 					if ($task_change_end_date['task_end_date'] == '0000-00-00 00:00:00') {
 						 $task_change_end_date['task_end_date'] = calcEndByStartAndDuration($task_change_end_date);
@@ -639,7 +639,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 
 		global $tasks_filtered, $children_of;
 		//get list of task ids and set-up array of children
-		if (is_array($p['tasks'])) {
+		if (!empty($p['tasks']) && is_array($p['tasks'])) {
 			foreach ($p['tasks'] as $i => $t) {
 				$tasks_filtered[] = $t['task_id'];
 				$children_of[$t['task_parent']] = (($children_of[$t['task_parent']]) ?? array());
