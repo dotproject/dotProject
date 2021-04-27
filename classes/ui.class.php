@@ -1026,12 +1026,12 @@ class CAppUI {
 		asort($js_files);
 		// while (list(,$js_file_name) = each($js_files)) {  // each() is obsolete in PHP 8 (gwyneth 20210414)
     foreach ($js_files as $js_file_name) {  // $key will be discarded
-			echo ('<script  src="' . $base . 'js/'
+			echo ('<script src="' . $base . 'js/'
 				  . $this->___($js_file_name) . '"></script>'."\n");
 		}
 
 		// additionally load overlib
-		echo ('<script  src="' . $base . 'lib/overlib/overlib.js"></script>'
+		echo ('<script src="' . $base . 'lib/overlib/overlib.js"></script>'
 		      . "\n");
 
 		$this->getModuleJS($m, $a, true);
