@@ -87,7 +87,6 @@ i {
 
 A {
   color: #88c0d0; /* nord8 */
-  cursor: pointer;
   text-decoration: none;
 }
 
@@ -103,6 +102,12 @@ A:link,
 A:active {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
+}
+
+input {
+  color: #d8dee9;  // nord1
+  background-color: #3b4252;  // nord1
+  border-radius: 0.1rem;
 }
 
 TD {
@@ -140,15 +145,12 @@ h3 {
   margin-top: 35px;
 }
 
-bordertable {
+bordertable, .bordertable {
   border: 1px #4c566a solid; /* nord3 */
+  border-radius: 0.1rem;
 }
 
-.bordertable {
-  border: 1px #4c566a solid; /* nord3 */
-}
-
-.button {
+button, .button {
   border: 1px #4c566a solid; /* nord3 */
   font-size: 0.8rem;
   /*width: 100px; too small for some translations*/
@@ -174,6 +176,9 @@ TEXTAREA,
 .textarea {
   font-family: Inter, Sans-Serif;
   font-size: 0.9rem;
+  color: #d8dee9;  // nord1
+  background-color: #3b4252;  // nord1
+  border-radius: 0.1rem;
 }
 
 textarea.small {
@@ -536,14 +541,21 @@ th form {
 
 /* Quill JS editor overrides (gwyneth 20210427) */
 
+.ql-container {
+  font-family: Inter, Sans-Serif;
+  font-weight: normal;
+  border-radius: 0.1rem;
+  font-size: 0.9rem;
+  color: #d8dee9;  // nord1
+  background-color: #3b4252;  // nord1
+  border-radius: 0.1rem;
+}
+
 .ql-editor i,
 em {
   font-weight: normal;
+  text-decoration: none;
   font-style: italic;
-}
-
-.ql-container {
-  font-family: Inter, Sans-Serif;
 }
 
 .ql-editor .ql-bg-black {
