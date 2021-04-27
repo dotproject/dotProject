@@ -57,7 +57,7 @@ BODY {
 	margin-right: 0px;
 	margin-bottom: 10px;
 	font-family: Inter,Sans-Serif;
-	font-size: 10px;
+	font-size: 14px;
 }
 
 ul {
@@ -102,16 +102,16 @@ A:visited, A:link, A:active {
 
 TD {
 /*	font-family: Inter,Sans-Serif; */
-	font-size: 8px
+	font-size: 0.8em;
 }
 
 TR {
 	/* font-family: Inter,Sans-Serif; */
-	font-size: 8px
+	font-size: 0.8em;
 }
 
 h1, .title {
-	font-size: 16px;
+	font-size: 1.5em;
 	font-weight: bold;
 	/* font-family: Inter,Sans-Serif; */
 	color: #eceff4;  // nord6
@@ -120,7 +120,7 @@ h1, .title {
 }
 
 h2, .subtitle {
-	font-size: 14px;
+	font-size: 1.25em;
 	font-weight: bold;
 	/* font-family: Inter,Sans-Serif; */
 	color: #eceff4;  // nord6
@@ -129,7 +129,7 @@ h2, .subtitle {
 }
 
 h3 {
-	font-size: 12px;
+	font-size: 1.1em;
 	font-weight: bold;
 	/* font-family: Inter,Sans-Serif; */
 	color: #eceff4;  // nord6
@@ -148,7 +148,7 @@ bordertable {
 .button{
 	border: 1px #4c566a solid;  // nord3
 	/* font-family: Inter,Sans-Serif; */
-	font-size: 8pt;
+	font-size: 0.8em;
 	/*width: 100px; too small for some translations*/
 }
 
@@ -163,20 +163,20 @@ bordertable {
 .text {
 	border: 1px #4c566a solid;  // nord3
 	font-family: Inter,Sans-Serif;
-	font-size: 8pt;
+	font-size: 0.8em;
 	color: #e5e9f0;  // nord5
 	/*height: 12pt; Select boxes are too small in Mozilla */
 }
 
 TEXTAREA, .textarea {
 	font-family: Inter,Sans-Serif;
-	font-size: 9pt;
+	font-size: 0.9em;
 }
 
 textarea.small {
 	border: 1px #4c566a solid;  // nord3
 	font-family: Inter,Sans-Serif;
-	font-size: 8pt;
+	font-size: 0.8em;
 }
 
 /* dotProject Top Banner and Top Nav Customization */
@@ -352,7 +352,7 @@ table.poptitle td {
 table.poptitle th {
 	background-color: #3b4252;  // nord0
 	color: #eceff4;  // nord6
-	font-size: 10pt;
+	font-size: 1em;
 	font-weight: bold;
 }
 
@@ -364,14 +364,14 @@ table.popcal th {
 	background-color: #3b4252;  // nord0
 	color: #eceff4;  // nord6
 	/* font-family: Inter,Sans-Serif; */
-	font-size: 9pt;
+	font-size: 0.9em;
 	font-weight: normal;
 }
 
 table.popcal td {
 	background-color: #3b4252;  // nord0
 	/* font-family: Inter,Sans-Serif; */
-	font-size: 8pt;
+	font-size: 0.8em;
 	text-align: center;
 }
 
@@ -422,7 +422,7 @@ table.motitle td {
 }
 table.motitle th {
 	background-color: #434c5e;  // nord2
-	font-size: 10pt;
+	font-size: 0.9em;
 }
 
 table.mocal {
