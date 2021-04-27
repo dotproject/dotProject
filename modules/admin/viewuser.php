@@ -6,8 +6,8 @@ if (!defined('DP_BASE_DIR')) {
 GLOBAL $addPwT,$company_id, $dept_ids, $department, $min_view, $m, $a;
 $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 
-if ($user_id != $AppUI->user_id 
-&& (! getPermission('admin', 'view', $user_id) 
+if ($user_id != $AppUI->user_id
+&& (! getPermission('admin', 'view', $user_id)
 || ! getPermission('users', 'view', $user_id)))
 	$AppUI->redirect('m=public&a=access_denied');
 
@@ -28,13 +28,13 @@ $company_prefix = 'company_';
 
 if (isset($_POST['department'])) {
 	$AppUI->setState('UsrProjIdxDepartment', $_POST['department']);
-	
+
 	//if department is set, ignore the company_id field
 	unset($company_id);
 }
 $department = $AppUI->getState('UsrProjIdxDepartment') !== NULL ? $AppUI->getState('UsrProjIdxDepartment') : $company_prefix.$AppUI->user_company;
 
-//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the 
+//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the
 // $department variable, and populate the $company_id variable.
 if (!(mb_strpos($department, $company_prefix)===false)) {
 	$company_id = mb_substr($department,mb_strlen($company_prefix));
@@ -71,21 +71,21 @@ if (!db_loadHash($sql, $user)) {
 	  $titleBlock->addCrumb('?m=admin', 'users list');
 	}
 	if ($canEdit) {
-		$titleBlock->addCrumb('?m=admin&amp;a=addedituser&amp;user_id=' . $user_id, 
+		$titleBlock->addCrumb('?m=admin&amp;a=addedituser&amp;user_id=' . $user_id,
 		                      'edit this user');
 	}
 	if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb('?m=system&amp;a=addeditpref&amp;user_id=' . $user_id, 
+		$titleBlock->addCrumb('?m=system&amp;a=addeditpref&amp;user_id=' . $user_id,
 		                      'edit preferences');
-		$titleBlock->addCrumbRight('<a href="#" onclick="popChgPwd();return false">' 
+		$titleBlock->addCrumbRight('<a href="#" onclick="popChgPwd();return false">'
 								   . $AppUI->_('change password') . '</a>');
-		$titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user') 
-		                     . '" onClick="javascript:window.location=\'./index.php' 
+		$titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user')
+		                     . '" onClick="javascript:window.location=\'./index.php'
 		                     . '?m=admin&amp;a=addedituser\';" />');
 	}
 	$titleBlock->show();
 ?>
-<script  language="javascript">
+<script language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -195,9 +195,9 @@ function popChgPwd() {
 	$min_view = true;
 	$oldViewPref = $AppUI->getPref('TABVIEW');
 	$AppUI->setPref('TABVIEW', 1);
-	
+
 	$tabBox = new CTabBox(('?m=admin&amp;a=viewuser&amp;user_id=' . $user_id), '', $tab);
-	$tabBox->loadExtras('admin', 'viewuser'); 
+	$tabBox->loadExtras('admin', 'viewuser');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_log', 'User Log');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_perms', 'Permissions');
 	$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_roles', 'Roles');
@@ -205,7 +205,7 @@ function popChgPwd() {
 		$tabBox->add(DP_BASE_DIR.'/modules/admin/vw_usr_transfer', 'Transfer');
 	}
 	$tabBox->show();
-	
+
 	$AppUI->setPref('TABVIEW', $oldViewPref);
 }
 ?>

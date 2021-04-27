@@ -88,7 +88,7 @@ foreach ($logs as $row) {
       "\n\t\t</a>";
   }
   $s .= "\n\t</td>";
-  $s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : "-") . "</td>";
+  $s .= '<td nowrap="nowrap"><time>' . ($task_log_date ? $task_log_date->format($df) : "-") . "</time></td>";
   /*
 	$s .= ('<td align="center" valign="middle">'
 	       . (($row['task_log_problem'] ?  dPshowImage('./images/icons/mark-as-important-16.png',

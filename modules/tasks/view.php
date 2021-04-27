@@ -219,11 +219,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?>:</td>
-			<td class="hilite" width="300"><?php echo $start_date ? $start_date->format($df) : '-';?></td>
+			<td class="hilite" width="300"><time><?php echo $start_date ? $start_date->format($df) : '-';?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date');?>:</td>
-			<td class="hilite" width="300"><?php echo $end_date ? $end_date->format($df) : '-';?></td>
+			<td class="hilite" width="300"><time><?php echo $end_date ? $end_date->format($df) : '-';?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap" valign="top"><?php echo $AppUI->_('Expected Duration');?>:</td>

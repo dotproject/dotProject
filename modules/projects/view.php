@@ -206,7 +206,7 @@ if ($canEdit) {
 $titleBlock->addCrumb('?m=projects&amp;a=reports&amp;project_id=' . $project_id, 'reports');
 $titleBlock->show();
 ?>
-<script  language="javascript">
+<script language="javascript">
 <?php
 //security improvement:
 //some javascript functions may not appear on client side in case of user not having write permissions
@@ -244,7 +244,7 @@ echo ('<span style="color:' . bestColor($obj->project_color_identifier) . '; fon
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Company'); ?>:</td>
-            <td class="hilite" width="100%"><?php
+      <td class="hilite" width="100%"><?php
 echo (((getPermission('companies', 'view', $obj->project_company))
        ? ('<a href="?m=companies&amp;a=view&amp;company_id=' . $obj->project_company . '">') : '')
       . htmlspecialchars($obj->company_name, ENT_QUOTES)
@@ -253,7 +253,7 @@ echo (((getPermission('companies', 'view', $obj->project_company))
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Internal Company'); ?>:</td>
-            <td class="hilite" width="100%"><?php
+      <td class="hilite" width="100%"><?php
 echo (((getPermission('companies', 'view', $obj->project_company_internal))
        ? ('<a href="?m=companies&amp;a=view&amp;company_id=' . $obj->project_company_internal . '">') : '')
       . htmlspecialchars($obj->company_name_internal, ENT_QUOTES)
@@ -268,15 +268,15 @@ echo htmlspecialchars(@$obj->project_short_name, ENT_QUOTES); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Start Date'); ?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
+			<td class="hilite"><time><?php echo $start_date ? $start_date->format($df) : '-'; ?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Target End Date'); ?>:</td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format($df) : '-'; ?></td>
+			<td class="hilite"><time><?php echo $end_date ? $end_date->format($df) : '-'; ?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Actual End Date'); ?>:</td>
-			<td class="hilite"><?php
+			<td class="hilite"><time><?php
 if ($project_id > 0) {
 	echo (($actual_end_date)
 	      ? ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $criticalTasks[0]['task_id'] . '">'
@@ -285,9 +285,7 @@ if ($project_id > 0) {
 } else {
 	echo $AppUI->_('Dynamically calculated');
 }
-
-?>
-			</td>
+?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Target Budget'); ?>:</td>

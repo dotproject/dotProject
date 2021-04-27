@@ -141,7 +141,7 @@ echo dPformSafe(@$obj->company_state, DP_FORM_URI); ?>+<?php
 echo dPformSafe(@$obj->company_zip, DP_FORM_URI); ?>+<?php
 echo dPformSafe(@$obj->company_country, DP_FORM_URI); ?>" target="_blank">
 				<?php
-echo dPshowImage('./images/googlemaps.gif', 55, 22, 'Find It on Google');
+echo dPshowImage('./images/googlemaps.svg', '', 22, 'Find It on Google');
 ?>
 <?php } ?>
 				</a></span>

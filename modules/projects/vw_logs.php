@@ -164,7 +164,7 @@ foreach ($logs as $row) {
 			   . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
-	$s .= $AppUI->showHTML('<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>');
+	$s .= $AppUI->showHTML('<td nowrap="nowrap"><time>'.($task_log_date ? $task_log_date->format($df) : '-').'</time></td>');
 	$s .= $AppUI->showHTML('<td width="30%"><a href="?m=tasks&amp;a=view&amp;task_id='.$row['task_id'].'&amp;tab=0">'.@$row["task_log_name"].'</a></td>');
 	$s .= $AppUI->showHTML('<td width="100">'.$row["user_username"].'</td>');
 	$s .= $AppUI->showHTML('<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>');

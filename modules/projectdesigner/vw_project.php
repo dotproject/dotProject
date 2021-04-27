@@ -15,21 +15,21 @@
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Start Date');?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format( $df ) : '-';?></td>
+			<td class="hilite"><date><?php echo $start_date ? $start_date->format( $df ) : '-';?></date></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Target End Date');?>:</td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format( $df ) : '-';?></td>
+			<td class="hilite"><date><?php echo $end_date ? $end_date->format( $df ) : '-';?></date></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Actual End Date');?>:</td>
-			<td class="hilite">
+			<td class="hilite"><date>
                                  <?php if ($project_id > 0) { ?>
                                         <?php echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
                                         <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format( $df ).'</span>' : '-';?>
                                         <?php echo $actual_end_date ? '</a>' : '';?>
                                  <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
-                        </td>
+      </date></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Target Budget');?>:</td>
@@ -96,7 +96,7 @@
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Worked Hours');?>:</td>
 			<td class="hilite" width="100%"><?php echo $worked_hours ?></td>
-		</tr>	
+		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Scheduled Hours');?>:</td>
 			<td class="hilite" width="100%"><?php echo $total_hours ?></td>
@@ -104,7 +104,7 @@
 		<tr>
 			<td align="right" nowrap><?php echo $AppUI->_('Project Hours');?>:</td>
 			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
-		</tr>				
+		</tr>
 		<?php
 		$q  = new DBQuery;
 		$q->addTable('departments', 'a');
@@ -132,11 +132,11 @@
 		    </tr>
 	 		<?php
 		}
-		
+
 			$q  = new DBQuery;
 			$q->addTable('contacts', 'a');
 			$q->addTable('project_contacts', 'b');
-			$q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');			
+			$q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');
 			$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name,
 					a.contact_email, a.contact_phone, c.dept_name');
 			$q->addWhere("a.contact_id = b.contact_id and b.project_id = $project_id
