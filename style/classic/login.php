@@ -9,7 +9,8 @@ if (!defined('DP_BASE_DIR')) {
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
 	<meta http-equiv="Pragma" content="no-cache">
-	<link href="./style/<?php echo $uistyle;?>/main.css" rel="STYLESHEET"/>
+	<link href="./style/<?php echo $uistyle;?>/css/main.css" rel="STYLESHEET"/>
+  <link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
 </head>
 
 <body style="background-color: white" onload="document.loginform.username.focus();">
@@ -50,7 +51,7 @@ if (!defined('DP_BASE_DIR')) {
 </tr>
 </table>
 
-<p align="center"><?php 
+<p align="center"><?php
 	echo '<span class="error">'.$AppUI->getMsg().'</span>';
 	//echo ini_get('register_globals') ? '' : '<br /><span class="warning">WARNING: dotproject is not fully supported with register_globals=off</span>';
 ?></p>

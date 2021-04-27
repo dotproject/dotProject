@@ -747,19 +747,19 @@ $AppUI->savePlace();
 
 ?>
 </table>
-<table>
+<table class="tabox-bottom">
 <tr>
   <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
-  <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>
+  <td class="task-future-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Future Task'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#E6EEDD; color:#000000" width="10">&nbsp;</td>
+  <td class="task-started-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Started and on time'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#FFEEBB; color:#000000" width="10">&nbsp;</td>
+  <td class="task-late-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Should have started'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#CC6666; color:#000000" width="10">&nbsp;</td>
+  <td class="task-overdue-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
-  <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;
+  <td class="task-done-bg task-color-fg" width="10">&nbsp;</td>
+  <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;</td>
 	<?php if ($min_view) { ?>
 	<?php echo $AppUI->_('Expand'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;open_task_all=1'; ?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;open_one_level=1'; ?>"><?php echo $AppUI->_('One Level'); ?></a> :
 	<?php echo $AppUI->_('Collapse'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;close_one_level=1';?>"><?php echo $AppUI->_('One Level'); ?></a>

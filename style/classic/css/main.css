@@ -199,6 +199,35 @@ TD.tabox {
 	border-bottom: solid #cccccc 2px;
 }
 
+/* Task colours */
+.task-color-fg {
+  color: black;
+}
+.task-future-bg {
+  background-color: #eceff4;
+}
+.task-started-bg {
+  background-color: #E6EEDD;
+}
+.task-late-bg {
+  background-color: #FFEEBB;
+}
+.task-overdue-bg {
+  background-color: #CC6666;
+}
+.task-done-bg {
+  background-color: #AADDAA;
+}
+/* used only on vw_tasks.php */
+.task-unknown-bg {
+  background-color: lightgray;
+}
+/* used only on vw_tasks.php */
+.task-border {
+  border-style: solid;
+  border-width: 1px;
+}
+
 /* Message styles */
 .warning {
 	color: #ff6600;

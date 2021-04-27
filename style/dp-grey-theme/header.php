@@ -5,9 +5,9 @@ if (!defined('DP_BASE_DIR')) {
 
 $dialog = (int)dPgetParam($_GET, 'dialog', 0);
 
-$page_title = (($dialog) ? '' 
-               : (($dPconfig['page_title'] == 'dotProject') 
-                  ? ($dPconfig['page_title'] . ' ' . $AppUI->getVersion()) 
+$page_title = (($dialog) ? ''
+               : (($dPconfig['page_title'] == 'dotProject')
+                  ? ($dPconfig['page_title'] . ' ' . $AppUI->getVersion())
 				  : $dPconfig['page_title']));
 
 ?>
@@ -17,16 +17,11 @@ $page_title = (($dialog) ? ''
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<meta name="Description" content="dotProject Default Style" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<meta http-equiv="Content-Type" content="text/html;charset=<?php 
-echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
+	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8';?>" />
 	<title><?php echo @dPgetConfig('page_title');?></title>
-	<link rel="stylesheet" href="./style/<?php 
-echo $uistyle;?>/main.css" media="all" />
-	<style type="text/css" media="all">@import "./style/<?php 
-echo $uistyle;?>/main.css";</style>
-	<link rel="shortcut icon" href="./style/<?php 
-echo $uistyle;?>/images/favicon.ico" type="image/ico" />
-	<?php 
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
+	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
+	<?php
 $AppUI->loadJS(); ?>
 	<script>
 	function gt_hide_tabs() {
@@ -70,10 +65,10 @@ $AppUI->loadJS(); ?>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td><table width='100%' cellpadding="3" cellspacing="0" border="0"><tr>
-	<th style="background: url(style/<?php 
+	<th style="background: url(style/<?php
 echo $uistyle; ?>/images/titlegrad.jpg" class="banner" align="left"><strong>
-	<?php 
-echo ('<a href="' . dPformSafe($dPconfig['base_url'], DP_FORM_URI) . '">' . $page_title . '</a>'); 
+	<?php
+echo ('<a href="' . dPformSafe($dPconfig['base_url'], DP_FORM_URI) . '">' . $page_title . '</a>');
 ?>
 	</strong>
 	<?php if (getPermission('smartsearch', 'access')): ?>
@@ -83,8 +78,8 @@ echo ('<a href="' . dPformSafe($dPconfig['base_url'], DP_FORM_URI) . '">' . $pag
 	</form>
 	<?php endif; ?>
 	</th>
-	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php 
-	echo (($dialog) ? 'target="_blank"' : ''); ?>><img src="style/<?php 
+	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php
+	echo (($dialog) ? 'target="_blank"' : ''); ?>><img src="style/<?php
 echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 	</tr></table></td>
 </tr>
@@ -101,7 +96,7 @@ echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 	$links = array();
 	foreach ($nav as $module) {
 		if (getPermission($module['mod_directory'], 'access')) {
-			$links[] = ('<a href="?m=' . dPformSafe($module['mod_directory'], DP_FORM_URI) . '">' 
+			$links[] = ('<a href="?m=' . dPformSafe($module['mod_directory'], DP_FORM_URI) . '">'
 						. $AppUI->_($module['mod_ui_name']) . '</a>');
 		}
 	}
@@ -119,7 +114,7 @@ echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 							  'calendar' => 'Event',
 							  'files' => 'File',
 							  'projects' => 'Project');
-	
+
 	$newItem = array(0=>'- New Item -');
 	foreach ($newItemPermCheck as $mod_check => $mod_check_title) {
 		if (getPermission($mod_check, 'add')) {
@@ -154,23 +149,23 @@ echo $uistyle;?>/images/dp_icon.gif" border="0" /></a></th>
 	<td>
 		<table cellspacing="0" cellpadding="3" border="0" width="100%">
 		<tr>
-			<td width="100%"><?php 
-	echo ($AppUI->_('Welcome') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name); 
+			<td width="100%"><?php
+	echo ($AppUI->_('Welcome') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 ?></td>
 			<td nowrap="nowrap">
-				<?php echo dPcontextHelp('Help'); ?> | 
-				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php 
+				<?php echo dPcontextHelp('Help'); ?> |
+				<a href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php
 echo $AppUI->user_id; ?>"><?php echo $AppUI->_('My Info');?></a> | <?php
 	if (getPermission('tasks', 'access')) {
 ?>
-				<a href="./index.php?m=tasks&amp;a=todo"><b><?php echo $AppUI->_('Todo'); 
+				<a href="./index.php?m=tasks&amp;a=todo"><b><?php echo $AppUI->_('Todo');
 ?></b></a> | <?php
 	}
 	if (getPermission('calendar', 'access')) {
 		$now = new CDate();
 ?>
-				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php 
-echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> | <?php 
+				<a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php
+echo $now->format(FMT_TIMESTAMP_DATE);?>"><?php echo $AppUI->_('Today');?></a> | <?php
 	}
 ?>
 				<a href="./index.php?logout=-1"><?php echo $AppUI->_('Logout');?></a>

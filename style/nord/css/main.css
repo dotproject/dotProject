@@ -278,7 +278,7 @@ table.tbl td {
 /* a 'standard' table */
 table.std {
   border: solid #5e81ac 2px; /* nord10 */
-  background: #2e3440; /* nord0 */
+  background-color: #2e3440; /* nord0 */
 }
 table.std TH {
   background-color: #5e81ac; /* nord10 */
@@ -360,7 +360,36 @@ td.tabox {
   color: #bf616a; /* nord11 */
 }
 
-/* popup calendar */
+/* Task colours */
+.task-color-fg {
+  color: #2e3440; /* nord0 */
+}
+.task-future-bg {
+  background-color: #eceff4; /* nord6 */
+}
+.task-started-bg {
+  background-color: #d8dee9; /* nord4 */
+}
+.task-late-bg {
+  background-color: #ebcb8b; /* nord13 */
+}
+.task-overdue-bg {
+  background-color: #bf616a; /* nord11 */
+}
+.task-done-bg {
+  background-color: #a3be8c; /* nord14 */
+}
+/* used only on vw_tasks.php */
+.task-unknown-bg {
+  background-color: #4c566a; /* nord3 */
+}
+/* used only on vw_tasks.php */
+.task-border {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/* Popup calendar */
 body.popcal {
   background-color: #2e3440; /* nord0 */
 }

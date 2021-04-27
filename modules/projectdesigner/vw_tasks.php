@@ -367,7 +367,7 @@ $AppUI->setState("tasks_opened", $tasks_opened);
 ?>
 </table>
 </form>
-<table>
+<table class="tabox-bottom">
 <tr>
         <td><?php echo $AppUI->_('Key');?>:</td>
         <th>&nbsp;P&nbsp;</th>
@@ -381,18 +381,19 @@ $AppUI->setState("tasks_opened", $tasks_opened);
         <th>&nbsp;I&nbsp;</th>
         <td>=<?php echo $AppUI->_('Inactive');?></td>
         <td>&nbsp; &nbsp;</td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp; &nbsp;</td>
+        <td class="task-future-bg task-color-fg task-border">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Future Task');?></td>
         <td>&nbsp; &nbsp;</td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp; &nbsp;</td>
+        <td class="task-started-bg task-color-fg task-border">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Started and on time');?></td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp; &nbsp;</td>
+        <td>&nbsp; &nbsp;</td>
+        <td class="task-late-bg task-color-fg task-border">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Should have started');?></td>
         <td>&nbsp; &nbsp;</td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp; &nbsp;</td>
+        <td class="task-overdue-bg task-color-fg task-border">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Overdue');?></td>
         <td>&nbsp; &nbsp;</td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#aaddaa">&nbsp; &nbsp;</td>
+        <td class="task-done-bg task-color-fg task-border">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Done');?></td>
 </tr>
 </table>

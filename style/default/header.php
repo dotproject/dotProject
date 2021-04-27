@@ -16,8 +16,7 @@ else
 	<meta name="Version" content="<?php echo @$AppUI->getVersion() ?? 'unknown'; ?>" />
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $locale_char_set ?? 'UTF-8'; ?>" />
 	<title><?php echo @dPgetConfig('page_title');?></title>
-	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
 	<?php @$AppUI->loadJS(); // reverted the move to the end, breaks display (gwyneth 20210425) ?>
 </head>

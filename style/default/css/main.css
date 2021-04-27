@@ -1,13 +1,13 @@
 /* dotPROJECT REQUIRED CLASSES */
 BODY {
-	background-color: #FFFFFF;
+	background-color: #f0f0f0;
+	color: #000000;
 	margin-top: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
 	margin-bottom: 10px;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 10pt;
-	color: #333;
 }
 
 ul {
@@ -27,19 +27,19 @@ dd {
 }
 
 
-em {
-	font-weight: bold;
+em, i {
+	font-weight: normal;
 	text-decoration: none;
-	font-style: normal;
+	font-style: italic;
 }
 
 A:link {
-	color: #006;
+	color: #08245b;
 	text-decoration: none;
 }
 
 A:visited {
-	color: #006;
+	color: #08245b;
 	text-decoration: none;
 }
 
@@ -49,25 +49,25 @@ A:active {
 }
 
 A:hover {
-	color: #FF9900;
+	color: #666666;
 	text-decoration: underline;
 }
 
 TD {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 8pt
 }
 
 TR {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 8pt
 }
 
 h1, .title {
 	font-size: 16px;
 	font-weight: bold;
-	font-family: verdana, arial, helvetica, sans-serif;
-	color: #333;
+	font-family: Osaka,verdana,Sans-Serif;
+	color: #08245b;
 	margin-bottom: 0px;
 	margin-top: 5px;
 }
@@ -75,7 +75,7 @@ h1, .title {
 h2, .subtitle {
 	font-size: 12px;
 	font-weight: bold;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	color: #666;
 	margin-bottom: 0px;
 	margin-top: 15px;
@@ -84,7 +84,7 @@ h2, .subtitle {
 h3 {
 	font-size: 12px;
 	font-weight: bold;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	color: #08245b;
 	margin-bottom: 0px;
 	margin-top: 35px;
@@ -100,52 +100,54 @@ bordertable {
 
 .button{
 	border: 1px black solid;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 8pt;
 	/*width: 100px; too small for some translations*/
 }
 
+.item {
+	color: #08245b;
+}
+
+.ok {
+	color: green;
+}
+
 .text{
 	border: 1px black solid;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 8pt;
+	color: #000009;
 	/*height: 12pt; Select boxes are too small in Mozilla */
 }
 
 TEXTAREA {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka,verdana,helvetica,arial,sans-serif;
 	font-size: 9pt;
 }
 
 .textarea {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka, verdana,helvetica,arial,sans-serif;
 	font-size: 9pt;
 }
 
 textarea.small {
 	border: 1px black solid;
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Osaka, verdana,Sans-Serif;
 	font-size: 8pt;
 }
 
 /* dotProject Top Banner and Top Nav Customization */
 TH.banner {
-	background-color: #FFFFFF;
-	color: #fff;
+	background-color: #08245b;
+	color: #fff
 }
 
 TD.nav {
-	background: url("images/lines_title_shadow.gif") repeat-x bottom;
-	padding-bottom: 5px;
-	color: #000;
+	border: 1px solid #848284;
+	background-color: #d5d3ce;
+	color: #000
 }
-
-TR.nav {
-	background: url("images/lines_title_bar.gif");
-	height: 20px;
-	color: #000;
-}
-
 
 /*
 **********************************
@@ -177,64 +179,51 @@ TD.clsBtnOn {
 TD.clsBtnOff {
 	color: #FFFFFF;
 	padding: 0 3;
-	tab-index: 0;
+	/* tab-index: 0; //not valid for TD */
 	border: solid #559999 2px;
 }
 
 TD.topBtnOff {
 	color: #FFFFFF;
 	padding: 0 3;
-	/* tab-index: 0; //tab index not valid for TD */
+	/* tab-index: 0; //not valid for TD */
 	border: solid #cccccc 2px;
+}
+
+TD.nav {
+	color: #FFFFFF;
 }
 
 /* Standard table 'spreadsheet' style */
 table.tbl {
-	background: #FFFFFF;
+	background: #a5cbf7;
 }
 
 table.tbl TH {
-	background: url("images/lines_title_bar.gif");
-	border-color: #ECECEC;
-	white-space: nowrap;
-	border-left-width: 0px;
-	border-right-width: 1px;
-	border-top-width: 0px;
-	border-bottom-width: 0px;
-	padding: 2px 2px 2px 2px;
-	font: 11px verdana, arial, helvetica, sans-serif;
-	text-align:center;
-	color: #000000
+	background-color: #08245b;
+	color: #ffffff;
 	list-style-type: disc;
 	list-style-position: inside;
+	border: outset #D1D1CD 1px;
+	font-weight: normal;
+	text-align:center;
 }
 
 table.tbl td {
-	background-color: #ECECEC;
+	background-color: #ffffff;
 }
 
 /* a 'standard' table */
 table.std {
-	background: #ECECEC;
-	border-top: solid #cccccc 1px;
-	border-left: solid #cccccc 1px;
-	border-right: solid #cccccc 2px;
-	border-bottom: solid #cccccc 2px;
+	border: solid #08245b 2px;
+	background: #d6ebff;
 }
 table.std TH {
-	font: 13px verdana, arial, helvetica, sans-serif;
-	font-weight: bold;
-	text-align: center;
-	color: black;
-	margin-bottom: 0;
-	padding: 1px 1px 1px 1px;
+	background-color: #08245b;
+	color: white;
 	list-style-type: disc;
 	list-style-position: inside;
-	border-top: solid #cccccc 0px;
-	border-left: solid #cccccc 1px;
-	border-right: solid #cccccc 2px;
-	border-bottom: solid #cccccc 2px;
-
+	border: outset #D1D1CD 1px;
 }
 
 table.std td.hilite {
@@ -243,11 +232,11 @@ table.std td.hilite {
 
 /* contacts table */
 table.contacts {
-	background-color: #ECECEC;
+	background-color: #08245b;
 }
 
 table.contacts td {
-	background-color: #cccccc;
+	background-color: #d6ebff;
 }
 
 table.contacts td.hilite {
@@ -256,52 +245,84 @@ table.contacts td.hilite {
 
 /* links in header blocks */
 A.hdr:link, A.hdr:active, A.hdr:visited {
-	color: #333;
+	color: #ffffff;
 }
 
 /* tabbed boxes */
 td.tabon {
+	background: #a5cbf7;
 	/*
-	border-top: outset #ffffff 1px;
-	border-left: outset #ffffff 1px;
+	border-top: outset #ffffff 2px;
+	border-left: outset #ffffff 2px;
 	border-right: outset #cccccc 2px;
 	border-bottom: none;
 	*/
-	background: #ffffff url('images/bar_top_Selectedmiddle.gif') repeat-x top;
+	/* background-image: url('./style/default/images/tabSelectedBg.png');*/
+	 background-image: url('images/tabSelectedBg.png');
 }
 td.taboff {
-	/* border-top: solid #cccccc 1px;
+	background: #d6ebff;
+	/*
+	border-top: solid #cccccc 1px;
 	border-left: solid #cccccc 1px;
 	border-right: solid #cccccc 1px;
 	border-bottom: solid #cccccc 2px;
 	*/
-	background: #ffffff url('images/bar_top_middle.gif') repeat-x top;
+	/* background-image: url('./style/default/images/tabBg.png'); */
+	background-image: url('images/tabBg.png');
 }
 td.tabsp {
 	border-bottom: solid #cccccc 2px;
 }
-/* Bottom of tabbed boxes, this is the bottom colour of the table */
 td.tabox {
-	background: #ECECEC;
-	border-top: solid #cccccc 1px;
-	border-left: solid #cccccc 1px;
+	background-color: #a5cbf7;
+	border-left: solid #cccccc 2px;
 	border-right: solid #cccccc 2px;
 	border-bottom: solid #cccccc 2px;
 }
 
+/* Task colours */
+.task-color-fg {
+  color: black;
+}
+.task-future-bg {
+  background-color: #eceff4;
+}
+.task-started-bg {
+  background-color: #E6EEDD;
+}
+.task-late-bg {
+  background-color: #FFEEBB;
+}
+.task-overdue-bg {
+  background-color: #CC6666;
+}
+.task-done-bg {
+  background-color: #AADDAA;
+}
+/* used only on vw_tasks.php */
+.task-unknown-bg {
+  background-color: lightgray;
+}
+/* used only on vw_tasks.php */
+.task-border {
+  border-style: solid;
+  border-width: 1px;
+}
+
 /* Message styles */
 .warning {
-	color: red
+	color: red;
 }
 .error {
-	color: red
+	color: red;
 }
 .message {
 	color: #08245b;
 }
 
 .no_ {
-	color: red
+	color: red;
 }
 
 /* popup calendar */
@@ -475,7 +496,7 @@ table.tbl td.event {
 }
 
 table.tbl td.event td {
-        background-color: #fff0b0;
+	background-color: #fff0b0;
 }
 
 .hidden {display:none;}
@@ -490,3 +511,5 @@ th form {
   margin: 0;
   margin-top: 1px;
 }
+
+.disabled { color: #000000; }

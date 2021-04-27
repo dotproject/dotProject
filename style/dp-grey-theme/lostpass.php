@@ -8,8 +8,7 @@
        	<title><?php echo $dPconfig['company_name'];?> :: dotProject Login</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
 </head>
 
