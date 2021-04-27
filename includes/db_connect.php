@@ -68,27 +68,28 @@ function db_loadResult($sql) {
 * If <var>object</var> has a value of null, then all of the returned query fields returned in the object.
 * @param string The SQL query
 * @param object The address of variable
+* @return bool  Object loaded correctly? true
 */
 function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
-	if ($object != null) {
+	if (!empty($object)) {
 		$hash = array();
-		if (!(db_loadHash($sql, $hash))) {
+		if (empty(db_loadHash($sql, $hash))) {
 			return false;
 		}
 		bindHashToObject($hash, $object, null, $strip, $bindAll);
 		return true;
 	} else {
 		$cur = db_exec($sql);
-		if (!($cur)) {
-			exit(db_error());
+		if (empty($cur)) {
+			exit(db_error());  // a bit drastic, isn't it? (gwyneth 20210427)
 		}
 		$object = db_fetch_object($cur);
-		if ($object) {
+		if (!empty($object)) {
 			db_free_result($cur);
 		} else {
 			$object = null;
 		}
-		return (($object) ? true : false);
+		return !empty($object);
 	}
 }
 
