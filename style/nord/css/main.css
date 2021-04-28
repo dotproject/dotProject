@@ -255,6 +255,12 @@ TD.nav {
   color: #3b4252; /* nord1 */
 }
 
+/* Header top (gradient, where the logo is) */
+table.banner th {
+  background-image: linear-gradient(to right,  #2e3440, #5e81ac); /* nord0 to nord10 */
+  text-align: left;
+}
+
 /* Standard table 'spreadsheet' style */
 table.tbl {
   background: #2e3440; /* nord0 */

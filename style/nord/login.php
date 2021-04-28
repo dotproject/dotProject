@@ -36,7 +36,7 @@ if (!defined('DP_BASE_DIR')) {
 	<td align="left" nowrap><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
 </tr>
 <tr>
-	<td align="left" nowrap><a href="http://www.dotproject.net/"><img src="./style/default/images/dp_icon.gif" border="0" alt="dotProject logo" /></a></td>
+	<td align="left" nowrap><a href="http://www.dotproject.net/" target="_blank" title="dotProject home page"><img src="./style/nord/images/dotProject.svg" height="24" border="0" alt="dotProject logo" /></a></td>
 	<td align="right" valign="bottom" nowrap><input type="submit" name="login" value="<?php echo $AppUI->_('login');?>" class="button" /></td>
 </tr>
 <tr>

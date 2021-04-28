@@ -19,7 +19,16 @@ else
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
-	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicon.ico" type="image/ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./style/<?php echo $uistyle; ?>/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./style/<?php echo $uistyle; ?>/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./style/<?php echo $uistyle; ?>/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="./style/<?php echo $uistyle; ?>/images/favicons/site.webmanifest">
+  <link rel="mask-icon" href="./style/<?php echo $uistyle; ?>/images/favicons/safari-pinned-tab.svg" color="#3b4252">
+  <link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/images/favicons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="msapplication-TileImage" content="./style/<?php echo $uistyle; ?>/images/favicons/mstile-144x144.png">
+  <meta name="msapplication-config" content="./style/<?php echo $uistyle; ?>/images/favicons/browserconfig.xml">
+  <meta name="theme-color" content="#eceff4">
 	<?php @$AppUI->loadJS(); // reverted the move to the end, breaks display (gwyneth 20210425) ?>
 </head>
 
@@ -27,7 +36,7 @@ else
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td><table width="100%" cellpadding="3" cellspacing="0" border="0"><tr>
-	<th style="background: url(style/<?php echo $uistyle;?>/images/titlegrad.jpg);" class="banner" align="left"><strong><?php
+	<th class="banner"><strong><?php
 		echo "<a style='color: #eceff4' href='{$dPconfig['base_url']}'>$page_title</a>";
 	?></strong>
 	<?php if (getPermission('smartsearch', 'access')): ?>
@@ -37,7 +46,7 @@ else
 	</form>
 	<?php endif; ?>
 	</th>
-	<th align="right" width='50'><a href='http://www.dotproject.net/' <?php if (!empty($dialog)) echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle ?? 'default';?>/images/dp_icon.gif" border="0" alt="http://dotproject.net/" /></a></th>
+	<th align="right" width='50'><a href="http://www.dotproject.net/" target="_blank" title="dotProject home page"><img src="./style/<?php echo $uistyle ?? 'default';?>/images/dotProject.svg" width="50" border="0" alt="dotProject logo" /></a></th>
 	</tr></table></td>
 </tr>
 <?php if (empty($dialog)) {
