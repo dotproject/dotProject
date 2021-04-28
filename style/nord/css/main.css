@@ -52,7 +52,7 @@ eye-comfortable, but yet colorful ambiance.
 */
 
 /* dotPROJECT REQUIRED CLASSES */
-BODY {
+body {
   background-color: #2e3440; /* nord0 */
   color: #e5e9f0; /* nord5 */
   margin-top: 0px;
@@ -88,20 +88,24 @@ i {
   font-style: italic;
 }
 
-a, a:link,
-a:visited, {
-  color: #88c0d0; /* nord8 */
-  text-decoration: none;
-}
-a:hover {
+a,
+a:link,
+a:visited {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
   border-radius: 0.25rem;
   transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+  background-color: transparent;
+}
+a:hover {
+  color: #88c0d0; /* nord8 */
+  text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
 a:active {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
+  background-color: transparent;
 }
 
 input,
@@ -112,12 +116,12 @@ select {
   cursor: pointer;
 }
 
-TD {
+td {
   font-size: 0.8rem;
   color: #e5e9f0; /* nord5 */
 }
 
-TR {
+tr {
   font-size: 0.8rem;
 }
 
@@ -159,14 +163,16 @@ button,
   font-size: 0.8rem;
   color: #d8dee9; /* nord4 */
   background-color: #3b4252; /* nord1 */
-  border-radius: 0.1rem;
+  border-radius: 0.25rem;
   /*width: 100px; too small for some translations*/
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
   cursor: pointer;
 }
 
 button:hover,
 .button:hover {
-  background-color: #4c566a; /* nord3 */
+  color: #d8dee9; /* nord4 -- same as non-hover */
+  background-color: #4c566a; /* nord3 - swapping border with background colour, etc. */
   border: 1px #3b4252 solid; /* nord1 */
 }
 
@@ -186,7 +192,7 @@ button:hover,
   /*height: 12pt; Select boxes are too small in Mozilla */
 }
 
-TEXTAREA,
+textarea,
 .textarea {
   font-family: Inter, Sans-Serif;
   font-size: 0.8rem;
@@ -208,9 +214,10 @@ table.banner {
   border-spacing: 0;
 }
 table.banner tr {
-  background-image: linear-gradient(to right,  #2e3440, #5e81ac); /* nord0 to nord10 */
+  background-image: linear-gradient(to right, #2e3440, #5e81ac); /* nord0 to nord10 */
 }
-table.banner td, table.banner th {
+table.banner td,
+table.banner th {
   border: none;
   padding: 3px;
 }
@@ -220,21 +227,23 @@ table.banner th.title {
   text-align: left;
   font-weight: bold;
 }
-table.banner th.title a, table.banner th.title a:hover {
+table.banner a,
+table.banner a:hover {
   color: #eceff4; /* nord6 */
   text-decoration: none;
+  background-color: transparent;
 }
 table.banner th.logo {
   background-color: transparent; /* nord10 */
   text-align: right;
-  width: 50;
 }
 table.banner th.logo img {
   height: 100%;
+  width: 50px;
   border: none;
 }
 
-TD.nav {
+td.nav {
   border: 1px solid #4c566a; /* nord3 */
   background-color: #3b4252; /* nord1 */
   color: #eceff4; /* nord6 */
@@ -246,42 +255,42 @@ Begin IE TD buttonizing
 **********************************
 */
 
-TD.clsBtnUp {
+td.clsBtnUp {
   cursor: hand;
   color: #3b4252; /* nord1 */
   padding: 0 3;
   border: inset 2px;
 }
 
-TD.clsBtnDown {
+td.clsBtnDown {
   cursor: hand;
   color: #2e3440; /* nord0 */
   padding: 0 3;
   border: inset 2px;
 }
 
-TD.clsBtnOn {
+td.clsBtnOn {
   cursor: hand;
   color: #2e3440; /* nord0 */
   padding: 0 3;
   border: outset #4c566a 2px; /* nord3 */
 }
 
-TD.clsBtnOff {
+td.clsBtnOff {
   color: #eceff4; /* nord6 */
   padding: 0 3;
-  /* tab-index: 0; /* not valid for TD */
+  /* tab-index: 0; /* not valid for td */
   border: solid #8fbcbb 2px; /* nord7 */
 }
 
-TD.topBtnOff {
+td.topBtnOff {
   color: #2e3440; /* nord0 */
   padding: 0 3;
-  /* tab-index: 0; /* not valid for TD */
+  /* tab-index: 0; /* not valid for td */
   border: solid #3b4252 2px; /* nord1 */
 }
 
-TD.nav {
+td.nav {
   color: #3b4252; /* nord1 */
 }
 
@@ -290,7 +299,7 @@ table.tbl {
   background: #2e3440; /* nord0 */
 }
 
-table.tbl TH {
+table.tbl th {
   background-color: #5e81ac; /* nord10 */
   color: #eceff4; /* nord6 */
   list-style-type: disc;
@@ -316,7 +325,7 @@ table.std {
   border: solid #5e81ac 2px; /* nord10 */
   background-color: #2e3440; /* nord0 */
 }
-table.std TH {
+table.std th {
   background-color: #5e81ac; /* nord10 */
   color: #eceff4; /* nord6 */
   list-style-type: disc;
@@ -342,10 +351,19 @@ table.contacts td.hilite {
 }
 
 /* links in header blocks */
-A.hdr:link,
-A.hdr:active,
-A.hdr:visited {
+a.hdr,
+a.hdr:link,
+a.hdr:active {
   color: #88c0d0; /* nord8 */
+  text-decoration: none;
+}
+a.hdr:hover {
+  color: #5e81ac; /* nord10 */
+  text-decoration: none;
+}
+a.hdr:visited {
+  color: #88c0d0; /* nord8 */
+  text-decoration: none;
 }
 
 /* tabbed boxes */
@@ -474,26 +492,61 @@ table.popcal td.weekend {
   background-color: #bf616a; /* nord11 */
 }
 
+table.popcal a,
 table.popcal a:link,
 table.popcal a:visited {
   color: #5e81ac; /* nord10, but also see the defaults for <a> above */
   text-decoration: none;
+  border-radius: 0.25rem;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+}
+table.popcal a:hover {
+  color: #81a1c1; /* nord9 */
+  text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
 
+table.popcal a.today,
 table.popcal a.today:link,
 table.popcal a.today:visited {
   color: #81a1c1; /* nord9 */
   font-weight: bold;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+}
+table.popcal a.today:hover {
+  color: #5e81ac; /* nord10 */
+  text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
 
+table.popcal a.weekend,
 table.popcal a.weekend:link,
 table.popcal a.weekend:visited {
   color: #bf616a; /* nord11 */
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+}
+table.popcal a.weekend:hover {
+  color: #d08770; /* nord12 */
+  text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
 
+table.popcal a.empty,
 table.popcal a.empty:link,
 table.popcal a.empty:visited {
   color: #d08770; /* nord12 */
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+}
+table.popcal a.empty:hover {
+  color: #ebcb8b; /* nord13 */
+  text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
 
 /* month calendar - title area */
