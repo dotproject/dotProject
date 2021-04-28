@@ -131,7 +131,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Map Address');?>:</td>
-			<td class="hilite"><input type="image" src="./images/googlemaps.svg" style="height:22px"
+			<td><input type="image" src="./images/googlemaps.svg" style="height:22px"
 				alt="Find It on Google" onclick="window.open('http://maps.google.com/maps?q=<?php
 				echo $AppUI->___(@$row->contact_address1);?>+<?php echo $AppUI->___(@$row->contact_address2);?>+<?php
 				echo $AppUI->___(@$row->contact_city);?>+<?php echo $AppUI->___(@$row->contact_state);?>+<?php

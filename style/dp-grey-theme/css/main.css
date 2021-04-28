@@ -519,3 +519,61 @@ th form {
   margin: 0;
   margin-top: 1px;
 }
+
+/* Folder module */
+#folder-list {
+  background-color: white;
+  layer-background-color: white;
+}
+
+#folder-list ul {
+  padding: 0;
+  margin: 0;
+}
+#folder-list ul li {
+  list-style: none;
+  margin-top: -1px;
+  margin-bottom: 0px;
+  border: 0px solid #cccccc;
+}
+#folder-list ul li ul li {
+  margin-left: 25px;
+}
+
+.folder-name {
+  display: block;
+  height: 16px;
+  padding-top: 0px;
+  background: white;
+  border-bottom: 1px solid #333333;
+  border-right: 1px solid #333333;
+  margin-bottom: 0px;
+}
+
+.folder-name-current {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  border-bottom: 1px solid #333333;
+}
+
+.has-files {
+  font-weight: bold;
+}
+
+#folder-list .tbl {
+  margin-top: 2px;
+}
+#folder-list .tbl th {
+  border: none;
+}
+
+#folder-list p {
+  padding: 3px 5px;
+  margin-top: -5px;
+  margin-left: 25px;
+  margin-right: 25px;
+  border: 1px solid #cccccc;
+  border-top: none;
+  background: #f9f9f9;
+}

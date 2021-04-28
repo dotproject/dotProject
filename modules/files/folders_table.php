@@ -39,7 +39,6 @@ if (!$project_id) {
 	$showProject = true;
 }
 
-
 global $allowedCompanies, $allowedProjects, $allowedTasks, $allowedFolders;
 
 $company = new CCompany();
@@ -99,7 +98,7 @@ function displayFolders($folder_id=0, $level=0) {
 
 	foreach ($folders as $row) {
 
-		//"loop" through one folder
+		// "loop" through one folder
 		if ($canRead_this && $level) {
 			// indent and display the title
 			echo ('<table width="100%" summary="files folders"><tr>' . "\n");
@@ -126,7 +125,6 @@ function displayFolders($folder_id=0, $level=0) {
 		}
 
 		echo ("</span>\n" . (($level)? "</td>\n" : ''));
-
 
 		if ($row['file_folder_description'] && !($folder_id && $level)) {
 			echo $AppUI->___('<p>' . $row['file_folder_description'] . '</p>');
@@ -773,8 +771,7 @@ if (!empty($folder) && $folder > 0) {
 }
 ?>
 
-
-<script  language="javascript">
+<script language="javascript">
 function expand(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "block" : "none";
@@ -824,65 +821,6 @@ function removeBulkComponent(li) {
       t.removeChild(old);
 }
 </script>
-
-<style>
-
-#folder-list {
-
-}
-#folder-list ul {
-  padding: 0;
-  margin: 0;
-}
-#folder-list ul li {
-  list-style: none;
-  margin-top: -1px;
-  margin-bottom: 0px;
-  border: 0px solid #CCCCCC;
-}
-#folder-list ul li ul li {
-  margin-left: 25px;
-}
-
-.folder-name {
-  display: block;
-  height: 16px;
-  padding-top: 0px;
-  background: white;
-  border-bottom: 1px solid #333333;
-  border-right: 1px solid #333333;
-  margin-bottom: 0px;
-}
-
-.folder-name-current {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  border-bottom: 1px solid #333333;
-}
-
-.has-files {
-  font-weight: bold;
-}
-
-#folder-list .tbl {
-  margin-top: 2px;
-}
-#folder-list .tbl th {
-  border: none;
-}
-
-#folder-list p {
-  padding: 3px 5px;
-  margin-top: -5px;
-  margin-left: 25px;
-  margin-right: 25px;
-  border: 1px solid #CCCCCC;
-  border-top: none;
-  background: #F9F9F9;
-}
-</style>
-
 <?php
 if (!empty($folder)) {
 ?>
@@ -922,7 +860,7 @@ if (!empty($folder)) {
 }
 ?>
 
-<div id="folder-list" style="background-color:white;layer-background-color:white;">
+<div id="folder-list">
 <?php
 displayFolders($folder);
 ?>
