@@ -88,21 +88,18 @@ i {
   font-style: italic;
 }
 
-A {
+a, a:link,
+a:visited, {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
 }
-
-A:hover {
+a:hover {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
   border-radius: 0.25rem;
   transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
 }
-
-A:visited,
-A:link,
-A:active {
+a:active {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
 }
@@ -167,6 +164,12 @@ button,
   cursor: pointer;
 }
 
+button:hover,
+.button:hover {
+  background-color: #4c566a; /* nord3 */
+  border: 1px #3b4252 solid; /* nord1 */
+}
+
 .item {
   color: #5e81ac; /* nord10 */
 }
@@ -199,9 +202,36 @@ textarea.small {
 }
 
 /* dotProject Top Banner and Top Nav Customization */
-TH.banner {
-  background-color: #5e81ac; /* nord10 */
+table.banner {
+  width: 100%;
+  border: none;
+  border-spacing: 0;
+}
+table.banner tr {
+  background-image: linear-gradient(to right,  #2e3440, #5e81ac); /* nord0 to nord10 */
+}
+table.banner td, table.banner th {
+  border: none;
+  padding: 3px;
+}
+table.banner th.title {
+  background-color: transparent; /* nord10 */
   color: #eceff4; /* nord6 */
+  text-align: left;
+  font-weight: bold;
+}
+table.banner th.title a, table.banner th.title a:hover {
+  color: #eceff4; /* nord6 */
+  text-decoration: none;
+}
+table.banner th.logo {
+  background-color: transparent; /* nord10 */
+  text-align: right;
+  width: 50;
+}
+table.banner th.logo img {
+  height: 100%;
+  border: none;
 }
 
 TD.nav {
@@ -253,12 +283,6 @@ TD.topBtnOff {
 
 TD.nav {
   color: #3b4252; /* nord1 */
-}
-
-/* Header top (gradient, where the logo is) */
-table.banner th {
-  background-image: linear-gradient(to right,  #2e3440, #5e81ac); /* nord0 to nord10 */
-  text-align: left;
 }
 
 /* Standard table 'spreadsheet' style */

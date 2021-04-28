@@ -35,10 +35,8 @@ else
 <body onload="this.focus();">
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-	<td><table width="100%" cellpadding="3" cellspacing="0" border="0"><tr>
-	<th class="banner"><strong><?php
-		echo "<a style='color: #eceff4' href='{$dPconfig['base_url']}'>$page_title</a>";
-	?></strong>
+	<td><table class="banner"><tr>
+	<th class="title"><?php	echo "<a href='" . $dPconfig['base_url'] . "' title='" . $page_title . "'>" . $page_title . "</a>"; ?>
 	<?php if (getPermission('smartsearch', 'access')): ?>
 	<form name="frmHeaderSearch" action="?m=smartsearch"  method="post">
 		<input class="text" type="text" id="keyword1" name="keyword1" value="<?php echo dPgetCleanParam($_POST, 'keyword1', ''); ?>" accesskey="k" />
@@ -46,7 +44,7 @@ else
 	</form>
 	<?php endif; ?>
 	</th>
-	<th align="right" width='50'><a href="http://www.dotproject.net/" target="_blank" title="dotProject home page"><img src="./style/<?php echo $uistyle ?? 'default';?>/images/dotProject.svg" width="50" border="0" alt="dotProject logo" /></a></th>
+	<th class="logo"><a href="http://www.dotproject.net/" target="_blank" title="dotProject home page"><img src="./style/<?php echo $uistyle ?? 'default';?>/images/dotProject.svg" alt="dotProject logo" /></a></th>
 	</tr></table></td>
 </tr>
 <?php if (empty($dialog)) {
