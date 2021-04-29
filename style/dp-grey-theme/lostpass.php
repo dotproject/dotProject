@@ -47,7 +47,7 @@
 	echo '<span class="error">'.$AppUI->getMsg().'</span>';
 
 	$msg = '';
-	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORT for this PHP Version ('.phpversion().')</span>' : '';
+	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORTED for this PHP Version ('.phpversion().')</span>' : '';
 	echo $msg;
 ?>
 </div>
