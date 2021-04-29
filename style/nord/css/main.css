@@ -215,6 +215,7 @@ table.banner {
 }
 table.banner tr {
   background-image: linear-gradient(to right, #2e3440, #5e81ac); /* nord0 to nord10 */
+  font-size: 1rem;
 }
 table.banner td,
 table.banner th {
@@ -226,6 +227,7 @@ table.banner th.title {
   color: #eceff4; /* nord6 */
   text-align: left;
   font-weight: bold;
+  font-size: 1rem;
 }
 table.banner a,
 table.banner a:hover {
@@ -237,9 +239,18 @@ table.banner th.logo {
   background-color: transparent; /* nord10 */
   text-align: right;
 }
+table.banner th.logo a,
+table.banner th.logo a:link,
+table.banner th.logo a:visited,
+table.banner th.logo a:hover,
+table.banner th.logo a:active {
+  color: transparent;
+  background-color: transparent; /* nord10 */
+  text-decoration: none;
+}
 table.banner th.logo img {
-  height: 100%;
-  width: 50px;
+  /* height: 100%; */
+  width: 8rem;
   border: none;
 }
 
@@ -353,17 +364,22 @@ table.contacts td.hilite {
 /* links in header blocks */
 a.hdr,
 a.hdr:link,
-a.hdr:active {
+a.hdr:visited {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
+  border-radius: 0.25rem;
+  transition: color 200ms ease-in-out 0s, background-color 200ms ease-in-out 0s;
+  background-color: transparent;
 }
 a.hdr:hover {
   color: #5e81ac; /* nord10 */
   text-decoration: none;
+  background-color: rgba(76, 86, 106, 0.8);
 }
-a.hdr:visited {
+a.hdr:active {
   color: #88c0d0; /* nord8 */
   text-decoration: none;
+  background-color: transparent;
 }
 
 /* tabbed boxes */
@@ -390,7 +406,7 @@ td.taboff {
 td.tabsp {
   border-bottom: solid #3b4252 2px; /* nord1 */
 }
-td.tabox {
+td.tabox, .tabox-bottom {
   background-color: #5e81ac; /* nord10 */
   border-left: solid #5e81ac 2px; /* nord10 */
   border-right: solid #5e81ac 2px; /* nord10 */
