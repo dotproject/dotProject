@@ -96,11 +96,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Company');?>:</td>
-			<?php if (getPermission('companies', 'view', $row->contact_company)) {?>
-            			<td nowrap="nowrap" class="hilite"> <?php echo "<a href='?m=companies&amp;a=view&amp;company_id=" . @$row->contact_company ."'>" . $AppUI->___($company_detail['company_name']) . '</a>' ;?></td>
-			<?php } else {?>
-						<td nowrap="nowrap"><?php echo $AppUI->___($company_detail['company_name']);?></td>
-			<?php }?>
+		<?php if (getPermission('companies', 'view', $row->contact_company)) {?>
+			<td nowrap="nowrap" class="hilite"> <?php echo "<a href='?m=companies&amp;a=view&amp;company_id=" . @$row->contact_company ."'>" . $AppUI->___($company_detail['company_name']) . '</a>' ;?></td>
+		<?php } else {?>
+			<td nowrap="nowrap"><?php echo $AppUI->___($company_detail['company_name']);?></td>
+		<?php }?>
 		</tr>
 <?php
         if (isset($_SESSION['all_tabs']['departments']))
@@ -122,11 +122,10 @@ function delIt() {
 		<tr>
 			<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address');?>:</td>
 			<td class="hilite">
-                    <?php echo $AppUI->___(@$row->contact_address1);?><br />
-			        <?php echo $AppUI->___(@$row->contact_address2);?><br />
-			        <?php echo $AppUI->___(@$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip);?><br />
-			        <?php echo $AppUI->___(@$row->contact_country);?><br />
-
+        <?php echo $AppUI->___(@$row->contact_address1);?><br />
+        <?php echo $AppUI->___(@$row->contact_address2);?><br />
+        <?php echo $AppUI->___(@$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip);?><br />
+        <?php echo $AppUI->___(@$row->contact_country);?><br />
            </td>
 		</tr>
 		<tr>
@@ -157,17 +156,17 @@ function delIt() {
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Email');?>:</td>
 			<td nowrap="nowrap" class="hilite"><a href="mailto:<?php echo @$row->contact_email;?>"><?php
-								echo $AppUI->___(@$row->contact_email);?></a></td>
+				echo $AppUI->___(@$row->contact_email);?></a></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Email');?>2:</td>
 			<td nowrap="nowrap" class="hilite"><a href="mailto:<?php echo @$row->contact_email2;?>"><?php
-								echo $AppUI->___(@$row->contact_email2);?></a></td>
+				echo $AppUI->___(@$row->contact_email2);?></a></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('URL');?>:</td>
 			<td nowrap="nowrap" class="hilite"><a href="<?php echo @$row->contact_url;?>"><?php
-								echo $AppUI->___(@$row->contact_url);?></a></td>
+				echo $AppUI->___(@$row->contact_url);?></a></td>
 		</tr>
 		<tr>
 			<td align="right">Jabber:</td>
