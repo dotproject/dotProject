@@ -299,11 +299,11 @@ function setDepartment(department_id_string) {
 <tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date');?></td>
 			<td nowrap="nowrap">
-                                <?php if ($project_id > 0) { ?>
-                                        <?php echo $actual_end_date ? '<a href="?m=tasks&amp;a=view&amp;task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
-                                        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
-                                        <?php echo $actual_end_date ? '</a>' : '';?>
-                                <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
+      <?php if ($project_id > 0) { ?>
+        <?php echo $actual_end_date ? '<a href="?m=tasks&amp;a=view&amp;task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
+        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
+        <?php echo $actual_end_date ? '</a>' : '';?>
+      <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
 			</td>
 		</tr>
 		<tr>
@@ -357,7 +357,6 @@ function setDepartment(department_id_string) {
 			<td nowrap="nowrap">
 				<input type="color" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : '#FFFFFF';?>" size="10" maxlength="7"/> *
 			</td>
-
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type');?></td>
