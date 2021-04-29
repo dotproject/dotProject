@@ -14,6 +14,8 @@ if (!(($canEdit && $dept_id) || ($canAuthor && !($dept_id)))) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // pull data for this department
 $q = new DBQuery;
 $q->addTable('departments','dep');
@@ -76,7 +78,7 @@ if (!db_loadHash($sql, $drow) && $dept_id > 0) {
 	$titleBlock->addCrumb("?m=companies&amp;a=view&amp;company_id=$company_id", "view this company");
 	$titleBlock->show();
 ?>
-<script  language="javascript">
+<script language="javascript">
 function testURL(x) {
 	var test = "document.editFrm.dept_url.value";
 	test = eval(test);
@@ -179,7 +181,11 @@ if (count($depts)) {
 <tr>
 	<td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description');?>:</td>
 	<td align="left">
-		<textarea cols="70" rows="10" class="textarea" name="dept_desc"><?php echo @$drow["dept_desc"];?></textarea>
+<!--		<textarea cols="70" rows="10" class="textarea" name="dept_desc"><?php // echo @$drow["dept_desc"];?></textarea> -->
+    <?php
+    $richedit = new DpRichEdit('dept_desc', $drow["dept_desc"]);
+    $richedit->render();
+    ?>
 	</td>
 </tr>
 
