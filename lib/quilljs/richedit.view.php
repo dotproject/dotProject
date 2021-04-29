@@ -1,5 +1,5 @@
 
-<div style="background-color: #fff; border: 1px solid #000;">
+<!--<div style="background-color: #fff; border: 1px solid #000;"> -->
   <div id="<?php echo $this->id ?>-toolbar-container">
     <span class="ql-formats">
       <select class="ql-font"></select>
@@ -26,7 +26,7 @@
     </span>
   </div>
   <div id="<?php echo $this->id ?>-editor-container"><?php echo $this->content ?></div>
-</div>
+<!--</div>-->
 
 <textarea id="<?php echo $this->id ?>" name="<?php echo $this->id ?>" style="width:1px;height:1px;visibility:hidden;"><?php echo $this->content ?></textarea>
 

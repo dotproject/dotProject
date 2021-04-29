@@ -54,8 +54,13 @@ $cfObj = new CFileFolder();
 $allowedFolderIDs = $cfObj->getAllowedSQL($AppUI->user_id, 'ff.file_folder_id');
 $allowedFolders = $cfObj->getAllowedSQL($AppUI->user_id, 'f.file_folder');
 
-// $parent_id is the parent of the children we want to see
-// $level is increased when we go deeper into the tree, used to display a nice indented tree
+/**
+ * Display a specific folder, level by level
+ *
+ * @param integer $parent_id is the parent of the children we want to see
+ * @param integer $level is increased when we go deeper into the tree, used to display a nice indented tree
+ * @return void
+ **/
 function displayFolders($folder_id=0, $level=0) {
 	global $AppUI, $m, $a, $tab;
 	global $current_uri;
@@ -175,8 +180,6 @@ function displayFolders($folder_id=0, $level=0) {
 			}
 		}
 
-
-
 		if ($file_count > 0) {
 			echo ('<div class="files-list" id="files_' . $folder_id . '" style="display:'
 			      . ((empty($level) || empty($open_folder)) ? 'none' : 'block') . ';">');
@@ -204,10 +207,20 @@ function displayFolders($folder_id=0, $level=0) {
 		displayFolders($kid_row['file_folder_id'], $level+1);
 		echo ('</li></ul>');
 	}
-
 }
 
+/**
+ * Counts number of files in the specified directory
+ *
+ * @param integer $folder_id
+ * @return integer or mixed
+ **/
 function countFiles($folder_id) {
+  if (empty($folder_id)) {  // should not really happen
+    dprint(__FILE__, __LINE__, 11, "[WARN]: got called with empty folder id (should not happen)");
+    return 0;
+  }
+
 	global $company_id, $project_id, $task_id;
 	global $allowedCompanies, $allowedProjects, $allowedTasks, $allowedFolders;
 
@@ -249,7 +262,17 @@ function countFiles($folder_id) {
 	return db_loadResult($sql);
 }
 
+/**
+ * Displays files in the specified directory
+ *
+ * @param integer $folder_id
+ * @return integer or mixed
+ **/
 function displayFiles($folder_id) {
+  if (empty($folder_id)) {  // should not really happen
+    dprint(__FILE__, __LINE__, 11, "[WARN]: got called with empty folder id (should not happen)");
+    return 0;
+  }
 
 	global $AppUI, $m, $a, $tab, $page;
 	global $current_uri;
@@ -310,7 +333,6 @@ function displayFiles($folder_id) {
 	$file_version_max_counts = $q->exec();
 	$q->clear();
 
-
 	// most recent version
 	$q->addTable('files', 'f');
 	$q->addQuery('f.*, fmc.file_versions, round(fmc.file_lastversion, 2) as file_lastversion'
@@ -360,7 +382,6 @@ function displayFiles($folder_id) {
 
 	$files_sql = $q->prepare();
 	$q->clear();
-
 
 	// all versions
 	$q->addTable('files', 'f');
