@@ -67,4 +67,8 @@ $dPconfig['root_dir'] = $baseDir;
 // is now set in top-level files index.php and fileviewer.php.
 // All code should start to use $baseUrl instead of base_url.
 $dPconfig['base_url'] = $baseUrl;
+
+// Extra parameters for overLib - allows styles to override the defaults
+// @author Gwyneth Llewelyn (20210430)
+$dPconfig['overlib_extra_parameters'] = "";
 ?>
