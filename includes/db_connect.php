@@ -10,7 +10,7 @@ if (!(defined('DP_BASE_DIR'))) {
 }
 
 // load the db specific handlers
-//require_once(DP_BASE_DIR."/includes/db_{$dPconfig['dbtype']}.php");
+//require_once(DP_BASE_DIR."/includes/db_" . $dPconfig['dbtype'] . ".php");
 //require_once("./includes/db_adodb.php");
 require_once DP_BASE_DIR . '/includes/db_adodb.php';
 

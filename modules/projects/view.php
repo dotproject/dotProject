@@ -61,8 +61,8 @@ if ($hasTasks) {
 				 . ' AS company_name_internal'
 				 . ", CONCAT_WS(', ',contact_last_name,contact_first_name) user_name"
 				 . ', p.*, SUM(t1.task_duration * t1.task_percent_complete'
-				 ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
-				 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours},"
+				 ." * IF(t1.task_duration_type = 24, " . $working_hours . ", t1.task_duration_type))"
+				 ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, " . $working_hours . ","
 				 . ' t1.task_duration_type)) AS project_percent_complete');
 } else {
 	$q->addQuery('com.company_name AS company_name, com_internal.company_name'

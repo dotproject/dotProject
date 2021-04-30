@@ -24,10 +24,10 @@ $end_date = intval($date_reg) ? new CDate(dPgetCleanParam($_POST, "log_end_date"
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
 if ($a = dPgetCleanParam($_REQUEST, "a", "") == "") {
-    $a = "&tab={$currentTabId}&amp;showdetails=1";
+    $a = "&tab=" . $currentTabId . "&amp;showdetails=1";
 } else {
     $user_id = intval(dPgetParam($_REQUEST, "user_id", 0));
-    $a = "&amp;a=viewuser&amp;user_id={$user_id}&amp;tab={$currentTabId}&amp;showdetails=1";
+    $a = "&amp;a=viewuser&amp;user_id=" . $user_id . "&amp;tab=" . $currentTabId . "&amp;showdetails=1";
 }
 
 ?>

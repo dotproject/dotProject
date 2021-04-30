@@ -54,8 +54,8 @@ if (isset($_GET['pin'])) {
 
 	// load the record data
 	$sql = (($pin)
-	        ?"INSERT INTO {$dbprefix}user_task_pin (user_id, task_id) VALUES($AppUI->user_id, $task_id)"
-	        :"DELETE FROM {$dbprefix}user_task_pin WHERE user_id=$AppUI->user_id AND task_id=$task_id");
+	        ?"INSERT INTO " . $dbprefix . "user_task_pin (user_id, task_id) VALUES(" . $AppUI->user_id . " , " . $task_id . ")"
+	        :"DELETE FROM " . $dbprefix . "user_task_pin WHERE user_id=" . $AppUI->user_id . " AND task_id=" . $task_id);
 
 	if (!db_exec($sql)) {
 		$AppUI->setMsg('ins/del err', UI_MSG_ERROR, true);
@@ -174,7 +174,7 @@ $from = $dbprefix.'tasks as tsk';
 $mods = $AppUI->getActiveModules();
 if (!empty($mods['history']) && getPermission('history', 'view')) {
 	$select .= ', MAX(history_date) as last_update';
-	$join = "LEFT JOIN {$dbprefix}history ON history_item = tsk.task_id AND history_table='tasks' ";
+	$join = "LEFT JOIN " . $dbprefix . "history ON history_item = tsk.task_id AND history_table='tasks' ";
 }
 $join .= 'LEFT JOIN '.$dbprefix.'projects as prj ON project_id = task_project';
 $join .= ' LEFT JOIN '.$dbprefix.'users as usernames ON task_owner = usernames.user_id';
@@ -279,8 +279,8 @@ $where .= ' AND task_status = ' . $task_status;
 
 // patch 2.12.04 text search
 if ($search_text = $AppUI->getState('searchtext')) {
-	$where .= (" AND (task_name LIKE ('%{$search_text}%') "
-	           . "OR task_description LIKE ('%{$search_text}%'))");
+	$where .= (" AND (task_name LIKE ('%" . $search_text . "%') "
+	           . "OR task_description LIKE ('%" . $search_text . "%'))");
 }
 
 // filter tasks considering task and project permissions

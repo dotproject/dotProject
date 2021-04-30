@@ -6,9 +6,9 @@ if (!defined("DP_BASE_DIR")) {
 /* $Id$ */
 
 /* program info */
-$program = "Dotproject";
-$version = "0.6.3";
-$xmailer = "dotproject (http://dotproject.net/)";
+$program = "dotProject";
+$version = @$AppUI->getVersion() ?? 'unknown';
+$xmailer = "dotProject (http://dotproject.net/)";
 
 /* error handler */
 function fatal_error($reason)
@@ -262,7 +262,7 @@ function format_field($value, $type, $ticket = null)
         $q->addQuery("CONCAT_WS(' ', contact_first_name, contact_last_name) as name");
         $q->addTable("users", "u");
         $q->leftJoin("contacts", "c", "u.user_contact = c.contact_id");
-        $q->addWhere("user_id = '{$value}'");
+        $q->addWhere("user_id = '" . $value . "'");
         $output = $q->loadResult();
       } else {
         $output = "-";
@@ -325,7 +325,7 @@ function format_field($value, $type, $ticket = null)
         $q = new DBQuery();
         $q->addQuery("ticket");
         $q->addTable("tickets");
-        $q->addWhere("parent = '{$value}'");
+        $q->addWhere("parent = '" . $value . "'");
         $q->addOrder("ticket DESC");
         $q->setLimit(1);
         $latest_value = $q->loadResult();
@@ -361,7 +361,7 @@ function format_field($value, $type, $ticket = null)
       $q = new DBQuery();
       $q->addQuery("type");
       $q->addTable("tickets");
-      $q->addWhere("parent = '{$ticket}'");
+      $q->addWhere("parent = '" . $ticket . "'");
       $q->addOrder("timestamp DESC");
       $q->setLimit(1);
       $latest_followup_type = $q->loadResult();
@@ -395,7 +395,7 @@ function format_field($value, $type, $ticket = null)
       $q = new DBQuery();
       $q->addQuery("user_signature");
       $q->addTable("users");
-      $q->addWhere("user_id = '{$AppUI->user_id}'");
+      $q->addWhere("user_id = '" . $AppUI->user_id . "'");
       $signature = $q->loadResult();
       if ($signature) {
         $output .= "\n";
@@ -449,6 +449,7 @@ function format_field($value, $type, $ticket = null)
       $q->addQuery("co.*");
       $q->addWhere("co.company_id = " . (int) $value);
       $sql = $q->prepare();
+      dprint(__FILE__, __LINE__, 12, "[DEBUG]: SQL query to extract the company for value '$value' name was: ($sql)");
       if (!db_loadObject($sql, $obj)) {
         // it all dies!
       }
@@ -476,7 +477,7 @@ if (isset($ticket)) {
   $q = new DBQuery();
   $q->addQuery("type, parent");
   $q->addTable("tickets");
-  $q->addWhere("ticket = '{$ticket}'");
+  $q->addWhere("ticket = '" . $ticket . "'");
 
   list($ticket_type, $ticket_parent) = $q->loadHash();
 }

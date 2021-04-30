@@ -43,14 +43,14 @@ if (@$comment) {
     $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery("contact_email as email");
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
 
     list($author_name, $author_email) = $q->fetchRow();
 
     $q->clear();
     $q->addTable('tickets');
     $q->addQuery('subject');
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
     $subject = $q->loadResult();
 
     $author = $author_name . " <" . $author_email . ">";
@@ -68,7 +68,7 @@ if (@$comment) {
 
     $q->addTable('tickets');
     $q->addUpdate('activity', $timestamp);
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
     $q->exec();
     $q->clear();
 
@@ -98,7 +98,7 @@ if (@$comment) {
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
     $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery("contact_email as email");
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
 
     list($author_name, $author_email) = $q->fetchRow();
     print("<td align=\"left\">" . $author_name . " &lt;" . $author_email . "&gt;</td>\n");

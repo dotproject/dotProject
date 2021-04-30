@@ -71,7 +71,7 @@ class CTabBox extends CTabBox_core {
 				$s .= '>&nbsp;<a href="';
 
 				if ($this->javascript) {
-					$s .= "javascript:" . $this->javascript . "({$this->active}, $k)";
+					$s .= "javascript:" . $this->javascript . "(" . $this->active . ", " . $k . ")";
 				} else if ($js_tabs) {
 					$s .= 'javascript:show_tab(' . $k . ')';
 				} else {

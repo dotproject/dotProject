@@ -69,7 +69,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
     $q->clear();
     $q->addTable('tickets');
     $q->addUpdate('type,priority,assignment', array($type_toggle, $priority_toggle, $assignment_toggle), true);
-    $q->addWhere("ticket = '{$ticket}'");
+    $q->addWhere("ticket = '" . $ticket ."'");
     $q->exec();
 
 	//Emailing notifications.
@@ -80,7 +80,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 		$change .= $AppUI->_('Priority changed') . ' ';
 	if ($assignment_toggle)
 		$change .= $AppUI->_('Assignment changed') . ' ';
-		
+
 	$boundary = "_lkqwkASDHASK89271893712893";
 	$message = "--$boundary\n";
 	$message .= "Content-disposition: inline\n";
@@ -113,8 +113,8 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "</table>\n";
 	$message .= "<table width='600' border='0' cellpadding='4' cellspacing='1' bgcolor='#878676'>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
-	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>$ticket</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
 	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
@@ -140,12 +140,12 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 
 	if (@$assignment_toggle != @$orig_assignment)
 	{
-		
+
                 $q->clear();
                 $q->addQuery('contact_first_name, contact_last_name, contact_email');
                 $q->addTable('users', 'u');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-                $q->addWhere("user_id = {$assignment_toggle}");
+                $q->addWhere("user_id = " . $assignment_toggle);
 		$mailinfo = $q->loadHash();
 
 		if (@$mailinfo['contact_email']) {
@@ -227,7 +227,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 /* get ticket */
 $q->clear();
 $q->addTable('tickets');
-$q->addWhere("ticket = '${ticket}'");
+$q->addWhere("ticket = '" . $ticket . "'");
 $ticket_info = $q->loadHash();
 
 print("<input type=\"hidden\" name=\"orig_assignment\" value='" . $ticket_info["assignment"] . "' />\n");
@@ -251,7 +251,7 @@ $ticket_info["assignment"];
 $q->clear();
 $q->addTable('tickets');
 $q->addQuery('attachment');
-$q->addWhere("ticket = '{$ticket}'");
+$q->addWhere("ticket = '" . $ticket . "'");
 $attach_count = $q->loadResult();
 
 if ($attach_count == 1) {
@@ -264,7 +264,7 @@ if ($attach_count == 1) {
   $q->addQuery('file_id, file_name');
   $q->addTable('files', 'f');
   $q->innerJoin('tickets','t', 't.ticket = f.file_task');
-  $q->addWhere("t.ticket = '{$ticket}'");
+  $q->addWhere("t.ticket = '" . $ticket . "'");
   $q->addWhere("f.project = 0");
   $q->includeCount();
 
@@ -295,8 +295,8 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
     $q->clear();
     $q->addQuery('ticket,type,timestamp,author');
     $q->addTable('tickets');
-    $q->addWhere("parent = '{$ticket}'");
-    $q->addOrder("ticket {$CONFIG['followup_order']}");
+    $q->addWhere("parent = '" . $ticket . "'");
+    $q->addOrder("ticket " . $CONFIG['followup_order']);
     $q->includeCount();
     $result = $q->loadList();
 
@@ -349,8 +349,8 @@ else {
     $q->clear();
     $q->addQuery('ticket, type');
     $q->addTable('tickets');
-    $q->addWhere("parent = '{$ticket_parent}'");
-    $q->addOrder("ticket {$CONFIG['followup_order']}");
+    $q->addWhere("parent = '" . $ticket_parent . "'");
+    $q->addOrder("ticket " . $CONFIG['followup_order']);
     $results = $q->loadList();
 
     /* parse followups */

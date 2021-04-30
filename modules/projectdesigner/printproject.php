@@ -33,7 +33,7 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
       $canAddTasks = $perms->checkModule( 'tasks', 'add');
       $canEditTasks = $perms->checkModule( 'tasks', 'edit');
       $canDeleteTasks = $perms->checkModule( 'tasks', 'delete');
-      
+
       if (!$canReadProject) {
       	$AppUI->redirect( "m=public&a=access_denied" );
       }
@@ -51,15 +51,15 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
 
       // get critical tasks (criteria: task_end_date)
       $criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : NULL;
-      
+
       // get ProjectPriority from sysvals
       $projectPriority = dPgetSysVal( 'ProjectPriority' );
       $projectPriorityColor = dPgetSysVal( 'ProjectPriorityColor' );
       $pstatus = dPgetSysVal( 'ProjectStatus' );
       $ptype = dPgetSysVal( 'ProjectType' );
-      
+
       $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
-      
+
       $q  = new DBQuery;
       //check that project has tasks; otherwise run seperate query
       $q->addTable('tasks', 't');
@@ -70,12 +70,12 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
 
       // load the record data
       // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-      if ($hasTasks) { 
+      if ($hasTasks) {
           $q->addTable('projects','pr');
           $q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, pr.*,"
                        ." SUM(t1.task_duration * t1.task_percent_complete"
-                       ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
-                       ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+                       ." * IF(t1.task_duration_type = 24, " . $working_hours . ", t1.task_duration_type))"
+                       ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, " . $working_hours . ", t1.task_duration_type))"
                        ." AS project_percent_complete");
           $q->addJoin('companies', 'com', 'company_id = project_company');
           $q->addJoin('users', 'u', 'user_id = project_owner');
@@ -120,7 +120,7 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
           $q->clear();
           $worked_hours = db_loadResult($sql);
           $worked_hours = rtrim($worked_hours, '.');
-          
+
           // total hours
           // same milestone comment as above, also applies to dynamic tasks
           $q->addTable('tasks');
@@ -129,7 +129,7 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
           $sql = $q->prepare();
           $q->clear();
           $days = db_loadResult($sql);
-          
+
           $q->addTable('tasks');
           $q->addQuery('ROUND(SUM(task_duration),2)');
           $q->addWhere("task_project = $project_id AND task_duration_type = 1 AND task_dynamic != 1");
@@ -137,24 +137,24 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
           $q->clear();
           $hours = db_loadResult($sql);
           $total_hours = $days * $dPconfig['daily_working_hours'] + $hours;
-          
+
           $total_project_hours = 0;
-          
+
           $q->addTable('tasks', 't');
           $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
           $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
           $q->addWhere("t.task_project = $project_id AND t.task_duration_type = 24 AND t.task_dynamic != 1");
           $total_project_days_sql = $q->prepare();
           $q->clear();
-          
+
           $q->addTable('tasks', 't');
           $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
           $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
           $q->addWhere("t.task_project = $project_id AND t.task_duration_type = 1 AND t.task_dynamic != 1");
           $total_project_hours_sql = $q->prepare();
           $q->clear();
-          
-          $total_project_hours = db_loadResult($total_project_days_sql) * $dPconfig['daily_working_hours'] 
+
+          $total_project_hours = db_loadResult($total_project_days_sql) * $dPconfig['daily_working_hours']
               + db_loadResult($total_project_hours_sql);
           //due to the round above, we don't want to print decimals unless they really exist
           //$total_project_hours = rtrim($total_project_hours, "0");
@@ -162,11 +162,11 @@ $tasks = arrayMerge( array( '0'=>$AppUI->_('(None)', UI_OUTPUT_RAW) ), $tasks );
       else { //no tasks in project so "fake" project data
           $worked_hours = $total_hours = $total_project_hours = 0.00;
       }
-      
+
 
 ?>
 
-<?php 
+<?php
 $priorities = dPgetsysval('TaskPriority');
 $types = dPgetsysval('TaskType');
 include_once( $AppUI->getModuleClass( 'tasks' ) );
@@ -223,7 +223,7 @@ TABLE.prjprint TD {
 TABLE.prjprint TR {
 	padding:5px;
 }
-	
+
 </style>
 <table class="prjprint">
 <form name="frmDelete" action="./index.php?m=projects" method="post">
@@ -233,8 +233,8 @@ TABLE.prjprint TR {
 </form>
 
 <tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
+	<td style="border: outset #d1d1cd 1px;" colspan="2">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">
             <tr>
             	<td width="22">
             	&nbsp;
@@ -248,7 +248,7 @@ TABLE.prjprint TR {
 				<a href="#" onclick="var img=document.getElementById('imghd'); img.style.display='none'; window.print(); window.close();">
       			<img id="imghd" src="./modules/projectdesigner/images/printer.png" border="0" width="22" height="22" alt="print project" title="print project"/>
       			</a>
-      			</td>-->  
+      			</td>-->
       	</tr>
       	</table>
 	</td>

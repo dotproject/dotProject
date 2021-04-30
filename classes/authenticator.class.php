@@ -112,7 +112,7 @@ if (!defined('DP_BASE_DIR')) {
 				$q->clear();
 				$q->addTable('users');
 				$q->addUpdate('user_password', $passwd);
-				$q->addWhere("user_id = {$this->user_id}");
+				$q->addWhere("user_id = " . $this->user_id);
 				if (! $q->exec()) {
 					die($AppUI->_('Could not update user credentials'));
 				}
@@ -121,7 +121,7 @@ if (!defined('DP_BASE_DIR')) {
 				$q->addUpdate('contact_first_name', $first_name);
 				$q->addUpdate('contact_last_name', $last_name);
 				$q->addUpdate('contact_email', $email);
-				$q->addWhere("contact_id = {$row['user_contact']}");
+				$q->addWhere("contact_id = " . $row['user_contact']);
 				if (! $q->exec()) {
 					die($AppUI->_('Could not update user details'));
 				}
@@ -386,8 +386,8 @@ if (!defined('DP_BASE_DIR')) {
 			$q  = new DBQuery;
 			$q->addTable('user_ip_lock');
 			$q->addQuery('user_id');
-			$q->addWhere("user_id = {$this->user_id}");
-			$q->addWhere("user_ip = '{$_SERVER['REMOTE_ADDR']}'");
+			$q->addWhere("user_id = " . $this->user_id);
+			$q->addWhere("user_ip = '". $_SERVER['REMOTE_ADDR'] . "'");
 			$row = $q->loadResult();
 			if ($row) {
 				return false;

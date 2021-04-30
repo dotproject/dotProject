@@ -11,15 +11,15 @@ $q = new DBQuery();
 $q->addTable('tickets');
 $q->addUpdate('parent,assignment,type',
   array($newparent, 9999, 'Client Followup'), true);
-$q->addWhere("ticket = {$ticket}");
+$q->addWhere("ticket = " . $ticket);
 $q->exec();
 
 header("Location: index.php?m=ticketsmith");
-if (isset($newparent) && isset($ticket) && $newparent != 0 && $ticket != 0) {
+if (!empty($newparent) && !empty($ticket)) {  // slight simplification (gwyneth 20210430)
   // error_log("Updating ticket - $sql1");
   mysql_query($sql1);
   // error_log(mysql_error());
-  $sql2 = "update {$dbprefix}tickets set activity = '" . time() . "' where ticket = $newparent";
+  $sql2 = "update " . $dbprefix . "tickets set activity = '" . time() . "' where ticket = " . $newparent;
   // error_log($sql2);
   mysql_query($sql2);
   // error_log($mysql_error());

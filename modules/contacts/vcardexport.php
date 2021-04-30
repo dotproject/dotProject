@@ -101,7 +101,7 @@ if (isset($_GET['contact_id']) && !($_GET['contact_id']=='')) {
 
 	header("MIME-Version: 1.0");
 	header("Content-Type: text/x-vcard");
-	header("Content-Disposition: attachment; filename={$contacts[0]['contact_last_name']}{$contacts[0]['contact_first_name']}.vcf");
+	header("Content-Disposition: attachment; filename=" . $contacts[0]['contact_last_name'] . $contacts[0]['contact_first_name'] . ".vcf");
 	print_r($text);
 } else {
 $AppUI->setMsg("contactIdError", UI_MSG_ERROR);

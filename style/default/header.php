@@ -26,7 +26,7 @@ else
 <tr>
 	<td><table width="100%" cellpadding="3" cellspacing="0" border="0"><tr>
 	<th style="background: url(style/<?php echo $uistyle;?>/images/titlegrad.jpg);" class="banner" align="left"><strong><?php
-		echo "<a style='color: white' href='{$dPconfig['base_url']}'>$page_title</a>";
+		echo "<a style='color: white' href='" . $dPconfig['base_url'] . "'>" . $page_title . "</a>";
 	?></strong>
 	<?php if (getPermission('smartsearch', 'access')): ?>
 	<form name="frmHeaderSearch" action="?m=smartsearch"  method="post">

@@ -1015,7 +1015,7 @@ class CAppUI {
 		}
 
 		// Load the basic javascript used by all modules.
-		$jsdir = dir("{$root}js");
+		$jsdir = dir($root . "js");
 
 		$js_files = array();
 		while (($entry = $jsdir->read()) !== false) {
@@ -1141,6 +1141,8 @@ class CTabBox_core {
 
 	/**
 	 * Gets the name of a tab
+   *
+   * @param integer Number of tab to retrieve name from (I guess it's an integer — gwyneth 20210430
 	 * @return string
 	 */
 	function getTabName($idx) {
@@ -1149,9 +1151,13 @@ class CTabBox_core {
 
 	/**
 	 * Adds a tab to the object
+   *
 	 * @param string File to include
-	 * @param The display title/name of the tab
-	 */
+	 * @param string The display title/name of the tab
+   * @param boolean if this already translated?
+   * @key mixed
+   * @return void
+	 **/
 	function add($file, $title, $translated = false, $key= NULL) {
 		$t = array($file, $title, $translated);
 		if (isset($key)) {

@@ -36,10 +36,10 @@ $base = DP_BASE_URL;
 if ( substr($base, -1) != '/') {
       $base .= '/';
 }
-echo"<style type=\"text/css\">@import url({$base}modules/$m/jscalendar/calendar-win2k-1.css);</style>";
-echo "<script type=\"text/javascript\" src=\"{$base}modules/$m/jscalendar/calendar.js\"></script>\n";
-echo "<script type=\"text/javascript\" src=\"{$base}modules/$m/jscalendar/lang/calendar-en.js\"></script>\n";
-echo "<script type=\"text/javascript\" src=\"{$base}modules/$m/jscalendar/calendar-setup.js\"></script>\n";
+echo"<style type=\"text/css\">@import url(" . $base . "modules/" . $m . "/jscalendar/calendar-win2k-1.css);</style>";
+echo "<script type=\"text/javascript\" src=\"" . $base . "modules/" . $m . "/jscalendar/calendar.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"" . $base . "modules/" . $m . "/jscalendar/lang/calendar-en.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"" . $base . "modules/" . $m . "/jscalendar/calendar-setup.js\"></script>\n";
 
 $today = new CDate();
 $df = $AppUI->getPref( 'SHDATEFORMAT' );
@@ -123,7 +123,7 @@ if (!$project_id) {
             			<strong><?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect( $projects, 'project_id','onchange="submitIt()" class="text" style="width:500px"', 0  );?></strong>
             		</font>
             	</td>
-            </tr>            
+            </tr>
             </form>
             </table>
 <?php
@@ -153,15 +153,15 @@ if (!$project_id) {
 
       // get critical tasks (criteria: task_end_date)
       $criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : NULL;
-      
+
       // get ProjectPriority from sysvals
       $projectPriority = dPgetSysVal( 'ProjectPriority' );
       $projectPriorityColor = dPgetSysVal( 'ProjectPriorityColor' );
       $pstatus = dPgetSysVal( 'ProjectStatus' );
       $ptype = dPgetSysVal( 'ProjectType' );
-      
+
       $working_hours = ($dPconfig['daily_working_hours']?$dPconfig['daily_working_hours']:8);
-      
+
       $q  = new DBQuery;
       //check that project has tasks; otherwise run seperate query
       $q->addTable('tasks', 't');
@@ -172,12 +172,12 @@ if (!$project_id) {
 
       // load the record data
       // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-      if ($hasTasks) { 
+      if ($hasTasks) {
           $q->addTable('projects', 'pr');
           $q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, pr.*,"
                        ." SUM(t1.task_duration * t1.task_percent_complete"
-                       ." * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
-                       ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))"
+                       ." * IF(t1.task_duration_type = 24, " . $working_hours . ", t1.task_duration_type))"
+                       ." / SUM(t1.task_duration * IF(t1.task_duration_type = 24, " . $working_hours . ", t1.task_duration_type))"
                        ." AS project_percent_complete");
           $q->addJoin('companies', 'com', 'company_id = project_company');
           $q->addJoin('users', 'u', 'user_id = project_owner');
@@ -217,46 +217,46 @@ if (!$project_id) {
           $q->addTable('task_log');
           $q->addTable('tasks');
           $q->addQuery('ROUND(SUM(task_log_hours),2)');
-          $q->addWhere("task_log_task = task_id AND task_project = $project_id");
+          $q->addWhere("task_log_task = task_id AND task_project = " . $project_id);
           $sql = $q->prepare();
           $q->clear();
           $worked_hours = db_loadResult($sql);
           $worked_hours = rtrim($worked_hours, '.');
-          
+
           // total hours
           // same milestone comment as above, also applies to dynamic tasks
           $q->addTable('tasks');
           $q->addQuery('ROUND(SUM(task_duration),2)');
-          $q->addWhere("task_project = $project_id AND task_duration_type = 24 AND task_dynamic != 1");
+          $q->addWhere("task_project = " . $project_id . " AND task_duration_type = 24 AND task_dynamic != 1");
           $sql = $q->prepare();
           $q->clear();
           $days = db_loadResult($sql);
-          
+
           $q->addTable('tasks');
           $q->addQuery('ROUND(SUM(task_duration),2)');
-          $q->addWhere("task_project = $project_id AND task_duration_type = 1 AND task_dynamic != 1");
+          $q->addWhere("task_project = " . $project_id . " AND task_duration_type = 1 AND task_dynamic != 1");
           $sql = $q->prepare();
           $q->clear();
           $hours = db_loadResult($sql);
           $total_hours = $days * $dPconfig['daily_working_hours'] + $hours;
-          
+
           $total_project_hours = 0;
-          
+
           $q->addTable('tasks', 't');
           $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
           $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
           $q->addWhere("t.task_project = $project_id AND t.task_duration_type = 24 AND t.task_dynamic != 1");
           $total_project_days_sql = $q->prepare();
           $q->clear();
-          
+
           $q->addTable('tasks', 't');
           $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
           $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-          $q->addWhere("t.task_project = $project_id AND t.task_duration_type = 1 AND t.task_dynamic != 1");
+          $q->addWhere("t.task_project = " . $project_id . " AND t.task_duration_type = 1 AND t.task_dynamic != 1");
           $total_project_hours_sql = $q->prepare();
           $q->clear();
-          
-          $total_project_hours = db_loadResult($total_project_days_sql) * $dPconfig['daily_working_hours'] 
+
+          $total_project_hours = db_loadResult($total_project_days_sql) * $dPconfig['daily_working_hours']
               + db_loadResult($total_project_hours_sql);
           //due to the round above, we don't want to print decimals unless they really exist
           //$total_project_hours = rtrim($total_project_hours, "0");
@@ -264,7 +264,7 @@ if (!$project_id) {
       else { //no tasks in project so "fake" project data
           $worked_hours = $total_hours = $total_project_hours = 0.00;
       }
-      
+
       // create Date objects from the datetime fields
       $start_date = intval( $obj->project_start_date ) ? new CDate( $obj->project_start_date ) : null;
       $end_date = intval( $obj->project_end_date ) ? new CDate( $obj->project_end_date ) : null;
@@ -299,7 +299,7 @@ if (!$project_id) {
       		'<input type="submit" class="button" value="'.$AppUI->_('new event').'">', '',
       		'<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post">', '</form>'
       	);
-      
+
       	$titleBlock->addCell();
       	$titleBlock->addCell(
       		'<input type="submit" class="button" value="'.$AppUI->_('new file').'">', '',

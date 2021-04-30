@@ -107,7 +107,7 @@ if ($search_pattern) {
     $fields = array("columns"  => array("ticket", "author", "subject", "timestamp", "type"),
                     "types"    => array("view", "email", "normal", "elapsed_date", "normal"),
                     "aligns"   => array("center", "left", "left", "left", "center"));
-    
+
     /* start results table */
     print("<p>\n");
     print("<table width=\"95%\" border=\"1\" cellspacing=\"5\" cellpadding=\"5\">\n");
@@ -118,19 +118,19 @@ if ($search_pattern) {
     $q = new DBQuery();
     $q->addQuery($fields['columns']);
     $q->addTable('tickets');
-    $q->addWhere("{$search_field} LIKE '{$search_pattern}'");
+    $q->addWhere($search_field . " LIKE '" . $search_pattern . "'");
     if ($search_depth == "Child") {
         $q->addWhere('parent != 0');
     }
     else if ($search_depth != "All") {
-        $q->addWhere("type = '{$search_depth}'");
+        $q->addWhere("type = '" . $search_depth . "'");
     }
-    $q->addOrder("{$sort_column} {$sort_direction}");
+    $q->addOrder($sort_column . " " . $sort_direction);
     $q->includeCount();
-    
+
     /* perform search */
     $result = $q->loadList();
-    
+
     /* display results */
     $result_count = $q->foundRows();
     if ($result_count) {
@@ -153,7 +153,7 @@ if ($search_pattern) {
     else {
         print("<tr><td>".$AppUI->_('There were')." ".$AppUI->_('no results')." ".$AppUI->_('in the given search').".</td></tr>\n");
     }
-    
+
     /* end results table */
     print("</table>\n");
 

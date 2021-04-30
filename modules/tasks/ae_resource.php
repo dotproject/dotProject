@@ -28,7 +28,7 @@ $initPercAsignment = "";
 $assigned = array();
 foreach ($assigned_perc as $user_id => $data) {
 	$assigned[$user_id] = $data['contact_name'] . " [" . $data['perc_assignment'] . "%]";
-	$initPercAsignment .= "$user_id={$data['perc_assignment']};";
+	$initPercAsignment .= "$user_id=" . $data['perc_assignment'] . ";";
 }
 
 ?>

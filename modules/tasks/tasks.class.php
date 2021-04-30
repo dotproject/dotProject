@@ -608,7 +608,7 @@ class CTask extends CDpObject
 				$nq = new DBQuery();
 				$nq->addTable('files');
 				$nq->addUpdate('file_project', $this->task_project);
-				$nq->addWhere("file_task = '{$this->task_id}'");
+				$nq->addWhere("file_task = '" . $this->task_id . "'");
 				$nq->exec();
 			}
 
@@ -1225,7 +1225,7 @@ class CTask extends CDpObject
 				$mail->To($email);
 				$recipient_list .= $email . ' (' . $name . ")\n";
 			} else {
-				$recipient_list .= "Invalid email address '{$email}' for {$name}, not sent\n";
+				$recipient_list .= "Invalid email address '" . $email . "' for " . $name . ", not sent\n";
 			}
 		}
 		$mail->Send();
@@ -1233,7 +1233,7 @@ class CTask extends CDpObject
 		$save_email = @$AppUI->getPref('TASKLOGNOTE');
 		if ($save_email) {
 			$log->task_log_description .= "\nEmailed " . date('d/m/Y H:i:s')
-				. " to:\n{$recipient_list}";
+				. " to:\n{" . $recipient_list . "}";
 			return true;
 		}
 
@@ -1279,12 +1279,12 @@ class CTask extends CDpObject
 		             . ', t.task_duration, t.task_duration_type'
 		             . ', p.project_color_identifier AS color, p.project_name');
 		$q->addWhere('task_status > -1'
-		             . " AND ((task_start_date <= '{$db_end}'"
-		             . " AND (task_end_date >= '{$db_start}'"
+		             . " AND ((task_start_date <= '" . $db_end . "'"
+		             . " AND (task_end_date >= '" . $db_start . "'"
 		             . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL)"
-		             . " OR task_start_date BETWEEN '$db_start' AND '$db_end'))");
+		             . " OR task_start_date BETWEEN '" . $db_start . "' AND '" . $db_end .  "'))");
 		if ($user_id) {
-			$q->addWhere("ut.user_id = '$user_id'");
+			$q->addWhere("ut.user_id = '" . $user_id . "'");
 		}
 
 		if ($company_id) {

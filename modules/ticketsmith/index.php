@@ -54,7 +54,7 @@ if (@$action == "expunge") {
     for ($loop = 0; $loop < count($deleted_parents); $loop++) {
         $q->clear();
         $q->setDelete('tickets');
-        $q->addWhere("ticket = '{$deleted_parents[$loop]}' OR parent = '{$deleted_parents[$loop]}'");
+        $q->addWhere("ticket = '" . $deleted_parents[$loop] . "' OR parent = '" . $deleted_parents[$loop] . "'");
         $q->exec();
     }
 }
@@ -149,14 +149,14 @@ $q->addTable('tickets');
 $q->addQuery($fields['columns']);
 if ($type == "My") {
     $q->addWhere("type = 'Open'");
-    $q->addWhere("(assignment = '{$AppUI->user_id}' OR assignment = '0')");
+    $q->addWhere("(assignment = '" . $AppUI->user_id . "' OR assignment = '0')");
 }
 else if ($type != "All") {
-    $q->addWhere("type = '{$type}'");
+    $q->addWhere("type = '" . $type . "'");
 }
 $q->addWhere("parent = '0'");
 if (!empty($column)) {
-  $q->addOrder(urlencode($column) . " {$direction}");
+  $q->addOrder(urlencode($column) . " " . $direction);
 }
 $q->setLimit($limit, $offset);
 $q->includeCount();
