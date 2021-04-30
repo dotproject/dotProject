@@ -220,6 +220,7 @@
   border: 1px solid #81a0c1; /* nord9 */
   font-family: Inter, Sans-Serif;
   padding: 8px;
+  background-color: #434c5e; /* nord2 */
 }
 .ql-toolbar.ql-snow .ql-picker-options {
   box-shadow: rgba(45,52,64,0.6); 0 2px 8px;
