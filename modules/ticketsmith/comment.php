@@ -7,6 +7,8 @@ if (!$canEdit) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 $ticket = (int)dPgetParam($_GET, 'ticket', '');
 $ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
@@ -55,7 +57,7 @@ if (@$comment) {
     $timestamp = time();
 
     /* prepare query */
-    
+
     $q->clear();
     $q->addTable('tickets');
     $q->addInsert('author,subject,body,timestamp,type,parent,assignment',
@@ -106,10 +108,15 @@ if (@$comment) {
     print("<tr>\n");
     print("<td align=\"left\"><br /></td>");
     print("<td align=\"left\">");
+/*
+    // why force this to monospace? It won't work like this anyway...
     print("<tt>\n");
     print("<textarea name=\"comment\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n");
     print("</textarea>\n");
     print("</tt>\n");
+*/
+    $richedit = new DpRichEdit('comment', "");
+    $richedit->render();
     print("</td>\n");
 
     /* output submit button */
