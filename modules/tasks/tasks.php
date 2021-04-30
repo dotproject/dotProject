@@ -268,7 +268,7 @@ if ($project_id && $showIncomplete) {
 $task_status = 0;
 if ($min_view && isset($_GET['task_status'])) {
 	$task_status = intval(dPgetParam($_GET, 'task_status', null));
-} else if (!($currentTabName)) {
+} else if (empty($currentTabName)) {
 	// If we aren't tabbed we are in the tasks list.
 	$task_status = intval($AppUI->getState('inactive'));
 } else if (mb_stristr($currentTabName, 'inactive')) {
@@ -354,7 +354,7 @@ for ($x=0; $x < $nums; $x++) {
 	$all_tasks[$row['task_id']] = $row['task_id'];
 }
 
-if ($open_task_all) {
+if (!empty($open_task_all)) {
 	$tasks_opened = $all_tasks;
 } else if ($close_task_all) {
 	$tasks_opened = array();
@@ -370,7 +370,7 @@ if ($open_task_all) {
 
 ?>
 
-<script  language="javascript">
+<script language="javascript">
 function toggle_users(id) {
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "inline" : "none";
@@ -393,7 +393,6 @@ function checkAll(project_id) {
 			e.checked = !e.checked;
 		}
 	}
-
 }
 
 function chAssignment(project_id, rmUser, del) {
@@ -502,7 +501,7 @@ function chAssignment(project_id, rmUser, del) {
 <?php if (!empty($mods['history']) && getPermission('history', 'view')) { ?>
   <th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC);?></th>
 <?php } else { $cols--; } ?>
-  <?php if ($showEditCheckbox) { echo '<th width="1">&nbsp;</th>'; } else { $cols--; } ?>
+  <?php if (!empty($showEditCheckbox)) { echo '<th width="1">&nbsp;</th>'; } else { $cols--; } ?>
 </tr>
 <?php
 reset($projects);
@@ -530,12 +529,12 @@ foreach ($projects as $k => $p) {
   <td>
   <a href="index.php?m=tasks&amp;f=<?php echo $f;?>&amp;project_id=<?php echo $project_id ? 0 : $k;?>">
   <img src="./images/icons/<?php
-echo (($project_id) ? 'expand.gif' : 'collapse.gif');
+echo (!empty($project_id) ? 'expand.gif' : 'collapse.gif');
 ?>" width="16" height="16" border="0" alt="<?php
-echo (($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only this project')); ?>" />
+echo (!empty($project_id) ? $AppUI->_('show other projects') : $AppUI->_('show only this project')); ?>" />
   </a>
   </td>
-  <td colspan="<?php echo $showEditCheckbox ? $cols-4 : $cols-1; ?>">
+  <td colspan="<?php echo !empty($showEditCheckbox) ? $cols-4 : $cols-1; ?>">
   <table width="100%" border="0">
   <tr>
 	<!-- patch 2.12.04 display company name next to project name -->
@@ -557,8 +556,8 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
   <tr>
 	<td align="right">
 <?php
-			$hasEditableTask = ((isset($canEdit) && $canEdit) ? true : false);
-			if (is_array($p['tasks']) && !($hasEditableTask)) {
+			$hasEditableTask = (!empty($canEdit) ? true : false);
+			if (!empty($p['tasks']) && is_array($p['tasks']) && !($hasEditableTask)) {
 				foreach ($p['tasks'] as $i => $t1) {
 					$hasEditableTask = (getPermission('tasks', 'edit',  $t1['task_id'])
 					                    || $hasEditableTask);
@@ -567,7 +566,7 @@ echo bestColor(@$p['project_color_identifier']); ?>;text-decoration:none;">
 					}
 				}
 			}
-			if ($showEditCheckbox && ($hasEditableTask)) {
+			if (!empty($showEditCheckbox) && $hasEditableTask) {
 				// get Users with all Allocation info (e.g. their freeCapacity)
 				$tempoTask = new CTask();
 				$userAlloc = $tempoTask->getAllocation('user_id');
@@ -726,8 +725,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 	<?php echo $AppUI->_('Collapse'); ?>&nbsp;<a href="<?php echo 'index.php'.$query_string.'&amp;close_task_all=1';?>"><?php echo $AppUI->_('All'); ?></a>/<a href="<?php echo 'index.php'.$query_string.'&amp;close_one_level=1';?>"><?php echo $AppUI->_('One Level'); ?></a>
 	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;
 <!-- removed project-level report buttons per Mantis Report #2374
-  <input type="button" class="button" value="<?php echo $AppUI->_('Reports');?>"
-   onclick="javascript:window.location='index.php?m=projects&a=reports&project_id=<?php echo $k;?>';" />
+  <input type="button" class="button" value="<?php // echo $AppUI->_('Reports');?>"
+   onclick="javascript:window.location='index.php?m=projects&a=reports&project_id=<?php // echo $k;?>';" />
 -->
   <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart');?>"
 		onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php

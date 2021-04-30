@@ -281,9 +281,7 @@ if ($do_report) {
 					$sse = ((!($sse) || $t->task_end_date > $sse) ? $t->task_end_date : $sse);
 				}
 			}
-
 		}
-
 		//Display Users and their related Tasks.
 ?>
 <center>
