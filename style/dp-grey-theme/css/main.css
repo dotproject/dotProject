@@ -523,7 +523,7 @@ th form {
 /* Folder module */
 #folder-list {
   background-color: white;
-  layer-background-color: white;
+  /* layer-background-color: white; /* obsolete property */
 }
 
 #folder-list ul {

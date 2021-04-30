@@ -442,7 +442,7 @@ table.tbl td.event td {
 /* Folder module */
 #folder-list {
   background-color: white;
-  layer-background-color: white;
+  /* layer-background-color: white; /* obsolete property */
 }
 
 #folder-list ul {

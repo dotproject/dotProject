@@ -2169,7 +2169,7 @@ class soap_server extends nusoap_base {
 			position: absolute; visibility: hidden; z-index: 200; left: 250px; top: 100px;
 			font-family: arial; overflow: hidden; width: 600;
 			padding: 20px; font-size: 10px; background-color: #999999;
-			layer-background-color:#FFFFFF; }
+			/* layer-background-color:#FFFFFF; /* obsolete property */ }
 		    a,a:active  { color: charcoal; font-weight: bold; }
 		    a:visited   { color: #666666; font-weight: bold; }
 		    a:hover     { color: cc3300; font-weight: bold; }

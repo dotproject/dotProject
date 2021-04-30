@@ -690,7 +690,7 @@ th form {
 /* Folder module */
 #folder-list {
   background-color: #2e3440; /* nord0 */
-  layer-background-color: #2e3440; /* nord0 */
+  /* layer-background-color: #2e3440; /* obsolete property */
 }
 
 #folder-list ul {
