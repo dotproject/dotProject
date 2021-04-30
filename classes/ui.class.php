@@ -988,7 +988,7 @@ class CAppUI {
  */
 //	function &acl() {
   function acl() {
-		if (!(isset($GLOBALS['acl']))) {
+		if (empty($GLOBALS['acl'])) {
 			$GLOBALS['acl'] = new dPacl;
 	  	}
 	  	return $GLOBALS['acl'];
@@ -1001,7 +1001,7 @@ class CAppUI {
 	function loadJS() {
 		global $m, $a;
 		// Search for the javascript files to load.
-		if (! isset($m)) {
+		if (empty($m)) {
 			return;
 		}
 		$root = DP_BASE_DIR;
