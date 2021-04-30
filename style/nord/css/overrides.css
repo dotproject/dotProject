@@ -157,20 +157,24 @@
 @media (pointer: coarse) {
   .ql-snow.ql-toolbar button:hover:not(.ql-active),
   .ql-snow .ql-toolbar button:hover:not(.ql-active) {
-    color: #4b556a; /* nord3 */
+    color: #d8dee9; /* nord4 */
   }
   .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-fill,
   .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-fill,
   .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill,
   .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill {
-    fill: #4b556a; /* nord3 */
+    fill: #d8dee9; /* nord4 */
   }
   .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
   .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
   .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
   .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
-    stroke: #4b556a; /* nord3 */
+    stroke: #d8dee9; /* nord4 */
   }
+}
+
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button {
+  color: #d8dee9; /* nord4 */
 }
 
 .ql-snow .ql-stroke {
