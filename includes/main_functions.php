@@ -46,11 +46,11 @@ function bestColor($bg, $lt='#ffffff', $dk='#000000') {
 function arraySelect($arr, $select_name, $select_attribs, $selected, $translate=false) {
 	GLOBAL $AppUI;
 	if (empty($arr)) {
-    dprint(__FILE__, __LINE__, 2, '[INFO]:' . __FUNCTION__ . ' called with empty array');
+    dprint(__FILE__, __LINE__, 2, '[INFO]: ' . __FUNCTION__ . ' called with empty array');
     return '';
   }
   if (!is_array($arr)) {
-		dprint(__FILE__, __LINE__, 2, '[INFO]:' . __FUNCTION__ . ' called with no array');
+		dprint(__FILE__, __LINE__, 2, '[INFO]: ' . __FUNCTION__ . ' called with no array');
 		return '';
 	}
 	reset($arr);
