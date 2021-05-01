@@ -44,7 +44,6 @@ $followup = dPgetCleanParam($_POST, 'followup', '');
 $q = new DBQuery();
 
 if (@$followup) {
-
     /* prepare fields */
     $timestamp = time();
     $q->addTable('users', 'u');

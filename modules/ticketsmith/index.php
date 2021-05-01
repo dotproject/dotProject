@@ -90,7 +90,7 @@ if ($dPconfig['link_tickets_kludge']) {
 if ($type == "my") {
 	$title = "My Tickets";
 } else {
-	$title = "$type Tickets";
+	$title = $type . " Tickets";
 }
 
 /* count tickets */
@@ -103,13 +103,13 @@ if ($type != 'All') {
     $q->addWhere("type = '$type'");
 }
 $ticket_count = $q->loadResult();
-dprint(__FILE__, __LINE__, 11, "[DEBUG] Ticket count: #$ticket_count.");
+dprint(__FILE__, __LINE__, 11, "[DEBUG] Ticket count: #" . $ticket_count . ".");
 /* paging controls */
 if (($offset + $limit) < $ticket_count) {
-    $page_string = ($offset + 1) . " to " . ($offset + $limit) . " of $ticket_count";
+    $page_string = ($offset + 1) . " to " . ($offset + $limit) . " of " . $ticket_count;
 }
 else {
-    $page_string = ($offset + 1) . " to $ticket_count of $ticket_count";
+    $page_string = ($offset + 1) . " to " . $ticket_count . " of " . $ticket_count;
 }
 
 /* start table */
@@ -117,7 +117,7 @@ else {
 
 <table class="tbl" width="100%">
 <tr>
-	<td colspan="<?php echo count($fields["headings"]);?>" align="center">
+	<td colspan="<?php echo count($fields["headings"]) ?? 1;?>" align="center">
 		<table width="100%" border="0" cellspacing="1" cellpadding="1">
 		<tr>
 			<td width="33%"></td>
@@ -126,12 +126,12 @@ else {
 <?php
 if ($ticket_count > $limit) {
     if ($offset - $limit >= 0) {
-        print("<a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
+        print("<a href='?m=ticketsmith&amp;type=" . $type . "&amp;column=" . $column . "&amp;direction=" . $direction . "&amp;offset="
 				. ($offset - $limit) . "'><img src='images/navleft.gif' border='0' alt='' /></a> | \n");
     }
     print($AppUI->_("$page_string")."\n");
     if ($offset + $limit < $ticket_count) {
-        print(" | <a href='?m=ticketsmith&amp;type=$type&amp;column=$column&amp;direction=$direction&amp;offset="
+        print(" | <a href='?m=ticketsmith&amp;type=" . $type . "&amp;column=" . $column . "&amp;direction=" . $direction . "&amp;offset="
 				. ($offset + $limit) . "'><img src='images/navright.gif' border='0' alt='' /></a>\n");
     }
 }
@@ -170,7 +170,7 @@ if ($parent_count) {
     print("<tr>\n");
     for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
         print("<th align=" . $fields["aligns"][$loop] . ">");
-        print("<a href=\"?m=ticketsmith&amp;type=$type");
+        print("<a href=\"?m=ticketsmith&amp;type=" . $type);
         print("&amp;column=" . $fields["columns"][$loop]);
         if ($column != $fields["columns"][$loop]) {
             $new_direction = "ASC";
@@ -183,7 +183,7 @@ if ($parent_count) {
                 $new_direction == "ASC";
             }
         }
-        print("&amp;direction=$new_direction");
+        print("&amp;direction=" . $new_direction);
         print('" class="hdr">' . $AppUI->_($fields["headings"][$loop]) . "</a></th>\n");
     }
     print("</tr>\n");
@@ -193,7 +193,7 @@ if ($parent_count) {
         // make sure that $fields["headings"] exists and is not empty before counting it! (gwyneth 20210419)
         $total_fields = !empty($fields["headings"]) ? count($fields["headings"]) : 0;
         for ($loop = 0; $loop < $total_fields; $loop++) {
-          print("<td  bgcolor='white' align=" . $fields["aligns"][$loop] . ">\n");
+          print("<td bgcolor='white' align=" . $fields["aligns"][$loop] . ">\n");
 
   	    	//translate some information, some not
   	    	if ($fields["headings"][$loop] == "Status") {
@@ -212,14 +212,14 @@ if ($parent_count) {
       }
     }
     else {
-      print("<tr style='height:25px;' align='center0 colspan='"
-        . (!empty($fields["headings"]) ? count($fields["headings"]) : 1)
+      print("<tr style='height:25px;' align='center' colspan='"
+        . (!empty($fields["headings"]) ? count($fields["headings"]) : 1) // see comment above (gwyneth 20210501)
         . "'><td>Nothing to show!</td></tr>\n");
     }
 }
 else {
     print("<tr style='height:25px;'>\n");
-    print("<td align='center' colspan='" . (!empty($fields["headings"]) ? count($fields["headings"]) : 1) . "'>\n");
+    print("<td align='center' colspan='" . (!empty($fields["headings"]) ? count($fields["headings"]) : 1) . "'>\n");  // again: see my comment above (gwyneth 20210501)
     print($AppUI->_('There are no')." ");
     print($type == "All" ? "" : mb_strtolower($AppUI->_($type)) . " ");
     print($AppUI->_('tickets').".\n");
@@ -243,9 +243,9 @@ if ($type == "Deleted" && $parent_count) {
     print("<td align='center'><a href='?m=ticketsmith&amp;type=Deleted&amp;action=expunge'>".$AppUI->_('Expunge Deleted')."</a></td>");
 }
 print("<td align='right'>
-<a href='?m=ticketsmith&amp;a=pdf&amp;type=$type&suppressHeaders=1'>" . $AppUI->_('Report as PDF') . "</a> |
-<a href='?m=ticketsmith&amp;a=search'>".$AppUI->_('Search')."</a> |
-<a href='?m=ticketsmith&amp;type=$type'>".$AppUI->_('Back to top')."</a></td></tr>\n");
+<a href='?m=ticketsmith&amp;a=pdf&amp;type=" . $type . "&suppressHeaders=1'>" . $AppUI->_('Report as PDF') . "</a> |
+<a href='?m=ticketsmith&amp;a=search'>" . $AppUI->_('Search') . "</a> |
+<a href='?m=ticketsmith&amp;type=" . $type . "'>" .$AppUI->_('Back to top') . "</a></td></tr>\n");
 print("</table>\n");
 print("</td>\n");
 print("</tr>\n");

@@ -239,13 +239,13 @@ print("<input type=\"hidden\" name=\"subject\" value='" . $ticket_info["subject"
 for ($loop = 0; $loop < count($fields["headings"]); $loop++) {
     print("<tr>\n");
     if ($fields["headings"][$loop] !== "<br />") {
-	$fields["headings"][$loop] = $AppUI->_($fields["headings"][$loop]);
+	    $fields["headings"][$loop] = $AppUI->_($fields["headings"][$loop]);
     }
     print("<td align=\"right\">" . $fields["headings"][$loop] . "</td>");
     print("<td align=\"left\" class=\"hilite\">" . format_field($ticket_info[$fields["columns"][$loop]], $fields["types"][$loop]) . "</td>\n");
     print("</tr>\n");
 }
-$ticket_info["assignment"];
+$ticket_info["assignment"];  // what exactly is this doing...? (gwyneth 20210501)
 
 /* output attachment indicator */
 $q->clear();
@@ -270,7 +270,7 @@ if ($attach_count == 1) {
 
   $result = $q->loadList();
   if ($q->foundRows()) {
-       print("<tr>\n");
+      print("<tr>\n");
       print("<td align=\"left\"><b>Attachments</b></td>");
       print("<td align=\"left\">");
 		  foreach ($result as $row) {
@@ -301,9 +301,9 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
     $result = $q->loadList();
 
     if ($q->foundRows()) {
-
         /* print followups */
         print("<table width=\"100%\" class=\"tbl\" cellspacing=\"5\" cellpadding=\"5\">\n");
+        $number = 0;
         foreach ($result as $row) {
 
             /* determine row color */
@@ -314,7 +314,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
 
             /* do number/author */
             print("<td>\n");
-            print("<strong>$number</strong> : \n");
+            print("<strong>" . ++$number . "</strong> : \n");  // what's the point?... (gwyneth 20210501)
             $row["author"] = preg_replace('/\"/', '', $row["author"]);
             $row["author"] = htmlspecialchars($row["author"]);
             print($row["author"] . "\n");
@@ -330,21 +330,14 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
 
             /* end row */
             print("</tr>\n");
-
         }
         print("</table>\n");
-
     }
     else {
         print("<em>".$AppUI->_('none')."</em>\n");
     }
-
     print("</td>\n</tr>\n");
-
-}
-
-else {
-
+} else {
     /* get peer followups */
     $q->clear();
     $q->addQuery('ticket, type');

@@ -382,16 +382,17 @@ function format_field($value, $type, $ticket = null)
       $value = htmlspecialchars($value);
       $output = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"10\">\n";
       $output .= "<tr><td bgcolor=\"" . $CONFIG["ticket_color"] . "\">\n<tt><pre>\n";
+      $output .= "<span style=\"color: " . bestColor($CONFIG["ticket_color"]) . ";\">\n";
       $url_find = "/(http|https|ftp|news|telnet|finger)(:\/\/[^ \">\\t\\r\\n]*)/";
       $url_replace = "<a href=\"\\1\\2\" target=\"new\">";
       $url_replace .= "<span style=\"font-size: 10pt;\">\\1\\2</span></a>";
       $value = preg_replace($url_find, $url_replace, $value);
       $output .= stripslashes($value);
-      $output .= "\n</pre></tt>\n</td></tr>\n</table>\n";
+      $output .= "\n</span></pre></tt>\n</td></tr>\n</table>\n";
       break;
     case "followup":
       $output = "\n<tt>\n";
-      $output .= "<textarea style='font-family: monospace;' name=\"followup\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n";
+      $output .= "<textarea <!-- style='font-family: monospace;' --> name=\"followup\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n";
       $q = new DBQuery();
       $q->addQuery("user_signature");
       $q->addTable("users");
@@ -449,7 +450,7 @@ function format_field($value, $type, $ticket = null)
       $q->addQuery("co.*");
       $q->addWhere("co.company_id = " . (int) $value);
       $sql = $q->prepare();
-      dprint(__FILE__, __LINE__, 12, "[DEBUG]: SQL query to extract the company for value '$value' name was: ($sql)");
+      dprint(__FILE__, __LINE__, 12, "[DEBUG]: SQL query to extract the company for value '" . $value . "' name was: (" . $sql . ")");
       if (!db_loadObject($sql, $obj)) {
         // it all dies!
       }
@@ -472,6 +473,10 @@ function format_field($value, $type, $ticket = null)
   return $output;
 }
 
+if (empty($ticket_parent)) {
+  $ticket_parent = 0;
+}
+
 /* figure out parent & type */
 if (!empty($ticket)) {  // was: isset($ticket) (gwyneth 20210430)
   $q = new DBQuery();
@@ -484,8 +489,5 @@ if (!empty($ticket)) {  // was: isset($ticket) (gwyneth 20210430)
   $ticket_type = $res['type'];      // much more readable this way! (gwyneth 20210501)
   $ticket_parent = $res['parent'];  // Even if the database columns change, at least we'll get errors in advance... that's the whole point of avoiding list() here... (gwyneth 20210501)
   dprint(__FILE__, __LINE__, 12, "[INFO]: Ticket type is now: '" . $ticket_type . "' and parent is: '" . $ticket_parent . "'");
-} else {
-  // $ticket_type has already been set to '' by default (gwyneth 20210501)
-  $ticket_parent = 0;
 }
 ?>
