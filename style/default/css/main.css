@@ -102,6 +102,12 @@ h3 {
   border: 1px black solid;
 }
 
+.smallNorm {  /* not defined anywhere... :-( (gwyneth 20210501) */
+  font-weight: normal;
+  font-size: small;
+}
+
+button,
 .button {
   border: 1px black solid;
   font-family: Osaka, verdana, Sans-Serif;

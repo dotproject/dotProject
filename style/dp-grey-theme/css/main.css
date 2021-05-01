@@ -98,6 +98,12 @@ h3 {
  border: 1px black solid;
 }
 
+.smallNorm {  /* not defined anywhere... :-( (gwyneth 20210501) */
+  font-weight: normal;
+  font-size: small;
+}
+
+button,
 .button{
 	border: 1px black solid;
 	font-family: verdana, arial, helvetica, sans-serif;
@@ -334,9 +340,14 @@ td.tabox {
 .message {
 	color: #08245b;
 }
-
 .no_ {
 	color: red
+}
+
+/* Used for ticket colouring (gwyneth 20210501) */
+.trouble-details {
+  font-weight: bold;
+  color: #FFFFFF;
 }
 
 /* popup calendar */

@@ -156,6 +156,11 @@ h3 {
   border-radius: 0.1rem;
 }
 
+.smallNorm {  /* not defined anywhere... :-( (gwyneth 20210501) */
+  font-weight: normal;
+  font-size: small;
+}
+
 button,
 .button {
   border: 1px #4c566a solid; /* nord3 */
