@@ -213,15 +213,21 @@ table.tbl TH {
   text-align: center;
 }
 
-table.tbl td {
-  background-color: #ffffff;
+table.tbl tr:nth-child(odd) {
+  background-color: #dddddd;
 }
-
+table.tbl tr:nth-child(even) {
+  background-color: #d3dce3;
+}
+table.tbl td {
+  background-color: transparent;
+}
 /* a 'standard' table */
 table.std {
   border: solid #08245b 2px;
   background: #d6ebff;
 }
+
 table.std TH {
   background-color: #08245b;
   color: white;

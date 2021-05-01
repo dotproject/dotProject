@@ -158,8 +158,14 @@ TABLE.tbl TH {
   font-weight: normal;
 }
 
-TABLE.tbl TD {
-  background-color: #f4efe3;
+table.tbl tr:nth-child(odd) {
+  background-color: #dddddd;
+}
+table.tbl tr:nth-child(even) {
+  background-color: #d3dce3;
+}
+table.tbl td {
+  background-color: transparent;
 }
 
 /* a 'standard' table */

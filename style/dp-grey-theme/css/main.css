@@ -209,8 +209,14 @@ table.tbl TH {
 	list-style-position: inside;
 }
 
+table.tbl tr:nth-child(odd) {
+  background-color: #dddddd;
+}
+table.tbl tr:nth-child(even) {
+  background-color: #d3dce3;
+}
 table.tbl td {
-	background-color: #ECECEC;
+  background-color: transparent;
 }
 
 /* a 'standard' table */

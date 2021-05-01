@@ -478,7 +478,14 @@ if (!empty($ticket)) {  // was: isset($ticket) (gwyneth 20210430)
   $q->addQuery("type, parent");
   $q->addTable("tickets");
   $q->addWhere("ticket = '" . $ticket . "'");
-
-  list($ticket_type, $ticket_parent) = $q->loadHash();
+  $res = $q->loadHash();
+  dprint(__FILE__, __LINE__, 12, "[DEBUG]: Old info: Ticket type is: '" . $ticket_type . "' and current parent is: '" . $ticket_parent . "'; Ticket hash loaded: '" . print_r($res, true) . "'");
+//  list($ticket_type, $ticket_parent) = $res;  // I hate list()! (gwyneth 20210501)
+  $ticket_type = $res['type'];      // much more readable this way! (gwyneth 20210501)
+  $ticket_parent = $res['parent'];  // Even if the database columns change, at least we'll get errors in advance... that's the whole point of avoiding list() here... (gwyneth 20210501)
+  dprint(__FILE__, __LINE__, 12, "[INFO]: Ticket type is now: '" . $ticket_type . "' and parent is: '" . $ticket_parent . "'");
+} else {
+  // $ticket_type has already been set to '' by default (gwyneth 20210501)
+  $ticket_parent = 0;
 }
 ?>

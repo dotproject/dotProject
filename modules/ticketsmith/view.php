@@ -303,17 +303,17 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
     if ($q->foundRows()) {
 
         /* print followups */
-        print("<table width=\"100%\" border=\"1\" cellspacing=\"5\" cellpadding=\"5\">\n");
+        print("<table width=\"100%\" class=\"tbl\" cellspacing=\"5\" cellpadding=\"5\">\n");
         foreach ($result as $row) {
 
             /* determine row color */
-            $color = (@$number++ % 2 == 0) ? "#d3dce3" : "#dddddd";
+            // $color = (@$number++ % 2 == 0) ? "#d3dce3" : "#dddddd";  // entering 21st century (gwyneth 20210501)
 
             /* start row */
             print("<tr>\n");
 
             /* do number/author */
-            print("<td bgcolor=\"$color\">\n");
+            print("<td>\n");
             print("<strong>$number</strong> : \n");
             $row["author"] = preg_replace('/\"/', '', $row["author"]);
             $row["author"] = htmlspecialchars($row["author"]);
@@ -321,10 +321,10 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
             print("</td>\n");
 
             /* do type */
-            print("<td bgcolor=\"$color\"><a href=\"index.php?m=ticketsmith&amp;a=view&amp;ticket=" . $row["ticket"] . "\">" . $AppUI->_($row["type"]) . "</a></td>\n");
+            print("<td><a href=\"index.php?m=ticketsmith&amp;a=view&amp;ticket=" . $row["ticket"] . "\">" . $AppUI->_($row["type"]) . "</a></td>\n");
 
             /* do timestamp */
-            print("<td bgcolor=\"$color\">\n");
+            print("<td>\n");
             print(get_time_ago($row["timestamp"]));
             print("</td>\n");
 
