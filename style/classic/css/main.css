@@ -47,10 +47,10 @@ h2,
   margin: 0px;
 }
 
-bordertable {
+/* bordertable { /* ?? What. Is. This ?? (gwyneth 20210501)
   border: 1px black solid;
 }
-
+*/
 .bordertable {
   border: 1px black solid;
 }

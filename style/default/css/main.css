@@ -94,10 +94,10 @@ h3 {
   margin-top: 35px;
 }
 
-bordertable {
+/* bordertable { /* ?? What. Is. This ?? (gwyneth 20210501)
   border: 1px black solid;
 }
-
+*/
 .bordertable {
   border: 1px black solid;
 }

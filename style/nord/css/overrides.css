@@ -183,9 +183,12 @@
 .ql-snow .ql-stroke-miter {
   stroke: #4b556a; /* nord3 */
 }
-.ql-snow .ql-fill,
+/* this is inside the SVG, so we want it as bright as possible */
+.ql-snow .ql-fil l,
 .ql-snow .ql-stroke.ql-fill {
-  fill: #4b556a; /* nord3 */
+  /* fill: #4b556a; /* nord3 */
+  fill: #eceff4; /* nord6 */
+  color: #eceef4; /* nord6 */
 }
 
 .ql-snow .ql-editor blockquote {
