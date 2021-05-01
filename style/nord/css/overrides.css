@@ -92,7 +92,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-  color: #5e81ac; /* nord10 */
+  color: #81a0c1; /* nord9 */
 }
 .ql-snow.ql-toolbar button:hover .ql-fill,
 .ql-snow .ql-toolbar button:hover .ql-fill,
@@ -122,7 +122,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
-  fill: #5e81ac; /* nord10 */
+  fill: #81a0c1; /* nord9 */
 }
 .ql-snow.ql-toolbar button:hover .ql-stroke,
 .ql-snow .ql-toolbar button:hover .ql-stroke,
@@ -152,7 +152,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
-  stroke: #5e81ac; /* nord10 */
+  stroke: #81a0c1; /* nord9 */
 }
 @media (pointer: coarse) {
   .ql-snow.ql-toolbar button:hover:not(.ql-active),
@@ -184,8 +184,8 @@
   stroke: #4b556a; /* nord3 */
 }
 /* this is inside the SVG, so we want it as bright as possible */
-.ql-snow .ql-fil l,
-.ql-snow .ql-stroke.ql-fill {
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill  {
   /* fill: #4b556a; /* nord3 */
   fill: #eceff4; /* nord6 */
   color: #eceef4; /* nord6 */
@@ -203,7 +203,7 @@
   color: #ebeef4; /* nord6 */
 }
 .ql-snow .ql-picker {
-  color: #4b556a; /* nord3 */
+  color: #ebeef4; /* nord6 */
 }
 .ql-snow .ql-picker-options {
   background-color: #2d3440; /* nord0 */

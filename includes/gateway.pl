@@ -604,7 +604,7 @@ sub mail_report {
 	print MAIL "    FONT-SIZE: 18pt; SIZE: 18pt;\n";
 	print MAIL "}\n";
 	print MAIL ".td {\n";
-	print MAIL "    font: 9pt arial, san-serif;\n";
+	print MAIL "    font: 9pt arial, sans-serif;\n";
 	print MAIL "}\n";
 	print MAIL "</style>\n";
 	if ($parent) {
@@ -624,9 +624,9 @@ sub mail_report {
 	print MAIL "<table width=\"600\" border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#878676\">\n";
 	print MAIL "    <tr>\n";
 	if ($parent) {
-		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">Followup Ticket Entered</font></td>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,sans-serif\" size=\"2\" color=\"white\">Followup Ticket Entered</font></td>\n";
 	} else {
-		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,sans-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
 	}
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
@@ -639,7 +639,7 @@ sub mail_report {
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
 	print MAIL "        <td bgcolor=\"white\" class=\"td\">Subject:</td>\n";
-	print MAIL "        <td bgcolor=\"white\"><font face=\"arial,san-serif\" size=\"2\">$subject</font></td>";
+	print MAIL "        <td bgcolor=\"white\"><font face=\"arial,sans-serif\" size=\"2\">$subject</font></td>";
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";
 	print MAIL "        <td bgcolor=\"white\" nowrap class=\"td\">View:</td>\n";
@@ -718,7 +718,7 @@ sub mail_acknowledgement {
 	print MAIL "    font-size: 18pt; size: 18pt;\n";
 	print MAIL "}\n";
 	print MAIL ".td {\n";
-	print MAIL "	font: 9pt arial, san-serif;\n";
+	print MAIL "	font: 9pt arial, sans-serif;\n";
 	print MAIL "}\n";
 	print MAIL "</style>\n";
 	print MAIL "<title>Your Support Request</title>\n";
@@ -734,10 +734,10 @@ sub mail_acknowledgement {
 	print MAIL "<table width=\"600\" border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#878676\">\n";
 	print MAIL "    <tr>\n";
 	if ($parent) {
-		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">Response received</font></td>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,sans-serif\" size=\"2\" color=\"white\">Response received</font></td>\n";
 	}
 	else {
-		print MAIL "        <td colspan=\"2\"><font face=\"arial,san-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
+		print MAIL "        <td colspan=\"2\"><font face=\"arial,sans-serif\" size=\"2\" color=\"white\">New Ticket Entered</font></td>\n";
 	}
 	print MAIL "    </tr>\n";
 	print MAIL "    <tr>\n";

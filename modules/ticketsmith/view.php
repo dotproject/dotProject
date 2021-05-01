@@ -59,9 +59,9 @@ else {
 
 /* perform updates */
 $orig_assignment = dPgetCleanParam($_POST, 'orig_assignment', '');
-$author = dPgetCleanParam($_POST, 'author', '');
-$priority = dPgetCleanParam($_POST, 'priority', '');
-$subject = dPgetCleanParam($_POST, 'subject', '');
+$author          = dPgetCleanParam($_POST, 'author',   '');
+$priority        = dPgetCleanParam($_POST, 'priority', '');
+$subject         = dPgetCleanParam($_POST, 'subject',  '');
 
 $q = new DBQuery();
 
@@ -117,15 +117,15 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>$ticket</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
-	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>" . str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace('"', '', $author))) . "</font></td>\n";
+	$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
+	$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>" . str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace('"', '', $author))) . "</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Subject').":</font></td>\n";
-	$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>$subject</font></td>\n";
+	$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>".$AppUI->_('Subject').":</font></td>\n";
+	$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>$subject</font></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "	<tr>\n";
-	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
+	$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
 	$message .= "		<td bgcolor='white' nowrap='nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
 	$message .= "	</tr>\n";
 	$message .= "</table>\n";
@@ -181,22 +181,22 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 			$message .= "</table>\n";
 			$message .= "<table width=600 border=0 cellpadding=4 cellspacing=1 bgcolor=#878676>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td colspan=2><font face='arial,san-serif' size='2' color='white'>".$AppUI->_('Ticket assigned to you')."</font></td>\n";
+			$message .= "		<td colspan=2><font face='arial,sans-serif' size='2' color='white'>".$AppUI->_('Ticket assigned to you')."</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
-			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>$ticket</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>".$AppUI->_('Ticket ID').":</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>$ticket</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
-			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>" . str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace('"', '', $author))) . "</font></td>\n";
+			$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>".$AppUI->_('Author').":</font></td>\n";
+			$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>" . str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace('"', '', $author))) . "</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>".$AppUI->_('Subject').":</font></td>\n";
-			$message .= "		<td bgcolor='white'><font face='arial,san-serif' size='2'>$subject</font></td>\n";
+			$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>".$AppUI->_('Subject').":</font></td>\n";
+			$message .= "		<td bgcolor='white'><font face='arial,sans-serif' size='2'>$subject</font></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "	<tr>\n";
-			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,san-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
+			$message .= "		<td bgcolor='white' nowrap='nowrap'><font face='arial,sans-serif' size='2'>".$AppUI->_('View').":</font></td>\n";
 			$message .= "		<td bgcolor='white' nowrap='nowrap'><a href=\"".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket\"><font face=arial,sans-serif size='2'>".DP_BASE_URL."/index.php?m=ticketsmith&a=view&ticket=$ticket</font></a></td>\n";
 			$message .= "	</tr>\n";
 			$message .= "</table>\n";

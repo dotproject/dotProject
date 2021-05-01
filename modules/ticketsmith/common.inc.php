@@ -329,7 +329,7 @@ function format_field($value, $type, $ticket = null)
         $q->addOrder("ticket DESC");
         $q->setLimit(1);
         $latest_value = $q->loadResult();
-        if ($latest_value) {
+        if (!empty($latest_value)) {
           $value = $latest_value;
         }
       }

@@ -248,7 +248,8 @@ function dPshowModuleConfig($config) {
 }
 
 /**
- *	Function to recussively find an image in a number of places
+ *	Function to recursively find an image in a number of places
+ *
  *	@param string The name of the image
  *	@param string Optional name of the current module
  *	@return location for image, "default" location returned if not found elsewhere (even if not present there).
@@ -281,7 +282,7 @@ function dPfindImage($name, $module=null) {
 function dPshowImage($src, $wid='', $hgt='', $alt='', $title='') {
 	global $AppUI;
 
-	if ($src == '') {
+	if (empty($src)) {  // just to make sure it's not null as well... (gwyneth 20210501)
 		return '';
 	}
 
@@ -294,6 +295,8 @@ function dPshowImage($src, $wid='', $hgt='', $alt='', $title='') {
 
 /**
  * function to return a default value if a variable is not set
+ *
+ * @note: in PHP 7+, this is basically the same as `$var ?? $def`
  */
 function defVal($var, $def) {
 	return isset($var) ? $var : $def;
@@ -306,7 +309,7 @@ function dPgetParam($arr, $name, $def=null) {
   if (isset($arr[$name])) {  // sometimes nulls are passed here (gwyneth 20210414)
 	  return defVal($arr[$name], $def);
   }
-  dprint(__FILE__, __LINE__, 8, __FUNCTION__ . ": $name is not a defined value");
+  dprint(__FILE__, __LINE__, 8, __FUNCTION__ . ": '" . $name . "' is not a defined value");
   return null;
 }
 
@@ -367,11 +370,15 @@ function dPsanitiseHTML($text, $allowedTags = null) {
 }
 
 function dPgetEmailParam($arr, $name, $def = null) {
+/*
   if (isset($arr[$name])) {  // apparently, this _can_ happen (gwyneth 20210415)
     $val = defVal($arr[$name], $def);
   } else {
     return null;
   }
+*/
+  // simplifying my own code, which might have returned too early in many edge cases (gwyneth 20210501)
+  $val = $arr[$name] ?? $def;
   preg_match('/(([\w\s]+)?<)?(\w+)@([\w\d\.]+)>?/', $val, $matched);
   $result = filter_xss($matched[3]) . '@' . filter_xss($matched[4]);
   if ($matched[2]) {
@@ -481,7 +488,7 @@ function dPuserHasRole($name) {
 	$q->addTable('roles', 'r');
 	$q->innerJoin('user_roles', 'ur', 'ur.role_id=r.role_id');
 	$q->addQuery('r.role_id');
-	$q->addWhere("ur.user_id=$uid AND r.role_name='$name'");
+	$q->addWhere("ur.user_id=" . $uid . " AND r.role_name='" . $name . "'");
 	return $q->loadResult();
 }
 
@@ -511,12 +518,18 @@ function dPformatDuration($x) {
 
 }
 
+/**
+ * @return float
+ **/
 function dPsetMicroTime() {
 	global $microTimeSet;
-	list($usec, $sec) = explode(' ',microtime());
+	list($usec, $sec) = explode(' ', microtime());
 	$microTimeSet = (float)$usec + (float)$sec;
 }
 
+/**
+ * @return float
+ **/
 function dPgetMicroDiff() {
 	global $microTimeSet;
 	$mt = $microTimeSet;
@@ -535,12 +548,12 @@ define ('DP_FORM_JSVARS', 4);
 function dPformSafe($txt, $flag_bits = 0) {
 	global $AppUI, $locale_char_set;
 
-	if (!$locale_char_set) {
+	if (empty($locale_char_set)) {
 		$locale_char_set = 'utf-8';
 	}
 
-	$deslash = $flag_bits & DP_FORM_DESLASH;
-	$isURI = $flag_bits & DP_FORM_URI;
+	$deslash  = $flag_bits & DP_FORM_DESLASH;
+	$isURI    = $flag_bits & DP_FORM_URI;
 	$isJSVars = $flag_bits & DP_FORM_JSVARS;
 
 	if (is_object($txt) || is_array($txt)) {
@@ -560,7 +573,6 @@ function dPformSafe($txt, $flag_bits = 0) {
 				$txt[$k] = $value;
 			}
 		}
-
 	} else {
 		$txt = $deslash ? $AppUI->___($txt, UI_OUTPUT_RAW) : $txt;
 		$txt = $isURI ? $AppUI->___($txt, UI_OUTPUT_URI) : $txt;
@@ -608,7 +620,7 @@ function formatTime($uts) {
 function formatCurrency($number, $format) {
 	global $AppUI, $locale_char_set;
 
-	if (!$format) {
+	if (empty($format)) {
 		$format = $AppUI->getPref('SHCURRFORMAT');
 	}
 	// If the requested locale doesn't work, don't fail,
@@ -621,7 +633,7 @@ function formatCurrency($number, $format) {
 	// it seems that some versions of PHP will set this incorrectly
 	// and you end up with everything using locale C.
 	// setlocale(LC_MONETARY, $format . '.UTF8', $format, '');
-  // Note: deprecated, obsolete and removed in PHP 8.0
+  // Note: deprecated, obsolete and removed in PHP 8.0 (gwyneth 20210426)
 	if (function_exists('money_format')) {
 		return money_format('%i', $number);
 	}
@@ -631,10 +643,10 @@ function formatCurrency($number, $format) {
 	// to format the money.	 It tries to set reasonable defaults.
   // Note 2: It has also been deprecated in PHP 7 and _removed_ in PHP 8! (gwyneth 20210426)
 	$mondat = localeconv();
-	if (! isset($mondat['int_frac_digits']) || $mondat['int_frac_digits'] > 100) {
+	if (!isset($mondat['int_frac_digits']) || $mondat['int_frac_digits'] > 100) {
 		$mondat['int_frac_digits'] = 2;
 	}
-	if (! isset($mondat['int_curr_symbol'])) {
+	if (!isset($mondat['int_curr_symbol'])) {
 		$mondat['int_curr_symbol'] = '';
 	} else {
     if (!is_string($mondat['int_curr_symbol'])) {
@@ -645,10 +657,10 @@ function formatCurrency($number, $format) {
       $mondat['int_curr_symbol'] = $first_curr_symbol;
     }
   }
-	if (! isset($mondat['mon_decimal_point'])) {
+	if (!isset($mondat['mon_decimal_point'])) {
 		$mondat['mon_decimal_point'] = '.';
 	}
-	if (! isset($mondat['mon_thousands_sep'])) {
+	if (!isset($mondat['mon_thousands_sep'])) {
 		$mondat['mon_thousands_sep'] = ',';
 	}
 	$numeric_portion = number_format(abs($number), $mondat['int_frac_digits'],
@@ -688,9 +700,9 @@ function formatCurrency($number, $format) {
 		$space = " ";
 	}
 	if ($mondat[$letter . '_cs_precedes']) {
-		$result = "$currency$space$numeric_portion";
+		$result = $currency . $space . $numeric_portion;
 	} else {
-		$result = "$numeric_portion$space$currency";
+		$result = $numeric_portion . $space . $currency;
 	}
 	return $result;
 }
@@ -713,7 +725,7 @@ function format_backtrace($bt, $file, $line, $msg) {
   if (!empty($bt) && is_array($bt)) {
   	echo "Backtrace:" . PHP_EOL;
   	foreach ($bt as $level => $frame) {
-  		echo "$level $frame[file]:$frame[line] $frame[function](";
+  		echo "$level $frame[file]:$frame[line] $frame[function](";  // this is weird! (gwyneth 20210501)
   		$in = false;
   		foreach ($frame['args'] as $arg) {
   			echo ((($in) ? ',' : '') . var_export($arg, true));
@@ -780,9 +792,9 @@ function dprint($file = null, $line = 0, $level = 0, $msg = "") {
 function dPrefix($file = null, $line = 0) {
 //  return $file . (empty($line) ? "" : "(" . $line . ")") . (empty($line) && empty($file) ? "" : ": ");
   if (!empty($file)) {
-    return ("$file($line): ");
+    return ($file . "(" . $line . "): ");
   } else {
-    return "Line $line: ";
+    return "Line " . $line . ": ";
   }
 }
 

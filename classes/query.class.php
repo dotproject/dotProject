@@ -67,7 +67,7 @@ class DBQuery {
 
 	public function clear() {
 		global $ADODB_FETCH_MODE;
-		if (isset($this->_old_style)) {
+		if (!empty($this->_old_style)) {
 			$ADODB_FETCH_MODE = $this->_old_style;
 			$this->_old_style = null;
 		}
@@ -244,7 +244,7 @@ class DBQuery {
 	}
 
 	function alterField($name, $type) {
-		if (! is_array($this->create_definition)) {
+		if (empty($this->create_definition) || !is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'CHANGE',
@@ -253,7 +253,7 @@ class DBQuery {
 	}
 
 	function dropField($name) {
-		if (! is_array($this->create_definition)) {
+		if (empty($this->create_definition) || !is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP',
@@ -262,7 +262,7 @@ class DBQuery {
 	}
 
 	function addIndex($name, $type)	{
-		if (! is_array($this->create_definition)) {
+		if (empty($this->create_definition) || !is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'ADD',
@@ -271,7 +271,7 @@ class DBQuery {
 	}
 
 	function dropIndex($name) {
-		if (! is_array($this->create_definition)) {
+		if (empty($this->create_definition) || !is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP',
@@ -280,7 +280,7 @@ class DBQuery {
 	}
 
 	function dropPrimary() {
-		if (! is_array($this->create_definition)) {
+		if (empty($this->create_definition) || !is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP',
@@ -307,7 +307,7 @@ class DBQuery {
 	 * @param	string 	$query	Where subclause to use
 	 */
 	function addWhere($query) {
-		if (isset($query)) {
+		if (!empty($query)) {
 			$this->addClause('where', $query);
 		}
 	}
@@ -364,7 +364,9 @@ class DBQuery {
 	 * @param	string	$group	Field name to group by.
 	 */
 	function addGroup($group) {
-		$this->addClause('group_by', $group);
+    if (!empty($group)) {
+		  $this->addClause('group_by', $group);
+    }
 	}
 
 	/**
@@ -374,7 +376,7 @@ class DBQuery {
 	 * @param	integer	$limit	Number of rows to limit.
 	 * @param	integer	$start	First row to start extraction.
 	 */
-	function setLimit($limit, $start = -1) {
+	function setLimit($limit = 10, $start = -1) {  /* set reasonable defaults for $limit (gwyneth 20210501) */
 		$this->limit = $limit;
 		$this->offset = $start;
 	}
@@ -667,14 +669,14 @@ class DBQuery {
 		global $db;
 		global $ADODB_FETCH_MODE;
 
-		if (! isset($this->_old_style)) {
+		if (empty($this->_old_style)) {
 			$this->_old_style = $ADODB_FETCH_MODE;
 		}
 
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
 		if ($q = $this->prepare()) {
-        dprint(__FILE__, __LINE__, 7, "executing query($q)");
+        dprint(__FILE__, __LINE__, 7, "executing query(" . $q . ")");
 			if ($debug) {
 				// Before running the query, explain the query and return the details.
 				$qid = $db->Execute('EXPLAIN ' . $q);
@@ -691,9 +693,9 @@ class DBQuery {
 			                    ? $db->SelectLimit($q, $this->limit, $this->offset)
 			                    : $db->Execute($q));
 
-			if (!empty($this->_query_id) && $this->_query_id === false) {
+			if (empty($this->_query_id) || $this->_query_id === false) {
 				$error = $db->ErrorMsg();
-				dprint(__FILE__, __LINE__, 2, "query failed($q); this->limit was: " . ($this->limit ?? "[not set]") . "; this->offset was: " . ($this->offset ?? "[no offset]") . "; this->_query_id was: " . ($this->_query_id ?? "[inaccesible]") . "; - and error was: " . ($error ?? "[invaiid error received (?)]"));
+				dprint(__FILE__, __LINE__, 2, "query failed(" . $q . "); this->limit was: " . ($this->limit ?? "[not set]") . "; this->offset was: " . ($this->offset ?? "[no offset]") . "; this->_query_id was: " . ($this->_query_id ?? "[inaccesible]") . "; - and error was: " . ($error ?? "[invalid error received (?)]"));
 				return $this->_query_id;
 			}
 		}
@@ -702,7 +704,7 @@ class DBQuery {
 	}
 
 	function fetchRow() {
-		if (! $this->_query_id) {
+		if (empty($this->_query_id)) {
 			return false;
 		}
 		return $this->_query_id->FetchRow();
@@ -715,14 +717,14 @@ class DBQuery {
 		global $db;
 		global $AppUI;
 
-		if (! $this->exec(ADODB_FETCH_ASSOC)) {
-			$AppUI->setMsg($db->ErrorMsg(), UI_MSG_ERROR);
+		if (empty($this->exec(ADODB_FETCH_ASSOC))) {
+			$AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
 			$this->clear();
 			return false;
 		}
 
 		$list = array();
-		$cnt = 0;
+		$maxrows = $cnt = 0;  // $maxrows wasn't initialised, which sucks (gwyneth 20210501)
 		while ($hash = $this->fetchRow()) {
 			$list[] = $hash;
 			if ($maxrows && $maxrows == $cnt++) {
@@ -736,8 +738,11 @@ class DBQuery {
 	function loadHashList($index = null) {
 		global $db;
 
-		if (! $this->exec(ADODB_FETCH_ASSOC)) {
-			exit ($db->ErrorMsg());
+		if (empty($this->exec(ADODB_FETCH_ASSOC))) {
+			// exit($db->ErrorMsg());  // a bit drastic, isn't it?... (gwyneth 20210501)
+      dprint(__FILE__, __LINE__, 1, "[ERROR]: " . __FUNCTION__ . " couldn't fetch hash list; error was " . $db->ErrorMsg());
+      $AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
+      return null;
 		}
 		$hashlist = array();
 		$keys = null;
@@ -759,8 +764,11 @@ class DBQuery {
 
 	function loadHash() {
 		global $db;
-		if (! $this->exec(ADODB_FETCH_ASSOC)) {
-			exit ($db->ErrorMsg());
+		if (empty($this->exec(ADODB_FETCH_ASSOC))) {
+      // exit($db->ErrorMsg());  // a bit drastic, isn't it?... (gwyneth 20210501)
+      dprint(__FILE__, __LINE__, 1, "[ERROR]: " . __FUNCTION__ . " couldn't fetch hash; error was " . $db->ErrorMsg());
+      $AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
+      return null;
 		}
 		$hash = $this->fetchRow();
 		$this->clear();
@@ -769,9 +777,12 @@ class DBQuery {
 
 	function loadArrayList($index = 0) {
 		global $db;
-		if (! $this->exec(ADODB_FETCH_NUM)) {
-			exit ($db->ErrorMsg());
-		}
+		if (empty($this->exec(ADODB_FETCH_NUM))) {
+      // exit($db->ErrorMsg());  // a bit drastic, isn't it?... (gwyneth 20210501)
+      dprint(__FILE__, __LINE__, 1, "[ERROR]: " . __FUNCTION__ . " couldn't fetch array list; error was " . $db->ErrorMsg());
+      $AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
+      return null;
+    }
 		$hashlist = array();
 		$keys = null;
 		while ($hash = $this->fetchRow()) {
@@ -783,8 +794,11 @@ class DBQuery {
 
 	function loadColumn() {
 		global $db;
-		if (! $this->exec(ADODB_FETCH_NUM)) {
-		  die ($db->ErrorMsg());
+		if (empty($this->exec(ADODB_FETCH_NUM))) {
+      // exit($db->ErrorMsg());  // a bit drastic, isn't it?... (gwyneth 20210501)
+      dprint(__FILE__, __LINE__, 1, "[ERROR]: " . __FUNCTION__ . " couldn't fetch column; error was " . $db->ErrorMsg());
+      $AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
+      return null;
 		}
 		$result = array();
 		while ($row = $this->fetchRow()) {
@@ -796,13 +810,16 @@ class DBQuery {
 
 	function loadObject(&$object, $bindAll=false , $strip = true) {
 		global $db;
-		if (! $this->exec(ADODB_FETCH_NUM)) {
-			die ($db->ErrorMsg());
+		if (empty($this->exec(ADODB_FETCH_NUM))) {
+      // exit($db->ErrorMsg());  // a bit drastic, isn't it?... (gwyneth 20210501)
+      dprint(__FILE__, __LINE__, 1, "[ERROR]: " . __FUNCTION__ . " couldn't fetch OBJECT; error was " . $db->ErrorMsg());
+      $AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
+      return false;
 		}
 		if ($object != null) {
 			$hash = $this->fetchRow();
 			$this->clear();
-			if (!$hash) {
+			if (empty($hash)) {
 				return false;
 			}
 			$this->bindHashToObject($hash, $object, null, $strip, $bindAll);
@@ -830,7 +847,7 @@ class DBQuery {
 		}
 		$schema->ContinueOnError(true);
 		if (($sql = $scheme->ParseSchemaString($xml)) == false) {
-			$AppUI->setMsg(array('Error in XML Schema', 'Error', $db->ErrorMsg()), UI_MSG_ERR);
+			$AppUI->setMsg(array(__FUNCTION__ . ': Error in XML Schema', 'Error', $db->ErrorMsg()), UI_MSG_ERR);
 			return false;
 		}
 
@@ -846,7 +863,7 @@ class DBQuery {
 		$result = false;
 
 		if (! $this->exec(ADODB_FETCH_NUM)) {
-			$AppUI->setMsg($db->ErrorMsg(), UI_MSG_ERROR);
+			$AppUI->setMsg(__FUNCTION__ . ": " . $db->ErrorMsg(), UI_MSG_ERROR);
 		} else if ($data = $this->fetchRow()) {
 			$result =  $data[0];
 		}
@@ -891,11 +908,11 @@ class DBQuery {
     if (empty($order_clause)) {  // empty clause? then return ""!
 			return $result;
 		}
-    // dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'");
+    // dprint(__FILE__, __LINE__, 2, "[DEBUG]: Order clause is '" . print_r($order_clause, true) . "'");
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
-      // dprint(__FILE__, __LINE__, 2, "Order clause is '" . print_r($order_clause, true) . "'; result is '" . print_r($result, true) . "'.");
+      // dprint(__FILE__, __LINE__, 2, "[DEBUG]: Order clause is '" . print_r($order_clause, true) . "'; result is '" . print_r($result, true) . "'.");
 		} else {  // not an array, i. e. just a string
       // I _think_ that sometimes the string comes with whitespace, so make sure to
       // trim it, the Unicode way! (gwyneth 20210419)
@@ -981,6 +998,9 @@ class DBQuery {
 	 * For this we need to remove quotes, semicolons, and various other components
 	 * that could cause us concern.  This is not exhaustive, but covers the most
 	 * common problems.
+   *
+   * @note: This should be progressively replaced by HTML Purifier; being 'not exhaustive' is simply
+   * not enough in the 2020s... (gwyneth 20210501)
 	 */
 	function sanitise($string) {
 		return str_replace(array("'", '"', ')', '(', ';', '--'), '', $string);
