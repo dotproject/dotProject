@@ -53,7 +53,7 @@ $owners = $q->loadHashList();
 
 // setup the title block
 $ttl = $company_id > 0 ? 'Edit Company' : 'Add Company';
-$titleBlock = new CTitleBlock($ttl, 'handshake.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock($ttl, 'handshake.png', $m,  $m . "." . $a);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 if ($company_id != 0) {
 	$titleBlock->addCrumb('?m=companies&amp;a=view&amp;company_id=' . $company_id, 'view this company');

@@ -19,7 +19,10 @@ if ($resource_id && ! $obj->load($resource_id)) {
 	$AppUI->redirect();
 }
 
-$titleBlock = new CTitleBlock((($resource_id) ? 'Edit Resource' : 'Add Resource'), 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
+$titleBlock = new CTitleBlock((($resource_id) ? 'Edit Resource' : 'Add Resource'),
 							   'helpdesk.png', $m, "$m.$a"
 );
 $titleBlock->addCrumb('?m=resources', 'resource list');
@@ -37,34 +40,51 @@ $typelist = $obj->typeSelect();
 <tr>
 <td align='center' >
   <table>
-	<tr><td align='right'><?php echo $AppUI->_('Resource ID'); ?></td>
-  <td align='left'><input type='text' size="15" maxlength="64" name="resource_key"
-    value="<?php echo dPformSafe($obj->resource_key);?>" /></td></tr>
-  <tr><td align='right'><?php echo $AppUI->_('Resource Name'); ?></td>
-  <td align='left'><input type='text' size="30" maxlength="255" name="resource_name"
-    value="<?php echo dPformSafe($obj->resource_name);?>" /></td></tr>
-  <tr><td align='right'><?php echo $AppUI->_('Type'); ?></td>
-  <td align='left'><?php echo arraySelect($typelist, 'resource_type', 'class=select', $obj->resource_type, true);?>
-  </td></tr>
-  <tr><td align='right'><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
-  <td><input type='text' size="5" maxlength="5" value='<?php 
-    if ($obj->resource_max_allocation)
-      echo dPformSafe($obj->resource_max_allocation);
-    else
-      echo '100'; ?>'
-    name='resource_max_allocation'></td></tr>
-  <tr><td align='right'><?php echo $AppUI->_('Notes'); ?></td>
-  <td><textarea name='resource_note' cols="40" rows="5"><?php echo dPformSafe($obj->resource_note);?></textarea>
+	<tr>
+    <td align='right'><?php echo $AppUI->_('Resource ID'); ?></td>
+    <td align='left'><input type='text' size="15" maxlength="64" name="resource_key"
+    value="<?php echo dPformSafe($obj->resource_key);?>" /></td>
+  </tr>
+  <tr>
+    <td align='right'><?php echo $AppUI->_('Resource Name'); ?></td>
+    <td align='left'><input type='text' size="30" maxlength="255" name="resource_name"
+    value="<?php echo dPformSafe($obj->resource_name);?>" /></td>
+  </tr>
+  <tr>
+    <td align='right'><?php echo $AppUI->_('Type'); ?></td>
+    <td align='left'><?php echo arraySelect($typelist, 'resource_type', 'class=select', $obj->resource_type, true);?></td>
+  </tr>
+  <tr>
+    <td align='right'><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
+    <td>
+      <input type='text' size="5" maxlength="5" value='<?php
+        if ($obj->resource_max_allocation)
+          echo dPformSafe($obj->resource_max_allocation);
+        else
+          echo '100'; ?>'
+        name='resource_max_allocation'>
+    </td>
+  </tr>
+  <tr>
+    <td align='right'><?php echo $AppUI->_('Notes'); ?></td>
+    <td>
+<!--  <textarea name='resource_note' cols="40" rows="5"><?php // echo dPformSafe($obj->resource_note);?></textarea> -->
+      <?php
+      $richedit = new DpRichEdit("resource_note", dPsanitiseHTML($obj->resource_note));
+      $richedit->render();
+      ?>
+    </td>
+  </tr>
   </table>
 </td>
 </tr>
 <tr>
   <td>
-    <input type="button" value="<?php echo $AppUI->_('back');?>" 
+    <input type="button" value="<?php echo $AppUI->_('back');?>"
     class="button" onclick="javascript:history.back(-1);" />
   </td>
   <td align="right">
-    <input type="button" value="<?php echo $AppUI->_('submit');?>" 
+    <input type="button" value="<?php echo $AppUI->_('submit');?>"
     class="button" onclick="submitIt(document.editfrm);" />
   </td>
 </tr>

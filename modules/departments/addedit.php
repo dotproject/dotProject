@@ -14,6 +14,7 @@ if (!(($canEdit && $dept_id) || ($canAuthor && !($dept_id)))) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
+// Load the Quill Rich Text Editor
 include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 // pull data for this department
@@ -183,8 +184,8 @@ if (count($depts)) {
 	<td align="left">
 <!--		<textarea cols="70" rows="10" class="textarea" name="dept_desc"><?php // echo @$drow["dept_desc"];?></textarea> -->
     <?php
-    $richedit = new DpRichEdit('dept_desc', $drow["dept_desc"]);
-    $richedit->render();
+      $richedit = new DpRichEdit('dept_desc', @$drow["dept_desc"]);
+      $richedit->render();
     ?>
 	</td>
 </tr>

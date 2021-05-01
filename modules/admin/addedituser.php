@@ -5,8 +5,6 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
-
 $user_id = intval(dPgetParam($_GET, 'user_id', 0));
 
 if ($user_id == 0) {
@@ -21,6 +19,9 @@ if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 //$roles
 // Create the roles class container
 require_once DP_BASE_DIR.'/modules/system/roles/roles.class.php';
@@ -32,7 +33,6 @@ foreach ($roles as $role) {
   $roles_arr[$role['id']] = $role['name'];
 }
 $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
-
 
 $q  = new DBQuery;
 $q->addTable('users', 'u');
@@ -61,18 +61,18 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 
 	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
-	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, "$m.$a");
+	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . "." . $a);
 	if (getPermission('admin', 'view') && getPermission('users', 'view'))
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	if ($user_id > 0) {
-		$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", "view this user" );
+		$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=" . $user_id, "view this user" );
 		if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=$user_id", "edit preferences" );
+		$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=" . $user_id, "edit preferences" );
 		}
 	}
 	$titleBlock->show();
 ?>
-<script  language="javascript">
+<script language="javascript">
 function submitIt() {
     var form = document.editFrm;
     var uid = new Number(form.user_id.value);
@@ -155,7 +155,6 @@ function setDept(key, val) {
 	<input type="hidden" name="username_min_len" value="<?php echo dPgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo dPgetConfig('password_min_len'); ?>)" />
 
-
 <tr>
     <td align="right" width="230">* <?php echo $AppUI->_('Login Name');?>:</td>
     <td>
@@ -230,8 +229,8 @@ echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 <tr>
   <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
   <td colspan="4"><?php
-  $richedit = new DpRichEdit("user_signature", dPsanitiseHTML(@$user['user_signature']));
-  $richedit->render();
+    $richedit = new DpRichEdit("user_signature", dPsanitiseHTML(@$user['user_signature']));
+    $richedit->render();
   //  <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php
   //echo @$user['user_signature']; ?\></textarea> ?>
   </td>

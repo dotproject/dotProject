@@ -28,6 +28,9 @@ else if (!$obj->load($event_id) && $event_id) {
 	$AppUI->redirect();
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // load the event types
 $types = dPgetSysVal('EventType');
 
@@ -260,8 +263,12 @@ echo @$obj->event_title;?>" maxlength="255" />
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">
 	<?php echo $AppUI->_('Description'); ?> :<br/>
-		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php
-echo $obj->event_description;?></textarea></td>
+<!--		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php
+//echo $obj->event_description;?></textarea> -->
+  <?php
+    $richedit = new DpRichEdit("event_description", dPsanitiseHTML($obj->event_description));
+    $richedit->render();
+   ?>
 	</td>
 </tr>
 

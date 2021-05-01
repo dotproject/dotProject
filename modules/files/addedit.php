@@ -71,6 +71,9 @@ if ($obj->file_checkout == 'final' && !($canAdmin)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // setup the title block
 $ttl = (($file_id) ? 'Edit File' : 'Add File');
 $ttl = (($ci) ? 'Checking in' : $ttl);
@@ -218,8 +221,12 @@ echo file_show_attr(); ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 			<td align="left">
-				<textarea name="file_description" class="textarea" style="width:270px"><?php
-echo $obj->file_description; ?></textarea>
+				<!-- <textarea name="file_description" class="textarea" style="width:270px"><?php
+// echo $obj->file_description; ?></textarea> -->
+        <?php
+          $richedit = new DpRichEdit("file_description", dPsanitiseHTML($obj->file_description));
+          $richedit->render();
+        ?>
 			</td>
 		</tr>
 		<tr>

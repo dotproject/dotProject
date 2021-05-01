@@ -10,11 +10,13 @@ if (!defined('DP_BASE_DIR')) {
 if (!$canEdit && !$canAuthor) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
+
+include_once ($AppUI->getLibraryClass('quilljs/richedit.class'));
 require_once($AppUI->getModuleClass ('companies'));
 require_once($AppUI->getModuleClass ('projects'));
 
 // setup the title block
-$titleBlock = new CTitleBlock('Submit Trouble Ticket', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('Submit Trouble Ticket', 'gconf-app-icon.png', $m, $m . "." . $a);
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
 $titleBlock->show();
 
@@ -118,7 +120,13 @@ function submitIt() {
 </tr>
 <tr>
 	<td colspan="2" align="center">
-		<textarea cols="70" rows="10" class="textarea" name="description"><?php echo @$crow["description"];?></textarea>
+<!--
+		<textarea cols="70" rows="10" class="textarea" name="description"><?php //echo @$crow["description"];?></textarea>
+-->
+  <?php
+  $richedit = new DpRichEdit("description", dPsanitiseHTML(@$crow["description"]));
+  $richedit->render();
+  ?>
 	</td>
 </tr>
 <tr>

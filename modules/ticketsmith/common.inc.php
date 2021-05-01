@@ -8,7 +8,7 @@ if (!defined("DP_BASE_DIR")) {
 /* program info */
 $program = "dotProject";
 $version = @$AppUI->getVersion() ?? 'unknown';
-$xmailer = "dotProject (http://dotproject.net/)";
+$xmailer = "dotProject (https://dotproject.net/)";
 
 /* error handler */
 function fatal_error($reason)
@@ -17,12 +17,12 @@ function fatal_error($reason)
 }
 
 /* create read-only output of list values */
-function chooseSelectedValue($name, $options, $selected)
-{
+function chooseSelectedValue($name, $options, $selected) {
+  $output = '';
   //	while (list($key, $val) = each($options)) {  // deprecated and obsolete in PHP 8.0 (gwyneth 20210424)
-  foreach ($options as $key => $val) {
+  foreach ($options as $key => $val) {  // TODO: There should be an easier way of doing this (gwyneth 20210501)
     if ($key == $selected) {
-      $output = "$val\n";
+      $output = $val . "\n";
     }
   }
   return $output;
@@ -36,13 +36,13 @@ function create_selectbox($name, $options, $selected)
 
   //	while (list($key, $val) = each($options)) {  // see above
   foreach ($options as $key => $val) {
-    $output .= "<option value=\"$key\"";
+    $output .= "<option value=\"" . $key . "\"";
 
     if ($key == $selected) {
       $output .= " selected";
     }
 
-    $output .= ">$val\n";
+    $output .= ">" . $val . "\n";
     //$loop++;
   }
 
@@ -102,7 +102,7 @@ function get_time_ago($timestamp)
     $output = "year";
   }
 
-  if ($interval > 1) {
+  if ($interval != 1) {  // Was > 1; however we also say "0 seconds ago" and not "0 second ago" (gwyneth 20210501)
     $output .= "s";
   }
 
@@ -287,13 +287,13 @@ function format_field($value, $type, $ticket = null)
       $priority = $CONFIG["priority_names"][$value];
       $color = $CONFIG["priority_colors"][$value];
       if ($value == 3) {
-        $priority = "<strong>$priority</strong>";
+        $priority = "<strong>" . $priority . "</strong>";
       }
       if ($value == 4) {
-        $priority = "<blink><strong>$priority</strong></blink>";
+        $priority = "<blink><strong>" . $priority . "</strong></blink>";
       }
 
-      $output = "<font color=\"$color\">$priority</font>";
+      $output = "<font color=\"" . $color . "\">" . $priority . "</font>";
       break;
     case "priority_select":
       if ($canEdit) {
@@ -333,15 +333,15 @@ function format_field($value, $type, $ticket = null)
           $value = $latest_value;
         }
       }
-      $output = "<a href='?m=ticketsmith&amp;a=view&amp;ticket=$value'>$value&nbsp;";
-      $output .= "<img src='images/icons/pencil.gif' border='0' alt='' /></a>";
+      $output = "<a href='?m=ticketsmith&amp;a=view&amp;ticket=" . $value . "'>" . $value . "&nbsp;";
+      $output .= "<img src='images/icons/pencil.gif' border='0' alt='Edit' /></a>";
       break;
     case "attach":
-      $output = "<a href='?m=ticketsmith&amp;a=attach&amp;ticket=$value'>";
+      $output = "<a href='?m=ticketsmith&amp;a=attach&amp;ticket=" . $value . "'>";
       $output .= "Link</a>";
       break;
     case "doattach":
-      $output = "<a href='?m=ticketsmith&amp;a=attach&amp;newparent=$value&amp;dosql=reattachticket&amp;ticket=$ticket'>";
+      $output = "<a href='?m=ticketsmith&amp;a=attach&amp;newparent=" . $value . "&amp;dosql=reattachticket&amp;ticket=" . $ticket . "'>";
       $output .= "Link</a>";
       break;
     case "open_date":
@@ -367,13 +367,13 @@ function format_field($value, $type, $ticket = null)
       $latest_followup_type = $q->loadResult();
       if ($latest_followup_type) {
         $latest_followup_type = preg_replace("/(\w+)\s.*/", "\\1", $latest_followup_type);
-        $output .= " [$latest_followup_type]";
+        $output .= " [" . $latest_followup_type . "]";
       }
       break;
     case "elapsed_date":
       $output = date($CONFIG["date_format"], $value);
       $time_ago = get_time_ago($value);
-      $output .= " <em>($time_ago)</em>";
+      $output .= " <em>(" . $time_ago . ")</em>";
       break;
     case "body":
       if ($CONFIG["wordwrap"]) {
@@ -418,15 +418,15 @@ function format_field($value, $type, $ticket = null)
       $value = preg_replace("/(\[\#\d+\])(\w+)/", "\\2", $value);
       $value = "Re: " . $value;
       $value = htmlspecialchars($value);
-      @$output .= "<input type=\"text\" name=\"subject\" value=\"$value\" size=\"70\" />\n";
+      @$output .= "<input type=\"text\" name=\"subject\" value=\"" . $value . "\" size=\"70\" />\n";
       break;
     case "cc":
       $value = htmlspecialchars($value);
-      $output = "<input type=\"text\" name=\"cc\" value=\"$value\" size=\"70\" />";
+      $output = "<input type=\"text\" name=\"cc\" value=\"". $value . "\" size=\"70\" />";
       break;
     case "recipient":
       $value = htmlspecialchars($value);
-      $output = "<input type=\"text\" name=\"recipient\" value=\"$value\" size=\"70\" />";
+      $output = "<input type=\"text\" name=\"recipient\" value=\"" . $value . "\" size=\"70\" />";
       break;
     case "original_author":
       if ($value) {

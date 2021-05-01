@@ -15,7 +15,7 @@ $priority_toggle = (int)dPgetParam($_POST, 'priority_toggle', '');
 $assignment_toggle = (int)dPgetParam($_POST, 'assignment_toggle', '');
 
 // setup the title block
-$titleBlock = new CTitleBlock('View Ticket', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('View Ticket', 'gconf-app-icon.png', $m, $m . "." . $a);
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
 $titleBlock->addCrumb("?m=ticketsmith&amp;type=My", "my tickets");
 $titleBlock->show();
@@ -36,7 +36,7 @@ if ($ticket_type == "Staff Followup" || $ticket_type == "Client Followup") {
 }
 else if ($ticket_type == "Staff Comment") {
 
-    $title = $AppUI->_($ticket_type)." ".$AppUI->_('to Ticket')." #$ticket_parent";
+    $title = $AppUI->_($ticket_type)." ".$AppUI->_('to Ticket')." #" . $ticket_parent;
 
     $fields = array("headings" => array("From",   "Date",         "<br />"),
                     "columns"  => array("author", "timestamp",    "body"),
@@ -90,7 +90,7 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "Author   : " . $author  . "\n";
 	$message .= "Subject  : " . $subject . "\n";
 	$message .= "View     : ".DP_BASE_URL."/?m=ticketsmith&amp;a=view&amp;ticket=" . $ticket . "\n";
-	$message .= "\n--$boundary\n";
+	$message .= "\n--" . $boundary . "\n";
 	$message .= "Content-disposition: inline\n";
 	$message .= "Content-type: text/html\n\n";
 	$message .= "<html>\n";
@@ -106,9 +106,9 @@ if (@$type_toggle || @$priority_toggle || @$assignment_toggle) {
 	$message .= "\n";
 	$message .= "<table border='0' cellpadding='4' cellspacing='1'>\n";
 	$message .= "	<tr>\n";
-	$message .= "	<td valign=top><img src=".DP_BASE_URL."/images/icons/ticketsmith.gif alt= border=0 width=42 height=42></td>\n";
+	$message .= "	<td valign=top><img src=".DP_BASE_URL."/images/icons/ticketsmith.gif alt='logo' border='0' width='42' height='42'></td>\n";
 	$message .= "		<td nowrap='nowrap'><span class=title>".$AppUI->_('Trouble Ticket Management -')  . $change ."</span></td>\n";
-	$message .= "		<td valign=top align=right width=100%>&nbsp;</td>\n";
+	$message .= "		<td valign='top' align='right' width='100%'>&nbsp;</td>\n";
 	$message .= "	</tr>\n";
 	$message .= "</table>\n";
 	$message .= "<table width='600' border='0' cellpadding='4' cellspacing='1' bgcolor='#878676'>\n";
@@ -369,7 +369,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
                 $peer_strings[$loop] = "<strong>" . ($loop + 1) . "</strong>";
             }
             else {
-                $peer_strings[$loop] = "<a href=\"?m=ticketsmith&amp;a=view&amp;ticket=$peer_tickets[$loop]\">" . ($loop + 1) . "</a>";
+                $peer_strings[$loop] = "<a href=\"?m=ticketsmith&amp;a=view&amp;ticket=" . $peer_tickets[$loop] . "\">" . ($loop + 1) . "</a>";
             }
         }
 
@@ -395,9 +395,7 @@ if ($ticket_type != "Staff Followup" && $ticket_type != "Client Followup" && $ti
 
         /* end row */
         print("</tr>\n");
-
     }
-
 }
 
 /* output action links */

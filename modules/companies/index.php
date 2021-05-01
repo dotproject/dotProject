@@ -56,15 +56,15 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id',
                            $owner_filter_id, false);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, $m . "." . $a);
 $titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string='
-                      . dPformSafe($search_string) . '" method="post">' . "\n"
+                      . dPformSafe($search_string) . '" method="post">' . '\n'
                       . '<table><tr><td><strong>' . $AppUI->_('Search')
                       . '</strong><input autofocus class="text" type="search" name="search_string" value="'
                       .  dPformSafe($search_string) . '" /><br />'
                       . '<a href="index.php?m=companies&amp;search_string=-1">'
                       . $AppUI->_('Reset search') . '</a></td><td valign="top"><strong>'
-                      . $AppUI->_('Owner filter').'</strong> ' . $owner_combo
+                      . $AppUI->_('Owner filter') . '</strong> ' . $owner_combo
                       . ' </td></tr></table></form>'));
 
 $search_string = addslashes($search_string);
