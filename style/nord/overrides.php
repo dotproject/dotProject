@@ -6,6 +6,15 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly');
 }
+
+// Override overLib styling, to keep in theme (gwyneth 20210430)
+// Allows users to override the override :-)
+GLOBAL $dPconfig;
+
+if (empty($dPconfig['overlib_extra_parameters'])) {
+  $dPconfig['overlib_extra_parameters'] = ",FGCOLOR,'#8fbcbb',BGCOLOR,'#4c566a',TEXTCOLOR,'#d8dee9',CAPCOLOR,'#434c5e',CLOSECOLOR,'#bf616a',TEXTFONT,'Inter,Sans-Serif',CAPTIONFONT,'Inter,Sans-Serif',CLOSEFONT,'Inter,Sans-Serif'";
+}
+
 class CTitleBlock extends CTitleBlock_core {
 }
 
