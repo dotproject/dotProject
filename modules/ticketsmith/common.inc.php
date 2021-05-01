@@ -473,7 +473,7 @@ function format_field($value, $type, $ticket = null)
 }
 
 /* figure out parent & type */
-if (!empty(($ticket)) {  // was: isset($ticket) (gwyneth 20210430)
+if (!empty($ticket)) {  // was: isset($ticket) (gwyneth 20210430)
   $q = new DBQuery();
   $q->addQuery("type, parent");
   $q->addTable("tickets");
