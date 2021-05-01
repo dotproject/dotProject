@@ -2811,7 +2811,7 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				. '</p></div>')) . "', CAPTION, '"
 			. $AppUI->_('Description')
 			. "'" . ', CENTER' . ($dPconfig['overlib_extra_parameters'] ?? '') . ');" onmouseout="nd();"');
-      dprint(__FILE__, __LINE__, 11, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'"); ?>
+      dprint(__FILE__, __LINE__, 11, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'");
 	}
 
 	if (!empty($a['task_milestone'])) { // changed as above; it was: $a['task_milestone'] > 0 (gwyneth 20210425)
