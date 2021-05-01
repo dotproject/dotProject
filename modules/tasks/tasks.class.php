@@ -2675,7 +2675,7 @@ function closeOpenedTaskRecursive($task_id) {
 function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOpenCloseLink=false
 				  , $allowRepeat = false) {
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $tasks_opened, $user_id;
+	global $tasks_opened, $user_id, $dPconfig;
 
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());  // does this write _globally_? Is that a good idea? (gwyneth 20210425)
 	$done = (($done) ? $done : array());
@@ -2810,7 +2810,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				. str_replace(array('"', "'"), array("&quot;", "\\'"), $a['task_description'])
 				. '</p></div>')) . "', CAPTION, '"
 			. $AppUI->_('Description')
-			. "'" . ', CENTER);" onmouseout="nd();"');
+			. "'" . ', CENTER' . ($dPconfig['overlib_extra_parameters'] ?? '') . ');" onmouseout="nd();"');
+      dprint(__FILE__, __LINE__, 11, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'"); ?>
 	}
 
 	if (!empty($a['task_milestone'])) { // changed as above; it was: $a['task_milestone'] > 0 (gwyneth 20210425)
