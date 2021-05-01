@@ -101,8 +101,16 @@ function submitIt(form) {
 }
 
 function addUser(form) {
-  var fl = form.resources.length - 1;
-  var au = form.assigned.length - 1;
+  if (form.resources != null) {
+    var fl = form.resources.length - 1; // no dependencies (gwyneth 20210501)
+  } else {
+    var fl = -1;
+  }
+  if (form.assigned != null) {
+    var au = form.assigned.length - 1; // no dependencies (gwyneth 20210501)
+  } else {
+    var au = -1;
+  }
   //gets value of percentage assignment of selected resource
   var perc = form.percentage_assignment.options[form.percentage_assignment.selectedIndex].value;
 
