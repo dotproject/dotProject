@@ -121,9 +121,9 @@ if (!empty($row['project_description'])) { ?>onmouseover="return overlib('<?php
 echo(htmlspecialchars(('<div><p>' . str_replace(array("\r\n", "\n", "\r"), '</p><p>',
                                                 addslashes($row['project_description']))
                        . '</p></div>'), ENT_QUOTES)); ?>', CAPTION, '<?php
-echo($AppUI->_('Description')); ?>', CENTER<?php $dPconfig['overlib_extra_parameters'] ?? '' ?>);" onmouseout="nd();"<?php } ?>>
+echo($AppUI->_('Description')); ?>', CENTER<?php $dPconfig['overlib_extra_parameters'] ?? ', DONOTHING' ?>);" onmouseout="nd();"<?php } ?>>
 		<?php echo (htmlspecialchars($row['project_name'], ENT_QUOTES));
-    dprint(__FILE__, __LINE__, 11, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'"); ?>
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: (No function) Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'"); ?>
 		</a>
 	</td>
 	<td nowrap="nowrap">

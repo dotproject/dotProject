@@ -12,7 +12,7 @@ if (!defined('DP_BASE_DIR')) {
 GLOBAL $dPconfig;
 
 if (empty($dPconfig['overlib_extra_parameters'])) {
-  $dPconfig['overlib_extra_parameters'] = ",FGCOLOR,'#8fbcbb',BGCOLOR,'#4c566a',TEXTCOLOR,'#d8dee9',CAPCOLOR,'#434c5e',CLOSECOLOR,'#bf616a',TEXTFONT,'Inter,Sans-Serif',CAPTIONFONT,'Inter,Sans-Serif',CLOSEFONT,'Inter,Sans-Serif'";
+  $dPconfig['overlib_extra_parameters'] = ",FGCOLOR,'#3b4252',BORDER,1,BGCOLOR,'#88c0d0',TEXTCOLOR,'#d8dee9',CAPCOLOR,'#5e81ac',CLOSECOLOR,'#bf616a',TEXTFONT,'Inter,Sans-Serif',CAPTIONFONT,'Inter,Sans-Serif',CLOSEFONT,'Inter,Sans-Serif'";
 }
 
 class CTitleBlock extends CTitleBlock_core {

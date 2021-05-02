@@ -178,10 +178,10 @@
 }
 
 .ql-snow .ql-stroke {
-  stroke: #4b556a; /* nord3 */
+  stroke: #d8dee9; /* nord4 */
 }
 .ql-snow .ql-stroke-miter {
-  stroke: #4b556a; /* nord3 */
+  stroke: #d8dee9; /* nord4 */
 }
 /* this is inside the SVG, so we want it as bright as possible */
 .ql-snow .ql-fill,

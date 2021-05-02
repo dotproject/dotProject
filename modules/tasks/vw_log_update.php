@@ -287,10 +287,10 @@ echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...')
         <td>
 	    <!--<textarea name="task_log_description" class="textarea" cols="50" rows="6"><?php
 // echo $log->task_log_description; ?></textarea>-->
-	    <?php
-		    $richedit = new DpRichEdit('task_log_description', $log->task_log_description);
-		    $richedit->render();
-	    ?>
+  	    <?php
+  		    $richedit = new DpRichEdit('task_log_description', $log->task_log_description);
+  		    $richedit->render();
+  	    ?>
         </td>
       </tr>
       <tr>

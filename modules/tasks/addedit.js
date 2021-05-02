@@ -133,7 +133,11 @@ function addUser(form) {
 }
 
 function removeUser(form) {
-  var fl = form.assigned.length - 1;
+  if (form.assigned != null) {
+    var fl = form.assigned.length - 1;
+  } else {
+    var fl = -1;
+  }
   for (fl; fl > -1; fl--) {
     if (form.assigned.options[fl].selected) {
       //remove from hperc_assign
@@ -155,7 +159,11 @@ function removeUser(form) {
 
 //Check to see if None has been selected.
 function checkForTaskDependencyNone(obj) {
-  var td = obj.length - 1;
+  if (obj != null) {
+    var td = obj.length - 1;
+  } else {
+    var td = -1;
+  }
   for (td; td > -1; td--) {
     if (obj.options[td].value == task_id) {
       clearExceptFor(obj, task_id);
@@ -166,7 +174,11 @@ function checkForTaskDependencyNone(obj) {
 
 //If None has been selected, remove the existing entries.
 function clearExceptFor(obj, id) {
-  var td = obj.length - 1;
+  if (obj != null) {
+    var td = obj.length - 1;
+  } else {
+    var td = -1;
+  }
   for (td; td > -1; td--) {
     if (obj.options[td].value != id) {
       obj.options[td] = null;
@@ -175,7 +187,12 @@ function clearExceptFor(obj, id) {
 }
 
 function addTaskDependency(form, datesForm) {
-  var at = form.all_tasks.length - 1;
+  if (form.all_tasks != null) {
+    var at = form.all_tasks.length - 1;
+  } else {
+    var at = -1;
+  }
+
   if (form.task_dependencies != null) {
     var td = form.task_dependencies.length - 1; // no dependencies (gwyneth 20210425)
   } else {
@@ -565,10 +582,15 @@ function checkDates(form, id) {
 }
 
 function copyForm(form, to, extras) {
+  if (form.elements != null) {
+    var fl = form.elements.length - 1;
+  } else {
+    var fl = -1;
+  }
   // Grab all of the elements in the form, and copy them
   // to the main form.  Do not copy hidden fields.
   var h = new HTMLex();
-  for (var i = 0; i < form.elements.length; i++) {
+  for (var i = 0; i < fl; i++) {
     var elem = form.elements[i];
     if (elem.type == "hidden") {
       // If we have anything in the extras array we check to see if we
@@ -661,7 +683,11 @@ function checkResource(form, id) {
 }
 
 function saveResource(form, id) {
-  var fl = form.assigned.length - 1;
+  if (form.assigned != null) {
+    var fl = form.assigned.length - 1;
+  } else {
+    var fl = -1;
+  }
   var ha = form.hassign;
   ha.value = "";
   for (fl; fl > -1; fl--) {
