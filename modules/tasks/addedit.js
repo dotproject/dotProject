@@ -123,8 +123,13 @@ function addUser(form) {
 
   //Pull selected resources and add them to list
   for (fl; fl > -1; fl--) {
-    if (form.resources.options[fl].selected && users.indexOf("," + form.resources.options[fl].value + ",") == -1) {
-      t = form.assigned.length;
+    if (form.resources.options[fl].selected && users.indexOf("," + form.resources.options[fl].value + ",") == -1)
+    {
+      if (form.assigned != null) {
+        t = form.assigned.length;
+      } else {
+        t = 0;  // is this correct ? (gwyneth 20210503)
+      }
       opt = new Option(form.resources.options[fl].text + " [" + perc + "%]", form.resources.options[fl].value);
       form.hperc_assign.value += form.resources.options[fl].value + "=" + perc + ";";
       form.assigned.options[t] = opt;
