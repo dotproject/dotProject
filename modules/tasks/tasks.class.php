@@ -2810,8 +2810,8 @@ function showtask(&$a, $level=0, $is_opened = true, $today_view = false, $hideOp
 				. str_replace(array('"', "'"), array("&quot;", "\\'"), $a['task_description'])
 				. '</p></div>')) . "', CAPTION, '"
 			. $AppUI->_('Description')
-			. "', CENTER" .  ($dPconfig['overlib_extra_parameters'] ?? ', DONOTHING') . ');" onmouseout="nd();"');
-      dprint(__FILE__, __LINE__, 2, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . ($dPconfig['overlib_extra_parameters'] ?? '[empty]') . "'");
+			. "', CENTER" .  dPgetConfig('overlib_extra_parameters', ', DONOTHING') . ');" onmouseout="nd();"');
+      dprint(__FILE__, __LINE__, 2, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . dPgetConfig('overlib_extra_parameters', '[empty]') . "'");
 	}
 
 	if (!empty($a['task_milestone'])) { // changed as above; it was: $a['task_milestone'] > 0 (gwyneth 20210425)

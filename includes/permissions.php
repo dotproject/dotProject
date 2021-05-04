@@ -112,13 +112,13 @@ function getPermission($mod, $perm, $item_id = 0) {
 }
 
 
-// TODO: getDeny* should be depricated as its usage is counter-intuitive and/or assuming
+// TODO: getDeny* should be deprecated as its usage is counter-intuitive and/or assuming
 // Simply using getPermission function is clearer
 function getDenyRead($mod, $item_id = 0) {
  	return ! getPermission($mod, 'view', $item_id);
 }
 
-function getDenyEdit($mod, $item_id=0) {
+function getDenyEdit($mod, $item_id = 0) {
  	return ! getPermission($mod, 'edit', $item_id);
 }
 

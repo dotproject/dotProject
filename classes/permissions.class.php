@@ -96,7 +96,8 @@ class dPacl extends gacl_api {
     $q->addWhere('aro.value=' . (int)$login);
     $q->setLimit(1);
     $arr=$q->loadHash();
-    return !empty($arr) ? 1 : 0;
+//    return !empty($arr) ? 1 : 0;
+    return (int)($arr ?? PERM_DENY);  // this is a bit tricky, but we were missing the -1 permission...
   }
 
 	function checkModule($module, $op, $userid = null) {
@@ -107,19 +108,19 @@ class dPacl extends gacl_api {
     $q = new DBQuery;
     $q->addQuery('allow');
     $q->addTable('dotpermissions', 'dp');
-    $q->addWhere("permission='$op' AND axo='$module' AND user_id='$userid' and section='app'");
+    $q->addWhere("permission='" . $op . "' AND axo='" . $module . "' AND user_id='" . $userid . "' and section='app'");
     $q->addOrder('priority ASC, acl_id DESC');
     $q->setLimit(1);
     $arr = $q->loadHash();
 
     if (!empty($arr) && is_array($arr) && isset($arr['allow'])) {  // extra check for null! (gwyneth 20210416)
-      $result = $arr['allow'];
+      $result = (int) $arr['allow'];
     } else {
-      $result = null;
+      $result = PERM_DENY;
     }
     //echo $result;
     if ($module == "projects") {
-      dprint(__FILE__, __LINE__, 2,  "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . "(should be either -1, 0, or 1).");
+      dprint(__FILE__, __LINE__, 2,  "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op . "," . ($userid ?? '[nobody]') . ") returned " . $result . " (should be either -1, 0, or 1).");
     }
     return $result;
 	/*
@@ -141,22 +142,22 @@ class dPacl extends gacl_api {
 		$q = new DBQuery;
 		$q->addQuery('allow');
 		$q->addTable('dotpermissions');
-		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$userid' and section='$module'");
+		$q->addWhere("permission='" . $op . "' AND axo='" . $item . "' AND user_id='" . $userid . "' and section='" . $module . "'");
 		$q->addOrder('priority ASC,acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
-    if (isset($arr['allow'])) {
-      $result = $arr['allow'];
+    if (!empty($arr) && !empty($arr['allow'])) {  // safer using `empty()` (gwyneth 20210504)
+      $result = (int) $arr['allow'];
     } else {
       $result = null;  // no record returned, so it will be called below (gwyneth 20210415)
     }
 		if (empty($result)) {  // it's better to check for empty() since it catches a lot more things (gwyneth 20210415)
 			dprint(__FILE__, __LINE__, 2,
-			  "[WARN]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") did not return a record");
+			  "[WARN]: " . __FUNCTION__ . "(" . $module . "," . $op . "," . ($userid ?? '[nobody]') . ") did not return a record");
 			return $this->checkModule($module, $op, $userid);
 		}
 		dprint(__FILE__, __LINE__, 2,
-      "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . ".");
+      "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op . "," . ($userid ?? '[nobody]') . ") returned " . $result . ".");
 		return $result;
 	}
 
@@ -166,19 +167,21 @@ class dPacl extends gacl_api {
 	 * If we get an ACL ID, and we get allow = false, then the item is
 	 * actively denied.	Any other combination is a soft-deny (i.e. not
 	 * strictly allowed, but not actively denied.
+   *
+   * @note I _might_ have broken this with too much error checking... (gwyneth 20210504)
 	 */
 	function checkModuleItemDenied($module, $op, $item, $user_id = null) {
 		if (!$user_id) {
-			$user_id = $GLOBALS['AppUI']->user_id;
+			$user_id = $GLOBALS['AppUI']->user_id ?? 0;  // `?? 0` ought to do the trick (gwyneth 20210504)
 		}
 		$q = new DBQuery;
 		$q->addQuery('allow');
 		$q->addTable('dotpermissions');
-		$q->addWhere("permission='$op' AND axo='$item' AND user_id='$user_id' and section='$module'");
+		$q->addWhere("permission='" . $op . "' AND axo='" . $item . "' AND user_id='" . $user_id . "' and section='" . $module . "'");
 		$q->addOrder('priority ASC, acl_id DESC');
 		$q->setLimit(1);
 		$arr = $q->loadHash();
-		if($arr && !$arr['allow']) {
+		if(!empty($arr) && !empty($arr['allow'])) {  // it's safer to use `empty()` (gwyneth 20210504)
 			return true;
 		} else {
 			return false;

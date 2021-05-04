@@ -699,7 +699,7 @@ class DBQuery {
 				return $this->_query_id;
 			}
 		}
-    dprint(__FILE__, __LINE__, 7, "_query_id is now: " . print_r($this->_query_id, true));
+    dprint(__FILE__, __LINE__, 11, "_query_id is now: " . print_r($this->_query_id, true));
 		return $this->_query_id;
 	}
 

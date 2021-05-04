@@ -186,7 +186,7 @@ function breadCrumbs(&$arr) {
 function dPcontextHelp($title, $link='') {
 	global $AppUI;
 	return ('<a href="#' . $AppUI->___($link) . '" onClick="'
-	        . "javascript:window.open('?m=help&dialog=1&hid=$link', 'contexthelp', "
+	        . "javascript:window.open('?m=help&dialog=1&hid='" . $link , "', 'contexthelp', "
 	        . "'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')" . '">'
 			. $AppUI->_($title).'</a>');
 }
@@ -201,6 +201,9 @@ function dPcontextHelp($title, $link='') {
 function dPgetConfig($key, $default = null) {
 	global $dPconfig;
 	return ((array_key_exists($key, $dPconfig)) ? $dPconfig[$key] : $default);
+  // note: From PHP7 onwards,  it could be enough to do
+  //  return $dPconfig[$key] ?? $default;
+  // (gwyneth 20210504)
 }
 
 function dPgetUsername($user) {
@@ -757,9 +760,9 @@ function dprint($file = null, $line = 0, $level = 0, $msg = "") {
   global $baseDir;  // assuming it exists...
 
 	// $max_level = /* 0; */ 2;  // temporarily (forcefully) set to get it to display SOMEthing! (gwyneth 20210416)
-	$max_level = (int) dPgetConfig('debug', 2);  // provide a reasonable default (gwyneth 20210414)
-	$display_debug = (int) dPgetConfig('display_debug', 0);
-  $error_log_file = dPgetConfig('error_log_file', '');  // this allows using a different place to log errors
+	$max_level      = (int) dPgetConfig('debug', 0);          // provide a reasonable default (gwyneth 20210414)
+	$display_debug  = (int) dPgetConfig('display_debug', 0);
+  $error_log_file = dPgetConfig('error_log_file', '');      // this allows using a different place to log errors
   // this will get us shorter error logs! (gwyneth 20210416)
   if (!empty($baseDir)) {
     $file = str_replace($baseDir, "", $file);
