@@ -11,7 +11,7 @@ if (!defined('DP_BASE_DIR')) {
 // Permission flags used in the DB
 
 define('PERM_DENY', '0');
-define('PERM_DENY', '-1');
+define('PERM_EDIT', '-1');
 define('PERM_READ', '1');
 
 define('PERM_ALL', '-1');

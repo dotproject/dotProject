@@ -79,7 +79,7 @@ class dPacl extends gacl_api {
    * Simple function to check if the user belongs to a group
    *
    * @param integer $login is the user ID; set to 0 by default (which will always fail)
-   + @return integer is one of: (PERM_DENY, PERM_DENY, PERM_READ, PERM_ALL)
+   + @return integer is one of: (PERM_DENY, PERM_EDIT, PERM_READ, PERM_ALL)
    */
 	function checkLogin($login = 0) {
 		//Simple ARO<->ACO check, no AXO's required.
