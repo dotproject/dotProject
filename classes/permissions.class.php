@@ -118,7 +118,9 @@ class dPacl extends gacl_api {
       $result = null;
     }
     //echo $result;
-    dprint(__FILE__, __LINE__, 2, "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . " (should be either -1, 0, or 1).");
+    if ($module == "projects") {
+      dprint(__FILE__, __LINE__, 2,  "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . "(should be either -1, 0, or 1).");
+    }
     return $result;
 	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);

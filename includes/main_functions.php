@@ -756,9 +756,10 @@ function format_backtrace($bt, $file, $line, $msg) {
 function dprint($file = null, $line = 0, $level = 0, $msg = "") {
   global $baseDir;  // assuming it exists...
 
-	$max_level = /* 0; */ 2;  // temporarily (forcefully) set to get it to display SOMEthing! (gwyneth 20210416)
-	// $max_level = (int) dPgetConfig('debug', 0);  // provide a reasonable default (gwyneth 20210414)
+	// $max_level = /* 0; */ 2;  // temporarily (forcefully) set to get it to display SOMEthing! (gwyneth 20210416)
+	$max_level = (int) dPgetConfig('debug', 2);  // provide a reasonable default (gwyneth 20210414)
 	$display_debug = (int) dPgetConfig('display_debug', 0);
+  $error_log_file = dPgetConfig('error_log_file', '');  // this allows using a different place to log errors
   // this will get us shorter error logs! (gwyneth 20210416)
   if (!empty($baseDir)) {
     $file = str_replace($baseDir, "", $file);
@@ -768,7 +769,11 @@ function dprint($file = null, $line = 0, $level = 0, $msg = "") {
   // Figure out if we have file _and_ line to print; if not, suppress the prefix
   $prefix = dPrefix($file, $line);
 	if ($level <= $max_level) {
-		error_log($prefix . $msg . PHP_EOL); // PHP_EOL should be a configurable option (gwyneth 20210416)
+    if (empty($error_log_file)) {  // use standard stderr/syslog
+		  error_log($prefix . $msg . PHP_EOL); // PHP_EOL should be a configurable option (gwyneth 20210416)
+    } else {
+      error_log($prefix . $msg . PHP_EOL, 3, $error_log_file);  // write to a user-defined log file; in this case, PHP_EOL is mandatory, as per https://www.php.net/manual/en/function.error-log.php (gwyneth 20210504)
+    }
 		if ($display_debug) {
 			echo $prefix . $msg . " <br />" . PHP_EOL;
 		}
