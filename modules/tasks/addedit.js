@@ -477,7 +477,7 @@ function calcFinish(f) {
   f.task_end_date.value = e.toISOString().substring(0, 19);
   // }
 
-  var tz1 = "";
+  var tz1 = "";  // unused? (gwyneth 20210503)
   var tz2 = "";
 
   // if there was no fullworkingday we have to check whether the end day is a working day

@@ -75,7 +75,13 @@ class dPacl extends gacl_api {
     // else do nothing, don't call anything (gwyneth 20210414)
 	}
 
-	function checkLogin($login) {
+  /**
+   * Simple function to check if the user belongs to a group
+   *
+   * @param integer $login is the user ID; set to 0 by default (which will always fail)
+   + @return integer is one of: (PERM_DENY, PERM_DENY, PERM_READ, PERM_ALL)
+   */
+	function checkLogin($login = 0) {
 		//Simple ARO<->ACO check, no AXO's required.
 		//return $this->acl_check('system', 'login', 'user', $login);
     // For dotproject, this is equivalent to check if the user belongs to a group.
@@ -83,14 +89,14 @@ class dPacl extends gacl_api {
     // because that should involve to check for nested ACOs when building the dotpermissions table, which
     // would make it a bit more complex.
     //
-   $q = new DBQuery;
-   $q->addQuery('aro.value,aro.name, gr_aro.group_id');
-   $q->addTable('gacl_aro', 'aro');
-   $q->innerJoin('gacl_groups_aro_map', 'gr_aro', 'aro.id=gr_aro.aro_id');
-   $q->addWhere('aro.value=' . (int)$login);
-   $q->setLimit(1);
-   $arr=$q->loadHash();
-   return $arr?1:0;
+    $q = new DBQuery;
+    $q->addQuery('aro.value,aro.name, gr_aro.group_id');
+    $q->addTable('gacl_aro', 'aro');
+    $q->innerJoin('gacl_groups_aro_map', 'gr_aro', 'aro.id=gr_aro.aro_id');
+    $q->addWhere('aro.value=' . (int)$login);
+    $q->setLimit(1);
+    $arr=$q->loadHash();
+    return !empty($arr) ? 1 : 0;
   }
 
 	function checkModule($module, $op, $userid = null) {
@@ -98,22 +104,22 @@ class dPacl extends gacl_api {
 			$userid = $GLOBALS['AppUI']->user_id ?? 0; // zero seems to be "safer"... (gwyneth 20210416)
 		}
 
-	    $q = new DBQuery;
-	    $q->addQuery('allow');
-	    $q->addTable('dotpermissions', 'dp');
-	    $q->addWhere("permission='$op' AND axo='$module' AND user_id='$userid' and section='app'");
-	    $q->addOrder('priority ASC, acl_id DESC');
-	    $q->setLimit(1);
-	    $arr=$q->loadHash();
+    $q = new DBQuery;
+    $q->addQuery('allow');
+    $q->addTable('dotpermissions', 'dp');
+    $q->addWhere("permission='$op' AND axo='$module' AND user_id='$userid' and section='app'");
+    $q->addOrder('priority ASC, acl_id DESC');
+    $q->setLimit(1);
+    $arr = $q->loadHash();
 
-	    if (!empty($arr) && is_array($arr) && isset($arr['allow'])) {  // extra check for null! (gwyneth 20210416)
-        $result=$arr['allow'];
-      } else {
-        $result=null;
-      }
-	    //echo $result;
-	    dprint(__FILE__, __LINE__, 8, "checkModule( $module, $op, $userid) returned $result");
-	    return $result;
+    if (!empty($arr) && is_array($arr) && isset($arr['allow'])) {  // extra check for null! (gwyneth 20210416)
+      $result = $arr['allow'];
+    } else {
+      $result = null;
+    }
+    //echo $result;
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . " (should be either -1, 0, or 1).");
+    return $result;
 	/*
 		$module = (($module == 'sysvals') ? 'system' : $module);
 		$result = $this->acl_check('application', $op, 'user', $userid, 'app', $module);
@@ -138,17 +144,17 @@ class dPacl extends gacl_api {
 		$q->setLimit(1);
 		$arr = $q->loadHash();
     if (isset($arr['allow'])) {
-      $result=$arr['allow'];
+      $result = $arr['allow'];
     } else {
       $result = null;  // no record returned, so it will be called below (gwyneth 20210415)
     }
 		if (empty($result)) {  // it's better to check for empty() since it catches a lot more things (gwyneth 20210415)
-			dprint(__FILE__, __LINE__, 8,
-			       "checkModuleItem($module, $op, $userid) did not return a record");
+			dprint(__FILE__, __LINE__, 2,
+			  "[WARN]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") did not return a record");
 			return $this->checkModule($module, $op, $userid);
 		}
-		dprint(__FILE__, __LINE__, 8,
-		       "checkModuleItem($module, $op, $userid) returned " . $result);
+		dprint(__FILE__, __LINE__, 2,
+      "[DEBUG]: " . __FUNCTION__ . "(" . $module . "," . $op , "," . $userid . ") returned " . $result . ".");
 		return $result;
 	}
 
