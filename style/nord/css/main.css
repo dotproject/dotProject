@@ -52,7 +52,7 @@ eye-comfortable, but yet colorful ambiance.
 */
 
 /* dotPROJECT REQUIRED CLASSES */
-body {
+body, body.loginform {
   background-color: #2e3440; /* nord0 */
   color: #e5e9f0; /* nord5 */
   margin-top: 0px;
@@ -153,11 +153,33 @@ h3 {
 }
 
 .bordertable {
-  border: 1px #4c566a solid; /* nord3 */
+  border: 1px #3a4252 solid; /* nord1 */
   border-radius: 0.1rem;
+  background-color: #434b5e; /* nord2 */
+}
+table.bordertable td {
+  background-color: #4b556a; /* nord3 */
+}
+table.bordertable td.companyName {
+  background-color: #5e81ac; /* nord10 */
 }
 
-.smallNorm {  /* not defined anywhere... :-( (gwyneth 20210501) */
+/* standard classes to avoid in-line HTML styling (gwyneth 20210504) */
+.align-right {
+  text-align: right;
+}
+.align-left {
+  text-align: left;
+}
+.align-center {
+  text-align: center;
+}
+.align-justify {
+  text-align: justify;
+}
+
+/* not defined anywhere... :-( (gwyneth 20210501) */
+.smallNorm {
   font-weight: normal;
   font-size: small;
 }
@@ -314,7 +336,6 @@ td.nav {
 table.tbl {
   background: #2e3440; /* nord0 */
 }
-
 table.tbl th {
   background-color: #5e81ac; /* nord10 */
   color: #eceff4; /* nord6 */
@@ -324,16 +345,18 @@ table.tbl th {
   font-weight: normal;
   text-align: center;
 }
-
 table.tbl tr:nth-child(odd) {
   background-color: #2e3440; /* nord0 */
 }
 table.tbl tr:nth-child(even) {
   background-color: #3b4252; /* nord1 */
 }
-
 table.tbl td {
   background-color: transparent;
+}
+table.tbl tfoot tr td:last-child {  /* Last element on the footer usually has a button to the right (gwyneth 20210504) */
+  text-align: right;
+  background-color: #5e81ac; /* nord10 */
 }
 
 /* a 'standard' table */

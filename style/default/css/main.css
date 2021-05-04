@@ -9,6 +9,9 @@ BODY {
   font-family: Osaka, verdana, Sans-Serif;
   font-size: 10pt;
 }
+body.loginform {
+  background-color: #f0f0f0;
+}
 
 ul {
   margin-left: 25px;
@@ -100,9 +103,31 @@ h3 {
 */
 .bordertable {
   border: 1px black solid;
+  background-color: #cccccc;
+}
+table.bordertable td {
+  background-color: #eeeeee;
+}
+table.bordertable td.companyName {
+  background-color: gray;
 }
 
-.smallNorm {  /* not defined anywhere... :-( (gwyneth 20210501) */
+/* standard classes to avoid in-line HTML styling (gwyneth 20210504) */
+.align-right {
+  text-align: right;
+}
+.align-left {
+  text-align: left;
+}
+.align-center {
+  text-align: center;
+}
+.align-justify {
+  text-align: justify;
+}
+
+/* not defined anywhere... :-( (gwyneth 20210501) */
+.smallNorm {
   font-weight: normal;
   font-size: small;
 }
@@ -228,6 +253,11 @@ table.tbl tr:nth-child(even) {
 table.tbl td {
   background-color: transparent;
 }
+table.tbl tfoot tr td:last-child {  /* Last element on the footer usually has a button to the right (gwyneth 20210504) */
+  text-align: right;
+  background-color: #ffffff;
+}
+
 /* a 'standard' table */
 table.std {
   border: solid #08245b 2px;
