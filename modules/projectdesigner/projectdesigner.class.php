@@ -169,7 +169,7 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
                 $days = $now->dateDiff( $end_date ) * $sign;
         }
 
-        $s = "\n<tr id=\"row".$a['task_id']."\" onmouseover=\"highlight_tds(this, true, ".$a['task_id'].")\" onmouseout=\"highlight_tds(this, false, ".$a['task_id'].")\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\">"; // edit icon
+        $s = "\n<tr id=\"row".$a['task_id']."\" onmouseover=\"highlight_tds(this, true, ".$a['task_id'].");\" onmouseout=\"highlight_tds(this, false, ".$a['task_id'].")\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\">"; // edit icon
         $s .= "\n\t<td>";
         $canEdit = !getDenyEdit( 'tasks', $a["task_id"] );
         $canViewLog = $perms->checkModuleItem('task_log', 'view', $a['task_id']);

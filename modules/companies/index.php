@@ -58,7 +58,7 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id',
 // setup the title block
 $titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, $m . "." . $a);
 $titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string='
-                      . dPformSafe($search_string) . '" method="post">' . '\n'
+                      . dPformSafe($search_string) . '" method="post">' . PHP_EOL
                       . '<table><tr><td><strong>' . $AppUI->_('Search')
                       . '</strong><input autofocus class="text" type="search" name="search_string" value="'
                       .  dPformSafe($search_string) . '" /><br />'

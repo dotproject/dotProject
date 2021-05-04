@@ -468,6 +468,7 @@ function dPgetSysVal($title) {
 	} else if ($sep1 == "\\r") {
 		$sep1 = "\r";
 	}
+  // shouldn't we use PHP_EOL and ignore the check? (gwyneth 20210504)
 
 	$temp = explode($sep1, $row['sysval_value']);
 	$arr = array();

@@ -86,7 +86,7 @@ foreach ($rows as $row) {
           . dPformSafe($row['company_id'] ?? 0) . '" onmouseover="return overlib(\''
           . dPformSafe($row['company_description'] ?? 'No description available') . '\', CAPTION, \'' . $AppUI->_('Description')
           . '\', CENTER' . dPgetConfig('overlib_extra_parameters', ', DONOTHING')
-          . '" onmouseout="nd();">' . htmlspecialchars($row['company_name'] ?? '[NO COMPANY]') . '</a></td>');
+          . ');" onmouseout="nd();">' . htmlspecialchars($row['company_name'] ?? '[NO COMPANY]') . '</a></td>');
 
   dprint(__FILE__, __LINE__, 2, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . dPgetConfig('overlib_extra_parameters', '[empty]') . "'");
 
