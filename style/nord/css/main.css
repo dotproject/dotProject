@@ -114,6 +114,7 @@ select {
   background-color: #434c5e; /* nord2 */
   border-radius: 0.1rem;
   cursor: pointer;
+  font-family: Inter, Sans-Serif;
 }
 
 td {
