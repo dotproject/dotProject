@@ -13,3 +13,13 @@ lib/ezpdf/fonts/php_*
 !/modules/files/
 
 /vendor/
+.idea/codeception.xml
+.idea/deployment.xml
+.idea/dotProject.iml
+.idea/modules.xml
+.idea/php-test-framework.xml
+.idea/php.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/jsLinters/jshint.xml
+.idea/.gitignore
