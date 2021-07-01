@@ -7,7 +7,12 @@
 actor: AcceptanceTester
 modules:
     enabled:
+        - Config:
+            # You can use any configs in the list. There no limitations on
+            # the parameters names.
+            username: 'admin'
+            password: 'passwd'
         - PhpBrowser:
-            url: http://localhost:8000
+            url: http://dotproject.local/
         - \Helper\Acceptance
 step_decorators: ~        
