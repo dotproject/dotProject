@@ -34,3 +34,10 @@ vendor/bin/codecept run unit --coverage --coverage-xml --coverage-html
 if you just want an html report:
 
 vendor/bin/codecept run unit --coverage --coverage-html
+
+
+
+### Notes
+
+- make sure you configure acceptance.suite.yml so that it reflects the domain you are working with
+- If you are working on your mac locally, make sure session.save_path is set
