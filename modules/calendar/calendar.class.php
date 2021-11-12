@@ -521,7 +521,7 @@ class CEvent extends CDpObject {
 * @param integer Time of Recurrence
 * @return array Calculated Start and End Dates for the recurrent Event for the given Period
 */
-	function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date
+	static function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date
 										 , $event_recurs, $event_times_recuring, $j) {
 		//this array will be returned
 		$transferredEvent = array();
