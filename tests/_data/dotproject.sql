@@ -1575,7 +1575,7 @@ CREATE TABLE `dotp_users` (
 --
 
 INSERT INTO `dotp_users` (`user_id`, `user_contact`, `user_username`, `user_password`, `user_parent`, `user_type`, `user_company`, `user_department`, `user_owner`, `user_signature`) VALUES
-(1, 1, 'admin', '1a1dc91c907325c69271ddf0c944bc72', 0, 1, 0, 0, 0, '');
+(1, 1, 'admin', '76a2173be6393254e72ffa4d6df1030a', 0, 1, 0, 0, 0, '');
 
 -- --------------------------------------------------------
 
