@@ -6,8 +6,8 @@ class CompaniesModuleCest
     public function _before(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php');
-        $I->fillField('username', 'admin');
-        $I->fillField('password', 'pass');
+        $I->fillField('username', $I->grabFromConfig('username'));
+        $I->fillField('password', $I->grabFromConfig('password'));
         $I->click(['class' => 'button']);
     }
 

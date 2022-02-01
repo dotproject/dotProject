@@ -1,5 +1,5 @@
 {
-    "name": "jeffphilapy/dot-project",
+    "name": "dotproject/dotproject",
     "require": {
     },
     "autoload": {
@@ -10,7 +10,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "require-dev": {
@@ -18,6 +18,7 @@
         "codeception/module-phpbrowser": "^1.0.0",
         "codeception/module-asserts": "^1.0.0",
         "codeception/module-db": "^1.0",
-        "codeception/module-datafactory": "^1.0"
+        "codeception/module-datafactory": "^1.0",
+        "justblackbird/codeception-config-module": "^1.0"
     }
 }

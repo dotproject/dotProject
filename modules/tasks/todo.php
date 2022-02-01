@@ -134,7 +134,7 @@ if ($showPinned) {
 	$q->addWhere('task_pinned = 1');
 }
 if (!$showEmptyDate) {
-	$q->addWhere("ta.task_start_date != null AND ta.task_start_date != '0000-00-00 00:00:00'");
+	$q->addWhere("ta.task_start_date != NULL AND ta.task_start_date != '0000-00-00 00:00:00'");
 }
 
 

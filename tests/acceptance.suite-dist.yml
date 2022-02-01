@@ -7,7 +7,13 @@
 actor: AcceptanceTester
 modules:
     enabled:
+        - Config:
+            # You can use any configs in the list. There no limitations on
+            # the parameters names.
+            username: 'admin'
+            password: 'passwd'
         - PhpBrowser:
+<<<<<<< HEAD:tests/acceptance.suite-dist.yml
             url: http://127.0.0.1:8000
         - \Helper\Acceptance
         - Db:
@@ -18,3 +24,8 @@ modules:
             populate: true
             cleanup: true
 step_decorators: ~
+=======
+            url: http://dotproject.local/
+        - \Helper\Acceptance
+step_decorators: ~        
+>>>>>>> 9b8865e01ffd8e8c6a2ecf6e81857f6525b6acc3:tests/acceptance.suite.yml

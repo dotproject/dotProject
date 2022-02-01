@@ -18,15 +18,18 @@ class SigninCest
         $I->see('login');
     }
 
-
+     /**
+     * @depends SigninCest:canSeeLoginForm
+     */
     public function canLoginIn(AcceptanceTester $I)
     {
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
-        $I->fillField('username', 'admin');
-        $I->fillField('password', 'pass');
+        $I->fillField('username', $I->grabFromConfig('username'));
+        $I->fillField('password', $I->grabFromConfig('password'));
         $I->click(['class' => 'button']);
-        $I->see('My Project');// if text not found, test fails
+//        $I->click('login', 'input[type=submit]');
+        $I->see('Day View');// if text not found, test fails
     }
 
      /**
@@ -48,7 +51,7 @@ class SigninCest
     {
         // TODO: Add to this test the ability to auto-create a test user
         $I->amOnPage('/index.php');
-        $I->fillField('username', 'admin');
+        $I->fillField('username', $I->grabFromConfig('username'));
         $I->fillField('password', 'pass');
         $I->click(['class' => 'button']);
         $I->dontSee('ERROR: '); //if text is found, test fails.
