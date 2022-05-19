@@ -13,6 +13,13 @@ modules:
             username: 'admin'
             password: 'passwd'
         - PhpBrowser:
-            url: http://dotproject.local/
+            url: http://127.0.0.1:8000
         - \Helper\Acceptance
-step_decorators: ~        
+        - Db:
+            dsn: 'mysql:host=127.0.0.1;dbname=dotproject'
+            user: 'root'
+            password: ''
+            dump: 'Tests/_data/dotproject.sql'
+            populate: true
+            cleanup: true
+step_decorators: ~
