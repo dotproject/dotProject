@@ -65,9 +65,12 @@ class CDpObject {
 		$this->_query = new DBQuery;
 	}
 
-	/**
-	 * Let people know that this is not a good idea.
-	 */
+    /**
+     * Let people know that this is not a good idea.
+     * @param $table
+     * @param $key
+     * @param string $perm_name
+     */
 	public function CDpObject($table, $key, $perm_name='') {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;

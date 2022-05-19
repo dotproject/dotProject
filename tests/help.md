@@ -42,3 +42,4 @@ vendor/bin/codecept run unit --coverage --coverage-html
 
 - make sure you configure acceptance.suite.yml so that it reflects the domain you are working with
 - If you are working on your mac locally, make sure session.save_path is set
+- If tests need to login, modify acceptance.suite.yml with username and password

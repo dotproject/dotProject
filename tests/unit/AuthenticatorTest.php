@@ -84,4 +84,5 @@ class AuthenticatorTest extends \Codeception\Test\Unit
         $actual = getAuth('googoodedo');
         $this->assertInstanceOf('SQLAuthenticator', $actual);
     }
+
 }

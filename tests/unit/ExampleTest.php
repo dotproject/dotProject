@@ -8,8 +8,8 @@ use ReflectionClass;
 require './base.php';
 
 // satisfy class calls in db.class.php
-// require './classes/ui.class.php';
-// $AppUI = new \CAppUI;
+ require './classes/ui.class.php';
+
 
 // call file to test
 // require './classes/dp.class.php';
@@ -64,5 +64,15 @@ class ExampleTest extends \Codeception\Test\Unit
 
         $this->assertSame('#000000', $actual);
 
+    }
+
+
+    public function testPracticeTest()
+    {
+
+        $AppUI = new \CAppUI;
+
+       $status = $AppUI->login('admin', 'passwd');
+        $this->assertTrue($status);
     }
 }
