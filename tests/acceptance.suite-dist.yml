@@ -13,10 +13,10 @@ modules:
             username: 'admin'
             password: 'passwd'
         - PhpBrowser:
-            url: http://127.0.0.1:8000
+            url: http://127.0.0.1:8080
         - \Helper\Acceptance
         - Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=dotproject'
+            dsn: 'mysql:host=127.0.0.1;dbname=dotproject_test'
             user: 'root'
             password: ''
             dump: 'Tests/_data/dotproject.sql'
