@@ -46,7 +46,7 @@ class CompaniesModuleCest
         $I->see('Add Company');
 
 
-		$company_name = $this->faker->sentence(2);
+		$company_name = $this->faker->company;
 
         $I->fillField('company_name', $company_name);
         $I->fillField('company_email', 'nothing@nowhere.com');
