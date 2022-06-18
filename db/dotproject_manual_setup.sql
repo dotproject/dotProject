@@ -1094,6 +1094,10 @@ CREATE TABLE `dotp_gacl_aro`
     UNIQUE KEY `gacl_section_value_value_aro` (`section_value`, `value`),
     KEY `gacl_hidden_aro` (`hidden`)
 );
+
+INSERT INTO `dotp_gacl_aro` (`id`, `section_value`, `value`, `order_value`, `name`, `hidden`) VALUES
+    (10, 'user', '1', 1, 'admin', 0);
+
 # --------------------------------------------------------
 
 #
@@ -1291,6 +1295,10 @@ CREATE TABLE `dotp_gacl_groups_aro_map`
     `aro_id`   int(11) NOT NULL default '0',
     PRIMARY KEY (`group_id`, `aro_id`)
 );
+
+INSERT INTO `dotp_gacl_groups_aro_map` (`group_id`, `aro_id`) VALUES
+    (11, 10);
+
 # --------------------------------------------------------
 
 #

@@ -21,7 +21,7 @@
 
 // If you experience a 'white screen of death' or other problems,
 // uncomment the following line of code:
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 $loginFromPage = 'index.php';
 require_once 'base.php';
@@ -110,10 +110,6 @@ if (dPgetParam($_POST, 'lostpass', 0)) {
 	exit();
 }
 
-$_REQUEST = true;
-$_POST['username'] = 'admin';
-$_POST['password'] = 'passwd';
-
 // check if the user is trying to log in
 // Note the change to REQUEST instead of POST.  This is so that we can
 // support alternative authentication methods such as the PostNuke
@@ -125,6 +121,7 @@ if (isset($_REQUEST['login'])) {
 	$AppUI->setUserLocale();
 	@include_once(DP_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 	@include_once DP_BASE_DIR . '/locales/core.php';
+
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed');
