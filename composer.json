@@ -17,6 +17,7 @@
         "codeception/module-asserts": "^1.0.0",
         "codeception/module-db": "^1.0",
         "codeception/module-datafactory": "^1.0",
-        "justblackbird/codeception-config-module": "^1.0"
+        "justblackbird/codeception-config-module": "^1.0",
+        "fakerphp/faker": "^1.19"
     }
 }
