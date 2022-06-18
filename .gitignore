@@ -11,8 +11,6 @@ lib/ezpdf/fonts/php_*
 /dotProject/
 !/modules/files/
 
-<<<<<<< HEAD
-
 /vendor/
 
 ##### IDE #####
