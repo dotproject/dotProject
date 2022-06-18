@@ -26,3 +26,14 @@ IRC channel is irc://irc.freenode.net/dotproject on `#dotproject` on `irc.freeno
 As of version 2.0, dotProject is released under GPL.
 1.0.2 and previous versions were released under BSD license.
 Parts of dotProject include libraries from other projects which are used and re-released under their original licence.
+
+## Docker composer support
+
+The latest devel branch now includes a simple docker-compose.yml file and support files.  These will allow you to run dotProject by running:
+
+`docker-compose up`
+
+This will set up an nginx container, a phpfpm container and a mariadb container and point the web server to the base directory of dotProject.  All you need to do after that is point your browser to http://localhost/
+
+`docker-compose down` will retain any data you have created.  If you want to start again from a clean slate, use `docker-compose down -v` to remove the database volume.
+
