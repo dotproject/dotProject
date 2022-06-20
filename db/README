@@ -1,6 +1,6 @@
 Notes to developers and users:
 
-dotproject.sql is the full installation script for the latest CVS version.
+test_dump.sql is the full installation script for the latest CVS version.
 
 upgrade_latest.sql is the differences between the last release version and
 the current CVS version.  It will be renamed once a release is created.

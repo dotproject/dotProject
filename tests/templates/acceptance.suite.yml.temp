@@ -20,7 +20,7 @@ modules:
             user: 'root'
             password: ''
             dump:
-                - 'tests/_data/dotproject.sql'
+                - 'tests/_data/test_dump.sql'
             populate: true # run populator before all tests
             cleanup: true # run populator before each test
 step_decorators: ~

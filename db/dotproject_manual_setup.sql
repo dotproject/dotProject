@@ -1,6 +1,6 @@
 SET SQL_MODE = 'ALLOW_INVALID_DATES';
 #
-# dotproject.sql Database Schema
+# test_dump.sql Database Schema
 #
 # Use this schema for creating your database for
 # a new installation of dotProject.
