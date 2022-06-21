@@ -46,7 +46,9 @@ class CompaniesModuleCest
         $I->see('Add Company');
 
 
-		$company_name = $this->faker->company;
+		$company_name = $this->faker->company();
+		$description = $this->faker->sentence(20);
+
 
         $I->fillField('company_name', $company_name);
         $I->fillField('company_email', 'nothing@nowhere.com');
@@ -63,8 +65,21 @@ class CompaniesModuleCest
         $I->selectOption('company_owner','Person, Admin');
         $I->selectOption('company_type','Internal');
 
+		$I->fillField('company_description', $description);
+
         $I->click('submit'); //TODO: uncomment this if you want this test to save to the database
 
 		$I->seeInDatabase('dotp_companies', ['company_name' => $company_name]);
+		$I->seeInDatabase('dotp_companies', ['company_description' => $description]);
     }
+
+	/**
+	 * @depends SigninCest:canLoginIn
+	 */
+	public function canUpdateCompany(AcceptanceTester $I) {
+
+		$company_name = $this->faker->company();
+		$I->haveInDatabase('dotp_companies', ['company_name' => $company_name]);
+
+	}
 }
