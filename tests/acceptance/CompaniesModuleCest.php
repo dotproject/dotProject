@@ -5,6 +5,8 @@ class CompaniesModuleCest
 {
 
 	private $faker;
+	private $company_name;
+	private $company_name2;
 
     public function _before(AcceptanceTester $I)
     {
@@ -14,6 +16,8 @@ class CompaniesModuleCest
         $I->click(['class' => 'button']);
 
 		$this->faker = $I->getFaker();
+		$this->company_name = $this->faker->company();
+		$this->company_name2 = $this->faker->company();
     }
 
     // tests
@@ -45,12 +49,10 @@ class CompaniesModuleCest
         $I->click(['class' => 'button']);
         $I->see('Add Company');
 
-
-		$company_name = $this->faker->company();
 		$description = $this->faker->sentence(20);
 
 
-        $I->fillField('company_name', $company_name);
+        $I->fillField('company_name', $this->company_name);
         $I->fillField('company_email', 'nothing@nowhere.com');
         $I->fillField('company_phone1', '7777777777');
         $I->fillField('company_phone2', '2222222222');
@@ -69,8 +71,12 @@ class CompaniesModuleCest
 
         $I->click('submit'); //TODO: uncomment this if you want this test to save to the database
 
-		$I->seeInDatabase('dotp_companies', ['company_name' => $company_name]);
+		$I->seeInDatabase('dotp_companies', ['company_name' => $this->company_name]);
 		$I->seeInDatabase('dotp_companies', ['company_description' => $description]);
+
+		$I->amOnPage('/index.php?m=companies');
+
+		$I->see($this->company_name);
     }
 
 	/**
@@ -78,8 +84,19 @@ class CompaniesModuleCest
 	 */
 	public function canUpdateCompany(AcceptanceTester $I) {
 
-		$company_name = $this->faker->company();
-		$I->haveInDatabase('dotp_companies', ['company_name' => $company_name]);
+		$I->updateInDatabase('dotp_companies', ['company_name' => $this->company_name2]);
+		$I->seeInDatabase('dotp_companies', ['company_name' => $this->company_name2]);
 
+		$I->amOnPage('/index.php?m=companies');
+
+		$I->see($this->company_name2);
 	}
+
+	/**
+	 * @depends SigninCest:canLoginIn
+	 */
+//	public function canDeleteCompany(AcceptanceTester $I)
+//	{
+//
+//	}
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class CalendarModuleCest
 {
@@ -15,7 +15,7 @@ class CalendarModuleCest
      * @depends SigninCest:canLoginIn
      */
     public function seeIfCalendarPageLoads(AcceptanceTester $I)
-    { 
+    {
         $I->amOnPage('/index.php?m=calendar');
         $I->see('calendar');// if text not found, test fails
     }
@@ -26,6 +26,6 @@ class CalendarModuleCest
     public function seeIfCalendarPageHasNoErrors(AcceptanceTester $I)
     {
         $I->amOnPage('/index.php?m=calendar');
-        $I->dontSee('ERROR: ');// if text not found, test fails
+        $I->dontSee('ERROR: ');// if text found, test fails
     }
 }
