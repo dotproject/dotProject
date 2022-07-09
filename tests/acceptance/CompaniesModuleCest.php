@@ -85,10 +85,12 @@ class CompaniesModuleCest
 	public function canUpdateCompany(AcceptanceTester $I) {
 
 		$I->updateInDatabase('dotp_companies', ['company_name' => $this->company_name2]);
+
+		// can see change in the database
 		$I->seeInDatabase('dotp_companies', ['company_name' => $this->company_name2]);
 
+		// can see the change on the page
 		$I->amOnPage('/index.php?m=companies');
-
 		$I->see($this->company_name2);
 	}
 
