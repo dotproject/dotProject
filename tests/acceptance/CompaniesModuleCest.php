@@ -18,6 +18,7 @@ class CompaniesModuleCest
 		$this->faker = $I->getFaker();
 		$this->company_name = $this->faker->company();
 		$this->company_name2 = $this->faker->company();
+		$this->company_phone1 = '7777777777';
     }
 
     // tests
@@ -54,7 +55,7 @@ class CompaniesModuleCest
 
         $I->fillField('company_name', $this->company_name);
         $I->fillField('company_email', 'nothing@nowhere.com');
-        $I->fillField('company_phone1', '7777777777');
+        $I->fillField('company_phone1', $this->company_phone1);
         $I->fillField('company_phone2', '2222222222');
         $I->fillField('company_fax', '0000000000');
         $I->fillField('company_address1', '1120 S. Westway st.');
@@ -97,8 +98,15 @@ class CompaniesModuleCest
 	/**
 	 * @depends SigninCest:canLoginIn
 	 */
-//	public function canDeleteCompany(AcceptanceTester $I)
-//	{
-//
-//	}
+	public function canDeleteCompany(AcceptanceTester $I)
+	{
+		$company_id = $I->grabFromDatabase('dotp_companies', 'company_id', ['company_phone1' => $this->company_phone1]);
+
+		$I->amOnPage('http://dotproject.test/index.php?m=companies&a=view&company_id='.$company_id);
+		$I->see('Admin Person');
+//		$I->see($this->company_name2);
+		// TODO: must see company
+		// TODO: must delete company
+		// TODO: must not see company
+	}
 }
