@@ -48,3 +48,6 @@ tests/unit.suite.yml
 # php documentation stuff
 .phpdoc/*
 
+# env
+.env
+.env.testing

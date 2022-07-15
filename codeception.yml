@@ -13,3 +13,5 @@ coverage:
     include:
         - classes/*
         - includes/*
+params:
+    - .env.testing
