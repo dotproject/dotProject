@@ -10,8 +10,8 @@ modules:
     - Config:
         # You can use any configs in the list. There no limitations on
         # the parameters names.
-        username: '%TEST_DB_USER%'
-        password: '%TEST_DB_PASS%'
+        username: '%TEST_ADMIN_USER%'
+        password: '%TEST_ADMIN_PASS%'
     - PhpBrowser:
         url: http://dotproject.test/
     - \Helper\Acceptance
