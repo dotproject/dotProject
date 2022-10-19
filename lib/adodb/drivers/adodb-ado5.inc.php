@@ -248,7 +248,8 @@ class ADODB_ado extends ADOConnection {
 			$oCmd->CommandText = $sql;
 			$oCmd->CommandType = 1;
 
-			while(list(, $val) = each($inputarr)) {
+//			while(list(, $val) = each($inputarr)) {  // deprecated in 7.2+
+      foreach($inputarr as $val) {
 				$type = gettype($val);
 				$len=strlen($val);
 				if ($type == 'boolean')

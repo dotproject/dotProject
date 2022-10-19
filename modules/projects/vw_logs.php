@@ -66,7 +66,7 @@ $hide_inactive = $AppUI->getState('ProjectsTaskLogsHideArchived');
 
 $AppUI->setState('ProjectsTaskLogsHideComplete', (isset($_GET['hide_complete']) ? true : false));
 $hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
-	
+
 ?>
 <script language="JavaScript">
 <?php
@@ -158,13 +158,13 @@ foreach ($logs as $row) {
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
 	if (getPermission('tasks', 'edit', $row['task_id'])) {
-		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] 
-		       . "&amp;tab=1&amp;task_log_id=" . @$row['task_log_id'] . '">' 
-			   . "\n\t\t\t" . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '') 
+		$s .= ("\n\t\t" . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id']
+		       . "&amp;tab=1&amp;task_log_id=" . @$row['task_log_id'] . '">'
+			   . "\n\t\t\t" . dPshowImage('./images/icons/stock_edit-16.png', 16, 16, '')
 			   . "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
-	$s .= $AppUI->showHTML('<td nowrap="nowrap">'.($task_log_date ? $task_log_date->format($df) : '-').'</td>');
+	$s .= $AppUI->showHTML('<td nowrap="nowrap"><time>'.($task_log_date ? $task_log_date->format($df) : '-').'</time></td>');
 	$s .= $AppUI->showHTML('<td width="30%"><a href="?m=tasks&amp;a=view&amp;task_id='.$row['task_id'].'&amp;tab=0">'.@$row["task_log_name"].'</a></td>');
 	$s .= $AppUI->showHTML('<td width="100">'.$row["user_username"].'</td>');
 	$s .= $AppUI->showHTML('<td width="100" align="right">'.sprintf("%.2f", $row["task_log_hours"]) . '</td>');
@@ -173,9 +173,9 @@ foreach ($logs as $row) {
         $s .= strip_tags($row['task_log_description'], '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>');
 	$s .= '</td>';
 	$s .= "\n\t<td>";
-	if ($canDelete) {
-		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $AppUI->showHTML($row['task_log_id']) . ');" title="' 
-			   . $AppUI->_('delete log') . '">' . "\n\t\t\t" 
+	if (!empty($canDelete)) {
+		$s .= ("\n\t\t" . '<a href="javascript:delIt2(' . $AppUI->showHTML($row['task_log_id']) . ');" title="'
+			   . $AppUI->_('delete log') . '">' . "\n\t\t\t"
 		       . dPshowImage('./images/icons/stock_delete-16.png', 16, 16, ''). "\n\t\t</a>");
 	}
 	$s .= "\n\t</td>";
@@ -189,30 +189,3 @@ $s .= '</tr>';
 echo $s;
 ?>
 </table>
-<style>
-.ql-size-large {
-    font-size: 1.5em;
-}
-.ql-size-small {
-    font-size: 0.75em;
-}
-.ql-size-huge {
-    font-size: 2.5em;
-}
-.ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
-}
-.ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-justify {
-    text-align: justify;
-}
-
-</style>

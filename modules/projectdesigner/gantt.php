@@ -143,7 +143,7 @@ foreach ($proTasks as $row) {
                         $row['task_end_date'] = '';
                 }
         }
-		
+
 		$ted = new CDate($row['task_end_date']);
 
 		if ($ted->after(new CDate($end_max)))
@@ -211,7 +211,7 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
 $graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
-$graph->scale->SetTableTitleBackground('#' . $projects[$project_id]['project_color_identifier']);
+$graph->scale->SetTableTitleBackground(/* '#' . */ $projects[$project_id]['project_color_identifier']);
 $font_color = bestColor($projects[$project_id]['project_color_identifier']);
 $graph->scale->tableTitle->SetColor($font_color);
 $graph->scale->tableTitle->Show(true);
@@ -331,8 +331,8 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         }
         $name = strlen( $name ) > 34 ? substr( $name, 0, 33 ).'.' : $name ;
         $name = str_repeat(' ', $level).$name;
-		
-		if ($caller == 'todo') { 
+
+		if ($caller == 'todo') {
 			$pname = $a['project_name'];
 	        if ( $locale_char_set=='utf-8' && function_exists('utf8_decode') ) {
 	                $pname = utf8_decode($pname);
@@ -352,8 +352,8 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
         $start = $start->getDate();
 
         $progress = $a['task_percent_complete'] + 0;
-	
-	if ($progress > 100) 
+
+	if ($progress > 100)
 		$progress = 100;
 	elseif ($progress < 0)
 		$progress = 0;
@@ -402,7 +402,7 @@ for($i = 0; $i < count(@$gantt_arr); $i ++ ) {
                 $s = $start->format($df);
                 if ($caller == 'todo')
         	       $bar  = new MileStone ($row++,array($name, $pname, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
-		    else 
+		    else
                    $bar  = new MileStone ($row++,array($name, '', substr($s, 0, 10), substr($s, 0, 10)) , $a['task_start_date'], $s);
                 $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
                 //caption of milestone should be date

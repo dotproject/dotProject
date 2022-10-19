@@ -39,7 +39,7 @@ foreach ($search_map as $search_name) {
 	$q->addTable('contacts', 'c');
 	$q->leftJoin('users', 'u', 'u.user_contact=c.contact_id');
 	$q->addQuery('DISTINCT UPPER(SUBSTRING(' . $search_name . ',1,1)) as L, user_id');
-	$q->addWhere('contact_private = 0 OR (contact_private = 1 AND contact_owner = ' 
+	$q->addWhere('contact_private = 0 OR (contact_private = 1 AND contact_owner = '
 	             . $AppUI->user_id . ') OR contact_owner IS NULL OR contact_owner = 0');
 	$arr = $q->loadList();
 	foreach ($arr as $L) {
@@ -66,13 +66,14 @@ $q->addQuery('contact_id, contact_order_by');
 $q->addQuery('contact_first_name, contact_last_name, contact_phone, contact_owner');
 $q->addQuery($showfields);
 $q->addQuery('user_id');
+$where_filter = "";  // variable has to exist and be initialised on PHP 7.2+ (gwyneth 20210419)
 foreach ($search_map as $search_name) {
 	$where_filter .= (' OR ' . $search_name . " LIKE $where");
 }
 $where_filter = mb_substr($where_filter, 4);
 $where_filter .= (($additional_filter) ? (' OR ' . $additional_filter) : '');
 $q->addWhere('(' . $where_filter . ')');
-$q->addWhere('(contact_private = 0 OR (contact_private = 1 AND contact_owner = ' . $AppUI->user_id 
+$q->addWhere('(contact_private = 0 OR (contact_private = 1 AND contact_owner = ' . $AppUI->user_id
              . ') OR contact_owner IS NULL OR contact_owner = 0)');
 if (count($allowedCompanies)) {
 	$comp_where = implode(' AND ', $allowedCompanies);
@@ -106,7 +107,7 @@ $x = 0;
 foreach ($disp_arr as $row) {
 	$y = floor($x / $t);
 	$carr[$y][] = $row;
-	$x++;	
+	$x++;
 }
 
 $tdw = floor(100 / $carrWidth);
@@ -122,17 +123,17 @@ $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show'). ': </td>';
 $a2z .= '<td><a href="?m=contacts&amp;where=0">' . $AppUI->_('All') . '</a></td>';
 for ($c=65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = ((mb_strpos($let, "$cu") > 0) 
-			 ? ('<a href="?m=contacts&amp;where=' . $cu . '">' . $cu . '</a>') 
+	$cell = ((mb_strpos($let, "$cu") > 0)
+			 ? ('<a href="?m=contacts&amp;where=' . $cu . '">' . $cu . '</a>')
 			 : ('<font color="#999999">' . $cu . '</font>'));
 	$a2z .= "\n\t<td>$cell</td>";
 }
-$a2z .= ("\n</tr>\n<tr>" . '<td colspan="28">' 
-         . '<form action="./index.php" method="get">' . $AppUI->_('Search for') 
-         . '<input autofocus type="search" name="search_string" value="' . $default_search_string . '" />' 
+$a2z .= ("\n</tr>\n<tr>" . '<td colspan="28">'
+         . '<form action="./index.php" method="get">' . $AppUI->_('Search for')
+         . '<input autofocus type="search" name="search_string" value="' . $default_search_string . '" />'
          . '<input type="hidden" name="m" value="contacts" /><input type="submit" value=">" />'
-         . '<a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search') 
-		 . '</a></form></td></tr>' 
+         . '<a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search')
+		 . '</a></form></td></tr>'
 		 . "\n</table>\n");
 
 // setup the title block
@@ -143,12 +144,12 @@ $a2z .= ("\n</tr>\n<tr>" . '<td colspan="28">'
 $titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, "$m.$a");
 $titleBlock->addCell($a2z);
 if ($canAuthor) {
-	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new contact') 
-	                      . '">'), '', '<form action="?m=contacts&amp;a=addedit" method="post">', 
+	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new contact')
+	                      . '">'), '', '<form action="?m=contacts&amp;a=addedit" method="post">',
 	                     '</form>');
-	$titleBlock->addCrumbRight('<a href="?m=contacts&amp;a=csvexport&amp;suppressHeaders=true">' 
-	                           . $AppUI->_('CSV Download'). '</a> | ' 
-	                           . '<a href="?m=contacts&amp;a=vcardimport&amp;dialog=0">' 
+	$titleBlock->addCrumbRight('<a href="?m=contacts&amp;a=csvexport&amp;suppressHeaders=true">'
+	                           . $AppUI->_('CSV Download'). '</a> | '
+	                           . '<a href="?m=contacts&amp;a=vcardimport&amp;dialog=0">'
 	                           . $AppUI->_('Import vCard') . '</a>');
 }
 $titleBlock->show();
@@ -177,44 +178,49 @@ for ($z = 0; $z < $carrWidth; $z++) {
 ?>
 	<td valign="top" align="left" bgcolor="#f4efe3" width="<?php echo $tdw;?>%">
 	<?php
-	for ($x = 0; $x < @count($carr[$z]); $x++) {
+  if (!empty($carr[$z]) && is_countable($carr[$z])) {
+    $countCarr = count($carr[$z]);
+  } else {
+    $countCarr = 0;
+  }
+	for ($x = 0; $x < $countCarr; $x++) {
 	?>
 		<table width="100%" cellspacing="1" cellpadding="1" summary="contact info">
 		<tr>
 			<td width="100%">
-				<?php $contactid = $carr[$z][$x]['contact_id']; ?>
-				<a href="?m=contacts&amp;a=view&amp;contact_id=<?php 
-		echo $contactid; 
-?>"><strong><?php 
-		echo $AppUI->___(($carr[$z][$x]['contact_order_by']) 
-		      ? $carr[$z][$x]['contact_order_by'] 
-		      : ($carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name'])); 
+				<?php $contactid = $carr[$z][$x]['contact_id'] ?? 0; ?>
+				<a href="?m=contacts&amp;a=view&amp;contact_id=<?php
+		echo $contactid;
+?>"><strong><?php
+		echo $AppUI->___((!empty($carr[$z][$x]['contact_order_by']))
+		      ? $carr[$z][$x]['contact_order_by']
+		      : ($carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']));
 ?></strong></a>&nbsp;
-				&nbsp;<a title="<?php 
-		echo $AppUI->___($AppUI->_('Export vCard for') . ' ' . $carr[$z][$x]['contact_first_name'] . ' ' 
-		      . $carr[$z][$x]['contact_last_name']); 
-?>" href="?m=contacts&amp;a=vcardexport&amp;suppressHeaders=true&amp;contact_id=<?php 
+				&nbsp;<a title="<?php
+		echo $AppUI->___($AppUI->_('Export vCard for') . ' ' . $carr[$z][$x]['contact_first_name'] . ' '
+		      . $carr[$z][$x]['contact_last_name']);
+?>" href="?m=contacts&amp;a=vcardexport&amp;suppressHeaders=true&amp;contact_id=<?php
 		echo $contactid; ?>" >(vCard)</a>
-				&nbsp;<a title="<?php 
-		echo $AppUI->_('Edit'); ?>" href="?m=contacts&amp;a=addedit&amp;contact_id=<?php 
+				&nbsp;<a title="<?php
+		echo $AppUI->_('Edit'); ?>" href="?m=contacts&amp;a=addedit&amp;contact_id=<?php
 		echo $contactid; ?>"><?php echo $AppUI->_('Edit'); ?></a>
 <?php
 		$q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('count(*)');
-		$q->addWhere('project_contacts LIKE "' . $carr[$z][$x]['contact_id'] 
-		             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id'] 
-		             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id'] 
+		$q->addWhere('project_contacts LIKE "' . $carr[$z][$x]['contact_id']
+		             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id']
+		             .',%" OR project_contacts LIKE "%,' . $carr[$z][$x]['contact_id']
 		             .'" OR project_contacts LIKE "' . $carr[$z][$x]['contact_id'] .'"');
-		
+
 		$res = $q->exec();
 		$projects_contact = db_fetch_row($res);
 		$q->clear();
 		if ($projects_contact[0] > 0) {
-			echo ('&nbsp;<a href="" onclick="javascript:window.open(' 
-			      . "'?m=public&amp;a=selector&amp;dialog=1&amp;callback=goProject&amp;table=projects" 
-			      . '&user_id=' . $carr[$z][$x]['contact_id'] 
-			      . "', 'selector', 'left=50,top=50,height=250,width=400,resizable');" 
+			echo ('&nbsp;<a href="" onclick="javascript:window.open('
+			      . "'?m=public&amp;a=selector&amp;dialog=1&amp;callback=goProject&amp;table=projects"
+			      . '&user_id=' . $carr[$z][$x]['contact_id']
+			      . "', 'selector', 'left=50,top=50,height=250,width=400,resizable');"
 			      . 'return false;">' . $AppUI->_('Projects') . '</a>');
 		}
 ?>
@@ -224,10 +230,11 @@ for ($z = 0; $z < $carrWidth; $z++) {
 			<td class="hilite">
 			<?php
 		reset($showfields);
-		while (list($key, $val) = each($showfields)) {
+//		while (list($key, $val) = each($showfields)) {  // obsolete in PHP 7.2+ (gwyneth 20210419)
+    foreach($showfields as $key => $val) {
 			if (mb_strlen($carr[$z][$x][$key]) > 0) {
 				if ($val == "contact_email") {
-					echo ('<a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">' 
+					echo ('<a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">'
 					      . $carr[$z][$x][$key] . "</a>\n");
 				} else if (!($val == "contact_company" && is_numeric($carr[$z][$x][$key]))) {
 					echo  $carr[$z][$x][$key]. "<br />";
@@ -238,10 +245,10 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		</tr>
 		</table>
 		<br />&nbsp;<br />
-	<?php 
+	<?php
 	} ?>
 	</td>
-<?php 
+<?php
 } ?>
 </tr>
 </table>

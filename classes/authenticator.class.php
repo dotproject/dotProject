@@ -43,17 +43,23 @@ if (!defined('DP_BASE_DIR')) {
 
 	/**
 	 * PostNuke authentication has encoded information
-	 * passed in on the login request.  This needs to 
+	 * passed in on the login request.  This needs to
 	 * be extracted and verified.
 	 */
 	class PostNukeAuthenticator extends SQLAuthenticator
 	{
-
+    // deprecated constructor type (gwyneth 20210416)
 		function PostNukeAuthenticator()
 		{
 			global $dPconfig;
 			$this->fallback = isset($dPconfig['postnuke_allow_login']) ? $dPconfig['postnuke_allow_login'] : false;
 		}
+
+    // modern constructor type (gwyneth 20210416)
+    function __construct()
+    {
+      self::PostNukeAuthenticator();
+    }
 
 		function authenticate($username, $password)
 		{
@@ -87,7 +93,7 @@ if (!defined('DP_BASE_DIR')) {
 			$first_name = implode(' ', $names);
 			$passwd = trim($user_data['passwd']);
 			$email = trim($user_data['email']);
-			
+
 			$q  = new DBQuery;
 			$q->addTable('users');
 			$q->addQuery('user_id, user_password, user_contact');
@@ -106,7 +112,7 @@ if (!defined('DP_BASE_DIR')) {
 				$q->clear();
 				$q->addTable('users');
 				$q->addUpdate('user_password', $passwd);
-				$q->addWhere("user_id = {$this->user_id}");
+				$q->addWhere("user_id = " . $this->user_id);
 				if (! $q->exec()) {
 					die($AppUI->_('Could not update user credentials'));
 				}
@@ -115,7 +121,7 @@ if (!defined('DP_BASE_DIR')) {
 				$q->addUpdate('contact_first_name', $first_name);
 				$q->addUpdate('contact_last_name', $last_name);
 				$q->addUpdate('contact_email', $email);
-				$q->addWhere("contact_id = {$row['user_contact']}");
+				$q->addWhere("contact_id = " . $row['user_contact']);
 				if (! $q->exec()) {
 					die($AppUI->_('Could not update user details'));
 				}
@@ -129,7 +135,7 @@ if (!defined('DP_BASE_DIR')) {
 			GLOBAL $db, $AppUI;
 
 			require_once($AppUI->getModuleClass("contacts"));
-	
+
 			$c = New CContact();
 			$c->contact_first_name = $first;
 			$c->contact_last_name = $last;
@@ -193,7 +199,7 @@ if (!defined('DP_BASE_DIR')) {
                         // We ignore the username provided
 			return $this->user_id;
 		}
-	}	
+	}
 
 	class LDAPAuthenticator extends SQLAuthenticator
 	{
@@ -202,12 +208,13 @@ if (!defined('DP_BASE_DIR')) {
 		var $ldap_version;
 		var $base_dn;
 		var $ldap_search_user;
-		var $ldap_search_pass;	
+		var $ldap_search_pass;
 		var $filter;
 
 		var $user_id;
 		var $username;
 
+    // deprecated constructor style
 		function LDAPAuthenticator()
 		{
 			GLOBAL $dPconfig;
@@ -223,6 +230,11 @@ if (!defined('DP_BASE_DIR')) {
 			$this->filter = $dPconfig["ldap_user_filter"];
 		}
 
+    // new constructor style
+    function __construct() {
+      self::LDAPAuthenticator();
+    }
+
 		function authenticate($username, $password)
 		{
 			GLOBAL $dPconfig;
@@ -231,7 +243,7 @@ if (!defined('DP_BASE_DIR')) {
 			if (mb_strlen($password) == 0) return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 			if ($this->fallback == true)
 			{
-				if (parent::authenticate($username, $password)) return true;	
+				if (parent::authenticate($username, $password)) return true;
 			}
 			// Fallback SQL authentication fails, proceed with LDAP
 
@@ -243,13 +255,13 @@ if (!defined('DP_BASE_DIR')) {
 			@ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
 			//$ldap_bind_dn = "cn=".$this->ldap_search_user.",".$this->base_dn;
-			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;	
+			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;
 			$ldap_bind_pw = empty($this->ldap_search_pass) ? NULL : $this->ldap_search_pass;
 
 			if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw))
 			{
 				// Uncomment for LDAP debugging
-				/*	
+				/*
 				$error_msg = ldap_error($rs);
 				die("Couldnt Bind Using ".$ldap_bind_dn."@".$this->ldap_host.":".$this->ldap_port." Because:".$error_msg);
 				*/
@@ -260,7 +272,7 @@ if (!defined('DP_BASE_DIR')) {
 				$filter_r = html_entity_decode(str_replace("%USERNAME%", $username, $this->filter), ENT_COMPAT, 'UTF-8');
 				$result = @ldap_search($rs, $this->base_dn, $filter_r);
 				if (!$result) return false; // ldap search returned nothing or error
-				
+
 				$result_user = ldap_get_entries($rs, $result);
 				if ($result_user["count"] == 0) return false; // No users match the filter
 
@@ -285,10 +297,10 @@ if (!defined('DP_BASE_DIR')) {
 					}
 					else
 					{
-						$this->createsqluser($username, $password, $first_user); 
+						$this->createsqluser($username, $password, $first_user);
 					}
 					return true;
-				} 
+				}
 			}
 		}
 
@@ -300,7 +312,7 @@ if (!defined('DP_BASE_DIR')) {
 			$q->addTable('users');
 			$q->addWhere("user_username = '$username'");
 			$rs = $q->exec();
-			if ($rs->RecordCount() > 0) 
+			if ($rs->RecordCount() > 0)
 			  $result = true;
 			$q->clear();
 			return $result;
@@ -315,7 +327,7 @@ if (!defined('DP_BASE_DIR')) {
 			$rs = $q->exec();
 			$row = $rs->FetchRow();
 			$q->clear();
-			return $row["user_id"];	
+			return $row["user_id"];
 		}
 
 		function createsqluser($username, $password, $ldap_attribs = Array())
@@ -324,7 +336,7 @@ if (!defined('DP_BASE_DIR')) {
 			$hash_pass = MD5($password);
 
 			require_once($AppUI->getModuleClass("contacts"));
-	
+
 			if (!count($ldap_attribs) == 0)
 			{
 				// Contact information based on the inetOrgPerson class schema
@@ -374,8 +386,8 @@ if (!defined('DP_BASE_DIR')) {
 			$q  = new DBQuery;
 			$q->addTable('user_ip_lock');
 			$q->addQuery('user_id');
-			$q->addWhere("user_id = {$this->user_id}");
-			$q->addWhere("user_ip = '{$_SERVER['REMOTE_ADDR']}'");
+			$q->addWhere("user_id = " . $this->user_id);
+			$q->addWhere("user_ip = '". $_SERVER['REMOTE_ADDR'] . "'");
 			$row = $q->loadResult();
 			if ($row) {
 				return false;

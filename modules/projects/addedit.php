@@ -2,7 +2,7 @@
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-include ($AppUI->getLibraryClass('quilljs/richedit.class'));
+include_once ($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 $project_id = intval(dPgetParam($_GET, 'project_id', 0));
 $company_id = intval(dPgetParam($_GET, 'company_id', 0));
@@ -25,7 +25,7 @@ $companies = arrayMerge(array('0'=>''), $companies);
 
 // get internal companies
 // 6 is standard value for internal companies
-$companies_internal = $row->listCompaniesByType(array('6')); 
+$companies_internal = $row->listCompaniesByType(array('6'));
 $companies_internal = arrayMerge(array('0'=>''), $companies_internal);
 
 // pull users
@@ -74,9 +74,9 @@ $projectPriority = dPgetSysVal('ProjectPriority');
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = intval($row->project_start_date) ? new CDate($row->project_start_date) : null;
-$end_date = intval($row->project_end_date) ? new CDate($row->project_end_date) : null;
-$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
+$start_date = (!empty($row) && intval($row->project_start_date)) ? new CDate($row->project_start_date) : null;
+$end_date = (!empty($row) && intval($row->project_end_date)) ? new CDate($row->project_end_date) : null;
+$actual_end_date = (!empty($criticalTasks) && intval($criticalTasks[0]['task_end_date'])) ? new CDate($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
@@ -99,15 +99,15 @@ if ($project_id) {
 }
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if ($department_selection_list!='' || $project_id) {
+if ((!empty($department_selection_list) && $department_selection_list != '') || $project_id) {
 	$department_selection_list = ($AppUI->_('Departments')."<br />\n"
 	                              . '<select name="dept_ids[]" class="text">' . "\n"
 	                              . '<option value="0"></option>' . "\n"
 	                              . $department_selection_list . "\n" .'</select>');
 } else {
 	$department_selection_list = ('<input type="button" class="button" value="'
-	                              . $AppUI->_('Select department...') 
-	                              . '" onclick="javascript:popDepartment();" />' 
+	                              . $AppUI->_('Select department...')
+	                              . '" onclick="javascript:popDepartment();" />'
 	                              . '<input type="hidden" name="project_departments"');
 }
 
@@ -159,7 +159,7 @@ function submitIt() {
 	}
 	*/
 
-	<?php 
+	<?php
 	/*
 	** Automatic required fields generated from System Values
 	*/
@@ -178,7 +178,7 @@ var selected_contacts_id = "<?php echo implode(',', $selected_contacts); ?>";
 
 // See above note re firefox bug and window.open
 function popContacts() {
-	window.open('?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 
+	window.open('?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id,
 	            'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
@@ -299,11 +299,11 @@ function setDepartment(department_id_string) {
 <tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date');?></td>
 			<td nowrap="nowrap">
-                                <?php if ($project_id > 0) { ?>
-                                        <?php echo $actual_end_date ? '<a href="?m=tasks&amp;a=view&amp;task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
-                                        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
-                                        <?php echo $actual_end_date ? '</a>' : '';?>
-                                <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
+      <?php if ($project_id > 0) { ?>
+        <?php echo $actual_end_date ? '<a href="?m=tasks&amp;a=view&amp;task_id='.$criticalTasks[0]['task_id'].'">' : '';?>
+        <?php echo $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format($df).'</span>' : '-';?>
+        <?php echo $actual_end_date ? '</a>' : '';?>
+      <?php } else { echo $AppUI->_('Dynamically calculated');} ?>
 			</td>
 		</tr>
 		<tr>
@@ -357,7 +357,6 @@ function setDepartment(department_id_string) {
 			<td nowrap="nowrap">
 				<input type="color" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : '#FFFFFF';?>" size="10" maxlength="7"/> *
 			</td>
-						
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type');?></td>
@@ -402,8 +401,9 @@ function setDepartment(department_id_string) {
 		<tr>
 			<td colspan="4">
 			<?php
-                            $richedit = new DpRichEdit("project_description", dPformSafe(@$row->project_description));
-                            $richedit->render();
+//        $richedit = new DpRichEdit("project_description", dPformSafe(@$row->project_description));
+        $richedit = new DpRichEdit("project_description", dPsanitiseHTML(@$row->project_description));
+        $richedit->render();
 			?>
 			</td>
 		</tr>
@@ -428,7 +428,7 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	$parsed = '';
 
 	if ($departments_count < 6) $departments_count++;
-	
+
 	$q  = new DBQuery;
 	$q->addTable('departments');
 	$q->addQuery('dept_id, dept_name');
@@ -440,11 +440,11 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	foreach ($depts_list as $dept_id => $dept_info) {
 		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
 
-		$parsed .= ('<option value="' . $dept_id . '"' . $selected . '>' 
+		$parsed .= ('<option value="' . $dept_id . '"' . $selected . '>'
 		            . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>');
 		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces+5);
 	}
-	
+
 	return $parsed;
 }
 ?>

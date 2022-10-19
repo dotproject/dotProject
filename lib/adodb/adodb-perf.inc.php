@@ -692,8 +692,8 @@ Committed_AS:   348732 kB
 	$this->conn->LogSQL($savelog);
 
 	// magic quotes
-
-	if (isset($_GET['sql']) && get_magic_quotes_gpc()) {
+  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
+	if (isset($_GET['sql']) && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 		$_GET['sql'] = $_GET['sql'] = str_replace(array("\\'",'\"'),array("'",'"'),$_GET['sql']);
 	}
 
@@ -999,7 +999,7 @@ Committed_AS:   348732 kB
 
 	function undomq($m)
 	{
-	if (get_magic_quotes_gpc()) {
+	if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
 		// undo the damage
 		$m = str_replace('\\\\','\\',$m);
 		$m = str_replace('\"','"',$m);

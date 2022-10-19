@@ -5,7 +5,7 @@ require_once("gacl_admin.inc.php");
 if ( isset($_GET['object_type']) AND $_GET['object_type'] != '' ) {
 	$object_type = $_GET['object_type'];
 } else {
-	$object_type = $_POST['object_type'];	
+	$object_type = $_POST['object_type'];
 }
 
 switch(strtolower(trim($object_type))) {
@@ -30,25 +30,26 @@ switch(strtolower(trim($object_type))) {
         exit();
         break;
 }
-   
+
 switch ($_POST['action']) {
     case 'Delete':
-   
+
         if (count($_POST['delete_sections']) > 0) {
             foreach($_POST['delete_sections'] as $id) {
                 $gacl_api->del_object_section($id, $object_type, TRUE);
             }
-        }   
-            
+        }
+
         //Return page.
         $gacl_api->return_page($_POST['return_page']);
-        
+
         break;
     case 'Submit':
         $gacl_api->debug_text("Submit!!");
 
         //Update sections
-        while (list(,$row) = @each($_POST['sections'])) {
+//        while (list(,$row) = @each($_POST['sections'])) {  // deprecated and obsolete in PHP 8 (gwyneth 20210424)
+        foreach ($_POST['sections'] as $row) {
             list($id, $value, $order, $name) = $row;
             $gacl_api->edit_object_section($id, $name, $value, $order,0,$object_type );
         }
@@ -58,9 +59,10 @@ switch ($_POST['action']) {
         unset($name);
 
         //Insert new sections
-        while (list(,$row) = @each($_POST['new_sections'])) {
+//        while (list(,$row) = @each($_POST['new_sections'])) {  // see above
+        foreach ($_POST['new_sections'] as $row) {
             list($value, $order, $name) = $row;
-            
+
             if (!empty($value) AND !empty($order) AND !empty($name)) {
 
                 $object_section_id = $gacl_api->add_object_section($name, $value, $order, 0, $object_type);
@@ -69,32 +71,33 @@ switch ($_POST['action']) {
         }
         $gacl_api->debug_text("return_page: ". $_POST['return_page']);
         $gacl_api->return_page($_POST['return_page']);
-        
-        break;    
+
+        break;
     default:
         $query = "select id,value,order_value,name from $object_sections_table order by order_value";
 
         $rs = $db->pageexecute($query, $gacl_api->_items_per_page, $_GET['page']);
-	if ($rs)
-	  $rows = $rs->GetRows();
-	else
-	  $rows = array();
+      	if ($rs)
+      	  $rows = $rs->GetRows();
+      	else
+      	  $rows = array();
 
         $sections = array();
 
-        while (list(,$row) = @each($rows)) {
+//        while (list(,$row) = @each($rows)) {  // see above
+        foreach ($rows as $row) {
             list($id, $value, $order_value, $name) = $row;
-            
+
                 $sections[] = array(
                                                 'id' => $id,
                                                 'value' => $value,
                                                 'order' => $order_value,
-                                                'name' => $name            
+                                                'name' => $name
                                             );
         }
 
         $new_sections = array();
-        
+
         for($i=0; $i < 5; $i++) {
                 $new_sections[] = array(
                                                 'id' => $i,

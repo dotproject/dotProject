@@ -13,7 +13,7 @@ class CDpTree
 	private $base_node;
 
 	/**
-	 * Constructor. 
+	 * Constructor.
 	 */
 	public function __construct($sort_key = null) {
 		$emptynode = null;
@@ -100,7 +100,8 @@ class CDpTreeNode
 			return $this;
 		} else {
 			reset ($this->children);
-			while (list($newid, $node) = each($this->children)) {
+//			while (list($newid, $node) = each($this->children)) { // obsolete in PHP 8
+        foreach ($this->children as $newid => $node) {
 				if ($result =& $node->find($id)) {
 					return $result;
 				}
@@ -115,7 +116,8 @@ class CDpTreeNode
 			// Sort based on the supplied sort key
 			usort($this->children, array($this, 'do_sort'));
 		}
-		while (list($id, $node) = each($this->children)) {
+//		while (list($id, $node) = each($this->children)) {  // obsolete in PHP 8.0
+    foreach($this->children as $id => $node) {
 			call_user_func($method, $node->depth, $node->data);
 			$node->display($method);
 		}

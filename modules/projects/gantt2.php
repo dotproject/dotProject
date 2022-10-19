@@ -39,8 +39,8 @@ $q->addJoin('user_tasks', 'ut', 't.task_id = ut.task_id');
 $q->addJoin('users', 'u', 'u.user_id = ut.user_id');
 $q->addJoin('projects', 'p', 'p.project_id = t.task_project');
 $q->addJoin('companies', 'c', 'p.project_company = c.company_id');
-$q->addQuery('u.user_username, t.task_name, t.task_start_date, t.task_milestone' 
-             . ', ut.perc_assignment, t.task_end_date, t.task_dynamic' 
+$q->addQuery('u.user_username, t.task_name, t.task_start_date, t.task_milestone'
+             . ', ut.perc_assignment, t.task_end_date, t.task_dynamic'
              . ', p.project_color_identifier, p.project_name');
 $q->addOrder('t.task_name, t.task_start_date, t.task_end_date, ut.perc_assignment');
 $tasks = $q->loadList();
@@ -80,9 +80,9 @@ if ($start_date && $end_date) {
 $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 $graph2->scale->actinfo->vgrid->SetColor('gray');
 $graph2->scale->actinfo->SetColor('darkgray');
-$graph2->scale->actinfo->SetColTitles(array($AppUI->_('User Name', UI_OUTPUT_RAW), 
-                                            $AppUI->_('Start Date', UI_OUTPUT_RAW), 
-                                            $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_(' ')), 
+$graph2->scale->actinfo->SetColTitles(array($AppUI->_('User Name', UI_OUTPUT_RAW),
+                                            $AppUI->_('Start Date', UI_OUTPUT_RAW),
+                                            $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_(' ')),
                                       array(160, 70, 70, 70));
 
 $tableTitle = (($proFilter == '-1') ? $AppUI->_('All Tasks By Users') : $projectStatus[$proFilter]);
@@ -114,10 +114,10 @@ if ($start_date && $end_date) {
 	for ($i = 0, $xi = count(@$taskMinMax); $i < $xi; $i++) {
 		$start = mb_substr($taskMinMax['task_min_date'], 0, 10);
 		$end = mb_substr($taskMinMax['task_max_date'], 0, 10);
-		
+
 		$d_start->Date($start);
 		$d_end->Date($end);
-		
+
 		if ($i == 0) {
 			$min_d_start = $d_start;
 			$max_d_end = $d_end;
@@ -148,7 +148,7 @@ $row = 0;
 
 if (!is_array($tasks) || sizeof($tasks) == 0) {
 	$d = new CDate();
-	$bar = new GanttBar($row++, array(' '.$AppUI->_('No tasks found'),  ' ', ' ', ' '), 
+	$bar = new GanttBar($row++, array(' '.$AppUI->_('No tasks found'),  ' ', ' ', ' '),
 	                    $d->getDate(), $d->getDate(), ' ', 0.6);
 	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 	$bar->title->SetColor('red');
@@ -164,32 +164,32 @@ if (is_array($tasks)) {
 			$row++;
 			$barTmp = new GanttBar($row++, array($t['user_name'], '', '',' '), '0', '0;' , 0.6);
 			$barTmp->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-			$barTmp->title->SetColor('#' . $t['project_color_identifier']);
-			$barTmp->SetFillColor('#' . $t['project_color_identifier']);
+			$barTmp->title->SetColor(/* '#' . */ $t['project_color_identifier']);
+			$barTmp->SetFillColor(/* '#' */ . $t['project_color_identifier']);
 			if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
 				$barTmp->title ->SetFont(FF_CUSTOM, FF_BOLD);
-			}		
+			}
 			$graph2->Add($barTmp);
 		}
-		
+
 		if ($locale_char_set=='utf-8' && function_exists('utf_decode')) {
-			$name = ((mb_strlen(utf8_decode($t['task_name'])) > 25) 
-			         ? (mb_substr(utf8_decode($t['task_name']), 0, 22) . '...') 
+			$name = ((mb_strlen(utf8_decode($t['task_name'])) > 25)
+			         ? (mb_substr(utf8_decode($t['task_name']), 0, 22) . '...')
 			         : utf8_decode($t['task_name']));
 			$nameUser = $t['user_name'];
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_deocde
-			$name = ((mb_strlen($t['task_name']) > 25) ? (mb_substr($t['task_name'], 0, 22) . '...') 
+			$name = ((mb_strlen($t['task_name']) > 25) ? (mb_substr($t['task_name'], 0, 22) . '...')
 			         : $t['task_name']);
 			$nameUser = $t['user_name'];
 		}
-		
+
 		//using new jpGraph determines using Date object instead of string
-		$start = (($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date'] 
+		$start = (($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date']
 		          : date('Y-m-d H:i:s'));
 		$end_date = $t['task_end_date'];
         $actual_end = $t['task_end_date'] ? $t['task_end_date'] : ' ';
-		
+
 		$end_date = new CDate($end_date);
 		//$end->addDays(0);
 		$end = $end_date->getDate();
@@ -197,42 +197,42 @@ if (is_array($tasks)) {
 		$start = new CDate($start);
 		//$start->addDays(0);
 		$start = $start->getDate();
-		
+
 		//$progress = $p['project_percent_complete'];
-		
+
 		$caption = '';
 		if (!($start) || $start == '0000-00-00 00:00:00') {
 			$start = !$end ? date('Y-m-d') : $end;
 			$caption .= $AppUI->_('(no start date)');
 		}
-		
+
 		if (!($end)) {
 			$end = $start;
 			$caption .= $AppUI->_('(no end date)');
 		} else {
 			$cap = '';
 		}
-		
+
 		if ($showLabels) {
 			$caption .= ($t['project_name'] . ' (' . $t['perc_assignment'] . '%)');
 			/*
 			$caption .= (($p['project_status']) != 7 ? $AppUI->_('active') : $AppUI->_('inactive'));
 			*/
 		}
-		
+
 		if ($t['task_milestone'] != 1) {
 			$enddate = new CDate($end);
 			$startdate = new CDate($start);
-			$bar = new GanttBar($row++, 
-			                    array($name, $startdate->format($df), $enddate->format($df), ' '), 
+			$bar = new GanttBar($row++,
+			                    array($name, $startdate->format($df), $enddate->format($df), ' '),
 			                    $start, $actual_end, $cap, ($t['task_dynamic'] == 1 ? 0.1 : 0.6));
 			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 				$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
 			}
-			$bar->SetFillColor('#' . $t['project_color_identifier']);
+			$bar->SetFillColor(/* '#' .*/ $t['project_color_identifier']);
 			$bar->SetPattern(BAND_SOLID, ($t['project_color_identifier']));
-			
+
 			//adding captions
 			$bar->caption = new TextProperty($caption);
 			$bar->caption->Align('left','center');
@@ -242,10 +242,10 @@ if (is_array($tasks)) {
 			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 			$bar->title->SetColor('#CC0000');
 		}
-		
+
 		$graph2->Add($bar);
-		
-		// If showAllGant checkbox is checked 
+
+		// If showAllGant checkbox is checked
 	}
 } // End of check for valid projects array.
 

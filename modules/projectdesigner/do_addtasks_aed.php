@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $AppUI;
 
 //Lets store the panels view options of the user:
@@ -14,12 +14,12 @@ $pdo->store();
 
 //Lets store the task lines
 $elements = $_POST;
-$project_id = $elements['project']; 
+$project_id = $elements['project'];
 foreach ($elements as $element => $on) {
       if ((substr($element, 0, 14) == 'add_task_line_') && ($on != '')) {
-            
+
             $tline = new CTask();
-            
+
             $tline->task_id = 0;
             $tline->task_name = $elements['add_task_name_'.$on];
             $tline->task_project = $project_id;
@@ -41,14 +41,14 @@ foreach ($elements as $element => $on) {
             $tline->task_type = $elements['add_task_type_'.$on];
             $tline->task_access = $elements['add_task_access_'.$on];
             $tline->task_description = $elements['add_task_description_'.$on];
-            $tline->task_owner = "{$AppUI->user_id}";
+            $tline->task_owner = $AppUI->user_id;
             if ($elements['add_task_extra_'.$on]=='1')
                   $tline->task_milestone = '1';
             elseif ($elements['add_task_extra_'.$on]=='2')
                   $tline->task_dynamic = '1';
             elseif ($elements['add_task_extra_'.$on]=='3')
                   $tline->task_status = '-1';
-                              
+
             if (($msg = $tline->store())) {
       		$nrerrors++;
       	}

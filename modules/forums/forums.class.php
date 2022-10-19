@@ -70,7 +70,7 @@ class CForum extends CDpObject {
 		$q->addWhere('visit_forum = '.$this->forum_id);
 		$q->exec(); // No error if this fails, it is not important.
 		$q->clear();
-		
+
 		$q->setDelete('forums');
 		$q->addWhere('forum_id = '.$this->forum_id);
 		if (!$q->exec()) {
@@ -197,14 +197,14 @@ class CForumMessage {
 		$q->addQuery('COUNT(*)');
 		$q->addWhere('message_forum = ' . $forumId);
 		$messageCount = db_loadResult($q->prepare());
-		$q->clear();		
+		$q->clear();
 
 		$q->addTable('forums');
 		$q->addUpdate('forum_message_count', $messageCount);
 		$q->addWhere('forum_id = ' . $forumId);
 		$q->exec();
 		$q->clear();
-		
+
 		return $result;
 	}
 
@@ -212,16 +212,16 @@ class CForumMessage {
 		GLOBAL $AppUI, $debug, $dPconfig;
 		$subj_prefix = $AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
 		$body_msg = $AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
-		
+
 		// Get the message from details.
 		$q  = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addQuery('contact_email, contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-		$q->addWhere("user_id = '{$this->message_author}'");
+		$q->addWhere("user_id = '" . $this->message_author . "'");
 		$res = $q->exec();
 		if ($row = db_fetch_assoc($res)) {
-		  $message_from = "$row[contact_first_name] $row[contact_last_name] <$row[contact_email]>";
+		  $message_from = $row[contact_first_name] . " " . $row[contact_last_name] . " <" . $row[contact_email] . ">";
 		} else {
 		  $message_from = "Unknown user";
 		}
@@ -229,7 +229,7 @@ class CForumMessage {
 		$q->clear();
 		$q->addTable('forums');
 		$q->addQuery('forum_name');
-		$q->addWhere("forum_id = '{$this->message_forum}'");
+		$q->addWhere("forum_id = '" . $this->message_forum . "'");
 		$res = $q->exec();
 		if ($row = db_fetch_assoc($res)) {
 		  $forum_name = $row['forum_name'];
@@ -252,10 +252,10 @@ class CForumMessage {
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact');
 
 		if ($AllCount < 1)		//message is only delivered to users that checked the forum watch
-		{	
+		{
 			$q->addTable('forum_watch');
 			$q->addWhere("user_id = watch_user
-				AND (watch_forum = $this->message_forum OR watch_topic = $this->message_parent)");
+				AND (watch_forum = " . $this->message_forum . " OR watch_topic = " . $this->message_parent . ")");
 		}
 
 		if (!($res = $q->exec())) {
@@ -267,16 +267,16 @@ class CForumMessage {
 		}
 
 		$mail = new Mail;
-		$mail->Subject("$subj_prefix $this->message_title", isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
+		$mail->Subject($subj_prefix . " " . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
 
 		$body = "$body_msg";
 
-		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ": $forum_name";
-		$body .= "\n" . $AppUI->_('Subject', UI_OUTPUT_RAW) . ": {$this->message_title}";
-		$body .= "\n" . $AppUI->_('Message From', UI_OUTPUT_RAW) . ": $message_from";
-		$body .= "\n\n".DP_BASE_URL.'/index.php?m=forums&a=viewer&forum_id='.$this->message_forum;
-		$body .= "\n\n$this->message_body";
- 
+		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ": " . $forum_name;
+		$body .= "\n" . $AppUI->_('Subject', UI_OUTPUT_RAW) . ": " . $this->message_title;
+		$body .= "\n" . $AppUI->_('Message From', UI_OUTPUT_RAW) . ": " . $message_from;
+		$body .= "\n\n" . DP_BASE_URL.'/index.php?m=forums&a=viewer&forum_id=' . $this->message_forum;
+		$body .= "\n\n" . $this->message_body;
+
 		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
 		$mail->From($AppUI->_('forumEmailFrom', UI_OUTPUT_RAW));
 

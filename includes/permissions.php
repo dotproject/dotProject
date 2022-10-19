@@ -18,7 +18,8 @@ define('PERM_ALL', '-1');
 
 function getReadableModule() {
 	global $AppUI;
-	$perms =& $AppUI->acl();
+//	$perms =& $AppUI->acl();
+  $perms = $AppUI->acl();  // because PHP 8 dislikes references, let's see if this works better (gwyneth 20210503)
 	$dbprefix = dPgetConfig('dbprefix', '');
 
 	$sql = 'SELECT mod_directory FROM '.$dbprefix.'modules WHERE mod_active > 0 ORDER BY mod_ui_order';
@@ -55,7 +56,7 @@ function checkFlag($flag, $perm_type, $old_flag) {
 /**
  * This function checks certain permissions for
  * a given module and optionally an item_id.
- * 
+ *
  * $perm_type can be PERM_READ or PERM_EDIT
  */
 function isAllowed($perm_type, $mod, $item_id = 0) {
@@ -76,13 +77,21 @@ function isAllowed($perm_type, $mod, $item_id = 0) {
 function getPermission($mod, $perm, $item_id = 0) {
 	global $AppUI;
 	$item_id = intval($item_id);
-	$perms =& $AppUI->acl();
+//	$perms =& $AppUI->acl();
+  $perms = $AppUI->acl();  // removing call by reference to see if it helps (gwyneth 20210503)
 	$dbprefix = dPgetConfig('dbprefix', '');
-	
+
+  if (empty($mod)) {
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: " . __FUNCTION__ . "() had empty mod(ule); item_id was " . $item_id . ".");
+  }
+  if (empty($perm)) {
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: " . __FUNCTION__ . "() had empty perm(issions); item_id was " . $item_id . ".");
+  }
+
 	// First check if the module is readable, i.e. has view permission.
 	$result = $perms->checkModuleItem($mod, $perm, $item_id);
-	
-	// We need to check if we are allowed to view in the parent module item.  
+
+	// We need to check if we are allowed to view in the parent module item.
 	// This can be done a lot better in PHPGACL, but is here for compatibility.
 	if ($item_id && $perm == 'view') {
 		if ($mod == 'task_log') {
@@ -103,13 +112,13 @@ function getPermission($mod, $perm, $item_id = 0) {
 }
 
 
-// TODO: getDeny* should be depricated as its usage is counter-intuitive and/or assuming
+// TODO: getDeny* should be deprecated as its usage is counter-intuitive and/or assuming
 // Simply using getPermission function is clearer
 function getDenyRead($mod, $item_id = 0) {
  	return ! getPermission($mod, 'view', $item_id);
 }
 
-function getDenyEdit($mod, $item_id=0) {
+function getDenyEdit($mod, $item_id = 0) {
  	return ! getPermission($mod, 'edit', $item_id);
 }
 

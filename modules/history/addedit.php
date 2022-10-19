@@ -17,7 +17,7 @@ if ($action) {
 	$history_description = dPgetCleanParam($_POST, 'history_description', '');
 	$history_project = dPgetCleanParam($_POST, 'history_project', '');
 	$userid = $AppUI->user_id;
-	
+
 	if ($action == 'add') {
 		$q->addTable('history');
 		$q->addInsert('history_table', "history");
@@ -36,16 +36,19 @@ if ($action) {
 	} else if ($action == 'del') {
 		$q->setDelete('history');
 		$q->addWhere('history_id ='.$history_id);
-		$okMsg = 'History deleted';				
+		$okMsg = 'History deleted';
 	}
 	if (!$q->exec()) {
-		$AppUI->setMsg(db_error());
-	} else {	
-		$AppUI->setMsg($okMsg);
+		$AppUI->setMsg(db_error(), UI_MSG_ERROR);  // review this db_error ... (gwyneth 20210501)
+	} else {
+		$AppUI->setMsg($okMsg, UI_MSG_OK);
 	}
 	$q->clear();
 	$AppUI->redirect();
 }
+
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 // pull the history
 $q->addTable('history');
@@ -60,7 +63,7 @@ $titleBlock = new CTitleBlock($title, 'stock_book_blue_48.png', $m, "$m.$a");
 $titleBlock->show();
 ?>
 
-<form name="AddEdit" method="post">				
+<form name="AddEdit" method="post">
 <div>
 <input name="action" type="hidden" value="<?php echo $history_id ? "update" : "add"  ?>">
 </div>
@@ -73,14 +76,14 @@ $titleBlock->show();
 </table>
 
 <table border="1" cellpadding="4" cellspacing="0" width="98%" class="std" summary="project history">
-	
-<script >
+
+<script>
 	function delIt() {
 		document.AddEdit.action.value = "del";
 		document.AddEdit.submit();
-	}	
+	}
 </script>
-	
+
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
 	<td width="60%">
@@ -94,14 +97,18 @@ echo arraySelect($projects, 'history_project', 'class="text"', $history["history
 ?>
 	</td>
 </tr>
-	
+
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description');?>:</td>
 	<td width="60%">
-		<textarea name="history_description" class="textarea" cols="60" rows="5" wrap="virtual"><?php echo $history["history_description"];?></textarea>
+		<!-- <textarea name="history_description" class="textarea" cols="60" rows="5" wrap="virtual"><?php // echo $history["history_description"];?></textarea> -->
+    <?php
+      $richedit = new DpRichEdit("history_description", dPsanitiseHTML($history["history_description"]));
+      $richedit->render();
+    ?>
 	</td>
-</tr>	
-		
+</tr>
+
 <table border="0" cellspacing="0" cellpadding="3" width="98%">
 <tr>
 	<td height="40" width="30%">&nbsp;</td>
@@ -118,7 +125,7 @@ echo arraySelect($projects, 'history_project', 'class="text"', $history["history
 		</table>
 	</td>
 </tr>
-</table>	
-	
 </table>
-</form>		
+
+</table>
+</form>

@@ -11,7 +11,7 @@ function checkDate() {
            if (document.frmDate.log_start_date.value == "" || document.frmDate.log_end_date.value== "") {
                 alert("<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>");
                 return false;
-           } 
+           }
            return true;
 }
 </script>
@@ -24,10 +24,10 @@ $end_date = intval($date_reg) ? new CDate(dPgetCleanParam($_POST, "log_end_date"
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId;
 if ($a = dPgetCleanParam($_REQUEST, "a", "") == "") {
-    $a = "&tab={$currentTabId}&amp;showdetails=1";
+    $a = "&tab=" . $currentTabId . "&amp;showdetails=1";
 } else {
     $user_id = intval(dPgetParam($_REQUEST, "user_id", 0));
-    $a = "&amp;a=viewuser&amp;user_id={$user_id}&amp;tab={$currentTabId}&amp;showdetails=1";
+    $a = "&amp;a=viewuser&amp;user_id=" . $user_id . "&amp;tab=" . $currentTabId . "&amp;showdetails=1";
 }
 
 ?>
@@ -61,11 +61,11 @@ if ($a = dPgetCleanParam($_REQUEST, "a", "") == "") {
 </table>
 </form>
 
-<?php 
-if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {  
+<?php
+if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {
     $start_date = date("Y-m-d", strtotime(dPgetCleanParam($_POST, "log_start_date", date("Y-m-d"))));
     $end_date   = date("Y-m-d 23:59:59", strtotime(dPgetCleanParam($_POST, "log_end_date", date("Y-m-d"))));
-    
+
     	$q  = new DBQuery;
 	$q->addTable('user_access_log', 'ual');
 	$q->addTable('users', 'u');
@@ -73,7 +73,7 @@ if (dPgetParam($_REQUEST, "showdetails", 0) == 1) {
 	$q->addQuery('ual.*, u.*, c.*');
 	$q->addWhere('ual.user_id = u.user_id');
 	$q->addWhere('user_contact = contact_id ');
-	if ($user_id != 0) { $q->addWhere("ual.user_id='$user_id'"); }
+	if (!empty($user_id)) { $q->addWhere("ual.user_id='$user_id'"); }  // better for PHP 8 (no warnings) (gwyneth 20210427)
 	$q->addWhere("ual.date_time_in >='$start_date'");
 	$q->addWhere("ual.date_time_out <='$end_date'");
 	$q->addGroup('ual.date_time_last_action DESC');

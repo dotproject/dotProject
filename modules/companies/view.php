@@ -54,17 +54,17 @@ $types = dPgetSysVal('CompanyType');
 $titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 if ($canEdit) {
 	$titleBlock->addCell();
-	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company') 
-	                      . '" />'), '', '<form action="?m=companies&amp;a=addedit" method="post">', 
+	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company')
+	                      . '" />'), '', '<form action="?m=companies&amp;a=addedit" method="post">',
 	                     '</form>');
-	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new project') 
-	                      . '" />'), '', 
-	                     ('<form action="?m=projects&amp;a=addedit&amp;company_id=' 
+	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new project')
+	                      . '" />'), '',
+	                     ('<form action="?m=projects&amp;a=addedit&amp;company_id='
 	                      . dPformSafe($company_id) . '" method="post">'), '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {
-	$titleBlock->addCrumb(('?m=companies&amp;a=addedit&amp;company_id=' . $company_id), 
+	$titleBlock->addCrumb(('?m=companies&amp;a=addedit&amp;company_id=' . $company_id),
 	                      'edit this company');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete company', $canDelete, $msg);
@@ -108,13 +108,13 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td class="hilite" width="100%"><?php 
-echo (htmlspecialchars($obj->contact_first_name) . '&nbsp;' 
+			<td class="hilite" width="100%"><?php
+echo (htmlspecialchars($obj->contact_first_name) . '&nbsp;'
       . htmlspecialchars($obj->contact_last_name)); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php 
+			<td class="hilite" width="100%"><?php
 echo htmlspecialchars($obj->company_email); ?></td>
 		</tr>
 		<tr>
@@ -133,23 +133,23 @@ echo htmlspecialchars($obj->company_email); ?></td>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite">
 <?php if (!empty($obj->company_country)) { ?>
-				<span style="float: right"><a href="http://maps.google.com/maps?q=<?php 
-echo dPformSafe(@$obj->company_address1, DP_FORM_URI); ?>+<?php 
-echo dPformSafe(@$obj->company_address2, DP_FORM_URI); ?>+<?php 
-echo dPformSafe(@$obj->company_city, DP_FORM_URI); ?>+<?php 
-echo dPformSafe(@$obj->company_state, DP_FORM_URI); ?>+<?php 
-echo dPformSafe(@$obj->company_zip, DP_FORM_URI); ?>+<?php 
+				<span style="float: right"><a href="http://maps.google.com/maps?q=<?php
+echo dPformSafe(@$obj->company_address1, DP_FORM_URI); ?>+<?php
+echo dPformSafe(@$obj->company_address2, DP_FORM_URI); ?>+<?php
+echo dPformSafe(@$obj->company_city, DP_FORM_URI); ?>+<?php
+echo dPformSafe(@$obj->company_state, DP_FORM_URI); ?>+<?php
+echo dPformSafe(@$obj->company_zip, DP_FORM_URI); ?>+<?php
 echo dPformSafe(@$obj->company_country, DP_FORM_URI); ?>" target="_blank">
-				<?php 
-echo dPshowImage('./images/googlemaps.gif', 55, 22, 'Find It on Google');
+				<?php
+echo dPshowImage('./images/googlemaps.svg', '', 22, 'Find It on Google');
 ?>
 <?php } ?>
 				</a></span>
 				<?php
-echo (htmlspecialchars(@$obj->company_address1) 
-      . (($obj->company_address2) ? '<br />' : '') . htmlspecialchars($obj->company_address2) 
-      . (($obj->company_city) ? '<br />' : '') . htmlspecialchars($obj->company_city) 
-      . (($obj->company_state) ? ', ' : '') . htmlspecialchars($obj->company_state) 
+echo (htmlspecialchars(@$obj->company_address1)
+      . (($obj->company_address2) ? '<br />' : '') . htmlspecialchars($obj->company_address2)
+      . (($obj->company_city) ? '<br />' : '') . htmlspecialchars($obj->company_city)
+      . (($obj->company_state) ? ', ' : '') . htmlspecialchars($obj->company_state)
       . (($obj->company_zip) ? ' ' : '') . htmlspecialchars($obj->company_zip));
 ?>
 			</td>
@@ -157,8 +157,8 @@ echo (htmlspecialchars(@$obj->company_address1)
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
 			<td class="hilite">
-				<a href="http://<?php 
-echo dPformSafe(@$obj->company_primary_url, DP_FORM_URI); ?>" target="Company"><?php 
+				<a href="http://<?php
+echo dPformSafe(@$obj->company_primary_url, DP_FORM_URI); ?>" target="Company"><?php
 echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 			</td>
 		</tr>
@@ -174,10 +174,11 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%" summary="company description">
 		<tr>
 			<td class="hilite">
-				<?php echo strip_tags($obj->company_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>') ?>
+				<?php //echo strip_tags($obj->company_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>')
+          echo $AppUI->showHTML($obj->company_description); ?>
 			</td>
 		</tr>
-		
+
 		</table>
 		<?php
 			require_once($AppUI->getSystemClass('CustomFields'));
@@ -187,7 +188,6 @@ echo htmlspecialchars(@$obj->company_primary_url); ?></a>
 	</td>
 </tr>
 </table>
-
 <?php
 // tabbed information boxes
 $moddir = DP_BASE_DIR . '/modules/companies/';
@@ -200,33 +200,4 @@ $tabBox->add($moddir . 'vw_contacts', 'Contacts');
 $tabBox->loadExtras($m);
 $tabBox->loadExtras($m, 'view');
 $tabBox->show();
-
 ?>
-<style>
-.ql-size-large {
-    font-size: 1.5em;
-}
-.ql-size-small {
-    font-size: 0.75em;
-}
-.ql-size-huge {
-    font-size: 2.5em;
-}
-.ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
-}
-.ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-justify {
-    text-align: justify;
-}
-
-</style>
-

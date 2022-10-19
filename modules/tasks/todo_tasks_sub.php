@@ -14,7 +14,7 @@ $q = new DBQuery();
 ?>
 
 
-<form name="form_buttons" method="post" action="index.php?<?php 
+<form name="form_buttons" method="post" action="index.php?<?php
 echo "m=$m&a=$a&date=$date"; ?>">
 <input type="hidden" name="show_form" value="1" />
 <table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -23,19 +23,19 @@ echo "m=$m&a=$a&date=$date"; ?>">
 	<td width="50%">
 <?php
 if ($other_users) {
-	echo ($AppUI->_("Show Todo for:") 
+	echo ($AppUI->_("Show Todo for:")
 	      . '<select name="show_user_todo" onchange="document.form_buttons.submit()">');
-	
+
 	$q->addTable('users', 'u');
 	$q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 	$q->addQuery('u.user_id, u.user_username, c.contact_first_name, c.contact_last_name');
 	$q->addOrder('c.contact_last_name');
 	$usersql = $q->prepare(true);
-	
+
 	if (($rows = db_loadList($usersql))) {
 		foreach ($rows as $row) {
-		  echo ('<option value="' . $row['user_id'] . '"' 
-				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . ' />' 
+		  echo ('<option value="' . $row['user_id'] . '"'
+				. (($user_id == $row["user_id"]) ? ' selected="selected"' : '') . ' />'
 				. $row['contact_last_name'].', ' . $row["contact_first_name"]) ;
 		}
 	}
@@ -90,14 +90,14 @@ if ($other_users) {
 	<th width='10'>&nbsp;</th>
 	<th width='10'><?php echo $AppUI->_('Pin'); ?></th>
 	<th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
-	<th width="15" align="center"><?php 
+	<th width="15" align="center"><?php
 sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
-	<th colspan="2"><?php 
+	<th colspan="2"><?php
 sort_by_item_title('Task / Project', 'task_name', SORT_STRING); ?></th>
-	<th nowrap><?php 
+	<th nowrap><?php
 sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
 	<th nowrap><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?></th>
-	<th nowrap><?php 
+	<th nowrap><?php
 sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
 	<th nowrap><?php sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC); ?></th>
 	<?php if (dPgetConfig('direct_edit_assignment')) { ?><th width="0">&nbsp;</th><?php } ?>
@@ -114,12 +114,12 @@ $showEditCheckbox = dPgetConfig('direct_edit_assignment');
 foreach ($tasks as $tId=>$task) {
 	$start = intval(@$task["task_start_date"]) ? new CDate($task["task_start_date"]) : null;
 	$end = intval(@$task["task_end_date"]) ? new CDate($task["task_end_date"]) : null;
-	
+
 	if (!$end && $start) {
 		$end = $start;
 		$end->addSeconds(@$task["task_duration"]*$task["task_duration_type"]*SEC_HOUR);
 	}
-	
+
 	$days = (($end) ? $end->dateDiff($now) : null);
 	$tasks[$tId]['task_due_in'] = $days;
 
@@ -128,24 +128,24 @@ foreach ($tasks as $tId=>$task) {
 // sorting tasks
 if ($task_sort_item1 != '') {
 	if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1, 
+		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1,
 							 $task_sort_item2, $task_sort_order2, $task_sort_type2);
 	} else {
 		$tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1);
 	}
 }else { // All this appears to already be handled in todo.php ... should consider deleting this else block
-	/* we have to calculate the end_date via start_date+duration for 
+	/* we have to calculate the end_date via start_date+duration for
 	 ** end='0000-00-00 00:00:00' if array_csort function is not used
 	 ** as it is normally done in array_csort function in order to economise
 	 ** cpu time as we have to go through the array there anyway
 	 */
-	for ($j=0, $xj = count($tasks); $j < $xj; $j++) {	
-		if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' 
+	for ($j=0, $xj = count($tasks); $j < $xj; $j++) {
+		if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00'
 		    || $tasks[$j]['task_end_date'] == '') {
-			if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' 
+			if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00'
 			    || $tasks[$j]['task_start_date'] == '') {
 				//just to be sure start date is "zeroed"
-				$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; 
+				$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00';
 				$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
 			} else {
 				$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
@@ -179,16 +179,16 @@ if (dPgetConfig('direct_edit_assignment')) {
 	</td>
 </table>
 </form>
-<table>
+<table class="tabox-bottom">
 <tr>
   <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
-  <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>
+  <td class="task-future-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Future Task'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#E6EEDD; color:#000000" width="10">&nbsp;</td>
+  <td class="task-started-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Started and on time'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#FFEEBB; color:#000000" width="10">&nbsp;</td>
+  <td class="task-late-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Should have started'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#CC6666; color:#000000" width="10">&nbsp;</td>
+  <td class="task-overdue-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
 </tr>
 </table>

@@ -17,7 +17,7 @@ if (dPgetParam($_POST, 'selected_contacts_id'))	{
 function setContactIDs (method,querystring)
 {
 	var URL = 'index.php?m=public&a=contact_selector';
-    
+
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
 	var currentIDstring = selected_contacts_id.value.toString();
@@ -28,14 +28,14 @@ function setContactIDs (method,querystring)
 	var i = 0;
 	var j = 0;
 	var flag = 0;
-	
+
 	if (method == 'GET' && querystring) {
 		URL += '&' + querystring;
 	}
-	
+
 	var countkeep = 0;
 	var countdrop = 0;
-	
+
 	for (i = 0; i < field.length; i++) {
 		if (field[i].checked) {
 			addkeepIDs[countkeep++] = field[i].value;
@@ -43,13 +43,13 @@ function setContactIDs (method,querystring)
 			dropIDs[countdrop++] = field[i].value;
 		}
 	}
-	
+
 	var countfinal = 0;
-	
+
 	for (i = 0; i < addkeepIDs.length; i++) {
 		resultIDs[countfinal++] = addkeepIDs[i];
 	}
-	
+
 	for (i = 0; i < currentIDs.length; i++) {
 		flag = 1;
 		for (j = 0; j < addkeepIDs.length; j++) {
@@ -66,10 +66,10 @@ function setContactIDs (method,querystring)
 			resultIDs[countfinal++] = currentIDs[i];
 		}
 	}
-	
-	
+
+
 	selected_contacts_id.value = resultIDs.join(',');
-    
+
 	if (method == 'GET') {
 		URL +=  '&selected_contacts_id=' + selected_contacts_id.value;
 		return URL;
@@ -81,9 +81,9 @@ function setContactIDs (method,querystring)
 <?php
 
 if ($contacts_submited == 1) {
-	$call_back_string = ((!(is_null($call_back))) 
+	$call_back_string = ((!(is_null($call_back)))
 	                     ? "window.opener.$call_back('$selected_contacts_id');" : '');
-echo $call_back_string 
+echo $call_back_string
 ?>
 self.close();
 <?php
@@ -98,33 +98,33 @@ function remove_invalid($arr) {
 		if (!(empty($val)) && trim($val) !== '' && is_numeric($val)) {
 			$result[] = $val;
 		}
-	}	
+	}
 	return $result;
 }
 
 function renderContacts ($contacts, $contacts_id) {
 	foreach ($contacts as $contact_id => $contact_data) {
-		$contact_company = (($contact_data['company_name']) 
+		$contact_company = (($contact_data['company_name'])
 							? $contact_data['company_name'] : $contact_data['contact_company']);
-		if ($contact_company  && $contact_company != $pointer_company) {
+		if (!empty($contact_company) && !empty($pointer_company) && $contact_company != $pointer_company) {
 			echo '<h4>'.$contact_company.'</h4>';
 			$pointer_company = $contact_company;
 		}
-		
-		$contact_department = (($contact_data['dept_name']) 
+
+		$contact_department = (($contact_data['dept_name'])
 							? $contact_data['dept_name'] : $contact_data['contact_department']);
-		if ($contact_department && $contact_department != $pointer_department) {
+		if (!empty($contact_department) && !empty($pointer_department) && $contact_department != $pointer_department) {
 			echo '<h5>'.$contact_department.'</h5>';
 			$pointer_department = $contact_department;
 		}
 
 		$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
-		
-		echo ('<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' 
+
+		echo ('<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="'
 			. $contact_id . '" ' . $checked . ' />');
-		echo ('<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' 
-			. $contact_data['contact_last_name'] 
-			. (($contact_data['contact_extra']) ? ($contact_data['contact_extra']) : '') 
+		echo ('<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' '
+			. $contact_data['contact_last_name']
+			. (($contact_data['contact_extra']) ?? '') // went for ?? operator (gwyneth 20210424)
 			. '</label>');
 		echo ('<br />');
 	}
@@ -150,8 +150,8 @@ if (mb_strlen($selected_contacts_id) > 0 && ! $show_all && ! $company_id) {
 	$q->addWhere('contact_id IN (' . $selected_contacts_id . ')');
 	$where = implode(',', $q->loadColumn());
 	$q->clear();
-	if (mb_substr($where, 0, 1) == ',' && $where != ',') { 
-		$where = '0'.$where; 
+	if (mb_substr($where, 0, 1) == ',' && $where != ',') {
+		$where = '0'.$where;
 	} else if ($where == ',') {
 		$where = '0';
 	}
@@ -182,7 +182,7 @@ $q->addTable('contacts', 'a');
 $q->leftJoin('companies', 'b', 'b.company_id = a.contact_company');
 $q->leftJoin('departments', 'c', 'c.dept_id = a.contact_department');
 $q->leftJoin('users', 'u', 'u.user_contact=a.contact_id');
-$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name,' 
+$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name,'
              . ' a.contact_company, a.contact_department');
 $q->addQuery('b.company_name');
 $q->addQuery('c.dept_name');
@@ -192,7 +192,7 @@ if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002
 }
 $q->addWhere('(contact_owner = ' . $AppUI->user_id . ' OR contact_private = 0)');
 //May need to review this order.
-$q->addOrder('company_name, contact_company, dept_name, contact_department' 
+$q->addOrder('company_name, contact_company, dept_name, contact_department'
              . ', contact_last_name');
 
 $contacts = $q->loadHashList('contact_id');
@@ -211,27 +211,27 @@ foreach ($contacts as $key => $row) {
 
 ?>
 
-<form action="index.php?m=public&a=contact_selector&dialog=1<?php 
-echo ((!is_null($call_back)) ? '&call_back='.$call_back : ''); 
+<form action="index.php?m=public&a=contact_selector&dialog=1<?php
+echo ((!is_null($call_back)) ? '&call_back='.$call_back : '');
 ?>&company_id=<?php echo $company_id ?>" method='post' name='frmContactSelect'>
 
 <?php
 $pointer_department = '';
 $pointer_company    = '';
 $companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
-echo arraySelect($companies_names, 'company_id', 
-                 ('onchange="document.frmContactSelect.contacts_submited.value=0; ' 
+echo arraySelect($companies_names, 'company_id',
+                 ('onchange="document.frmContactSelect.contacts_submited.value=0; '
                   . 'setContactIDs(); document.frmContactSelect.submit();"'), 0);
 ?>
 
 <br />
-<h4><a href="#" onClick="window.location.href=setContactIDs('GET','dialog=1<?php 
+<h4><a href="#" onClick="window.location.href=setContactIDs('GET','dialog=1<?php
 echo ((!is_null($call_back)) ? ('&call_back=' . $call_back) : ''); ?>&show_all=1');">
 <?php echo $AppUI->_('View all allowed companies'); ?>
 </a></h4>
 <hr />
-<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
-<?php	
+<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?? ' ' . strtolower($AppUI->_("All Companies")); ?></h2>
+<?php
 renderContacts($activeContacts, $contacts_id);
 
 if (sizeof($inactiveContacts) > 0) {
@@ -242,6 +242,6 @@ if (sizeof($inactiveContacts) > 0) {
 <hr />
 <input name="contacts_submited" type="hidden" value="1" />
 <input name="selected_contacts_id" type="hidden" value="<?php echo $selected_contacts_id; ?>">
-<input type="submit" value="<?php 
+<input type="submit" value="<?php
 echo $AppUI->_('Continue'); ?>" onClick="setContactIDs()" class="button" />
 </form>

@@ -21,7 +21,7 @@ if (!defined('DP_BASE_DIR')) {
 			$additional_get_information = "company_id=".$_GET["company_id"];
 			break;
 	}
-	
+
 	$q  = new DBQuery;
 	$q->addTable($table_name);
 	$q->addQuery("$id_field, $name_field");
@@ -42,7 +42,7 @@ if (!defined('DP_BASE_DIR')) {
 		db_loadHash($sql, $r_data);
 		$data_update_script = "";
 		$update_address     = isset($_POST["overwrite_address"]);
-			
+
 		if ($table_name == "companies") {
 			$update_fields = array();
 			if ($update_address) {
@@ -69,7 +69,7 @@ if (!defined('DP_BASE_DIR')) {
 			}
 			$data_update_script = "opener.setDepartment('" . $_POST[$id_field] . "', '" . db_escape($r_data[$name_field]) . "');\n";
 		}
-	
+
 		// Let's figure out which fields are going to
 		// be updated
 		foreach ($update_fields as $record_field => $contact_field) {
@@ -83,14 +83,14 @@ if (!defined('DP_BASE_DIR')) {
 		<?php
 	} else {
 		?>
-		
+
 		<form name="frmSelector" action="?m=contacts&amp;a=select_contact_company&amp;dialog=1&amp;table_name=<?php echo $table_name."&amp;$additional_get_information"; ?>" method="post">
 			<table cellspacing="0" cellpadding="3" border="0">
 			<tr>
 				<td colspan="2">
 			<?php
 				echo $AppUI->_('Select').' '.$AppUI->_($selection_string).':<br />';
-				echo arraySelect($company_list, $id_field, ' size="10"', $company_id);
+				echo arraySelect($company_list, $id_field, ' size="10"', $_GET['company_id'] ?? -1);
 			?>
 				</td>
 			</tr>

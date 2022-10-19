@@ -26,9 +26,9 @@ if ($currentTabName == 'Not Applicable') {
 // retrieve list of records
 $q  = new DBQuery;
 $q->addTable('companies', 'c');
-$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description' 
-             . ', count(distinct p.project_id) as countp' 
-			 . ', count(distinct p2.project_id) as inactive' 
+$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description'
+             . ', count(distinct p.project_id) as countp'
+			 . ', count(distinct p2.project_id) as inactive'
              . ', con.contact_first_name, con.contact_last_name');
 $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_status <> 7');
 $q->addJoin('users', 'u', 'c.company_owner = u.user_id');
@@ -52,18 +52,18 @@ $rows = $q->loadList();
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="company list">
 <tr>
-	<td nowrap="nowrap" width="60" align="right">&nbsp;<?php 
+	<td nowrap="nowrap" width="60" align="right">&nbsp;<?php
 echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 	<th nowrap="nowrap">
-		<a href="?m=companies&amp;orderby=company_name" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=company_name" class="hdr"><?php
 echo $AppUI->_('Company Name'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=companies&amp;orderby=countp" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=countp" class="hdr"><?php
 echo $AppUI->_('Active Projects'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=companies&amp;orderby=inactive" class="hdr"><?php 
+		<a href="?m=companies&amp;orderby=inactive" class="hdr"><?php
 echo $AppUI->_('Archived Projects'); ?></a>
 	</th>
 	<th nowrap="nowrap">
@@ -76,20 +76,29 @@ $s = '';
 $none = true;
 foreach ($rows as $row) {
 	$none = false;
-	$s .= "\n" . '<tr>';
-	$s .= "\n" . '<td>&nbsp;</td>';
-	$s .= ("\n" . '<td><a href="./index.php?m=companies&amp;a=view&amp;company_id=' 
-	       . dPformSafe($row['company_id']) . '" title="' . dPformSafe($row['company_description']) 
-	       .'">' . htmlspecialchars($row['company_name']) .'</a></td>');
-	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' . $row['countp'] . '</td>');
-	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' . @$row['inactive'] . '</td>');
-	$s .= ("\n" . '<td width="125" align="center" nowrap="nowrap">' 
+	$s .= PHP_EOL . '<tr>';
+	$s .= PHP_EOL . '<td>&nbsp;</td>';
+	// $s .= ("\n" . '<td><a href="?m=companies&amp;a=view&amp;company_id='
+	//        . dPformSafe($row['company_id']) . '" title="'
+  //        . striptags(dPformSafe($row['company_description']))  // needed because now we allowed tags in description fields (gwyneth 20210504)
+	//        .'">' . htmlspecialchars($row['company_name']) .'</a></td>');
+  $s .= (PHP_EOL . '<td><a href="?m=companies&amp;a=view&amp;company_id='
+          . dPformSafe($row['company_id'] ?? 0) . '" onmouseover="return overlib(\''
+          . dPformSafe($row['company_description'] ?? 'No description available') . '\', CAPTION, \'' . $AppUI->_('Description')
+          . '\', CENTER' . dPgetConfig('overlib_extra_parameters', ', DONOTHING')
+          . ');" onmouseout="nd();">' . htmlspecialchars($row['company_name'] ?? '[NO COMPANY]') . '</a></td>');
+
+  dprint(__FILE__, __LINE__, 2, "[DEBUG] " . __FUNCTION__ . ": Extra parameters for overLib: '" . dPgetConfig('overlib_extra_parameters', '[empty]') . "'");
+
+	$s .= (PHP_EOL . '<td width="125" align="center" nowrap="nowrap">' . $row['countp'] . '</td>');
+	$s .= (PHP_EOL . '<td width="125" align="center" nowrap="nowrap">' . ($row['inactive'] ?? '') . '</td>');
+	$s .= (PHP_EOL . '<td width="125" align="center" nowrap="nowrap">'
 	       . $AppUI->_($types[@$row['company_type']]) . '</td>');
-	$s .= "\n" . '</tr>';
+	$s .= PHP_EOL . '</tr>';
 }
-echo $s . "\n";
+echo $s . PHP_EOL;
 if ($none) {
-	echo "\n" . '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
+	echo PHP_EOL . '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
 }
 ?>
 </table>

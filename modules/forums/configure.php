@@ -50,9 +50,10 @@ $q->addWhere('watch_forum = 0');
 $q->addWhere('watch_topic = 0');
 $resAll = $q->exec();
 
-if (db_num_rows($resAll) >= 1)	// message has to be sent to all users
-{
+if (db_num_rows($resAll) >= 1) {	// message has to be sent to all users
 	$watchAll = true;
+} else {
+  $watchAll = false;  // PHP 8 requires this to be explicitly set (gwyneth 20210419)
 }
 $q->clear();
 

@@ -177,7 +177,7 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task');?>:</td>
 			<td class="hilite"><strong><?php echo $AppUI->___(@$obj->task_name);?></strong></td>
 		</tr>
-		<?php if ($obj->task_parent != $obj->task_id) { 
+		<?php if ($obj->task_parent != $obj->task_id) {
 			$obj_parent = new CTask();
 			$obj_parent->load($obj->task_parent);
 		?>
@@ -194,7 +194,7 @@ function delIt() {
 			<td class="hilite">
 		<?php
 			$task_priotities = dPgetSysVal('TaskPriority');
-            echo $AppUI->_($task_priotities[$obj->task_priority]); 
+            echo $AppUI->_($task_priotities[$obj->task_priority]);
 		?>
 			</td>
 		</tr>
@@ -219,11 +219,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date');?>:</td>
-			<td class="hilite" width="300"><?php echo $start_date ? $start_date->format($df) : '-';?></td>
+			<td class="hilite" width="300"><time><?php echo $start_date ? $start_date->format($df) : '-';?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date');?>:</td>
-			<td class="hilite" width="300"><?php echo $end_date ? $end_date->format($df) : '-';?></td>
+			<td class="hilite" width="300"><time><?php echo $end_date ? $end_date->format($df) : '-';?></time></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap" valign="top"><?php echo $AppUI->_('Expected Duration');?>:</td>
@@ -269,7 +269,7 @@ function delIt() {
 			$q->addTable('task_dependencies', 'td');
 			$q->addWhere('td.dependencies_req_task_id = t.task_id');
 			$q->addWhere('td.dependencies_task_id = ' . $task_id);
-			
+
 			$taskDep = $q->loadHashList();
 			$q->clear();
 		?>
@@ -278,7 +278,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td colspan="3">
-			<?php 
+			<?php
 				$s = count($taskDep) == 0 ? '<tr><td>'.$AppUI->_('none').'</td></tr>' : '';
 				foreach ($taskDep as $key => $value) {
 					$s .= '<tr><td class="hilite">';
@@ -290,7 +290,7 @@ function delIt() {
 			</td>
 		</tr>
                 <?php
-			// Pull the tasks depending on this Task 
+			// Pull the tasks depending on this Task
 			$q->addQuery('td.dependencies_task_id, t.task_name');
 			$q->addTable('tasks', 't');
 			$q->addTable('task_dependencies', 'td');
@@ -322,7 +322,8 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class='hilite' colspan='3'>
-				<?php echo strip_tags($obj->task_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'); ?>
+				<?php echo $AppUI->showHTML($obj->task_description);
+        // echo strip_tags($obj->task_description, '<br><p><span><b><strong><h1><h2><i><a><ol><ul><li><u><s><em>'); ?>
 		  </td>
 		</tr>
 <?php
@@ -333,7 +334,7 @@ function delIt() {
 		$q->addQuery('dept_id, dept_name, dept_phone');
 		$depts = $q->loadHashList('dept_id');
 		$q->clear();
-		if (count($depts)) {
+		if (!empty($depts) && count($depts)) {  // if this company doesn't have any departments, skip this (gwyneth 20210426)
 			?>
 		    <tr>
 		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
@@ -342,20 +343,19 @@ function delIt() {
 		    	<td colspan='3' class="hilite">
 		    		<?php
 		    			foreach ($depts as $dept_id => $dept_info) {
-						$op = '<div>'
-		    				.$dept_info['dept_name'];
+						    $op = '<div>' . $dept_info['dept_name'];
 		    				if ($dept_info['dept_phone'] != '') {
-		    					$op .= '('.$dept_info['dept_phone'].')';
+		    					$op .= '(' . $dept_info['dept_phone'] . ')';
 		    				}
 		    				$op .= '</div>';
-						echo $AppUI->___($op);
+						    echo $AppUI->showHTML($op);  /// was ___($op) but this makes things clearer (gwyneth 20210426)
 		    			}
 		    		?>
 		    	</td>
 		    </tr>
 	 		<?php
 		}
-		
+
 		if ($AppUI->isActiveModule('contacts') && getPermission('contacts', 'view')) {
 			$q->addTable('contacts', 'c');
 			$q->leftJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id');
@@ -441,7 +441,7 @@ function delIt() {
 </tr>
 </table>
 
-<?php 
+<?php
 $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
 
@@ -490,31 +490,3 @@ if ($tabBox_show == 1) {
 	$tabBox->show();
 }
 ?>
-<style>
-.ql-size-large {
-    font-size: 1.5em;
-}
-.ql-size-small {
-    font-size: 0.75em;
-}
-.ql-size-huge {
-    font-size: 2.5em;
-}
-.ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
-}
-.ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-justify {
-    text-align: justify;
-}
-
-</style>
-

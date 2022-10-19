@@ -12,10 +12,10 @@ $q = new DBQuery();
 require_once ($AppUI->getModuleClass('companies'));
 
 // Let's update project status!
-if (isset($_GET['update_project_status']) && isset($_GET['project_status']) 
+if (isset($_GET['update_project_status']) && isset($_GET['project_status'])
    && isset($_GET['project_id'])) {
 	$projects_id = $_GET['project_id']; // This must be an array
-	
+
 	foreach ($projects_id as $project_id) {
 		if (! getPermission('projects', 'edit', (int)$project_id)) {
 			continue; /* Cannot update the status of a project we can't edit */
@@ -43,20 +43,20 @@ $active = intval(!$AppUI->getState('ProjIdxTab'));
 if (isset($_POST['company_id'])) {
 	$AppUI->setState('ProjIdxCompany', intval($_POST['company_id']));
 }
-$company_id = (($AppUI->getState('ProjIdxCompany') !== NULL) 
-               ? $AppUI->getState('ProjIdxCompany') 
+$company_id = (($AppUI->getState('ProjIdxCompany') !== NULL)
+               ? $AppUI->getState('ProjIdxCompany')
                : $AppUI->user_company);
 
 $company_prefix = 'company_';
 
 if (isset($_POST['department'])) {
 	$AppUI->setState('ProjIdxDepartment', dPgetCleanParam($_POST, 'department'));
-	
+
 	//if department is set, ignore the company_id field
 	unset($company_id);
 }
-$department = (($AppUI->getState('ProjIdxDepartment') !== NULL) 
-               ? $AppUI->getState('ProjIdxDepartment') 
+$department = (($AppUI->getState('ProjIdxDepartment') !== NULL)
+               ? $AppUI->getState('ProjIdxDepartment')
                : ($company_prefix . $AppUI->user_company));
 
 //if $department contains the $company_prefix string that it's requesting a company
@@ -68,9 +68,9 @@ if (!(mb_strpos($department, $company_prefix)===false)) {
 }
 
 $valid_ordering = array('project_name', 'user_username', 'my_tasks desc', 'total_tasks desc',
-                        'total_tasks', 'my_tasks', 'project_color_identifier', 'company_name', 
-                        'project_end_date', 'project_start_date', 'project_actual_end_date', 
-                        'task_log_problem DESC,project_priority', 'project_status', 
+                        'total_tasks', 'my_tasks', 'project_color_identifier', 'company_name',
+                        'project_end_date', 'project_start_date', 'project_actual_end_date',
+                        'task_log_problem DESC,project_priority', 'project_status',
                         'project_percent_complete');
 
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
@@ -91,7 +91,7 @@ $owner = $AppUI->getState('ProjIdxowner') !== NULL ? $AppUI->getState('ProjIdxow
 $q->addTable('users', 'u');
 $q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 $q->addQuery('user_id');
-$q->addQuery("CONCAT(contact_last_name, ', ', contact_first_name, ' (', user_username, ')')" 
+$q->addQuery("CONCAT(contact_last_name, ', ', contact_first_name, ' (', user_username, ')')"
              . ' AS label');
 $q->addOrder('contact_last_name, contact_first_name, user_username');
 $userRows = $q->loadHashList();
@@ -109,7 +109,7 @@ foreach($userRows as $key => $value) {
 	}
 }
 $userRows = array(0 => $AppUI->_('All Users', UI_OUTPUT_RAW)) + $activeUsers + $inactiveUsers;
-$bufferUser = arraySelect($userRows, 'show_owner', 
+$bufferUser = arraySelect($userRows, 'show_owner',
                           'class="text" onchange="javascript:document.pickUser.submit()""', $owner);
 
 /* setting this to filter project_list_data function below
@@ -118,7 +118,7 @@ $bufferUser = arraySelect($userRows, 'show_owner',
  5 = completed
  7 = archived
 
-Because these are "magic" numbers, if the values for ProjectStatus change under 'System Admin', 
+Because these are "magic" numbers, if the values for ProjectStatus change under 'System Admin',
 they'll need to change here as well (sadly).
 */
 if ($tab != 7 && $tab != 8) {
@@ -138,15 +138,15 @@ projects_list_data();
 // setup the title block
 $titleBlock = new CTitleBlock('Projects', 'applet3-48.png', $m, ($m . '.' . $a));
 $titleBlock->addCell($AppUI->_('Owner') . ':');
-$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickUser">' . "\n" 
+$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickUser">' . "\n"
                       . $bufferUser . "\n" . '</form>' . "\n"));
 $titleBlock->addCell($AppUI->_('Company') . '/' . $AppUI->_('Division') . ':');
-$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickCompany">' . "\n" 
+$titleBlock->addCell(('<form action="?m=projects" method="post" name="pickCompany">' . "\n"
                       . $cBuffer . "\n" .  '</form>' . "\n"));
 $titleBlock->addCell();
 if ($canAuthor) {
-	$titleBlock->addCell(('<form action="?m=projects&amp;a=addedit" method="post">' . "\n" 
-	                      . '<input type="submit" class="button" value="' 
+	$titleBlock->addCell(('<form action="?m=projects&amp;a=addedit" method="post">' . "\n"
+	                      . '<input type="submit" class="button" value="'
 	                      . $AppUI->_('new project') . '" />'. "\n" . '</form>' . "\n"));
 }
 $titleBlock->show();
@@ -173,7 +173,7 @@ $statuses = $q->loadHashList('project_status');
 $q->clear();
 $all_projects = 0;
 foreach ($statuses as $k => $v) {
-	$project_status_tabs[$v['project_status']] = ($AppUI->_($project_types[$v['project_status']]) 
+	$project_status_tabs[$v['project_status']] = ($AppUI->_($project_types[$v['project_status']])
 													  . ' (' . $v['count'] . ')');
 	//count all projects
 	$all_projects += $v['count'];
@@ -186,12 +186,12 @@ $fixed_status = array('In Progress' => 'vw_idx_active',
 
 /**
 * Now, we will figure out which vw_idx file are available
-* for each project status using the $fixed_status array 
+* for each project status using the $fixed_status array
 */
 $project_status_file = array();
 foreach ($project_types as $status_id => $status_title) {
 	//if there is no fixed vw_idx file, we will use vw_idx_proposed
-	$project_status_file[$status_id] = ((isset($fixed_status[$status_title])) 
+	$project_status_file[$status_id] = ((isset($fixed_status[$status_title]))
 										? $fixed_status[$status_title] : 'vw_idx_proposed');
 }
 
@@ -200,8 +200,8 @@ $tabBox = new CTabBox('?m=projects', DP_BASE_DIR . '/modules/projects/', $tab);
 
 $tabBox->add('vw_idx_proposed', $AppUI->_('All') . ' (' . $all_projects . ')' , true,  500);
 foreach ($project_types as $psk => $project_status) {
-		$tabBox->add($project_status_file[$psk], 
-					 (($project_status_tabs[$psk]) ? $project_status_tabs[$psk] : $AppUI->_($project_status)), true, $psk);
+		$tabBox->add($project_status_file[$psk],
+					 (!empty($project_status_tabs[$psk]) ? $project_status_tabs[$psk] : $AppUI->_($project_status)), true, $psk);
 }
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');

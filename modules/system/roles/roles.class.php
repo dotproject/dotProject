@@ -29,11 +29,18 @@ class CRole {
 	var $role_description = NULL;
 	var $perms = null;
 
+  // deprecated constructor style
 	function CRole($name='', $description='') {
 		$this->role_name = $name;
 		$this->role_description = $description;
-		$this->perms =& $GLOBALS['AppUI']->acl();
+		// $this->perms =& $GLOBALS['AppUI']->acl();
+    $this->perms = $GLOBALS['AppUI']->acl();
 	}
+
+  // modern constructor style
+  function __construct($name='', $description='') {
+    self::CRole($name, $description);
+  }
 
 	function bind($hash) {
 		if (!is_array($hash)) {
@@ -97,7 +104,7 @@ class CRole {
 		$roles = $this->perms->getChildren($role_parent);
 		return $roles;
 	}
-	
+
 
 	function rename_array(&$roles, $from, $to) {
 		if (count($from) != count($to)) {

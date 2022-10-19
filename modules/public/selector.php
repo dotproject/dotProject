@@ -51,7 +51,7 @@ switch ($table) {
 		$q->addWhere(selPermWhere($obj, 'dept_id', 'dept_name'));
 		$q->addWhere("dept_company = company_id ");
 		$q->addTable('companies', 'b');
-		
+
 		$hide_company = (int)dPgetParam($_GET, 'hide_company', 0);
 		$q->addQuery('dept_id');
 		if ($hide_company == 1) {
@@ -59,7 +59,7 @@ switch ($table) {
 		} else {
 			$q->addQuery("CONCAT_WS(': ',company_name,dept_name) AS dept_name");
 		}
-		
+
 		if ($company_id) {
 			$q->addWhere("dept_company = $company_id");
 			$q->addOrder("dept_name");
@@ -84,7 +84,7 @@ switch ($table) {
 		break;
 	case 'projects':
 		$project_company = (int)dPgetParam($_GET, 'project_company', 0);
-		
+
 		$title = 'Project';
 		$obj = new CProject;
 		$q->addQuery('a.project_id, project_name');
@@ -98,10 +98,10 @@ switch ($table) {
 		if ($project_company) {
 			$q->addWhere("project_company = $project_company");
 		}
-		break;	
+		break;
 	case "tasks":
 		$task_project = (int)dPgetParam($_GET, 'task_project', 0);
-		
+
 		$title = 'Task';
 		$q->addQuery('task_id, task_name, task_parent, p.project_name');
 		$q->addOrder('task_parent, task_parent = task_id desc');
@@ -123,7 +123,7 @@ switch ($table) {
 				$last_parent = 0;
 				$level = 0;
 			}
-			$query_result[$task['task_id']] = ($task['project_name'] . ' - ' 
+			$query_result[$task['task_id']] = ($task['project_name'] . ' - '
 			                                   . $task['task_name']);
 			$html_disp_offset[$task['task_id']] = str_repeat('&nbsp;&nbsp;', $level);
 		}
@@ -167,7 +167,7 @@ if (!$ok) {
 		echo "<br />ok = $ok \n";
 	}
 } else {
-	$list = arrayMerge(array(0 => $AppUI->_('[none]')), 
+	$list = arrayMerge(array(0 => $AppUI->_('[none]')),
 	                   ((!(empty($query_result))) ? $query_result : $q->loadHashList()));
 	echo db_error();
 ?>
@@ -179,7 +179,7 @@ function setClose(key, val) {
 
 window.onresize = window.onload = function setHeight() {
 
-if (document.compatMode && document.compatMode != "BackCompat" 
+if (document.compatMode && document.compatMode != "BackCompat"
     && document.documentElement.clientHeight) {
 	var wh = document.documentElement.clientHeight;
 } else {
@@ -208,9 +208,9 @@ selector.style.height = (wh - count - 5) + "px";
 		<?php
 if (count($list) > 1) {
 	foreach ($list as $key => $val) {
-		echo ('<li>' . $html_disp_offset[$key] . '<a href="' . "javascript:setClose('" 
-		      . $AppUI->___($key, UI_OUTPUT_JS) . "','" 
-		      . $AppUI->___($val, UI_OUTPUT_JS) . "');" . '">' . $AppUI->___($val) 
+		echo ('<li>' . ($html_disp_offset[$key] ?? ''). '<a href="' . "javascript:setClose('"
+		      . $AppUI->___($key, UI_OUTPUT_JS) . "','"
+		      . $AppUI->___($val, UI_OUTPUT_JS) . "');" . '">' . $AppUI->___($val)
 		      . "</a></li>\n");
 	}
 } else {
@@ -221,7 +221,7 @@ if (count($list) > 1) {
 		</div>
 	</td>
 	<td valign="bottom">
-		<input type="button" class="button" value="<?php 
+		<input type="button" class="button" value="<?php
 echo $AppUI->_('cancel');?>" onclick="window.close()" />
 	</td>
 </tr>

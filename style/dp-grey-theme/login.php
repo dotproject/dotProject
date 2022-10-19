@@ -12,8 +12,7 @@ if (!defined('DP_BASE_DIR')) {
        	<title><?php echo @$dPconfig['company_name'];?> :: dotProject Login</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
 </head>
 
@@ -56,7 +55,7 @@ if (!defined('DP_BASE_DIR')) {
 	echo '<span class="error">'.$AppUI->getMsg().'</span>';
 
 	$msg = '';
-	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORT for this PHP Version ('.phpversion().')</span>' : '';
+	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORTED for this PHP Version ('.phpversion().')</span>' : '';
 	echo $msg;
 ?>
 </div>

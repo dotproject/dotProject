@@ -1408,7 +1408,11 @@ class adoSchema {
 	*/
 	function __construct( $db ) {
 		// Initialize the environment
-		$this->mgq = get_magic_quotes_runtime();
+    if (function_exists('get_magic_quotes_runtime')) {  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
+		  $this->mgq = get_magic_quotes_runtime();
+    } else {
+      $this->mgq = null;
+    }
 		#set_magic_quotes_runtime(0);
 		ini_set("magic_quotes_runtime", 0);
 
@@ -2377,7 +2381,7 @@ class adoSchema {
 	* @deprecated adoSchema now cleans up automatically.
 	*/
 	function Destroy() {
-		ini_set("magic_quotes_runtime", $this->mgq );
+		ini_set("magic_quotes_runtime", $this->mgq ?? 0);
 		#set_magic_quotes_runtime( $this->mgq );
 	}
 }

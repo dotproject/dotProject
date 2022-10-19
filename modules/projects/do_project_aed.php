@@ -29,7 +29,17 @@ if ($obj->project_actual_end_date) {
 
 // let's check if there are some assigned departments to project
 if (!dPgetParam($_POST, "project_departments", 0)) {
-	$obj->project_departments = implode(",", dPgetCleanParam($_POST, "dept_ids", array()));
+  // PHP 8 needs a bit more logic to deal with an empty array (gwyneth 20210417)
+  $dept_ids = dPgetCleanParam($_POST, "dept_ids", array());
+  if (!empty($dept_ids)) {
+    if (is_array($dept_ids)) {
+      $obj->project_departments = implode(",", $dept_ids);
+    } else {
+      $obj->project_departments = $dept_ids;
+    }
+  } else {
+    $obj->project_departments = array();
+  }
 }
 
 $del = (int)dPgetParam($_POST, 'del', 0);
@@ -49,13 +59,13 @@ if ($del) {
 		$AppUI->setMsg("Project deleted", UI_MSG_ALERT);
 		$AppUI->redirect("m=projects");
 	}
-} 
+}
 else {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		$isNotNew = @$_POST['project_id'];
-		
+
 		if ($importTask_projectId = (int)dPgetParam($_POST, 'import_tasks_from', '0')) {
 			$scale_project = (int)dPgetParam($_POST, 'scale_project', '0');
 			$obj->importTasks($importTask_projectId, $scale_project);

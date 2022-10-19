@@ -8,12 +8,11 @@
        	<title><?php echo $dPconfig['company_name'];?> :: dotProject Login</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion();?>" />
-	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/main.css" media="all" />
-	<style media="all">@import "./style/<?php echo $uistyle;?>/main.css";</style>
+	<link rel="stylesheet" href="./style/<?php echo $uistyle;?>/css/main.css" media="all" />
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle;?>/images/favicon.ico" type="image/ico" />
 </head>
 
-<body style="background-color: #f0f0f0" onload="document.loginform.username.focus();">
+<body class="loginform" onload="document.loginform.username.focus();">
 <br /><br /><br /><br />
 <?php //please leave action argument empty ?>
 <!--form action="./index.php" method="post" name="loginform"-->
@@ -48,7 +47,7 @@
 	echo '<span class="error">'.$AppUI->getMsg().'</span>';
 
 	$msg = '';
-	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORT for this PHP Version ('.phpversion().')</span>' : '';
+	$msg .=  phpversion() < '4.1' ? '<br /><span class="warning">WARNING: dotproject is NOT SUPPORTED for this PHP Version ('.phpversion().')</span>' : '';
 	echo $msg;
 ?>
 </div>

@@ -11,10 +11,10 @@ $no_modify = false;
 
 $sort = dPgetCleanParam($_REQUEST, 'sort', 'task_end_date');
 
-if (getPermission('admin', 'view')) { 
+if (getPermission('admin', 'view')) {
 	$other_users = true;
 	//lets see if the user wants to see anothers user mytodo
-	if (($show_uid = (int)dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { 
+	if (($show_uid = (int)dPgetParam($_REQUEST, 'show_user_todo', 0)) != 0) {
 		$user_id = $show_uid;
 		$no_modify = true;
 		$AppUI->setState('user_id', $user_id);
@@ -33,14 +33,14 @@ $selected = dPgetCleanParam($_POST, 'selected', 0);
 if ($selected && count($selected)) {
 	$new_task = dPgetParam($_POST, 'new_task', -1);
 	$new_project = dPgetParam($_POST, 'new_project', $project_id);
-	
+
 	foreach ($selected as $key => $val) {
 		$t = new CTask();
 		$t->load($val);
 		if (isset($_POST['include_children']) && $_POST['include_children']) {
 			$children = $t->getDeepChildren();
 		}
-		
+
 		if ($action == 'f') {
 			//mark task as completed
 			if (getPermission('tasks', 'edit', $t->task_id)) {
@@ -158,11 +158,11 @@ function showchildren($id, $level=1) {
  */
 function showtask_edit($task, $level=0) {
 	global $AppUI, $durnTypes, $now, $df;
-	
+
 	$style = '';
 	$start = intval(@$task['task_start_date']) ? new CDate($task['task_start_date']) : null;
 	$end = intval(@$task['task_end_date']) ? new CDate($task['task_end_date']) : null;
-	
+
 	if (!$end && $start) {
 		$end = $start;
 		$end->addSeconds(@$task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
@@ -175,11 +175,11 @@ function showtask_edit($task, $level=0) {
 	}
 
 	if ($now->after($end)) {
-		$style = (($end) ? 'background-color:#cc6666;color:#ffffff' 
+		$style = (($end) ? 'background-color:#cc6666;color:#ffffff'
 		          : 'background-color:lightgray;');
-	} 
+	}
 	$days = (($start) ? ($end->dateDiff($now)) : 0);
-	
+
 	if ($task['task_percent_complete'] == 100) {
 		$days = 'n/a';
 		$style = 'background-color:#aaddaa; color:#00000;';
@@ -187,8 +187,8 @@ function showtask_edit($task, $level=0) {
 ?>
 <tr>
 	<td>
-<?php 
-	if (getPermission('tasks', 'edit', $task['task_id'])) { 
+<?php
+	if (getPermission('tasks', 'edit', $task['task_id'])) {
 ?>
 		<a href="?m=tasks&amp;a=addedit&amp;task_id=<?php echo $task['task_id']; ?>">
 		<img src="./images/icons/pencil.gif" alt="Edit Task" border="0" width="12" height="12" />
@@ -197,7 +197,7 @@ function showtask_edit($task, $level=0) {
 	</td>
 	<td align="right"><?php echo intval($task['task_percent_complete']); ?>%</td>
 	<td>
-<?php 
+<?php
 	if ($task['task_priority'] < 0) {
 		echo '<img src="./images/icons/low.gif" width="13" height="16" />';
 	} else if ($task['task_priority'] > 0) {
@@ -207,19 +207,19 @@ function showtask_edit($task, $level=0) {
 	</td>
 
 	<td width="50%">
-		<?php 
+		<?php
 		for ($i = 1; $i < $level; $i++) {
 			echo '&nbsp;&nbsp;';
 		}
 		if ($level > 0) {
-			echo '<img src="./images/corner-dots.gif" width="16" height="12" border="0" />'; 
+			echo '<img src="./images/corner-dots.gif" width="16" height="12" border="0" />';
 		}
-?>	
+?>
 		<a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $task['task_id']; ?>" title="<?php
-		echo (((isset($task['parent_name'])) 
-		       ? ('*** ' . $AppUI->_('Parent Task') . ' ***' . "\n" 
-		          . htmlspecialchars($task['parent_name'], ENT_QUOTES) . "\n\n") : '') 
-		      .	'*** ' . $AppUI->_('Description') . ' ***' . "\n" 
+		echo (((isset($task['parent_name']))
+		       ? ('*** ' . $AppUI->_('Parent Task') . ' ***' . "\n"
+		          . htmlspecialchars($task['parent_name'], ENT_QUOTES) . "\n\n") : '')
+		      .	'*** ' . $AppUI->_('Description') . ' ***' . "\n"
 		      . htmlspecialchars($task['task_description'], ENT_QUOTES)) ?>">
 					<?php echo htmlspecialchars($task['task_name'], ENT_QUOTES); ?>
 		</a>
@@ -235,26 +235,26 @@ function showtask_edit($task, $level=0) {
 <?php } // END of displaying tasks function.}}}
 ?>
 
-<form name="form" method="post" action="index.php?<?php 
+<form name="form" method="post" action="index.php?<?php
 echo "m=$m&amp;a=$a&amp;project_id=$project_id"; ?>">
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl" summary="task listing">
 <tr>
 	<th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
 	<th width="15" align="center"><?php echo $AppUI->_('P'); ?></th>
 	<th>
-		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php 
+		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php
 echo $project_id; ?>&amp;sort=task_name">
 		<?php echo $AppUI->_('Task'); ?>
 		</a>
 	</th>
 	<th nowrap="nowrap">
-		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php 
+		<a class="hdr" href="?m=tasks&amp;a=organize&amp;project_id=<?php
 echo $project_id; ?>&amp;sort=task_duration">
 		<?php echo $AppUI->_('Duration'); ?>
 		</a>
 	</th>
 	<th nowrap="nowrap">
-		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php 
+		<a class="hdr" href="index.php?m=tasks&a=organize&project_id=<?php
 echo $project_id; ?>&sort=task_end_date">
 		<?php echo $AppUI->_('Due In'); ?>
 		</a>
@@ -330,26 +330,26 @@ foreach ($tasks as $t) {
 	<td><?php echo arraySelect($actions, 'action', '', '0'); ?></td>
 	<td><?php echo arraySelect($projects, 'new_project', ' onchange="javascript:updateTasks();"', '0'); ?></td>
 	<td><?php echo ($ts)?arraySelect($ts, 'new_task', '', '0'):''; ?></td>
-	<td><input type="submit" class="button" value="<?php 
+	<td><input type="submit" class="button" value="<?php
 echo $AppUI->_('update selected tasks'); ?>"></td>
 </tr>
 </table>
 </form>
 
-<table summary="task status">
+<table class="tabox-bottom" summary="task status">
 <tr>
   <td><?php echo $AppUI->_('Key'); ?>:&nbsp;&nbsp;</td>
-  <td style="background-color:#FFFFFF; color:#000000" width="10">&nbsp;</td>
+  <td class="task-future-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Future Task'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#E6EEDD; color:#000000" width="10">&nbsp;</td>
+  <td class="task-started-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Started and on time'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#FFEEBB; color:#000000" width="10">&nbsp;</td>
+  <td class="task-late-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Should have started'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#CC6666; color:#000000" width="10">&nbsp;</td>
+  <td class="task-overdue-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Overdue'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:#AADDAA; color:#000000" width="10">&nbsp;</td>
+  <td class="task-done-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Done'); ?>&nbsp;&nbsp;</td>
-  <td style="background-color:lightgray; color:#000000" width="10">&nbsp;</td>
+  <td class="task-unknown-bg task-color-fg" width="10">&nbsp;</td>
   <td>=<?php echo $AppUI->_('Unknown'); ?>&nbsp;&nbsp;</td>
 </tr>
 </table>

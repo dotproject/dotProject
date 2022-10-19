@@ -18,9 +18,9 @@ $AppUI->savePlace();
 if (isset($dept_id) && $dept_id >0) {
 	$AppUI->setState('DeptIdxDepartment', $dept_id);
 }
-$dept_id = (($AppUI->getState('DeptIdxDepartment') !== NULL) 
-	? $AppUI->getState('DeptIdxDepartment') 
-	: (($AppUI->user_department > 0) ? $AppUI->user_department 
+$dept_id = (($AppUI->getState('DeptIdxDepartment') !== NULL)
+	? $AppUI->getState('DeptIdxDepartment')
+	: (($AppUI->user_department > 0) ? $AppUI->user_department
 		: $company_prefix . $AppUI->user_company));
 
 if (isset($_GET['tab'])) {
@@ -56,10 +56,10 @@ if ($dept_id > 0) {
 			$titleBlock = new CTitleBlock('View Department', 'users.gif', $m, $m.'.'.$a);
 			if ($canEdit) {
 				$titleBlock->addCell();
-				$titleBlock->addCell(('<form action="?m=departments&amp;a=addedit&amp;company_id=' 
-				                      . $company_id.'&amp;dept_parent=' . $dept_id 
-				                      . '" method="post">' 
-				                      . '<input type="submit" class="button" value="' 
+				$titleBlock->addCell(('<form action="?m=departments&amp;a=addedit&amp;company_id='
+				                      . $company_id.'&amp;dept_parent=' . $dept_id
+				                      . '" method="post">'
+				                      . '<input type="submit" class="button" value="'
 				                      . $AppUI->_('new department') . '" />' . '</form>'));
 			}
 			$titleBlock->addCrumb('?m=companies', 'company list');
@@ -68,13 +68,13 @@ if ($dept_id > 0) {
 				$titleBlock->addCrumb('?m=departments&a=addedit&dept_id='.$dept_id, 'edit this department');
 
 				if ($canDelete) {
-					$titleBlock->addCrumbDelete('delete department', $canDelete, $msg);
+					$titleBlock->addCrumbDelete('delete department', $canDelete, $msg ?? '');
 				}
 			}
 			$titleBlock->show();
 		}
 ?>
-<script  language="javascript">
+<script language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -102,27 +102,27 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" border="0" width="100%" summary="details">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['company_name'];?></td>
+			<td class="hilite" width="100%"><?php echo $dept['company_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_name'];?></td>
+			<td class="hilite" width="100%"><?php echo $dept['dept_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['contact_first_name'].' '.@$dept['contact_last_name'];?></td>
+			<td class="hilite" width="100%"><?php echo @$dept['contact_first_name'].' '.@$dept['contact_last_name'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_phone'];?></td>
+			<td class="hilite" width="100%"><?php echo @$dept['dept_phone'];?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_fax'];?></td>
+			<td class="hilite" width="100%"><?php echo @$dept['dept_fax'];?></td>
 		</tr>
 		<tr valign=top>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-			<td bgcolor="#ffffff"><?php
+			<td class="hilite"><?php
 				echo @$dept['dept_address1']
 					.(($dept['dept_address2']) ? '<br />'.$dept['dept_address2'] : '')
 					.'<br />'.$dept['dept_city']
@@ -137,7 +137,7 @@ function delIt() {
 		<strong><?php echo $AppUI->_('Description'); ?></strong>
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
-			<td bgcolor="#ffffff" width="100%"><?php echo str_replace(chr(10), "<br />", $dept['dept_desc']);?>&nbsp;</td>
+			<td class="hilite" width="100%"><?php echo str_replace(chr(10), "<br />", $dept['dept_desc']);?>&nbsp;</td>
 		</tr>
 		</table>
 	</td>
@@ -150,7 +150,7 @@ function delIt() {
 	$tabBox = new CTabBox('?m=' . $m . '&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
 	$tabBox->add($moddir . 'vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
-	$tabBox->loadExtras($m, 'view');		
+	$tabBox->loadExtras($m, 'view');
 	$tabBox->show();
 }
 ?>

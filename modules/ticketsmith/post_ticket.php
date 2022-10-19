@@ -10,11 +10,13 @@ if (!defined('DP_BASE_DIR')) {
 if (!$canEdit && !$canAuthor) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
+
+include_once ($AppUI->getLibraryClass('quilljs/richedit.class'));
 require_once($AppUI->getModuleClass ('companies'));
 require_once($AppUI->getModuleClass ('projects'));
 
 // setup the title block
-$titleBlock = new CTitleBlock('Submit Trouble Ticket', 'gconf-app-icon.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('Submit Trouble Ticket', 'gconf-app-icon.png', $m, $m . "." . $a);
 $titleBlock->addCrumb("?m=ticketsmith", "tickets list");
 $titleBlock->show();
 
@@ -50,7 +52,7 @@ function submitIt() {
 <table width="100%" border=0 cellpadding="0" cellspacing=1 class="std">
 <tr height="20">
 	<th colspan="2">
-		&nbsp;<font face="verdana,helveitica,arial,sans-serif" color="#ffffff"><strong><?php echo $AppUI->_('Trouble Details'); ?></strong></font>
+		&nbsp;<span class="trouble-details"><?php echo $AppUI->_('Trouble Details'); ?></span>
 	</th>
 </tr>
 <tr>
@@ -80,7 +82,7 @@ function submitIt() {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Company'); ?>:</td>
 	<td>
-	  <?php 
+	  <?php
 		$objCompany = new CCompany();
 		$companies = $objCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 		$companies = arrayMerge(array('0'=>''), $companies);
@@ -90,11 +92,11 @@ function submitIt() {
 <tr>
 	<td align="right"><?php echo $AppUI->_('Project'); ?>:</td>
 	<td>
-	  <?php 
+	  <?php
 		// Retrieve projects that the user can access
 		$objProject = new CProject();
 		$allowedProjects = $objProject->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name');
-		
+
 		$q  = new DBQuery;
 		$q->addTable('projects', 'p');
 		$q->addTable('tasks', 't');
@@ -105,10 +107,10 @@ function submitIt() {
 			implode (',', array_keys($allowedProjects)) . '))');
 		}
 		$q->addOrder('p.project_name');
-		
+
 		$importList = $q->loadHashList ();
 		$importList = arrayMerge(array('0'=> $AppUI->_('')), $importList);
-	
+
 		echo arraySelect($importList, 'ticket_project', 'size="1" class="text"', null);
 	?></td>
 </tr>
@@ -118,7 +120,13 @@ function submitIt() {
 </tr>
 <tr>
 	<td colspan="2" align="center">
-		<textarea cols="70" rows="10" class="textarea" name="description"><?php echo @$crow["description"];?></textarea>
+<!--
+		<textarea cols="70" rows="10" class="textarea" name="description"><?php //echo @$crow["description"];?></textarea>
+-->
+  <?php
+  $richedit = new DpRichEdit("description", dPsanitiseHTML(@$crow["description"]));
+  $richedit->render();
+  ?>
 	</td>
 </tr>
 <tr>

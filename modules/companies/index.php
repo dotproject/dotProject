@@ -13,18 +13,18 @@ $valid_ordering = array('company_name', 'countp', 'inactive', 'company_type');
 
 // retrieve any state parameters
 if (isset($_GET['orderby']) && in_array($_GET['orderby'], $valid_ordering)) {
-	$orderdir = (($AppUI->getState('CompIdxOrderDir') 
+	$orderdir = (($AppUI->getState('CompIdxOrderDir')
 				  ? (($AppUI->getState('CompIdxOrderDir') == 'asc') ? 'desc' : 'asc') : 'desc'));
 	$AppUI->setState('CompIdxOrderBy', $_GET['orderby']);
     $AppUI->setState('CompIdxOrderDir', $orderdir);
 }
-$orderby = (($AppUI->getState('CompIdxOrderBy')) 
+$orderby = (($AppUI->getState('CompIdxOrderBy'))
             ? $AppUI->getState('CompIdxOrderBy') : 'company_name');
 $orderdir = (($AppUI->getState('CompIdxOrderDir')) ? $AppUI->getState('CompIdxOrderDir') : 'asc');
 
 $owner_filter_id = intval(dPgetParam($_REQUEST, 'owner_filter_id', 0));
-if ($owner_filter_id !== 0) {
-	$AppUI->setState('owner_filter_id', $owner_filter_id_pre);
+if (!empty($owner_filter_id) && $owner_filter_id !== 0) {
+	$AppUI->setState('owner_filter_id', $owner_filter_id);  // was $owner_filter_id_pre, which isn't defined anywhere! (gwyneth 20210430)
 } else {
 	$owner_filter_id = $AppUI->getState('owner_filter_id', $AppUI->user_id);
 }
@@ -51,27 +51,27 @@ $search_string = $AppUI->___($search_string);
 $perms =& $AppUI->acl();
 $owner_list = array(-1 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('companies');
 //db_loadHashList($sql);
-$owner_combo = arraySelect($owner_list, 'owner_filter_id', 
-                           'class="text" onchange="javascript:document.searchform.submit()"', 
+$owner_combo = arraySelect($owner_list, 'owner_filter_id',
+                           'class="text" onchange="javascript:document.searchform.submit()"',
                            $owner_filter_id, false);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, "$m.$a");
-$titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string=' 
-                      . dPformSafe($search_string) . '" method="post">' . "\n" 
-                      . '<table><tr><td><strong>' . $AppUI->_('Search') 
-                      . '</strong><input autofocus class="text" type="search" name="search_string" value="' 
-                      .  dPformSafe($search_string) . '" /><br />' 
-                      . '<a href="index.php?m=companies&amp;search_string=-1">' 
-                      . $AppUI->_('Reset search') . '</a></td><td valign="top"><strong>' 
-                      . $AppUI->_('Owner filter').'</strong> ' . $owner_combo 
+$titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, $m . "." . $a);
+$titleBlock->addCell(('<form name="searchform" action="?m=companies&amp;search_string='
+                      . dPformSafe($search_string) . '" method="post">' . PHP_EOL
+                      . '<table><tr><td><strong>' . $AppUI->_('Search')
+                      . '</strong><input autofocus class="text" type="search" name="search_string" value="'
+                      .  dPformSafe($search_string) . '" /><br />'
+                      . '<a href="index.php?m=companies&amp;search_string=-1">'
+                      . $AppUI->_('Reset search') . '</a></td><td valign="top"><strong>'
+                      . $AppUI->_('Owner filter') . '</strong> ' . $owner_combo
                       . ' </td></tr></table></form>'));
 
 $search_string = addslashes($search_string);
 
 if ($canEdit) {
-	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company') 
-	                      . '">'), '', '<form action="?m=companies&amp;a=addedit" method="post">', 
+	$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new company')
+	                      . '">'), '', '<form action="?m=companies&amp;a=addedit" method="post">',
 	                     '</form>');
 }
 $titleBlock->show();

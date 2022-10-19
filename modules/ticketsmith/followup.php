@@ -44,24 +44,23 @@ $followup = dPgetCleanParam($_POST, 'followup', '');
 $q = new DBQuery();
 
 if (@$followup) {
-
     /* prepare fields */
     $timestamp = time();
     $q->addTable('users', 'u');
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
     $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery('contact_email as email');
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
     $q->exec();
 
     list($from_name, $from_email) = $q->fetchRow();
 
-    $author = "$from_name <$from_email>";
+    $author = $from_name . " <" . $from_email . ">";
     if (!$recipient) {
         $q->clear();
         $q->addTable('tickets');
         $q->addQuery('author');
-        $q->addWhere("ticket = '{$ticket_parent}'");
+        $q->addWhere("ticket = '" . $ticket_parent . "'");
 
         $recipient = $q->loadResult();
     }
@@ -99,11 +98,11 @@ if (@$followup) {
     $q->clear();
     $q->addTable('tickets');
     $q->addUpdate('activity', $timestamp);
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
     $q->exec();
 
     /* redirect to parent */
-    echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=$ticket_parent\">");
+    echo("<meta http-equiv=\"Refresh\" CONTENT=\"0;URL=?m=ticketsmith&amp;a=view&amp;ticket=" . $ticket_parent . "\">");
 
     exit();
 
@@ -122,7 +121,7 @@ if (@$followup) {
 
     $q->clear();
     $q->addTable('tickets');
-    $q->addWhere("ticket = {$ticket}");
+    $q->addWhere("ticket = " . $ticket);
     $ticket_info = $q->loadHash();
 
     /* output From: line */
@@ -131,7 +130,7 @@ if (@$followup) {
     $q->clear();
     $q->addTable('users', 'u');
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
     $q->addQuery("CONCAT_WS(' ',contact_first_name,contact_last_name) as name, contact_email as email");
     $q->exec();
     list($from_name, $from_email) = $q->fetchRow();
@@ -145,7 +144,7 @@ if (@$followup) {
     $q->clear();
     $q->addTable('tickets');
     $q->addQuery('author');
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
 
     $recipient = $q->loadResult();
 

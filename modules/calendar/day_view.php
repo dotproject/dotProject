@@ -25,7 +25,7 @@ if (isset($_REQUEST['company_id'])) {
 }
 $company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
 
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', dPgetCleanParam($_REQUEST,'event_filter'), 
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', dPgetCleanParam($_REQUEST,'event_filter'),
                                        'EVENTFILTER', 'my');
 
 $AppUI->setState('CalDayViewTab', dPgetCleanParam($_GET, 'tab', $tab));
@@ -50,7 +50,7 @@ $mm = $this_day->getMonth();
 $yy = $this_day->getYear();
 
 // get current week
-$this_week = Date_calc::beginOfWeek ($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY);
+$this_week = Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY);
 
 // prepare time period for 'events'
 $first_time = php4_clone($this_day);
@@ -66,7 +66,7 @@ $next_day = new CDate(Date_calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
 // get the list of visible companies
 $company = new CCompany();
 global $companies;
-$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name',
                                          'company_name');
 $companies = arrayMerge(array('0'=>$AppUI->_('All')), $companies);
 
@@ -75,16 +75,16 @@ $titleBlock = new CTitleBlock('Day View', 'myevo-appointments.png', $m, "$m.$a")
 $titleBlock->addCrumb(('?m=calendar&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), 'month view');
 $titleBlock->addCrumb(('?m=calendar&amp;a=week_view&amp;date=' . $this_week), 'week view');
 $titleBlock->addCell(($AppUI->_('Company') . ':'));
-$titleBlock->addCell(arraySelect($companies, 'company_id', 
-                                 'onchange="document.pickCompany.submit()" class="text"', 
-                                 $company_id), '', 
-                     ('<td><form method="post" name="pickCompany">' 
-                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
+$titleBlock->addCell(arraySelect($companies, 'company_id',
+                                 'onchange="document.pickCompany.submit()" class="text"',
+                                 $company_id), '',
+                     ('<td><form method="post" name="pickCompany">'
+                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'),
                      '</tr></table></form></td>');
-$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event') 
-                      . '" />'), '', ('<td><form action="?m=calendar&amp;a=addedit&amp;date=' 
-									  . $this_day->format(FMT_TIMESTAMP_DATE)  . '" method="post">' 
-                                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'), 
+$titleBlock->addCell(('<input type="submit" class="button" value="' . $AppUI->_('new event')
+                      . '" />'), '', ('<td><form action="?m=calendar&amp;a=addedit&amp;date='
+									  . $this_day->format(FMT_TIMESTAMP_DATE)  . '" method="post">'
+                                      . '<table border="0" cellspacing="0" cellpadding="0"><tr>'),
                      '</tr></table></form></td>');
 $titleBlock->show();
 ?>
@@ -100,20 +100,20 @@ function clickDay(idate, fdate) {
 				<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
 				<tr>
 						<td>
-					<a href="<?php 
+					<a href="<?php
 echo ('?m=calendar&amp;a=day_view&amp;date='.$prev_day->format(FMT_TIMESTAMP_DATE)); ?>">
-					<?php 
+					<?php
 echo dPshowImage(dPfindImage('prev.gif'), 16, 16, $AppUI->_('previous day')); ?>
 					</a>
 						</td>
 						<th width="100%">
-					<?php 
+					<?php
 echo ($AppUI->_($this_day->format('%A')) . ', ' . $this_day->format($df)); ?>
 						</th>
 						<td>
-					<a href="<?php 
+					<a href="<?php
 echo ('?m=calendar&amp;a=day_view&amp;date=' . $next_day->format(FMT_TIMESTAMP_DATE)); ?>">
-					<?php 
+					<?php
 echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 					</a>
 						</td>
@@ -125,7 +125,7 @@ echo dPshowImage(dPfindImage('next.gif'), 16, 16, $AppUI->_('next day')); ?>
 		<td valign="top">
 			<?php
 // tabbed information boxes
-$tabBox = new CTabBox(('?m=calendar&amp;a=day_view&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '', 
+$tabBox = new CTabBox(('?m=calendar&amp;a=day_view&amp;date=' . $this_day->format(FMT_TIMESTAMP_DATE)), '',
 					  $tab);
 $tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_events', 'Events');
 $tabBox->add($dPconfig['root_dir'] . '/modules/calendar/vw_day_tasks', 'Tasks');
@@ -147,23 +147,23 @@ $minical->clickMonth = true;
 $minical->setLinkFunctions('clickDay');
 
 $minical->setDate($minical->prev_month);
-echo $minical->show(); 
+echo $minical->show();
 ?>
 				</td>
 			</tr>
 			<tr>
 				<td align="center">
-<?php 
+<?php
 $minical->setDate($minical->next_month);
-echo $minical->show(); 
+echo $minical->show();
 ?>
 				</td>
 			</tr>
 			<tr>
 				<td align="center">
-<?php 
+<?php
 $minical->setDate($minical->next_month);
-echo $minical->show(); 
+echo $minical->show();
 ?>
 
 				</td>

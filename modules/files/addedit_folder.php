@@ -8,7 +8,7 @@ $folder = intval(dPgetParam($_GET, 'folder', 0));
 
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'] . $referrerArray['fragment'];
+$referrer = $referrerArray['query'] . (isset($referrerArray['fragment']) ?? "");
 
 $obj = new CFileFolder();
 // load the record data
@@ -28,6 +28,9 @@ if ($folder) {
 if (($folder && !($canEdit_folder && $canRead_folder)) || (!($folder) && !($canAuthor_folder))) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
+
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 $msg = '';
 // check if this record has dependancies to prevent deletion
@@ -93,7 +96,11 @@ function delIt() {
 		<tr>
 			<td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description');?>:</td>
 			<td align="left">
-				<textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_folder_description; ?></textarea>
+				<!-- <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php // echo $obj->file_folder_description; ?></textarea> -->
+          <?php
+            $richedit = new DpRichEdit("file_folder_description", dPsanitiseHTML($obj->file_folder_description));
+            $richedit->render();
+          ?>
 			</td>
 		</tr>
 		</table>

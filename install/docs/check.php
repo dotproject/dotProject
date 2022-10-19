@@ -58,7 +58,7 @@ if ($dbok = function_exists( 'mysql_pconnect' )) {
 
 echo '<tr><td>Operating System</td><td>'.php_uname().'</td></tr>';
 
-$msg = phpversion() < '4.1' ? '<td class="error">To old, upgrade</td>' : '<td>OK</td>';
+$msg = phpversion() < '4.1' ? '<td class="error">Too old, upgrade</td>' : '<td>OK</td>';
 echo '<tr><td>PHP Version</td><td>'.phpversion()."</td>$msg</tr>";
 
 $sapi = php_sapi_name();

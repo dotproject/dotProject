@@ -27,7 +27,7 @@ $AppUI->setMsg('User');
 
 // !User's contact information not deleted - left for history.
 if ($del) {
-	if (! getPermission('admin', 'delete') 
+	if (! getPermission('admin', 'delete')
 	    || !(getPermission('users', 'delete', $user_id_aed))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
@@ -42,20 +42,20 @@ if ($del) {
 	if (!(getPermission('admin', 'add') && getPermission('users', 'add'))) {
 		$AppUI->redirect('m=admin&a=access_denied');
 	}
-	
+
 	//pull a list of existing usernames
 	$q = new DBQuery;
 	$q->addTable('users','u');
 	$q->addQuery('user_username');
-	$q->addWhere("user_username like '{$obj->user_username}'");
+	$q->addWhere("user_username like '" . $obj->user_username . "'");
 	$userEx = $q->loadResult();
-	
+
 	// If userName already exists quit with error and do nothing
 	if ($userEx) {
 		$AppUI->setMsg('already exists. Try another username.', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
-	
+
 	$contact->contact_owner = $AppUI->user_id;
 } else if (! getPermission('admin', 'edit') || ! getPermission('users', 'edit', $user_id_aed)) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -63,13 +63,13 @@ if ($del) {
 
 if (($msg = $contact->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
-} else {        
+} else {
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		if ($isNewUser && $_POST['send_user_mail']) {
-			notifyNewUser($contact->contact_email, $contact->contact_first_name, 
+			notifyNewUser($contact->contact_email, $contact->contact_first_name,
 			              $obj->user_username, $_POST['user_password']);
 		}
 		if (isset($_POST['user_role']) && $_POST['user_role']) {
@@ -94,10 +94,10 @@ function notifyNewUser($address, $username, $logname, $logpwd) {
 		} else {
 			$email = 'dotproject@' . $AppUI->cfg['site_domain'];
 		}
-		
+
 		$name = $AppUI->user_first_name .' ' . $AppUI->user_last_name;
 		$body = $username.',
-		
+
 An access account has been created for you in our dotProject project management system.
 
 You can access it here at ' . $dPconfig['base_url'] . '
@@ -106,7 +106,7 @@ Your username is: ' . $logname . '
 Your password is: ' . $logpwd .'
 
 This account will allow you to see and interact with projects. If you have any questions please contact us.';
-		
+
 		$mail->From('"'.$name.'" <'.$email.'>');
 		$mail->To($address);
 		$mail->Subject('New Account Created - dotProject Project Management System');

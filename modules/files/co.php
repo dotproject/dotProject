@@ -34,9 +34,12 @@ if ($obj->file_co_reason != '' && !($obj->file_checkout == $AppUI->user_id || $c
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // setup the title block
-$titleBlock = new CTitleBlock(((($co_cancel) ? 'Cancel ' : '') . 'Checkout'), 
-                              'folder5.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock(((($co_cancel) ? 'Cancel ' : '') . 'Checkout'),
+                              'folder5.png', $m, $m . "." . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
 $titleBlock->show();
 
@@ -62,7 +65,7 @@ $extra = array(
 	'where'=>'project_status<>7'
 );
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name', 
+$projects = $project->getAllowedRecords($AppUI->user_id, 'project_id,project_name', 'project_name',
                                         null, $extra);
 $projects = arrayMerge(array('0'=>$AppUI->_('All')), $projects);
 ?>
@@ -78,20 +81,20 @@ function popFile(params) {
 
 <form name="coFrm" action="?m=files" method="post">
 	<input type="hidden" name="dosql" value="do_file_co" />
-    <input type="hidden" name="co_cancel" value="<?php echo $co_cancel; ?>">
+  <input type="hidden" name="co_cancel" value="<?php echo $co_cancel; ?>">
 	<input type="hidden" name="file_id" value="<?php echo $file_id;?>" />
-    <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
-    <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
-        
+  <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>">
+  <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>">
+
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
 <tr>
 	<td width="100%" valign="top" align="center">
-		<table cellspacing="1" cellpadding="2" width="60%"><?php 
+		<table cellspacing="1" cellpadding="2" width="60%"><?php
 if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name');?>:</td>
-			<td align="left" class="hilite"><?php 
+			<td align="left" class="hilite"><?php
 	echo mb_strlen($obj->file_name)== 0 ? "n/a" : $obj->file_name;?></td>
 		</tr>
 		<tr valign="top">
@@ -105,41 +108,44 @@ if ($file_id) { ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By');?>:</td>
 			<td align="left" class="hilite"><?php echo $obj->getOwner();?></td>
-		</tr><?php 
+		</tr><?php
 } ?>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php 
+			<td align="right" nowrap="nowrap"><?php
 echo $AppUI->_(($co_cancel) ? 'CO Cancel Reason' : 'CO Reason'); ?>:</td>
 			<td align="left">
-				<textarea name="file_co_reason" class="textarea" style="width:270px"><?php 
-echo $obj->file_co_reason;?></textarea>
+				<!-- <textarea name="file_co_reason" class="textarea" style="width:270px"><?php
+// echo $obj->file_co_reason;?></textarea> -->
+        <?php
+          $richedit = new DpRichEdit("file_co_reason", dPsanitiseHTML($obj->file_co_reason));
+          $richedit->render();
+        ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
 				<input type="checkbox" name="notify" id="notify" checked="checked" />
-				<label for="notify"><?php 
+				<label for="notify"><?php
 echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label>
-			</td>		
+			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">&nbsp;</td>
 			<td align="left">
 				<input type="checkbox" name="notify_contacts" id="notify_contacts" checked="checked" />
-				<label for="notify_contacts"><?php 
+				<label for="notify_contacts"><?php
 echo $AppUI->_('Notify Project and Task Contacts'); ?></label>
-			</td>		
+			</td>
 		</tr>
-		
 		</table>
 	</td>
 </tr>
 <tr>
 	<td>
-		<input class="button" type="button" name="cancel" value="<?php 
-echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('<?php 
-echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); 
+		<input class="button" type="button" name="cancel" value="<?php
+echo $AppUI->_('cancel');?>" onclick="javascript:if (confirm('<?php
+echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS);
 ?>')) {location.href = '?m=files';}" />
 	</td>
 	<td align="right">

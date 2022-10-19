@@ -7,6 +7,8 @@ if (!$canEdit) {
 	$AppUI->redirect("m=public&a=access_denied");
 }
 
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 $ticket = (int)dPgetParam($_GET, 'ticket', '');
 $ticket_type = dPgetCleanParam($_GET, 'ticket_type', '');
 
@@ -23,7 +25,7 @@ require(DP_BASE_DIR.'/modules/ticketsmith/common.inc.php');
 $title = "Post Comment";
 
 /* prepare ticket parent */
-if (!$ticket_parent) {
+if (empty($ticket_parent)) {
     $ticket_parent = $ticket;
 }
 
@@ -41,21 +43,24 @@ if (@$comment) {
     $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery("contact_email as email");
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
 
-    list($author_name, $author_email) = $q->fetchRow();
+    $res = $q->fetchRow();
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: Old info: Author name is: '" . $author_name . "' and current email is: '" . $author_email . "'; Fetched row: '" . print_r($res, true) . "'");
+    list($author_name, $author_email) = $res;
+    dprint(__FILE__, __LINE__, 2, "[DEBUG]: Changed: Author name is now: '" . $author_name . "' and current email is: '" . $author_email . "'");
 
     $q->clear();
     $q->addTable('tickets');
     $q->addQuery('subject');
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
     $subject = $q->loadResult();
 
     $author = $author_name . " <" . $author_email . ">";
     $timestamp = time();
 
     /* prepare query */
-    
+
     $q->clear();
     $q->addTable('tickets');
     $q->addInsert('author,subject,body,timestamp,type,parent,assignment',
@@ -66,7 +71,7 @@ if (@$comment) {
 
     $q->addTable('tickets');
     $q->addUpdate('activity', $timestamp);
-    $q->addWhere("ticket = '{$ticket_parent}'");
+    $q->addWhere("ticket = '" . $ticket_parent . "'");
     $q->exec();
     $q->clear();
 
@@ -96,7 +101,7 @@ if (@$comment) {
     $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
     $q->addQuery("CONTACT_WS(' ',contact_first_name,contact_last_name) as name");
     $q->addQuery("contact_email as email");
-    $q->addWhere("user_id = '{$AppUI->user_id}'");
+    $q->addWhere("user_id = '" . $AppUI->user_id . "'");
 
     list($author_name, $author_email) = $q->fetchRow();
     print("<td align=\"left\">" . $author_name . " &lt;" . $author_email . "&gt;</td>\n");
@@ -106,10 +111,15 @@ if (@$comment) {
     print("<tr>\n");
     print("<td align=\"left\"><br /></td>");
     print("<td align=\"left\">");
+/*
+    // why force this to monospace? It won't work like this anyway...
     print("<tt>\n");
     print("<textarea name=\"comment\" wrap=\"hard\" cols=\"72\" rows=\"20\">\n");
     print("</textarea>\n");
     print("</tt>\n");
+*/
+    $richedit = new DpRichEdit('comment', "");
+    $richedit->render();
     print("</td>\n");
 
     /* output submit button */

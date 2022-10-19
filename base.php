@@ -20,7 +20,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 }}} */
 
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 if (defined('E_DEPRECATED')) {
 	error_reporting(E_ALL & ~(E_DEPRECATED|E_NOTICE|E_STRICT));
@@ -38,15 +38,16 @@ global $baseDir;
 global $baseUrl;
 
 $baseDir = dirname(__FILE__);
-//Make sure directoy seperator is at the end so that paths are well formed
+//Make sure directoy separator is at the end so that paths are well-formed
 //$baseDir .= ((substr_compare($baseDir, DIRECTORY_SEPERATOR, -1 , 1) == 0) ? '' : DIRECTORY_SEPERATOR);
 // Define to deprecate the global baseDir
 define('DP_BASE_DIR', $baseDir);
+// dprint(__FILE__, __LINE__, 8, "[DEBUG] Base dir is '" . DP_BASE_DIR . "'");
 
 require_once ($baseDir . '/includes/dP_compat.php');
 
 // only rely on env variables if not using a apache handler
-function safe_get_env($name) 
+function safe_get_env($name)
 {
 	if (isset($_SERVER[$name])) {
 		return $_SERVER[$name];
@@ -58,11 +59,11 @@ function safe_get_env($name)
 }
 
 // automatically define the base url
-$baseUrl = (((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') 
-             || $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') 
+$baseUrl = (((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
+             || $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
              ? 'https://' : 'http://');
 $baseUrl .= safe_get_env('HTTP_HOST');
-// check if webserver is not running on default port                
+// check if webserver is not running on default port
 // This seems to only apply if using older Apache servers
 if (($_SERVER['SERVER_PORT'] != 80 || $_SERVER['SERVER_PORT'] != 443) && strpos($baseUrl, ':') === FALSE) {
   $baseUrl .= ':' . safe_get_env('SERVER_PORT');

@@ -28,6 +28,9 @@ else if (!$obj->load($event_id) && $event_id) {
 	$AppUI->redirect();
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 // load the event types
 $types = dPgetSysVal('EventType');
 
@@ -68,7 +71,7 @@ if ($_GET['event_project']) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event') , 
+$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event') ,
                                'myevo-appointments.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=calendar', 'month view');
 if ($event_id) {
@@ -88,7 +91,7 @@ $q->addQuery('p.project_id, p.project_name');
 $prj = new CProject;
 $allowedProjects = $prj->getAllowedSQL($AppUI->user_id);
 
-if (count($allowedProjects)) { 
+if (count($allowedProjects)) {
 	$prj->setAllowedSQL($AppUI->user_id, $q);
 }
 $q->addOrder('project_name');
@@ -120,13 +123,13 @@ if (!$event_id && !$is_clash) {
 			$h++;
 		}
 	}
-	if ($h && $h < dPgetConfig('cal_day_end')) {
+	if (!empty($h) && $h < dPgetConfig('cal_day_end')) {
 		$seldate->setTime($h, $min, 0);
 	} else {
 		$seldate->setTime(dPgetConfig('cal_day_start'),0,0);
 	}
 		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
-	if ($h && $h < dPgetConfig('cal_day_end')) {
+	if (!empty($h) && $h < dPgetConfig('cal_day_end')) {
 		$seldate->addSeconds($inc * 60);
 	} else {
 		$seldate->setTime(dPgetConfig('cal_day_end'),0,0);
@@ -185,13 +188,13 @@ function submitIt() {
 		form.event_end_date.focus();
 		return;
 	}
-	if ((!(form.event_times_recuring.value>0)) 
+	if ((!(form.event_times_recuring.value>0))
 		&& (form.event_recurs[0].selected!=true)) {
 		alert("<?php echo $AppUI->_('Please enter number of recurrences', UI_OUTPUT_JS); ?>");
 		form.event_times_recuring.value=1;
 		form.event_times_recuring.focus();
 		return;
-	} 
+	}
 	// Ensure that the assigned values are selected before submitting.
 	var assigned = form.assigned;
 	var len = assigned.length;
@@ -235,7 +238,7 @@ function removeUser() {
 	for (fl; fl > -1; fl--) {
 		if (form.assigned.options[fl].selected) {
 			//remove from hperc_assign
-			var selValue = form.assigned.options[fl].value;			
+			var selValue = form.assigned.options[fl].value;
 			var re = ".*("+selValue+"=[0-9]*;).*";
 			form.assigned.options[fl] = null;
 		}
@@ -255,13 +258,17 @@ function removeUser() {
 <tr>
 	<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title');?>:</td>
 	<td width="20%">
-		<input autofocus type="text" class="text" size="25" name="event_title" value="<?php 
+		<input autofocus type="text" class="text" size="25" name="event_title" value="<?php
 echo @$obj->event_title;?>" maxlength="255" />
 	</td>
 	<td align="left" rowspan=4 valign="top" colspan="2" width="40%">
 	<?php echo $AppUI->_('Description'); ?> :<br/>
-		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php 
-echo $obj->event_description;?></textarea></td>
+<!--		<textarea class="textarea" name="event_description" rows="5" cols="45"><?php
+//echo $obj->event_description;?></textarea> -->
+  <?php
+    $richedit = new DpRichEdit("event_description", dPsanitiseHTML($obj->event_description));
+    $richedit->render();
+   ?>
 	</td>
 </tr>
 
@@ -273,7 +280,7 @@ echo $obj->event_description;?></textarea></td>
 ?>
 	</td>
 </tr>
-	
+
 <tr>
 	<td align="right"><?php echo $AppUI->_('Project');?>:</td>
 	<td>
@@ -285,17 +292,17 @@ echo $obj->event_description;?></textarea></td>
 
 
 <tr>
-	<td align="right" nowrap="nowrap"><label for="event_private"><?php 
+	<td align="right" nowrap="nowrap"><label for="event_private"><?php
 echo $AppUI->_('Private Entry'); ?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_private" id="event_private" <?php 
+		<input type="checkbox" value="1" name="event_private" id="event_private" <?php
 echo (@$obj->event_private ? 'checked="checked"' : '');?> />
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_start_date" value="<?php 
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_start_date" value="<?php
 echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
 </tr>
@@ -303,19 +310,19 @@ echo (($start_date) ? $start_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_end_date" value="<?php 
+		<input type="datetime-local" step="<?php echo $inc * 60 ?>" name="event_end_date" value="<?php
 echo (($end_date) ? $end_date->format(FMT_DATETIME_HTML5) : ''); ?>" class="dpDateField text">
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
-	<td><?php 
-echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); 
+	<td><?php
+echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true);
 ?></td>
 	<td align="right">x</td>
 	<td>
-		<input type="text"  name="event_times_recuring" value="<?php 
-echo ((isset($obj->event_times_recuring)) ? $obj->event_times_recuring : '1'); 
+		<input type="text"  name="event_times_recuring" value="<?php
+echo ((isset($obj->event_times_recuring)) ? $obj->event_times_recuring : '1');
 ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 	</td>
 </tr>
@@ -334,13 +341,13 @@ echo ((isset($obj->event_times_recuring)) ? $obj->event_times_recuring : '1');
 </tr>
 <tr>
 	<td colspan="2" align="right">
-	<?php 
-echo arraySelect($users, 'resources', 
+	<?php
+echo arraySelect($users, 'resources',
                  'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 	</td>
 	<td colspan="2" align="left">
-	<?php 
-echo arraySelect($assigned, 'assigned', 
+	<?php
+echo arraySelect($assigned, 'assigned',
                  'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 	</td>
 </tr>
@@ -356,15 +363,15 @@ echo arraySelect($assigned, 'assigned',
 			</tr>
 		</table>
 	</td>
-	<td align="left"><label for="mail_invited"><?php 
-echo $AppUI->_('Mail Attendees?'); ?></label> 
+	<td align="left"><label for="mail_invited"><?php
+echo $AppUI->_('Mail Attendees?'); ?></label>
 	<input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
 </tr>
 <tr>
-	<td align="right" nowrap="nowrap"><label for="event_cwd"><?php 
+	<td align="right" nowrap="nowrap"><label for="event_cwd"><?php
 echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
 	<td>
-		<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php 
+		<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php
 echo (@$obj->event_cwd ? 'checked="checked"' : ''); ?> />
 	</td>
 </tr>
@@ -379,11 +386,11 @@ $custom_fields->printHTML();
 	</td>
 <tr>
 	<td colspan="2">
-		<input type="button" value="<?php 
+		<input type="button" value="<?php
 echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back();" />
 	</td>
 	<td align="right" colspan="2">
-		<input type="button" value="<?php 
+		<input type="button" value="<?php
 echo $AppUI->_('submit'); ?>" class="button" onClick="javascript:submitIt()" />
 	</td>
 </tr>

@@ -52,9 +52,10 @@ function err($s)
 }
 
 // undo stupid magic quotes
+// probably not needed any longer (gwyneth 20210413)
 function undomq(&$m)
 {
-	if (get_magic_quotes_gpc()) {
+	if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) { // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
 		// undo the damage
 		$m = str_replace('\\\\','\\',$m);
 		$m = str_replace('\"','"',$m);

@@ -1164,7 +1164,9 @@ if (!defined('_ADODB_LAYER')) {
 				foreach($inputarr as $arr) {
 					$sql = ''; $i = 0;
 					//Use each() instead of foreach to reduce memory usage -mikefedyk
-					while(list(, $v) = each($arr)) {
+          // Sorry, @mikefedyk, each() is now deprecated (gwyneth 20210417)
+//					while(list(, $v) = each($arr)) {
+          foreach($arr as $v) {
 						$sql .= $sqlarr[$i];
 						// from Ron Baldwin <ron.baldwin#sourceprose.com>
 						// Only quote string types
@@ -2049,7 +2051,8 @@ if (!defined('_ADODB_LAYER')) {
 		if (!$rs) {
 		// no cached rs found
 			if ($this->debug) {
-				if (get_magic_quotes_runtime() && !$this->memCache) {
+        // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
+				if (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime() && !$this->memCache) {
 					ADOConnection::outp("Please disable magic_quotes_runtime - it corrupts cache files :(");
 				}
 				if ($this->debug !== -1) {

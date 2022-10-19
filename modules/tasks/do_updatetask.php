@@ -4,10 +4,10 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 /*
- * There is an issue with international UTF characters, when stored in the database an accented 
- * letter actually takes up two letters per say in the field length, this is a problem with 
- * costcodes sincE they are limited in size so saving a costcode as REDACI�N would actually 
- * save REDACI� since the accent takes two characters, so lets unaccent them, other languages 
+ * There is an issue with international UTF characters, when stored in the database an accented
+ * letter actually takes up two letters per say in the field length, this is a problem with
+ * costcodes sincE they are limited in size so saving a costcode as REDACI�N would actually
+ * save REDACI� since the accent takes two characters, so lets unaccent them, other languages
  * should add to the replacements array too...
 */
 function cleanText($text) {
@@ -55,12 +55,15 @@ if ($obj->task_log_date) {
 	$date = new CDate($obj->task_log_date);
 	$obj->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 }
-$dot = mb_strpos($obj->task_log_hours, ':');
-if ($dot > 0) {
-	$log_duration_minutes = sprintf('%.3F', mb_substr($obj->task_log_hours, $dot + 1)/60.0);
-	$obj->task_log_hours = sprintf('%.3F', floor($obj->task_log_hours) + $log_duration_minutes);
+$dot = mb_strpos($obj->task_log_hours, ':');  // this should actually be the locale's hour separator (gwyneth 20210426)
+// From here onwards, we have to make sure that $obj->task_log_hours is used as a float for the calculations, or else this 503s on us — it gets converted back into a string (gwyneth 20210426)
+//  @see modules/tasks/tasks.class.php, function check()
+//  TODO: there _are_ standard classes/methods to handle these issues, why are we reinventing the wheel?
+if ($dot > 0) {  // Ex. turn 02h30 into 2.500 (float) (gwyneth 20210426)
+	$log_duration_minutes = sprintf('%.3F', ((float)mb_substr((float)$obj->task_log_hours, $dot + 1))/60.0);
+	$obj->task_log_hours = sprintf('%.3F', floor((float)$obj->task_log_hours) + $log_duration_minutes);
 }
-$obj->task_log_hours = sprintf('%.3F', round($obj->task_log_hours, 3));
+$obj->task_log_hours = sprintf('%.3F', round((float)$obj->task_log_hours, 3));
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Task Log');
@@ -93,7 +96,7 @@ if (dPgetCleanParam($_POST, 'task_end_date', '') != '') {
 	$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
 }
 
-if ($task->task_percent_complete >= 100 && (!($task->task_end_date) 
+if ($task->task_percent_complete >= 100 && (!($task->task_end_date)
                                             || $task->task_end_date == '0000-00-00 00:00:00')) {
 	$task->task_end_date = $obj->task_log_date;
 }
@@ -117,11 +120,11 @@ $email_project_contacts = dPgetCleanParam($_POST, 'email_project_contacts', null
 $email_others = dPgetCleanParam($_POST, 'email_others', '');
 $email_extras = dPgetCleanParam($_POST, 'email_extras', null);
 
-if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, 
+if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts,
     $email_others, $email_extras)) {
 	$obj->store(); // Save the updated message. It is not an error if this fails.
 }
 
-$AppUI->redirect('m=tasks&a=view&task_id=' . $obj->task_log_task . '&tab=0#tasklog' 
+$AppUI->redirect('m=tasks&a=view&task_id=' . $obj->task_log_task . '&tab=0#tasklog'
                  . $obj->task_log_id);
 ?>

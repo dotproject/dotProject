@@ -67,4 +67,16 @@ $dPconfig['root_dir'] = $baseDir;
 // is now set in top-level files index.php and fileviewer.php.
 // All code should start to use $baseUrl instead of base_url.
 $dPconfig['base_url'] = $baseUrl;
+
+// Extra parameters for overLib - allows styles to override the defaults
+// @author Gwyneth Llewelyn (20210430)
+$dPconfig['overlib_extra_parameters'] = "";
+
+// Optionally log to a user-defined location
+// Take into account that this file needs to be accessible by the web server process, or else
+//  all logs may be lost! Note: the destination should also be allowed via `open_basedir` in `php.ini`
+// Created because some system configurations (e.g. nginx + PHP-FPM) do weird filtering of messages and
+//  buffer them before sending them to syslog; this creates confusing logs
+// @author Gwyneth Llewelyn (20210504)
+$dPconfig['error_log_file'] = '';
 ?>

@@ -225,7 +225,8 @@ class ADODB_ado extends ADOConnection {
 
       // Map by http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ado270/htm/mdmthcreateparam.asp
       // Check issue http://bugs.php.net/bug.php?id=40664 !!!
-			while(list(, $val) = each($inputarr)) {
+//			while(list(, $val) = each($inputarr)) {  // deprecated in 7.2+
+      foreach($inputarr as $val) {
 				$type = gettype($val);
 				$len=strlen($val);
 				if ($type == 'boolean')

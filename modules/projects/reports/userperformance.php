@@ -6,8 +6,8 @@ if (!defined('DP_BASE_DIR')) {
 $do_report = dPgetParam($_POST, 'do_report', 0);
 $log_start_date = dPgetCleanParam($_POST, 'log_start_date', 0);
 $log_end_date = dPgetCleanParam($_POST, 'log_end_date', 0);
-$log_all = (int)dPgetParam($_POST['log_all'], 0);
-$group_by_unit = dPgetCleanParam($_POST['group_by_unit'],'day');
+$log_all = (int)dPgetParam($_POST, 'log_all', 0);
+$group_by_unit = dPgetCleanParam($_POST, 'group_by_unit','day');
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
@@ -52,29 +52,29 @@ $end_date->setTime(23, 59, 59);
 
 <?php
 if ($do_report) {
-	
+
 	// Let's figure out which users we have
 	$q = new DBQuery;
 	$q->addTable('users', 'u');
 	$q->addQuery('u.user_id, u.user_username, contact_first_name, contact_last_name');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
 	$user_list = $q->loadHashList('user_id');
-	
+
 	// Now which tasks will we need and the real allocated hours (estimated time / number of users)
 	// Also we will use tasks with duration_type = 1 (hours) and those that are not marked
 	// as milstones
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$working_hours = $dPconfig['daily_working_hours'];
 
-	$sql = ('SELECT t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ' 
-			. $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated' 
-			. ' FROM tasks as t, user_tasks as ut' 
+	$sql = ('SELECT t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, '
+			. $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated'
+			. ' FROM tasks as t, user_tasks as ut'
 			. " WHERE t.task_id = ut.task_id AND t.task_milestone = '0'");
-	
+
 	$q = new DBQuery;
 	$q->addTable('tasks', 't');
 	$q->addTable('user_tasks', 'ut');
-	$q->addQuery('t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ' 
+	$q->addQuery('t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, '
 			. $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated' );
 	$q->addWhere("t.task_id = ut.task_id AND t.task_milestone = '0'");
 	if ($project_id != 0) {
@@ -84,9 +84,9 @@ if ($do_report) {
 		$q->addWhere('t.task_start_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
 		$q->addWhere('t.task_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 	}
-	
+
 	$q->addGroup('t.task_id');
-	
+
 	$task_list = $q->loadHashList('task_id');
 	//echo $sql;
 ?>
@@ -105,8 +105,8 @@ if ($do_report) {
 		$percentage_sum = $hours_allocated_sum = $hours_worked_sum = 0;
 		$sum_total_hours_allocated = $sum_total_hours_worked = 0;
 		$sum_hours_allocated_complete = $sum_hours_worked_complete = 0;
-	
-//TODO: Split times for which more than one users were working...	
+
+//TODO: Split times for which more than one users were working...
 		$q = new DBQuery;
 		foreach ($user_list as $user_id => $user) {
 			$q->clear();
@@ -117,7 +117,7 @@ if ($do_report) {
 
 			$total_hours_allocated = $total_hours_worked = 0;
 			$hours_allocated_complete = $hours_worked_complete = 0;
-			
+
 			foreach ($tasks_id as $task_id) {
 				if (isset($task_list[$task_id])) {
 					// Now let's figure out how many time did the user spent in this task
@@ -127,8 +127,8 @@ if ($do_report) {
 					$q->addWhere('task_log_task = '.(int)$task_id);
 					$q->addWhere('task_log_creator = '.(int)$user_id);
 					$hours_worked = round($q->loadResult(),2);
-					
-					
+
+
 					$q->clear();
 					$q->addTable('tasks');
 					$q->addQuery('task_percent_complete');
@@ -136,23 +136,23 @@ if ($do_report) {
 					//echo $sql;
 					$percent = $q->loadColumn();
 					$complete = ($percent[0] == 100);
-                    
+
 					if ($complete) {
 						$hours_allocated_complete += $task_list[$task_id]['hours_allocated'];
 						$hours_worked_complete += $hours_worked;
 					}
-					
+
 					$total_hours_allocated += $task_list[$task_id]['hours_allocated'];
 					$total_hours_worked    += $hours_worked;
 				}
 			}
-			
+
 			$sum_total_hours_allocated += $total_hours_allocated;
 			$sum_total_hours_worked    += $total_hours_worked;
 
 			$sum_hours_allocated_complete += $hours_allocated_complete;
 			$sum_hours_worked_complete    += $hours_worked_complete;
-			
+
 			if ($total_hours_allocated > 0 || $total_hours_worked > 0) {
 				$percentage = 0;
 				$percentage_e = 0;

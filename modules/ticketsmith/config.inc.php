@@ -6,7 +6,7 @@ if (!defined('DP_BASE_DIR')) {
 
 // reply-to address for staff followups
 // i.e. the address the gateway receives
-if (! isset($dPconfig['site_domain'])) {
+if (empty($dPconfig['site_domain'])) {
   $dPconfig['site_domain'] = "dotproject.net";
 }
 
@@ -16,7 +16,7 @@ $CONFIG['notify'] = '';
 $CONFIG['notify_911'] = '';
 
 $CONFIG["reply_to"] = "support@" . $dPconfig['site_domain'];
-// If you want to hide real addresses behind a bogus 
+// If you want to hide real addresses behind a bogus
 // generic email, uncomment the following:
 // $CONFIG["reply_name"] = "Help Desk";
 
@@ -58,5 +58,4 @@ $CONFIG["followup_order"] = "ASC"; // "ASC" or "DESC"
 // go to parent or latest followup from index?
 // note that latest followup is slightly slower
 $CONFIG["index_link"] = "parent"; // "parent" or "latest"
-
 ?>

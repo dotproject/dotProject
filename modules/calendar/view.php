@@ -61,11 +61,11 @@ $event_project = $q->LoadResult();
 $titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, "$m.$a");
 if ($canAuthor) {
 	$titleBlock->addCell();
-	$titleBlock->addCell('<form action="?m=calendar&amp;a=addedit" method="post">' 
-	                     . '<input type="submit" class="button" value="' 
+	$titleBlock->addCell('<form action="?m=calendar&amp;a=addedit" method="post">'
+	                     . '<input type="submit" class="button" value="'
 	                     . $AppUI->_('new event') . '" /></form>', '', '', '');
 }
-$titleBlock->addCrumb(('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE)), 
+$titleBlock->addCrumb(('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE)),
                       'month view');
 $titleBlock->addCrumb('?m=calendar&amp;a=day_view&amp;date='.$start_date->format(FMT_TIMESTAMP_DATE).'&amp;tab=0', 'day view');
 if ($canEdit) {
@@ -110,10 +110,10 @@ function delIt() {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type');?>:</td>
 			<td class="hilite" width="100%"><?php echo $AppUI->_($types[$obj->event_type]);?></td>
-		</tr>	
+		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project');?>:</td>
-			<td class="hilite" width="100%"><a href='?m=projects&amp;a=view&amp;project_id=<?php 
+			<td class="hilite" width="100%"><a href='?m=projects&amp;a=view&amp;project_id=<?php
 echo $obj->event_project ?>'><?php echo $event_project;?></a></td>
 		</tr>
 		<tr>
@@ -126,8 +126,8 @@ echo $obj->event_project ?>'><?php echo $event_project;?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs');?>:</td>
-			<td class="hilite"><?php 
-echo ($AppUI->_($recurs[$obj->event_recurs]) . ' (' . $obj->event_times_recuring . ' ' 
+			<td class="hilite"><?php
+echo ($AppUI->_($recurs[$obj->event_recurs]) . ' (' . $obj->event_times_recuring . ' '
       . $AppUI->_('times') . ')'); ?></td>
 		</tr>
 		<tr>
@@ -151,7 +151,8 @@ echo ($AppUI->_($recurs[$obj->event_recurs]) . ' (' . $obj->event_times_recuring
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo nl2br(strip_tags($obj->event_description));?>&nbsp;
+				<?php // echo nl2br(strip_tags($obj->event_description));
+        echo nl2br($AppUI->showHTML($obj->event_description)); ?>&nbsp;
 			</td>
 		</tr>
 		</table>

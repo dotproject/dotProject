@@ -5,7 +5,7 @@ require_once("gacl_admin.inc.php");
 if ($_GET['object_type'] != '') {
 	$object_type = $_GET['object_type'];
 } else {
-	$object_type = $_POST['object_type'];	
+	$object_type = $_POST['object_type'];
 }
 
 switch(strtolower(trim($object_type))) {
@@ -32,22 +32,23 @@ switch(strtolower(trim($object_type))) {
 
 switch ($_POST['action']) {
     case 'Delete':
-   
+
         if (count($_POST['delete_object']) > 0) {
             foreach($_POST['delete_object'] as $id) {
                 $gacl_api->del_object($id, $object_type, TRUE);
             }
-        }   
-            
+        }
+
         //Return page.
         $gacl_api->return_page($_POST['return_page']);
-        
+
         break;
     case 'Submit':
         $gacl_api->debug_text("Submit!!");
-    
+
         //Update objects
-        while (list(,$row) = @each($_POST['objects'])) {
+//        while (list(,$row) = @each($_POST['objects'])) {  // obsolete and deprecated in PHP 8 (gwyneth 20210424)
+        foreach ($_POST['objects'] as $row) {
             list($id, $value, $order, $name) = $row;
             $gacl_api->edit_object($id, $_POST['section_value'], $name, $value, $order, 0, $object_type);
         }
@@ -58,22 +59,23 @@ switch ($_POST['action']) {
         unset($name);
 
         //Insert new sections
-        while (list(,$row) = @each($_POST['new_objects'])) {
+//        while (list(,$row) = @each($_POST['new_objects'])) {  // see above
+        foreach ($_POST['new_objects'] as $row) {
             list($value, $order, $name) = $row;
-            
+
             if (!empty($value) AND !empty($name)) {
                 $object_id= $gacl_api->add_object($_POST['section_value'], $name, $value, $order, 0, $object_type);
             }
         }
         $gacl_api->debug_text("return_page: ". $_POST['return_page']);
         $gacl_api->return_page($_POST['return_page']);
-        
-        break;    
+
+        break;
     default:
         //Grab section name
-        $query = sprintf("select name from $object_sections_table where value = '%s'", $db->qstr($_GET['section_value'], get_magic_quotes_runtime()));
+        $query = sprintf("select name from $object_sections_table where value = '%s'", $db->qstr($_GET['section_value'], function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()));  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
         $section_name = $db->GetOne($query);
-        
+
         $query = sprintf("select
                                     id,
                                     section_value,
@@ -83,19 +85,20 @@ switch ($_POST['action']) {
                         from    $object_table
                         where   section_value='%s'
                         order by order_value",
-			$db->qstr($_GET['section_value'], get_magic_quotes_runtime()));
-        $rs = $db->pageexecute($query, $gacl_api->_items_per_page, $_GET['page']);        
+			$db->qstr($_GET['section_value'], function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()));  // REMOVED in PHP 8; throws fatal error (gwyneth 20210413)
+        $rs = $db->pageexecute($query, $gacl_api->_items_per_page, $_GET['page']);
         $rows = $rs->GetRows();
 
-        while (list(,$row) = @each($rows)) {
+//        while (list(,$row) = @each($rows)) {  // see above
+        foreach ($rows as $row) {
             list($id, $section_value, $value, $order_value, $name) = $row;
-            
+
                 $objects[] = array(
                                                 'id' => $id,
                                                 'section_value' => $section_value,
                                                 'value' => $value,
                                                 'order' => $order_value,
-                                                'name' => $name            
+                                                'name' => $name
                                             );
         }
 
@@ -111,9 +114,9 @@ switch ($_POST['action']) {
 
         $smarty->assign('objects', $objects);
         $smarty->assign('new_objects', $new_objects);
-        
+
         $smarty->assign("paging_data", $gacl_api->get_paging_data($rs));
-        
+
         break;
 }
 

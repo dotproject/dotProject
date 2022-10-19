@@ -23,7 +23,7 @@ class CProjectDesignerOptions extends CDpObject {
 
         function __construct() {
                 parent::__construct( 'project_designer_options', 'pd_option_id' );
-        }                    
+        }
 
         function store($updateNulls = FALSE) {
                   $q = new DBQuery;
@@ -37,7 +37,7 @@ class CProjectDesignerOptions extends CDpObject {
                   $q->addReplace('pd_option_view_files',$this->pd_option_view_files);
                   $q->addWhere('pd_option_user = '.$this->pd_option_user);
                   $q->exec();
-        }                    
+        }
 }
 
 /** Retrieve tasks with first task_end_dates within given project
@@ -57,7 +57,7 @@ function getCriticalTasksInverted($project_id = NULL, $limit = 1) {
             $q->addWhere("task_project = $project_id AND !isnull( task_end_date ) AND task_end_date !=  '0000-00-00 00:00:00'");
             $q->addOrder('task_start_date ASC');
             $q->setLimit($limit);
-            
+
                 return $q->loadList();
       }
 }
@@ -66,7 +66,7 @@ function taskstyle_pd($task) {
 	$now = new CDate();
 	$start_date = intval( $task["task_start_date"] ) ? new CDate( $task["task_start_date"] ) : null;
 	$end_date = intval( $task["task_end_date"] ) ? new CDate( $task["task_end_date"] ) : null;
-    
+
 	if ($start_date && !$end_date) {
         $end_date = $start_date;
         $end_date->addSeconds( @$task["task_duration"]*$task["task_duration_type"]*SEC_HOUR );
@@ -74,7 +74,7 @@ function taskstyle_pd($task) {
 	else if (!$start_date){
 		return '';
     }
-    
+
     $style = 'class=';
     if ($task['task_percent_complete'] == 0) {
         $style .= (($now->before( $start_date ))?'"task_future"':'"task_notstarted"');
@@ -95,7 +95,7 @@ function get_actual_end_date_pd($task_id, $task) {
   global $AppUI;
   $q = new DBQuery;
   $mods = $AppUI->getActiveModules();
-  
+
   if (!empty($mods['history']) && !getDenyRead('history')) {
       $q->addQuery('MAX(history_date) as actual_end_date');
       $q->addTable('history');
@@ -106,13 +106,13 @@ function get_actual_end_date_pd($task_id, $task) {
       $q->addTable('task_log');
       $q->addWhere('task_log_task = '.$task_id);
   }
-  
+
   $task_log_end_date = $q->loadResult();
-  
+
   $edate = $task_log_end_date;
-  
+
   $edate = ($edate > $task->task_end_date || $task->task_percent_complete == 100)?$edate:$task->task_end_date;
-  
+
   return $edate;
 }
 
@@ -121,7 +121,7 @@ function get_actual_end_date_pd($task_id, $task) {
 function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
         global $AppUI, $dPconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
         global $task_access, $task_priority, $PROJDESIGN_CONFIG;
-      
+
         $types = dPgetsysval('TaskType');
 
         $now = new CDate();
@@ -144,11 +144,11 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
                 if (!$end_date) {
                        	/*
 			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php 
-			** perhaps this fallback if-clause could be deleted in the future, 
+			** called from array_csort and tasks.php
+			** perhaps this fallback if-clause could be deleted in the future,
 			** didn't want to remove it shortly before the 2.0.2
 
-			*/ 
+			*/
 			$end_date = new CDate('0000-00-00 00:00:00');
                 }
 
@@ -169,12 +169,12 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
                 $days = $now->dateDiff( $end_date ) * $sign;
         }
 
-        $s = "\n<tr id=\"row".$a['task_id']."\" onmouseover=\"highlight_tds(this, true, ".$a['task_id'].")\" onmouseout=\"highlight_tds(this, false, ".$a['task_id'].")\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\">"; // edit icon
+        $s = "\n<tr id=\"row".$a['task_id']."\" onmouseover=\"highlight_tds(this, true, ".$a['task_id'].");\" onmouseout=\"highlight_tds(this, false, ".$a['task_id'].")\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\">"; // edit icon
         $s .= "\n\t<td>";
         $canEdit = !getDenyEdit( 'tasks', $a["task_id"] );
         $canViewLog = $perms->checkModuleItem('task_log', 'view', $a['task_id']);
         if ($canEdit) {
-                $s .= "\n\t\t<a href=\"?m=tasks&a=addedit&task_id={$a['task_id']}\">"
+                $s .= "\n\t\t<a href=\"?m=tasks&a=addedit&task_id=" . $a['task_id'] . "\">"
                         . "\n\t\t\t".'<img src="./images/icons/pencil.gif" alt="'.$AppUI->_( 'Edit Task' ).'" border="0" width="12" height="12">'
                         . "\n\t\t</a>";
         }
@@ -182,7 +182,7 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
 // pinned
 /*        $pin_prefix = $a['task_pinned']?'':'un';
         $s .= "\n\t<td>";
-        $s .= "\n\t\t<a href=\"?m=tasks&pin=" . ($a['task_pinned']?0:1) . "&task_id={$a['task_id']}\">"
+        $s .= "\n\t\t<a href=\"?m=tasks&pin=" . ($a['task_pinned']?0:1) . "&task_id=" . $a['task_id'] . "\">"
                 . "\n\t\t\t".'<img src="./images/icons/' . $pin_prefix . 'pin.gif" alt="'.$AppUI->_( $pin_prefix . 'pin Task' ).'" border="0" width="12" height="12">'
                 . "\n\t\t</a>";
         $s .= "\n\t</td>";*/
@@ -223,7 +223,7 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
 // add log
         $s .= "\n\t<td align='center' nowrap='nowrap'>";
         if ($a['task_dynamic'] != 1) {
-              $s .= "\n\t\t<a href=\"?m=tasks&a=view&tab=1&project_id={$a['task_project']}&task_id={$a['task_id']}\">"
+              $s .= "\n\t\t<a href=\"?m=tasks&a=view&tab=1&project_id=" . $a['task_project'] . "&task_id=" . $a['task_id'] . "\">"
                   . "\n\t\t\t".'<img src="./modules/projectdesigner/images/add.png" alt="'.$AppUI->_( 'Add Work Log' ).'" title="'.$AppUI->_( 'Add Work Log' ).'" border="0" width="16" height="16">'
                   . "\n\t\t</a>";
         }
@@ -322,7 +322,7 @@ function showtask_pd( &$a, $level=0, $is_opened = true, $today_view = false) {
 
 // Assignment checkbox
         if ($showEditCheckbox || $perms->checkModule( 'admin', 'view')) {
-                $s .= "\n\t<td align='center'><input type=\"checkbox\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\" onfocus=\"is_check=true;\" onblur=\"is_check=false;\" id=\"selected_task_{$a['task_id']}\" name=\"selected_task[{$a['task_id']}]\" value=\"{$a['task_id']}\"/></td>";
+                $s .= "\n\t<td align='center'><input type=\"checkbox\" onclick=\"select_box('selected_task', ".$a['task_id'].",'frm_tasks')\" onfocus=\"is_check=true;\" onblur=\"is_check=false;\" id=\"selected_task_" . $a['task_id'] . "\" name=\"selected_task[" . $a['task_id']. "]\" value=\"" . $a['task_id'] . "\"/></td>";
         }
         $s .= '</tr>';
         echo $s;
@@ -352,7 +352,7 @@ function get_dependencies_pd($task_id){
       $q->addTable('tasks','t');
       $q->addTable('task_dependencies','td');
       $q->addQuery('t.task_id, t.task_name');
-      $q->addWhere("td.dependencies_task_id = $task_id");
+      $q->addWhere("td.dependencies_task_id = " . $task_id);
       $q->addWhere('t.task_id = td.dependencies_req_task_id');
       $sql = $q->prepare();
       $taskDep = db_loadHashList( $sql );
@@ -361,7 +361,7 @@ function get_dependencies_pd($task_id){
 function showtask_pr( &$a, $level=0, $is_opened = true, $today_view = false) {
         global $AppUI, $dPconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
         global $task_access, $task_priority;
-      
+
         $types = dPgetsysval('TaskType');
 
         $now = new CDate();
@@ -384,11 +384,11 @@ function showtask_pr( &$a, $level=0, $is_opened = true, $today_view = false) {
                 if (!$end_date) {
                        	/*
 			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php 
-			** perhaps this fallback if-clause could be deleted in the future, 
+			** called from array_csort and tasks.php
+			** perhaps this fallback if-clause could be deleted in the future,
 			** didn't want to remove it shortly before the 2.0.2
 
-			*/ 
+			*/
 			$end_date = new CDate('0000-00-00 00:00:00');
                 }
 
@@ -416,7 +416,7 @@ function showtask_pr( &$a, $level=0, $is_opened = true, $today_view = false) {
         $alt = str_replace("\r", ' ', $alt);
         $alt = str_replace("\n", ' ', $alt);
 
-        $open_link = $is_opened ? "<!--<a href='index.php$query_string&close_task_id=".$a["task_id"]."'>--><img src='images/icons/collapse.gif' border='0' align='center' /><!--</a>-->" : "<!--<a href='index.php$query_string&open_task_id=".$a["task_id"]."'>--><img src='images/icons/expand.gif' border='0' /><!--</a>-->";
+        $open_link = $is_opened ? "<!--<a href='index.php" . $query_string . "&close_task_id=".$a["task_id"]."'>--><img src='images/icons/collapse.gif' border='0' align='center' /><!--</a>-->" : "<!--<a href='index.php" . $query_string . "&open_task_id=".$a["task_id"]."'>--><img src='images/icons/expand.gif' border='0' /><!--</a>-->";
         if ($a["task_milestone"] > 0 ) {
                 $s .= '&nbsp;<!--<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '">--><b>' . $a["task_name"] . '</b><!--</a>--> <img src="./images/icons/milestone.gif" border="0"></td>';
         } else if ($a["task_dynamic"] == '1'){

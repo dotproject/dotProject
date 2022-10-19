@@ -19,6 +19,9 @@ if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
+
 //$roles
 // Create the roles class container
 require_once DP_BASE_DIR.'/modules/system/roles/roles.class.php';
@@ -30,7 +33,6 @@ foreach ($roles as $role) {
   $roles_arr[$role['id']] = $role['name'];
 }
 $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
-
 
 $q  = new DBQuery;
 $q->addTable('users', 'u');
@@ -59,18 +61,18 @@ if (!db_loadHash($sql, $user) && $user_id > 0) {
 
 	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
-	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, "$m.$a");
+	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . "." . $a);
 	if (getPermission('admin', 'view') && getPermission('users', 'view'))
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	if ($user_id > 0) {
-		$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=$user_id", "view this user" );
+		$titleBlock->addCrumb( "?m=admin&amp;a=viewuser&amp;user_id=" . $user_id, "view this user" );
 		if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=$user_id", "edit preferences" );
+		$titleBlock->addCrumb( "?m=system&amp;a=addeditpref&amp;user_id=" . $user_id, "edit preferences" );
 		}
 	}
 	$titleBlock->show();
 ?>
-<script  language="javascript">
+<script language="javascript">
 function submitIt() {
     var form = document.editFrm;
     var uid = new Number(form.user_id.value);
@@ -152,14 +154,13 @@ function setDept(key, val) {
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="username_min_len" value="<?php echo dPgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo dPgetConfig('password_min_len'); ?>)" />
-	
 
 <tr>
     <td align="right" width="230">* <?php echo $AppUI->_('Login Name');?>:</td>
     <td>
 <?php
 	if (@$user['user_username']) {
-		echo ('<input type="hidden" class="text" name="user_username" value="' 
+		echo ('<input type="hidden" class="text" name="user_username" value="'
 		      . $user['user_username'] . '" />');
 		echo '<strong>' . $AppUI->showHTML($user['user_username']) . '</strong>';
 	} else {
@@ -194,16 +195,16 @@ function setDept(key, val) {
 </tr>
 <tr>
     <td align="right">* <?php echo $AppUI->_('Name');?>:</td>
-    <td><input type="text" class="text" name="contact_first_name" value="<?php 
-echo $user['contact_first_name'];?>" maxlength="50" /> 
-    <input type="text" class="text" name="contact_last_name" value="<?php 
+    <td><input type="text" class="text" name="contact_first_name" value="<?php
+echo $user['contact_first_name'];?>" maxlength="50" />
+    <input type="text" class="text" name="contact_last_name" value="<?php
 echo $user['contact_last_name'];?>" maxlength="50" /></td>
 </tr>
 <?php if ($canEdit) { ?>
 <tr>
     <td align="right"> <?php echo $AppUI->_('Company');?>:</td>
     <td>
-<?php 
+<?php
 echo arraySelect($companies, 'contact_company', 'class="text" size="1"', $user['contact_company']);
 ?>
     </td>
@@ -212,27 +213,31 @@ echo arraySelect($companies, 'contact_company', 'class="text" size="1"', $user['
 <tr>
     <td align="right"><?php echo $AppUI->_('Department');?>:</td>
     <td>
-        <input type="hidden" name="contact_department" value="<?php 
+        <input type="hidden" name="contact_department" value="<?php
 echo @$user['contact_department'];?>" />
-        <input type="text" class="text" name="dept_name" value="<?php 
+        <input type="text" class="text" name="dept_name" value="<?php
 echo @$user['dept_name'];?>" size="40" disabled="disabled" />
-        <input type="button" class="button" value="<?php 
+        <input type="button" class="button" value="<?php
 echo $AppUI->_('select dept');?>..." onclick="javascript:popDept()" />
     </td>
 </tr>
 <tr>
-    <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
-    <td><input type="email" class="text" name="contact_email" value="<?php 
+  <td align="right">* <?php echo $AppUI->_('Email');?>:</td>
+  <td><input type="email" class="text" name="contact_email" value="<?php
 echo $user['contact_email'];?>" maxlength="255" size="40" /> </td>
 </tr>
 <tr>
-    <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
-    <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php 
-echo @$user['user_signature'];?></textarea></td>
+  <td align="right" valign="top"><?php echo $AppUI->_('Email').' '.$AppUI->_('Signature');?>:</td>
+  <td colspan="4"><?php
+    $richedit = new DpRichEdit("user_signature", dPsanitiseHTML(@$user['user_signature']));
+    $richedit->render();
+  //  <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php
+  //echo @$user['user_signature']; ?\></textarea> ?>
+  </td>
 </tr>
 <tr>
 	<td align="right"><?php if ($user['user_contact']) { ?>
-		<a href="?m=contacts&amp;a=addedit&amp;contact_id=<?php 
+		<a href="?m=contacts&amp;a=addedit&amp;contact_id=<?php
 echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a>
 	<?php } ?></td>
 	<td>&nbsp;</td>
@@ -247,11 +252,11 @@ echo $user['user_contact']; ?>"><?php echo $AppUI->_(array('edit', 'contact info
     </td>
     <td align="right">
     <?php if ($canEdit && !$user_id) { ?>
-	<label for="send_user_mail"><?php 
-echo $AppUI->_('Inform new user of their account details?'); ?></label> 
+	<label for="send_user_mail"><?php
+echo $AppUI->_('Inform new user of their account details?'); ?></label>
 	<input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
 <?php } ?>
-	<input type="button" value="<?php 
+	<input type="button" value="<?php
 echo $AppUI->_('submit');?>" onclick="javascript:submitIt()" class="button" />
     </td>
 </tr>

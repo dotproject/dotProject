@@ -10,7 +10,7 @@ if (!(defined('DP_BASE_DIR'))) {
 }
 
 // load the db specific handlers
-//require_once(DP_BASE_DIR."/includes/db_{$dPconfig['dbtype']}.php");
+//require_once(DP_BASE_DIR."/includes/db_" . $dPconfig['dbtype'] . ".php");
 //require_once("./includes/db_adodb.php");
 require_once DP_BASE_DIR . '/includes/db_adodb.php';
 
@@ -18,7 +18,7 @@ require_once DP_BASE_DIR . '/includes/db_adodb.php';
 db_connect(dPgetConfig('dbhost'), dPgetConfig('dbname'),
 dPgetConfig('dbuser'), dPgetConfig('dbpass'), dPgetConfig('dbpersist'));
 
-	
+
 // Quick hack to ensure MySQL behaves itself (#2323)
 $db->Execute("SET sql_mode := ''");
 
@@ -32,7 +32,7 @@ $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.
 	$rsArr = $rs->GetArray();
-	
+
 	foreach ($rsArr as $c) {
 		if ($c['config_type'] == 'checkbox') {
 			$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
@@ -65,35 +65,36 @@ function db_loadResult($sql) {
 * This global function loads the first row of a query into an object
 *
 * If an object is passed to this function, the returned row is bound to the existing elements of <var>object</var>.
-* If <var>object</var> has a value of null, then all of the returned query fields returned in the object. 
+* If <var>object</var> has a value of null, then all of the returned query fields returned in the object.
 * @param string The SQL query
 * @param object The address of variable
+* @return bool  Object loaded correctly? true
 */
 function db_loadObject($sql, &$object, $bindAll=false , $strip = true) {
-	if ($object != null) {
+	if (!empty($object)) {
 		$hash = array();
-		if (!(db_loadHash($sql, $hash))) {
+		if (empty(db_loadHash($sql, $hash))) {
 			return false;
 		}
 		bindHashToObject($hash, $object, null, $strip, $bindAll);
 		return true;
 	} else {
 		$cur = db_exec($sql);
-		if (!($cur)) {
-			exit(db_error());
+		if (empty($cur)) {
+			exit(db_error());  // a bit drastic, isn't it? (gwyneth 20210427)
 		}
 		$object = db_fetch_object($cur);
-		if ($object) {
+		if (!empty($object)) {
 			db_free_result($cur);
 		} else {
 			$object = null;
 		}
-		return (($object) ? true : false);
+		return !empty($object);
 	}
 }
 
 /**
-* This global function return a result row as an associative array 
+* This global function return a result row as an associative array
 *
 * @param string The SQL query
 * @param array An array for the result to be return in
@@ -245,11 +246,11 @@ function db_insertArray($table, &$hash, $verbose=false) {
 		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf($fmtsql, implode(',', $fields) ,  implode(',', $values));
-	
-	if ($verbose) { 
+
+	if ($verbose) {
 		print "$sql<br />\n";
 	}
-	
+
 	if (!(db_exec($sql))) {
 		return false;
 	}
@@ -285,7 +286,7 @@ function db_updateArray($table, &$hash, $keyName, $verbose=false) {
 		$tmp[] = "$k=$val";
 	}
 	$sql = sprintf($fmtsql, implode(',', $tmp) , $where);
-	if ($verbose) { 
+	if ($verbose) {
 		print "$sql<br />\n";
 	}
 	$ret = db_exec($sql);
@@ -340,14 +341,14 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 		$values[] = "'" . db_escape($v) . "'";
 	}
 	$sql = sprintf($fmtsql, implode(",", $fields) ,  implode(",", $values));
-	if ($verbose) { 
+	if ($verbose) {
 		print "$sql<br />\n";
 	}
 	if (!(db_exec($sql))) {
 		return false;
 	}
 	$id = db_insert_id();
-	if ($verbose) { 
+	if ($verbose) {
 		print "id=[$id]<br />\n";
 	}
 	if ($keyName && $id) {
@@ -366,7 +367,7 @@ function db_insertObject($table, &$object, $keyName = NULL, $verbose=false) {
 function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descriptionField = NULL) {
 	global $AppUI;
 	$perms =& $AppUI->acl();
-	
+
 	//TODO: If DBQuery exists use it
 	$dbprefix = dPgetConfig('dbprefix','');
 	if ( ($dbprefix != '') && (strstr($table,$dbprefix) === false) ) {
@@ -403,16 +404,16 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 					//TODO: If DBQuery available, use it
 					if ($dbprefix != '') {
 						if (!(strstr($table,$dbprefix) === false)) substr_replace($table,'',0,strlen($dbprefix));
-						$keyDesc = db_loadResult('SELECT permissions_item_label FROM '.$dbprefix.'modules' 
+						$keyDesc = db_loadResult('SELECT permissions_item_label FROM '.$dbprefix.'modules'
 						                         . " WHERE permissions_item_table = '" . $table . "'");
 					} else {
-					$keyDesc = db_loadResult('SELECT permissions_item_label FROM modules' 
+					$keyDesc = db_loadResult('SELECT permissions_item_label FROM modules'
 					                         . " WHERE permissions_item_table = '" . $table . "'");
 					}
 				}
-				
+
 				if ($keyDesc) {
-					$perms->edit_object($perm_item_id, $table, $obj_vars_arr[$keyDesc], 
+					$perms->edit_object($perm_item_id, $table, $obj_vars_arr[$keyDesc],
 					                    $obj_vars_arr[$keyName], 0, 0, 'axo');
 				}
 			}
@@ -420,7 +421,7 @@ function db_updateObject($table, &$object, $keyName, $updateNulls=true, $descrip
 	} else {
 		$retval = true;
 	}
-	
+
 	return $retval;
 }
 
@@ -447,7 +448,7 @@ function db_datetime($timestamp = NULL) {
 	if (!($timestamp)) {
 		return NULL;
 	}
-	$datetime_str = ((is_object($timestamp)) ? $timestamp->toString('%Y-%m-%d %H:%M:%S') 
+	$datetime_str = ((is_object($timestamp)) ? $timestamp->toString('%Y-%m-%d %H:%M:%S')
 	                 : strftime('%Y-%m-%d %H:%M:%S', $timestamp));
 	return $datetime_str;
 }
@@ -483,37 +484,39 @@ function bindHashToObject($hash, &$obj, $prefix=NULL, $checkSlashes=true, $bindA
 	} else if (!(is_object($obj))) {
 		die('bindHashToObject : object expected');
 	}
-	/* 
-	 * checking that all hash values are non-objects so that stripslashes() and other such 
-	 * functions are correctly used as well as making sure that we actually create new values and 
-	 * not just copy a reference to an object. bind() already filters non-objects but we still need 
+	/*
+	 * checking that all hash values are non-objects so that stripslashes() and other such
+	 * functions are correctly used as well as making sure that we actually create new values and
+	 * not just copy a reference to an object. bind() already filters non-objects but we still need
 	 * to check on this should the funtion be called independently of bind()
 	 */
-	
+
 	foreach ($hash as $k => $v) {
 		if (is_object($hash[$k])) {
-			$error_str .= ('bindHashToObject : non-object expected for hash value with key ' 
+			$error_str .= ('bindHashToObject : non-object expected for hash value with key '
 			               . $k . "\n");
 			die ($error_str);
 		}
 	}
-	
+	// get_magic_quotes_gpc() has been REMOVED in PHP 8; calling it throws a fatal error (gwyneth 20210413)
+  $check_magic_quotes = function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
+
 	if ($bindAll) {
 		foreach ($hash as $k => $v) {
-			$obj->$k = (($checkSlashes && get_magic_quotes_gpc()) ? stripslashes($hash[$k]) 
+			$obj->$k = (($checkSlashes && $check_magic_quotes) ? stripslashes($hash[$k])
 			            : $hash[$k]);
 		}
 	} else if ($prefix) {
 		foreach (get_object_vars($obj) as $k => $v) {
 			if (isset($hash[$prefix . $k ])) {
-				$obj->$k = (($checkSlashes && get_magic_quotes_gpc()) ? stripslashes($hash[$k]) 
+				$obj->$k = (($checkSlashes && $check_magic_quotes) ? stripslashes($hash[$k])
 				            : $hash[$k]);
 			}
 		}
 	} else {
 		foreach (get_object_vars($obj) as $k => $v) {
 			if (isset($hash[$k])) {
-				$obj->$k = (($checkSlashes && get_magic_quotes_gpc()) ? stripslashes($hash[$k]) 
+				$obj->$k = (($checkSlashes && $check_magic_quotes) ? stripslashes($hash[$k])
 				            : $hash[$k]);
 			}
 		}

@@ -64,14 +64,14 @@ ksort($trans);
 $titleBlock = new CTitleBlock('Translation Management', 'rdf2.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Module'), '',
                      '<form action="?m=system&amp;a=translate" method="post" name="modlang">', '');
-$titleBlock->addCell(arraySelect($modules, 'module', 
-                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"', 
+$titleBlock->addCell(arraySelect($modules, 'module',
+                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"',
                                  $module));
 $titleBlock->addCell($AppUI->_('Language'));
 $temp = $AppUI->setWarning(false);
-$titleBlock->addCell(arraySelect($locales, 'lang', 
-                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"', 
-                                 $lang, true), 
+$titleBlock->addCell(arraySelect($locales, 'lang',
+                                 'size="1" class="text" onchange="javascript:document.modlang.submit();"',
+                                 $lang, true),
                      '','', '</form>');
 $AppUI->setWarning($temp);
 
@@ -93,9 +93,9 @@ $titleBlock->show();
 $index = 0;
 if ($lang == 'en') {
 	echo "<tr>\n";
-	echo ('<td><input type="text" name="trans[' . $index 
+	echo ('<td><input type="text" name="trans[' . $index
 	      . '][abbrev]" value="" size="20" class="text" /></td>' . "\n");
-	echo ('<td><input type="text" name="trans[' . $index 
+	echo ('<td><input type="text" name="trans[' . $index
 	      . '][english]" value="" size="40" class="text" /></td>' . "\n");
 	echo '<td colspan="2">'.$AppUI->_('New Entry')."</td>\n";
 	echo "</tr>\n";
@@ -109,7 +109,7 @@ foreach ($trans as $k => $langs) {
 if ($k != @$langs['english']) {
 	$k = dPformSafe($k);
 	if ($lang == 'en') {
-		echo ('<input type="text" name="trans[' . $index . '][abbrev]" value="' . $k 
+		echo ('<input type="text" name="trans[' . $index . '][abbrev]" value="' . $k
 			  . '" size="20" class="text" />');
 	} else {
 		echo $k;
@@ -123,16 +123,16 @@ if ($k != @$langs['english']) {
 $langs['english'] = dPformSafe(@$langs['english']);
 if ($lang == 'en') {
 	if (mb_strlen($langs['english']) < 40) {
-		echo ('<input type="text" name="trans[' . $index . '][english]" value="' 
+		echo ('<input type="text" name="trans[' . $index . '][english]" value="'
 		      . $langs['english'] . '" size="40" class="text" />');
 	} else {
-		$rows = round(mb_strlen($langs['english']/35)) +1 ;
-		echo ('<textarea name="trans[' . $index . '][english]" cols="40" class="small" rows="' 
+		$rows = round(mb_strlen($langs['english'])/35) +1 ;
+		echo ('<textarea name="trans[' . $index . '][english]" cols="40" class="small" rows="'
 		      . $rows . '">' . $langs['english'] . '</textarea>');
 	}
 } else {
 	echo $langs['english'];
-	echo ('<input type="hidden" name="trans[' . $index . '][english]" value="' 
+	echo ('<input type="hidden" name="trans[' . $index . '][english]" value="'
 	      . ($k ? $k : $langs['english']) .'" size="20" class="text" />');
 }
 ?></td>
@@ -140,11 +140,11 @@ if ($lang == 'en') {
 if ($lang != 'en') {
 	$langs['lang'] = dPformSafe(@$langs['lang']);
 	if (mb_strlen($langs['lang']) < 40) {
-		echo ('<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] 
+		echo ('<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang']
 		      . '" size="40" class="text" />');
 	} else {
 		$rows = round(mb_strlen($langs['lang'] / 35)) +1 ;
-		echo ('<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="' 
+		echo ('<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="'
 		      . $rows . '">' . $langs['lang'] . '</textarea>');
 	}
 }

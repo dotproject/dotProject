@@ -4,7 +4,7 @@ if (!defined('DP_BASE_DIR')) {
 }
 
 $link_id = intval(dPgetParam($_GET, 'link_id', 0));
- 
+
 // check permissions for this record
 $canEdit = getPermission($m, 'edit', $link_id);
 if (!(($canEdit && $link_id) || ($canAuthor && !($link_id)))) {
@@ -43,6 +43,9 @@ if (!db_loadObject($q->prepare(), $obj) && $link_id > 0) {
 	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
+
+// Load the Quill Rich Text Editor
+include_once($AppUI->getLibraryClass('quilljs/richedit.class'));
 
 // setup the title block
 $ttl = $link_id ? "Edit Link" : "Add Link";
@@ -164,7 +167,11 @@ function setTask(key, val) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description');?>:</td>
 			<td align="left">
-				<textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->link_description;?></textarea>
+				<!-- <textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php // echo $obj->link_description;?></textarea> -->
+        <?php
+          $richedit = new DpRichEdit("link_description", dPsanitiseHTML($obj->link_description));
+          $richedit->render();
+        ?>
 			</td>
 		</tr>
 

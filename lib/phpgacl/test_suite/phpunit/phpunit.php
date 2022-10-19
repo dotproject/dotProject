@@ -127,7 +127,7 @@ class Assert {
     for($i=0; $i< sizeof($lines0); $i++) {
       $this->assertEquals(trim($lines0[$i]),
                           trim($lines1[$i]),
-                          "line ".($i+1)." of multiline strings differ. ".$message); 
+                          "line ".($i+1)." of multiline strings differ. ".$message);
     }
   }
 
@@ -201,11 +201,12 @@ class TestCase extends Assert /* implements Test */ {
     if (! $testResult)
       $testResult = $this->_createResult();
     $this->fResult = $testResult;
-    $testResult->run(&$this);
+//    $testResult->run(&$this);  // PHP 8.0 doesn't like this (or, rather, &$this) (gwyneth 20210424)
+    $testResult->run($this);  // PHP 8.0 doesn't like this (or, rather, &$this) (gwyneth 20210424)
     $this->fResult = 0;
     return $testResult;
   }
-  
+
   function classname() {
 	  if (isset($this->fClassName)) {
 		return $this->fClassName;
@@ -220,23 +221,22 @@ class TestCase extends Assert /* implements Test */ {
 
   function runTest() {
     if (phpversion() >= '4') {
-	global $PHPUnit_testRunning;
-	eval('$PHPUnit_testRunning[0] = & $this;');
-	// Saved ref to current TestCase, so that the error handler
-	// can access it.  This code won't even parse in PHP3, so we
-	// hide it in an eval.
-	$old_handler = set_error_handler("PHPUnit_error_handler");
-	// errors will now be handled by our error handler
-      }
+    	global $PHPUnit_testRunning;
+    	eval('$PHPUnit_testRunning[0] = & $this;');
+    	// Saved ref to current TestCase, so that the error handler
+    	// can access it.  This code won't even parse in PHP3, so we
+    	// hide it in an eval.
+    	$old_handler = set_error_handler("PHPUnit_error_handler");
+    	// errors will now be handled by our error handler
+    }
 
-      $name = $this->name();
-      if (phpversion() >= '4' && ! method_exists($this, $name)) {
-          $this->error("Method '$name' does not exist");
-      }
-      else
-          $this->$name();
-
-        /*
+    $name = $this->name();
+    if (phpversion() >= '4' && ! method_exists($this, $name)) {
+        $this->error("Method '$name' does not exist");
+    }
+    else
+        $this->$name();
+      /*
       if (phpversion() >= '4') {
 	  set_error_handler($old_handler); // revert to prior error handler
 	  $PHPUnit_testRunning = null;
@@ -264,28 +264,32 @@ class TestCase extends Assert /* implements Test */ {
     //printf("TestCase::fail(%s)<br>\n", ($message) ? $message : '');
     /* JUnit throws AssertionFailedError here.  We just record the
        failure and carry on */
-    $this->fExceptions[] = new Exception(&$message, 'FAILURE');
+//    $this->fExceptions[] = new Exception(&$message, 'FAILURE');  // see above!
+    $this->fExceptions[] = new Exception($message, 'FAILURE');
   }
 
   function error($message) {
     /* report error that requires correction in the test script
        itself, or (heaven forbid) in this testing infrastructure */
-    $this->fExceptions[] = new Exception(&$message, 'ERROR');
+//    $this->fExceptions[] = new Exception(&$message, 'ERROR');  // see above
+    $this->fExceptions[] = new Exception($message, 'ERROR');
     $this->fResult->stop();	// [does not work]
   }
 
   function failed() {
-      reset($this->fExceptions);
-      while (list($key, $exception) = each($this->fExceptions)) {
-	  if ($exception->type == 'FAILURE')
+    reset($this->fExceptions);
+//    while (list($key, $exception) = each($this->fExceptions)) {  // deprecated and obsolete (gwyneth 20210424)
+    foreach ($this->fExceptions as $key => $exception) {
+	    if ($exception->type == 'FAILURE')
 	      return true;
       }
       return false;
   }
   function errored() {
-      reset($this->fExceptions);
-      while (list($key, $exception) = each($this->fExceptions)) {
-	  if ($exception->type == 'ERROR')
+    reset($this->fExceptions);
+//      while (list($key, $exception) = each($this->fExceptions)) {  // deprecated and obsolete (gwyneth 20210424)
+    foreach ($this->fExceptions as $key => $exception) {
+	    if ($exception->type == 'ERROR')
 	      return true;
       }
       return false;
@@ -337,7 +341,8 @@ class TestSuite /* implements Test */ {
       // PHP4 introspection, submitted by Dylan Kuhn
 
       $names = get_class_methods($classname);
-      while (list($key, $method) = @each($names)) {
+//      while (list($key, $method) = @each($names)) {  // deprecated and obsolete in PHP 8 (gwyneth 20210424)
+      foreach ($names as $key => $method) {
         if (preg_match('/^test/', $method)) {
           $test = new $classname($method);
           if (strcasecmp($method, $classname) == 0 || is_subclass_of($test, $method)) {
@@ -360,7 +365,7 @@ class TestSuite /* implements Test */ {
       while (list($key, $value) = each($names)) {
         $type = gettype($value);
         if ($type == "user function" && preg_match('/^test/', $key)
-        && $key != "testcase") {  
+        && $key != "testcase") {
           $this->addTest(new $classname($key));
         }
       }
@@ -376,10 +381,12 @@ class TestSuite /* implements Test */ {
     /* Run all TestCases and TestSuites comprising this TestSuite,
        accumulating results in the given TestResult object. */
     reset($this->fTests);
-    while (list($na, $test) = each($this->fTests)) {
+//    while (list($na, $test) = each($this->fTests)) {  // obsolete and deprecated (gwyneth 20210424)
+    foreach ($this->fTests as $na => $test) {
       if ($testResult->shouldStop())
-	break;
-      $test->run(&$testResult);
+	      break;
+//       $test->run(&$testResult);  // see above
+      $test->run($testResult);
     }
   }
 
@@ -388,7 +395,8 @@ class TestSuite /* implements Test */ {
        in any constituent TestSuites) */
     $count = 0;
     reset($fTests);
-    while (list($na, $test_case) = each($this->fTests)) {
+//    while (list($na, $test_case) = each($this->fTests)) {  // deprecated and obsolete (gwyneth 20210424)
+    foreach ($this->fTests as $na => $test_case) {
       $count += $test_case->countTestCases();
     }
     return $count;
@@ -436,11 +444,13 @@ class TestResult {
   }
 
   function addError($test, $exception) {
-      $this->fErrors[] = new TestFailure(&$test, &$exception);
+//      $this->fErrors[] = new TestFailure(&$test, &$exception);
+      $this->fErrors[] = new TestFailure($test, $exception);
   }
 
   function addFailure($test, $exception) {
-      $this->fFailures[] = new TestFailure(&$test, &$exception);
+//      $this->fFailures[] = new TestFailure(&$test, &$exception);
+      $this->fFailures[] = new TestFailure($test, $exception);
   }
 
   function getFailures() {
@@ -503,7 +513,7 @@ class TextTestResult extends TestResult {
   function TextTestResult() {
     $this->TestResult();  // call superclass constructor
   }
-  
+
   function report() {
     /* report result of test run */
     $nRun = $this->countTests();
@@ -514,46 +524,49 @@ class TextTestResult extends TestResult {
     printf("%s error%s.<br>\n", $nErrors, ($nErrors == 1) ? '' : 's');
 
     if ($nFailures > 0) {
-	print("<h2>Failures</h2>");
-	print("<ol>\n");
-	$failures = $this->getFailures();
-	while (list($i, $failure) = each($failures)) {
-	    $failedTestName = $failure->getTestName();
-	    printf("<li>%s\n", $failedTestName);
+    	print("<h2>Failures</h2>");
+    	print("<ol>\n");
+    	$failures = $this->getFailures();
+    //	while (list($i, $failure) = each($failures)) {  // deprecated and obsolete in PHP 8 (gwyneth 20210424)
+      foreach ($failures as $i => $failure) {
+    	    $failedTestName = $failure->getTestName();
+    	    printf("<li>%s\n", $failedTestName);
 
-	    $exceptions = $failure->getExceptions();
-	    print("<ul>");
-	    while (list($na, $exception) = each($exceptions))
-		printf("<li>%s\n", $exception->getMessage());
-	    print("</ul>");
-	}
-	print("</ol>\n");
+    	    $exceptions = $failure->getExceptions();
+    	    print("<ul>");
+    //	    while (list($na, $exception) = each($exceptions))  // see above
+          foreach ($exceptions as $na => $exception) {
+    		    printf("<li>%s\n", $exception->getMessage());
+          }
+    	    print("</ul>");
+    	}
+	    print("</ol>\n");
     }
 
     if ($nErrors > 0) {
-	print("<h2>Errors</h2>");
-	print("<ol>\n");
-	reset($this->fErrors);
-	while (list($i, $error) = each($this->fErrors)) {
-	    $erroredTestName = $error->getTestName();
-	    printf("<li>%s\n", $failedTestName);
+    	print("<h2>Errors</h2>");
+    	print("<ol>\n");
+    	reset($this->fErrors);
+    //	while (list($i, $error) = each($this->fErrors)) {  // see above
+      foreach ($this->fErrors as $i => $error) {
+    	    $erroredTestName = $error->getTestName();
+    	    printf("<li>%s\n", $failedTestName);
 
-	    $exception = $error->getException();
-	    print("<ul>");
-	    printf("<li>%s\n", $exception->getMessage());
-	    print("</ul>");
-	}
-	print("</ol>\n");
-
+    	    $exception = $error->getException();
+    	    print("<ul>");
+    	    printf("<li>%s\n", $exception->getMessage());
+    	    print("</ul>");
+    	}
+    	print("</ol>\n");
     }
   }
 
   function _startTest($test) {
-      if (phpversion() > '4') {
-	  printf("%s - %s ", get_class($test), $test->name());
-      } else {
-	  printf("%s ", $test->name());
-      }
+    if (phpversion() > '4') {
+      printf("%s - %s ", get_class($test), $test->name());
+    } else {
+      printf("%s ", $test->name());
+    }
     flush();
   }
 
@@ -574,41 +587,44 @@ class PrettyTestResult extends TestResult {
   function PrettyTestResult() {
     $this->TestResult();  // call superclass constructor
 	echo "<h2>Tests</h2>";
-	
+
 	echo "<TABLE CELLSPACING=\"1\" CELLPADDING=\"1\" BORDER=\"0\" WIDTH=\"90%\" ALIGN=\"CENTER\" class=\"details\">";
 	echo "<TR><TH>Class</TH><TH>Function</TH><TH>Success?</TH></TR>";
   }
-  
+
   function report() {
-	echo "</TABLE>";
+	  echo "</TABLE>";
     /* report result of test run */
     $nRun = $this->countTests();
     $nFailures = $this->countFailures();
-	echo "<h2>Summary</h2>";
+	  echo "<h2>Summary</h2>";
 
     printf("<p>%s test%s run<br>", $nRun, ($nRun == 1) ? '' : 's');
     printf("%s failure%s.<br>\n", $nFailures, ($nFailures == 1) ? '' : 's');
     if ($nFailures == 0)
       return;
 
-	echo "<h2>Failure Details</h2>";
+	  echo "<h2>Failure Details</h2>";
     print("<ol>\n");
     $failures = $this->getFailures();
-    while (list($i, $failure) = each($failures)) {
+//    while (list($i, $failure) = each($failures)) {  // see above
+    foreach ($failures as $i => $failure) {
       $failedTestName = $failure->getTestName();
       printf("<li>%s\n", $failedTestName);
 
       $exceptions = $failure->getExceptions();
       print("<ul>");
-      while (list($na, $exception) = each($exceptions))
-	printf("<li>%s\n", $exception->getMessage());
+//      while (list($na, $exception) = each($exceptions))  // see above
+      foreach ($exceptions as $na => $exception) {
+	      printf("<li>%s\n", $exception->getMessage());
+      }
       print("</ul>");
     }
     print("</ol>\n");
   }
 
   function _startTest($test) {
-    printf("<TR><TD>%s </TD><TD>%s </TD>", $test->classname(),$test->name());
+    printf("<TR><TD>%s </TD><TD>%s </TD>", $test->classname(), $test->name());
     flush();
   }
 
@@ -624,9 +640,9 @@ class PrettyTestResult extends TestResult {
 class TestRunner {
   /* Run a suite of tests and report results. */
   function run($suite) {
-      $result = new TextTestResult;
-      $suite->run($result);
-      $result->report();
+    $result = new TextTestResult;
+    $suite->run($result);
+    $result->report();
   }
 }
 

@@ -18,16 +18,16 @@ require(DP_BASE_DIR."/modules/ticketsmith/config.inc.php");
 require(DP_BASE_DIR."/modules/ticketsmith/common.inc.php");
 
 /* setup table & database field stuff */
-$fields = array("headings" => array("Link", "Author", "Subject", "Date", 
+$fields = array("headings" => array("Link", "Author", "Subject", "Date",
                                     "Followup", "Status", "Priority", "Owner"),
 
-                "columns"  => array("ticket", "author", "subject", "timestamp", 
+                "columns"  => array("ticket", "author", "subject", "timestamp",
                                     "activity", "type", "priority", "assignment"),
 
-                "types"    => array("doattach", "email", "normal", "open_date", 
+                "types"    => array("doattach", "email", "normal", "open_date",
                                     "activity_date", "normal", "priority_view", "user"),
-                              
-                "aligns"   => array("center", "left", "left", "left", "left", 
+
+                "aligns"   => array("center", "left", "left", "left", "left",
                                     "center", "center", "center"));
 
 /* set up defaults for viewing */
@@ -43,9 +43,9 @@ $q = new DBQuery();
 $q->addTable('tickets');
 $q->addQuery('COUNT(*) as rowcount');
 $q->addWhere("parent = '0'");
-$q->addWhere("ticket != {$ticket}");
+$q->addWhere("ticket != " . $ticket);
 if ($type != 'All') {
-  $q->addWhere("type = '{$type}'");
+  $q->addWhere("type = '" . $type . "'");
 }
 $ticket_count = $q->loadResult();
 
@@ -94,16 +94,16 @@ $q->clear();
 $q->addTable('tickets');
 $q->addQuery($fields['columns']);
 if ($type == "My") {
-    $query .= "type = 'Open' AND (assignment = '$user_cookie' OR assignment = '0') AND ";
+    $query .= "type = 'Open' AND (assignment = '" . $user_cookie . "' OR assignment = '0') AND ";
     $q->addWhere("type = 'Open'");
-    $q->addWhere("(assignment = '{$user_cookie}}' OR assignment = '0')");
+    $q->addWhere("(assignment = '" . $user_cookie . "' OR assignment = '0')");
 }
 else if ($type != "All") {
-    $q->addWhere("type = '{$type}'");
+    $q->addWhere("type = '" . $type . "'");
 }
-$q->addWhere("ticket != {$ticket}");
+$q->addWhere("ticket != " . $ticket);
 $q->addWhere("parent = '0'");
-$q->addOrder(urlencode($column) . " {$direction}");
+$q->addOrder(urlencode($column) . " " . $direction);
 $q->setLimit($limit, $offset);
 $q->includeCount();
 $result = $q->loadList();
@@ -172,7 +172,7 @@ print("<td align='right'><a href='?m=ticketsmith&amp;a=search'>".$AppUI->_('Sear
 <a href='?m=ticketsmith&amp;type=$type'>".$AppUI->_('Back to top')."</a></td></tr>\n");
 print("</table>\n");
 print("</td>\n");
-print("</tr>\n");    
+print("</tr>\n");
 
 /* end table */
 print("</table>\n");

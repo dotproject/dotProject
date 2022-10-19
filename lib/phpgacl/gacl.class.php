@@ -92,13 +92,13 @@ class gacl {
 	var $_group_switch = '_group_';
 
 	/**
-	 * Constructor
-	 * @param array An arry of options to oeverride the class defaults
+	 * Constructor (deprecated)
+	 * @param array An arry of options to override the class defaults
 	 */
 	function gacl($options = NULL) {
 
 		$available_options = array('db','debug','items_per_page','max_select_box_items','max_search_return_items','db_table_prefix','db_type','db_host','db_user','db_password','db_name','caching','force_cache_expire','cache_dir','cache_expire_time');
-		if (is_array($options)) {
+		if (!empty($options) && is_array($options)) {
 			foreach ($options as $key => $value) {
 				$this->debug_text("Option: $key");
 
@@ -126,7 +126,7 @@ class gacl {
 			$this->db = ADONewConnection($this->_db_type);
 			$this->db->SetFetchMode(ADODB_FETCH_NUM);
 			$this->db->PConnect($this->_db_host, $this->_db_user, $this->_db_password, $this->_db_name);
-		}
+    }
 		$this->db->debug = $this->_debug;
 
 		if (!class_exists('Hashed_Cache_Lite')) {
@@ -149,6 +149,14 @@ class gacl {
 
 		return true;
 	}
+
+  /**
+   * Constructor (new form)
+   * @param array An arry of options to override the class defaults
+   */
+  function __construct($options = NULL) {
+    self::gacl($options);
+  }
 
 	/**
 	* Prints debug text if debug is enabled.
@@ -271,7 +279,7 @@ class gacl {
 	* @return array Returns as much information as possible about the ACL so other functions can trim it down and omit unwanted data.
 	*/
 	function acl_query($aco_section_value, $aco_value, $aro_section_value, $aro_value, $axo_section_value=NULL, $axo_value=NULL, $root_aro_group=NULL, $root_axo_group=NULL, $debug=NULL) {
-				
+
 		$cache_id = 'acl_query_'.$aco_section_value.'-'.$aco_value.'-'.$aro_section_value.'-'.$aro_value.'-'.$axo_section_value.'-'.$axo_value.'-'.$root_aro_group.'-'.$root_axo_group.'-'.$debug;
 
 		$retarr = $this->get_cache($cache_id);

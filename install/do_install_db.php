@@ -1,5 +1,5 @@
 <?php // $Id$
-//Max Execution Time in Installation No Limit 
+//Max Execution Time in Installation No Limit
 set_time_limit(0);
 
 include_once 'check_upgrade.php';
@@ -95,7 +95,7 @@ if ($dobackup) {
 <head>
  <title>dotProject Installer</title>
  <meta name="Description" content="dotProject Installer">
-  <link rel="stylesheet" href="../style/default/main.css">
+  <link rel="stylesheet" href="../style/default/css/main.css">
 </head>
 <body>
 <h1><img src="dp.png" align="middle" alt="dotProject Logo"/>&nbsp;dotProject Installer</h1>
@@ -111,9 +111,9 @@ if ($dbc && ($do_db || $do_db_cfg)) {
 
  if ($mode == 'install') {
 
-  if ($dbdrop) { 
+  if ($dbdrop) {
    dPmsg('Dropping previous database');
-   $db->Execute('DROP DATABASE IF EXISTS `'.$dbname.'`'); 
+   $db->Execute('DROP DATABASE IF EXISTS `'.$dbname.'`');
 	 $existing_db = false;
   }
 
@@ -121,7 +121,7 @@ if ($dbc && ($do_db || $do_db_cfg)) {
 		dPmsg('Creating new Database');
 		$db->Execute('CREATE DATABASE `'.$dbname.'`');
          $dbError = $db->ErrorNo();
- 
+
          if ($dbError <> 0 && $dbError <> 1007) {
                  $dbErr = true;
                 $dbMsg .= 'A Database Error occurred. Database has not been created! The provided database details are probably not correct.<br>'.$db->ErrorMsg().'<br>';

@@ -9,7 +9,7 @@ if (!defined('DP_BASE_DIR')) {
  *	@version $Revision$
 */
 
-require_once ($AppUI->getSystemClass ('dp'));
+require_once ($AppUI->getSystemClass('dp'));
 require_once ($AppUI->getSystemClass('date'));
 require_once ($AppUI->getModuleClass('tasks'));
 require_once ($AppUI->getModuleClass('companies'));
@@ -167,9 +167,9 @@ class CProject extends CDpObject {
 
 		//Pristine Start and End Dates of Source and Destination Projects
 		$origStartDate = new CDate($origProject->project_start_date);
-		$origEndDate = new CDate($origProject->project_end_date);
-		$destStartDate = new CDate ($this->project_start_date);
-		$destEndDate = new CDate ($this->project_end_date);
+		$origEndDate   = new CDate($origProject->project_end_date);
+		$destStartDate = new CDate($this->project_start_date);
+		$destEndDate   = new CDate($this->project_end_date);
 
 		$dateOffset = $destStartDate->dateDiff($origStartDate);
 
@@ -232,9 +232,9 @@ class CProject extends CDpObject {
 		$tasks = $q->loadColumn();
 
 		// Update dates based on new project's start date.
-		$origDate = new CDate($origProject->project_start_date);
+		$origDate      = new CDate($origProject->project_start_date);
 		$origStartHour = new CDate ($this->project_start_date);
-		$destDate = new CDate ($this->project_start_date);
+		$destDate      = new CDate ($this->project_start_date);
 		foreach ($tasks as $task_id) {
 			$newTask = new CTask();
 			$newTask->load($task_id);
@@ -348,7 +348,6 @@ class CProject extends CDpObject {
 		$aBuf2 = db_loadColumn ($sql);
 
 		return array_merge ($aBuf1, $aBuf2);
-
 	}
 
 	function getAllowedProjectsInRows($userId) {
@@ -613,8 +612,6 @@ function projects_list_data($user_id=false) {
         }
 	$q->clear();
 
-
-
 	$q->addTable('projects', 'p');
 	$q->addQuery('p.project_id, p.project_status, p.project_color_identifier, p.project_type'
 	             . ', p.project_name, p.project_description, p.project_start_date'
@@ -622,8 +619,8 @@ function projects_list_data($user_id=false) {
 	             . ', p.project_status, p.project_priority, com.company_name'
 	             . ', com.company_description, tc.critical_task, tc.project_actual_end_date'
 	             . ', if (tp.task_log_problem IS NULL, 0, tp.task_log_problem) AS task_log_problem'
-				 . ', tt.total_tasks, tsy.my_tasks, ts.project_percent_complete'
-				 . ', ts.project_duration, u.user_username');
+			      	 . ', tt.total_tasks, tsy.my_tasks, ts.project_percent_complete'
+				       . ', ts.project_duration, u.user_username');
 	$q->addJoin('companies', 'com', 'p.project_company = com.company_id');
 	$q->addJoin('users', 'u', 'p.project_owner = u.user_id');
 	$q->addJoin('tasks_critical', 'tc', 'p.project_id = tc.task_project');
@@ -668,8 +665,6 @@ function projects_list_data($user_id=false) {
 	$q->addOrder($orderby . ' ' . $orderdir);
 	$obj_project->setAllowedSQL($AppUI->user_id, $q, null, 'p');
 	$projects = $q->loadList();
-
-
 
 	// retrieve list of records
 	// modified for speed
