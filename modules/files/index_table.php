@@ -104,8 +104,8 @@ if ($task_id) {
 // most recent version info per file_project and file_version_id
 $r->createTemp('files_count_max');
 $r->addTable('files', 'f');
-$r->addQuery('DISTINCT count(f.file_id) as file_versions' 
-             . ', max(f.file_version) as file_lastversion' 
+$r->addQuery('DISTINCT count(f.file_id) as file_versions'
+             . ', max(f.file_version) as file_lastversion'
              . ', f.file_version_id, f.file_project');
 $r->addJoin('projects', 'p', 'p.project_id = f.file_project');
 $r->addJoin('tasks', 't', 't.task_id = f.file_task');
@@ -137,8 +137,8 @@ $q2->addQuery('SQL_CALC_FOUND_ROWS f.*, f.file_id as latest_id'
               . ', fmc.file_versions , round(fmc.file_lastversion, 2) as file_lastversion');
 $q2->addQuery('ff.*');
 $q2->addTable('files', 'f');
-$q2->addJoin('files_count_max', 'fmc', 
-             '(fmc.file_lastversion = f.file_version AND fmc.file_version_id = f.file_version_id' 
+$q2->addJoin('files_count_max', 'fmc',
+             '(fmc.file_lastversion = f.file_version AND fmc.file_version_id = f.file_version_id'
              . ' AND fmc.file_project = f.file_project)', 'inner');
 $q2->addJoin('file_folders', 'ff', 'ff.file_folder_id = f.file_folder');
 $q2->addJoin('projects', 'p', 'p.project_id = f.file_project');
@@ -169,16 +169,17 @@ $q2->setLimit($xpg_pagesize, $xpg_min);
 // performance issues. It is far better to rearrange the group
 // by to get the correct ordering.
 $q2->addGroup('p.project_id');
-$q2->addGroup('f.file_version_id DESC');
+$q2->addGroup('f.file_version_id');
+$q2->addOrder('f.file_version_id DESC');
 
 
 $q3 = new DBQuery;
-$q3->addQuery('f.file_id, f.file_version, f.file_version_id, f.file_project, f.file_name' 
-              . ', f.file_task, t.task_name, f.file_description, f.file_checkout, f.file_co_reason' 
-              . ', u.user_username as file_owner, f.file_size, f.file_category, f.file_type' 
-              . ', f.file_date, cu.user_username as co_user, p.project_name' 
-              . ', p.project_color_identifier, p.project_owner, con.contact_first_name' 
-              . ', con.contact_last_name, co.contact_first_name as co_contact_first_name' 
+$q3->addQuery('f.file_id, f.file_version, f.file_version_id, f.file_project, f.file_name'
+              . ', f.file_task, t.task_name, f.file_description, f.file_checkout, f.file_co_reason'
+              . ', u.user_username as file_owner, f.file_size, f.file_category, f.file_type'
+              . ', f.file_date, cu.user_username as co_user, p.project_name'
+              . ', p.project_color_identifier, p.project_owner, con.contact_first_name'
+              . ', con.contact_last_name, co.contact_first_name as co_contact_first_name'
               . ', co.contact_last_name as co_contact_last_name ');
 $q3->addQuery('ff.*');
 $q3->addTable('files', 'f');
@@ -214,7 +215,7 @@ if ($task_id) {
 $files = array();
 $file_versions = array();
 if ($canRead) {
-	
+
 	$q2->includeCount();
 	$files = $q2->loadList();
 	$xpg_totalrecs = $q2->foundRows();
@@ -260,14 +261,14 @@ $id = 0;
 foreach ($files as $file_row) {
 	$latest_file = $file_versions[$file_row['latest_id']];
 	$file_date = new CDate($latest_file['file_date']);
-	
+
 	if ($fp != $latest_file["file_project"]) {
 		if (!$latest_file["file_project"]) {
 			$latest_file["project_name"] = $AppUI->_('Not associated to projects');
 			$latest_file["project_color_identifier"] = '#f4efe3';
 		}
 		if ($showProject) {
-			$style = ("background-color:$latest_file[project_color_identifier];color:" 
+			$style = ("background-color:$latest_file[project_color_identifier];color:"
 			          . bestColor($latest_file["project_color_identifier"]));
 ?>
 <tr>
@@ -283,60 +284,60 @@ foreach ($files as $file_row) {
 ?>
 <tr>
 	<td nowrap="nowrap" width="20">
-		<?php 
-	if ($canEdit && (empty($latest_file['file_checkout']) 
-	                 || ($latest_file['file_checkout'] == 'final' 
+		<?php
+	if ($canEdit && (empty($latest_file['file_checkout'])
+	                 || ($latest_file['file_checkout'] == 'final'
 	                     && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id)))) {
-		echo ('<a href="./index.php?m=files&amp;a=addedit&amp;file_id=' . $latest_file['file_id'] 
+		echo ('<a href="./index.php?m=files&amp;a=addedit&amp;file_id=' . $latest_file['file_id']
 		      . '">');
-		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file', 
+		echo (dPshowImage(DP_BASE_URL . '/modules/files/images/kedit.png', '16', '16', 'edit file',
 		                  'edit file'));
 		echo '</a>';
 	}
 ?>
 	</td>
-	<td nowrap="nowrap"><?php 
+	<td nowrap="nowrap"><?php
 	if ($canEdit && empty($latest_file['file_checkout'])) {
 ?>
-		<a href="?m=files&amp;a=co&amp;file_id=<?php echo $latest_file['file_id']; ?>"><?php 
-		echo dPshowImage((DP_BASE_URL . '/modules/files/images/co.png'), '16', '16', 'checkout', 
+		<a href="?m=files&amp;a=co&amp;file_id=<?php echo $latest_file['file_id']; ?>"><?php
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/co.png'), '16', '16', 'checkout',
 		                 'checkout file');
 ?>
 		</a><?php
-	} else if ($latest_file['file_checkout'] == $AppUI->user_id) { 
+	} else if ($latest_file['file_checkout'] == $AppUI->user_id) {
 ?>
 		<a href="?m=files&amp;a=addedit&amp;ci=1&amp;file_id=<?php echo $latest_file['file_id']; ?>">
-		<?php 
-		echo dPshowImage((DP_BASE_URL . '/modules/files/images/ci.png'), '16', '16', 'checkin', 
+		<?php
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/ci.png'), '16', '16', 'checkin',
 		                 'checkin file');
 ?>
 		</a><?php
 	} else if ($latest_file['file_checkout'] == 'final') {
 		echo $AppUI->_('final');
 	} else {
-		echo ($AppUI->___('	  ' . $latest_file['co_contact_first_name'] . ' ' 
+		echo ($AppUI->___('	  ' . $latest_file['co_contact_first_name'] . ' '
 		                  . $latest_file['co_contact_last_name']) . '<br />'
 			  . $AppUI->___('(' . $latest_file['co_user'] . ')'));
 	}
 ?>
 	</td>
 	<td width="10%">
-		<?php echo $AppUI->___($latest_file['file_co_reason']); ?> <?php 
-	if (!(empty($latest_file['file_checkout'])) 
-	    && ($latest_file['file_checkout'] == $AppUI->user_id 
+		<?php echo $AppUI->___($latest_file['file_co_reason']); ?> <?php
+	if (!(empty($latest_file['file_checkout']))
+	    && ($latest_file['file_checkout'] == $AppUI->user_id
 	        || ($canEdit && ($canAdmin || $latest_file['project_owner'] == $AppUI->user_id)))) {
 ?>
-		<a href="?m=files&amp;a=co&amp;co_cancel=1&amp;file_id=<?php 
+		<a href="?m=files&amp;a=co&amp;co_cancel=1&amp;file_id=<?php
 		echo $latest_file['file_id']; ?>">
 		<?php
-		echo dPshowImage((DP_BASE_URL . '/images/icons/stock_cancel-16.png'), '16', '16', 
-		                 'cancel checkout', 'cancel file checkout'); 
+		echo dPshowImage((DP_BASE_URL . '/images/icons/stock_cancel-16.png'), '16', '16',
+		                 'cancel checkout', 'cancel file checkout');
 ?>
 		</a><?php
 } ?>
 	</td>
 	<td nowrap="8%">
-		<?php 
+		<?php
 	$fnamelen = 32;
 	$filename = $latest_file['file_name'];
 	if (mb_strlen($latest_file['file_name']) > $fnamelen+9) {
@@ -346,23 +347,23 @@ foreach ($files as $file_row) {
 	}
 	$file_icon = getIcon($file_row['file_type']);
 ?>
-		<a href="./fileviewer.php?file_id=<?php 
+		<a href="./fileviewer.php?file_id=<?php
 	echo $latest_file['file_id']; ?>" title="<?php echo $AppUI->___($latest_file['file_description']); ?>">
 		<?php
-	echo (dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16') . "\n" 
+	echo (dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16') . "\n"
 	      . '&nbsp;' . $filename);
 ?>
 	  </a>
 	</td>
 	<td width="20%"><?php echo $AppUI->___($latest_file['file_description']); ?></td>
 	<td width="5%" nowrap="nowrap" align="center">
-		<?php 
+		<?php
 	echo $file_row['file_lastversion'];
 	if ($file_row['file_versions'] > 1) {
 ?>
 		<a href="#" onclick="javascript:expand('versions_<?php echo $latest_file['file_id']; ?>');">
 		(<?php echo $file_row['file_versions']; ?>)
-		</a><?php 
+		</a><?php
 	}
 ?>
 	</td>
@@ -372,14 +373,14 @@ foreach ($files as $file_row) {
 	<td width="10%" nowrap="nowrap" align="center">
 		<?php
 	if ($file_row['file_folder_name'] != '') {
-		$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab=' . (count($file_types)+1) 
+		$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab=' . (count($file_types)+1)
 		                    . '&amp;folder=' . $file_row['file_folder_id']);
 ?>
 		<a href="<?php echo $file_folder_url; ?>">
-		<?php 
-		echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
+		<?php
+		echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'),
 		                 '16', '16', 'folder icon', 'show only this folder');
-?> 
+?>
 		<?php echo  $AppUI->___($file_row['file_folder_name']); ?>
 		</a> <?php
 	} else {
@@ -388,23 +389,23 @@ foreach ($files as $file_row) {
 ?>
 	</td>
 	<td width="5%" align="center">
-		<a href="./index.php?m=tasks&amp;a=view&amp;task_id=<?php 
+		<a href="./index.php?m=tasks&amp;a=view&amp;task_id=<?php
 	echo $latest_file['file_task']; ?>">
 		<?php echo $latest_file["task_name"]; ?>
 		</a>
 	</td>
 	<td width="15%" nowrap="nowrap">
-		<?php 
-	echo $AppUI->___($latest_file["contact_first_name"] . ' ' . $latest_file["contact_last_name"]); 
+		<?php
+	echo $AppUI->___($latest_file["contact_first_name"] . ' ' . $latest_file["contact_last_name"]);
 ?>
 	</td>
 	<td width="5%" nowrap="nowrap" align="right">
 		<?php echo file_size(intval($latest_file["file_size"])); ?>
 	</td>
 	<td nowrap="nowrap">
-		<?php 
-	echo $AppUI->_(mb_substr($latest_file['file_type'], 
-	                         mb_strpos($latest_file['file_type'], '/') + 1)); 
+		<?php
+	echo $AppUI->_(mb_substr($latest_file['file_type'],
+	                         mb_strpos($latest_file['file_type'], '/') + 1));
 ?>
 	</td>
 	<td width="15%" nowrap="nowrap" align="right">
@@ -416,8 +417,8 @@ foreach ($files as $file_row) {
 ?>
 <tr>
 	<td colspan="20">
-	<table style="display: none" id="versions_<?php 
-		echo $latest_file['file_id']; 
+	<table style="display: none" id="versions_<?php
+		echo $latest_file['file_id'];
 ?>" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 	<tr>
 		<th nowrap="nowrap">&nbsp;</th>
@@ -444,7 +445,7 @@ foreach ($files as $file_row) {
 ?>
 			<a href="./index.php?m=files&amp;a=addedit&amp;file_id=<?php echo $file['file_id']; ?>">
 			<?php
-					echo dPshowImage((DP_BASE_URL . '/modules/files/images/kedit.png'), '16', '16', 
+					echo dPshowImage((DP_BASE_URL . '/modules/files/images/kedit.png'), '16', '16',
 				                 'edit file', 'edit file');
 ?>
 			</a><?php
@@ -452,12 +453,12 @@ foreach ($files as $file_row) {
 ?>
 		</td>
 		<td nowrap="8%">
-			<a href="./fileviewer.php?file_id=<?php echo $file['file_id']; ?>" title="<?php 
+			<a href="./fileviewer.php?file_id=<?php echo $file['file_id']; ?>" title="<?php
 				echo $AppUI->___($file['file_description']); ?>">
-			<?php 
+			<?php
 				echo dPshowImage((DP_BASE_URL . '/modules/files/images/' . $file_icon), '16', '16');
 ?>
-			<?php echo $AppUI->___($file['file_name']); ?> 
+			<?php echo $AppUI->___($file['file_name']); ?>
 			</a>
 		</td>
 		<td width="20%"><?php echo $AppUI->___($file['file_description']); ?></td>
@@ -468,15 +469,15 @@ foreach ($files as $file_row) {
 		<td width="10%" nowrap="nowrap" align="center">
 			<?php
 				if ($file['file_folder_name'] != '') {
-					$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab=' 
-					                    . (count($file_types)+1) . '&amp;folder=' 
+					$file_folder_url = (DP_BASE_URL . '/index.php?m=files&amp;tab='
+					                    . (count($file_types)+1) . '&amp;folder='
 					                    . $file['file_folder_id']);
 ?>
 			<a href="<?php echo $file_folder_url; ?>">
-			<?php 
-					echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'), 
+			<?php
+					echo dPshowImage((DP_BASE_URL . '/modules/files/images/folder5_small.png'),
 					                 '16', '16', 'folder icon', 'show only this folder');
-?> 
+?>
 			<?php echo  $AppUI->___($file['file_folder_name']); ?>
 			</a><?php
 				} else {
@@ -510,7 +511,7 @@ foreach ($files as $file_row) {
 	</td>
 </tr>
 <?php
-	} 
+	}
 }
 ?>
 </table>
