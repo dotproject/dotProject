@@ -1,4 +1,18 @@
-My current setup to run Dotproject is on a mac using valet.
+# README
+
+## Goal
+- Put acceptance tests in place
+- Refactor code so that it can be unit tested
+- Put Unit tests in place
+- Upgrade to work with later versions of PHP
+
+
+## System Requirements
+- PHP up to version 7.4
+- Mysql up to version 8
+
+## Other Notes
+My current setup to run Dotproject is on a Mac using valet.
 
 In the terminal and in the current directory of the project:
 - type: valet link
