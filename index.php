@@ -88,7 +88,7 @@ require_once($AppUI->getSystemClass('query'));
 require_once DP_BASE_DIR.'/misc/debug.php';
 
 //Function for update lost action in user_access_log
-$AppUI->updateLastAction($last_insert_id);
+$AppUI->updateLastAction($last_insert_id); // BOOKMARK: on PHP 8 the code breaks here
 // load default preferences if not logged in
 if ($AppUI->doLogin()) {
 	$AppUI->loadPrefs(0);

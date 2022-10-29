@@ -807,7 +807,7 @@ class CAppUI {
 		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0) {
-			$q->exec();
+			$q->exec(); // BOOKMARK: on PHP 8 the code breaks here
 			$q->clear();
 		}
 	}

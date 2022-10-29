@@ -2,9 +2,9 @@
 
 ## Goal
 - Put acceptance tests in place
-- Refactor code so that it can be unit tested
-- Put unit tests in place
-- Upgrade to work with later versions of PHP
+  - Refactor code so that it can be unit tested
+  - Put unit tests in place
+  - Upgrade to work with later versions of PHP
 
 
 ## System Requirements
