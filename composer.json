@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Classes\\": "classes/",
-            "Includes\\": "includes/"
+            "Includes\\": "includes/",
+            "Library\\": "lib/"
         }
     },
     "autoload-dev": {

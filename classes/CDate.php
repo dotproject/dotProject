@@ -1,44 +1,8 @@
-<?php /* CLASSES $Id$ */
+<?php
+namespace Classes;
 
+use Date;
 
-/**
-* @package dotproject
-* @subpackage utilites
-*/
-if (!defined('DP_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
-
-define('DATE_CALC_BEGIN_WEEKDAY', LOCALE_FIRST_DAY);
-require_once $AppUI->getLibraryClass('PEAR/Date');
-
-define('FMT_DATEISO', '%Y%m%dT%H%M%S');
-define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
-define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
-define('FMT_DATETIME_HTML5', '%Y-%m-%dT%H:%M');
-define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
-define('FMT_DATE_HTML5', '%Y-%m-%d');
-define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
-define('FMT_TIMESTAMP_DATE', '%Y%m%d');
-define('FMT_TIMESTAMP_TIME', '%H%M%S');
-define('FMT_UNIX', '3');
-define('WDAY_SUNDAY',	  0);
-define('WDAY_MONDAY',	  1);
-define('WDAY_TUESDAY',	  2);
-define('WDAY_WEDNESDAY', 3);
-define('WDAY_THURSDAY',  4);
-define('WDAY_FRIDAY',	  5);
-define('WDAY_SATURDAY',  6);
-define('SEC_MINUTE',	 60);
-define('SEC_HOUR',	   3600);
-define('SEC_DAY',	  86400);
-
-/**
-* dotProject implementation of the Pear Date class
-*
-* This provides customised extensions to the Date class to leave the
-* Date package as 'pure' as possible
-*/
 class CDate extends Date {
 
 	function CDate($date = null, $format = null)
@@ -54,9 +18,9 @@ class CDate extends Date {
 		return parent::Date($date);
 	}
 
-/**
-* extend PEAR Date's format() meet to translation needs
-*/
+	/**
+	 * extend PEAR Date's format() meet to translation needs
+	 */
 	function format($format) {
 		global $AppUI;
 		$AppUI->setBaseLocale();
@@ -73,12 +37,12 @@ class CDate extends Date {
 		return parent::after($when);
 	}
 
-/**
-* Overloaded compare method
-*
-* The convertTZ calls are time intensive calls.	 When a compare call is
-* made in a recussive loop the lag can be significant.
-*/
+	/**
+	 * Overloaded compare method
+	 *
+	 * The convertTZ calls are time intensive calls.	 When a compare call is
+	 * made in a recussive loop the lag can be significant.
+	 */
 	function compare($d1, $d2, $convertTZ=false)
 	{
 		if (!is_object($d1)) {
@@ -106,11 +70,11 @@ class CDate extends Date {
 		return dPsgn($comp_value);
 	}
 
-/**
-* Adds (+/-) a number of days to the current date.
-* @param int Positive or negative number of days
-* @author J. Christopher Pereira <kripper@users.sf.net>
-*/
+	/**
+	 * Adds (+/-) a number of days to the current date.
+	 * @param int Positive or negative number of days
+	 * @author J. Christopher Pereira <kripper@users.sf.net>
+	 */
 	function addDays($n) {
 		$timeStamp = $this->getTime();
 		$oldHour = $this->getHour();
@@ -122,11 +86,11 @@ class CDate extends Date {
 		}
 	}
 
-/**
-* Adds (+/-) a number of months to the current date.
-* @param int Positive or negative number of months
-* @author Andrew Eddie <eddieajau@users.sourceforge.net>
-*/
+	/**
+	 * Adds (+/-) a number of months to the current date.
+	 * @param int Positive or negative number of months
+	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
+	 */
 	function addMonths($n) {
 		$an = abs($n);
 		$years = floor($an / 12);
@@ -149,23 +113,23 @@ class CDate extends Date {
 		}
 	}
 
-/**
-* New method to get the difference in days the stored date
-* @param Date The date to compare to
-* @author Andrew Eddie <eddieajau@users.sourceforge.net>
-*/
+	/**
+	 * New method to get the difference in days the stored date
+	 * @param Date The date to compare to
+	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
+	 */
 	function dateDiff($when, $ignoretime = false) {
 		return Date_calc::dateDiff($this->getDay(), $this->getMonth(), $this->getYear(),
-								   $when->getDay(), $when->getMonth(), $when->getYear());
+			$when->getDay(), $when->getMonth(), $when->getYear());
 	}
 
-/**
-* New method that sets hour, minute and second in a single call
-* @param int hour
-* @param int minute
-* @param int second
-* @author Andrew Eddie <eddieajau@users.sourceforge.net>
-*/
+	/**
+	 * New method that sets hour, minute and second in a single call
+	 * @param int hour
+	 * @param int minute
+	 * @param int second
+	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
+	 */
 	function setTime($h=0, $m=0, $s=0) {
 		$this->setHour($h);
 		$this->setMinute($m);
@@ -193,7 +157,7 @@ class CDate extends Date {
 		$end = intval(dPgetConfig('cal_day_end'));
 		$start = intval(dPgetConfig('cal_day_start'));
 		while (! $this->isWorkingDay() || $this->getHour() > $end ||
-				($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
+			($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
 			$this->addDays(1);
 			$this->setTime($start, '0', '0');
 		}
@@ -215,7 +179,7 @@ class CDate extends Date {
 		$end = intval(dPgetConfig('cal_day_end'));
 		$start = intval(dPgetConfig('cal_day_start'));
 		while (! $this->isWorkingDay() || ($this->getHour() < $start) ||
-				($this->getHour() == $start && $this->getMinute() == '0')) {
+			($this->getHour() == $start && $this->getMinute() == '0')) {
 			$this->addDays(-1);
 			$this->setTime($end, '0', '0');
 		}
@@ -248,7 +212,7 @@ class CDate extends Date {
 		if ($durationType == '24') { // duration type is 24, full days, we're finished very quickly
 			$full_working_days = $duration;
 		} else if ($durationType == '1') { // durationType is 1 hour
-		// get dP time constants
+			// get dP time constants
 			$cal_day_start = intval(dPgetConfig('cal_day_start'));
 			$cal_day_end = intval(dPgetConfig('cal_day_end'));
 			$dwh = intval(dPgetConfig('daily_working_hours'));
