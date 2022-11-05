@@ -1,0 +1,25 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+actor: AcceptanceTester
+modules:
+  enabled:
+    - Config:
+        # You can use any configs in the list. There no limitations on
+        # the parameters names.
+        username: '%TEST_ADMIN_USER%'
+        password: '%TEST_ADMIN_PASS%'
+    - PhpBrowser:
+        url: http://dotproject.test/
+    - \Helper\Acceptance
+    - Db:
+        dsn: 'mysql:host=%TEST_DB_HOST%;dbname=%TEST_DB_NAME%'
+        user: '%TEST_DB_USER%'
+        password: '%TEST_DB_PASS%'
+        dump:
+          - 'tests/_data/companies.sql'
+        populate: true # run populator before all tests
+step_decorators: ~

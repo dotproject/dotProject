@@ -10,8 +10,10 @@ if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once $AppUI->getSystemClass('query');
-require_once $AppUI->getModuleClass('system');
+if (!defined('UNIT_TEST')) {
+	require_once $AppUI->getSystemClass('query');
+	require_once $AppUI->getModuleClass('system');
+}
 
 /**
  *	CDpObject Abstract Class.
@@ -63,9 +65,12 @@ class CDpObject {
 		$this->_query = new DBQuery;
 	}
 
-	/**
-	 * Let people know that this is not a good idea.
-	 */
+    /**
+     * Let people know that this is not a good idea.
+     * @param $table
+     * @param $key
+     * @param string $perm_name
+     */
 	public function CDpObject($table, $key, $perm_name='') {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
@@ -507,7 +512,7 @@ class CDpObject {
 			return $this->_module_directory;
 		}
 		/* Now the guessing game begins */
-		$mods = new CModule;
+		$mods = $this->getCModule();
 		if (!empty($this->_permission_name)) {
 			if (($mod_name = $mods->getModuleByName($this->_permission_name))) {
 				$this->_module_directory = $mod_name;
@@ -523,6 +528,17 @@ class CDpObject {
 			return $mod_name;
 		}
 		return 'unknown';
+	}
+
+	/**
+	 * Temp fix for the purpose of unit testing classes
+	 * that originally initialized this object within the
+	 * method being tested.
+	 *
+	 * @return object
+	 */
+	private function getCModule() {
+		return new CModule;
 	}
 
  }

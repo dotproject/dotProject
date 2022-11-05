@@ -1,5 +1,5 @@
 #
-# dotproject.sql Database Schema
+# test_dump.sql Database Schema
 #
 # Use this schema for creating your database for
 # a new installation of dotProject.
@@ -430,7 +430,7 @@ CREATE TABLE `%dbprefix%user_preferences` (
 #
 
 INSERT INTO `%dbprefix%users` VALUES (1,1,'admin',MD5('passwd'),0,1,0,0,0,'');
-INSERT INTO `%dbprefix%contacts` (contact_id, contact_first_name, contact_last_name, contact_email) 
+INSERT INTO `%dbprefix%contacts` (contact_id, contact_first_name, contact_last_name, contact_email)
   VALUES (1,'Admin','Person','admin@example.com');
 
 INSERT INTO `%dbprefix%permissions` VALUES (1,1,'all',-1, -1);
@@ -563,7 +563,7 @@ CREATE TABLE `%dbprefix%user_roles` (
 # Host: localhost
 # Database: dotproject
 # Table: 'common_notes'
-# 
+#
 CREATE TABLE `%dbprefix%common_notes` (
   `note_id` int(10) unsigned NOT NULL auto_increment,
   `note_author` int(10) unsigned NOT NULL default '0',
@@ -579,7 +579,7 @@ CREATE TABLE `%dbprefix%common_notes` (
   `note_modified` timestamp,
   `note_modified_by` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`note_id`)
-) ; 
+) ;
 
 
 
@@ -674,12 +674,12 @@ INSERT INTO `%dbprefix%config` VALUES (0, 'files_show_versions_edit', 'false', '
 
 # 20050302
 # ldap system config variables
-INSERT INTO `%dbprefix%config` VALUES (0, 'auth_method', 'sql', 'auth', 'select'); 
-INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_host', 'localhost', 'ldap', 'text'); 
-INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_port', '389', 'ldap', 'text'); 
-INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_version', '3', 'ldap', 'text'); 
-INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_base_dn', 'dc=saki,dc=com,dc=au', 'ldap', 'text'); 
-INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text'); 
+INSERT INTO `%dbprefix%config` VALUES (0, 'auth_method', 'sql', 'auth', 'select');
+INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_host', 'localhost', 'ldap', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_port', '389', 'ldap', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_version', '3', 'ldap', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_base_dn', 'dc=saki,dc=com,dc=au', 'ldap', 'text');
+INSERT INTO `%dbprefix%config` VALUES (0, 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text');
 
 # 20050302
 # PostNuke authentication variables
@@ -756,7 +756,7 @@ INSERT INTO `%dbprefix%config` VALUES (0, 'task_reminder_repeat', '100', 'task_r
 
 # 20080702
 # GACL Caching options
-INSERT INTO %dbprefix%config VALUES 
+INSERT INTO %dbprefix%config VALUES
 (NULL, 'gacl_cache', 'false', 'gacl', 'checkbox'),
 (NULL, 'gacl_expire', 'true', 'gacl', 'checkbox'),
 (NULL, 'gacl_cache_dir', '/tmp', 'gacl', 'text'),

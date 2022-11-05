@@ -1,5 +1,7 @@
 <?php
+
 // $Id$
+
 if (!defined('DP_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -27,6 +29,7 @@ if (!defined('DP_BASE_DIR')) {
 				return $auth;
 				break;
 			default:
+
 				// Try loading the authenticator class
 				$auth_mode = preg_replace('/[^a-z0-9_-]/i', '', $auth_mode);
 				@include_once(DP_BASE_DIR.'/classes/auth.'.$auth_mode.'.class.php');
@@ -41,9 +44,78 @@ if (!defined('DP_BASE_DIR')) {
 		}
 	}
 
+/**
+ * Authenticate user against database
+ */
+class SQLAuthenticator
+{
+	var $user_id;
+	var $username;
+
 	/**
+	 * Query database and get user to compare
+	 *
+	 * @param [type] $username
+	 * @param [type] $password
+	 * @return void
+	 */
+	function authenticate($username, $password)
+	{
+		GLOBAL $db, $AppUI;
+
+		$this->username = $username;
+
+		$q  = $this->getDBQueryObj();
+		$q->addTable('users');
+		$q->addQuery('user_id, user_password');
+		$q->addWhere("user_username = '$username'");
+		if (!$rs = $q->exec()) {
+			$q->clear();
+			return false;
+		}
+		if (!$row = $q->fetchRow()) {
+			$q->clear();
+			return false;
+		}
+
+		$this->user_id = $row["user_id"];
+		$q->clear();
+
+
+		return $this->comparePasswords($password, $row["user_password"]);
+
+	}
+
+	/**
+	 * Verifies that passwords are the same
+	 *
+	 * @param [string] $fPassword ex: from form
+	 * @param [string] $dbPassword ex: from database
+	 * @return boolean
+	 */
+	function comparePasswords($fPassword, $dbPassword) {
+		if (MD5($fPassword) == $dbPassword) return true;
+		return false;
+	}
+
+	/**
+	 * separated out so that authenticate() can be unit tested
+	 */
+	function getDBQueryObj() {
+		return new DBQuery;
+	}
+
+	function userId($username)
+	{
+		// We ignore the username provided
+		return $this->user_id;
+	}
+}
+
+
+/**
 	 * PostNuke authentication has encoded information
-	 * passed in on the login request.  This needs to 
+	 * passed in on the login request.  This needs to
 	 * be extracted and verified.
 	 */
 	class PostNukeAuthenticator extends SQLAuthenticator
@@ -87,7 +159,7 @@ if (!defined('DP_BASE_DIR')) {
 			$first_name = implode(' ', $names);
 			$passwd = trim($user_data['passwd']);
 			$email = trim($user_data['email']);
-			
+
 			$q  = new DBQuery;
 			$q->addTable('users');
 			$q->addQuery('user_id, user_password, user_contact');
@@ -129,7 +201,7 @@ if (!defined('DP_BASE_DIR')) {
 			GLOBAL $db, $AppUI;
 
 			require_once($AppUI->getModuleClass("contacts"));
-	
+
 			$c = New CContact();
 			$c->contact_first_name = $first;
 			$c->contact_last_name = $last;
@@ -158,42 +230,7 @@ if (!defined('DP_BASE_DIR')) {
 		}
 	}
 
-	class SQLAuthenticator
-	{
-		var $user_id;
-		var $username;
 
-		function authenticate($username, $password)
-		{
-			GLOBAL $db, $AppUI;
-
-			$this->username = $username;
-
-			$q  = new DBQuery;
-			$q->addTable('users');
-			$q->addQuery('user_id, user_password');
-			$q->addWhere("user_username = '$username'");
-			if (!$rs = $q->exec()) {
-				$q->clear();
-				return false;
-			}
-			if (!$row = $q->fetchRow()) {
-				$q->clear();
-				return false;
-			}
-
-			$this->user_id = $row["user_id"];
-			$q->clear();
-			if (MD5($password) == $row["user_password"]) return true;
-			return false;
-		}
-
-		function userId($username)
-		{
-                        // We ignore the username provided
-			return $this->user_id;
-		}
-	}	
 
 	class LDAPAuthenticator extends SQLAuthenticator
 	{
@@ -202,7 +239,7 @@ if (!defined('DP_BASE_DIR')) {
 		var $ldap_version;
 		var $base_dn;
 		var $ldap_search_user;
-		var $ldap_search_pass;	
+		var $ldap_search_pass;
 		var $filter;
 
 		var $user_id;
@@ -231,7 +268,7 @@ if (!defined('DP_BASE_DIR')) {
 			if (mb_strlen($password) == 0) return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 			if ($this->fallback == true)
 			{
-				if (parent::authenticate($username, $password)) return true;	
+				if (parent::authenticate($username, $password)) return true;
 			}
 			// Fallback SQL authentication fails, proceed with LDAP
 
@@ -243,13 +280,13 @@ if (!defined('DP_BASE_DIR')) {
 			@ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
 			//$ldap_bind_dn = "cn=".$this->ldap_search_user.",".$this->base_dn;
-			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;	
+			$ldap_bind_dn = empty($this->ldap_search_user) ? NULL : $this->ldap_search_user;
 			$ldap_bind_pw = empty($this->ldap_search_pass) ? NULL : $this->ldap_search_pass;
 
 			if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw))
 			{
 				// Uncomment for LDAP debugging
-				/*	
+				/*
 				$error_msg = ldap_error($rs);
 				die("Couldnt Bind Using ".$ldap_bind_dn."@".$this->ldap_host.":".$this->ldap_port." Because:".$error_msg);
 				*/
@@ -260,7 +297,7 @@ if (!defined('DP_BASE_DIR')) {
 				$filter_r = html_entity_decode(str_replace("%USERNAME%", $username, $this->filter), ENT_COMPAT, 'UTF-8');
 				$result = @ldap_search($rs, $this->base_dn, $filter_r);
 				if (!$result) return false; // ldap search returned nothing or error
-				
+
 				$result_user = ldap_get_entries($rs, $result);
 				if ($result_user["count"] == 0) return false; // No users match the filter
 
@@ -285,10 +322,10 @@ if (!defined('DP_BASE_DIR')) {
 					}
 					else
 					{
-						$this->createsqluser($username, $password, $first_user); 
+						$this->createsqluser($username, $password, $first_user);
 					}
 					return true;
-				} 
+				}
 			}
 		}
 
@@ -300,7 +337,7 @@ if (!defined('DP_BASE_DIR')) {
 			$q->addTable('users');
 			$q->addWhere("user_username = '$username'");
 			$rs = $q->exec();
-			if ($rs->RecordCount() > 0) 
+			if ($rs->RecordCount() > 0)
 			  $result = true;
 			$q->clear();
 			return $result;
@@ -315,7 +352,7 @@ if (!defined('DP_BASE_DIR')) {
 			$rs = $q->exec();
 			$row = $rs->FetchRow();
 			$q->clear();
-			return $row["user_id"];	
+			return $row["user_id"];
 		}
 
 		function createsqluser($username, $password, $ldap_attribs = Array())
@@ -324,7 +361,7 @@ if (!defined('DP_BASE_DIR')) {
 			$hash_pass = MD5($password);
 
 			require_once($AppUI->getModuleClass("contacts"));
-	
+
 			if (!count($ldap_attribs) == 0)
 			{
 				// Contact information based on the inetOrgPerson class schema

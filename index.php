@@ -21,7 +21,7 @@
 
 // If you experience a 'white screen of death' or other problems,
 // uncomment the following line of code:
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 $loginFromPage = 'index.php';
 require_once 'base.php';
@@ -31,10 +31,10 @@ if (is_file(DP_BASE_DIR . '/includes/config.php')) {
 	require_once DP_BASE_DIR . '/includes/config.php';
 
 } else {
-	echo ('<html><head><meta http-equiv="refresh" content="5; URL=' . DP_BASE_URL 
-	      . '/install/index.php"></head><body>' 
-	      . 'Fatal Error. You haven\'t created a config file yet.<br/>' 
-	      . '<a href="./install/index.php">Click Here To Start Installation and Create One!</a>' 
+	echo ('<html><head><meta http-equiv="refresh" content="5; URL=' . DP_BASE_URL
+	      . '/install/index.php"></head><body>'
+	      . 'Fatal Error. You haven\'t created a config file yet.<br/>'
+	      . '<a href="./install/index.php">Click Here To Start Installation and Create One!</a>'
 	      . ' (forwarded in 5 sec.)</body></html>');
 	exit();
 }
@@ -71,7 +71,7 @@ if (!(isset($_SESSION['AppUI'])) || isset($_GET['logout'])) {
     if (isset($_GET['logout']) && isset($_SESSION['AppUI']->user_id)) {
         $AppUI =& $_SESSION['AppUI'];
         $AppUI->registerLogout($AppUI->user_id);
-        addHistory('login', $AppUI->user_id, 'logout', 
+        addHistory('login', $AppUI->user_id, 'logout',
 		           ($AppUI->user_first_name . ' ' . $AppUI->user_last_name));
     }
 	$_SESSION['AppUI'] = new CAppUI;
@@ -88,7 +88,7 @@ require_once($AppUI->getSystemClass('query'));
 require_once DP_BASE_DIR.'/misc/debug.php';
 
 //Function for update lost action in user_access_log
-$AppUI->updateLastAction($last_insert_id);
+$AppUI->updateLastAction($last_insert_id); // BOOKMARK: on PHP 8 the code breaks here
 // load default preferences if not logged in
 if ($AppUI->doLogin()) {
 	$AppUI->loadPrefs(0);
@@ -121,6 +121,7 @@ if (isset($_REQUEST['login'])) {
 	$AppUI->setUserLocale();
 	@include_once(DP_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 	@include_once DP_BASE_DIR . '/locales/core.php';
+
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed');
@@ -128,7 +129,7 @@ if (isset($_REQUEST['login'])) {
 		//Register login in user_acces_log
 		$AppUI->registerLogin();
 	}
-	addHistory('login', $AppUI->user_id, 'login', 
+	addHistory('login', $AppUI->user_id, 'login',
 	           ($AppUI->user_first_name . ' ' . $AppUI->user_last_name));
 	$AppUI->redirect($redirect);
 }
@@ -237,7 +238,7 @@ if ($u && file_exists(DP_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.c
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_REQUEST['dosql'])) {
 	//require('./dosql/' . $_REQUEST['dosql'] . '.php');
-	require (DP_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u.'/') : '') 
+	require (DP_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u.'/') : '')
 	         . $AppUI->checkFileName($_REQUEST['dosql']) . '.php');
 }
 
@@ -261,11 +262,11 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 		if (!(getPermission($dir, 'access'))) {
 			continue;
 		}
-		$modules_tabs = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $dir . '/'), 
+		$modules_tabs = $AppUI->readFiles((DP_BASE_DIR . '/modules/' . $dir . '/'),
 		                                  ('^' . $m . '_tab.*\.php'));
 		foreach ($modules_tabs as $mod_tab) {
 			// Get the name as the subextension
-			// cut the module_tab. and the .php parts of the filename 
+			// cut the module_tab. and the .php parts of the filename
 			// (begining and end)
 			$nameparts = explode('.', $mod_tab);
 			$filename = mb_substr($mod_tab, 0, -4);
@@ -283,13 +284,13 @@ if (!(isset($_SESSION['all_tabs'][$m]))) {
 			$arr[] = array('name' => ucfirst(str_replace('_', ' ', $name)),
 			               'file' => (DP_BASE_DIR . '/modules/' . $dir . '/' . $filename),
 			               'module' => $dir);
-			
-			/* 
+
+			/*
 			 * Don't forget to unset $arr again! $arr is likely to be used in the sequel declaring
 			 * any temporary array. This may lead to strange bugs with disappearing tabs(cf. #1767).
 			 * @author: gregorerhardt @date: 20070203
 			 */
-			unset($arr); 
+			unset($arr);
 		}
 	}
 } else {
@@ -300,16 +301,16 @@ $module_file = (DP_BASE_DIR . '/modules/' . $m . '/' . (($u) ? ($u.'/') : '') . 
 if (file_exists($module_file)) {
 	require $module_file;
 } else {
-	//TODO: make this part of the public module? 
+	//TODO: make this part of the public module?
 	//TODO: internationalise the string.
 	$titleBlock = new CTitleBlock('Warning', 'log-error.gif');
 	$titleBlock->show();
-	
+
 	echo $AppUI->_('Missing file. Possible Module "' . $m . '" missing!');
 }
 // wtf??  why?
 if (!$suppressHeaders) {
-	echo ('<iframe name="thread" src="' . DP_BASE_URL 
+	echo ('<iframe name="thread" src="' . DP_BASE_URL
 	      . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>');
 	require (DP_BASE_DIR . '/style/' . $uistyle . '/footer.php');
 }
