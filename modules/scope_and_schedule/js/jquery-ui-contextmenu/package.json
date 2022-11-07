@@ -50,7 +50,7 @@
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-exec": "^1.0.0",
-    "grunt-jscs": "^2.7.0",
+    "grunt-jscs": "^3.0.1",
     "grunt-saucelabs": "^8.1.0",
     "grunt-yabs": "^1.1.0",
     "jquery-ui-dist": "^1.12.1"
