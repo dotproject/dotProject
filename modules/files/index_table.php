@@ -168,8 +168,8 @@ $q2->setLimit($xpg_pagesize, $xpg_min);
 // Adding an Order by that is different to a group by can cause
 // performance issues. It is far better to rearrange the group
 // by to get the correct ordering.
-$q2->addGroup('p.project_id');
-$q2->addGroup('f.file_version_id DESC');
+$q2->addOrder('p.project_id');
+$q2->addOrder('f.file_version_id DESC');
 
 
 $q3 = new DBQuery;
