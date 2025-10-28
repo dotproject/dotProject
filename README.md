@@ -27,7 +27,7 @@ Parts of dotProject include libraries from other projects which are used and re-
 
 The latest devel branch now includes a simple `docker-compose.yml` file and support files.  These will allow you to run dotProject by running:
 
-`docker-compose up`
+`docker compose up`
 
 This will set up an nginx container, a phpfpm container and a mariadb container and point the web server to the base directory of dotProject.  All you need to do after that is point your browser to http://localhost/
 
