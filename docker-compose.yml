@@ -13,7 +13,7 @@ services:
 
   phpfpm:
     build: ./.docker-compose
-    image: phpfpm-7.4:local
+    image: php:7.4.0-fpm
     restart: always
     depends_on:
       - "mariadb"
