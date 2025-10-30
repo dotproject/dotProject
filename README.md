@@ -7,7 +7,7 @@ been under the watchful eye of the current dotProject team since around December
 
 ## Installing/Upgrading
 
-**NOTE** The `devel` branch is where all the development happens.  If you want the latest and greatest with all relevent bug fixes between releases, then download from https://github.com/dotproject/dotProject/archive/devel.zip
+**NOTE** The `devel` branch is where all the development happens.  If you want the latest and greatest with all relevent bug fixes between releases, then download from https://github.com/dotproject/dotProject/archive/devel.zip. This project requires PHP 7.4. 
 
 `master` tracks the current release.
 
